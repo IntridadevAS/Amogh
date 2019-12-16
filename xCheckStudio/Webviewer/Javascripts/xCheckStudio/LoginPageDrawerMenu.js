@@ -113,7 +113,7 @@ let menu = {
     },
     onExitClicked: function () {
         console.log("onExitClicked");
-        var overlay = document.getElementById("exitOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("exitPopup");
 
         overlay.style.display = 'block';
@@ -150,7 +150,7 @@ function swapIcon() {
 }
 
 function cancelExit() {
-    var overlay = document.getElementById("exitOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("exitPopup");
 
     overlay.style.display = 'none';

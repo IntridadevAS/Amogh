@@ -503,7 +503,7 @@ var CheckModule = {
 
 
 function onNoDataToSaveOk() {
-    var overlay = document.getElementById("noDataToSaveOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("noDataToSavePopup");
 
     overlay.style.display = 'none';
@@ -511,7 +511,7 @@ function onNoDataToSaveOk() {
 }
 
 function showNoDataToSavePrompt() {
-    var overlay = document.getElementById("noDataToSaveOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("noDataToSavePopup");
 
     overlay.style.display = 'block';
@@ -549,7 +549,7 @@ function showNoDataToSavePrompt() {
 // }
 
 function onFailedToSaveOk() {
-    var overlay = document.getElementById("failedToSaveOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("failedToSavePopup");
 
     overlay.style.display = 'none';
@@ -557,7 +557,7 @@ function onFailedToSaveOk() {
 }
 
 function showFailedToSavePrompt() {
-    var overlay = document.getElementById("failedToSaveOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("failedToSavePopup");
 
     overlay.style.display = 'block';

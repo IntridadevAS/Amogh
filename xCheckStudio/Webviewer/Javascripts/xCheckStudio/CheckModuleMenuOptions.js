@@ -13,7 +13,7 @@ function enableMenuOptions() {
 
     // on reload data
     document.getElementById(MenuBar.ReloadDataBtn).onclick = function () {
-        var overlay = document.getElementById("resetDataOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("resetDataPopup");
 
         overlay.style.display = 'block';
@@ -28,7 +28,7 @@ function enableMenuOptions() {
 
     // on clear data
     document.getElementById(MenuBar.ClearDataBtn).onclick = function () {
-        var overlay = document.getElementById("clearAllDataOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("clearAllDataPopup");
 
         overlay.style.display = 'block';
@@ -58,7 +58,7 @@ function enableMenuOptions() {
 
     // on save progress
     document.getElementById(MenuBar.SaveProgressBtn).onclick = function () {
-        var overlay = document.getElementById("saveDataOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("saveDataPopup");
 
         overlay.style.display = 'block';
@@ -102,7 +102,7 @@ function clearAllData() {
 }
 
 function hideClearAllDataForm() {
-    var overlay = document.getElementById("clearAllDataOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("clearAllDataPopup");
 
     overlay.style.display = 'none';
@@ -142,7 +142,7 @@ function resetData() {
 }
 
 function hideResetDataForm() {
-    var overlay = document.getElementById("resetDataOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("resetDataPopup");
 
     overlay.style.display = 'none';
@@ -160,7 +160,7 @@ function saveData() {
 }
 
 function hideSaveDataForm() {
-    var overlay = document.getElementById("saveDataOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("saveDataPopup");
 
     overlay.style.display = 'none';

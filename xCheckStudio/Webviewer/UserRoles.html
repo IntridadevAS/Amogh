@@ -41,38 +41,9 @@
 
 <body>
 
-    <center>
-        <img src="images\Header.png" align="BOTTOM">
-    </center>
-
-    <hr>
-
-    <div style="height:600px; width:100%;">
-        <table style="height:100%; width:100%;">
-            <tr>
-                <td style="width: 150px">
-                    <!-- vertical tabs -->
-                    <div class="tab" style="height:100%; width: 100%">
-                        <button class="tablinks" id="userRolesTab">User Roles</button>
-                    </div>
-                </td>
-                <td >
-                    <!-- Tab contents -->
-
-                    <!-- User roles tab -->
-                    <div id="userRolesContent" class="tabcontent" style="height:600px ;display: none">
-                        <h3>User Credentials</h3>
-                        <input id="addUserButton" class="addUserButton" type="button" value="New" />
-                        <div id="usersInfoDiv">
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
+    
     <!-- Add Document overlay -->
-    <div id="newUserOverlay" class="overlay"></div>
+    <div id="uiBlockingOverlay" class="overlay"></div>
     <div id="newUserPopup" class="popup" style="width: 300px; height: 200px;">
         <div class="popupcontent" style="padding: 10px; ">
 
@@ -136,7 +107,37 @@
             <button id="addNewUserButton">Add</button>
             <button id="cancelAddNewUser">Cancel</button>
         </div>
-    </div>    
+    </div>  
+
+    <center>
+        <img src="images\Header.png" align="BOTTOM">
+    </center>
+
+    <hr>
+
+    <div style="height:600px; width:100%;">
+        <table style="height:100%; width:100%;">
+            <tr>
+                <td style="width: 150px">
+                    <!-- vertical tabs -->
+                    <div class="tab" style="height:100%; width: 100%">
+                        <button class="tablinks" id="userRolesTab">User Roles</button>
+                    </div>
+                </td>
+                <td >
+                    <!-- Tab contents -->
+
+                    <!-- User roles tab -->
+                    <div id="userRolesContent" class="tabcontent" style="height:600px ;display: none">
+                        <h3>User Credentials</h3>
+                        <input id="addUserButton" class="addUserButton" type="button" value="New" />
+                        <div id="usersInfoDiv">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>  
 </body>
 
 </html>

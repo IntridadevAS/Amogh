@@ -228,6 +228,7 @@ function onCheckCompleted() {
 }
 
 function showCheckCompletePrompt() {
+    document.getElementById("uiBlockingOverlay").style.display = "block";
     document.getElementById("Check_Complete").style.display = "block";
 }
 
@@ -382,10 +383,7 @@ function performComplianceCheck(checkcase, srcId) {
 // }
 
 function cancelCheckResults() {
-    // sourceAComplianceCheckManager = undefined;
-    // sourceBComplianceCheckManager = undefined;
-    // comparisonCheckManager = undefined;
-
+    document.getElementById("uiBlockingOverlay").style.display = "none";
     document.getElementById("Check_Complete").style.display = "none";
 }
 
@@ -467,7 +465,7 @@ function deleteCheckResultsFromDB(checkType) {
 }
 
 function showNotValidCheckcasePrompt() {
-    var overlay = document.getElementById("notValidCheckcaseOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("notValidCheckcasePopup");
 
     overlay.style.display = 'block';
@@ -482,7 +480,7 @@ function showNotValidCheckcasePrompt() {
 }
 
 function onNotValidCheckcaseOk() {
-    var overlay = document.getElementById("notValidCheckcaseOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("notValidCheckcasePopup");
 
     overlay.style.display = 'none';
@@ -491,7 +489,7 @@ function onNotValidCheckcaseOk() {
 }
 
 function showNoCheckTypePrompt() {
-    var overlay = document.getElementById("noCheckTypeOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("noCheckTypePopup");
 
     overlay.style.display = 'block';
@@ -506,7 +504,7 @@ function showNoCheckTypePrompt() {
 }
 
 function onSelectCheckTypeOk() {
-    var overlay = document.getElementById("noCheckTypeOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("noCheckTypePopup");
 
     overlay.style.display = 'none';
@@ -514,7 +512,7 @@ function onSelectCheckTypeOk() {
 }
 
 function showSelectValidCheckCasePrompt() {
-    var overlay = document.getElementById("selectValidCheckcaseOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("selectValidCheckcasePopup");
 
     overlay.style.display = 'block';
@@ -529,7 +527,7 @@ function showSelectValidCheckCasePrompt() {
 }
 
 function onSelectValidCheckCaseOk() {
-    var overlay = document.getElementById("selectValidCheckcaseOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("selectValidCheckcasePopup");
 
     overlay.style.display = 'none';
@@ -537,7 +535,7 @@ function onSelectValidCheckCaseOk() {
 }
 
 function showSelectItemsPrompt() {
-    var overlay = document.getElementById("selectItemsOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("selectItemsPopup");
 
     overlay.style.display = 'block';
@@ -552,7 +550,7 @@ function showSelectItemsPrompt() {
 }
 
 function onSelectItemsOk() {
-    var overlay = document.getElementById("selectItemsOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("selectItemsPopup");
 
     overlay.style.display = 'none';

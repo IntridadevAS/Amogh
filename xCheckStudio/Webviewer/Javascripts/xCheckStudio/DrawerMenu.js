@@ -124,7 +124,7 @@ let menu = {
 
     onHomeClick: function () {
 
-        var overlay = document.getElementById("returnHomeOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnHomePopup");
 
         overlay.style.display = 'block';
@@ -139,7 +139,7 @@ let menu = {
     },
 
     onProjectsClicked: function () {
-        var overlay = document.getElementById("returnProjectCenterOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnProjectCenterPopup");
 
         overlay.style.display = 'block';
@@ -154,7 +154,7 @@ let menu = {
     },
 
     onCheckClicked: function () {
-        var overlay = document.getElementById("returnCheckOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnCheckPopup");
 
         overlay.style.display = 'block';
@@ -169,7 +169,7 @@ let menu = {
     },
 
     onPREPClicked: function () {
-        var overlay = document.getElementById("returnPREPOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnPREPPopup");
 
         overlay.style.display = 'block';
@@ -190,7 +190,7 @@ let menu = {
     },
 
     onOutputClicked: function () {
-        var overlay = document.getElementById("outputOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("outputPopup");
 
         overlay.style.display = 'block';
@@ -202,7 +202,7 @@ let menu = {
     },
 
     onSignOutClicked: function () {
-        var overlay = document.getElementById("signOutOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("signOutPopup");
 
         overlay.style.display = 'block';
@@ -218,7 +218,7 @@ let menu = {
 }
 
 function cancelReturnHome() {
-    var overlay = document.getElementById("returnHomeOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("returnHomePopup");
 
     overlay.style.display = 'none';
@@ -237,7 +237,7 @@ function returnHome(callbackFunction) {
 }
 
 function cancelReturnProjectCenter() {
-    var overlay = document.getElementById("returnProjectCenterOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("returnProjectCenterPopup");
 
     overlay.style.display = 'none';
@@ -256,7 +256,7 @@ function returnProjectCenter(callbackFunction) {
 }
 
 function cancelReturnPREP() {
-    var overlay = document.getElementById("returnPREPOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("returnPREPPopup");
 
     overlay.style.display = 'none';
@@ -275,7 +275,7 @@ function returnToPREP(callbackFunction) {
 }
 
 function cancelSignOut() {
-    var overlay = document.getElementById("signOutOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("signOutPopup");
 
     overlay.style.display = 'none';
@@ -312,7 +312,7 @@ function swapIcon() {
 }
 
 function cancelReturnCheck() {
-    var overlay = document.getElementById("returnCheckOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("returnCheckPopup");
 
     overlay.style.display = 'none';
@@ -320,7 +320,7 @@ function cancelReturnCheck() {
 }
 
 function closeSaveAs() {
-    var overlay = document.getElementById("ExcelOutputOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("ExcelOutputPopup");
 
     overlay.style.display = 'none';
@@ -328,7 +328,7 @@ function closeSaveAs() {
 }
 
 function closeOutpuToOverlay() {
-    var overlay = document.getElementById("outputOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("outputPopup");
 
     overlay.style.display = 'none';

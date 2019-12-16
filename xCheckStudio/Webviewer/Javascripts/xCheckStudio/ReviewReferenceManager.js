@@ -10,7 +10,7 @@ let ReferenceManager = {
         }
 
         // show div
-        var overlay = document.getElementById("referenceOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("referencePopup");
 
         overlay.style.display = 'block';
@@ -133,7 +133,7 @@ let ReferenceManager = {
     },
 
     closeReferenceDiv: function () {
-        var overlay = document.getElementById("referenceOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("referencePopup");
         overlay.style.display = 'none';
         popup.style.display = 'none';
@@ -143,7 +143,7 @@ let ReferenceManager = {
     },
 
     showReferenceSelectionDiv: function () {
-        var overlay = document.getElementById("referenceSelectionOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("referenceSelectionPopup");
 
         overlay.style.display = 'block';
@@ -157,14 +157,14 @@ let ReferenceManager = {
     },
 
     closeReferenceSelectionDiv: function () {
-        var overlay = document.getElementById("referenceSelectionOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("referenceSelectionPopup");
         overlay.style.display = 'none';
         popup.style.display = 'none';
     },
 
     showInputReferenceDiv: function () {
-        var overlay = document.getElementById("addReferenceOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("addReferencePopup");
 
         overlay.style.display = 'block';
@@ -178,7 +178,7 @@ let ReferenceManager = {
     },
 
     closeInputReferenceDiv: function () {
-        var overlay = document.getElementById("addReferenceOverlay");
+        var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("addReferencePopup");
         overlay.style.display = 'none';
         popup.style.display = 'none';

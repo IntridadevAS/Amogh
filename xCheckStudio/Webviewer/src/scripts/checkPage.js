@@ -266,7 +266,7 @@ let viewTabs = {
   },
 
   onClearDataSource: function () {
-    var overlay = document.getElementById("clearDataSourceOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("clearDataSourcePopup");
 
     overlay.style.display = 'block';
@@ -375,7 +375,7 @@ for (grabBar of grabBars) {
 
 
 function showLoadDataForm() {
-  var overlay = document.getElementById("loadDataOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("loadDataPopup");
 
   overlay.style.display = 'block';
@@ -391,7 +391,7 @@ function showLoadDataForm() {
 }
 
 function closeLoadDataForm() {
-  var overlay = document.getElementById("loadDataOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("loadDataPopup");
 
   overlay.style.display = 'none';
@@ -473,7 +473,7 @@ function removeSourceFilesFromDirectory() {
 function hideClearDataSourceForm() {
   viewTabs.tabToDelete = undefined;
 
-  var overlay = document.getElementById("clearDataSourceOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("clearDataSourcePopup");
 
   overlay.style.display = 'none';

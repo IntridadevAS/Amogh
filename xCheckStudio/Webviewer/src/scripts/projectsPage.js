@@ -1039,7 +1039,7 @@ let newProjectView = {
     this.active = false;
   },
   onCloseNewProject: function () {
-    var overlay = document.getElementById("cancelProjectCreationOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("cancelProjectCreationPopup");
 
     overlay.style.display = 'block';
@@ -1074,7 +1074,7 @@ let newCheckView = {
   },
 
   onCloseNewCheck: function () {
-    var overlay = document.getElementById("cancelCheckSpaceCreationOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("cancelCheckSpaceCreationPopup");
 
     overlay.style.display = 'block';
@@ -1168,7 +1168,7 @@ let editProjectView = {
   },
 
   cancelEditProject: function (closeProjectOverlay) {
-    var overlay = document.getElementById("editProjectOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("editProjectPopup");
 
     overlay.style.display = 'none';
@@ -1181,7 +1181,7 @@ let editProjectView = {
   },
 
   openEditProjectOverlay: function () {
-    var overlay = document.getElementById("editProjectOverlay");
+    var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("editProjectPopup");
 
     overlay.style.display = 'block';
@@ -1453,7 +1453,7 @@ function enterCheck() {
 function showEnterCheckForm(subject) {
   subject.classList.add("selected");
 
-  var overlay = document.getElementById("enterCheckOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("enterCheckPopup");
 
   overlay.style.display = 'block';
@@ -1468,7 +1468,7 @@ function showEnterCheckForm(subject) {
 }
 
 function hideEnterCheckForm() {
-  var overlay = document.getElementById("enterCheckOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("enterCheckPopup");
 
   overlay.style.display = 'none';
@@ -1513,7 +1513,7 @@ function enterReview() {
 function showEnterReviewForm(subject) {
   subject.classList.add("selected");
 
-  var overlay = document.getElementById("enterReviewOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("enterReviewPopup");
 
   overlay.style.display = 'block';
@@ -1528,7 +1528,7 @@ function showEnterReviewForm(subject) {
 }
 
 function hideEnterReviewForm() {
-  var overlay = document.getElementById("enterReviewOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("enterReviewPopup");
 
   overlay.style.display = 'none';
@@ -1536,7 +1536,7 @@ function hideEnterReviewForm() {
 }
 
 function showDeleteForm() {
-  var overlay = document.getElementById("deleteOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("deletePopup");
 
   overlay.style.display = 'block';
@@ -1551,7 +1551,7 @@ function showDeleteForm() {
 }
 
 function hideDeleteForm() {
-  var overlay = document.getElementById("deleteOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("deletePopup");
 
   overlay.style.display = 'none';
@@ -1564,7 +1564,7 @@ function onAlertOk() {
 }
 
 function hideAlertForm() {
-  var overlay = document.getElementById("alertOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("alertPopup");
 
   overlay.style.display = 'none';
@@ -1576,7 +1576,7 @@ function showAlertForm(alertMsg) {
   var alertMsgHolder = document.getElementById("createProjectErrorMsg");
   alertMsgHolder.innerText = alertMsg;
 
-  var overlay = document.getElementById("alertOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("alertPopup");
 
   overlay.style.display = 'block';
@@ -1615,7 +1615,7 @@ function cancelCancelProjectCreation() {
 }
 
 function hideCancelProjectCreationForm() {
-  var overlay = document.getElementById("cancelProjectCreationOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("cancelProjectCreationPopup");
 
   overlay.style.display = 'none';
@@ -1633,7 +1633,7 @@ function cancelCancelCheckSpaceCreation() {
 }
 
 function hideCancelCheckSpaceCreationForm() {
-  var overlay = document.getElementById("cancelCheckSpaceCreationOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("cancelCheckSpaceCreationPopup");
 
   overlay.style.display = 'none';
@@ -1646,7 +1646,7 @@ function cancelCheckSpaceCreation() {
 }
 
 
-function cancelDuplicate() {  
+function cancelDuplicate() {
   hideDuplicateForm();
 }
 
@@ -1681,14 +1681,14 @@ function duplicateCheckspace() {
   var checkspaceData = {};
   checkspaceData["name"] = checkspaceName;
   checkspaceData["status"] = obj.checkstatus
-  checkspaceData["config"]= obj.checkconfiguration;
-  checkspaceData["description"]= obj.checkdescription;
-  checkspaceData["comments"]= obj.checkcomments;
-  checkspaceData["isFav"]= obj.checkisfavourite;
-  checkspaceData["date"]= xCheckStudio.Util.getCurrentDateTime();
-  checkspaceData["projId"]= obj.projectid;
-  checkspaceData["userId"]= obj.userid;
-  checkspaceData["review"]= obj.review;
+  checkspaceData["config"] = obj.checkconfiguration;
+  checkspaceData["description"] = obj.checkdescription;
+  checkspaceData["comments"] = obj.checkcomments;
+  checkspaceData["isFav"] = obj.checkisfavourite;
+  checkspaceData["date"] = xCheckStudio.Util.getCurrentDateTime();
+  checkspaceData["projId"] = obj.projectid;
+  checkspaceData["userId"] = obj.userid;
+  checkspaceData["review"] = obj.review;
 
   controller.CopyCheckspace(checkspaceData, obj.checkname);
 
@@ -1736,8 +1736,8 @@ function duplicateProject() {
 function hideDuplicateForm() {
   controller.projectToCopy = undefined;
   controller.checkSpaceToCopy = undefined;
-  
-  var overlay = document.getElementById("duplicateOverlay");
+
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("duplicatePopup");
 
   overlay.style.display = 'none';
@@ -1747,7 +1747,7 @@ function hideDuplicateForm() {
 function showDuplicateProjectForm(title) {
   document.getElementById("duplicatePromptTitle").innerText = title;
 
-  var overlay = document.getElementById("duplicateOverlay");
+  var overlay = document.getElementById("uiBlockingOverlay");
   var popup = document.getElementById("duplicatePopup");
 
   overlay.style.display = 'block';

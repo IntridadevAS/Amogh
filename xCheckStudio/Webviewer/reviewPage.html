@@ -13,804 +13,779 @@
   <link href="CSS\slider.css" rel="stylesheet" type="text/css" />
 
   <link rel="stylesheet" href="src/prompts/promptForms.css" type="text/css" />
-  <link href="CSS/ReferenceOverlay.css" rel="stylesheet" type="text/css" />
+  <link href="CSS/OverlayStyles.css" rel="stylesheet" type="text/css" />
   <link href="CSS/accordionButton.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  <header>
-    <button id="mainMenu" type="button" class="dropDownMenu">
-      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
-    </button>
-    <h1 id="pageName"></h1>
-    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
-    <div class="userInfo">
-      <p id="userName" class="userName"> User Name </p>
-      <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
-      <img id="userImg" src="public/symbols/Max.png" alt="">
-      <div class="programCntrls">
-        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
-            onclick="onminimizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
-            onclick="onmaximizewindow()"></button>
-        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
-            onclick="onExitClicked()"></button>
+  <!-- UI blocking overlay -->
+  <div id="uiBlockingOverlay" class="overlay" style="display: block"></div>
+
+  <!-- reference selection overlay -->
+  <div id="referenceSelectionPopup" class="popup" style="z-index: 201;">
+    <iframe id="referenceSelectionIFrame" src="Reference_selection.html" style="height: 401px; width: 444px"></iframe>
+  </div>
+
+  <!-- add reference overlay -->
+  <div id="addReferencePopup" class="popup" style="z-index: 201;">
+    <iframe id="addReferenceIFrame" src="Add_Reference_Overlay.html" style="height: 148px; width: 585px"></iframe>
+  </div>
+
+  <!-- reference overlay -->
+  <div id="referencePopup" class="popup">
+    <iframe id="referenceIFrame" src="Referenced_Data.html" style="height: 569px; width: 585px"></iframe>
+  </div>
+
+  <!-- Return to home page overlay -->
+  <div id="returnHomePopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Info</span>
+      </div>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save before Returning to Home
+          Page?</span><span></span>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="returnHome(ReviewPageCleanUp.onLeavingPage)">
+          <span>No</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="returnHome(ReviewPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnHome()">
+          <span>Cancel</span>
+        </div>
       </div>
     </div>
+  </div>
 
-  </header>
-
-  <!-- page loading overlay -->
-  <div id="pageLoadingOverlay" class="overlay" style="display: block"></div>
-
-  <div id="drawer" style="position: fixed; top:50px; left: 0px">
-    <div id="loadIndicator"></div>
-
-    <div class="background">
-      <div id='contextMenu' style="z-index: 4; position: absolute;">
+  <!-- Return to project center overlay -->
+  <div id="returnProjectCenterPopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Info</span>
       </div>
-
-      <!-- reference selection overlay -->
-      <div id="referenceSelectionOverlay" class="overlay" style="z-index: 201;"></div>
-      <div id="referenceSelectionPopup" class="popup" style="z-index: 201;">
-        <iframe id="referenceSelectionIFrame" src="Reference_selection.html"
-          style="height: 401px; width: 444px"></iframe>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save before Returning to Project
+          Center?</span><span></span>
       </div>
-
-      <!-- add reference overlay -->
-      <div id="addReferenceOverlay" class="overlay" style="z-index: 201;"></div>
-      <div id="addReferencePopup" class="popup" style="z-index: 201;">
-        <iframe id="addReferenceIFrame" src="Add_Reference_Overlay.html" style="height: 148px; width: 585px"></iframe>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onLeavingPage)">
+          <span>No</span>
+        </div>
       </div>
-
-      <!-- reference overlay -->
-      <div id="referenceOverlay" class="overlay"></div>
-      <div id="referencePopup" class="popup">
-        <iframe id="referenceIFrame" src="Referenced_Data.html" style="height: 569px; width: 585px"></iframe>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
       </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnProjectCenter()">
+          <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <!-- Return to home page overlay -->
-      <div id="returnHomeOverlay" class="overlay"></div>
-      <div id="returnHomePopup" class="popup">
-        <div id="Save_and_Exit">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Save_and_Exit_">
-            <span>Info</span>
-          </div>
-          <div id="Save_data_and_Exit_XcheckStudi">
-            <span></span><span style="font-style:normal;font-weight:normal;">Save before Returning to Home
-              Page?</span><span></span>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
-            id="Component_20">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="NO" style="cursor: pointer;" onclick="returnHome(ReviewPageCleanUp.onLeavingPage)">
-              <span>No</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
-            id="Component_34">
-            <svg class="Rectangle_1242">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
-                x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="YES" style="cursor: pointer;" onclick="returnHome(ReviewPageCleanUp.onSaveAndLeavePage)">
-              <span>Yes</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
-            id="Component_35">
-            <svg class="Rectangle_1242_A61_Rectangle_4">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-                rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnHome()">
-              <span>Cancel</span>
-            </div>
-          </div>
+  <!-- Return to check page overlay -->
+  <div id="returnCheckPopup" class="popup">
+    <div id="Return_to_Home_Page">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Info">
+        <span>Info</span>
+      </div>
+      <div id="Return_to_Home_Page_" class="promptMessageDiv">
+        <span></span><span style="font-style:normal;font-weight:normal;">Return to Check Page?</span>
+      </div>
+      <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelReturnCheck()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="CANCEL">
+          <span>Cancel</span>
         </div>
       </div>
 
-      <!-- Return to project center overlay -->
-      <div id="returnProjectCenterOverlay" class="overlay"></div>
-      <div id="returnProjectCenterPopup" class="popup">
-        <div id="Save_and_Exit">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Save_and_Exit_">
-            <span>Info</span>
-          </div>
-          <div id="Save_data_and_Exit_XcheckStudi">
-            <span></span><span style="font-style:normal;font-weight:normal;">Save before Returning to Project
-              Center?</span><span></span>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
-            id="Component_20">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="NO" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onLeavingPage)">
-              <span>No</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
-            id="Component_34">
-            <svg class="Rectangle_1242">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
-                x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="YES" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onSaveAndLeavePage)">
-              <span>Yes</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
-            id="Component_35">
-            <svg class="Rectangle_1242_A61_Rectangle_4">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-                rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnProjectCenter()">
-              <span>Cancel</span>
-            </div>
-          </div>
+      <div id="symYesButton___10" style="cursor: pointer;" onclick="returnCheck(ReviewPageCleanUp.onLeavingPage)">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="OK">
+          <span>OK</span>
         </div>
       </div>
+      <svg class="icon_32_Info" viewBox="0 1 32 32">
+        <path fill="rgba(123,168,219,1)" id="icon_32_Info"
+          d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
+        </path>
+      </svg>
+    </div>
+  </div>
 
-      <!-- Return to check page overlay -->
-      <div id="returnCheckOverlay" class="overlay"></div>
-      <div id="returnCheckPopup" class="popup">
-        <div id="Return_to_Home_Page">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Info">
-            <span>Info</span>
-          </div>
-          <div id="Return_to_Home_Page_" class="promptMessageDiv">
-            <span></span><span style="font-style:normal;font-weight:normal;">Return to Check Page?</span>
-          </div>
-          <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelReturnCheck()">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="CANCEL">
-              <span>Cancel</span>
-            </div>
-          </div>
+  <!-- On Output click overlay -->
+  <div id="outputPopup" style="width: 581px; height: 350px; overflow: hidden; top: 40%; left: 30%;" class="popup">
+    <div id="Output_Data">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="349">
+        </rect>
+      </svg>
+      <svg class="Path_350" viewBox="0 0 575 55">
+        <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 575 0 L 575 55 L 0 55 L 0 0 Z">
+        </path>
+      </svg>
+      <div id="Output">
+        <span>Output</span>
+      </div>
+      <div id="Save_As">
+        <span>Output To</span>
+      </div>
+      <svg class="Line_39">
+        <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_39" d="M 0 0 L 0 230">
+        </path>
+      </svg>
+      <div onclick="closeOutpuToOverlay()" style="cursor: pointer;">
+        <svg class="Path_259" viewBox="7432.354 -8028.479 18 18">
+          <path fill="rgba(255,255,255,1)" id="Path_259"
+            d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+          </path>
+        </svg>
+      </div>
+      <div id="Publish_To">
+        <span>Publish To</span>
+      </div>
+      <div id="Component_24">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="SQL">
+          <span>SQL</span>
+        </div>
+      </div>
+      <div id="Component_25">
+        <svg class="Rectangle_1242_A55_Rectangle_3">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_3"
+            rx="5" ry="5" x="0" y="0" width="106.505" height="30">
+          </rect>
+        </svg>
+        <div id="DropBox">
+          <span>DropBox</span>
+        </div>
+      </div>
+      <div id="Component_26">
+        <svg class="Rectangle_1242_A55_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="Link">
+          <span>Link</span>
+        </div>
+      </div>
+      <div id="Component_27" onclick="OnExcelClick()">
+        <svg class="Rectangle_1242_A55_Rectangle_5">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_5"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="Excel">
+          <span>Excel</span>
+        </div>
+      </div>
+      <div id="Component_28">
+        <svg class="Rectangle_1242_A55_Rectangle_6">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_6"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="PDF">
+          <span>PDF</span>
+        </div>
+      </div>
+      <div id="symCancelButton___1">
+        <svg class="Rectangle_1242_A55_Rectangle_7">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_7"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="XML">
+          <span>XML</span>
+        </div>
+      </div>
+      <div id="symCancelButton___2">
+        <svg class="Rectangle_1242_A55_Rectangle_8">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_8"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="ID3D_PDF">
+          <span>3D PDF</span>
+        </div>
+      </div>
+      <div id="symCancelButton___4">
+        <svg class="Rectangle_1242_A55_Rectangle_9">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_9"
+            rx="5" ry="5" x="0" y="0" width="117.505" height="30">
+          </rect>
+        </svg>
+        <div id="JPG___PNG">
+          <span>JPG / PNG</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <div id="symYesButton___10" style="cursor: pointer;" onclick="returnCheck(ReviewPageCleanUp.onLeavingPage)">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="OK">
-              <span>OK</span>
-            </div>
-          </div>
-          <svg class="icon_32_Info" viewBox="0 1 32 32">
-            <path fill="rgba(123,168,219,1)" id="icon_32_Info"
-              d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
+  <div id="ExcelOutputPopup" style="width: 64.65%; height: 68.8%; overflow: hidden; top: 20%; left: 20%;" class="popup">
+    <div id="Excel_Output___Horizontal">
+      <div id="Group_399">
+        <div id="Group_398">
+          <svg class="Path_378" viewBox="0 0 1242 681.214">
+            <path fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_378"
+              d="M 4.722433567047119 0 L 1237.277587890625 0 C 1239.885620117188 0 1242 1.868811249732971 1242 4.174106597900391 L 1242 677.0401000976562 C 1242 679.3453979492188 1239.885620117188 681.2142333984375 1237.277587890625 681.2142333984375 L 4.722433567047119 681.2142333984375 C 2.114305257797241 681.2142333984375 0 679.3453979492188 0 677.0401000976562 L 0 4.174106597900391 C 0 1.868811249732971 2.114305257797241 0 4.722433567047119 0 Z">
             </path>
           </svg>
-        </div>
-      </div>
-
-      <!-- On Output click overlay -->
-      <div id="outputOverlay" class="overlay"></div>
-      <div id="outputPopup" style="width: 581px; height: 350px; overflow: hidden; top: 40%; left: 30%;" class="popup">
-        <div id="Output_Data">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0" width="581" height="349">
-            </rect>
-          </svg>
-          <svg class="Path_350" viewBox="0 0 575 55">
-            <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 575 0 L 575 55 L 0 55 L 0 0 Z">
+          <svg class="Path_3501" viewBox="0 0 1232.769 55">
+            <path fill="rgba(71,71,71,1)" id="Path_350"
+              d="M 0 0 L 1232.7685546875 0 L 1232.7685546875 55 L 0 55 L 0 0 Z">
             </path>
           </svg>
-          <div id="Output">
-            <span>Output</span>
+          <div id="Excel_Output">
+            <span>Excel Output</span>
           </div>
-          <div id="Save_As">
-            <span>Output To</span>
+          <div id="pie">
+            <svg class="bg">
+              <rect fill="transparent" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="8" ry="8" x="0" y="0"
+                width="100%" height="100%">
+              </rect>
+            </svg>
+            <div id="Group_5">
+              <div id="Data_source_1">
+                <span>Output Reviews</span>
+              </div>
+            </div>
           </div>
-          <svg class="Line_39">
-            <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_39" d="M 0 0 L 0 230">
+          <div id="reviewResultsExportSwitch"></div>
+          <div id="Data_source_1_A96_Text_3">
+            <span>Comparison</span>
+          </div>
+          <div id="comparisonTables" class="Path_364">
+
+          </div>
+          <div id="Data_source_1_A96_Text_7">
+            <span>Category</span>
+          </div>
+          <div id="complianceDataset1Name">
+            <span>Dataset1.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_9">
+            <span>Category</span>
+          </div>
+          <div id="complianceDataset2Name">
+            <span>Dataset2.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_11">
+            <span>Category</span>
+          </div>
+          <div id="Data_source_1_A96_Text_12">
+            <span>Compliance</span>
+          </div>
+          <svg class="line">
+            <rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
+            </rect>
+          </svg>
+          <div id="Data_source_1_A96_Text_13">
+            <span>Include Properties</span>
+          </div>
+          <svg class="line_A96_Rectangle_3">
+            <rect fill="rgba(255,255,255,1)" id="line_A96_Rectangle_3" rx="0" ry="0" x="0" y="0" width="100%"
+              height="100%">
+            </rect>
+          </svg>
+          <svg class="Path_373" viewBox="0 0 231 21.262">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(112,112,112,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_373"
+              d="M 0 0 L 231 0 L 231 10.6794548034668 L 231 21.26171875 L 0 21.26171875 L 0 0 Z">
             </path>
           </svg>
-          <div onclick="closeOutpuToOverlay()" style="cursor: pointer;">
-            <svg class="Path_259" viewBox="7432.354 -8028.479 18 18">
-              <path fill="rgba(255,255,255,1)" id="Path_259" d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+          <div id="Data_source_1_A96_Text_14">
+            <span>Output Destination</span>
+          </div>
+          <div id="Browse_to_output_destination">
+            <span>Browse to output destination</span>
+          </div>
+          <svg class="line_A96_Rectangle_4">
+            <rect fill="rgba(255,255,255,1)" id="line_A96_Rectangle_4" rx="0" ry="0" x="0" y="0" width="100%"
+              height="100%">
+            </rect>
+          </svg>
+          <svg class="Rectangle_12421">
+            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+              y="0" width="100%" height="100%">
+            </rect>
+          </svg>
+          <div id="exportButton">
+            <span>Export</span>
+          </div>
+          <div id="comparisonOutputSwitch" class="Rectangle_1309">
+
+          </div>
+          <div id="complianceSource1tables" class="Path_374">
+
+          </div>
+          <div id="complianceSource2tables" class="Path_375">
+
+          </div>
+          <div id="complianceDataset3Name">
+            <span>Dataset3.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_24">
+            <span>Category</span>
+          </div>
+          <div id="complianceDataset4Name">
+            <span>Dataset4.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_26">
+            <span>Category</span>
+          </div>
+          <div id="complianceSource3tables" class="Path_376">
+
+          </div>
+          <div id="complianceSource4tables" class="Path_377">
+
+          </div>
+          <div id="pie_A96_Group_5">
+            <svg class="bg_A96_Rectangle_7">
+              <rect fill="transparent" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A96_Rectangle_7" rx="8"
+                ry="8" x="0" y="0" width="100%" height="100%">
+              </rect>
+            </svg>
+            <div id="Group_5_A96_Group_6">
+              <div id="Data_source_1_A96_Text_33">
+                <span>Output Datasets</span>
+              </div>
+            </div>
+          </div>
+          <div id="modelBrowserExportSwitch"></div>
+          <div id="dataset1Name">
+            <span>Dataset1.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_35">
+            <span>Category</span>
+          </div>
+          <div id="dataset2Name">
+            <span>Dataset2.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_37">
+            <span>Category</span>
+          </div>
+          <div id="dataset1" class="Path_379">
+
+          </div>
+          <div id="dataset2" class="Path_380">
+
+          </div>
+          <div id="dataset3Name">
+            <span>Dataset3.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_45">
+            <span>Category</span>
+          </div>
+          <div id="dataset4Name">
+            <span>Dataset4.Name</span>
+          </div>
+          <div id="Data_source_1_A96_Text_47">
+            <span>Category</span>
+          </div>
+          <div id="dataset3" class="Path_382">
+
+          </div>
+          <div id="dataset4" class="Path_381">
+
+          </div>
+          <div id="reportNameTextBox" class="Path_383">
+
+          </div>
+          <div id="Data_source_1_A96_Text_54">
+            <span>Report Name</span>
+          </div>
+          <div id="ExportComparisonPropertiesSwitch" class="Rectangle_1310">
+
+          </div>
+          <div onclick="closeSaveAs()" style="cursor: pointer;">
+            <svg class="Path_2591" viewBox="7432.354 -8028.479 18 18">
+              <path fill="rgba(255,255,255,1)" id="Path_259"
+                d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
               </path>
             </svg>
           </div>
-          <div id="Publish_To">
-            <span>Publish To</span>
+          <div id="complianceOutputSwitch" class="Rectangle_1311">
+
           </div>
-          <div id="Component_24">
-            <svg class="Rectangle_1242">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="SQL">
-              <span>SQL</span>
-            </div>
-          </div>
-          <div id="Component_25">
-            <svg class="Rectangle_1242_A55_Rectangle_3">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_3" rx="5" ry="5" x="0" y="0" width="106.505" height="30">
-              </rect>
-            </svg>
-            <div id="DropBox">
-              <span>DropBox</span>
-            </div>
-          </div>
-          <div id="Component_26">
-            <svg class="Rectangle_1242_A55_Rectangle_4">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_4" rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="Link">
-              <span>Link</span>
-            </div>
-          </div>
-          <div id="Component_27" onclick="OnExcelClick()">
-            <svg class="Rectangle_1242_A55_Rectangle_5">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_5" rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="Excel">
-              <span>Excel</span>
-            </div>
-          </div>
-          <div id="Component_28">
-            <svg class="Rectangle_1242_A55_Rectangle_6">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_6" rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="PDF">
-              <span>PDF</span>
-            </div>
-          </div>
-          <div id="symCancelButton___1">
-            <svg class="Rectangle_1242_A55_Rectangle_7">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_7" rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="XML">
-              <span>XML</span>
-            </div>
-          </div>
-          <div id="symCancelButton___2">
-            <svg class="Rectangle_1242_A55_Rectangle_8">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_8" rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="ID3D_PDF">
-              <span>3D PDF</span>
-            </div>
-          </div>
-          <div id="symCancelButton___4">
-            <svg class="Rectangle_1242_A55_Rectangle_9">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_9" rx="5" ry="5" x="0" y="0" width="117.505" height="30">
-              </rect>
-            </svg>
-            <div id="JPG___PNG">
-              <span>JPG / PNG</span>
-            </div>
+          <div class="Rectangle_1320">
+
           </div>
         </div>
       </div>
-      
-      <div id="ExcelOutputOverlay" class="overlay"></div>
-      <div id="ExcelOutputPopup" style="width: 64.65%; height: 68.8%; overflow: hidden; top: 20%; left: 20%;" class="popup">
-        <div id="Excel_Output___Horizontal">
-          <div id="Group_399">
-            <div id="Group_398">
-              <svg class="Path_378" viewBox="0 0 1242 681.214">
-                <path fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_378" d="M 4.722433567047119 0 L 1237.277587890625 0 C 1239.885620117188 0 1242 1.868811249732971 1242 4.174106597900391 L 1242 677.0401000976562 C 1242 679.3453979492188 1239.885620117188 681.2142333984375 1237.277587890625 681.2142333984375 L 4.722433567047119 681.2142333984375 C 2.114305257797241 681.2142333984375 0 679.3453979492188 0 677.0401000976562 L 0 4.174106597900391 C 0 1.868811249732971 2.114305257797241 0 4.722433567047119 0 Z">
-                </path>
-              </svg>
-              <svg class="Path_3501" viewBox="0 0 1232.769 55">
-                <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 1232.7685546875 0 L 1232.7685546875 55 L 0 55 L 0 0 Z">
-                </path>
-              </svg>
-              <div id="Excel_Output">
-                <span>Excel Output</span>
-              </div>
-              <div id="pie">
-                <svg class="bg">
-                  <rect fill="transparent" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg" rx="8" ry="8" x="0" y="0" width="100%" height="100%">
-                  </rect>
-                </svg>
-                <div id="Group_5">
-                  <div id="Data_source_1">
-                    <span>Output Reviews</span>
-                  </div>
-                </div>
-              </div>
-              <div id="reviewResultsExportSwitch"></div>
-              <div id="Data_source_1_A96_Text_3">
-                <span>Comparison</span>
-              </div>
-              <div id="comparisonTables" class="Path_364">
+    </div>
+  </div>
 
-              </div>
-              <div id="Data_source_1_A96_Text_7">
-                <span>Category</span>
-              </div>
-              <div id="complianceDataset1Name">
-                <span>Dataset1.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_9">
-                <span>Category</span>
-              </div>
-              <div id="complianceDataset2Name">
-                <span>Dataset2.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_11">
-                <span>Category</span>
-              </div>
-              <div id="Data_source_1_A96_Text_12">
-                <span>Compliance</span>
-              </div>
-              <svg class="line">
-                <rect fill="rgba(255,255,255,1)" id="line" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
-                </rect>
-              </svg>
-              <div id="Data_source_1_A96_Text_13">
-                <span>Include Properties</span>
-              </div>
-              <svg class="line_A96_Rectangle_3">
-                <rect fill="rgba(255,255,255,1)" id="line_A96_Rectangle_3" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
-                </rect>
-              </svg>
-              <svg class="Path_373" viewBox="0 0 231 21.262">
-                <path fill="rgba(59,59,59,1)" stroke="rgba(112,112,112,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_373" d="M 0 0 L 231 0 L 231 10.6794548034668 L 231 21.26171875 L 0 21.26171875 L 0 0 Z">
-                </path>
-              </svg>
-              <div id="Data_source_1_A96_Text_14">
-                <span>Output Destination</span>
-              </div>
-              <div id="Browse_to_output_destination">
-                <span>Browse to output destination</span>
-              </div>
-              <svg class="line_A96_Rectangle_4">
-                <rect fill="rgba(255,255,255,1)" id="line_A96_Rectangle_4" rx="0" ry="0" x="0" y="0" width="100%" height="100%">
-                </rect>
-              </svg>
-              <svg class="Rectangle_12421">
-                <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0" y="0" width="100%" height="100%">
-                </rect>
-              </svg>
-              <div id="exportButton">
-                <span>Export</span>
-              </div>
-              <div id="comparisonOutputSwitch" class="Rectangle_1309">
+  <!-- Return to PREP overlay -->
+  <div id="returnPREPPopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Info</span>
+      </div>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save data and Return to PREP
+          Module?</span><span></span>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="returnToPREP(ReviewPageCleanUp.onLeavingPage)">
+          <span>No</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="returnToPREP(ReviewPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnPREP()">
+          <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-              </div>
-              <div id="complianceSource1tables" class="Path_374">
+  <!--Sign out overlay -->
+  <div id="signOutPopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Save before Sign Out</span>
+      </div>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save data before Signing Out of your
+          session?</span><span></span>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onLeavingPage)">
+          <span>No</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelSignOut()">
+          <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-              </div>
-              <div id="complianceSource2tables" class="Path_375">
+  <!-- exit app overlay -->
+  <div id="exitPopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Save before Exit</span>
+      </div>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span>Save data before Exiting </span><span
+          style="font-style:normal;font-weight:bold;">XcheckStudio</span><span>?</span>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="exit()">
+          <span>No</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="exit(ReviewPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelExit()">
+          <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-              </div>
-              <div id="complianceDataset3Name">
-                <span>Dataset3.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_24">
-                <span>Category</span>
-              </div>
-              <div id="complianceDataset4Name">
-                <span>Dataset4.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_26">
-                <span>Category</span>
-              </div>
-              <div id="complianceSource3tables" class="Path_376">
-
-              </div>
-              <div id="complianceSource4tables" class="Path_377">
-               
-              </div>
-              <div id="pie_A96_Group_5">
-                <svg class="bg_A96_Rectangle_7">
-                  <rect fill="transparent" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="10" shape-rendering="auto" id="bg_A96_Rectangle_7" rx="8" ry="8" x="0" y="0" width="100%" height="100%">
-                  </rect>
-                </svg>
-                <div id="Group_5_A96_Group_6">
-                  <div id="Data_source_1_A96_Text_33">
-                    <span>Output Datasets</span>
-                  </div>
-                </div>
-              </div>
-              <div id="modelBrowserExportSwitch"></div>
-              <div id="dataset1Name">
-                <span>Dataset1.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_35">
-                <span>Category</span>
-              </div>
-              <div id="dataset2Name">
-                <span>Dataset2.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_37">
-                <span>Category</span>
-              </div>
-              <div id="dataset1" class="Path_379">
-                
-              </div>
-              <div id="dataset2" class="Path_380">
-
-              </div>
-              <div id="dataset3Name">
-                <span>Dataset3.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_45">
-                <span>Category</span>
-              </div>
-              <div id="dataset4Name">
-                <span>Dataset4.Name</span>
-              </div>
-              <div id="Data_source_1_A96_Text_47">
-                <span>Category</span>
-              </div>
-              <div id="dataset3" class="Path_382">
-
-              </div>
-              <div id="dataset4" class="Path_381">
-
-              </div>
-              <div id="reportNameTextBox" class="Path_383">
-
-              </div>
-              <div id="Data_source_1_A96_Text_54">
-                <span>Report Name</span>
-              </div>
-              <div id="ExportComparisonPropertiesSwitch" class="Rectangle_1310">
-                
-              </div>
-              <div onclick="closeSaveAs()" style="cursor: pointer;">
-                <svg class="Path_2591" viewBox="7432.354 -8028.479 18 18">
-                  <path fill="rgba(255,255,255,1)" id="Path_259" d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
-                  </path>
-                </svg>
-              </div>
-              <div id="complianceOutputSwitch" class="Rectangle_1311">
-               
-              </div>
-              <div class="Rectangle_1320">
-               
-              </div>
-            </div>
-          </div>
+  <!-- reset data overlay -->
+  <div id="resetDataPopup" class="popup">
+    <div id="Return_to_Home_Page">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Info" style="left: 10px;">
+        <span>Reset Data</span>
+      </div>
+      <div id="Return_to_Home_Page_" class="promptMessageDiv">
+        <span></span><span style="font-style:normal;font-weight:normal;">Reset Check Results?</span>
+      </div>
+      <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelResetData()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="CANCEL">
+          <span>Cancel</span>
         </div>
       </div>
 
-      <!-- Return to PREP overlay -->
-      <div id="returnPREPOverlay" class="overlay"></div>
-      <div id="returnPREPPopup" class="popup">
-        <div id="Save_and_Exit">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Save_and_Exit_">
-            <span>Info</span>
-          </div>
-          <div id="Save_data_and_Exit_XcheckStudi">
-            <span></span><span style="font-style:normal;font-weight:normal;">Save data and Return to PREP
-              Module?</span><span></span>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
-            id="Component_20">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="NO" style="cursor: pointer;" onclick="returnToPREP(ReviewPageCleanUp.onLeavingPage)">
-              <span>No</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
-            id="Component_34">
-            <svg class="Rectangle_1242">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
-                x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="YES" style="cursor: pointer;" onclick="returnToPREP(ReviewPageCleanUp.onSaveAndLeavePage)">
-              <span>Yes</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
-            id="Component_35">
-            <svg class="Rectangle_1242_A61_Rectangle_4">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-                rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnPREP()">
-              <span>Cancel</span>
-            </div>
-          </div>
+      <div id="symYesButton___10" style="cursor: pointer;" onclick="resetData()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="OK">
+          <span>Reset</span>
         </div>
       </div>
-
-      <!--Sign out overlay -->
-      <div id="signOutOverlay" class="overlay"></div>
-      <div id="signOutPopup" class="popup">
-        <div id="Save_and_Exit">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Save_and_Exit_">
-            <span>Save before Sign Out</span>
-          </div>
-          <div id="Save_data_and_Exit_XcheckStudi">
-            <span></span><span style="font-style:normal;font-weight:normal;">Save data before Signing Out of your
-              session?</span><span></span>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
-            id="Component_20">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="NO" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onLeavingPage)">
-              <span>No</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
-            id="Component_34">
-            <svg class="Rectangle_1242">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
-                x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="YES" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onSaveAndLeavePage)">
-              <span>Yes</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
-            id="Component_35">
-            <svg class="Rectangle_1242_A61_Rectangle_4">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-                rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="CANCEL" style="cursor: pointer;" onclick="cancelSignOut()">
-              <span>Cancel</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- exit app overlay -->
-      <div id="exitOverlay" class="overlay"></div>
-      <div id="exitPopup" class="popup">
-        <div id="Save_and_Exit">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Save_and_Exit_">
-            <span>Save before Exit</span>
-          </div>
-          <div id="Save_data_and_Exit_XcheckStudi">
-            <span>Save data before Exiting </span><span
-              style="font-style:normal;font-weight:bold;">XcheckStudio</span><span>?</span>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;"
-            id="Component_20">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="NO" style="cursor: pointer;" onclick="exit()">
-              <span>No</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;"
-            id="Component_34">
-            <svg class="Rectangle_1242">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5"
-                x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="YES" style="cursor: pointer;" onclick="exit(ReviewPageCleanUp.onSaveAndLeavePage)">
-              <span>Yes</span>
-            </div>
-          </div>
-          <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;"
-            id="Component_35">
-            <svg class="Rectangle_1242_A61_Rectangle_4">
-              <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-                rx="5" ry="5" x="0" y="0" width="90" height="30">
-              </rect>
-            </svg>
-            <div id="CANCEL" style="cursor: pointer;" onclick="cancelExit()">
-              <span>Cancel</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- reset data overlay -->
-      <div id="resetDataOverlay" class="overlay"></div>
-      <div id="resetDataPopup" class="popup">
-        <div id="Return_to_Home_Page">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Info" style="left: 10px;">
-            <span>Reset Data</span>
-          </div>
-          <div id="Return_to_Home_Page_" class="promptMessageDiv">
-            <span></span><span style="font-style:normal;font-weight:normal;">Reset Check Results?</span>
-          </div>
-          <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelResetData()">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="CANCEL">
-              <span>Cancel</span>
-            </div>
-          </div>
-
-          <div id="symYesButton___10" style="cursor: pointer;" onclick="resetData()">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="OK">
-              <span>Reset</span>
-            </div>
-          </div>
-          <!-- <svg class="icon_32_Info" viewBox="0 1 32 32">
+      <!-- <svg class="icon_32_Info" viewBox="0 1 32 32">
             <path fill="rgba(123,168,219,1)" id="icon_32_Info"
               d="M 15.99930000305176 33.00030136108398 C 11.7262601852417 33.00030136108398 7.708600044250488 31.33565139770508 4.686410427093506 28.31299018859863 C 1.664330244064331 25.29044151306152 2.716064386731887e-07 21.2724609375 2.716064386731887e-07 16.99920082092285 C 2.716064386731887e-07 12.72605133056641 1.664330244064331 8.708391189575195 4.686410427093506 5.6863112449646 C 7.708490371704102 2.664231061935425 11.72615051269531 0.9999011158943176 15.99930000305176 0.9999011158943176 C 20.27256011962891 0.9999011158943176 24.29054069519043 2.664231061935425 27.31308937072754 5.6863112449646 C 30.33575057983398 8.708500862121582 32.00040054321289 12.72616100311279 32.00040054321289 16.99920082092285 C 32.00040054321289 21.2723503112793 30.33575057983398 25.29033088684082 27.31308937072754 28.31299018859863 C 24.29043006896973 31.33565139770508 20.2724494934082 33.00030136108398 15.99930000305176 33.00030136108398 Z M 12.7224006652832 14.56110095977783 C 13.2699499130249 14.56110095977783 13.63029003143311 14.65001106262207 13.82400035858154 14.83290100097656 C 14.01451015472412 15.0153112411499 14.11110019683838 15.342041015625 14.11110019683838 15.80400085449219 C 14.11110019683838 16.06768035888672 14.08021068572998 16.35625076293945 14.01930046081543 16.66170120239258 C 13.95783996582031 16.96285057067871 13.87971019744873 17.29594039916992 13.78709983825684 17.65170097351074 L 12.75660037994385 21.29310035705566 C 12.66396045684814 21.68291091918945 12.59889030456543 22.01912117004395 12.55770015716553 22.32090187072754 C 12.51708984375 22.62499046325684 12.49650001525879 22.92537117004395 12.49650001525879 23.21370124816895 C 12.49650001525879 23.95893096923828 12.77508068084717 24.58180046081543 13.32450008392334 25.06500053405762 C 13.87519073486328 25.54933166503906 14.65764045715332 25.79490089416504 15.65010070800781 25.79490089416504 C 16.29512023925781 25.79490089416504 16.87014961242676 25.70890045166016 17.35919952392578 25.5393009185791 C 17.86007118225098 25.3650016784668 18.5232105255127 25.11519050598145 19.3302001953125 24.79680061340332 L 19.60470008850098 23.67630195617676 C 19.45536994934082 23.74576187133789 19.2244701385498 23.82290077209473 18.9197998046875 23.90670204162598 C 18.59893035888672 23.99512100219727 18.32162094116211 24.03810119628906 18.07200050354004 24.03810119628906 C 17.54241943359375 24.03810119628906 17.16543006896973 23.94968032836914 16.95149993896484 23.77530097961426 C 16.73650932312012 23.60224151611328 16.62750053405762 23.27067184448242 16.62750053405762 22.7898006439209 C 16.62750053405762 22.59416198730469 16.66081047058105 22.3086109161377 16.72649955749512 21.94110107421875 C 16.79701042175293 21.55279159545898 16.87120056152344 21.22690200805664 16.95330047607422 20.94480133056641 L 17.97840118408203 17.31420135498047 C 18.07889938354492 16.97829055786133 18.14824104309082 16.60887145996094 18.18449974060059 16.21620178222656 C 18.22143936157227 15.80705070495605 18.23940086364746 15.53356075286865 18.23940086364746 15.38010120391846 C 18.23940086364746 14.620680809021 17.96869087219238 13.99357128143311 17.43480110168457 13.51620101928711 C 16.89764976501465 13.0402307510376 16.12671089172363 12.79890155792236 15.14340019226074 12.79890155792236 C 14.59355068206787 12.79890155792236 14.0055103302002 12.89822101593018 13.39560031890869 13.09410095214844 C 12.77694034576416 13.29037094116211 12.12530994415283 13.52777099609375 11.45880031585693 13.79970073699951 L 11.1870002746582 14.92110061645508 C 11.40032005310059 14.83929061889648 11.657470703125 14.75821113586426 11.90340042114258 14.68260097503662 C 12.1759204864502 14.6019811630249 12.45147037506104 14.56110095977783 12.7224006652832 14.56110095977783 Z M 17.42130088806152 6.153301239013672 C 16.75091934204102 6.153301239013672 16.16772079467773 6.379801273345947 15.68790054321289 6.82650089263916 C 15.20895004272461 7.275681018829346 14.96610069274902 7.82072114944458 14.96610069274902 8.446500778198242 C 14.96610069274902 9.075160980224609 15.20895004272461 9.618990898132324 15.68790054321289 10.06290149688721 C 16.16835975646973 10.50482082366943 16.75156021118164 10.72890090942383 17.42130088806152 10.72890090942383 C 18.09134101867676 10.72890090942383 18.67242050170898 10.50482082366943 19.14839935302734 10.06290149688721 C 19.62495994567871 9.619550704956055 19.86660003662109 9.075711250305176 19.86660003662109 8.446500778198242 C 19.86660003662109 7.818490982055664 19.62495994567871 7.273441314697266 19.14839935302734 6.82650089263916 C 18.67394065856934 6.379801273345947 18.09287071228027 6.153301239013672 17.42130088806152 6.153301239013672 Z">
             </path>
           </svg> -->
-        </div>
-      </div>
+    </div>
+  </div>
 
-      <!-- recheck overlay -->
-      <div id="recheckOverlay" class="overlay"></div>
-      <div id="recheckPopup" class="popup">
-        <div id="Return_to_Home_Page">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Info" style="left: 10px;">
-            <span>Re-Check</span>
-          </div>
-          <div id="Return_to_Home_Page_" class="promptMessageDiv">
-            <span></span><span style="font-style:normal;font-weight:normal;">Re Run Check? Incudes all Data Changes
-              made!</span>
-          </div>
-          <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelRecheck()">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
+        <!-- recheck overlay -->
+        <div id="recheckPopup" class="popup">
+          <div id="Return_to_Home_Page">
+            <svg class="Rectangle_1204">
+              <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+                y="0" width="581" height="155">
+              </rect>
             </svg>
-            <div id="CANCEL">
-              <span>Cancel</span>
+            <svg class="Rectangle_1215">
+              <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+              </rect>
+            </svg>
+            <div id="Info" style="left: 10px;">
+              <span>Re-Check</span>
+            </div>
+            <div id="Return_to_Home_Page_" class="promptMessageDiv">
+              <span></span><span style="font-style:normal;font-weight:normal;">Re Run Check? Incudes all Data Changes
+                made!</span>
+            </div>
+            <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelRecheck()">
+              <svg class="Path_310" viewBox="0 0 90 30">
+                <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                  stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                  d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+                </path>
+              </svg>
+              <div id="CANCEL">
+                <span>Cancel</span>
+              </div>
+            </div>
+  
+            <div id="symYesButton___10" style="cursor: pointer;" onclick="recheck()">
+              <svg class="Path_310" viewBox="0 0 90 30">
+                <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+                  stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+                  d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+                </path>
+              </svg>
+              <div id="OK">
+                <span>OK</span>
+              </div>
             </div>
           </div>
-
-          <div id="symYesButton___10" style="cursor: pointer;" onclick="recheck()">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="OK">
-              <span>OK</span>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <!-- reset data overlay -->
-      <div id="saveResultsOverlay" class="overlay"></div>
+              <!-- reset data overlay -->
       <div id="saveResultsPopup" class="popup">
         <div id="Return_to_Home_Page">
           <svg class="Rectangle_1204">
@@ -856,48 +831,34 @@
         </div>
       </div>
 
-      <!-- saved data overlay -->
-      <!-- <div id="savedDataOverlay" class="overlay"></div>
-      <div id="savedDataPopup" class="popup">
-        <div id="There_is_no_valid_checkcase">
-          <svg class="Rectangle_1204">
-            <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-              y="0" width="581" height="155">
-            </rect>
-          </svg>
-          <svg class="Rectangle_1215">
-            <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
-            </rect>
-          </svg>
-          <div id="Alert">
-            <span>Alert</span>
-          </div>
-          <div id="There_is_no_valid_CheckCase_fo">
-            <span></span><span style="font-style:normal;font-weight:normal;">Saved Data!</span>
-          </div>
-          <div id="Page_1">
-            <div id="Small">
-              <svg class="icon_32_Severity" viewBox="48 865 32 29.756">
-                <path fill="rgba(255,224,71,1)" id="icon_32_Severity"
-                  d="M 79.41110229492188 887.7999877929688 C 80.21749877929688 889.2620239257813 80.19869995117188 891.0059814453125 79.33619689941406 892.4500122070313 C 78.49240112304688 893.8939819335938 76.97360229492188 894.7559814453125 75.30490112304688 894.7559814453125 L 52.69509887695313 894.7559814453125 C 51.02640151977539 894.7559814453125 49.50759887695313 893.8939819335938 48.66379928588867 892.4500122070313 C 47.80130004882813 891.0059814453125 47.78250122070313 889.2620239257813 48.58890151977539 887.7999877929688 L 59.893798828125 867.4190063476563 C 60.73759841918945 865.9190063476563 62.27519989013672 865 64 865 C 65.72489929199219 865 67.26249694824219 865.9190063476563 68.106201171875 867.4190063476563 L 79.41110229492188 887.7999877929688 Z M 61.1875 870.3809814453125 L 61.1875 884.4439697265625 L 66.8125 884.4439697265625 L 66.8125 870.3809814453125 L 61.1875 870.3809814453125 Z M 64 886.3189697265625 C 62.44359970092773 886.3189697265625 61.1875 887.5750122070313 61.1875 889.1309814453125 C 61.1875 890.68798828125 62.44359970092773 891.9439697265625 64 891.9439697265625 C 65.556396484375 891.9439697265625 66.8125 890.68798828125 66.8125 889.1309814453125 C 66.8125 887.5750122070313 65.556396484375 886.3189697265625 64 886.3189697265625 Z">
-                </path>
-              </svg>
-            </div>
-          </div>
-          <div id="Component_4">
-            <svg class="Path_310" viewBox="0 0 90 30">
-              <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
-                d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
-              </path>
-            </svg>
-            <div id="OK" onclick="onSavedDataOk()">
-              <span>OK</span>
-            </div>
-          </div>
-        </div>
-      </div> -->
+  <header>
+    <button id="mainMenu" type="button" class="dropDownMenu">
+      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+    </button>
+    <h1 id="pageName"></h1>
+    <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
+    <div class="userInfo">
+      <p id="userName" class="userName"> User Name </p>
+      <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
+      <img id="userImg" src="public/symbols/Max.png" alt="">
+      <div class="programCntrls">
+        <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
+            onclick="onminimizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/maximizeWin.svg" alt="maximize program"
+            onclick="onmaximizewindow()"></button>
+        <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
+            onclick="onExitClicked()"></button>
+      </div>
+    </div>
+
+  </header>
+
+  <div id="drawer" style="position: fixed; top:50px; left: 0px">
+    <div id="loadIndicator"></div>
+
+    <div class="background">
+      <div id='contextMenu' style="z-index: 4; position: absolute;">
+      </div>
 
       <div class="tabButtonContainer" id="tabsContainer">
         <div id="tabContainer" class="tabContainer">
@@ -1346,7 +1307,7 @@
   <link rel="stylesheet" href="CSS\DrawerMenu.css" type="text/css" />
 
   <link rel="stylesheet" href="CSS\ContextMenu.css" type="text/css" />
-  <link rel="stylesheet" href="CSS\Excel_Output___Horizontal.css" type="text/css"/>
+  <link rel="stylesheet" href="CSS\Excel_Output___Horizontal.css" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewReferenceManager.js"></script>
 
@@ -1392,7 +1353,7 @@
         document.getElementById("IFrameSmallAnalyticsCompliance").src = "SmallAnalyticsModule.html";
         document.getElementById("IFramelargeAnalytics").src = "LargeAnalyticsModule.html";
         // hide loading overlay
-        document.getElementById("pageLoadingOverlay").style.display = "none";
+        document.getElementById("uiBlockingOverlay").style.display = "none";
       });
       // // hide busy indicator
       // hideBusyIndicator();     
@@ -1466,7 +1427,7 @@
 
     function onExitClicked() {
       console.log("onExitClicked");
-      var overlay = document.getElementById("exitOverlay");
+      var overlay = document.getElementById("uiBlockingOverlay");
       var popup = document.getElementById("exitPopup");
 
       overlay.style.display = 'block';
@@ -1481,7 +1442,7 @@
     }
 
     function cancelExit() {
-      var overlay = document.getElementById("exitOverlay");
+      var overlay = document.getElementById("uiBlockingOverlay");
       var popup = document.getElementById("exitPopup");
 
       overlay.style.display = 'none';
