@@ -965,8 +965,8 @@
           <!-- Modal content -->
           <div class="modal-content" id="largeAnalyticsContainer-content"
             style="width: 100%; height: 100%; padding: 6px;">
-            <span onclick="this.parentElement.parentElement.style.display='none'" style="color: white; font-weight: bolder; position: absolute; top: 25px;
-              right: 25px;" class="closebtn">X</span>
+              <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)" style="left:10px; top:15px; background-image: url(../../public/symbols/XD_Minimise.svg)"
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="this.parentElement.parentElement.style.display='none'"></div>
             <iframe id="IFramelargeAnalytics" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
