@@ -114,6 +114,11 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                                 return false;
                             }
                         },
+                        disabled: function () {
+                            var disable = false;
+                            disable = _this.DisableContextMenuRestoreForComponent(this[0]);
+                            return disable;
+                        },
                     },
                     "reference": {
                         name: "Reference",
@@ -273,6 +278,11 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                     },
                     "restoreItem": {
                         name: transposeconditionalName,
+                        disabled: function () {
+                            var disable = false;
+                            disable = _this.DisableContextMenuRestoreForProperty(this[0]);
+                            return disable;
+                        },
                         visible: function () { if (transposeconditionalName == 'Restore') { return true; } else { return false; } },
                     }
                 }
@@ -466,6 +476,29 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
     return transpose;
 }
 
+ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForComponent = function() {
+    var restore = true;
+    var ignore = ['OK', 'OK(T)', 'OK(A)(T)', 'No Match'];
+    var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
+
+    if (selectedGroupIdsVsResultIds == undefined) {
+        return restore;
+    }
+
+    for (var groupId in selectedGroupIdsVsResultIds) {
+        var componentIds = selectedGroupIdsVsResultIds[groupId];
+        for (var componentId in componentIds) {
+            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
+            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
+            var index = ignore.indexOf(checkResultComponent.status);
+            if (index > 0 && checkResultComponent.transpose !== null) {
+                restore = false;
+            }
+        }
+    }
+    return restore;
+}
+
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
 
     var accept = true;
@@ -604,6 +637,33 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
     }
 
     return transpose;
+}
+
+ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForProperty = function () {
+    var restore = true;
+    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)'];
+    var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
+
+    if (selectedPropertiesKey.length == 0) {
+        restore = true;
+        return restore;
+    }
+
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
+
+    for (var i = 0; i < selectedPropertiesKey.length; i++) {
+        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
+        var rowData = data[rowIndex];
+
+        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
+        if (index > 0) {
+            restore = false;
+        }
+    }
+
+    return restore;
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = function (groupId) {
