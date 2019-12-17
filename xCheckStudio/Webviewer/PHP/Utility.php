@@ -64,6 +64,10 @@
         return rmdir($dir);
     }
 
+    function renameFolder($sourceDir, $destinationDir) {
+        return rename( $sourceDir, $destinationDir) ;
+    }
+
     function CopyFile($soureFilePath, $destinationFilePath){
         return copy($soureFilePath, $destinationFilePath);
     }

@@ -1194,6 +1194,7 @@ let editProjectView = {
 
   onUpdateProject: function () {
     var _this = this;
+    let editProjectName = document.getElementById("editProjectName").value;
     let editComments = document.getElementById("editComments").value;
     let editProjectStatus = document.getElementById("editProjectStatus").value;
     let editProjectType = document.getElementById("editProjectType").value;
@@ -1206,7 +1207,8 @@ let editProjectView = {
         'InvokeFunction': 'UpdateProject',
         'userid': userinfo.userid,
         'projectid': this.currentProject.projectid,
-        'projectname': this.currentProject.projectname,
+        'projectname': editProjectName,
+        'oldprojectname': this.currentProject.projectname,
         'projectDescription': editProjectDescription,
         'projectType': editProjectType,
         "projectStatus": editProjectStatus,
@@ -1216,11 +1218,14 @@ let editProjectView = {
       type: "POST",
       url: "PHP/ProjectManager.php"
     }).done(function (msg) {
-      onToggleOverlayDisplay(false);
-      document.getElementById("editProject").classList.remove("projectOverlaysOpen");
-      _this.cancelEditProject(true);
       if (msg === "true") {
+        onToggleOverlayDisplay(false);
+        document.getElementById("editProject").classList.remove("projectOverlaysOpen");
+        _this.cancelEditProject(true);
         controller.fetchProjects();
+      }
+      else {
+        showAlertForm(msg);
       }
     });
   }

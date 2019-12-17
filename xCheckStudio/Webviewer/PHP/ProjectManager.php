@@ -3459,17 +3459,8 @@ function CreateProject()
         return;
     }
     try{
-        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "select projectname from Projects where projectname=\"". $projectName."\" COLLATE NOCASE;";      
-        $count=0;
-        foreach ($dbh->query($query) as $row)
-        {
-            $count = $count+1;
-        }
-        if ($count != 0)
-        {
+        if (CheckIfProjectExists($projectName) == TRUE) {
             echo "Project with provided name already exists. Please try some other name.";
-            $dbh = null; //This is how you close a PDO connection
             return;
         }
     }
@@ -3489,6 +3480,31 @@ function CreateProject()
         }
     }              	
     echo "success";
+}
+
+/*
+|
+|   Checks whether project with provided name exists or not.
+|   Retunrs TRUE if project exists
+|   Retunrs FALSE if not
+|
+*/
+
+function CheckIfProjectExists($projectName) {
+    $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+    $query =  "select projectname from Projects where projectname=\"". $projectName."\" COLLATE NOCASE;";      
+    $count=0;
+    foreach ($dbh->query($query) as $row)
+    {
+        $count = $count+1;
+    }
+    $dbh = null; //This is how you close a PDO connection
+    if ($count != 0) {
+        return TRUE;
+    }
+    else {
+        return FALSE;
+    }
 }
 
 /*
@@ -3659,11 +3675,25 @@ function UpdateProject()
     $projectComments = trim($_POST["projectComments"], " "); 
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
     
+    if (CheckIfProjectExists($projectName) == TRUE){
+            echo "Project with provided name already exists. Please try some other name.";
+            return;
+    }
+    
+    /*Rename the project directory now*/
+    $oldprojectname = trim($_POST["oldprojectname"], " ");
+    $status = renameFolder(getProjectDirectoryPath($oldprojectname), getProjectDirectoryPath($projectName));
+    if ($status != TRUE) {
+        echo "Failed to rename project directory. May be project directory is in use. Please try by closing the same.";
+        return;
+    }
+    
+    /*Update the project details in database*/
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query = 'UPDATE Projects Set userid=?, type=?,comments=?,IsFavourite=?,description=?,status=? WHERE projectid=?';
+        $query = 'UPDATE Projects Set projectname=?, type=?,comments=?,IsFavourite=?,description=?,status=? WHERE projectid=?';
         $stmt = $dbh->prepare($query);
-        $response = $stmt->execute(array($userid, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectid));     
+        $response = $stmt->execute(array($projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectid));     
         echo json_encode($response);
         $dbh = null; //This is how you close a PDO connection
         return;      
@@ -3671,6 +3701,7 @@ function UpdateProject()
     catch(Exception $e) {
         echo "failed";
         return;
-    } 
+    }
+    
 }
 ?>
