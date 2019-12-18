@@ -3676,18 +3676,20 @@ function UpdateProject()
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
     
     if (CheckIfProjectExists($projectName) == TRUE){
-            echo "Project with provided name already exists. Please try some other name.";
-            return;
+        echo "Project with provided name already exists. Please try some other name.";
+        return;
     }
     
     /*Rename the project directory now*/
     $oldprojectname = trim($_POST["oldprojectname"], " ");
-    $status = renameFolder(getProjectDirectoryPath($oldprojectname), getProjectDirectoryPath($projectName));
-    if ($status != TRUE) {
-        echo "Failed to rename project directory. May be project directory is in use. Please try by closing the same.";
-        return;
+    if (strcmp($oldprojectname, $projectName) != 0 ) {
+        $status = renameFolder(getProjectDirectoryPath($oldprojectname), getProjectDirectoryPath($projectName));
+        if ($status != TRUE) {
+            echo "Failed to rename project directory. May be project directory is in use. Please try by closing the same.";
+            return;
+        }
     }
-    
+
     /*Update the project details in database*/
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");

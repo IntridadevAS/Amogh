@@ -386,7 +386,7 @@
         <img src="public/symbols/Review_Module_Icon.svg" class="module review" onclick="OnReviewClicked()" onmouseover="OnDisplayToolTip('reviewtooltiptext')" onmouseout="OnHideToolTip('reviewtooltiptext')"/>  <div id ="reviewtooltiptext" class="tooltiptext" style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">Review</div>
       </div>
       <div id="prepmodule">
-        <img src="public/symbols/Prep_Module_Icon.svg" class="module prep" onclick="OnPrepClick()" onmouseover="OnDisplayToolTip('preptooltiptext')" onmouseout="OnHideToolTip('preptooltiptext')"/> <div id ="preptooltiptext" class="tooltiptext" style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">PREP</div>
+        <img src="public/symbols/Prep_Module_Icon.svg" class="module prep" onclick="OnPrepClick()" onmouseover="OnDisplayToolTip('preptooltiptext')" onmouseout="OnHideToolTip('preptooltiptext')"/> <div id ="preptooltiptext" class="tooltiptext" style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">Prep</div>
       </div>
     </div>
   </div>
@@ -402,7 +402,7 @@
         disabledMenuItem.push("prep");
       }
 
-      //DrawerMenu.create(disabledMenuItem);
+      DrawerMenu.create(disabledMenuItem);
     }
 
     function setUserName() {
