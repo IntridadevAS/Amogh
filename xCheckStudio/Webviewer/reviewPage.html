@@ -924,10 +924,7 @@
         </div>
         <div id="largeAnalyticsContainer" class="modal">
           <!-- Modal content -->
-          <div class="modal-content" id="largeAnalyticsContainer-content"
-            style="width: 100%; height: 100%; padding: 6px;">
-              <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)" style="left:10px; top:15px; background-image: url(../../public/symbols/XD_Minimise.svg)"
-              onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="this.parentElement.parentElement.style.display='none'"></div>
+          <div class="modal-content" id="largeAnalyticsContainer-content" style="width: 100%; height: 100%; padding: 6px;">
             <iframe id="IFramelargeAnalytics" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
@@ -1398,13 +1395,34 @@
     }
 
     function IsCompliancePerformed(sourceId) {
-      return model.files[sourceId]["compliance"];
+      if(model.files[sourceId])
+        return model.files[sourceId]["compliance"];
+      else
+        return false;
     }
 
     function ShowLargeAnalytics()
     {
       Analytics.ShowLargeAnalytics();
-    }    
+    } 
+    
+    function ShowSmallAnalytics() {
+      var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
+      modal.style.display = "none";
+
+      if(model.currentCheck == 'comparison') {
+          var visualizer = document.getElementById("comparisonVisualizerA");
+      }
+      else {
+        var visualizer = document.getElementById("complianceVisualizerA");
+      }
+
+      if(visualizer.classList.contains("maximize")) {
+          visualizer.classList.remove("maximize");
+      }
+      
+      Analytics.ShowSmallAnalytics(visualizer, Comparison.SmallAnalyticsContainer);
+    }
 
     // reference related functions
     function closeReference() {

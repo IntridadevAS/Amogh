@@ -1678,6 +1678,45 @@ var Application = function() {
 
 window.application = new Application();
 </script>
+<style>
+		.maxMinBtn{
+		background-color: var(--xCheckDarkGrey);
+		background-image: url(../../public/symbols/XD_Maximise.svg);
+		background-position: center;
+		background-repeat: no-repeat;
+		position: absolute;
+		left: 5px;
+		top: 5px;
+		height: 30px;
+		width: 30px;
+		opacity: 0.2;
+		border: var(--borderWidth) solid var(--xCheckMedGrey);
+		border-radius: var(--borderRadiusVal);
+		z-index: 1;
+		cursor: pointer;
+	}
+
+	.maximize .maxMinBtn {
+		background-image: url(../../public/symbols/XD_Minimise.svg);
+	}
+
+	.analyticsBtn{
+		background-color: var(--xCheckDarkGrey);
+		background-image: url(../../public/symbols/Analytics_Icon.svg);
+		background-position: center;
+		background-repeat: no-repeat;
+		position: absolute;
+		left: 5px;
+		top: 45px;
+		height: 30px;
+		opacity: 0.2;
+		width: 30px;
+		border: var(--borderWidth) solid var(--xCheckMedGrey);
+		border-radius: var(--borderRadiusVal);
+		z-index: 2;
+		cursor: pointer;
+	}
+</style>
 </head>
 <body>
 <div id="Compliance_DataSet_Selection" onclick="RemoveComplianceSourceSelectionOverlay()" style="cursor: pointer;" >
@@ -1750,6 +1789,9 @@ window.application = new Application();
 	</div>
 </div>
 <div id="Large___1">
+	<div class="maxMinBtn" onmouseover="onMouseOverMaxMin(this)" onmouseout="onMouseOutMaxMin(this)" onClick="ShowSmallAnalytics()"></div>
+	<div id="analyticsBtn" onmouseover="onMouseOverMaxMin(this)" style="left: 5px; top: 50px" onmouseout="onMouseOutMaxMin(this)" 
+	class="analyticsBtn" onclick="HideAnalyticsViewer()"></div>
 	<div id="Group_1">
 		<div id="compare">
 			<svg class="bg">
@@ -2099,6 +2141,13 @@ var activeResultType = "";
 var SeveritybuttonActive = true;
 var InfoButtonActive = false;
 
+function onMouseOverMaxMin(selected) {
+	selected.style.opacity = 1;
+}
+
+function onMouseOutMaxMin(selected) {
+	selected.style.opacity = 0.2;
+}
 window.onload = function () {            
 
 	populateDataSourceInfo();

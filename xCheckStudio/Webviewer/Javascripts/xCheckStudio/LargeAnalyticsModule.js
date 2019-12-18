@@ -28,6 +28,18 @@ function LoadAnalyticsContent(analyticsData, currentCheck) {
     }
 }
 
+function HideAnalyticsViewer() {
+    var reviewDoc = window.frameElement.ownerDocument;
+    var modal = reviewDoc.getElementById("largeAnalyticsContainer");
+    modal.style.display = "none";
+    window.parent.ShowModelViewer();
+    window.parent.resizeCanvas();
+}
+
+function ShowSmallAnalytics() {
+    window.parent.ShowSmallAnalytics();
+}
+
 function OpenAnalyticsCharts() {
     if(activeResultType == "comparison") {
         openChartComparison()
