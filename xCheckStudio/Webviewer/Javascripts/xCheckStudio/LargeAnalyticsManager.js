@@ -308,8 +308,9 @@ LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
         },
 		argumentAxis: {
             label: {
-                wordWrap: "Wrap",
-                overlappingBehavior: "stagger"
+                wordWrap: "normal",
+                textOverflow: 'ellipsis',
+                displayMode: 'stagger'
             }
         },
         valueAxis: {
