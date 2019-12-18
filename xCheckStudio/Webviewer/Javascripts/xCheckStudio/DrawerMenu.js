@@ -10,9 +10,7 @@ var DrawerMenu = {
             revealMode: "expand",
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
-                if (disableItems) {
-                    disableMenuItems(disableItems);
-                }
+                disableMenuItems(disableItems);
 
                 return $list.dxList({
                     dataSource: menuItems,
@@ -344,10 +342,23 @@ function returnCheck(callbackFunction) {
 }
 
 function disableMenuItems(items) {
-    for (var i = 0; i < items.length; i++) {
+    var disabledMenuItem=[];
+    // create drawer menu
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if (userinfo.permission.toLowerCase() === 'review') {
+        disabledMenuItem = ["check", "output", "reports"];
+    }
+
+    if (userinfo.type.toLowerCase() !== 'admin') {
+        disabledMenuItem.push("prep");
+    }
+
+    var mergedArrayWithoutDuplicates = items.concat(disabledMenuItem.filter(seccondArrayItem => !items.includes(seccondArrayItem)));
+
+    for (var i = 0; i < mergedArrayWithoutDuplicates.length; i++) {
         for (var j = 0; j < menuItems.length; j++) {
             var menuItem = menuItems[j];
-            if (menuItem.text.toLowerCase() === items[i].toLowerCase()) {
+            if (menuItem.text.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
                 menuItem["disabled"] = true;
             }
         }

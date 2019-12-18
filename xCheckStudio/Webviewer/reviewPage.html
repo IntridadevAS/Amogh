@@ -1344,9 +1344,9 @@
 
       // enable menu options
       enableMenuOptions();
-
+      var disableItems = [];
       // create drawer menu
-      DrawerMenu.create();
+      DrawerMenu.create(disableItems);
 
       // init review module
       initReviewModule().then(function (result) {
