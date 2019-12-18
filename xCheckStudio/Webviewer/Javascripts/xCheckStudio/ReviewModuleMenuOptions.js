@@ -51,7 +51,7 @@ function enableMenuOptions() {
 
     // on history
     document.getElementById(MenuBar.HistoryBtn).onclick = function () {
-        alert("Not Handled");
+        VersioningManager.showRevisioningForm();
     }
 
     // on units
