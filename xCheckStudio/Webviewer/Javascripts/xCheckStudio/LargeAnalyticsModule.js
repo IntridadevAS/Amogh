@@ -1,41 +1,39 @@
-function populateLargeAnalyticsData() {
- 
-    analyticsManager = new LargeAnalyticsManager();
+function LoadAnalyticsContent(analyticsData, currentCheck) {
 
+    analyticsManager = new LargeAnalyticsManager(analyticsData);
 
-    // draw pie and bar charts 
-    if (isComparisonPerformed) {
-        activeResultType = "comparison";
+    if(currentCheck['check'] == 'comparison') {
         openChartComparison();
     }
+    else {
+        var currentcompliance = currentCheck['selectedCheck'].id;
+        if(currentcompliance == 'a') 
+        {
+            activeResultType = 'complianceA';
+        }
+        else if(currentcompliance == 'b') 
+        {
+            activeResultType = 'complianceB';
+        }
+        else if(currentcompliance == 'c') 
+        {
+            activeResultType = 'complianceC';
+        }
+        else if(currentcompliance == 'd') 
+        {
+            activeResultType = 'complianceD';
+        }
 
-    else if (isComplianceAPerformed) {
-        activeResultType = "complianceA";
-        OpenComplianceAChart();
+        OpenComplianceChart(activeResultType);
     }
-
-    else if (isComplianceBPerformed) {
-        activeResultType = "complianceB";
-        OpenComplianceBChart();
-    }
-
-    // if(isComplianceCPerformed) {
-    //     sourceCComplianceCheckGroups = true;
-    // }
-    // if(isComplianceDPerformed) {
-    //     sourceDComplianceCheckGroups = true;
-    // }
 }
 
 function OpenAnalyticsCharts() {
     if(activeResultType == "comparison") {
         openChartComparison()
     }
-    else if(activeResultType == "complianceA") {
-        OpenComplianceAChart();
-    }
-    else if(activeResultType == "complianceB") {
-        OpenComplianceBChart();
+    else if(activeResultType.includes("compliance")) {
+        OpenComplianceChart(activeResultType);
     }
 }
 
@@ -129,22 +127,13 @@ function openChartComparison() {
     document.getElementById("pie_A3_Group_12").style.backgroundColor = "rgba(143, 144, 145, 1)";
     document.getElementById("bar_A3_Group_10").style.backgroundColor = "rgba(33,37,63,0)";
 
-    if (isComparisonPerformed) {
-        analyticsManager.populateLargeAnalyticsComparisonCharts();
-    }
+    analyticsManager.populateComparisonCharts();
 }
 
-function OpenComplianceAChart() {
-    activeResultType = "complianceA";
-    if (isComplianceAPerformed) {
-        analyticsManager.populateLargeAnalyticsComplianceACharts();
-    }
-}
+function OpenComplianceChart(resultType) {
+    activeResultType = resultType;
+    document.getElementById("pie_A3_Group_12").style.backgroundColor = "rgba(33,37,63,0)";
+    document.getElementById("bar_A3_Group_10").style.backgroundColor = "rgba(143, 144, 145, 1)";
 
-function OpenComplianceBChart() {
-    activeResultType = "complianceB";
-
-    if (isComplianceBPerformed) {
-        analyticsManager.populateLargeAnalyticsComplianceBCharts();
-    }
+    analyticsManager.populateComplianceCharts(activeResultType);
 }

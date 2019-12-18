@@ -537,37 +537,6 @@ let viewPanels = {
   onMouseOutMaxMin: function (selected) {
     selected.style.opacity = 0.2;
   },
-
-  showSmallAnalytics: function (parentContainer, analyticsContainerId) {
-    parentContainer.style.display = "none";
-    document.getElementById(analyticsContainerId).style.display = "block";
-  },
-
-  showLargeAnalytics: function () {
-    var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
-    modal.style.display = "block";
-  },
-
-  showAnalytics: function (selected) {
-    let parent = selected.parentNode;
-
-    if (selected.id == Comparison.AnalyticsButton && model.selectedComparisons.length > 0) {
-      if (!parent.classList.contains("maximize")) {
-        this.showSmallAnalytics(parent, Comparison.SmallAnalyticsContainer);
-      }
-      else {
-        this.showLargeAnalytics();
-      }
-    }
-    else if (selected.id == Compliance.AnalyticsButton && model.selectedCompliance) {
-      if (!parent.classList.contains("maximize")) {
-        this.showSmallAnalytics(parent, Compliance.SmallAnalyticsContainer);
-      }
-      else {
-        this.showLargeAnalytics();
-      }
-    }
-  },
 }
 
 controller.init();

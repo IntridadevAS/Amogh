@@ -1,32 +1,32 @@
-function populateSmallAnalyticsData() {
-
-    analyticsManager = new SmallAnalyticsManager();
+function LoadAnalyticsContent(analyticsData, currentCheck) {
 
     HighLightButtonsOnPieChartClick(); 
+    analyticsManager = new SmallAnalyticsManager(analyticsData);
 
-
-    if (isComparisonPerformed) {
+    if(currentCheck['check'] == 'comparison') {
         openChartComparison();
-        activeResultType = "comparison";
     }
-    else if (isComplianceAPerformed) {
-        activeResultType = "complianceA";
-        document.getElementById("ID2_A1_Group_21").style.backgroundColor = "rgba(143, 144, 145, 1)";
-        document.getElementById("ID1_A1_Group_22").style.backgroundColor = "rgba(33,37,63,0)";
-        OpenComplianceAChart();
+    else {
+        var currentcompliance = currentCheck['selectedCheck'].id;
+        if(currentcompliance == 'a') 
+        {
+            activeResultType = 'complianceA';
+        }
+        else if(currentcompliance == 'b') 
+        {
+            activeResultType = 'complianceB';
+        }
+        else if(currentcompliance == 'c') 
+        {
+            activeResultType = 'complianceC';
+        }
+        else if(currentcompliance == 'd') 
+        {
+            activeResultType = 'complianceD';
+        }
+
+        OpenComplianceChart(activeResultType);
     }
-    else if(isComplianceBPerformed) {
-        activeResultType = "complianceB";
-        document.getElementById("ID2_A1_Group_21").style.backgroundColor = "rgba(143, 144, 145, 1)";
-        document.getElementById("ID1_A1_Group_22").style.backgroundColor = "rgba(33,37,63,0)";
-        OpenComplianceBChart();
-    }
-    // if(isComplianceCPerformed) {
-    //     sourceCComplianceCheckGroups = true;
-    // }
-    // if(isComplianceDPerformed) {
-    //     sourceDComplianceCheckGroups = true;
-    // }
 }
 
 function HideAnalyticsViewer() {
@@ -36,16 +36,13 @@ function HideAnalyticsViewer() {
 }
 
 function ShowLargeAnalytics() {
-    var reviewDoc = window.frameElement.ownerDocument;
-    var modal = reviewDoc.getElementById('largeAnalyticsContainer');
-    // When the user clicks the button, open the modal 
-    modal.style.display = "block";
+    window.parent.ShowLargeAnalytics();
 }
 
 function ShowSeveritySummary() {
     var summary = document.getElementById("Summary");
     summary.style.display = "block";
-    var summaryData = analyticsManager.getSeveritySummary(activeResultType);
+    var summaryData = analyticsManager.getSeveritySummary();
 
     var Total_items_checked_div = document.getElementById("ID37");
     Total_items_checked_div.innerHTML = summaryData.TotalItemsChecked;
@@ -104,11 +101,8 @@ function OpenAnalyticsCharts() {
     if(activeResultType == "comparison") {
         openChartComparison()
     }
-    else if(activeResultType == "complianceA") {
-        OpenComplianceAChart();
-    }
-    else if(activeResultType == "complianceB") {
-        OpenComplianceBChart();
+    else {
+        OpenComplianceChart(activeResultType);
     }
 }
 
@@ -154,16 +148,14 @@ function openChartComparison() {
     document.getElementById("ID2_A1_Group_21").style.backgroundColor = "rgba(33,37,63,0)";
     document.getElementById("ID1_A1_Group_22").style.backgroundColor = "rgba(143, 144, 145, 1)";
 
-    if (isComparisonPerformed) {
-        analyticsManager.populateComparisonAnalyticsData();
-    }
+    analyticsManager.populateComparisonAnalytics();
 }
 
-function OpenComplianceAChart() {
-    activeResultType = "complianceA";
-    if (isComplianceAPerformed) {
-        analyticsManager.populateSourceAComplianceAnalyticsData();
-    }
+function OpenComplianceChart(resultType) {
+    activeResultType = resultType;
+    document.getElementById("ID2_A1_Group_21").style.backgroundColor = "rgba(143, 144, 145, 1)";
+    document.getElementById("ID1_A1_Group_22").style.backgroundColor = "rgba(33,37,63,0)";
+    analyticsManager.populateComplianceAnalytics(activeResultType);
 }
 
 function OnSeverityChartsClicked() {
@@ -190,12 +182,4 @@ function OnInfoChartsClicked() {
     InfoChartButton.style.fill = "rgba(83, 84, 85, 1)";
 
     OpenAnalyticsCharts();
-}
-
-function OpenComplianceBChart() {
-    activeResultType = "complianceB";
-
-    if (isComplianceBPerformed) {
-        analyticsManager.populateSourceBComplianceAnalyticsData();
-    }
 }
