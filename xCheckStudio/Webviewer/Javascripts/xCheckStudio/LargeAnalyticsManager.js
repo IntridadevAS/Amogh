@@ -1,451 +1,278 @@
-function LargeAnalyticsManager() {
-
-    this.ComparisonTotalItemsChecked = 0;
-    this.ComparisonErrorsCount = 0;
-    this.ComparisonOKCount = 0;
-    this.ComparisonWarningsCount = 0;
-    this.ComparisonTotalItemsCount = 0;
-    this.ComparisonTotalItemsNotChecked = 0;
-    this.ComparisonNoMatchCount = 0;
-    this.ComparisonUndefinedCount = 0;
-    this.ComparisonOKATCount = 0;
-    this.TotalItemsLoaded = 0;
-
-    this.SourceAComplianceTotalItemsChecked = 0;
-    this.SourceAComplianceErrorsCount = 0;
-    this.SourceAComplianceOKCount = 0;
-    this.SourceAComplianceWarningsCount = 0;
-    this.SourceAComplianceUndefinedCount = 0;
-    this.SourceAComplianceTotalItemsLoaded = 0;
-    this.SourceANotSelectedComps = 0;
-    this.SourceATotalItemsLoaded = 0;
-    this.SourceAOKATCount = 0;
-
-    this.SourceBComplianceTotalItemsChecked = 0;
-    this.SourceBComplianceErrorsCount = 0;
-    this.SourceBComplianceOKCount = 0;
-    this.SourceBComplianceWarningsCount = 0;
-    this.SourceBComplianceUndefinedCount = 0;
-    this.SourceBComplianceTotalItemsLoaded = 0;
-    this.SourceBNotSelectedComps = 0;
-    this.SourceBTotalItemsLoaded = 0
-    this.SourceBOKATCount = 0;
+function LargeAnalyticsManager(analyticsData) {
+    this.AnalyticsData = analyticsData;
 }
 
-LargeAnalyticsManager.prototype.populateLargeAnalyticsComparisonCharts = function () {
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    var _this = this;
-    $.ajax({
-        url: 'PHP/AnalyticsDataReader.php',
-        type: "POST",
-        async: true,
-        data: { 
-            'CheckType': 'Comparison',
-            'ProjectName': projectinfo.projectname,
-            'CheckName': checkinfo.checkname
-        },
-        success: function (msg) {
-            if (msg != 'fail') {
-                var checkResults = JSON.parse(msg);
+LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
 
+    var comparisonData = this.AnalyticsData[activeResultType];
 
-                var totalItemsChecked = 0;
-                var errorsCount = 0;
-                var warningsCount = 0;
-                var okCount = 0;
-                var okACount = 0;
-                var okTCount = 0;
-                var OkATCount = 0;
-                var noMatchCount = 0;
-                var undefinedCount = 0;
-                var sourceASelectedCount = 0;
-                var sourceBSelectedCount = 0;
-                var sourceATotalComponentsCount = 0;
-                var sourceBTotalComponentsCount = 0;
-                var checkGroupsInfo = 0;
+    var totalItemsChecked = 0;
+    var errorsCount = 0;
+    var warningsCount = 0;
+    var okCount = 0;
+    var okACount = 0;
+    var okTCount = 0;
+    var OkATCount = 0;
+    var noMatchCount = 0;
+    var undefinedCount = 0;
+    var sourceASelectedCount = 0;
+    var sourceBSelectedCount = 0;
+    var sourceCSelectedCount = 0;
+    var sourceDSelectedCount = 0;
+    var sourceATotalComponentsCount = 0;
+    var sourceBTotalComponentsCount = 0;
+    var sourceCTotalComponentsCount = 0;
+    var sourceDTotalComponentsCount = 0;
+    var checkGroupsInfo = 0;
 
-                var sourceANotSelectedComponents;
-                var sourceBNotSelectedComponents;
+    var sourceANotSelectedComponents;
+    var sourceBNotSelectedComponents;
 
-                if ("okCount" in checkResults) {
-                    okCount = parseInt(checkResults["okCount"]);
-                }
+    if ("okCount" in comparisonData) {
+        okCount = parseInt(comparisonData["okCount"]);
+    }
 
-                if ("okACount" in checkResults) {
-                    okACount = parseInt(checkResults["okACount"]);
-                }
+    if ("okACount" in comparisonData) {
+        okACount = parseInt(comparisonData["okACount"]);
+    }
 
-                if ("okTCount" in checkResults) {
-                    okTCount = parseInt(checkResults["okTCount"]);
-                }
+    if ("okTCount" in comparisonData) {
+        okTCount = parseInt(comparisonData["okTCount"]);
+    }
 
-                if ("okATCount" in checkResults) {
-                    OkATCount = parseInt(checkResults["okATCount"]);
-                }
+    if ("okATCount" in comparisonData) {
+        OkATCount = parseInt(comparisonData["okATCount"]);
+    }
 
-                if ("errorCount" in checkResults) {
-                    errorsCount = parseInt(checkResults["errorCount"]);
-                }
+    if ("errorCount" in comparisonData) {
+        errorsCount = parseInt(comparisonData["errorCount"]);
+    }
 
-                if ("warningCount" in checkResults) {
-                    warningsCount = parseInt(checkResults["warningCount"]);
-                }
+    if ("warningCount" in comparisonData) {
+        warningsCount = parseInt(comparisonData["warningCount"]);
+    }
 
-                if ("nomatchCount" in checkResults) {
-                    noMatchCount = parseInt(checkResults["nomatchCount"]);
-                }
+    if ("nomatchCount" in comparisonData) {
+        noMatchCount = parseInt(comparisonData["nomatchCount"]);
+    }
 
-                if ("undefinedCount" in checkResults) {
-                    undefinedCount = parseInt(checkResults["undefinedCount"]);
-                }
+    if ("undefinedCount" in comparisonData) {
+        undefinedCount = parseInt(comparisonData["undefinedCount"]);
+    }
 
-                if ("sourceASelectedCount" in checkResults) {
-                    sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
-                }
+    if ("sourceASelectedCount" in comparisonData) {
+        sourceASelectedCount = parseInt(comparisonData["sourceASelectedCount"]);
+    }
 
-                if ("sourceBSelectedCount" in checkResults) {
-                    sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
-                }
+    if ("sourceBSelectedCount" in comparisonData) {
+        sourceBSelectedCount = parseInt(comparisonData["sourceBSelectedCount"]);
+    }
 
-                if ("sourceATotalComponentsCount" in checkResults) {
-                    sourceATotalComponentsCount = parseInt(checkResults["sourceATotalComponentsCount"]);
-                }
+    if ("sourceCSelectedCount" in comparisonData) {
+        sourceCSelectedCount = parseInt(comparisonData["sourceCSelectedCount"]);
+    }
 
-                if ("sourceBTotalComponentsCount" in checkResults) {
-                    sourceBTotalComponentsCount = parseInt(checkResults["sourceBTotalComponentsCount"]);
-                }
+    if ("sourceDSelectedCount" in comparisonData) {
+        sourceDSelectedCount = parseInt(comparisonData["sourceDSelectedCount"]);
+    }
 
-                if ("CheckGroupsInfo" in checkResults) {
-                    checkGroupsInfo = checkResults["CheckGroupsInfo"];
-                }
+    if ("sourceATotalComponentsCount" in comparisonData) {
+        sourceATotalComponentsCount = parseInt(comparisonData["sourceATotalComponentsCount"]);
+    }
 
-                if ("SourceANotSelectedComps" in checkResults) {
-                    sourceANotSelectedComponents = checkResults["SourceANotSelectedComps"];
-                }
+    if ("sourceBTotalComponentsCount" in comparisonData) {
+        sourceBTotalComponentsCount = parseInt(comparisonData["sourceBTotalComponentsCount"]);
+    }
 
-                if ("SourceBNotSelectedComps" in checkResults) {
-                    sourceBNotSelectedComponents = checkResults["SourceBNotSelectedComps"];
-                }
-                totalItemsChecked = sourceASelectedCount + sourceBSelectedCount;
-                totalItemsLoaded = sourceATotalComponentsCount + sourceBTotalComponentsCount
-                totalItemsNotChecked = totalItemsLoaded - totalItemsChecked;
-                _this.ComparisonOKATCount = okACount + okTCount + OkATCount;
+    if ("sourceCTotalComponentsCount" in comparisonData) {
+        sourceCTotalComponentsCount = parseInt(comparisonData["sourceCTotalComponentsCount"]);
+    }
 
-                _this.ComparisonTotalItemsChecked = totalItemsChecked;
-                _this.ComparisonErrorsCount = errorsCount;
-                _this.ComparisonWarningsCount = warningsCount;
-                _this.ComparisonOKCount = okCount;
-                _this.TotalItemsLoaded = totalItemsLoaded;
-                _this.ComparisonTotalItemsNotChecked = totalItemsNotChecked;
-                _this.ComparisonNoMatchCount = noMatchCount;
-                _this.ComparisonUndefinedCount = undefinedCount;
+    if ("sourceDTotalComponentsCount" in comparisonData) {
+        sourceDTotalComponentsCount = parseInt(comparisonData["sourceDTotalComponentsCount"]);
+    }
 
-                 
-                //add data to summary
-                if(SeveritybuttonActive) {
-                    _this.setSeveritySummary('Comparison');
-                }
-                else if(InfoButtonActive) {
-                    _this.setInfoSummary('Comparison');
-                }
-                 
-                // draw pie charts
+    if ("CheckGroupsInfo" in comparisonData) {
+        checkGroupsInfo = comparisonData["CheckGroupsInfo"];
+    }
 
-                if(PieChartActive) {
-                    // _this.ShowPieChartDiv();
-                    if(SeveritybuttonActive) {
-                        _this.drawComparisonSeverityPieCharts(okCount,
-                            warningsCount,
-                            errorsCount,
-                            totalItemsChecked);
-                    }
-                    else if(InfoButtonActive) {
-                        _this.drawComparisonInfoPieCharts(noMatchCount,
-                            undefinedCount,
-                            totalItemsNotChecked,
-                            totalItemsLoaded);
-                    } 
-                }
+    if ("SourceANotSelectedComps" in comparisonData) {
+        sourceANotSelectedComponents = comparisonData["SourceANotSelectedComps"];
+    }
 
-                // //  draw bar chart (total 1)
-                if(BarChartActive) {
-                    // _this.ShowBarChartDiv();
-                    if(SeveritybuttonActive) {
-                        _this.createSeverityBarCharts(checkGroupsInfo);
-                    }
-                    else if(InfoButtonActive) {
-                        _this.createInfoBarCharts(checkGroupsInfo);
-                    }               
-                }
+    if ("SourceBNotSelectedComps" in comparisonData) {
+        sourceBNotSelectedComponents = comparisonData["SourceBNotSelectedComps"];
+    }
 
-                _this.drawLineChart(checkGroupsInfo);
-            }
+    if ("SourceCNotSelectedComps" in comparisonData) {
+        sourceCNotSelectedComponents = comparisonData["SourceCNotSelectedComps"];
+    }
+
+    if ("SourceDNotSelectedComps" in comparisonData) {
+        sourceDNotSelectedComponents = comparisonData["SourceDNotSelectedComps"];
+    }
+
+    totalItemsChecked = sourceASelectedCount + sourceBSelectedCount + sourceCSelectedCount + sourceDSelectedCount;
+    totalItemsLoaded = sourceATotalComponentsCount + sourceBTotalComponentsCount + sourceCTotalComponentsCount + sourceDTotalComponentsCount;
+    totalItemsNotChecked = totalItemsLoaded - totalItemsChecked;
+
+    this.AnalyticsData[activeResultType]['TotalItemsChecked'] = totalItemsChecked;
+    this.AnalyticsData[activeResultType]['TotalItemsLoaded'] = totalItemsLoaded;
+    this.AnalyticsData[activeResultType]['TotalItemsNotChecked'] = totalItemsNotChecked;
+    this.AnalyticsData[activeResultType]['OKATCount'] = Number(okACount) + Number(okTCount) + Number(OkATCount);
+
+    //add data to summary
+    if(SeveritybuttonActive) {
+        this.setSeveritySummary();
+    }
+    else if(InfoButtonActive) {
+        this.setInfoSummary();
+    }
+        
+    // draw pie charts
+
+    if(PieChartActive) {
+        // _this.ShowPieChartDiv();
+        if(SeveritybuttonActive) {
+            this.drawComparisonSeverityPieCharts(okCount,
+                warningsCount,
+                errorsCount,
+                totalItemsChecked);
         }
-    });
+        else if(InfoButtonActive) {
+            this.drawComparisonInfoPieCharts(noMatchCount,
+                undefinedCount,
+                totalItemsNotChecked,
+                totalItemsLoaded);
+        } 
+    }
+
+    // //  draw bar chart (total 1)
+    if(BarChartActive) {
+        // _this.ShowBarChartDiv();
+        if(SeveritybuttonActive) {
+            this.createSeverityBarCharts(checkGroupsInfo);
+        }
+        else if(InfoButtonActive) {
+            this.createInfoBarCharts(checkGroupsInfo);
+        }               
+    }
+
+    this.drawLineChart(checkGroupsInfo);
 }
 
-LargeAnalyticsManager.prototype.populateLargeAnalyticsComplianceACharts = function () {
+LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceType) {
 
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    var _this = this;
-    $.ajax({
-        url: 'PHP/AnalyticsDataReader.php',
-        type: "POST",
-        async: true,
-        data: { 
-            'CheckType': 'SourceACompliance',
-            'ProjectName': projectinfo.projectname,
-            'CheckName': checkinfo.checkname
-        },
-        success: function (msg) {
-            if (msg != 'fail') {
-                var checkResults = JSON.parse(msg);
-                var totalItemsChecked = 0;
-                var errorsCount = 0;
-                var warningsCount = 0;
-                var okCount = 0;
-                var undefinedCount = 0;
-                var noMatchCount = 0;
-                var okACount = 0;
-                var okTCount = 0;
-                var OkATCount = 0;
-                var sourceASelectedCount = 0;                  
-                var sourceATotalComponentsCount = 0;                  
-                var checkGroupsInfo = 0;
+    var complianceData = this.AnalyticsData[complianceType];
 
-                var sourceANotSelectedComponents;
+    var totalItemsChecked = 0;
+    var errorsCount = 0;
+    var warningsCount = 0;
+    var okCount = 0;
+    var undefinedCount = 0;
+    var noMatchCount = 0;
+    var okACount = 0;
+    var okTCount = 0;
+    var OkATCount = 0;
+    var sourceSelectedCount = 0;
+    var sourceTotalComponentsCount = 0;
+    var checkGroupsInfo = 0;
 
-                if ("okCount" in checkResults) {
-                    okCount = parseInt(checkResults["okCount"]);
-                }
+    var sourceNotSelectedComponents;
 
-                if ("okACount" in checkResults) {
-                    okACount = parseInt(checkResults["okACount"]);
-                }
+    if ("okCount" in complianceData) {
+        okCount = parseInt(complianceData["okCount"]);
+    }
 
-                if ("okTCount" in checkResults) {
-                    okTCount = parseInt(checkResults["okTCount"]);
-                }
+    if ("okACount" in complianceData) {
+        okACount = parseInt(complianceData["okACount"]);
+    }
 
-                if ("okATCount" in checkResults) {
-                    OkATCount = parseInt(checkResults["okATCount"]);
-                }
+    if ("okTCount" in complianceData) {
+        okTCount = parseInt(complianceData["okTCount"]);
+    }
 
-                if ("errorCount" in checkResults) {
-                    errorsCount = parseInt(checkResults["errorCount"]);
-                }
+    if ("okATCount" in complianceData) {
+        OkATCount = parseInt(complianceData["okATCount"]);
+    }
 
-                if ("warningCount" in checkResults) {
-                    warningsCount = parseInt(checkResults["warningCount"]);
-                }
+    if ("errorCount" in complianceData) {
+        errorsCount = parseInt(complianceData["errorCount"]);
+    }
 
-                if ("undefinedCount" in checkResults) {
-                    undefinedCount = parseInt(checkResults["undefinedCount"]);
-                }
+    if ("warningCount" in complianceData) {
+        warningsCount = parseInt(complianceData["warningCount"]);
+    }
 
-                if ("sourceASelectedCount" in checkResults) {
-                    sourceASelectedCount = parseInt(checkResults["sourceASelectedCount"]);
-                }                 
+    if ("undefinedCount" in complianceData) {
+        undefinedCount = parseInt(complianceData["undefinedCount"]);
+    }
 
-                if ("sourceATotalComponentsCount" in checkResults) {
-                    sourceATotalComponentsCount = parseInt(checkResults["sourceATotalComponentsCount"]);
-                }      
-                
-                if ("CheckGroupsInfo" in checkResults) {
-                    checkGroupsInfo = checkResults["CheckGroupsInfo"];
-                }
+    if ("sourceSelectedCount" in complianceData) {
+        sourceSelectedCount = parseInt(complianceData["sourceSelectedCount"]);
+    }
 
-                if ("SourceANotSelectedComps" in checkResults) {
-                    sourceANotSelectedComponents = checkResults["SourceANotSelectedComps"];
-                }
-               
-                totalItemsChecked = sourceASelectedCount;                 
+    if ("sourceTotalComponentsCount" in complianceData) {
+        sourceTotalComponentsCount = parseInt(complianceData["sourceTotalComponentsCount"]);
+    }
 
-                _this.SourceAComplianceTotalItemsChecked = totalItemsChecked;
-                _this.SourceAComplianceErrorsCount = errorsCount;
-                _this.SourceAComplianceWarningsCount= warningsCount;
-                _this.SourceAComplianceOKCount  = okCount;
-                _this.SourceAComplianceUndefinedCount = undefinedCount;
-                _this.SourceANotSelectedComps = sourceATotalComponentsCount - totalItemsChecked;
-                _this.SourceATotalItemsLoaded = sourceATotalComponentsCount;
-                _this.SourceAOKATCount = okACount + okTCount + OkATCount;
+    if ("CheckGroupsInfo" in complianceData) {
+        checkGroupsInfo = complianceData["CheckGroupsInfo"];
+    }
 
+    if ("SourceNotSelectedComps" in complianceData) {
+        sourceNotSelectedComponents = complianceData["SourceNotSelectedComps"];
+    }
 
-            //add data to summary
-            if(SeveritybuttonActive) {
-                _this.setSeveritySummary('complianceA');
-            }
-            else if(InfoButtonActive) {
-                _this.setInfoSummary('complianceA');
-            }
-                            
-            // draw pie charts
+    totalItemsChecked = sourceSelectedCount;
 
-            if(PieChartActive) {
-            // _this.ShowPieChartDiv();
-                if(SeveritybuttonActive) {
-                    _this.drawComparisonSeverityPieCharts(okCount,
-                        warningsCount,
-                        errorsCount,
-                        totalItemsChecked);
-                }
-                else if(InfoButtonActive) {
-                    _this.drawComparisonInfoPieCharts(noMatchCount,
-                        undefinedCount,
-                        _this.SourceANotSelectedComps,
-                        totalItemsLoaded);
-                } 
-            }
+    var sourceNotSelectedComps = sourceTotalComponentsCount - totalItemsChecked;
+    var OKATCount = Number(okACount) + Number(okTCount) + Number(OkATCount);
 
-            // //  draw bar chart (total 1)
-            if(BarChartActive) {
-                // _this.ShowBarChartDiv();
-                if(SeveritybuttonActive) {
-                    _this.createSeverityBarCharts(checkGroupsInfo);
-                }
-                else if(InfoButtonActive) {
-                    _this.createInfoBarCharts(checkGroupsInfo);
-                }               
-            }
+    this.AnalyticsData[complianceType]['TotalItemsChecked'] = totalItemsChecked;
+    this.AnalyticsData[complianceType]['TotalItemsNotChecked'] = sourceNotSelectedComps;
+    this.AnalyticsData[complianceType]['TotalItemsLoaded'] = sourceTotalComponentsCount;
+    this.AnalyticsData[complianceType]['OKATCount'] = OKATCount;
 
-            _this.drawLineChart(checkGroupsInfo);
+    //add data to summary
+    if (SeveritybuttonActive) {
+        this.setSeveritySummary();
+    }
+    else if (InfoButtonActive) {
+        this.setInfoSummary();
+    }
 
-            }
+    // draw pie charts
+
+    if (PieChartActive) {
+        // _this.ShowPieChartDiv();
+        if (SeveritybuttonActive) {
+            this.drawComparisonSeverityPieCharts(okCount,
+                warningsCount,
+                errorsCount,
+                totalItemsChecked);
         }
-    });
-}
-
-LargeAnalyticsManager.prototype.populateLargeAnalyticsComplianceBCharts = function () {
-
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    var _this = this;
-    $.ajax({
-        url: 'PHP/AnalyticsDataReader.php',
-        type: "POST",
-        async: true,
-        data: { 
-            'CheckType': 'SourceBCompliance',
-            'ProjectName': projectinfo.projectname,
-            'CheckName': checkinfo.checkname
-        },
-        success: function (msg) {
-            if (msg != 'fail') {
-                var checkResults = JSON.parse(msg);
-                var totalItemsChecked = 0;
-                var errorsCount = 0;
-                var warningsCount = 0;
-                var okCount = 0;
-                var noMatchCount = 0;
-                var undefinedCount = 0;
-                var okACount = 0;
-                var okTCount = 0;
-                var OkATCount = 0;
-                var sourceBSelectedCount = 0;
-                var checkGroupsInfo = 0;
-                var sourceBTotalComponentsCount = 0;         
-                var sourceBNotSelectedComponents = 0;
-
-                if ("okCount" in checkResults) {
-                    okCount = parseInt(checkResults["okCount"]);
-                }
-
-                if ("okACount" in checkResults) {
-                    okACount = parseInt(checkResults["okACount"]);
-                }
-
-                if ("okTCount" in checkResults) {
-                    okTCount = parseInt(checkResults["okTCount"]);
-                }
-
-                if ("okATCount" in checkResults) {
-                    OkATCount = parseInt(checkResults["okATCount"]);
-                }
-
-                if ("errorCount" in checkResults) {
-                    errorsCount = parseInt(checkResults["errorCount"]);
-                }
-
-                if ("warningCount" in checkResults) {
-                    warningsCount = parseInt(checkResults["warningCount"]);
-                }
-
-                if ("undefinedCount" in checkResults) {
-                    undefinedCount = parseInt(checkResults["undefinedCount"]);
-                }
-
-                if ("sourceBSelectedCount" in checkResults) {
-                    sourceBSelectedCount = parseInt(checkResults["sourceBSelectedCount"]);
-                }
-
-
-                if ("sourceBTotalComponentsCount" in checkResults) {
-                    sourceBTotalComponentsCount = parseInt(checkResults["sourceBTotalComponentsCount"]);
-                }      
-                
-                if ("CheckGroupsInfo" in checkResults) {
-                    checkGroupsInfo = checkResults["CheckGroupsInfo"];
-                }
-
-                if ("SourceBNotSelectedComps" in checkResults) {
-                    sourceBNotSelectedComponents = checkResults["SourceBNotSelectedComps"];
-                }
-               
-
-                totalItemsChecked = sourceBSelectedCount;
-
-                _this.SourceBComplianceTotalItemsChecked = totalItemsChecked;
-                _this.SourceBComplianceErrorsCount = errorsCount;
-                _this.SourceBComplianceWarningsCount  = warningsCount;
-                _this.SourceBComplianceOKCount = okCount;
-                _this.SourceBComplianceUndefinedCount = undefinedCount;
-                _this.SourceBNotSelectedComps = sourceBTotalComponentsCount - totalItemsChecked;
-                _this.SourceBTotalItemsLoaded = sourceBTotalComponentsCount;
-                _this.SourceBOKATCount = okACount + okTCount + OkATCount;       
-
-                //add data to summary
-                if(SeveritybuttonActive) {
-                    _this.setSeveritySummary('complianceB');
-                }
-                else if(InfoButtonActive) {
-                    _this.setInfoSummary('complianceB');
-                }
-                                
-                // draw pie charts
-
-                if(PieChartActive) {
-                // _this.ShowPieChartDiv();
-                    if(SeveritybuttonActive) {
-                        _this.drawComparisonSeverityPieCharts(okCount,
-                            warningsCount,
-                            errorsCount,
-                            totalItemsChecked);
-                    }
-                    else if(InfoButtonActive) {
-                        _this.drawComparisonInfoPieCharts(noMatchCount,
-                            undefinedCount,
-                            _this.SourceBNotSelectedComps,
-                            totalItemsLoaded);
-                    } 
-                }
-
-                // //  draw bar chart (total 1)
-                if(BarChartActive) {
-                    // _this.ShowBarChartDiv();
-                    if(SeveritybuttonActive) {
-                        _this.createSeverityBarCharts(checkGroupsInfo);
-                    }
-                    else if(InfoButtonActive) {
-                        _this.createInfoBarCharts(checkGroupsInfo);
-                    }               
-                }
-
-                _this.drawLineChart(checkGroupsInfo);
-            }
+        else if (InfoButtonActive) {
+            this.drawComparisonInfoPieCharts(noMatchCount,
+                undefinedCount,
+                totalItemsNotChecked,
+                totalItemsLoaded);
         }
-    });
+    }
+
+    // //  draw bar chart (total 1)
+    if (BarChartActive) {
+        // _this.ShowBarChartDiv();
+        if (SeveritybuttonActive) {
+            this.createSeverityBarCharts(checkGroupsInfo);
+        }
+        else if (InfoButtonActive) {
+            this.createInfoBarCharts(checkGroupsInfo);
+        }
+    }
+
+    this.drawLineChart(checkGroupsInfo);
+
 }
 
 LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsInfo) {
@@ -496,7 +323,7 @@ LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.seriesName + ": " + arg.valueText
+                    text: arg.argumentText
                 };
             }
         }
@@ -547,7 +374,7 @@ LargeAnalyticsManager.prototype.createInfoBarCharts = function(checkGroupsInfo) 
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.seriesName + ": " + arg.valueText
+                    text: arg.argumentText
                 };
             }
         }
@@ -687,54 +514,34 @@ LargeAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
     errorDiv.innerHTML = fixedPercent + "%";
 }
 
-LargeAnalyticsManager.prototype.setSeveritySummary = function(checkType) {
+LargeAnalyticsManager.prototype.setSeveritySummary = function() {
+    var totalItemsChecked = this.AnalyticsData[activeResultType]['TotalItemsChecked'];
+    var ErrorsCount = this.AnalyticsData[activeResultType]['errorCount'];
+    var OKCount = this.AnalyticsData[activeResultType]["okCount"];
+    var WarningsCount = this.AnalyticsData[activeResultType]["warningCount"];
+    var OKATCount = this.AnalyticsData[activeResultType]['OKATCount'];
 
-    if (checkType.toLowerCase() == "comparison") {
-        document.getElementById("ID37").innerHTML =  this.ComparisonTotalItemsChecked;
-        document.getElementById("ID18").innerHTML =  this.ComparisonErrorsCount;
-        document.getElementById("ID6_A3_Text_49").innerHTML = this.ComparisonOKCount;
-        document.getElementById("ID13").innerHTML =  this.ComparisonWarningsCount;    
-        document.getElementById("ID37_A3_Text_50").innerHTML = this.ComparisonErrorsCount + this.ComparisonOKCount + this.ComparisonWarningsCount;
-        document.getElementById("ID6").innerHTML = this.ComparisonOKATCount;
-   }
-   else if(checkType.toLowerCase() == "compliancea") {
-        document.getElementById("ID37").innerHTML = this.SourceAComplianceTotalItemsChecked;
-        document.getElementById("ID18").innerHTML = this.SourceAComplianceErrorsCount;
-        document.getElementById("ID6_A3_Text_49").innerHTML = this.SourceAComplianceOKCount;
-        document.getElementById("ID13").innerHTML = this.SourceAComplianceWarningsCount;    
-        document.getElementById("ID37_A3_Text_50").innerHTML = this.SourceAComplianceErrorsCount + this.SourceAComplianceOKCount + this.SourceAComplianceWarningsCount;
-        document.getElementById("ID6").innerHTML = this.SourceAOKATCount;
-   }
-   else if(checkType.toLowerCase() == "complianceb") {
-        document.getElementById("ID37").innerHTML = this.SourceBComplianceTotalItemsChecked;
-        document.getElementById("ID18").innerHTML = this.SourceBComplianceErrorsCount;
-        document.getElementById("ID6_A3_Text_49").innerHTML = this.SourceBComplianceOKCount;
-        document.getElementById("ID13").innerHTML = this.SourceBComplianceWarningsCount;    
-        document.getElementById("ID37_A3_Text_50").innerHTML = this.SourceBComplianceErrorsCount + this.SourceBComplianceOKCount + this.SourceBComplianceWarningsCount;
-        document.getElementById("ID6").innerHTML = this.SourceBOKATCount;
-    }
+    document.getElementById("ID37").innerHTML =  totalItemsChecked;
+    document.getElementById("ID18").innerHTML =  ErrorsCount
+    document.getElementById("ID6_A3_Text_49").innerHTML = OKCount;
+    document.getElementById("ID13").innerHTML =  WarningsCount;    
+    document.getElementById("ID37_A3_Text_50").innerHTML = Number(ErrorsCount) + Number(OKCount) + Number(WarningsCount);
+    document.getElementById("ID6").innerHTML = OKATCount;
 }
 
 LargeAnalyticsManager.prototype.setInfoSummary = function(checkType) {
 
-    if (checkType.toLowerCase() == "comparison") {
-        document.getElementById("checkedItemCount").innerHTML =  this.TotalItemsLoaded;
-        document.getElementById("count_no_match").innerHTML =  this.ComparisonNoMatchCount;
-        document.getElementById("count_undefined").innerHTML = this.ComparisonUndefinedCount;
-        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.ComparisonTotalItemsNotChecked;    
-   }
-   else if(checkType.toLowerCase() == "compliancea") {
-        document.getElementById("checkedItemCount").innerHTML =  this.SourceATotalItemsLoaded;
-        document.getElementById("count_no_match").innerHTML =  0;
-        document.getElementById("count_undefined").innerHTML = this.SourceAComplianceUndefinedCount;
-        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.SourceANotSelectedComps;    
-   }
-   else if(checkType.toLowerCase() == "complianceb") {
-        document.getElementById("checkedItemCount").innerHTML =  this.SourceBTotalItemsLoaded;
-        document.getElementById("count_no_match").innerHTML =  0;
-        document.getElementById("count_undefined").innerHTML = this.SourceBComplianceUndefinedCount;
-        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.SourceBNotSelectedComps;   
-    }
+        document.getElementById("checkedItemCount").innerHTML =  this.AnalyticsData[activeResultType]['TotalItemsLoaded'];
+
+        if(this.AnalyticsData[activeResultType]["nomatchCount"]) {
+            document.getElementById("count_no_match").innerHTML =  this.AnalyticsData[activeResultType]["nomatchCount"];
+        }
+        else {
+            document.getElementById("count_no_match").innerHTML = 0;
+        }
+
+        document.getElementById("count_undefined").innerHTML = this.AnalyticsData[activeResultType]["undefinedCount"];
+        document.getElementById("ID37_A3_Text_12_1").innerHTML =  this.AnalyticsData[activeResultType]['TotalItemsNotChecked'];
 }
 
 LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
@@ -752,6 +559,9 @@ LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
     }
    
     var colorsArray = ["#F43742", "#F8C13B", "#0FFF72"];
+    if(document.getElementById("line_charts").innerHTML.trim() != "") {
+        $("#line_charts").dxChart("dispose");
+    }
     $("#line_charts").dxChart({
         palette: colorsArray,
         dataSource: Severitydata,

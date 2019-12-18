@@ -78,7 +78,7 @@
 	height: 32px;
 	transform: matrix(1,0,0,1,0,0);
 }
-#type_2 {
+#complianceAName {
 	position: absolute;
 	width: 388px;
 	height: 52px;
@@ -128,7 +128,7 @@
 	font-size: 24px;
 	color: rgba(255,255,255,1);
 }
-#type_2_A4_Group_4 {
+#complianceBName {
 	position: absolute;
 	width: 388px;
 	height: 52px;
@@ -179,7 +179,7 @@
 	font-size: 24px;
 	color: rgba(255,255,255,1);
 }
-#type_2_A4_Group_7 {
+#complianceCName {
 	position: absolute;
 	width: 388px;
 	height: 52px;
@@ -230,7 +230,7 @@
 	font-size: 24px;
 	color: rgba(255,255,255,1);
 }
-#type_2_A4_Group_10 {
+#complianceDName {
 	position: absolute;
 	width: 388px;
 	height: 52px;
