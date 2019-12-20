@@ -377,9 +377,9 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
 
                         originalComponent.accepted = changedComponent["accepted"];
 
-                        if (originalComponent.status.toLowerCase() !== 'ok') {
-                            originalComponent.status = "OK(A)";
-                        }
+                        // if (originalComponent.status.toLowerCase() !== 'ok') {
+                            originalComponent.status = changedComponent["status"];
+                        // }
 
                         for (var propertyId in originalComponent.properties) {
 
@@ -390,9 +390,9 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                             if (orginalProperty["accepted"] == "true") {
                                 orginalProperty.severity = "ACCEPTED";
                             }
-                            else if (orginalProperty["transpose"] !== null) {
-                                originalComponent.status = "OK(A)(T)";
-                            }
+                            // else if (orginalProperty["transpose"] !== null) {
+                            //     originalComponent.status = "OK(A)(T)";
+                            // }
                         }
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
@@ -481,6 +481,7 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
 
                         originalComponent.accepted = changedComponent["accepted"];
                         originalComponent.status = changedComponent["status"];
+
                         for (var propertyId in originalComponent.properties) {
 
                             var orginalProperty = originalComponent.properties[propertyId];
