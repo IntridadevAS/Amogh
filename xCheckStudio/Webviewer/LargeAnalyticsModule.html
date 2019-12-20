@@ -1681,7 +1681,7 @@ window.application = new Application();
 <style>
 		.maxMinBtn{
 		background-color: var(--xCheckDarkGrey);
-		background-image: url(../../public/symbols/XD_Maximise.svg);
+		background-image: url(../../public/symbols/XD_Minimise.svg);
 		background-position: center;
 		background-repeat: no-repeat;
 		position: absolute;
@@ -1694,10 +1694,6 @@ window.application = new Application();
 		border-radius: var(--borderRadiusVal);
 		z-index: 1;
 		cursor: pointer;
-	}
-
-	.maximize .maxMinBtn {
-		background-image: url(../../public/symbols/XD_Minimise.svg);
 	}
 
 	.analyticsBtn{
@@ -1789,8 +1785,8 @@ window.application = new Application();
 	</div>
 </div>
 <div id="Large___1">
-	<div class="maxMinBtn" onmouseover="onMouseOverMaxMin(this)" onmouseout="onMouseOutMaxMin(this)" onClick="ShowSmallAnalytics()"></div>
-	<div id="analyticsBtn" onmouseover="onMouseOverMaxMin(this)" style="left: 5px; top: 50px" onmouseout="onMouseOutMaxMin(this)" 
+	<div class="maxMinBtn" title="Small Analytics" onmouseover="onMouseOverMaxMin(this)" onmouseout="onMouseOutMaxMin(this)" onClick="ShowSmallAnalytics()"></div>
+	<div id="analyticsBtn" title="Model Viewer" onmouseover="onMouseOverMaxMin(this)" style="left: 5px; top: 50px" onmouseout="onMouseOutMaxMin(this)" 
 	class="analyticsBtn" onclick="HideAnalyticsViewer()"></div>
 	<div id="Group_1">
 		<div id="compare">

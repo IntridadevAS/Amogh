@@ -10,7 +10,7 @@ var AcceptedColor = "#e8ffeb";
 var PropertyAcceptedColor = "#ffff99";
 var SelectedRowColor = "#e6e8e8";
 var HiddenElementTextColor = "#b3b5b5";
-var MissingItemsColor = "#D8F5F0";
+var MissingItemsColor = "#dddbff";
 // var TransposedColor = "#ace396";
 
 function HighlightManager(viewer,
