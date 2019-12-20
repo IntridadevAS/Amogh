@@ -347,7 +347,8 @@ let controller = {
             "projectStatus": projectStatus,
             "projectComments": projectComments,
             "projectIsFavorite": projectIsFavorite,
-            "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime()
+            "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime(),
+            "projectModifiedDate": xCheckStudio.Util.getCurrentDateTime()
           },
           type: "POST",
           url: "PHP/ProjectManager.php"
@@ -1126,6 +1127,7 @@ let editProjectView = {
     let editProjectName = document.getElementById("editProjectName");
     let editCreator = document.getElementById("editCreator");
     let editDateCreated = document.getElementById("editDateCreated");
+    let editDateModified = document.getElementById("editDateModified");
     let editProjectWin = document.getElementById("editProject");
     let editComments = document.getElementById("editComments");
     let editProjectForm = document.getElementById("editProjectForm");
@@ -1142,6 +1144,7 @@ let editProjectView = {
     editProjectName.value = this.currentProject.projectname;
     editCreator.innerHTML = this.currentProject.creator;
     editDateCreated.innerHTML = this.currentProject.createddate;
+    editDateModified.innerHTML = this.currentProject.modifieddate;
     editProjectDescription.value = this.currentProject.description;
     editComments.value = this.currentProject.comments;
     editProjectStatus.value = this.currentProject.status;
@@ -1214,6 +1217,7 @@ let editProjectView = {
         "projectStatus": editProjectStatus,
         "projectComments": editComments,
         "projectIsFavorite": this.currentProject.IsFavourite,
+        "projectModifiedDate": xCheckStudio.Util.getCurrentDateTime(),
       },
       type: "POST",
       url: "PHP/ProjectManager.php"

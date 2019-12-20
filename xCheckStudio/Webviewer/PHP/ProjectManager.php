@@ -3358,6 +3358,7 @@ function CopyProjectToMainDB()
         $projectPath = trim($_POST["path"], " ");
         $projectStatus = trim($_POST["projectStatus"], " ");  
         $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
+        $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
 
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");                
        
@@ -3386,7 +3387,8 @@ function CopyProjectToMainDB()
                                         description,
                                         path,
                                         status,
-                                        createddate) VALUES (?,?,?,?,?,?,?,?,?)';
+                                        createddate,
+                                        modifieddate) VALUES (?,?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
 
         $stmt->execute(array( $userid, 
@@ -3397,7 +3399,8 @@ function CopyProjectToMainDB()
                             $projectDescription, 
                             $projectPath, 
                             $projectStatus,
-                            $projectCreatedDate));
+                            $projectCreatedDate,
+                            $projectModifiedDate));
         
         $insertedId = $dbh->lastInsertId();
         if($insertedId !=0 && 
@@ -3522,7 +3525,8 @@ function AddNewProjectToMainDB()
     $projectStatus = trim($_POST["projectStatus"], " ");  
     $projectComments = trim($_POST["projectComments"], " "); 
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
-    $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");   
+    $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
+    $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");   
     
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
@@ -3537,10 +3541,11 @@ function AddNewProjectToMainDB()
         description,
         path,
         status,
-        createddate) VALUES (?,?,?,?,?,?,?,?,?)';
+        createddate,
+        modifieddate) VALUES (?,?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
 
-        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus,$projectCreatedDate));     
+        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus,$projectCreatedDate,$projectModifiedDate));     
         // $_SESSION['ProjectId'] = $dbh->lastInsertId();
         $insertedId = $dbh->lastInsertId();
         if($insertedId !=0 && $insertedId !=-1){
@@ -3554,6 +3559,7 @@ function AddNewProjectToMainDB()
             "path" => $path,
             "status" => $projectStatus,
             "createddate" => $projectCreatedDate,
+            "modifieddate" => $projectModifiedDate,
             );
          echo json_encode($array);
         }
@@ -3666,23 +3672,23 @@ function SetProjectAsFavourite()
 
 function UpdateProject()
 {
-    $projectid = trim($_POST["projectid"], " ");     
-    $userid = trim($_POST["userid"], " ");      
-    $projectName = trim($_POST["projectname"], " ");      
+    $projectid = trim($_POST["projectid"], " ");
+    $userid = trim($_POST["userid"], " ");
+    $projectName = trim($_POST["projectname"], " ");
     $projectDescription = trim($_POST["projectDescription"], " ");
-    $projectType = trim($_POST["projectType"], " ");  
-    $projectStatus = trim($_POST["projectStatus"], " ");  
-    $projectComments = trim($_POST["projectComments"], " "); 
-    $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
-    
-    if (CheckIfProjectExists($projectName) == TRUE){
-        echo "Project with provided name already exists. Please try some other name.";
-        return;
-    }
+    $projectType = trim($_POST["projectType"], " ");
+    $projectStatus = trim($_POST["projectStatus"], " ");
+    $projectComments = trim($_POST["projectComments"], " ");
+    $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");
+    $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
     
     /*Rename the project directory now*/
     $oldprojectname = trim($_POST["oldprojectname"], " ");
     if (strcmp($oldprojectname, $projectName) != 0 ) {
+        if (CheckIfProjectExists($projectName) == TRUE){
+            echo "Project with provided name already exists. Please try some other name.";
+            return;
+        }
         $status = renameFolder(getProjectDirectoryPath($oldprojectname), getProjectDirectoryPath($projectName));
         if ($status != TRUE) {
             echo "Failed to rename project directory. May be project directory is in use. Please try by closing the same.";
@@ -3693,9 +3699,9 @@ function UpdateProject()
     /*Update the project details in database*/
     try{
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query = 'UPDATE Projects Set projectname=?, type=?,comments=?,IsFavourite=?,description=?,status=? WHERE projectid=?';
+        $query = 'UPDATE Projects Set projectname=?, type=?,comments=?,IsFavourite=?,description=?,status=?,modifieddate=? WHERE projectid=?';
         $stmt = $dbh->prepare($query);
-        $response = $stmt->execute(array($projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectid));     
+        $response = $stmt->execute(array($projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus,$projectModifiedDate, $projectid));     
         echo json_encode($response);
         $dbh = null; //This is how you close a PDO connection
         return;      
