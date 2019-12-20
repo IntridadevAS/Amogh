@@ -182,7 +182,7 @@ function TransposeComponentProperties() {
         // open database
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
+        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', 'Missing Item(s)');
         $results = array();
         $dbh->beginTransaction();
 
@@ -277,7 +277,7 @@ function RestoreComponentLevelTranspose() {
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'Missing Property(s)');
+    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'Missing Property(s)', 'Missing Item(s)');
         $results = array();
         $dbh->beginTransaction();
 
@@ -366,7 +366,7 @@ function RestoreCategoryLevelTranspose() {
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
     $categoryStatus = 'UNACCEPTED';
-    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match', 'Missing Property(s)');
+    $dontChangeOk = array('OK', 'OK(A)', 'No Value', 'ACCEPTED', 'No Match', 'Missing Property(s)', 'Missing Item(s)');
     $componentsArray = array();
     $results = array();
 
@@ -471,7 +471,7 @@ function transposePropertiesCategoryLevel() {
 
     $categoryStatus = 'OK(T)';
     $status = 'true';
-    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match', 'Missing Property(s)');
+    $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'ACCEPTED', 'No Match', 'Missing Property(s)', 'Missing Item(s)');
     $componentsArray = array();
     $results = array();
 

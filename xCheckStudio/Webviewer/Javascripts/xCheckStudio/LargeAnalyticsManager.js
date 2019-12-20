@@ -360,8 +360,9 @@ LargeAnalyticsManager.prototype.createInfoBarCharts = function(checkGroupsInfo) 
         },
 		argumentAxis: {
             label: {
-                wordWrap: "Wrap",
-                overlappingBehavior: "stagger"
+                wordWrap: "normal",
+                textOverflow: 'ellipsis',
+                displayMode: 'stagger'
             }
         },
         valueAxis: {

@@ -522,8 +522,9 @@ SmallAnalyticsManager.prototype.createSeverityBarCharts = function (checkGroupsI
         },
         argumentAxis: {
             label: {
-                wordWrap: "Wrap",
-                overlappingBehavior: "stagger"
+                wordWrap: "normal",
+                textOverflow: 'ellipsis',
+                displayMode: 'stagger'
             }
         },
         valueAxis: {
@@ -573,8 +574,9 @@ SmallAnalyticsManager.prototype.CreateInfoBarCharts = function (checkGroupsInfo)
         },
         argumentAxis: {
             label: {
-                wordWrap: "Wrap",
-                overlappingBehavior: "stagger"
+                wordWrap: "normal",
+                textOverflow: 'ellipsis',
+                displayMode: 'stagger'
             }
         },
         valueAxis: {
