@@ -165,6 +165,9 @@
             // copy hidden components
             CopyHiddenComponents($dbh, $tempDbh);
             
+            // copy hidden components
+            CopyVersions($dbh, $tempDbh);
+
             $tempDbh->commit();
             $tempDbh->beginTransaction();     
             
@@ -190,6 +193,49 @@
         return;
     } 
     
+    function  CopyVersions($fromDbh, $toDbh)
+    {     
+        $results = $fromDbh->query("SELECT * FROM Versions;");
+        if($results)
+        {
+
+            $command = 'DROP TABLE IF EXISTS Versions;';
+            $toDbh->exec($command);  
+            $command = 'CREATE TABLE IF NOT EXISTS Versions(
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                name TEXT,
+                description TEXT,
+                comments TEXT,
+                createdById TEXT,
+                createdByAlias TEXT,
+                createdOn TEXT,
+                IsFav INTEGER       
+                )';
+            $toDbh->exec($command);
+           
+            $insertStmt = $toDbh->prepare("INSERT INTO Versions(id, 
+            name, 
+            description, 
+            comments, 
+            createdById, 
+            createdByAlias, 
+            createdOn, 
+            IsFav) VALUES(?,?,?,?,?,?,?,?)");            
+
+            while ($row = $results->fetch(\PDO::FETCH_ASSOC)) 
+            {  
+                $insertStmt->execute(array($row['id'], 
+                                    $row['name'],
+                                    $row['description'],
+                                    $row['comments'], 
+                                    $row['createdById'],
+                                    $row['createdByAlias'],
+                                    $row['createdOn'], 
+                                    $row['IsFav']));
+            }   
+        }     
+    }
+
     function  CopyHiddenComponents($fromDbh, $toDbh)
     {     
         $results = $fromDbh->query("SELECT * FROM hiddenComponents;");

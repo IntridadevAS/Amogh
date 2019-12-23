@@ -1,15 +1,5 @@
-window.onload = function()
-{
-    // create current version card
-    var versionData = {};
-    var userInfo = JSON.parse(localStorage.getItem('userinfo'));
-    versionData["id"] = "currentVersion";
-    versionData["name"] = "Current";
-    versionData["description"] = "";
-    versionData["userAlias"] = userInfo.alias;
-    versionData["createdOn"] = "";    
-
-    window.parent.createVersionCard(versionData);
+window.onload = function () {
+    window.parent.restoreVersions();
 }
 
 function onClose() {
@@ -18,4 +8,17 @@ function onClose() {
 
 function onCreateVersion() {
     window.parent.showCreateVersionForm();
+}
+
+function setFavoriteVersion(versionId) {
+    event.stopPropagation();
+
+    window.parent.setFavoriteVersion(versionId);
+}
+
+function deleteVersion(versionId)
+{
+    event.stopPropagation();
+
+    window.parent.deleteVersion(versionId);
 }

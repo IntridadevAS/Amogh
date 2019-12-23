@@ -1,3 +1,21 @@
+:root {
+	--intridaBlue: #15b9f9;
+	--intridaGreen: #51e0dc;
+	--xCheckWhite: #f2f3f4;
+	--xCheckMedGrey: #696969;
+	--xCheckDarkGrey: #474747;
+	--xCheckBlack: #323132;
+	--xCheckOrange: #f05a28;
+	--xCheckRed: #ed1c24;
+	--xCheckGradient: linear-gradient(to right, #f05a28, #ed1c24);
+	--xCheckHeaderGradient: linear-gradient(to right, #f2f3f480, #f05a2880, #ee2e2580, #32313280);
+	--checkSpaceGradient: linear-gradient(to bottom, #47474780, #15b9f980);
+	--reviewSpaceGradient: linear-gradient(to bottom, #47474780, #ed1c2480);
+	--borderRadiusVal: 5px;
+	--borderWidth: 1px;
+	--borderWidthHilite: 3px;
+	}
+	
 .mediaViewInfo {
 	--web-view-name: Create New Version;
 	--web-view-id: Create_New_Version;

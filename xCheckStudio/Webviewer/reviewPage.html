@@ -976,7 +976,8 @@
         </div>
         <div id="largeAnalyticsContainer" class="modal">
           <!-- Modal content -->
-          <div class="modal-content" id="largeAnalyticsContainer-content" style="width: 100%; height: 100%; padding: 6px;">
+          <div class="modal-content" id="largeAnalyticsContainer-content"
+            style="width: 100%; height: 100%; padding: 6px;">
             <iframe id="IFramelargeAnalytics" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
@@ -1438,44 +1439,43 @@
     }
 
     function GetCurrentCheck() {
-        var currentCheck = {};
-        currentCheck['check'] = model.currentCheck;
-        if(model.currentCheck == 'comparison') {
-          currentCheck['selectedCheck'] = model.selectedComparisons;
-        }
-        else {
-          currentCheck['selectedCheck'] = model.selectedCompliance;
-        }
+      var currentCheck = {};
+      currentCheck['check'] = model.currentCheck;
+      if (model.currentCheck == 'comparison') {
+        currentCheck['selectedCheck'] = model.selectedComparisons;
+      }
+      else {
+        currentCheck['selectedCheck'] = model.selectedCompliance;
+      }
       return currentCheck;
     }
 
     function IsCompliancePerformed(sourceId) {
-      if(model.files[sourceId])
+      if (model.files[sourceId])
         return model.files[sourceId]["compliance"];
       else
         return false;
     }
 
-    function ShowLargeAnalytics()
-    {
+    function ShowLargeAnalytics() {
       Analytics.ShowLargeAnalytics();
-    } 
-    
+    }
+
     function ShowSmallAnalytics() {
       var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
       modal.style.display = "none";
 
-      if(model.currentCheck == 'comparison') {
-          var visualizer = document.getElementById("comparisonVisualizerA");
+      if (model.currentCheck == 'comparison') {
+        var visualizer = document.getElementById("comparisonVisualizerA");
       }
       else {
         var visualizer = document.getElementById("complianceVisualizerA");
       }
 
-      if(visualizer.classList.contains("maximize")) {
-          visualizer.classList.remove("maximize");
+      if (visualizer.classList.contains("maximize")) {
+        visualizer.classList.remove("maximize");
       }
-      
+
       Analytics.ShowSmallAnalytics(visualizer, Comparison.SmallAnalyticsContainer);
     }
 
@@ -1596,10 +1596,19 @@
       popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
-    function createVersionCard(versionData) {
-      VersioningManager.createVersionCard(versionData);
+    function restoreVersions() {
+      VersioningManager.restoreVersions();
     }
+
+    function setFavoriteVersion(versionId) {
+      VersioningManager.setFavoriteVersion(versionId);
+    }    
+
+    function deleteVersion(versionId) {
+      VersioningManager.deleteVersion(versionId);
+    }    
     
+
   </script>
 </body>
 
