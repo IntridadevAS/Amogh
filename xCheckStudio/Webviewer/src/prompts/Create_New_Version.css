@@ -1,0 +1,366 @@
+:root {
+	--intridaBlue: #15b9f9;
+	--intridaGreen: #51e0dc;
+	--xCheckWhite: #f2f3f4;
+	--xCheckMedGrey: #696969;
+	--xCheckDarkGrey: #474747;
+	--xCheckBlack: #323132;
+	--xCheckOrange: #f05a28;
+	--xCheckRed: #ed1c24;
+	--xCheckGradient: linear-gradient(to right, #f05a28, #ed1c24);
+	--xCheckHeaderGradient: linear-gradient(to right, #f2f3f480, #f05a2880, #ee2e2580, #32313280);
+	--checkSpaceGradient: linear-gradient(to bottom, #47474780, #15b9f980);
+	--reviewSpaceGradient: linear-gradient(to bottom, #47474780, #ed1c2480);
+	--borderRadiusVal: 5px;
+	--borderWidth: 1px;
+	--borderWidthHilite: 3px;
+	}
+	
+.mediaViewInfo {
+	--web-view-name: Create New Version;
+	--web-view-id: Create_New_Version;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+:root {
+	--web-view-ids: Create_New_Version;
+}
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	border: none;
+}
+#Create_New_Version {
+	position: absolute;
+	background: #E5E5E5;
+	width: 581px;
+	height: 544px;
+	overflow: hidden;
+	--web-view-name: Create New Version;
+	--web-view-id: Create_New_Version;
+	--web-scale-on-resize: true;
+	--web-enable-deep-linking: true;
+}
+@keyframes fadein {
+
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+
+}
+#Group_401 {
+	position: absolute;
+	width: 581px;
+	height: 544px;
+	left: 0.5px;
+	top: 0px;
+	overflow: visible;
+}
+.Rectangle_1290 {
+	filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.502));
+	position: absolute;
+	overflow: visible;
+	width: 617px;
+	height: 580px;
+	left: 0px;
+	top: 0px;
+}
+.Rectangle_1291 {
+	position: absolute;
+	overflow: visible;
+	width: 330px;
+	height: 491px;
+	left: 241px;
+	top: 40px;
+}
+.Rectangle_1292 {
+	position: absolute;
+	overflow: visible;
+	width: 309px;
+	height: 429px;
+	left: 251px;
+	top: 70px;
+}
+#Group_354 {
+	position: absolute;
+	width: 20px;
+	height: 428.5px;
+	left: 540px;
+	top: 70px;
+	overflow: visible;
+}
+.Rectangle_1189 {
+	position: absolute;
+	overflow: visible;
+	width: 20px;
+	height: 428.5px;
+	left: 0px;
+	top: 0px;
+}
+.Rectangle_1190 {
+	position: absolute;
+	overflow: visible;
+	width: 20px;
+	height: 185px;
+	left: 0px;
+	top: 0px;
+}
+#CheckIconNew {
+	position: absolute;
+	width: 220px;
+	height: 174px;
+	left: 10px;
+	top: 357px;
+	overflow: visible;
+	--web-animation: fadein 0.3s ease-out;
+	--web-action-type: page;
+	--web-action-target: Version_Center.html;
+	cursor: pointer;
+}
+.Rectangle_1132 {
+	position: absolute;
+	overflow: visible;
+	width: 220px;
+	height: 174px;
+	left: 0px;
+	top: 0px;
+}
+#Create_Version {
+	position: absolute;
+	left: 37px;
+	top: 130px;
+	overflow: visible;
+	width: 145px;
+	white-space: nowrap;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Rectangle_1185 {
+	opacity: 0.5;
+}
+.Rectangle_1185 {
+	position: absolute;
+	overflow: visible;
+	width: 220px;
+	height: 115px;
+	left: 0px;
+	top: 0px;
+}
+#Symbol_85___17 {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	left: 90px;
+	top: 50.808px;
+	overflow: visible;
+}
+.Ellipse_226 {
+	position: absolute;
+	overflow: visible;
+	width: 40px;
+	height: 40px;
+	left: 0px;
+	top: 0px;
+}
+#_ {
+	position: absolute;
+	width: 16px;
+	height: 15.999px;
+	left: 12px;
+	top: 12px;
+	overflow: visible;
+}
+.Union_1 {
+	overflow: visible;
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	left: 0px;
+	top: 0px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#Group_355 {
+	position: absolute;
+	width: 220px;
+	height: 137.656px;
+	left: 11px;
+	top: 210px;
+	overflow: visible;
+}
+#Group_210 {
+	position: absolute;
+	width: 220px;
+	height: 137.656px;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+}
+.Rectangle_1205 {
+	position: absolute;
+	overflow: visible;
+	width: 220px;
+	height: 137.656px;
+	left: 0px;
+	top: 0px;
+}
+#Group_27 {
+	position: absolute;
+	width: 90px;
+	height: 19px;
+	left: 5px;
+	top: 5px;
+	overflow: visible;
+}
+#Description_ {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	width: 91px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+.Path_361 {
+	filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.749));
+	overflow: visible;
+	position: absolute;
+	width: 27px;
+	height: 27px;
+	left: 544.354px;
+	top: 7px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#New_Version {
+	position: absolute;
+	left: 10px;
+	top: 5px;
+	overflow: hidden;
+	width: 469px;
+	height: 30px;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 25px;
+	color: rgba(242,243,244,1);
+}
+#CheckIconExisting {
+	position: absolute;
+	width: 220px;
+	height: 160px;
+	left: 10.5px;
+	top: 40px;
+	overflow: visible;
+}
+.Rectangle_1132_A82_Rectangle_9 {
+	filter: drop-shadow(1px 1px 1px rgba(50, 49, 50, 1));
+	position: absolute;
+	overflow: visible;
+	width: 223px;
+	height: 163px;
+	left: 0px;
+	top: 0px;
+}
+#Rectangle_1185_A82_Rectangle_10 {
+	opacity: 0.5;
+}
+.Rectangle_1185_A82_Rectangle_10 {
+	position: absolute;
+	overflow: visible;
+	width: 218px;
+	height: 101px;
+	left: 1px;
+	top: 1px;
+}
+.Path_270 {
+	overflow: visible;
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	left: 184px;
+	top: 5px;
+	transform: matrix(1,0,0,1,0,0);
+}
+#Version_Name {
+	position: absolute;
+	left: 6px;
+	top: 105px;
+	overflow: visible;
+	width: 142px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Status {
+	position: absolute;
+	left: 6px;
+	top: 134px;
+	overflow: hidden;
+	width: 99px;
+	height: 26px;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 15px;
+	color: rgba(242,243,244,1);
+}
+#Comments {
+	position: absolute;
+	left: 252px;
+	top: 44px;
+	overflow: visible;
+	width: 113px;
+	white-space: nowrap;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20px;
+	color: rgba(242,243,244,1);
+}
+#Created_________May_10__2019 {
+	position: absolute;
+	left: 17.5px;
+	top: 50px;
+	overflow: hidden;
+	width: 132px;
+	height: 22px;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 10px;
+	color: rgba(242,243,244,1);
+}
+#Created_By_________May_10__201 {
+	position: absolute;
+	left: 17.5px;
+	top: 77px;
+	overflow: hidden;
+	width: 183px;
+	height: 22px;
+	text-align: left;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 10px;
+	color: rgba(242,243,244,1);
+}

@@ -509,6 +509,9 @@ function SaveAll()
         SaveReferencesFromTemp( $tempDbh, $dbh, "c_References");          
         SaveReferencesFromTemp( $tempDbh, $dbh, "d_References");
 
+        // save versions
+        SaveVersionsFromTemp( $tempDbh, $dbh);
+
         // commit update
         $dbh->commit();
         $tempDbh->commit();
@@ -794,6 +797,49 @@ function CreateCheckSpaceDBonSave()
 
     echo "success"; 
     return;
+}
+
+/* 
+   Save check versions
+*/
+function SaveVersionsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM Versions;");  
+     
+    // create table
+    $command = 'DROP TABLE IF EXISTS Versions;';
+    $dbh->exec($command);   
+
+    if($selectResults) 
+    {             
+        $command = 'CREATE TABLE IF NOT EXISTS Versions(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            description TEXT,
+            comments TEXT,
+            createdById TEXT,
+            createdByAlias TEXT,
+            createdOn TEXT,
+            IsFav INTEGER       
+            )';                 
+        $dbh->exec($command);    
+
+         $insertStmt = $dbh->prepare("INSERT INTO Versions(id, name, description, comments, createdById, 
+         createdByAlias, createdOn, IsFav) VALUES(?,?,?,?,?,?,?,?)");
+    
+    
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
+        {           
+            $insertStmt->execute(array($row['id'], 
+                                       $row['name'], 
+                                       $row['description'],
+                                       $row['comments'], 
+                                       $row['createdById'], 
+                                       $row['createdByAlias'], 
+                                       $row['createdOn'], 
+                                       $row['IsFav']));
+        }  
+    }   
 }
 
 /* 

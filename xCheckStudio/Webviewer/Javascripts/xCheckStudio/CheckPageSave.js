@@ -13,8 +13,8 @@ var CheckModule = {
                 showBusyIndicator();
 
                 // create project DB
-                this.createCheckSpaceDBonSave().then(function (result) {
-                    if (result) {
+                // this.createCheckSpaceDBonSave().then(function (result) {
+                    // if (result) {
 
                         // save all
                         CheckModule.saveAll().then(function (res) {
@@ -38,18 +38,18 @@ var CheckModule = {
 
                             return resolve(false);
                         });
-                    }
-                    else {
+                    // }
+                    // else {
 
-                        if (!silent) {
-                            showFailedToSavePrompt();
-                        }
-                        // remove busy spinner        
-                        hideBusyIndicator();
+                    //     if (!silent) {
+                    //         showFailedToSavePrompt();
+                    //     }
+                    //     // remove busy spinner        
+                    //     hideBusyIndicator();
 
-                        return resolve(false);
-                    }
-                });
+                    //     return resolve(false);
+                    // }
+                // });
             }
             catch (error) {
                 console.log(error.message);
@@ -161,31 +161,31 @@ var CheckModule = {
     //     });
     // },
 
-    createCheckSpaceDBonSave: function () {
-        return new Promise((resolve) => {
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // createCheckSpaceDBonSave: function () {
+    //     return new Promise((resolve) => {
+    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-            $.ajax({
-                url: 'PHP/ProjectManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "CreateCheckSpaceDBonSave",
-                    'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
-                },
-                success: function (msg) {
-                    if (msg != 'fail') {
-                        return resolve(true);
-                    }
+    //         $.ajax({
+    //             url: 'PHP/ProjectManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "CreateCheckSpaceDBonSave",
+    //                 'ProjectName': projectinfo.projectname,
+    //                 'CheckName': checkinfo.checkname
+    //             },
+    //             success: function (msg) {
+    //                 if (msg != 'fail') {
+    //                     return resolve(true);
+    //                 }
 
-                    return resolve(false);
-                }
-            });
-        });
-    },
+    //                 return resolve(false);
+    //             }
+    //         });
+    //     });
+    // },
 
     getControlStates: function () {
         // control states
