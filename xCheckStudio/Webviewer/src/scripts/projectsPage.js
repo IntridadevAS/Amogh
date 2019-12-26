@@ -742,16 +742,21 @@ let projectView = {
   },
 
   clearProjects: function () {
-    let newProjectCard = "";
+    let newPrivateProjectCard = "", newPublicProjectCard="";
     if (controller.permissions()) {
-      newProjectCard += `
+      newPrivateProjectCard += `
         <div class="card newProjectCard">\
-            <div class="plusBtn"></div>
-        </div>`
+            <div class="plusBtn"></div><div class="tooltiptext">Create a new private project</div>
+        </div>`;
+
+        newPublicProjectCard += `
+        <div class="card newProjectCard">\
+            <div class="plusBtn"></div><div class="tooltiptext">Create a new public project</div>
+        </div>`;
     }
 
-    this.projects.innerHTML = newProjectCard;
-    this.publicProjectsCont.innerHTML = newProjectCard;
+    this.projects.innerHTML = newPrivateProjectCard;
+    this.publicProjectsCont.innerHTML = newPublicProjectCard;
   },
 
   infoDeleteButtons: function () {
