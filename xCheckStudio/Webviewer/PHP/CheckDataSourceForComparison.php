@@ -91,6 +91,14 @@
 
             global $dataSourceOrderInCheckCase;
 
+            // This arrays are used to store the components which are matched 
+            // before that data source's loop is started executing.
+            // Don't need $sourceAAlreadyMatchedComponents, because there is loop 
+            // before source a components
+            $sourceBAlreadyMatchedComponents = array();
+            $sourceCAlreadyMatchedComponents = array();
+            $sourceDAlreadyMatchedComponents = array();
+
             // perform comparison in context of source a components
             foreach ($SourceAComponents as $mainClass => $currentComponents)
             {
@@ -206,7 +214,7 @@
                                 $matchedComponentArray["b"] = $sourceBMatchedComponent;
                             }
 
-
+                            $sourceCMatchedComponent = null;                            
                             if($totalSources > 2)
                             {
                                 /* 
@@ -230,6 +238,7 @@
                             }
 
                             // for source d check
+                            $sourceDMatchedComponent = null;   
                             if($totalSources > 3)
                             {
                                 /* 
@@ -248,11 +257,40 @@
 
                                 if($sourceDMatchedComponent)
                                 {
-                                    $matchedComponentArray["d"] = $sourceDMatchedComponent;
+                                    $matchedComponentArray["d"] = $sourceDMatchedComponent;                                    
                                 }
                             }
 
+                            // maintain array of classwise matched components
                             array_push( $classWiseMatechedComponents, $matchedComponentArray);    
+
+                            // maintain source b matched components
+                            if($sourceBMatchedComponent)
+                            {
+                                if(!array_key_exists($sourceBMatchedComponent["id"], $sourceBAlreadyMatchedComponents))
+                                {
+                                    $sourceBAlreadyMatchedComponents[$sourceBMatchedComponent["id"]] = array();
+                                }                                
+                                array_push($sourceBAlreadyMatchedComponents[$sourceBMatchedComponent["id"]], $mappedGroup);
+                            }
+                            // maintain source c matched components
+                            if($sourceCMatchedComponent)
+                            {
+                                if(!array_key_exists($sourceCMatchedComponent["id"], $sourceCAlreadyMatchedComponents))
+                                {
+                                    $sourceCAlreadyMatchedComponents[$sourceCMatchedComponent["id"]] = array();
+                                }                                
+                                array_push($sourceCAlreadyMatchedComponents[$sourceCMatchedComponent["id"]], $mappedGroup);
+                            }
+                            // maintain source d matched components
+                            if($sourceDMatchedComponent)
+                            {
+                                if(!array_key_exists($sourceDMatchedComponent["id"], $sourceDAlreadyMatchedComponents))
+                                {
+                                    $sourceDAlreadyMatchedComponents[$sourceDMatchedComponent["id"]] = array();
+                                }                                
+                                array_push($sourceDAlreadyMatchedComponents[$sourceDMatchedComponent["id"]], $mappedGroup);
+                            }
                         }
 
                         $groupMatchedComponents = array();
@@ -528,6 +566,7 @@
                                 $matchedComponentArray["a"] = $sourceAMatchedComponent;
                             }
                             
+                            $sourceCMatchedComponent = null;
                             if($totalSources > 2)
                             {
                                 /* 
@@ -549,6 +588,7 @@
                                 }
                             }
 
+                            $sourceDMatchedComponent = null;
                             if($totalSources > 3)
                             {
                                 /* 
@@ -580,6 +620,25 @@
                             }                       
                     
                             array_push( $classWiseMatechedComponents, $matchedComponentArray);    
+                    
+                            // maintain source c matched components
+                            if($sourceCMatchedComponent)
+                            {
+                                if(!array_key_exists($sourceCMatchedComponent["id"], $sourceCAlreadyMatchedComponents))
+                                {
+                                    $sourceCAlreadyMatchedComponents[$sourceCMatchedComponent["id"]] = array();
+                                }                                
+                                array_push($sourceCAlreadyMatchedComponents[$sourceCMatchedComponent["id"]], $mappedGroup);
+                            }
+                            // maintain source d matched components
+                            if($sourceDMatchedComponent)
+                            {
+                                if(!array_key_exists($sourceDMatchedComponent["id"], $sourceDAlreadyMatchedComponents))
+                                {
+                                    $sourceDAlreadyMatchedComponents[$sourceDMatchedComponent["id"]] = array();
+                                }                                
+                                array_push($sourceDAlreadyMatchedComponents[$sourceDMatchedComponent["id"]], $mappedGroup);
+                            }
                         }
 
                         $groupMatchedComponents = array();
@@ -631,17 +690,37 @@
                             }
                             if($isAllNoMatch)
                             {
-                                // no match component                                
-                                $noMatchComponent = getNoMatchComponent ($sourceBComponent,
-                                                                        $SourceBProperties,
-                                                                        2,
-                                                                        $classMappingInfo);
-                                
-                                $groupName =  getGroupTitle($mappingGroup, $totalSources);
-                                
+                                $validNoMatch = true;
+                                if(array_key_exists($sourceBComponent["id"], $sourceBAlreadyMatchedComponents))
+                                {
+                                    for($ii = 0; $ii < count($sourceBAlreadyMatchedComponents[$sourceBComponent["id"]]); $ii++)
+                                    {
+                                        $group = $sourceBAlreadyMatchedComponents[$sourceBComponent["id"]][$ii];
+                                        
+                                        if($group["SourceAName"] == $mappingGroup["SourceAName"] && 
+                                            $group["SourceBName"] == $mappingGroup["SourceBName"] &&
+                                            $group["SourceCName"] == $mappingGroup["SourceCName"] &&
+                                            $group["SourceDName"] == $mappingGroup["SourceDName"])
+                                        {
+                                            $validNoMatch = false;
+                                        }
+                                    }                                    
+                                }
 
-                                $componentGroup = getCheckComponentGroup($groupName);   
-                                $componentGroup->AddCheckComponent($noMatchComponent); 
+                                if($validNoMatch)
+                                {
+                                    // no match component                                
+                                    $noMatchComponent = getNoMatchComponent ($sourceBComponent,
+                                                                            $SourceBProperties,
+                                                                            2,
+                                                                            $classMappingInfo);
+                                    
+                                    $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                    
+
+                                    $componentGroup = getCheckComponentGroup($groupName);   
+                                    $componentGroup->AddCheckComponent($noMatchComponent); 
+                                }
 
                             }
                             else
@@ -681,7 +760,12 @@
                                         $srcCComponent === NULL)
                                     {                                        
                                         continue;
-                                    } 
+                                    }
+                                    else if($totalSources === 2 && 
+                                            $srcAComponent === NULL)
+                                    {                                        
+                                        continue;
+                                    }  
                                     
                                     $srcBComponent = $classwiseMatchObjects['b'];
                                     $checkCaseComponentClass = $classwiseMatchObjects["classMapping"];
@@ -862,6 +946,7 @@
                                 }  
                                 
                                 // for source d check
+                                $sourceDMatchedComponent = null;
                                 if($totalSources > 3)
                                 {
                                     /* 
@@ -895,7 +980,17 @@
                                     continue; 
                                 }                          
 
-                                array_push( $classWiseMatechedComponents, $matchedComponentArray);    
+                                array_push( $classWiseMatechedComponents, $matchedComponentArray);                                                    
+                            
+                                // maintain source d matched components
+                                if($sourceDMatchedComponent)
+                                {
+                                    if(!array_key_exists($sourceDMatchedComponent["id"], $sourceDAlreadyMatchedComponents))
+                                    {
+                                        $sourceDAlreadyMatchedComponents[$sourceDMatchedComponent["id"]] = array();
+                                    }                                
+                                    array_push($sourceDAlreadyMatchedComponents[$sourceDMatchedComponent["id"]], $mappedGroup);
+                                }
                             }
 
                             $groupMatchedComponents = array();
@@ -947,17 +1042,36 @@
                                 }
                                 if($isAllNoMatch)
                                 {
-                                    // no match component                                
-                                    $noMatchComponent = getNoMatchComponent ($sourceCComponent,
-                                                                            $SourceCProperties,
-                                                                            3,
-                                                                            $classMappingInfo);
-                                    
-                                    $groupName =  getGroupTitle($mappingGroup, $totalSources);
-                                    
-    
-                                    $componentGroup = getCheckComponentGroup($groupName);                      
-                                    $componentGroup->AddCheckComponent($noMatchComponent); 
+                                    $validNoMatch = true;
+                                    if(array_key_exists($sourceCComponent["id"], $sourceCAlreadyMatchedComponents))
+                                    {
+                                        for($ii = 0; $ii < count($sourceCAlreadyMatchedComponents[$sourceCComponent["id"]]); $ii++)
+                                        {
+                                            $group = $sourceCAlreadyMatchedComponents[$sourceCComponent["id"]][$ii];
+                                            if($group["SourceAName"] == $mappingGroup["SourceAName"] && 
+                                                $group["SourceBName"] == $mappingGroup["SourceBName"] &&
+                                                $group["SourceCName"] == $mappingGroup["SourceCName"] &&
+                                                $group["SourceDName"] == $mappingGroup["SourceDName"])
+                                            {
+                                                $validNoMatch = false;
+                                            }
+                                        }                                    
+                                    }
+
+                                    if($validNoMatch)
+                                    {
+                                        // no match component                                
+                                        $noMatchComponent = getNoMatchComponent ($sourceCComponent,
+                                                                                $SourceCProperties,
+                                                                                3,
+                                                                                $classMappingInfo);
+                                        
+                                        $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                        
+        
+                                        $componentGroup = getCheckComponentGroup($groupName);                      
+                                        $componentGroup->AddCheckComponent($noMatchComponent); 
+                                    }
 
                                 }
                                 else
@@ -982,9 +1096,17 @@
                                         {
                                             $srcDComponent = $classwiseMatchObjects['d'];
                                         }
-                                        if( $srcAComponent === NULL && 
+                                        if( $totalSources > 3 && 
+                                            $srcAComponent === NULL && 
                                             $srcBComponent === NULL &&
-                                            $srcCComponent === NULL)
+                                            $srcDComponent === NULL)
+                                        {
+                                            // neglect no match component here
+                                            continue;
+                                        }
+                                        else if( $totalSources > 2 && 
+                                            $srcAComponent === NULL && 
+                                            $srcBComponent === NULL)
                                         {
                                             // neglect no match component here
                                             continue;
@@ -1242,17 +1364,36 @@
                                 }
                                 if($isAllNoMatch)
                                 {
-                                    // no match component                                
-                                    $noMatchComponent = getNoMatchComponent ($sourceDComponent,
-                                                                            $SourceDProperties,
-                                                                            4,
-                                                                            $classMappingInfo);
-                                    
-                                    $groupName =  getGroupTitle($mappingGroup, $totalSources);
-                                    
-    
-                                    $componentGroup = getCheckComponentGroup($groupName);                      
-                                    $componentGroup->AddCheckComponent($noMatchComponent); 
+                                    $validNoMatch = true;
+                                    if(array_key_exists($sourceDComponent["id"], $sourceDAlreadyMatchedComponents))
+                                    {
+                                        for($ii = 0; $ii < count($sourceDAlreadyMatchedComponents[$sourceDComponent["id"]]); $ii++)
+                                        {
+                                            $group = $sourceDAlreadyMatchedComponents[$sourceDComponent["id"]][$ii];
+                                            if($group["SourceAName"] == $mappingGroup["SourceAName"] && 
+                                                $group["SourceBName"] == $mappingGroup["SourceBName"] &&
+                                                $group["SourceCName"] == $mappingGroup["SourceCName"] &&
+                                                $group["SourceDName"] == $mappingGroup["SourceDName"])
+                                            {
+                                                $validNoMatch = false;
+                                            }
+                                        }                                    
+                                    }
+
+                                    if($validNoMatch)
+                                    {
+                                        // no match component                                
+                                        $noMatchComponent = getNoMatchComponent ($sourceDComponent,
+                                                                                $SourceDProperties,
+                                                                                4,
+                                                                                $classMappingInfo);
+                                        
+                                        $groupName =  getGroupTitle($mappingGroup, $totalSources);
+                                        
+        
+                                        $componentGroup = getCheckComponentGroup($groupName);                      
+                                        $componentGroup->AddCheckComponent($noMatchComponent); 
+                                    }
 
                                 }
                                 else
