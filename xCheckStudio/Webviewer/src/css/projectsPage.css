@@ -179,6 +179,7 @@ input[type=checkbox] + label {
   mask-image: url("../../public/symbols/favoriteStar.svg");
   width: 30px;
   height: 30px;
+  cursor: pointer;
 }
 .favorite .star {
   background-color: var(--xCheckWhite);
@@ -197,6 +198,7 @@ input[type=checkbox] + label {
   box-sizing: border-box;
   height: 30px;
   width: 30px;
+  cursor: pointer;
 }
 
 .btnSymbol:hover {
@@ -730,6 +732,7 @@ input[type=checkbox] + label {
   right: 10px;
   bottom: 10px;
   display: flex;
+  color: var(--xCheckWhite);
 }
 
 .buttonAreaDelete button {
