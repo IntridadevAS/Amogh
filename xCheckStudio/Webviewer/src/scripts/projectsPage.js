@@ -10,7 +10,6 @@ let model = {
   projectReviews: [],
   projectChecks: [],
   currentModule: "",
-  isCurrentProjectDirty: false,
 }
 
 let controller = {
@@ -1151,7 +1150,6 @@ let editProjectView = {
     editProjectType.value = this.currentProject.type;
 
     editProjectView.disableEditProjectForm();
-    model.isCurrentProjectDirty = false;
   },
 
   disableEditProjectForm: function () {
@@ -1175,7 +1173,6 @@ let editProjectView = {
       document.getElementById("editProjectType").disabled = false;
       document.getElementById("editProjectDescription").disabled = false;
       document.getElementById("favoriteCheck").disabled = false;
-      model.isCurrentProjectDirty = true;
     } else {
       showAlertForm("Sorry, you are not authorized to edit project information.");
     }
@@ -1195,15 +1192,25 @@ let editProjectView = {
   },
 
   openEditProjectOverlay: function () {
-    if (model.isCurrentProjectDirty) {
-      var overlay = document.getElementById("uiBlockingOverlay");
-      var popup = document.getElementById("editProjectPopup");
+    let editProjectName = document.getElementById("editProjectName").value;
+    let editComments = document.getElementById("editComments").value;
+    let editProjectStatus = document.getElementById("editProjectStatus").value;
+    let editProjectType = document.getElementById("editProjectType").value;
+    let editProjectDescription = document.getElementById("editProjectDescription").value;
+      
 
-      overlay.style.display = 'block';
-      popup.style.display = 'block';
+    if(model.currentProject.projectname === editProjectName && 
+      model.currentProject.comments === editComments && 
+      model.currentProject.description === editProjectDescription && 
+      model.currentProject.status === editProjectStatus &&
+      model.currentProject.type === editProjectType) {
+        this.cancelEditProject(true);
     }
     else {
-      this.cancelEditProject(true);
+      var overlay = document.getElementById("uiBlockingOverlay");
+      var popup = document.getElementById("editProjectPopup");
+      overlay.style.display = 'block';
+      popup.style.display = 'block';
     }
   },
 
