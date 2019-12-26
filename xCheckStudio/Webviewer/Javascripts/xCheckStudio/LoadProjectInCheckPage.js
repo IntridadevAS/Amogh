@@ -81,14 +81,11 @@ function loadCheckSpaceForCheck(data) {
 
 function loadDataSets(data) {
     // return new Promise((resolve) => {
-    if (!("checkCaseInfo" in data) ||
-        !("sourceViewerOptions" in data)) {
-        return;
-    }
-    var checkCaseInfo = data["checkCaseInfo"];
-    var viewerOptions = data["sourceViewerOptions"];
-   
-    viewPanels.addFilesPanel.classList.add("hide");
+    // if (!data["checkCaseInfo"] ||
+    //     !data["sourceViewerOptions"]) {
+    //     return;
+    // }
+    var checkCaseInfo = data["checkCaseInfo"];    
 
     // get selected check case name
     var checkCaseName;
@@ -105,10 +102,27 @@ function loadDataSets(data) {
         }
     }
 
-    for (var srcId in viewerOptions) {
-        var viewerOption = viewerOptions[srcId];
-        loadDataSource(viewerOption, data, checkCaseName);
-    }   
+    var viewerOptions = data["sourceViewerOptions"];
+    if (viewerOptions && 
+        Object.keys(viewerOptions).length > 0) {
+        
+        viewPanels.addFilesPanel.classList.add("hide");
+
+        for (var srcId in viewerOptions) {
+            var viewerOption = viewerOptions[srcId];
+            loadDataSource(viewerOption, data, checkCaseName);
+        }
+    }
+    else {
+        checkCaseFilesData.populateCheckCases();
+        var checkCaseSelectElement = document.getElementById("checkCaseSelect");
+        if (checkCaseName) {
+            checkCaseSelectElement.value = checkCaseName;
+        }
+        else {
+            checkCaseSelectElement.value = "AutoSelect";
+        }
+    }
 }
 
 function loadDataSource(viewerOption, data, checkCaseName) {

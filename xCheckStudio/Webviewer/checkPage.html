@@ -1413,35 +1413,37 @@
 
     window.onload = function () {
 
-      setPageTitle();
-      setUserName();
-      setCheckSpaceName();
-      loadCheckCases();
+        setPageTitle();
+        setUserName();
+        setCheckSpaceName();
 
-      var checkButton = document.getElementById("checkButton");
-      checkButton.onclick = function () {
+        var checkButton = document.getElementById("checkButton");
+        checkButton.onclick = function () {
 
-        // show busy loader
-        onCheckButtonClick();
-      };
+          // show busy loader
+          onCheckButtonClick();
+        };
 
-      // enable menu options
-      enableMenuOptions();
+        // enable menu options
+        enableMenuOptions();
 
-      //Create file uploader using devExtreme
-      UploadManager.createFileUploader();
+        //Create file uploader using devExtreme
+        UploadManager.createFileUploader();
 
-      // create drawer menu
-      DrawerMenu.create(["check", "output"]);
+        // create drawer menu
+        DrawerMenu.create(["check", "output"]);
 
-      //load data from saved check space
-      loadCheckSpaceInCheckPage();
+        loadCheckCases().then(function (result) {
 
-      // // hide busy indicator
-      // hideBusyIndicator();
-      // hide loading overlay
-      document.getElementById("uiBlockingOverlay").style.display = "none";
-    }
+          //load data from saved check space
+          loadCheckSpaceInCheckPage();
+
+          // // hide busy indicator
+          // hideBusyIndicator();
+          // hide loading overlay
+          document.getElementById("uiBlockingOverlay").style.display = "none";
+        });
+      }
 
     function showBusyIndicator() {
       // hide busy indicator
