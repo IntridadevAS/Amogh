@@ -10,6 +10,7 @@ let model = {
   projectReviews: [],
   projectChecks: [],
   currentModule: "",
+  isCurrentProjectDirty: false,
 }
 
 let controller = {
@@ -607,7 +608,6 @@ let controller = {
       controller.setMyCurrentProj(id);
     };
     editProjectView.init();
-    editProjectView.disableEditProjectForm();
   },
 
   copyProject: function (projectname,
@@ -1149,25 +1149,36 @@ let editProjectView = {
     editComments.value = this.currentProject.comments;
     editProjectStatus.value = this.currentProject.status;
     editProjectType.value = this.currentProject.type;
+
+    editProjectView.disableEditProjectForm();
+    model.isCurrentProjectDirty = false;
   },
 
   disableEditProjectForm: function () {
+    // create drawer menu
     document.getElementById("editProjectName").disabled = true;
     document.getElementById("editComments").disabled = true;
     document.getElementById("editProjectStatus").disabled = true;
     document.getElementById("editProjectType").disabled = true;
     document.getElementById("editProjectDescription").disabled = true;
     document.getElementById("favoriteCheck").disabled = true;
+
   },
 
   editProjectInfo: function () {
-    this.cancelEditProject(false);
-    document.getElementById("editProjectName").disabled = false;
-    document.getElementById("editComments").disabled = false;
-    document.getElementById("editProjectStatus").disabled = false;
-    document.getElementById("editProjectType").disabled = false;
-    document.getElementById("editProjectDescription").disabled = false;
-    document.getElementById("favoriteCheck").disabled = false;
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if (userinfo.userid === this.currentProject.userid) {
+      this.cancelEditProject(false);
+      document.getElementById("editProjectName").disabled = false;
+      document.getElementById("editComments").disabled = false;
+      document.getElementById("editProjectStatus").disabled = false;
+      document.getElementById("editProjectType").disabled = false;
+      document.getElementById("editProjectDescription").disabled = false;
+      document.getElementById("favoriteCheck").disabled = false;
+      model.isCurrentProjectDirty = true;
+    } else {
+      showAlertForm("Sorry, you are not authorized to edit project information.");
+    }
   },
 
   cancelEditProject: function (closeProjectOverlay) {
@@ -1184,11 +1195,16 @@ let editProjectView = {
   },
 
   openEditProjectOverlay: function () {
-    var overlay = document.getElementById("uiBlockingOverlay");
-    var popup = document.getElementById("editProjectPopup");
+    if (model.isCurrentProjectDirty) {
+      var overlay = document.getElementById("uiBlockingOverlay");
+      var popup = document.getElementById("editProjectPopup");
 
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
+      overlay.style.display = 'block';
+      popup.style.display = 'block';
+    }
+    else {
+      this.cancelEditProject(true);
+    }
   },
 
   SaveEditedProjectInfo: function () {
