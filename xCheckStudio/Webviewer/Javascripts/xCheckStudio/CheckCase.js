@@ -1,48 +1,54 @@
 
 function loadCheckCases() {
-    // this new project to be created
-    var checkCaseSelect = document.getElementById("checkCaseSelect");
-    checkCaseSelect.onchange = function () {
-        if (this.value === "AutoSelect") {
-            checkCaseManager = undefined;
 
-            // // disable controls
-            // disableControlsOnLoad();
+    return new Promise(function (resolve) {
 
-            return;
-        }
+        // this new project to be created
+        var checkCaseSelect = document.getElementById("checkCaseSelect");
+        checkCaseSelect.onchange = function () {
+            if (this.value === "AutoSelect") {
+                checkCaseManager = undefined;
 
-        //$("#checkCaseSelect option[value='AutoSelect']").prop("disabled", true);
-        checkCaseSelected = true;
-        var fileName;
-        for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
-            var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
-            if (checkCaseFileData.CheckCaseName === this.value) {
-                fileName = checkCaseFileData.FileName;
-                break;
+                // // disable controls
+                // disableControlsOnLoad();
+
+                return;
             }
+
+            //$("#checkCaseSelect option[value='AutoSelect']").prop("disabled", true);
+            checkCaseSelected = true;
+            var fileName;
+            for (var i = 0; i < checkCaseFilesData.CheckCaseFileDataList.length; i++) {
+                var checkCaseFileData = checkCaseFilesData.CheckCaseFileDataList[i];
+                if (checkCaseFileData.CheckCaseName === this.value) {
+                    fileName = checkCaseFileData.FileName;
+                    break;
+                }
+            }
+            if (fileName === undefined) {
+                return;
+            }
+
+            // read check case data from XML checkcase data file
+            checkCaseManager = new CheckCaseManager();
+            checkCaseManager.readCheckCaseData(fileName);
+
+            // // if valid check case is selected, then enable source A controls              
+            // var component = document.getElementById('createbtnA');
+            // if (component.classList.contains("disabledbutton")) {
+            //     component.classList.remove('disabledbutton');
+            // }
+
+            // // enable drop zone for source A
+            // enableDropZone("dropZone1");
         }
-        if (fileName === undefined) {
-            return;
-        }
 
-        // read check case data from XML checkcase data file
-        checkCaseManager = new CheckCaseManager();
-        checkCaseManager.readCheckCaseData(fileName);
-
-        // // if valid check case is selected, then enable source A controls              
-        // var component = document.getElementById('createbtnA');
-        // if (component.classList.contains("disabledbutton")) {
-        //     component.classList.remove('disabledbutton');
-        // }
-
-        // // enable drop zone for source A
-        // enableDropZone("dropZone1");
-    }
-
-    // read check cases files list
-    checkCaseFilesData = new CheckCaseFilesData();
-    checkCaseFilesData.readCheckCaseFiles();
+        // read check cases files list
+        checkCaseFilesData = new CheckCaseFilesData();
+        checkCaseFilesData.readCheckCaseFiles().then(function (result) {
+            return resolve(result);
+        });
+    });
 }
 
 function filterCheckCases(loadAll) {    
