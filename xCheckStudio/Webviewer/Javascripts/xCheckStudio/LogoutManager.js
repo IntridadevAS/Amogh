@@ -1,20 +1,21 @@
-function onLogoutUser() {
+function onLogoutUser(alluser) {
 
     return new Promise((resolve) => {
         var userinfo = JSON.parse(localStorage.getItem('userinfo'));
         $.ajax({
             data: {
                 userid: userinfo.userid,
+                "AllUser": alluser,
             },
             type: "POST",
             url: "PHP/logout.php",
             success: function (msg) {
-                if (msg === "Success") {
-                    localStorage.clear();
-
+                var object = JSON.parse(msg);
+                if (object.Msg === "Success") {
+                    if(object.AllUser === "No")
+                        localStorage.clear();
                     return resolve(true);                  
                 }
-                
                 return resolve(false);              
             },
             error: function () {

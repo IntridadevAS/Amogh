@@ -39,7 +39,7 @@ function closeWindow() {
         window.close();
     }
 
-    onLogoutUser().then(function (status) {
+    onLogoutUser("No").then(function (status) {
         if (status) {
             window.close();
         }
