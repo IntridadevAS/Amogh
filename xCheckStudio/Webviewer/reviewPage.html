@@ -1058,7 +1058,7 @@
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="comparisonAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
-              onclick="Analytics.showAnalytics(this)"></div>
+              onclick="Analytics.ShowAnalytics(this)"></div>
             <div id="comparePanelA" class="comparePanel" style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
               <!-- Translucency slider -->
@@ -1166,7 +1166,7 @@
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="complianceAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
-              onclick="Analytics.showAnalytics(this)"></div>
+              onclick="Analytics.ShowAnalytics(this)"></div>
             <div id="compliance1" class="tempContainer">
 
               <!-- Translucency slider -->
@@ -1478,6 +1478,7 @@
       model.checks[model.currentCheck].resizeViewers();
     }
 
+    // analytics related functions
     ShowModelViewer = function () {
       if (model.currentCheck == "comparison") {
         document.getElementById("comparisonSmallAnalyticsContainer").style.display = "none";
@@ -1528,6 +1529,14 @@
       }
 
       Analytics.ShowSmallAnalytics(visualizer, Comparison.SmallAnalyticsContainer);
+    }
+
+    function GetActiveCategory() {
+      Analytics.GetActiveCategory();
+    }
+
+    function GetSubClassMappingForHighlightedRow() {
+      Analytics.GetSubClassMappingForHighlightedRow();
     }
 
     // reference related functions

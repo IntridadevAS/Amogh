@@ -1,6 +1,7 @@
 function LoadAnalyticsContent(analyticsData, currentCheck) {
 
     HighLightButtonsOnPieChartClick(); 
+    InitAnalyticsContextMenu();
     analyticsManager = new SmallAnalyticsManager(analyticsData);
 
     if(currentCheck['check'] == 'comparison') {
@@ -29,6 +30,81 @@ function LoadAnalyticsContent(analyticsData, currentCheck) {
     }
 }
 
+function InitAnalyticsContextMenu() {
+    $("#Small").contextMenu({
+        selector: ".bg",
+        className: 'contextMenu_style',
+        build: function ($triggerElement, e) {
+            return {
+                callback: function (key, options) {
+                    ExecuteAnalyticsContextMenu(key);
+                },
+                items: {
+                    "totalCheck" : {
+                        name: "Total Check",
+                    },
+                    "category":
+                    {
+                        name: "Category",
+                    },
+                    "subClassCheck" : {
+                        name: "Class"
+                    },
+                    "property": {
+                        name: "Property",
+                    }
+                }
+            }
+        }
+    });
+}
+
+function ExecuteAnalyticsContextMenu(key) {
+    switch(key) {
+        case "category" :
+            AnalyticsType = key;
+            onCategoryAnalyticsClick();
+            break;
+        case "totalCheck" : 
+            AnalyticsType = key;
+            onTotalCheckAnalyticsClick();
+            break;
+        case "subClassCheck" :
+            AnalyticsType = key;
+            onSubClassAnalyticsClick();
+            break;
+            
+    }
+}
+
+function onCategoryAnalyticsClick() {
+    ActiveCategory = window.parent.GetActiveCategory();
+
+    if(ActiveCategory == undefined) {
+        return;
+    }
+    
+    if(activeResultType == "comparison") {
+        analyticsManager.populateComparisonCategoryAnalytics();
+    }
+    else {
+        analyticsManager.populateComplianceCategoryAnalytics(activeResultType)
+    }
+}
+
+function onTotalCheckAnalyticsClick() {
+    if(activeResultType == "comparison") {
+        openChartComparison();
+    }
+    else {
+        OpenComplianceChart(activeResultType);
+    }
+}
+
+function onSubClassAnalyticsClick() {
+    var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
+}
+
 function HideAnalyticsViewer() {
     // var reviewDoc = window.frameElement.ownerDocument;
     window.parent.ShowModelViewer();
@@ -42,7 +118,16 @@ function ShowLargeAnalytics() {
 function ShowSeveritySummary() {
     var summary = document.getElementById("Summary");
     summary.style.display = "block";
-    var summaryData = analyticsManager.getSeveritySummary();
+    var summaryData;
+    switch(AnalyticsType) {
+        case 'category' : 
+            summaryData = analyticsManager.getSeveritySummaryForCategory();
+            break;
+
+        case 'totalCheck' :
+            summaryData = analyticsManager.getSeveritySummary();
+            break;
+    }
 
     var Total_items_checked_div = document.getElementById("ID37");
     Total_items_checked_div.innerHTML = summaryData.TotalItemsChecked;
@@ -66,8 +151,16 @@ function ShowSeveritySummary() {
 function ShowInfoSummary() {
     var summary = document.getElementById("SummaryInfo");
     summary.style.display = "block";
+    var infoSummary;
+    switch(AnalyticsType) {
+        case 'category' : 
+            infoSummary = analyticsManager.getInfoSummaryForCategory();
+            break;
 
-    var infoSummary = analyticsManager.getInfoSummary(activeResultType);
+        case 'totalCheck' :
+            infoSummary = analyticsManager.getInfoSummary();
+            break;
+    }
 
     var Total_items_loaded_div = document.getElementById("checkedItemCount");
     Total_items_loaded_div.innerHTML = infoSummary.TotalItemsLoaded;
@@ -97,15 +190,6 @@ function RemoveComplianceSourceSelectionOverlay() {
     complianceSelection.style.display = "none";
 }
 
-function OpenAnalyticsCharts() {
-    if(activeResultType == "comparison") {
-        openChartComparison()
-    }
-    else {
-        OpenComplianceChart(activeResultType);
-    }
-}
-
 function HighlightButtonsOnBarChartClick() {
     document.getElementById('ID1').style.backgroundColor = "rgba(33,37,63,0)";
     document.getElementById('ID2').style.backgroundColor = "rgba(143, 144, 145, 1)";
@@ -116,7 +200,7 @@ function HighlightButtonsOnBarChartClick() {
 function onBarChartsClick() {
     BarChartActive = true;
     PieChartActive = false;
-    OpenAnalyticsCharts();
+    ExecuteAnalyticsContextMenu(AnalyticsType);
     HighlightButtonsOnBarChartClick();  
 }
 
@@ -138,7 +222,7 @@ function onPieChartsClick() {
     PieChartActive = true;
     BarChartActive = false;
 
-    OpenAnalyticsCharts();
+    ExecuteAnalyticsContextMenu(AnalyticsType);
     HighLightButtonsOnPieChartClick();    
 }
 
@@ -168,7 +252,7 @@ function OnSeverityChartsClicked() {
     var InfoChartButton = document.getElementById("InfoChartButton");
     InfoChartButton.style.fill = "rgba(255,255,255,1)";
 
-    OpenAnalyticsCharts();
+    ExecuteAnalyticsContextMenu(AnalyticsType);
 }
 
 function OnInfoChartsClicked() {
@@ -181,5 +265,5 @@ function OnInfoChartsClicked() {
     var InfoChartButton = document.getElementById("InfoChartButton");
     InfoChartButton.style.fill = "rgba(83, 84, 85, 1)";
 
-    OpenAnalyticsCharts();
+    ExecuteAnalyticsContextMenu(AnalyticsType);
 }

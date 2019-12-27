@@ -1813,7 +1813,8 @@
             $toDbh->exec($command);    
             $command = 'CREATE TABLE SourceDComplianceCheckComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,                
+                name TEXT,  
+                mainComponentClass TEXT,              
                 subComponentClass TEXT,
                 status TEXT,
                 accepted TEXT,
@@ -1822,14 +1823,15 @@
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckComponents(id, name, subComponentClass, status,
-                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceDComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['name'], 
+                                        $row['mainComponentClass'],
                                         $row['subComponentClass'],
                                         $row['status'], 
                                         $row['accepted'], 
@@ -1919,7 +1921,8 @@
             $toDbh->exec($command);    
             $command = 'CREATE TABLE SourceCComplianceCheckComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,                
+                name TEXT,   
+                mainComponentClass TEXT,              
                 subComponentClass TEXT,
                 status TEXT,
                 accepted TEXT,
@@ -1928,14 +1931,15 @@
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckComponents(id, name, subComponentClass, status,
-                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceCComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['name'], 
+                                        $row['mainComponentClass'],
                                         $row['subComponentClass'],
                                         $row['status'], 
                                         $row['accepted'], 
@@ -2025,7 +2029,8 @@
             $toDbh->exec($command);    
             $command = 'CREATE TABLE SourceBComplianceCheckComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,                
+                name TEXT,  
+                mainComponentClass TEXT,               
                 subComponentClass TEXT,
                 status TEXT,
                 accepted TEXT,
@@ -2034,14 +2039,15 @@
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, subComponentClass, status,
-                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
+                                        accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['name'], 
+                                        $row['mainComponentClass'],
                                         $row['subComponentClass'],
                                         $row['status'], 
                                         $row['accepted'], 
@@ -2131,7 +2137,8 @@
             $toDbh->exec($command);   
             $command = 'CREATE TABLE SourceAComplianceCheckComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,                
+                name TEXT,
+                mainComponentClass TEXT,       
                 subComponentClass TEXT,
                 status TEXT,
                 accepted TEXT,
@@ -2140,14 +2147,15 @@
                 ownerGroup INTEGER NOT NULL)'; 
             $toDbh->exec($command);    
 
-            $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, subComponentClass, status, accepted,
-                                        nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?)");
+            $insertStmt = $toDbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status, accepted,
+                                        nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
             
             
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
             {           
                 $insertStmt->execute(array($row['id'], 
                                         $row['name'], 
+                                        $row['mainComponentClass'],
                                         $row['subComponentClass'],
                                         $row['status'], 
                                         $row['accepted'], 
