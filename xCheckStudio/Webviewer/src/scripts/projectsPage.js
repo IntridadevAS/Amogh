@@ -1138,7 +1138,8 @@ let editProjectView = {
     let editProjectStatus = document.getElementById("editProjectStatus");
     let editProjectType = document.getElementById("editProjectType");
     let editProjectDescription = document.getElementById("editProjectDescription");
-
+    
+    
     editProjectWin.classList.add("projectOverlaysOpen");
     onToggleOverlayDisplay(true);
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
@@ -1153,7 +1154,7 @@ let editProjectView = {
     editComments.value = this.currentProject.comments;
     editProjectStatus.value = this.currentProject.status;
     editProjectType.value = this.currentProject.type;
-
+    editCreator.innerHTML = this.currentProject.alias;
     editProjectView.disableEditProjectForm();
   },
 
