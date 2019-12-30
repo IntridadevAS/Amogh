@@ -1,7 +1,7 @@
 <?php
-    require_once 'Utility.php';
-    require_once 'UserManagerUtility.php';
-    require_once 'GlobalConstants.php';
+require_once 'Utility.php';
+require_once 'UserManagerUtility.php';
+require_once 'GlobalConstants.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $InvokeFunction = trim($_POST["InvokeFunction"], " ");
@@ -27,15 +27,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetProjects":
             GetProjects();
             break;
-        // case "IsLoadProject":
-        //     IsLoadProject();
-        //     break;
-        // case "CreateProjectSession":
-        //     CreateProjectSession();
-        //     break;
+            // case "IsLoadProject":
+            //     IsLoadProject();
+            //     break;
+            // case "CreateProjectSession":
+            //     CreateProjectSession();
+            //     break;
         case "ReadSelectedComponents":
             ReadSelectedComponents();
-           break;
+            break;
         case "ReadCheckModuleControlsState":
             ReadCheckModuleControlsState();
             break;
@@ -57,26 +57,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveCheckCaseData":
             SaveCheckCaseData();
             break;
-        // case "SaveCheckModuleControlsState":
-        //     SaveCheckModuleControlsState();
-        //     break;
-        // case "SaveDatasourceInfo":
-        //     SaveDatasourceInfo();
-        //     break;  
-        // case "SaveSelectedComponents":
-        //     SaveSelectedComponents();         
-        //     break;  
-        // case "SaveCheckResults":
-        //     SaveCheckResults();         
-        //     break;
-        // case "SaveNotSelectedComponents":
-        //     SaveNotSelectedComponents();         
-        //     break;
-        // case "SaveComponents":
-        //     SaveComponents();         
-        //     break;
+            // case "SaveCheckModuleControlsState":
+            //     SaveCheckModuleControlsState();
+            //     break;
+            // case "SaveDatasourceInfo":
+            //     SaveDatasourceInfo();
+            //     break;  
+            // case "SaveSelectedComponents":
+            //     SaveSelectedComponents();         
+            //     break;  
+            // case "SaveCheckResults":
+            //     SaveCheckResults();         
+            //     break;
+            // case "SaveNotSelectedComponents":
+            //     SaveNotSelectedComponents();         
+            //     break;
+            // case "SaveComponents":
+            //     SaveComponents();         
+            //     break;
         case "CreateCheckSpaceDBonSave":
-             CreateCheckSpaceDBonSave();         
+            CreateCheckSpaceDBonSave();
             break;
         case "ClearTemporaryCheckSpaceDB":
             ClearTemporaryCheckSpaceDB();
@@ -92,16 +92,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         case "CopyProject":
             CopyProject();
-            break;        
-        // case  "SaveHiddenItems":
-        //     SaveHiddenItems();
-        //     break;
-        // case "SaveReferences":
-        //     SaveReferences();         
-        //     break;
+            break;
+            // case  "SaveHiddenItems":
+            //     SaveHiddenItems();
+            //     break;
+            // case "SaveReferences":
+            //     SaveReferences();         
+            //     break;
         case "SaveAll":
-            SaveAll();         
-            break;            
+            SaveAll();
+            break;
         default:
             echo "No Function Found!";
     }
@@ -110,23 +110,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function RemoveAllSources()
 {
-    if(!isset( $_POST['ProjectName']) ||
-    !isset( $_POST['CheckName']))
-    {
-        echo json_encode(array("Msg" =>  "Invalid input.",
-        "MsgCode" => 0));  
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
 
         return;
     }
 
-    try    
-    { 
+    try {
         // get project name
-        $projectName = $_POST['ProjectName'];	
-        $checkName = $_POST['CheckName'];        
-        
-        $dbPath = getCheckDatabasePath($projectName, $checkName);   
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");       
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
+
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
         $dbh->beginTransaction();
@@ -150,7 +152,7 @@ function RemoveAllSources()
         $dbh->exec($command);
         $command = 'DROP TABLE IF EXISTS SourceDProperties;';
         $dbh->exec($command);
-        
+
         //delete references
         $command = 'DROP TABLE IF EXISTS a_References;';
         $dbh->exec($command);
@@ -171,19 +173,21 @@ function RemoveAllSources()
         DeleteSourceDComplianceResults();
 
         // commit update
-        $dbh->commit();        
+        $dbh->commit();
         $dbh = null; //This is how you close a PDO connection                
-    
-        echo json_encode(array("Msg" =>  "success",
-        "MsgCode" => 1));  
+
+        echo json_encode(array(
+            "Msg" =>  "success",
+            "MsgCode" => 1
+        ));
+        return;
+    } catch (Exception $e) {
+        echo json_encode(array(
+            "Msg" =>  "Failed to remove all sources.",
+            "MsgCode" => 0
+        ));
         return;
     }
-    catch(Exception $e) 
-    {        
-        echo json_encode(array("Msg" =>  "Failed to remove all sources.",
-        "MsgCode" => 0));  
-        return;
-    } 
 }
 
 /*
@@ -191,27 +195,29 @@ function RemoveAllSources()
 */
 function RemoveSource()
 {
-    if(!isset( $_POST['ProjectName']) ||
-    !isset( $_POST['CheckName']) ||
-    !isset( $_POST['SourceId']))
-    {
-        echo json_encode(array("Msg" =>  "Invalid input.",
-        "MsgCode" => 0));  
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['SourceId'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
 
         return;
     }
 
-    try
-    {   
+    try {
         // get project name
-        $projectName = $_POST['ProjectName'];	
+        $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
         $sourceId = $_POST['SourceId'];
-        
-        $dbPath = getCheckDatabasePath($projectName, $checkName);  
 
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");        
-        
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
+
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
         // begin the transaction
         $dbh->beginTransaction();
 
@@ -223,32 +229,25 @@ function RemoveSource()
         $refrenceTable = NULL;
 
         // delete compliance results
-        if(strtolower($sourceId) === "a")
-        {
+        if (strtolower($sourceId) === "a") {
             DeleteSourceAComplianceResults();
 
             $sourceComponentsTable = "SourceAComponents";
             $sourcePropertiesTable = "SourceAProperties";
             $refrenceTable = "a_References";
-        }
-        else if(strtolower($sourceId) === "b")
-        {
+        } else if (strtolower($sourceId) === "b") {
             DeleteSourceBComplianceResults();
 
             $sourceComponentsTable = "SourceBComponents";
             $sourcePropertiesTable = "SourceBProperties";
             $refrenceTable = "b_References";
-        }
-        else if(strtolower($sourceId) === "c")
-        {
+        } else if (strtolower($sourceId) === "c") {
             DeleteSourceCComplianceResults();
 
             $sourceComponentsTable = "SourceCComponents";
             $sourcePropertiesTable = "SourceCProperties";
             $refrenceTable = "c_References";
-        }
-        else if(strtolower($sourceId) === "d")
-        {
+        } else if (strtolower($sourceId) === "d") {
             DeleteSourceDComplianceResults();
 
             $sourceComponentsTable = "SourceDComponents";
@@ -257,192 +256,191 @@ function RemoveSource()
         }
 
         // delete source component and properties tables
-        if($sourceComponentsTable !== NULL)
-        {
-            $command = 'DROP TABLE IF EXISTS '.$sourceComponentsTable.';';
+        if ($sourceComponentsTable !== NULL) {
+            $command = 'DROP TABLE IF EXISTS ' . $sourceComponentsTable . ';';
             $dbh->exec($command);
         }
 
-        if($sourcePropertiesTable !== NULL)
-        {
-            $command = 'DROP TABLE IF EXISTS '.$sourcePropertiesTable.';';
+        if ($sourcePropertiesTable !== NULL) {
+            $command = 'DROP TABLE IF EXISTS ' . $sourcePropertiesTable . ';';
             $dbh->exec($command);
         }
 
-        if($refrenceTable !== NULL)
-        {
-            $command = 'DROP TABLE IF EXISTS '.$refrenceTable.';';
+        if ($refrenceTable !== NULL) {
+            $command = 'DROP TABLE IF EXISTS ' . $refrenceTable . ';';
             $dbh->exec($command);
-        }       
+        }
 
 
         // commit update
-        $dbh->commit();        
+        $dbh->commit();
         $dbh = null; //This is how you close a PDO connection                
-      
-        echo json_encode(array("Msg" =>  "success",
-        "MsgCode" => 1));  
+
+        echo json_encode(array(
+            "Msg" =>  "success",
+            "MsgCode" => 1
+        ));
+        return;
+    } catch (Exception $e) {
+        echo json_encode(array(
+            "Msg" =>  "Failed to remove source.",
+            "MsgCode" => 0
+        ));
         return;
     }
-    catch(Exception $e) 
-    { 
-        echo json_encode(array("Msg" =>  "Failed to remove source.",
-        "MsgCode" => 0));  
-        return;
-    } 
 }
 
-function RemoveSourceFromDirecory() {
-    if(!isset( $_POST['ProjectName']) ||
-    !isset( $_POST['CheckName']) ||
-    !isset( $_POST['SourceId']))
-    {
-        echo json_encode(array("Msg" =>  "Invalid input.",
-        "MsgCode" => 0));  
+function RemoveSourceFromDirecory()
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['SourceId'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
 
         return;
     }
-    try
-    {   
+    try {
         // get project name
-        $projectName = $_POST['ProjectName'];	
+        $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
         $sourceId = $_POST['SourceId'];
 
         $sourcePath;
         // delete source files
-        if(strtolower($sourceId) === "a")
-        {
+        if (strtolower($sourceId) === "a") {
             $sourcePath = getCheckSourceAPath($projectName, $checkName);
-        }
-        else if(strtolower($sourceId) === "b")
-        {
+        } else if (strtolower($sourceId) === "b") {
             $sourcePath = getCheckSourceBPath($projectName, $checkName);
-        }
-        else if(strtolower($sourceId) === "c")
-        {
+        } else if (strtolower($sourceId) === "c") {
             $sourcePath = getCheckSourceCPath($projectName, $checkName);
-        }
-        else if(strtolower($sourceId) === "d")
-        {
+        } else if (strtolower($sourceId) === "d") {
             $sourcePath = getCheckSourceDPath($projectName, $checkName);
-        }          
-      
+        }
+
         deleteAllSourceInformation($sourcePath);
-        echo json_encode(array("Msg" =>  "success",
-        "MsgCode" => 1));  
+        echo json_encode(array(
+            "Msg" =>  "success",
+            "MsgCode" => 1
+        ));
+        return;
+    } catch (Exception $e) {
+        echo json_encode(array(
+            "Msg" =>  "Failed to remove source.",
+            "MsgCode" => 0
+        ));
         return;
     }
-    catch(Exception $e) 
-    { 
-        echo json_encode(array("Msg" =>  "Failed to remove source.",
-        "MsgCode" => 0));  
-        return;
-    } 
 }
 
-function deleteAllSourceInformation($fileName) {
-        //It it's a file.
-        if (is_file($fileName)) {
-            //Attempt to delete it.
-            return unlink($fileName);
+function deleteAllSourceInformation($fileName)
+{
+    //It it's a file.
+    if (is_file($fileName)) {
+        //Attempt to delete it.
+        return unlink($fileName);
+    }
+    //If it's a directory.
+    elseif (is_dir($fileName)) {
+        //Get a list of the files in this directory.
+        $scan = glob(rtrim($fileName, '/') . '/*');
+        //Loop through the list of files.
+        foreach ($scan as $index => $path) {
+            //Call our recursive function.
+            deleteAllSourceInformation($path);
         }
-        //If it's a directory.
-        elseif (is_dir($fileName)) {
-            //Get a list of the files in this directory.
-            $scan = glob(rtrim($fileName,'/').'/*');
-            //Loop through the list of files.
-            foreach($scan as $index=>$path) {
-                //Call our recursive function.
-                deleteAllSourceInformation($path);
-            }
-        }
+    }
 }
 
 /* 
    Save all data
-*/ 
+*/
 function SaveAll()
-{   
-    if(!isset( $_POST['ProjectName']) ||
-    !isset( $_POST['CheckName']) ||
-    !isset( $_POST['Context']))
-    {
-        echo json_encode(array("Msg" =>  "Invalid input.",
-        "MsgCode" => 0));  
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['Context'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
 
         return;
     }
 
     // get project name
-    $projectName = $_POST['ProjectName'];	
+    $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
-   
-    $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-    $tempDBPath = getCheckDatabasePath($projectName, $checkName); 
-    
+
+    $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+    $tempDBPath = getCheckDatabasePath($projectName, $checkName);
+
     // create or rewrite the main check space db
     CreateCheckSpaceDBonSave();
 
-    if(!file_exists ($dbPath ) || 
-       !file_exists ($tempDBPath ))
-    { 
-        echo json_encode(array("Msg" =>  "DBs not found.",
-        "MsgCode" => 0));  
+    if (
+        !file_exists($dbPath) ||
+        !file_exists($tempDBPath)
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "DBs not found.",
+            "MsgCode" => 0
+        ));
 
         return;
-    }       
+    }
 
     $context = $_POST['Context'];
-    
-    try
-    {        
+
+    try {
         // open database             
-        $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");       
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+        $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
         $dbh->beginTransaction();
-        $tempDbh->beginTransaction();  
+        $tempDbh->beginTransaction();
 
-         // this will save all sources components, properties                       
-         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceAComponents", "SourceAProperties"); 
-         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
-         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceCComponents", "SourceCProperties");          
-         SaveComponentsFromTemp( $tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
-        
-         // save check case info 
-         SaveCheckCaseInfoFromTemp($tempDbh, $dbh);        
-       
-         // 'check' context save needs to be changed for viewer opttions
-        if($context === "check")
-        {
+        // this will save all sources components, properties                       
+        SaveComponentsFromTemp($tempDbh, $dbh, "SourceAComponents", "SourceAProperties");
+        SaveComponentsFromTemp($tempDbh, $dbh, "SourceBComponents", "SourceBProperties");
+        SaveComponentsFromTemp($tempDbh, $dbh, "SourceCComponents", "SourceCProperties");
+        SaveComponentsFromTemp($tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
+
+        // save check case info 
+        SaveCheckCaseInfoFromTemp($tempDbh, $dbh);
+
+        // 'check' context save needs to be changed for viewer opttions
+        if ($context === "check") {
             // save check module control state from temp check space db to main checkspace db
-            SaveCheckModuleControlsState($dbh);           
+            SaveCheckModuleControlsState($dbh);
 
             // save loaded data sources information
-            SaveDataSourceInfo($dbh);           
+            SaveDataSourceInfo($dbh);
 
             // save viewer related information            
             SaveVieweroptions($dbh);
 
             // save selected components
-            SaveSelectedComponents($dbh);           
+            SaveSelectedComponents($dbh);
 
             // save not selected components
-            SaveNotSelectedComponents($dbh);          
+            SaveNotSelectedComponents($dbh);
 
             // save hiddent items
             SaveHiddenItems($dbh);
 
             // save check result statistics
-            if(!SaveCheckStatistics($tempDbh, $dbh))
-            {
+            if (!SaveCheckStatistics($tempDbh, $dbh)) {
                 SaveCheckStatisticsFromTemp($tempDbh, $dbh);
             }
-        }
-        else
-        {
+        } else {
             // save check module control state from temp check space db to main checkspace db
             SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh);
 
@@ -463,21 +461,21 @@ function SaveAll()
 
             // // save not selected components
             SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceANotSelectedComponents");
-            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceBNotSelectedComponents");            
+            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceBNotSelectedComponents");
             SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceCNotSelectedComponents");
-            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceDNotSelectedComponents");      
+            SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, "SourceDNotSelectedComponents");
 
             // save hiddent items
-            SaveHiddenItemsFromTemp($tempDbh, $dbh);     
-            
+            SaveHiddenItemsFromTemp($tempDbh, $dbh);
+
             // save check result statistics
             SaveCheckStatisticsFromTemp($tempDbh, $dbh);
-        }     
-        
+        }
+
         // comparison result tables table                               
-        SaveComparisonGroupsFromTemp( $tempDbh, $dbh);
-        SaveComparisonComponentsFromTemp( $tempDbh, $dbh);                  
-        SaveComparisonPropertiesFromTemp( $tempDbh, $dbh);                      
+        SaveComparisonGroupsFromTemp($tempDbh, $dbh);
+        SaveComparisonComponentsFromTemp($tempDbh, $dbh);
+        SaveComparisonPropertiesFromTemp($tempDbh, $dbh);
         SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceANotMatchedComponents");
         SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceBNotMatchedComponents");
         SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, "SourceCNotMatchedComponents");
@@ -491,7 +489,7 @@ function SaveAll()
         // source b compliance result tables table     
         SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh);
         SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh);
-        SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh);     
+        SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh);
 
         // source c compliance result tables table     
         SaveSourceCComplianceCheckGroupsFromTemp($tempDbh, $dbh);
@@ -504,13 +502,13 @@ function SaveAll()
         SaveSourceDComplianceCheckPropertiesFromTemp($tempDbh, $dbh);
 
         // save references                
-        SaveReferencesFromTemp( $tempDbh, $dbh, "a_References");          
-        SaveReferencesFromTemp( $tempDbh, $dbh, "b_References");
-        SaveReferencesFromTemp( $tempDbh, $dbh, "c_References");          
-        SaveReferencesFromTemp( $tempDbh, $dbh, "d_References");
+        SaveReferencesFromTemp($tempDbh, $dbh, "a_References");
+        SaveReferencesFromTemp($tempDbh, $dbh, "b_References");
+        SaveReferencesFromTemp($tempDbh, $dbh, "c_References");
+        SaveReferencesFromTemp($tempDbh, $dbh, "d_References");
 
         // save versions
-        SaveVersionsFromTemp( $tempDbh, $dbh);
+        SaveVersionsFromTemp($tempDbh, $dbh);
 
         // commit update
         $dbh->commit();
@@ -518,29 +516,30 @@ function SaveAll()
         $dbh = null; //This is how you close a PDO connection                    
         $tempDbh = null; //This is how you close a PDO connection                        
 
-        echo json_encode(array("Msg" =>  "success",
-        "MsgCode" => 1));  
+        echo json_encode(array(
+            "Msg" =>  "success",
+            "MsgCode" => 1
+        ));
+        return;
+    } catch (Exception $e) {
+        echo json_encode(array(
+            "Msg" =>  "Failed to save data.",
+            "MsgCode" => 0
+        ));
         return;
     }
-    catch(Exception $e) 
-    {        
-        echo json_encode(array("Msg" =>  "Failed to save data.",
-        "MsgCode" => 0));  
-        return;
-    } 
 }
 
 
-function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
+function SaveComparisonPropertiesFromTemp($tempDbh, $dbh)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckProperties;");  
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckProperties;");
 
     // delete table
     $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
-    $dbh->exec($command);  
-    if($selectResults) 
-    {  
-                  
+    $dbh->exec($command);
+    if ($selectResults) {
+
         // $command = 'CREATE TABLE ComparisonCheckProperties(
         //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
         //     sourceAName TEXT,
@@ -554,8 +553,8 @@ function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
         //     description TEXT,
         //     ownerComponent INTEGER NOT NULL,
         //     transpose TEXT)';
-        $command = CREATE_COMPARISONPROPERTIES_TABLE; 
-        $dbh->exec($command);     
+        $command = CREATE_COMPARISONPROPERTIES_TABLE;
+        $dbh->exec($command);
 
         //  $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckProperties(id, 
         //  sourceAName, 
@@ -569,75 +568,75 @@ function SaveComparisonPropertiesFromTemp( $tempDbh, $dbh)
         //  description,
         //  ownerComponent,
         //  transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['sourceAName'], 
-                                       $row['sourceBName'],
-                                       $row['sourceCName'], 
-                                       $row['sourceDName'],
-                                       $row['sourceAValue'],
-                                       $row['sourceBValue'], 
-                                       $row['sourceCValue'],
-                                       $row['sourceDValue'], 
-                                       $row['result'], 
-                                       $row['severity'],
-                                       $row['accepted'],
-                                       $row['performCheck'], 
-                                       $row['description'], 
-                                       $row['ownerComponent'],
-                                       $row['transpose']));
-        }  
+        $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['sourceAName'],
+                $row['sourceBName'],
+                $row['sourceCName'],
+                $row['sourceDName'],
+                $row['sourceAValue'],
+                $row['sourceBValue'],
+                $row['sourceCValue'],
+                $row['sourceDValue'],
+                $row['result'],
+                $row['severity'],
+                $row['accepted'],
+                $row['performCheck'],
+                $row['description'],
+                $row['ownerComponent'],
+                $row['transpose']
+            ));
+        }
     }
 }
 
-function SaveComparisonGroupsFromTemp( $tempDbh, $dbh)
+function SaveComparisonGroupsFromTemp($tempDbh, $dbh)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckGroups;");  
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckGroups;");
 
-     // delete table if exists
-     $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
-     $dbh->exec($command);   
+    // delete table if exists
+    $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
+    $dbh->exec($command);
 
-    if($selectResults) 
-    {        
-                  
+    if ($selectResults) {
+
         $command = 'CREATE TABLE ComparisonCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
             componentCount Integer, 
-            categoryStatus TEXT NOT NULL)'; 
-        $dbh->exec($command);    
+            categoryStatus TEXT NOT NULL)';
+        $dbh->exec($command);
 
-         $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, 
+        $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckGroups(id, 
          componentClass, 
          componentCount, 
          categoryStatus) VALUES(?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['componentClass'], 
-                                       $row['componentCount'],
-                                       $row['categoryStatus']));
-        }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['componentClass'],
+                $row['componentCount'],
+                $row['categoryStatus']
+            ));
+        }
     }
 }
 
-function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
+function SaveComparisonComponentsFromTemp($tempDbh, $dbh)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckComponents;");  
+    $selectResults = $tempDbh->query("SELECT * FROM ComparisonCheckComponents;");
 
-     // delete table, if exists
-     $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
-     $dbh->exec($command);  
-    if($selectResults) 
-    {         
-                  
+    // delete table, if exists
+    $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
+    $dbh->exec($command);
+    if ($selectResults) {
+
         // $command = 'CREATE TABLE ComparisonCheckComponents(
         //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
         //     sourceAName TEXT,
@@ -652,8 +651,8 @@ function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
         //     sourceBId TEXT,
         //     ownerGroup INTEGER NOT NULL,
         //     transpose TEXT)';
-        $command = CREATE_COMPARISONCOMPONETS_TABLE; 
-        $dbh->exec($command);    
+        $command = CREATE_COMPARISONCOMPONETS_TABLE;
+        $dbh->exec($command);
 
         //  $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckComponents(id, 
         //  sourceAName, 
@@ -669,63 +668,63 @@ function SaveComparisonComponentsFromTemp( $tempDbh, $dbh)
         //  ownerGroup,
         //  transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE);
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['sourceAName'], 
-                                       $row['sourceBName'],
-                                       $row['sourceCName'], 
-                                       $row['sourceDName'],
-                                       $row['sourceAMainClass'], 
-                                       $row['sourceBMainClass'],
-                                       $row['sourceCMainClass'], 
-                                       $row['sourceDMainClass'],
-                                       $row['sourceASubComponentClass'], 
-                                       $row['sourceBSubComponentClass'], 
-                                       $row['sourceCSubComponentClass'], 
-                                       $row['sourceDSubComponentClass'], 
-                                       $row['status'],
-                                       $row['accepted'], 
-                                       $row['sourceANodeId'], 
-                                       $row['sourceBNodeId'],
-                                       $row['sourceCNodeId'], 
-                                       $row['sourceDNodeId'],
-                                       $row['sourceAId'], 
-                                       $row['sourceBId'], 
-                                       $row['sourceCId'], 
-                                       $row['sourceDId'], 
-                                       $row['ownerGroup'],
-                                       $row['transpose'],
-                                       $row['classMappingInfo']));
-        }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['sourceAName'],
+                $row['sourceBName'],
+                $row['sourceCName'],
+                $row['sourceDName'],
+                $row['sourceAMainClass'],
+                $row['sourceBMainClass'],
+                $row['sourceCMainClass'],
+                $row['sourceDMainClass'],
+                $row['sourceASubComponentClass'],
+                $row['sourceBSubComponentClass'],
+                $row['sourceCSubComponentClass'],
+                $row['sourceDSubComponentClass'],
+                $row['status'],
+                $row['accepted'],
+                $row['sourceANodeId'],
+                $row['sourceBNodeId'],
+                $row['sourceCNodeId'],
+                $row['sourceDNodeId'],
+                $row['sourceAId'],
+                $row['sourceBId'],
+                $row['sourceCId'],
+                $row['sourceDId'],
+                $row['ownerGroup'],
+                $row['transpose'],
+                $row['classMappingInfo']
+            ));
+        }
     }
 }
 
 function ClearTemporaryCheckSpaceDB()
-{     
-    if(!isset($_POST['ProjectName']) ||
-    !isset($_POST['CheckName']) ||
-    !isset($_POST['ProjectId']))
-    {
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['ProjectId'])
+    ) {
         echo 'fail';
         return;
     }
 
-    try
-    {   
-         // get project name
-        $projectName = $_POST['ProjectName'];	
+    try {
+        // get project name
+        $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
         $projectId = $_POST['ProjectId'];
-        
-        $tempDBPath = getCheckDatabasePath($projectName, $checkName);           
-        if(file_exists ($tempDBPath ))
-        { 
-            unlink($tempDBPath);            
-        }     
-        
+
+        $tempDBPath = getCheckDatabasePath($projectName, $checkName);
+        if (file_exists($tempDBPath)) {
+            unlink($tempDBPath);
+        }
+
         //   // check if checkspace db is saved. If not saved, then 
         // // delete the checkspace entry from project db
         // $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
@@ -742,15 +741,14 @@ function ClearTemporaryCheckSpaceDB()
         //     $checkspaceDir = getCheckDirectoryPath($projectName, $checkName);
         //     deleteDirectory($checkspaceDir);           
         // }  
-    }
-    catch(Exception $e) 
-    {        
-        echo "fail"; 
+    } catch (Exception $e) {
+        echo "fail";
         return;
-    } 
+    }
 }
 
-function deleteDirectory($dir) {
+function deleteDirectory($dir)
+{
     if (!file_exists($dir)) {
         return true;
     }
@@ -767,7 +765,6 @@ function deleteDirectory($dir) {
         if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
             return false;
         }
-
     }
 
     return rmdir($dir);
@@ -778,24 +775,20 @@ function CreateCheckSpaceDBonSave()
     // get project name
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
-    try
-    {   
+    try {
         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-        if(file_exists ($dbPath ))
-        { 
+        if (file_exists($dbPath)) {
             unlink($dbPath);
         }
 
         // create project database          
         $database = new SQLite3($dbPath);
-    }
-    catch(Exception $e) 
-    {        
-        echo "fail"; 
+    } catch (Exception $e) {
+        echo "fail";
         return;
-    } 
+    }
 
-    echo "success"; 
+    echo "success";
     return;
 }
 
@@ -804,14 +797,13 @@ function CreateCheckSpaceDBonSave()
 */
 function SaveVersionsFromTemp($tempDbh, $dbh)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM Versions;");  
-     
+    $selectResults = $tempDbh->query("SELECT * FROM Versions;");
+
     // create table
     $command = 'DROP TABLE IF EXISTS Versions;';
-    $dbh->exec($command);   
+    $dbh->exec($command);
 
-    if($selectResults) 
-    {             
+    if ($selectResults) {
         $command = 'CREATE TABLE IF NOT EXISTS Versions(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
@@ -821,25 +813,26 @@ function SaveVersionsFromTemp($tempDbh, $dbh)
             createdByAlias TEXT,
             createdOn TEXT,
             IsFav INTEGER       
-            )';                 
-        $dbh->exec($command);    
+            )';
+        $dbh->exec($command);
 
-         $insertStmt = $dbh->prepare("INSERT INTO Versions(id, name, description, comments, createdById, 
+        $insertStmt = $dbh->prepare("INSERT INTO Versions(id, name, description, comments, createdById, 
          createdByAlias, createdOn, IsFav) VALUES(?,?,?,?,?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['name'], 
-                                       $row['description'],
-                                       $row['comments'], 
-                                       $row['createdById'], 
-                                       $row['createdByAlias'], 
-                                       $row['createdOn'], 
-                                       $row['IsFav']));
-        }  
-    }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['description'],
+                $row['comments'],
+                $row['createdById'],
+                $row['createdByAlias'],
+                $row['createdOn'],
+                $row['IsFav']
+            ));
+        }
+    }
 }
 
 /* 
@@ -847,38 +840,38 @@ function SaveVersionsFromTemp($tempDbh, $dbh)
 */
 function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$referenceTable.";");  
-     
-    // create table
-    $command = 'DROP TABLE IF EXISTS '.$referenceTable.';';
-    $dbh->exec($command);   
+    $selectResults = $tempDbh->query("SELECT * FROM " . $referenceTable . ";");
 
-    if($selectResults) 
-    {             
-        $command = 'CREATE TABLE IF NOT EXISTS '. $referenceTable. '(
+    // create table
+    $command = 'DROP TABLE IF EXISTS ' . $referenceTable . ';';
+    $dbh->exec($command);
+
+    if ($selectResults) {
+        $command = 'CREATE TABLE IF NOT EXISTS ' . $referenceTable . '(
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
         webAddress TEXT,
         document TEXT,
         pic TEXT,
         comment TEXT,
         component INTEGER NOT NULL       
-        )';               
-        $dbh->exec($command);    
+        )';
+        $dbh->exec($command);
 
-         $insertReferenceStmt = $dbh->prepare("INSERT INTO ".$referenceTable."(id, webAddress, document, pic, comment, 
+        $insertReferenceStmt = $dbh->prepare("INSERT INTO " . $referenceTable . "(id, webAddress, document, pic, comment, 
          component) VALUES(?,?,?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertReferenceStmt->execute(array($row['id'], 
-                                       $row['webAddress'], 
-                                       $row['document'],
-                                       $row['pic'], 
-                                       $row['comment'], 
-                                       $row['component']));
-        }  
-    }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertReferenceStmt->execute(array(
+                $row['id'],
+                $row['webAddress'],
+                $row['document'],
+                $row['pic'],
+                $row['comment'],
+                $row['component']
+            ));
+        }
+    }
 }
 
 /* 
@@ -886,9 +879,8 @@ function SaveReferencesFromTemp($tempDbh, $dbh, $referenceTable)
 */
 function SaveHiddenItemsFromTemp($tempDbh, $dbh)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM hiddenComponents;");  
-    if($selectResults) 
-    {
+    $selectResults = $tempDbh->query("SELECT * FROM hiddenComponents;");
+    if ($selectResults) {
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS hiddenComponents;';
         $dbh->exec($command);
@@ -896,42 +888,41 @@ function SaveHiddenItemsFromTemp($tempDbh, $dbh)
         $command = 'CREATE TABLE hiddenComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 hiddenComponents TEXT,
-                visibleComponents TEXT)'; 
+                visibleComponents TEXT)';
         $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO hiddenComponents(id, hiddenComponents, visibleComponents) VALUES(?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['hiddenComponents'], 
-                                       $row['visibleComponents']));
-        }  
-       
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['hiddenComponents'],
+                $row['visibleComponents']
+            ));
+        }
     }
 }
 
-function SaveHiddenItems( $dbh)
+function SaveHiddenItems($dbh)
 {
-    if(!isset($_POST['hiddenItems']))
-    {
+    if (!isset($_POST['hiddenItems'])) {
         return false;
     }
 
-    $hiddenItems = json_decode($_POST['hiddenItems'],true);
+    $hiddenItems = json_decode($_POST['hiddenItems'], true);
 
-    if(!array_key_exists("hiddenComponents",$hiddenItems) ||
-        !array_key_exists("visibleComponents",$hiddenItems))
-    {
+    if (
+        !array_key_exists("hiddenComponents", $hiddenItems) ||
+        !array_key_exists("visibleComponents", $hiddenItems)
+    ) {
         return false;
     }
 
     $hiddenComponents = $hiddenItems['hiddenComponents'];
     $visibleComponents = $hiddenItems["visibleComponents"];
 
-    try
-    {         
+    try {
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS hiddenComponents;';
         $dbh->exec($command);
@@ -939,20 +930,17 @@ function SaveHiddenItems( $dbh)
         $command = 'CREATE TABLE hiddenComponents(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 hiddenComponents TEXT,
-                visibleComponents TEXT)'; 
+                visibleComponents TEXT)';
         $dbh->exec($command);
-      
+
         $insertQuery = 'INSERT INTO hiddenComponents(hiddenComponents, visibleComponents) VALUES(?,?) ';
         $values = array($hiddenComponents, $visibleComponents);
-                    
-        $stmt = $dbh->prepare($insertQuery);                    
-        $stmt->execute($values);         
-    
-    }                
-    catch(Exception $e)
-    {   
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
         return false;
-    }  
+    }
 
     return true;
 
@@ -981,7 +969,7 @@ function SaveHiddenItems( $dbh)
     //     $dbh->beginTransaction();
 
     //     // SourceANotCheckedComponents table
-        
+
     //     // drop table if exists
     //     $command = 'DROP TABLE IF EXISTS hiddenComponents;';
     //     $dbh->exec($command);
@@ -991,13 +979,13 @@ function SaveHiddenItems( $dbh)
     //             hiddenComponents TEXT,
     //             visibleComponents TEXT)'; 
     //     $dbh->exec($command);
-      
+
     //     $insertQuery = 'INSERT INTO hiddenComponents(hiddenComponents, visibleComponents) VALUES(?,?) ';
     //     $values = array($hiddenComponents, $visibleComponents);
-                    
+
     //     $stmt = $dbh->prepare($insertQuery);                    
     //     $stmt->execute($values);   
-        
+
     //     // commit update
     //     $dbh->commit();
     //     $dbh = null; //This is how you close a PDO connection
@@ -1012,22 +1000,21 @@ function SaveHiddenItems( $dbh)
 /* 
    Save Components and properties
 */
-function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTable)
+function SaveComponentsFromTemp($tempDbh, $dbh, $componentTable, $propertiesTable)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$componentTable.";");
-    
-    // delete table
-    $command = 'DROP TABLE IF EXISTS '.$componentTable.';';
-    $dbh->exec($command);   
+    $selectResults = $tempDbh->query("SELECT * FROM " . $componentTable . ";");
 
     // delete table
-    $command = 'DROP TABLE IF EXISTS '.$propertiesTable.';';
-    $dbh->exec($command);  
+    $command = 'DROP TABLE IF EXISTS ' . $componentTable . ';';
+    $dbh->exec($command);
 
-    if($selectResults) 
-    {
-         // ischecked can have values 'true' or 'false'
-         $command = 'CREATE TABLE '. $componentTable. '(
+    // delete table
+    $command = 'DROP TABLE IF EXISTS ' . $propertiesTable . ';';
+    $dbh->exec($command);
+
+    if ($selectResults) {
+        // ischecked can have values 'true' or 'false'
+        $command = 'CREATE TABLE ' . $componentTable . '(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT NOT NULL,
             mainclass TEXT NOT NULL,
@@ -1036,53 +1023,54 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
             ischecked TEXT,
             parentid INTEGER,
             componentid INTEGER
-          )';         
-         $dbh->exec($command);    
+          )';
+        $dbh->exec($command);
 
-         $insertComponentStmt = $dbh->prepare("INSERT INTO ".$componentTable."(id, name, mainclass, subclass, nodeid, 
+        $insertComponentStmt = $dbh->prepare("INSERT INTO " . $componentTable . "(id, name, mainclass, subclass, nodeid, 
          ischecked, parentid, componentid) VALUES(?,?,?,?,?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertComponentStmt->execute(array($row['id'], 
-                                       $row['name'], 
-                                       $row['mainclass'],
-                                       $row['subclass'], 
-                                       $row['nodeid'], 
-                                       $row['ischecked'],
-                                       $row['parentid'],
-                                       $row['componentid']));
-        }  
-        
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertComponentStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainclass'],
+                $row['subclass'],
+                $row['nodeid'],
+                $row['ischecked'],
+                $row['parentid'],
+                $row['componentid']
+            ));
+        }
+
         // save properties
-        $selectPropertiesResults = $tempDbh->query("SELECT * FROM ".$propertiesTable.";");  
-        if($selectPropertiesResults) 
-        {
+        $selectPropertiesResults = $tempDbh->query("SELECT * FROM " . $propertiesTable . ";");
+        if ($selectPropertiesResults) {
             // create properties table
-            $command = 'CREATE TABLE '.$propertiesTable.'(
+            $command = 'CREATE TABLE ' . $propertiesTable . '(
                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         name TEXT NOT NULL,
                         format TEXT,
                         value TEXT,                
                         ownercomponent INTEGER NOT NULL               
-              )';         
-             $dbh->exec($command);  
-             
-             $insertPropertiesStmt = $dbh->prepare("INSERT INTO  ".$propertiesTable."(id, name, format, value, 
+              )';
+            $dbh->exec($command);
+
+            $insertPropertiesStmt = $dbh->prepare("INSERT INTO  " . $propertiesTable . "(id, name, format, value, 
                       ownercomponent) VALUES(?,?,?,?,?)");
-    
-    
-            while ($row = $selectPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
-            {           
-                $insertPropertiesStmt->execute(array($row['id'], 
-                                        $row['name'], 
-                                        $row['format'],
-                                        $row['value'], 
-                                        $row['ownercomponent']));
-            }  
+
+
+            while ($row = $selectPropertiesResults->fetch(\PDO::FETCH_ASSOC)) {
+                $insertPropertiesStmt->execute(array(
+                    $row['id'],
+                    $row['name'],
+                    $row['format'],
+                    $row['value'],
+                    $row['ownercomponent']
+                ));
+            }
         }
-    } 
+    }
 }
 
 /* 
@@ -1090,65 +1078,59 @@ function SaveComponentsFromTemp( $tempDbh, $dbh, $componentTable, $propertiesTab
 */
 function SaveVieweroptionsFromTemp($tempDbh, $dbh, $tableName)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
-    if($selectResults) 
-    {
+    $selectResults = $tempDbh->query("SELECT * FROM " . $tableName . ";");
+    if ($selectResults) {
         // create table
         // drop table if exists
-       // drop table if exists
-       $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
-       $dbh->exec($command);
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS ' . $tableName . ';';
+        $dbh->exec($command);
 
-       $command = 'CREATE TABLE '.$tableName.'(
+        $command = 'CREATE TABLE ' . $tableName . '(
                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, 
-                   endpointUri TEXT)';            
-       $dbh->exec($command);  
+                   endpointUri TEXT)';
+        $dbh->exec($command);
 
-       $insertStmt = $dbh->prepare('INSERT INTO '.$tableName.'(id, endpointUri) VALUES(?,?) ');                                        
-      
-       while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['endpointUri']));
-        }           
+        $insertStmt = $dbh->prepare('INSERT INTO ' . $tableName . '(id, endpointUri) VALUES(?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['endpointUri']
+            ));
+        }
     }
 }
 
 function SaveVieweroptions($dbh)
 {
 
-    if(!isset($_POST["viewerOptions"]))
-    {
+    if (!isset($_POST["viewerOptions"])) {
         return;
     }
 
-    try
-    {   
+    try {
 
-        $viewerOptions = json_decode($_POST['viewerOptions'],true);
+        $viewerOptions = json_decode($_POST['viewerOptions'], true);
         foreach ($viewerOptions as $sourceViewerOptionsTable => $sourceViewerOptions) {
-                
-                // // open database          
-                // $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
 
-                // // begin the transaction
-                // $dbh->beginTransaction();                     
+            // // open database          
+            // $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
 
-                $command = 'CREATE TABLE '.$sourceViewerOptionsTable.'(
+            // // begin the transaction
+            // $dbh->beginTransaction();                     
+
+            $command = 'CREATE TABLE ' . $sourceViewerOptionsTable . '(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                    
-                    endpointUri TEXT)';            
-                    $dbh->exec($command);  
-        
-                $insertStmt = $dbh->prepare("INSERT INTO ".$sourceViewerOptionsTable."(endpointUri) VALUES(?)");
-                $insertStmt->execute(array($sourceViewerOptions[0]));
-            
-            
-        }        
-    }
-    catch(Exception $e) 
-    { 
+                    endpointUri TEXT)';
+            $dbh->exec($command);
+
+            $insertStmt = $dbh->prepare("INSERT INTO " . $sourceViewerOptionsTable . "(endpointUri) VALUES(?)");
+            $insertStmt->execute(array($sourceViewerOptions[0]));
+        }
+    } catch (Exception $e) {
         return false;
-    } 
+    }
 
     return true;
 
@@ -1163,7 +1145,7 @@ function SaveVieweroptions($dbh)
     //    // get project name
     //    $projectName = $_POST['ProjectName'];	
     //    $checkName = $_POST['CheckName'];
- 
+
     //    $sourceViewerOptions = json_decode($_POST['SourceViewerOptions'],true);
     //    $sourceViewerOptionsTable = $_POST['SourceViewerOptionsTable'];
 
@@ -1175,34 +1157,34 @@ function SaveVieweroptions($dbh)
     //    }       
 
     //    $dbh;
-        // try
-        // {        
-        //     // open database          
-        //     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
+    // try
+    // {        
+    //     // open database          
+    //     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");                 
 
-        //     // begin the transaction
-        //     $dbh->beginTransaction();                     
+    //     // begin the transaction
+    //     $dbh->beginTransaction();                     
 
-        //     $command = 'CREATE TABLE '.$sourceViewerOptionsTable.'(
-        //         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                    
-        //         endpointUri TEXT)';            
-        //         $dbh->exec($command);  
-    
-        //     $insertStmt = $dbh->prepare("INSERT INTO ".$sourceViewerOptionsTable."(endpointUri) VALUES(?)");
-        //     $insertStmt->execute(array($sourceViewerOptions[0]));
+    //     $command = 'CREATE TABLE '.$sourceViewerOptionsTable.'(
+    //         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,                    
+    //         endpointUri TEXT)';            
+    //         $dbh->exec($command);  
 
-        //     // commit update
-        //     $dbh->commit();           
-        //     $dbh = null; //This is how you close a PDO connection                   
-               
-        //     echo 'success';
-        //     return;
-        // }
-        // catch(Exception $e) 
-        // {        
-        //     echo "fail"; 
-        //     return;
-        // } 
+    //     $insertStmt = $dbh->prepare("INSERT INTO ".$sourceViewerOptionsTable."(endpointUri) VALUES(?)");
+    //     $insertStmt->execute(array($sourceViewerOptions[0]));
+
+    //     // commit update
+    //     $dbh->commit();           
+    //     $dbh = null; //This is how you close a PDO connection                   
+
+    //     echo 'success';
+    //     return;
+    // }
+    // catch(Exception $e) 
+    // {        
+    //     echo "fail"; 
+    //     return;
+    // } 
 }
 
 /* 
@@ -1211,25 +1193,25 @@ function SaveVieweroptions($dbh)
 function SaveCheckCaseInfoFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM CheckCaseInfo");
-    if($selectResults) 
-    {
+    if ($selectResults) {
 
         $command = 'DROP TABLE IF EXISTS CheckCaseInfo;';
         $dbh->exec($command);
 
         $command = 'CREATE TABLE CheckCaseInfo(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                    checkCaseData TEXT)';         
-        $dbh->exec($command);      
+                    checkCaseData TEXT)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO CheckCaseInfo(id, checkCaseData) VALUES(?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['checkCaseData']));
-        }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['checkCaseData']
+            ));
+        }
     }
 }
 
@@ -1238,51 +1220,50 @@ function SaveCheckCaseInfoFromTemp($tempDbh, $dbh)
 */
 function SaveNotSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
-    if($selectResults) 
-    {
+    $selectResults = $tempDbh->query("SELECT * FROM " . $tableName . ";");
+    if ($selectResults) {
 
-        $command = 'DROP TABLE IF EXISTS '.$tableName.';';
-        $dbh->exec($command);    
-        $command = 'CREATE TABLE '.$tableName.'(
+        $command = 'DROP TABLE IF EXISTS ' . $tableName . ';';
+        $dbh->exec($command);
+        $command = 'CREATE TABLE ' . $tableName . '(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
             mainClass TEXT,
             subClass TEXT,
             nodeId TEXT,
-            mainTableId TEXT)'; 
-        $dbh->exec($command);   
+            mainTableId TEXT)';
+        $dbh->exec($command);
 
-        $insertStmt = $dbh->prepare("INSERT INTO ".$tableName."(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['name'], 
-                                       $row['mainClass'],
-                                       $row['subClass'], 
-                                       $row['nodeId'], 
-                                       $row['mainTableId']));
-        } 
+        $insertStmt = $dbh->prepare("INSERT INTO " . $tableName . "(id, name, mainClass, subClass, nodeId ,mainTableId) VALUES(?,?,?,?,?,?)");
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainClass'],
+                $row['subClass'],
+                $row['nodeId'],
+                $row['mainTableId']
+            ));
+        }
     }
 }
 
 function SaveNotSelectedComponents($dbh)
-{    
-    if(!isset($_POST['notSelectedComponents']))
-    {
+{
+    if (!isset($_POST['notSelectedComponents'])) {
         echo 'fail';
         return;
     }
 
     $notSelectedComponentsObject = json_decode($_POST['notSelectedComponents'], true);
-    
-    foreach($notSelectedComponentsObject as $notSelectedComponentsTable =>$componentsList)            
-    {
-        if(!array_key_exists("selectedComponents",$componentsList) ||
-           !array_key_exists("componentsTable",$componentsList))
-        {
+
+    foreach ($notSelectedComponentsObject as $notSelectedComponentsTable => $componentsList) {
+        if (
+            !array_key_exists("selectedComponents", $componentsList) ||
+            !array_key_exists("componentsTable", $componentsList)
+        ) {
             continue;
         }
 
@@ -1290,203 +1271,189 @@ function SaveNotSelectedComponents($dbh)
         $componentsTable = $componentsList['componentsTable'];
 
         $projectName = $_POST['ProjectName'];
-        $checkName = $_POST['CheckName'];        
+        $checkName = $_POST['CheckName'];
         $components = getSourceComponents($projectName, $checkName, $componentsTable);
 
-        if($components === NULL)
-        {           
+        if ($components === NULL) {
             continue;
         }
-     
+
         // echo "components : ";
         // var_dump($components);
         // echo "  ";
 
         $notCheckedComponents = array();
-        foreach ($components as $id => $component)
-        {    
+        foreach ($components as $id => $component) {
             // echo "component : ";
             // var_dump($component);
             // echo "  ";
-    
+
             // echo "selectedComponents : ";
             // var_dump($selectedComponents);
             // echo "  ";      
 
             // return;
             // check is component is selected or not for performing check
-            if(!isComponentSelected($component, $selectedComponents)) 
-            {
-                    
-                    //source A component not checked    
-                    $compKey = $component['id'];                            
-                    if(!array_key_exists($compKey, $notCheckedComponents))
-                    {
-                        $notCheckedComponents[$compKey] = $component;                                                   
-                    }
+            if (!isComponentSelected($component, $selectedComponents)) {
+
+                //source A component not checked    
+                $compKey = $component['id'];
+                if (!array_key_exists($compKey, $notCheckedComponents)) {
+                    $notCheckedComponents[$compKey] = $component;
+                }
 
                 //continue;
             }
-        }     
+        }
 
-        writeNotCheckedComponentsToDB($dbh,
-                                      $notCheckedComponents, 
-                                      $notSelectedComponentsTable);
-    }    
+        writeNotCheckedComponentsToDB(
+            $dbh,
+            $notCheckedComponents,
+            $notSelectedComponentsTable
+        );
+    }
 }
 
-function writeNotCheckedComponentsToDB($dbh,
-                                       $notCheckedComponents,                                              
-                                       $tableName)
-{        
-        try
-        {             
-            // drop table if exists
-            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
-            $dbh->exec($command);
+function writeNotCheckedComponentsToDB(
+    $dbh,
+    $notCheckedComponents,
+    $tableName
+) {
+    try {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS ' . $tableName . ';';
+        $dbh->exec($command);
 
-            $command = 'CREATE TABLE '.$tableName.'(
+        $command = 'CREATE TABLE ' . $tableName . '(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT,
                     mainClass TEXT,
                     subClass TEXT,
                     nodeId TEXT,
-                    mainTableId TEXT)'; 
-            $dbh->exec($command);    
+                    mainTableId TEXT)';
+        $dbh->exec($command);
 
-            foreach($notCheckedComponents as $key =>$value)            
-            {               
-                $name = $value["name"];
-                $mainclass = $value["mainclass"];
-                $subclass =  $value["subclass"];               
+        foreach ($notCheckedComponents as $key => $value) {
+            $name = $value["name"];
+            $mainclass = $value["mainclass"];
+            $subclass =  $value["subclass"];
 
-                $nodeId = NULL;
-                if(array_key_exists("nodeid", $value))
-                { 
-                    $nodeId = $value["nodeid"];
-                }
+            $nodeId = NULL;
+            if (array_key_exists("nodeid", $value)) {
+                $nodeId = $value["nodeid"];
+            }
 
-                $mainTableId = $value["id"];
+            $mainTableId = $value["id"];
 
-                $insertQuery = 'INSERT INTO '.$tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
-                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+            $insertQuery = 'INSERT INTO ' . $tableName . '(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';
+            $values = array($name,  $mainclass, $subclass, $nodeId, $mainTableId);
 
-                $insertStmt = $dbh->prepare($insertQuery);
-                $insertStmt->execute($values);  
-            }            
-        }                
-        catch(Exception $e)
-        {   
-            return false;
+            $insertStmt = $dbh->prepare($insertQuery);
+            $insertStmt->execute($values);
         }
+    } catch (Exception $e) {
+        return false;
+    }
 
-        return true;
+    return true;
 }
 
-function isComponentSelected($component, $SelectedComponents){
-           
-    for($index = 0; $index < count($SelectedComponents); $index++)
-    {
-        $selectedComponent = $SelectedComponents[$index];              
-        if($component['name']              ==  $selectedComponent['Name'] &&
-           $component['mainclass']==  $selectedComponent['MainComponentClass'] && 
-           $component['subclass']  ==  $selectedComponent['ComponentClass']){
-               
-                 if(isset($selectedComponent['NodeId']))
-                {                          
-                    if($selectedComponent['NodeId'] == $component['nodeid'])
-                    {                               
-                        return true;
-                    }                           
-                }
-                else
-                {                           
+function isComponentSelected($component, $SelectedComponents)
+{
+
+    for ($index = 0; $index < count($SelectedComponents); $index++) {
+        $selectedComponent = $SelectedComponents[$index];
+        if (
+            $component['name']              ==  $selectedComponent['Name'] &&
+            $component['mainclass'] ==  $selectedComponent['MainComponentClass'] &&
+            $component['subclass']  ==  $selectedComponent['ComponentClass']
+        ) {
+
+            if (isset($selectedComponent['NodeId'])) {
+                if ($selectedComponent['NodeId'] == $component['nodeid']) {
                     return true;
                 }
-        }                    
-           
+            } else {
+                return true;
+            }
+        }
     }
 
     return false;
-} 
+}
 
- // get source components
- function getSourceComponents($projectName, $checkName, $componentsTable)
- {           
-     $components = array();        
+// get source components
+function getSourceComponents($projectName, $checkName, $componentsTable)
+{
+    $components = array();
 
-     try{   
-             // open database
-             $dbPath = getCheckDatabasePath($projectName, $checkName);
-             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+    try {
+        // open database
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-             // begin the transaction
-             $dbh->beginTransaction();
-              
-             // fetch source omponents
-             $stmt =  $dbh->query('SELECT *FROM '.$componentsTable.';');
-            
-             if($stmt)
-             {
-                 while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) 
-                {
-                        $values2 =array('id'=>$componentRow['id'], 'name'=>$componentRow['name'],  'mainclass'=>$componentRow['mainclass'], 'subclass'=>$componentRow['subclass']);
-                        if (array_key_exists("nodeid",$componentRow))
-                        {
-                            $values2["nodeid"] =  $componentRow['nodeid'];                               
-                        }
+        // begin the transaction
+        $dbh->beginTransaction();
 
-                        //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
-                        $components[$componentRow['id']] = $values2;   
-                    
-                }   
-            }                  
+        // fetch source omponents
+        $stmt =  $dbh->query('SELECT *FROM ' . $componentsTable . ';');
 
-            // commit update
-             $dbh->commit();
-             $dbh = null; //This is how you close a PDO connection
-         }                
-     catch(Exception $e) {        
-         //echo "fail"; 
-         echo 'Message: ' .$e->getMessage();
-         return NULL;
-     }   
-     
-     return $components ;
- }   
+        if ($stmt) {
+            while ($componentRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $values2 = array('id' => $componentRow['id'], 'name' => $componentRow['name'],  'mainclass' => $componentRow['mainclass'], 'subclass' => $componentRow['subclass']);
+                if (array_key_exists("nodeid", $componentRow)) {
+                    $values2["nodeid"] =  $componentRow['nodeid'];
+                }
+
+                //$values2 = array($row['name'],  $row['mainclass'], $row['subclass'], $row['nodeid']);
+                $components[$componentRow['id']] = $values2;
+            }
+        }
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection
+    } catch (Exception $e) {
+        //echo "fail"; 
+        echo 'Message: ' . $e->getMessage();
+        return NULL;
+    }
+
+    return $components;
+}
 
 
 function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");    
+    $selectResults = $tempDbh->query("SELECT * FROM " . $tableName . ";");
 
     // drop table if exists
-    $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+    $command = 'DROP TABLE IF EXISTS ' . $tableName . ';';
     $dbh->exec($command);
 
-    if($selectResults) 
-    {
+    if ($selectResults) {
 
-        $command = 'CREATE TABLE '.$tableName.'(
+        $command = 'CREATE TABLE ' . $tableName . '(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT,
                 mainClass TEXT,
                 subClass TEXT,
                 nodeId TEXT,
-                mainTableId TEXT)'; 
-        $dbh->exec($command);    
+                mainTableId TEXT)';
+        $dbh->exec($command);
 
-        $insertStmt = $dbh->prepare('INSERT INTO '.$tableName.'(id, name, mainClass, subClass, nodeId, mainTableId) VALUES(?, ?, ?, ?, ?, ?) ');                                        
-      
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-         {           
-             $insertStmt->execute(array($row['id'], 
-                                        $row['name'], 
-                                        $row['mainClass'],
-                                        $row['subClass'], 
-                                        $row['nodeId'], 
-                                        $row['mainTableId']));
-         }      
+        $insertStmt = $dbh->prepare('INSERT INTO ' . $tableName . '(id, name, mainClass, subClass, nodeId, mainTableId) VALUES(?, ?, ?, ?, ?, ?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainClass'],
+                $row['subClass'],
+                $row['nodeId'],
+                $row['mainTableId']
+            ));
+        }
     }
 }
 
@@ -1506,10 +1473,10 @@ function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 //                     sourceACheckAllSwitch TEXT,
 //                     sourceBCheckAllSwitch TEXT)';         
 //         $dbh->exec($command);    
-        
+
 //         $insertStmt = $dbh->prepare("INSERT INTO CheckModuleControlsState(id, comparisonSwith, sourceAComplianceSwitch, sourceBComplianceSwitch, 
 //         sourceACheckAllSwitch ,sourceBCheckAllSwitch) VALUES(?,?,?,?,?,?)");    
-    
+
 //         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
 //         {           
 //             $insertStmt->execute(array($row['id'], 
@@ -1528,13 +1495,12 @@ function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 function  SaveCheckStatisticsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM CheckStatistics");
-    if($selectResults) 
-    {
+    if ($selectResults) {
 
         $command = 'DROP TABLE IF EXISTS CheckStatistics;';
-        $dbh->exec($command);  
+        $dbh->exec($command);
 
-       $command = 'CREATE TABLE IF NOT EXISTS CheckStatistics(
+        $command = 'CREATE TABLE IF NOT EXISTS CheckStatistics(
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
         comparisonOK TEXT ,
         comparisonError TEXT ,
@@ -1549,8 +1515,8 @@ function  SaveCheckStatisticsFromTemp($tempDbh, $dbh)
         sourceBComplianceOK TEXT ,
         sourceBComplianceError TEXT ,
         sourceBComplianceWarning TEXT ,
-        sourceBComplianceCheckGroupsInfo TEXT )'; 
-        $dbh->exec($command);  
+        sourceBComplianceCheckGroupsInfo TEXT )';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO CheckStatistics(id,
         comparisonOK, 
@@ -1566,27 +1532,28 @@ function  SaveCheckStatisticsFromTemp($tempDbh, $dbh)
         sourceBComplianceOK, 
         sourceBComplianceError, 
         sourceBComplianceWarning, 
-        sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");    
+        sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['comparisonOK'], 
-                                    $row['comparisonError'],
-                                    $row['comparisonWarning'],
-                                    $row['comparisonNoMatch'], 
-                                    $row['comparisonUndefined'], 
-                                    $row['comparisonCheckGroupsInfo'],
-                                    $row['sourceAComplianceOK'],
-                                    $row['sourceAComplianceError'], 
-                                    $row['sourceAComplianceWarning'], 
-                                    $row['sourceAComplianceCheckGroupsInfo'],
-                                    $row['sourceBComplianceOK'],
-                                    $row['sourceBComplianceError'], 
-                                    $row['sourceBComplianceWarning'], 
-                                    $row['sourceBComplianceCheckGroupsInfo']));
-        }   
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['comparisonOK'],
+                $row['comparisonError'],
+                $row['comparisonWarning'],
+                $row['comparisonNoMatch'],
+                $row['comparisonUndefined'],
+                $row['comparisonCheckGroupsInfo'],
+                $row['sourceAComplianceOK'],
+                $row['sourceAComplianceError'],
+                $row['sourceAComplianceWarning'],
+                $row['sourceAComplianceCheckGroupsInfo'],
+                $row['sourceBComplianceOK'],
+                $row['sourceBComplianceError'],
+                $row['sourceBComplianceWarning'],
+                $row['sourceBComplianceCheckGroupsInfo']
+            ));
+        }
 
 
         return true;
@@ -1597,27 +1564,25 @@ function  SaveCheckStatisticsFromTemp($tempDbh, $dbh)
 
 function  SaveCheckStatistics($tempDbh, $dbh)
 {
-    
-    $comparisonOK =NULL;
-    $comparisonError =NULL;
-    $comparisonWarning =NULL;
-    $comparisonNoMatch =NULL;
-    $comparisonUndefined =NULL;
-    $comparisonCheckGroupsInfo =NULL;
+
+    $comparisonOK = NULL;
+    $comparisonError = NULL;
+    $comparisonWarning = NULL;
+    $comparisonNoMatch = NULL;
+    $comparisonUndefined = NULL;
+    $comparisonCheckGroupsInfo = NULL;
 
     $comparisonResults = $tempDbh->query("SELECT * FROM ComparisonCheckStatistics");
-    if($comparisonResults)
-    {
-        while ($row = $comparisonResults->fetch(\PDO::FETCH_ASSOC)) 
-        {  
+    if ($comparisonResults) {
+        while ($row = $comparisonResults->fetch(\PDO::FETCH_ASSOC)) {
             $comparisonOK = $row['comparisonOK'];
             $comparisonError = $row['comparisonError'];
             $comparisonWarning = $row['comparisonWarning'];
             $comparisonNoMatch = $row['comparisonNoMatch'];
             $comparisonUndefined = $row['comparisonUndefined'];
-            $comparisonCheckGroupsInfo = $row['comparisonCheckGroupsInfo'];         
+            $comparisonCheckGroupsInfo = $row['comparisonCheckGroupsInfo'];
             break;
-        }   
+        }
     }
 
     $sourceAComplianceOK  = NULL;
@@ -1625,17 +1590,15 @@ function  SaveCheckStatistics($tempDbh, $dbh)
     $sourceAComplianceWarning  = NULL;
     $sourceAComplianceCheckGroupsInfo  = NULL;
     $sourceAComplianceResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckStatistics");
-    if($sourceAComplianceResults)
-    {
-        while ($row = $sourceAComplianceResults->fetch(\PDO::FETCH_ASSOC)) 
-        {  
+    if ($sourceAComplianceResults) {
+        while ($row = $sourceAComplianceResults->fetch(\PDO::FETCH_ASSOC)) {
             $sourceAComplianceOK = $row['sourceAComplianceOK'];
             $sourceAComplianceError = $row['sourceAComplianceError'];
             $sourceAComplianceWarning = $row['sourceAComplianceWarning'];
             $sourceAComplianceCheckGroupsInfo = $row['sourceAComplianceCheckGroupsInfo'];
-           
+
             break;
-        }   
+        }
     }
 
     $sourceBComplianceOK  = NULL;
@@ -1643,24 +1606,23 @@ function  SaveCheckStatistics($tempDbh, $dbh)
     $sourceBComplianceWarning  = NULL;
     $sourceBComplianceCheckGroupsInfo  = NULL;
     $sourceBComplianceResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckStatistics");
-    if($sourceBComplianceResults)
-    {
-        while ($row = $sourceBComplianceResults->fetch(\PDO::FETCH_ASSOC)) 
-        {  
+    if ($sourceBComplianceResults) {
+        while ($row = $sourceBComplianceResults->fetch(\PDO::FETCH_ASSOC)) {
             $sourceBComplianceOK = $row['sourceBComplianceOK'];
             $sourceBComplianceError = $row['sourceBComplianceError'];
             $sourceBComplianceWarning = $row['sourceBComplianceWarning'];
             $sourceBComplianceCheckGroupsInfo = $row['sourceBComplianceCheckGroupsInfo'];
-           
+
             break;
-        }   
+        }
     }
 
 
-    if($comparisonResults || 
-       $sourceAComplianceResults || 
-       $sourceBComplianceResults)
-    {
+    if (
+        $comparisonResults ||
+        $sourceAComplianceResults ||
+        $sourceBComplianceResults
+    ) {
 
 
         $command = 'CREATE TABLE IF NOT EXISTS CheckStatistics(
@@ -1678,26 +1640,28 @@ function  SaveCheckStatistics($tempDbh, $dbh)
             sourceBComplianceOK TEXT ,
             sourceBComplianceError TEXT ,
             sourceBComplianceWarning TEXT ,
-            sourceBComplianceCheckGroupsInfo TEXT )'; 
-        $dbh->exec($command);  
+            sourceBComplianceCheckGroupsInfo TEXT )';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO CheckStatistics(comparisonOK, comparisonError, comparisonWarning, comparisonNoMatch,
         comparisonUndefined,comparisonCheckGroupsInfo, sourceAComplianceOK, sourceAComplianceError, sourceAComplianceWarning, sourceAComplianceCheckGroupsInfo,
-        sourceBComplianceOK, sourceBComplianceError, sourceBComplianceWarning, sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");    
-        $insertStmt->execute(array($comparisonOK, 
-                                    $comparisonError, 
-                                    $comparisonWarning,
-                                    $comparisonNoMatch, 
-                                    $comparisonUndefined, 
-                                    $comparisonCheckGroupsInfo,
-                                    $sourceAComplianceOK, 
-                                    $sourceAComplianceError, 
-                                    $sourceAComplianceWarning,
-                                    $sourceAComplianceCheckGroupsInfo, 
-                                    $sourceBComplianceOK, 
-                                    $sourceBComplianceError,
-                                    $sourceBComplianceWarning, 
-                                    $sourceBComplianceCheckGroupsInfo));
+        sourceBComplianceOK, sourceBComplianceError, sourceBComplianceWarning, sourceBComplianceCheckGroupsInfo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $insertStmt->execute(array(
+            $comparisonOK,
+            $comparisonError,
+            $comparisonWarning,
+            $comparisonNoMatch,
+            $comparisonUndefined,
+            $comparisonCheckGroupsInfo,
+            $sourceAComplianceOK,
+            $sourceAComplianceError,
+            $sourceAComplianceWarning,
+            $sourceAComplianceCheckGroupsInfo,
+            $sourceBComplianceOK,
+            $sourceBComplianceError,
+            $sourceBComplianceWarning,
+            $sourceBComplianceCheckGroupsInfo
+        ));
 
         return true;
     }
@@ -1710,35 +1674,34 @@ function SaveSourceDComplianceCheckGroupsFromTemp($tempDbh, $dbh)
     $selectResults = $tempDbh->query("SELECT * FROM SourceDComplianceCheckGroups");
 
     $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
-    $dbh->exec($command);  
-    if($selectResults) 
-    {
+    $dbh->exec($command);
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceDComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
             componentCount Integer,
-            categoryStatus TEXT NOT NULL)'; 
-        $dbh->exec($command);  
+            categoryStatus TEXT NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceDComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['componentClass'], 
-                                    $row['componentCount'],
-                                    $row['categoryStatus']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['componentClass'],
+                $row['componentCount'],
+                $row['categoryStatus']
+            ));
+        }
     }
 }
 
 function SaveSourceDComplianceCheckComponentsFromTemp($tempDbh, $dbh)
-{  
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceDComplianceCheckComponents");
-    if($selectResults) 
-    {
- 
+    if ($selectResults) {
+
         $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
         $command = 'CREATE TABLE SourceDComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -1749,37 +1712,37 @@ function SaveSourceDComplianceCheckComponentsFromTemp($tempDbh, $dbh)
             accepted TEXT,
             nodeId TEXT,
             sourceId TEXT,
-            ownerGroup INTEGER NOT NULL)'; 
-        $dbh->exec($command);    
+            ownerGroup INTEGER NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceDComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
                                     accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['mainComponentClass'],
-                                    $row['subComponentClass'],
-                                    $row['status'], 
-                                    $row['accepted'], 
-                                    $row['nodeId'], 
-                                    $row['sourceId'], 
-                                    $row['ownerGroup']));
-        }   
-    }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainComponentClass'],
+                $row['subComponentClass'],
+                $row['status'],
+                $row['accepted'],
+                $row['nodeId'],
+                $row['sourceId'],
+                $row['ownerGroup']
+            ));
+        }
+    }
 }
 
 function SaveSourceDComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
-{   
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceDComplianceCheckProperties");
-    
+
     $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
-    $dbh->exec($command);    
-    if($selectResults) 
-    {
-  
+    $dbh->exec($command);
+    if ($selectResults) {
+
         $command = 'CREATE TABLE SourceDComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -1790,26 +1753,27 @@ function SaveSourceDComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL,
-            rule TEXT)'; 
-        $dbh->exec($command);    
+            rule TEXT)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceDComplianceCheckProperties(id, name, value, result,
                                     severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['value'],
-                                    $row['result'], 
-                                    $row['severity'], 
-                                    $row['accepted'], 
-                                    $row['performCheck'], 
-                                    $row['description'], 
-                                    $row['ownerComponent'],
-                                    $row['rule']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['value'],
+                $row['result'],
+                $row['severity'],
+                $row['accepted'],
+                $row['performCheck'],
+                $row['description'],
+                $row['ownerComponent'],
+                $row['rule']
+            ));
+        }
     }
 }
 
@@ -1818,38 +1782,37 @@ function SaveSourceCComplianceCheckGroupsFromTemp($tempDbh, $dbh)
     $selectResults = $tempDbh->query("SELECT * FROM SourceCComplianceCheckGroups");
 
     $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
-    $dbh->exec($command);  
-    if($selectResults) 
-    {
+    $dbh->exec($command);
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceCComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
             componentCount Integer,
-            categoryStatus TEXT NOT NULL)'; 
-        $dbh->exec($command);  
+            categoryStatus TEXT NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceCComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['componentClass'], 
-                                    $row['componentCount'],
-                                    $row['categoryStatus']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['componentClass'],
+                $row['componentCount'],
+                $row['categoryStatus']
+            ));
+        }
     }
 }
 
 function SaveSourceCComplianceCheckComponentsFromTemp($tempDbh, $dbh)
-{  
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceCComplianceCheckComponents");
-    
-    $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
-    $dbh->exec($command);    
 
-    if($selectResults) 
-    { 
+    $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+    $dbh->exec($command);
+
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceCComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,
@@ -1859,36 +1822,36 @@ function SaveSourceCComplianceCheckComponentsFromTemp($tempDbh, $dbh)
             accepted TEXT,
             nodeId TEXT,
             sourceId TEXT,
-            ownerGroup INTEGER NOT NULL)'; 
-        $dbh->exec($command);    
+            ownerGroup INTEGER NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceCComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
                                     accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['mainComponentClass'],
-                                    $row['subComponentClass'],
-                                    $row['status'], 
-                                    $row['accepted'], 
-                                    $row['nodeId'], 
-                                    $row['sourceId'], 
-                                    $row['ownerGroup']));
-        }   
-    }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainComponentClass'],
+                $row['subComponentClass'],
+                $row['status'],
+                $row['accepted'],
+                $row['nodeId'],
+                $row['sourceId'],
+                $row['ownerGroup']
+            ));
+        }
+    }
 }
 
 function SaveSourceCComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
-{   
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceCComplianceCheckProperties");
-    
+
     $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
-    $dbh->exec($command);    
-    if($selectResults) 
-    {
+    $dbh->exec($command);
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceCComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -1899,68 +1862,68 @@ function SaveSourceCComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL,
-            rule TEXT)'; 
-        $dbh->exec($command);    
+            rule TEXT)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceCComplianceCheckProperties(id, name, value, result,
                                     severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['value'],
-                                    $row['result'], 
-                                    $row['severity'], 
-                                    $row['accepted'], 
-                                    $row['performCheck'], 
-                                    $row['description'], 
-                                    $row['ownerComponent'],
-                                    $row['rule']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['value'],
+                $row['result'],
+                $row['severity'],
+                $row['accepted'],
+                $row['performCheck'],
+                $row['description'],
+                $row['ownerComponent'],
+                $row['rule']
+            ));
+        }
     }
 }
 
 function SaveSourceBComplianceCheckGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckGroups");
-    
+
     $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
-    $dbh->exec($command);  
-    if($selectResults) 
-    {
+    $dbh->exec($command);
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceBComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
             componentCount Integer,
-            categoryStatus TEXT NOT NULL)'; 
-        $dbh->exec($command);  
+            categoryStatus TEXT NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['componentClass'], 
-                                    $row['componentCount'],
-                                    $row['categoryStatus']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['componentClass'],
+                $row['componentCount'],
+                $row['categoryStatus']
+            ));
+        }
     }
 }
 
 function SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh)
-{  
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckComponents");
-    
+
     $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
-    $dbh->exec($command); 
-    if($selectResults) 
-    {
- 
+    $dbh->exec($command);
+    if ($selectResults) {
+
         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
-        $dbh->exec($command); 
+        $dbh->exec($command);
 
         $command = 'CREATE TABLE SourceBComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -1971,36 +1934,36 @@ function SaveSourceBComplianceCheckComponentsFromTemp($tempDbh, $dbh)
             accepted TEXT,
             nodeId TEXT,
             sourceId TEXT,
-            ownerGroup INTEGER NOT NULL)'; 
-        $dbh->exec($command);    
+            ownerGroup INTEGER NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
                                     accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['mainComponentClass'],
-                                    $row['subComponentClass'],
-                                    $row['status'], 
-                                    $row['accepted'], 
-                                    $row['nodeId'], 
-                                    $row['sourceId'], 
-                                    $row['ownerGroup']));
-        }   
-    }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainComponentClass'],
+                $row['subComponentClass'],
+                $row['status'],
+                $row['accepted'],
+                $row['nodeId'],
+                $row['sourceId'],
+                $row['ownerGroup']
+            ));
+        }
+    }
 }
 
 function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
-{   
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceBComplianceCheckProperties");
 
     $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
-    $dbh->exec($command); 
-    if($selectResults) 
-    {
+    $dbh->exec($command);
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceBComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT,              
@@ -2011,26 +1974,27 @@ function SaveSourceBComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL,
-            rule TEXT)'; 
-        $dbh->exec($command);    
+            rule TEXT)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceBComplianceCheckProperties(id, name, value, result,
                                     severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['value'],
-                                    $row['result'], 
-                                    $row['severity'], 
-                                    $row['accepted'], 
-                                    $row['performCheck'], 
-                                    $row['description'], 
-                                    $row['ownerComponent'],
-                                    $row['rule']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['value'],
+                $row['result'],
+                $row['severity'],
+                $row['accepted'],
+                $row['performCheck'],
+                $row['description'],
+                $row['ownerComponent'],
+                $row['rule']
+            ));
+        }
     }
 }
 
@@ -2039,40 +2003,39 @@ function SaveSourceAComplianceCheckGroupsFromTemp($tempDbh, $dbh)
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckGroups");
 
     $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
-    $dbh->exec($command);  
+    $dbh->exec($command);
 
-    if($selectResults) 
-    {
+    if ($selectResults) {
         $command = 'CREATE TABLE SourceAComplianceCheckGroups(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             componentClass TEXT NOT NULL,
             componentCount Integer,
-            categoryStatus TEXT NOT NULL)'; 
-        $dbh->exec($command);  
+            categoryStatus TEXT NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckGroups(id, componentClass, componentCount, categoryStatus) VALUES(?, ?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['componentClass'], 
-                                    $row['componentCount'],
-                                    $row['categoryStatus']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['componentClass'],
+                $row['componentCount'],
+                $row['categoryStatus']
+            ));
+        }
     }
 }
 
 function SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh)
-{  
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckComponents");
-    
-    $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
-    $dbh->exec($command);    
 
-    if($selectResults) 
-    {
- 
+    $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
+    $dbh->exec($command);
+
+    if ($selectResults) {
+
         $command = 'CREATE TABLE SourceAComplianceCheckComponents(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT, 
@@ -2082,36 +2045,36 @@ function SaveSourceAComplianceCheckComponentsFromTemp($tempDbh, $dbh)
             accepted TEXT,
             nodeId TEXT,
             sourceId TEXT,
-            ownerGroup INTEGER NOT NULL)'; 
-        $dbh->exec($command);    
+            ownerGroup INTEGER NOT NULL)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckComponents(id, name, mainComponentClass, subComponentClass, status,
                                     accepted, nodeId, sourceId, ownerGroup) VALUES(?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['mainComponentClass'],
-                                    $row['subComponentClass'],
-                                    $row['status'], 
-                                    $row['accepted'], 
-                                    $row['nodeId'], 
-                                    $row['sourceId'],
-                                    $row['ownerGroup']));
-        }   
-    }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainComponentClass'],
+                $row['subComponentClass'],
+                $row['status'],
+                $row['accepted'],
+                $row['nodeId'],
+                $row['sourceId'],
+                $row['ownerGroup']
+            ));
+        }
+    }
 }
 
 function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
-{   
+{
     $selectResults = $tempDbh->query("SELECT * FROM SourceAComplianceCheckProperties");
-  
+
     $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
-    $dbh->exec($command);    
-    if($selectResults) 
-    {
+    $dbh->exec($command);
+    if ($selectResults) {
 
         $command = 'CREATE TABLE SourceAComplianceCheckProperties(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -2123,26 +2086,27 @@ function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
             performCheck TEXT,
             description TEXT,
             ownerComponent INTEGER NOT NULL,
-            rule TEXT)'; 
-        $dbh->exec($command);   
+            rule TEXT)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO SourceAComplianceCheckProperties(id, name, value, result,
                                     severity, accepted, performCheck, description, ownerComponent, rule) VALUES(?,?,?,?,?,?,?,?,?,?)");
-        
-        
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                    $row['name'], 
-                                    $row['value'],
-                                    $row['result'], 
-                                    $row['severity'], 
-                                    $row['accepted'], 
-                                    $row['performCheck'], 
-                                    $row['description'], 
-                                    $row['ownerComponent'],
-                                    $row['rule']));
-        }   
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['value'],
+                $row['result'],
+                $row['severity'],
+                $row['accepted'],
+                $row['performCheck'],
+                $row['description'],
+                $row['ownerComponent'],
+                $row['rule']
+            ));
+        }
     }
 }
 
@@ -2150,18 +2114,17 @@ function SaveSourceAComplianceCheckPropertiesFromTemp($tempDbh, $dbh)
 |
 |   write selected components
 |
-*/ 
+*/
 function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
 {
-    $selectResults = $tempDbh->query("SELECT * FROM ".$tableName.";");
-    if($selectResults) 
-    {
+    $selectResults = $tempDbh->query("SELECT * FROM " . $tableName . ";");
+    if ($selectResults) {
         // create table
         // drop table if exists
-        $command = 'DROP TABLE IF EXISTS '.$tableName. ';';
+        $command = 'DROP TABLE IF EXISTS ' . $tableName . ';';
         $dbh->exec($command);
 
-        $command = 'CREATE TABLE '. $tableName. '(
+        $command = 'CREATE TABLE ' . $tableName . '(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT NOT NULL,
             mainClass TEXT NOT NULL,
@@ -2169,61 +2132,57 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
             nodeId INTEGER,
             mainComponentId INTEGER,
             componentId INTEGER
-            )';         
-        $dbh->exec($command);          
-        
-        $insertStmt = $dbh->prepare("INSERT INTO ". $tableName. "(id, name, mainClass, subClass, 
+            )';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare("INSERT INTO " . $tableName . "(id, name, mainClass, subClass, 
                       nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?,?)");
-    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['name'], 
-                                       $row['mainClass'],
-                                       $row['subClass'], 
-                                       $row['nodeId'], 
-                                       $row['mainComponentId'],
-                                       $row['componentId']));
-        }                    
-    }  
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['mainClass'],
+                $row['subClass'],
+                $row['nodeId'],
+                $row['mainComponentId'],
+                $row['componentId']
+            ));
+        }
+    }
 }
 
 function SaveSelectedComponents($dbh)
-    {
-        if(!isset($_POST['selectedComponents']))
-        {
-            return false;
-        }
+{
+    if (!isset($_POST['selectedComponents'])) {
+        return false;
+    }
 
-        try
-        { 
+    try {
 
         // $selectedComponentsTable = $_POST['selectedComponentsTableName'];       
         $selectedComponentsObject = json_decode($_POST['selectedComponents'], true);
-        foreach($selectedComponentsObject as $selectedComponentsTable =>$componentsList)            
-        {
-            if(!array_key_exists("selectedCompoents",$componentsList))
-            {
+        foreach ($selectedComponentsObject as $selectedComponentsTable => $componentsList) {
+            if (!array_key_exists("selectedCompoents", $componentsList)) {
                 continue;
             }
 
             $nodeIdvsComponentIdList = NULL;
-            if(array_key_exists("nodeIdvsComponentIdList",$componentsList))
-            {
+            if (array_key_exists("nodeIdvsComponentIdList", $componentsList)) {
                 $nodeIdvsComponentIdList = $componentsList['nodeIdvsComponentIdList'];
             }
 
             $selectedComponents = $componentsList['selectedCompoents'];
 
-          
-                // create selected components table
 
-                // drop table if exists
-                $command = 'DROP TABLE IF EXISTS '.$selectedComponentsTable. ';';
-                $dbh->exec($command);
+            // create selected components table
 
-                $command = 'CREATE TABLE '. $selectedComponentsTable. '(
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS ' . $selectedComponentsTable . ';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE ' . $selectedComponentsTable . '(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT NOT NULL,
                     mainClass TEXT NOT NULL,
@@ -2231,141 +2190,136 @@ function SaveSelectedComponents($dbh)
                     nodeId INTEGER,
                     mainComponentId INTEGER,
                     componentId INTEGER
-                    )';         
-                $dbh->exec($command);    
+                    )';
+            $dbh->exec($command);
 
-                for($index = 0; $index < count($selectedComponents); $index++)
-                {
-                    $selectedComponent = $selectedComponents[$index];     
-                   
+            for ($index = 0; $index < count($selectedComponents); $index++) {
+                $selectedComponent = $selectedComponents[$index];
 
-                    $name = $selectedComponent['Name'];
-                    $mainClass =  $selectedComponent['MainComponentClass'];
-                    $subClass =$selectedComponent['ComponentClass'];
-                    $nodeId = null;
-                    $componentId = null;
-                    if(isset($selectedComponent['NodeId']))
-                    {
-                        $nodeId = (int)$selectedComponent['NodeId'];
-                    }
 
-                    if(isset($selectedComponent['ComponentId']))
-                    {
-                        $componentId = (int)$selectedComponent['ComponentId'];
-                    }
+                $name = $selectedComponent['Name'];
+                $mainClass =  $selectedComponent['MainComponentClass'];
+                $subClass = $selectedComponent['ComponentClass'];
+                $nodeId = null;
+                $componentId = null;
+                if (isset($selectedComponent['NodeId'])) {
+                    $nodeId = (int) $selectedComponent['NodeId'];
+                }
 
-                    $mainCompId = null;
-                    if($nodeId !== NULL && 
-                       $nodeIdvsComponentIdList &&
-                       $nodeIdvsComponentIdList[$nodeId])
-                    {
-                        $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
-                    }
+                if (isset($selectedComponent['ComponentId'])) {
+                    $componentId = (int) $selectedComponent['ComponentId'];
+                }
 
-                    $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?) ';
-                    $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId, $componentId);
-                    
-                    $stmt = $dbh->prepare($insertQuery);                    
-                    $stmt->execute($values);   
-                }  
-            }       
+                $mainCompId = null;
+                if (
+                    $nodeId !== NULL &&
+                    $nodeIdvsComponentIdList &&
+                    $nodeIdvsComponentIdList[$nodeId]
+                ) {
+                    $mainCompId = (int) $nodeIdvsComponentIdList[$nodeId];
+                }
+
+                $insertQuery = 'INSERT INTO ' .  $selectedComponentsTable . '(name, mainClass, subClass, nodeId, mainComponentId, componentId) VALUES(?,?,?,?,?,?) ';
+                $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId, $componentId);
+
+                $stmt = $dbh->prepare($insertQuery);
+                $stmt->execute($values);
+            }
         }
-        catch(Exception $e) 
-        { 
-            return false;
-        } 
+    } catch (Exception $e) {
+        return false;
+    }
 
-        return true;
-        // $nodeIdvsComponentIdList = NULL;
-        // if(isset($_POST['nodeIdvsComponentIdList']))
-        // {
-        //     $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
-        // }
+    return true;
+    // $nodeIdvsComponentIdList = NULL;
+    // if(isset($_POST['nodeIdvsComponentIdList']))
+    // {
+    //     $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
+    // }
 
-        // $projectName = $_POST['ProjectName'];
-        // $checkName = $_POST['CheckName'];
-        // $dbh;
-        // try
-        //     {        
-        //         // open database
-        //         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-        //         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-                
-        //         // begin the transaction
-        //         $dbh->beginTransaction();
+    // $projectName = $_POST['ProjectName'];
+    // $checkName = $_POST['CheckName'];
+    // $dbh;
+    // try
+    //     {        
+    //         // open database
+    //         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+    //         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-        //         // create selected components table
+    //         // begin the transaction
+    //         $dbh->beginTransaction();
 
-        //         // drop table if exists
-        //         $command = 'DROP TABLE IF EXISTS '.$selectedComponentsTable. ';';
-        //         $dbh->exec($command);
+    //         // create selected components table
 
-        //         $command = 'CREATE TABLE '. $selectedComponentsTable. '(
-        //             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-        //             name TEXT NOT NULL,
-        //             mainClass TEXT NOT NULL,
-        //             subClass TEXT NOT NULL,
-        //             nodeId INTEGER,
-        //             mainComponentId INTEGER
-        //             )';         
-        //         $dbh->exec($command);    
+    //         // drop table if exists
+    //         $command = 'DROP TABLE IF EXISTS '.$selectedComponentsTable. ';';
+    //         $dbh->exec($command);
 
-        //         for($index = 0; $index < count($selectedComponents); $index++)
-        //         {
-        //             $selectedComponent = $selectedComponents[$index];     
-                   
+    //         $command = 'CREATE TABLE '. $selectedComponentsTable. '(
+    //             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    //             name TEXT NOT NULL,
+    //             mainClass TEXT NOT NULL,
+    //             subClass TEXT NOT NULL,
+    //             nodeId INTEGER,
+    //             mainComponentId INTEGER
+    //             )';         
+    //         $dbh->exec($command);    
 
-        //             $name = $selectedComponent['Name'];
-        //             $mainClass =  $selectedComponent['MainComponentClass'];
-        //             $subClass =$selectedComponent['ComponentClass'];
-        //             $nodeId = null;
-        //             if(isset($selectedComponent['NodeId']))
-        //             {
-        //                 $nodeId = (int)$selectedComponent['NodeId'];
-        //             }
+    //         for($index = 0; $index < count($selectedComponents); $index++)
+    //         {
+    //             $selectedComponent = $selectedComponents[$index];     
 
-        //             $mainCompId = null;
-        //             if($nodeId !== NULL && 
-        //                $nodeIdvsComponentIdList &&
-        //                $nodeIdvsComponentIdList[$nodeId])
-        //             {
-        //                 $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
-        //             }
 
-        //             $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId) VALUES(?,?,?,?,?) ';
-        //             $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId);
-                    
-        //             $stmt = $dbh->prepare($insertQuery);                    
-        //             $stmt->execute($values);   
-        //         }
-                
-        //         // commit update
-        //         $dbh->commit();
-        //         $dbh = null; //This is how you close a PDO connection                    
-                              
-        //         return;
-        //     }
-        //     catch(Exception $e) 
-        //     {        
-        //         echo "fail"; 
-        //         return;
-        //     } 
-        }
+    //             $name = $selectedComponent['Name'];
+    //             $mainClass =  $selectedComponent['MainComponentClass'];
+    //             $subClass =$selectedComponent['ComponentClass'];
+    //             $nodeId = null;
+    //             if(isset($selectedComponent['NodeId']))
+    //             {
+    //                 $nodeId = (int)$selectedComponent['NodeId'];
+    //             }
+
+    //             $mainCompId = null;
+    //             if($nodeId !== NULL && 
+    //                $nodeIdvsComponentIdList &&
+    //                $nodeIdvsComponentIdList[$nodeId])
+    //             {
+    //                 $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
+    //             }
+
+    //             $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId) VALUES(?,?,?,?,?) ';
+    //             $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId);
+
+    //             $stmt = $dbh->prepare($insertQuery);                    
+    //             $stmt->execute($values);   
+    //         }
+
+    //         // commit update
+    //         $dbh->commit();
+    //         $dbh = null; //This is how you close a PDO connection                    
+
+    //         return;
+    //     }
+    //     catch(Exception $e) 
+    //     {        
+    //         echo "fail"; 
+    //         return;
+    //     } 
+}
 
 /*
 |
 |   write data sources info
 |
-*/ 
+*/
 function SaveDataSourceInfoFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM DatasourceInfo;");
-    if($selectResults) 
-    {
+    if ($selectResults) {
 
         $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
-        $dbh->exec($command);       
-   
+        $dbh->exec($command);
+
         $command = 'CREATE TABLE DatasourceInfo(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             sourceAFileName TEXT,
@@ -2376,8 +2330,8 @@ function SaveDataSourceInfoFromTemp($tempDbh, $dbh)
             sourceBType TEXT,
             sourceCType TEXT,
             sourceDType TEXT,
-            orderMaintained Text)';      
-        $dbh->exec($command);  
+            orderMaintained Text)';
+        $dbh->exec($command);
 
         $insertStmt = $dbh->prepare("INSERT INTO DatasourceInfo(id, 
         sourceAFileName, 
@@ -2388,33 +2342,33 @@ function SaveDataSourceInfoFromTemp($tempDbh, $dbh)
         sourceBType, 
         sourceCType, 
         sourceDType, 
-        orderMaintained) VALUES(?,?,?,?,?,?,?,?,?,?)");    
-    
-        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-        {           
-            $insertStmt->execute(array($row['id'], 
-                                       $row['sourceAFileName'], 
-                                       $row['sourceBFileName'],
-                                       $row['sourceCFileName'], 
-                                       $row['sourceDFileName'], 
-                                       $row['sourceAType'],
-                                       $row['sourceBType'],
-                                       $row['sourceCType'], 
-                                       $row['sourceDType'], 
-                                       $row['orderMaintained']));
-        } 
+        orderMaintained) VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['sourceAFileName'],
+                $row['sourceBFileName'],
+                $row['sourceCFileName'],
+                $row['sourceDFileName'],
+                $row['sourceAType'],
+                $row['sourceBType'],
+                $row['sourceCType'],
+                $row['sourceDType'],
+                $row['orderMaintained']
+            ));
+        }
     }
 }
 
-function SaveDatasourceInfo( $dbh)
+function SaveDatasourceInfo($dbh)
 {
-    
-    if(!isset($_POST["dataSourceInfo"]))
-    {
+
+    if (!isset($_POST["dataSourceInfo"])) {
         return false;
     }
 
-    $dataSourceInfo = json_decode($_POST['dataSourceInfo'],true);
+    $dataSourceInfo = json_decode($_POST['dataSourceInfo'], true);
 
     $sourceAName  = NULL;
     $sourceBName  = NULL;
@@ -2426,95 +2380,85 @@ function SaveDatasourceInfo( $dbh)
     $sourceDType  = NULL;
     $orderMaintained  = 'true';
 
-    if (array_key_exists("SourceAFileName",$dataSourceInfo))
-    {
-        $sourceAName =  $dataSourceInfo['SourceAFileName'];  
+    if (array_key_exists("SourceAFileName", $dataSourceInfo)) {
+        $sourceAName =  $dataSourceInfo['SourceAFileName'];
     }
-    if (array_key_exists("SourceBFileName",$dataSourceInfo))
-    {
-        $sourceBName =  $dataSourceInfo['SourceBFileName'];  
+    if (array_key_exists("SourceBFileName", $dataSourceInfo)) {
+        $sourceBName =  $dataSourceInfo['SourceBFileName'];
     }
-    if (array_key_exists("SourceCFileName",$dataSourceInfo))
-    {
-        $sourceCName =  $dataSourceInfo['SourceCFileName'];  
+    if (array_key_exists("SourceCFileName", $dataSourceInfo)) {
+        $sourceCName =  $dataSourceInfo['SourceCFileName'];
     }
-    if (array_key_exists("SourceDFileName",$dataSourceInfo))
-    {
-        $sourceDName =  $dataSourceInfo['SourceDFileName'];  
+    if (array_key_exists("SourceDFileName", $dataSourceInfo)) {
+        $sourceDName =  $dataSourceInfo['SourceDFileName'];
     }
 
-    if(array_key_exists("SourceAType",$dataSourceInfo))
-    {
-        $sourceAType =  $dataSourceInfo['SourceAType'];    
+    if (array_key_exists("SourceAType", $dataSourceInfo)) {
+        $sourceAType =  $dataSourceInfo['SourceAType'];
     }
-    if(array_key_exists("SourceBType",$dataSourceInfo))
-    {
-        $sourceBType =  $dataSourceInfo['SourceBType'];                 
+    if (array_key_exists("SourceBType", $dataSourceInfo)) {
+        $sourceBType =  $dataSourceInfo['SourceBType'];
     }
-    if(array_key_exists("SourceCType",$dataSourceInfo))
-    {
-        $sourceCType =  $dataSourceInfo['SourceCType'];                 
+    if (array_key_exists("SourceCType", $dataSourceInfo)) {
+        $sourceCType =  $dataSourceInfo['SourceCType'];
     }
-    if(array_key_exists("SourceDType",$dataSourceInfo))
-    {
-        $sourceDType =  $dataSourceInfo['SourceDType'];                 
+    if (array_key_exists("SourceDType", $dataSourceInfo)) {
+        $sourceDType =  $dataSourceInfo['SourceDType'];
     }
 
-    if(array_key_exists("orderMaintained",$dataSourceInfo))
-    {
-        $orderMaintained  = $dataSourceInfo['orderMaintained'];          
-    } 
-       
-        // if(isset($_POST["SourceAFileName"]))
-        // {
-        //     $sourceAName =  $_POST['SourceAFileName'];   
-        // }
-        // if(isset($_POST["SourceBFileName"]))
-        // {
-        //     $sourceBName =  $_POST['SourceBFileName'];   
-        // }
-        // if(isset($_POST["SourceCFileName"]))
-        // {
-        //     $sourceCName =  $_POST['SourceCFileName'];   
-        // }
-        // if(isset($_POST["SourceDFileName"]))
-        // {
-        //     $sourceDName =  $_POST['SourceDFileName'];   
-        // }
+    if (array_key_exists("orderMaintained", $dataSourceInfo)) {
+        $orderMaintained  = $dataSourceInfo['orderMaintained'];
+    }
 
-        // if(isset($_POST["SourceAType"]))
-        // {
-        //     $sourceAType =  $_POST['SourceAType'];   
-        // }
-        // if(isset($_POST["SourceBType"]))
-        // {
-        //     $sourceBType =  $_POST['SourceBType'];   
-        // }
-        // if(isset($_POST["SourceCType"]))
-        // {
-        //     $sourceCType =  $_POST['SourceCType'];   
-        // }
-        // if(isset($_POST["SourceDType"]))
-        // {
-        //     $sourceDType =  $_POST['SourceDType'];   
-        // }  
+    // if(isset($_POST["SourceAFileName"]))
+    // {
+    //     $sourceAName =  $_POST['SourceAFileName'];   
+    // }
+    // if(isset($_POST["SourceBFileName"]))
+    // {
+    //     $sourceBName =  $_POST['SourceBFileName'];   
+    // }
+    // if(isset($_POST["SourceCFileName"]))
+    // {
+    //     $sourceCName =  $_POST['SourceCFileName'];   
+    // }
+    // if(isset($_POST["SourceDFileName"]))
+    // {
+    //     $sourceDName =  $_POST['SourceDFileName'];   
+    // }
 
-        // if(isset($_POST["orderMaintained"]))
-        // {
-        //     $orderMaintained  = $_POST['orderMaintained'];   
-        // } 
+    // if(isset($_POST["SourceAType"]))
+    // {
+    //     $sourceAType =  $_POST['SourceAType'];   
+    // }
+    // if(isset($_POST["SourceBType"]))
+    // {
+    //     $sourceBType =  $_POST['SourceBType'];   
+    // }
+    // if(isset($_POST["SourceCType"]))
+    // {
+    //     $sourceCType =  $_POST['SourceCType'];   
+    // }
+    // if(isset($_POST["SourceDType"]))
+    // {
+    //     $sourceDType =  $_POST['SourceDType'];   
+    // }  
 
-        $projectName = $_POST['ProjectName'];
-        $checkName = $_POST['CheckName'];
+    // if(isset($_POST["orderMaintained"]))
+    // {
+    //     $orderMaintained  = $_POST['orderMaintained'];   
+    // } 
+
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
 
     //  $dbh;
-     try
-     {  
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
-         $dbh->exec($command);
+    try {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS DatasourceInfo;';
+        $dbh->exec($command);
 
-         $command = 'CREATE TABLE DatasourceInfo(
+        $command = 'CREATE TABLE DatasourceInfo(
              id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
              sourceAFileName TEXT,
              sourceBFileName TEXT,
@@ -2524,10 +2468,10 @@ function SaveDatasourceInfo( $dbh)
              sourceBType TEXT,
              sourceCType TEXT,
              sourceDType TEXT,
-             orderMaintained Text)';         
-         $dbh->exec($command);    
+             orderMaintained Text)';
+        $dbh->exec($command);
 
-         $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, 
+        $insertQuery = 'INSERT INTO DatasourceInfo(sourceAFileName, 
          sourceBFileName, 
          sourceCFileName, 
          sourceDFileName, 
@@ -2536,23 +2480,23 @@ function SaveDatasourceInfo( $dbh)
          sourceCType, 
          sourceDType, 
          orderMaintained) VALUES(?,?,?,?,?,?,?,?,?) ';
-         $values = array($sourceAName,
-         $sourceBName, 
-         $sourceCName,  
-         $sourceDName, 
-         $sourceAType,  
-         $sourceBType, 
-         $sourceCType,  
-         $sourceDType, 
-         $orderMaintained);
-         
-         $stmt = $dbh->prepare($insertQuery);                    
-         $stmt->execute($values);               
-     }
-     catch(Exception $e) 
-     {   
-         return false;
-     } 
+        $values = array(
+            $sourceAName,
+            $sourceBName,
+            $sourceCName,
+            $sourceDName,
+            $sourceAType,
+            $sourceBType,
+            $sourceCType,
+            $sourceDType,
+            $orderMaintained
+        );
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
 
     return true;
 }
@@ -2566,16 +2510,14 @@ function SaveDatasourceInfo( $dbh)
 |
 */
 function SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh)
-{ 
-    try
-    { 
+{
+    try {
         $selectResults = $tempDbh->query("SELECT * FROM CheckModuleControlsState;");
-        if($selectResults) 
-        {
+        if ($selectResults) {
 
             $command = 'DROP TABLE IF EXISTS CheckModuleControlsState;';
             $dbh->exec($command);
-            
+
             $command = 'CREATE TABLE CheckModuleControlsState(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 comparisonSwith TEXT,
@@ -2584,9 +2526,9 @@ function SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh)
                 sourceCComplianceSwitch TEXT,
                 sourceDComplianceSwitch TEXT,
                 selectedDataSetTab TEXT,
-                selectedCheckCase TEXT)';         
-            $dbh->exec($command);    
-            
+                selectedCheckCase TEXT)';
+            $dbh->exec($command);
+
             $insertStmt = $dbh->prepare("INSERT INTO CheckModuleControlsState(id, 
             comparisonSwith, 
             sourceAComplianceSwitch, 
@@ -2594,38 +2536,36 @@ function SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh)
             sourceCComplianceSwitch,
             sourceDComplianceSwitch,
             selectedDataSetTab,
-            selectedCheckCase) VALUES(?,?,?,?,?,?,?,?)");    
+            selectedCheckCase) VALUES(?,?,?,?,?,?,?,?)");
 
-            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
-            {           
-                $insertStmt->execute(array($row['id'], 
-                                            $row['comparisonSwith'], 
-                                            $row['sourceAComplianceSwitch'],
-                                            $row['sourceBComplianceSwitch'], 
-                                            $row['sourceCComplianceSwitch'], 
-                                            $row['sourceDComplianceSwitch'],
-                                            $row['selectedDataSetTab'],
-                                            $row['selectedCheckCase']));
-            } 
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+                $insertStmt->execute(array(
+                    $row['id'],
+                    $row['comparisonSwith'],
+                    $row['sourceAComplianceSwitch'],
+                    $row['sourceBComplianceSwitch'],
+                    $row['sourceCComplianceSwitch'],
+                    $row['sourceDComplianceSwitch'],
+                    $row['selectedDataSetTab'],
+                    $row['selectedCheckCase']
+                ));
+            }
         }
+    } catch (Exception $e) {
+        return false;
     }
-    catch(Exception $e) 
-    {       
-      return false;
-    } 
 
     return true;
 }
 
 function SaveCheckModuleControlsState($dbh)
-{   
+{
 
-    if(!isset($_POST["checkModuleControlState"]))
-    {
+    if (!isset($_POST["checkModuleControlState"])) {
         return false;
     }
 
-    $checkModuleControlState = json_decode($_POST['checkModuleControlState'],true);
+    $checkModuleControlState = json_decode($_POST['checkModuleControlState'], true);
 
     // if(!isset($_POST["comparisonSwithOn"]) ||
     // !isset($_POST["sourceAComplianceSwitchOn"]) ||
@@ -2642,20 +2582,19 @@ function SaveCheckModuleControlsState($dbh)
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
     // $dbh;
-     try
-     {        
+    try {
         //  // open database
         //  $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
         //  $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-         
+
         //  // begin the transaction
         //  $dbh->beginTransaction();
 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS CheckModuleControlsState;';
-         $dbh->exec($command);
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS CheckModuleControlsState;';
+        $dbh->exec($command);
 
-         $command = 'CREATE TABLE CheckModuleControlsState(
+        $command = 'CREATE TABLE CheckModuleControlsState(
              id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
              comparisonSwith TEXT,
              sourceAComplianceSwitch TEXT,
@@ -2663,334 +2602,315 @@ function SaveCheckModuleControlsState($dbh)
              sourceCComplianceSwitch TEXT,
              sourceDComplianceSwitch TEXT,
              selectedDataSetTab TEXT,
-             selectedCheckCase TEXT)';         
-         $dbh->exec($command);    
+             selectedCheckCase TEXT)';
+        $dbh->exec($command);
 
-         $insertQuery = 'INSERT INTO CheckModuleControlsState(comparisonSwith, 
+        $insertQuery = 'INSERT INTO CheckModuleControlsState(comparisonSwith, 
          sourceAComplianceSwitch, 
          sourceBComplianceSwitch, 
          sourceCComplianceSwitch, 
          sourceDComplianceSwitch, 
          selectedDataSetTab, 
          selectedCheckCase) VALUES(?,?,?,?,?,?,?) ';
-         $values = array($checkModuleControlState["comparisonSwithOn"],  
-                         $checkModuleControlState["sourceAComplianceSwitchOn"],  
-                         $checkModuleControlState["sourceBComplianceSwitchOn"],  
-                         $checkModuleControlState["sourceCComplianceSwitchOn"],
-                         $checkModuleControlState["sourceDComplianceSwitchOn"],
-                         $checkModuleControlState["selectedDataSetTab"],
-                         $checkModuleControlState["selectedCheckCase"]);
-         
-         $stmt = $dbh->prepare($insertQuery);                    
-         $stmt->execute($values); 
+        $values = array(
+            $checkModuleControlState["comparisonSwithOn"],
+            $checkModuleControlState["sourceAComplianceSwitchOn"],
+            $checkModuleControlState["sourceBComplianceSwitchOn"],
+            $checkModuleControlState["sourceCComplianceSwitchOn"],
+            $checkModuleControlState["sourceDComplianceSwitchOn"],
+            $checkModuleControlState["selectedDataSetTab"],
+            $checkModuleControlState["selectedCheckCase"]
+        );
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
 
         //  // commit update
         //  $dbh->commit();
         //  $dbh = null; //This is how you close a PDO connection                 
-     }
-     catch(Exception $e) 
-     {        
+    } catch (Exception $e) {
         //  echo "fail"; 
-         return false;
-     } 
+        return false;
+    }
 
-     return true;
+    return true;
 }
 
 /*
 |
 |   write check case data(as JSON string)     
 |
-*/  
+*/
 function SaveCheckCaseData()
-{         
-    if(!isset($_POST['CheckCaseManager']))
-    {
+{
+    if (!isset($_POST['CheckCaseManager'])) {
         echo 'fail';
         return;
     }
-    $checkCaseData =  $_POST['CheckCaseManager'];   
+    $checkCaseData =  $_POST['CheckCaseManager'];
 
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
-                
+
     $dbh;
-    try
-    {        
+    try {
         // open database
         $dbPath = getCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
         $dbh->beginTransaction();
 
         // create CheckCaseInfo table
-                    
+
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS CheckCaseInfo;';
         $dbh->exec($command);
-        
-        $command = 'CREATE TABLE CheckCaseInfo(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, checkCaseData TEXT)';         
+
+        $command = 'CREATE TABLE CheckCaseInfo(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, checkCaseData TEXT)';
         $dbh->exec($command);
-        
+
         $insertQuery = 'INSERT INTO CheckCaseInfo(checkCaseData) VALUES(?) ';
         $values = array($checkCaseData);
-                    
-        $stmt = $dbh->prepare($insertQuery);                    
-        $stmt->execute($values);   
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
 
         // commit update
         $dbh->commit();
         $dbh = null; //This is how you close a PDO connection                 
-    }
-    catch(Exception $e) 
-    {        
-        echo "fail"; 
+    } catch (Exception $e) {
+        echo "fail";
         return;
-    } 
+    }
 }
 
 /*
 |
 |   Deletes all tables which store comparison check results
 |
-*/  
+*/
 function DeleteComparisonResults()
 {
     // get project name
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
     $dbh;
-    try
-    {    
+    try {
         // open database
         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
-        $dbh->beginTransaction();  
+        $dbh->beginTransaction();
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
-        $dbh->exec($command);      
+        $dbh->exec($command);
 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
-         $dbh->exec($command);     
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
+        $dbh->exec($command);
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
-        $dbh->exec($command);     
+        $dbh->exec($command);
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceANotSelectedComponents;';
-        $dbh->exec($command);     
-     
-             // drop table if exists
+        $dbh->exec($command);
+
+        // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceBNotSelectedComponents;';
-        $dbh->exec($command);    
+        $dbh->exec($command);
 
         // commit update
         $dbh->commit();
         $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        return "fail";
     }
-    catch(Exception $e) 
-    {        
-        return "fail";         
-    } 
 
-    return "success"; 
+    return "success";
 }
 
 /*
 |
 |   Deletes all tables which store source A compliance check results
 |
-*/  
+*/
 function DeleteSourceAComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
     $dbh;
-    try
-    {    
+    try {
         // open database
         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
-        $dbh->beginTransaction();  
+        $dbh->beginTransaction();
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
-        $dbh->exec($command);      
+        $dbh->exec($command);
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
-        $dbh->exec($command);     
+        $dbh->exec($command);
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
-        $dbh->exec($command);     
+        $dbh->exec($command);
 
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceAComplianceNotCheckedComponents;';
-        $dbh->exec($command);           
-     
+        $dbh->exec($command);
+
         // commit update
         $dbh->commit();
         $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        return "fail";
     }
-    catch(Exception $e) 
-    {        
-        return "fail";         
-    } 
 
-    return "success"; 
+    return "success";
 }
 
 /*
 |
 |   Deletes all tables which store source B compliance check results
 |
-*/ 
+*/
 function DeleteSourceBComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
-     $dbh;
-     try
-     {    
-         // open database
-         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
- 
-         // begin the transaction
-         $dbh->beginTransaction();  
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
-         $dbh->exec($command);      
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
-         $dbh->exec($command);     
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
-         $dbh->exec($command);     
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceBComplianceNotCheckedComponents;';
-         $dbh->exec($command);           
-      
-         // commit update
-         $dbh->commit();
-         $dbh = null; //This is how you close a PDO connection    
-     }
-     catch(Exception $e) 
-     {        
-         return "fail";         
-     } 
- 
-     return "success"; 
+    $dbh;
+    try {
+        // open database
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceNotCheckedComponents;';
+        $dbh->exec($command);
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        return "fail";
+    }
+
+    return "success";
 }
 
 /*
 |
 |   Deletes all tables which store source C compliance check results
 |
-*/ 
+*/
 function DeleteSourceCComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
-     $dbh;
-     try
-     {    
-         // open database
-         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
- 
-         // begin the transaction
-         $dbh->beginTransaction();  
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
-         $dbh->exec($command);      
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
-         $dbh->exec($command);     
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
-         $dbh->exec($command);     
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceCComplianceNotCheckedComponents;';
-         $dbh->exec($command);           
-      
-         // commit update
-         $dbh->commit();
-         $dbh = null; //This is how you close a PDO connection    
-     }
-     catch(Exception $e) 
-     {        
-         return "fail";         
-     } 
- 
-     return "success"; 
+    $dbh;
+    try {
+        // open database
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceNotCheckedComponents;';
+        $dbh->exec($command);
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        return "fail";
+    }
+
+    return "success";
 }
 
 /*
 |
 |   Deletes all tables which store source D compliance check results
 |
-*/ 
+*/
 function DeleteSourceDComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
-     $dbh;
-     try
-     {    
-         // open database
-         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
- 
-         // begin the transaction
-         $dbh->beginTransaction();  
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
-         $dbh->exec($command);      
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
-         $dbh->exec($command);     
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
-         $dbh->exec($command);     
- 
-         // drop table if exists
-         $command = 'DROP TABLE IF EXISTS SourceDComplianceNotCheckedComponents;';
-         $dbh->exec($command);           
-      
-         // commit update
-         $dbh->commit();
-         $dbh = null; //This is how you close a PDO connection    
-     }
-     catch(Exception $e) 
-     {        
-         return "fail";         
-     } 
- 
-     return "success"; 
+    $dbh;
+    try {
+        // open database
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
+        $dbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceNotCheckedComponents;';
+        $dbh->exec($command);
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        return "fail";
+    }
+
+    return "success";
 }
 
 function ReadCheckModuleControlsState()
@@ -2998,55 +2918,51 @@ function ReadCheckModuleControlsState()
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
     $dbh;
-        try
-        {   
-            // open database
-            $dbPath = getCheckDatabasePath($projectName, $checkName);
-            if(!CheckIfFileExists($dbPath)){
-                echo 'fail';
-                return;
-            }
-
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-
-            // begin the transaction
-            $dbh->beginTransaction();  
-            
-            $results = $dbh->query("SELECT *FROM  CheckModuleControlsState;");   
-            
-            $checkModuleControlsState = array();
-            if($results)
-            {
-                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
-                {
-                    $checkModuleControlsState = array('comparisonSwith'=>$record['comparisonSwith'], 
-                                                      'sourceAComplianceSwitch'=>$record['sourceAComplianceSwitch'],  
-                                                      'sourceBComplianceSwitch'=>$record['sourceBComplianceSwitch'],
-                                                      'sourceCComplianceSwitch'=>$record['sourceCComplianceSwitch'],
-                                                      'sourceDComplianceSwitch'=>$record['sourceDComplianceSwitch'],
-                                                      'selectedDataSetTab'=>$record['selectedDataSetTab'],
-                                                      'selectedCheckCase'=>$record['selectedCheckCase']);
-                    break;
-                }
-            }
-            
-            echo json_encode($checkModuleControlsState);
-
-            // commit update
-            $dbh->commit();
-            $dbh = null; //This is how you close a PDO connection    
-        }
-        catch(Exception $e) 
-        {        
-            echo "Fail"; 
+    try {
+        // open database
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
+        if (!CheckIfFileExists($dbPath)) {
+            echo 'fail';
             return;
-        } 
+        }
+
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        $results = $dbh->query("SELECT *FROM  CheckModuleControlsState;");
+
+        $checkModuleControlsState = array();
+        if ($results) {
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                $checkModuleControlsState = array(
+                    'comparisonSwith' => $record['comparisonSwith'],
+                    'sourceAComplianceSwitch' => $record['sourceAComplianceSwitch'],
+                    'sourceBComplianceSwitch' => $record['sourceBComplianceSwitch'],
+                    'sourceCComplianceSwitch' => $record['sourceCComplianceSwitch'],
+                    'sourceDComplianceSwitch' => $record['sourceDComplianceSwitch'],
+                    'selectedDataSetTab' => $record['selectedDataSetTab'],
+                    'selectedCheckCase' => $record['selectedCheckCase']
+                );
+                break;
+            }
+        }
+
+        echo json_encode($checkModuleControlsState);
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        echo "Fail";
+        return;
+    }
 }
 
 function ReadSelectedComponents()
 {
-    if(!isset($_POST['source']))
-    {
+    if (!isset($_POST['source'])) {
         echo "fail";
         return;
     }
@@ -3055,190 +2971,180 @@ function ReadSelectedComponents()
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
     $dbh;
-        try
-        {        
-            // open database
-            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
+    try {
+        // open database
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-            // begin the transaction
-            $dbh->beginTransaction();  
-            
-            $table;
-            if(strtolower($source) === 'sourcea')
-            {
-                $table = "SourceASelectedComponents";
-            }
-            else if(strtolower($source) === 'sourceb')
-            {
-                $table = "SourceBSelectedComponents";
-            }
-            else if(strtolower($source) === 'sourcec')
-            {
-                $table = "SourceCSelectedComponents";
-            }
-            else if(strtolower($source) === 'sourced')
-            {
-                $table = "SourceDSelectedComponents";
-            }
+        // begin the transaction
+        $dbh->beginTransaction();
 
-            $selectedComponents = ReadSelectedComponentsFromDB($dbh, $table);
-            // // source a selected components
-            // $sourceAIdwiseComponents = NULL;
-            // $sourceANodeIdwiseComponents = [];
-            // if(strtolower($source) === 'sourcea' || strtolower($source) === 'both')
-            // {
-            //     $results = $dbh->query("SELECT *FROM  SourceASelectedComponents;");     
-            //     if($results)
-            //     {
-            //         while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
-            //         {
-            //             $comp = array('id'=>$component['id'], 
-            //                         'name'=>$component['name'],  
-            //                         'mainClass'=>$component['mainClass'],
-            //                         'subClass'=>$component['subClass'],
-            //                         'nodeId'=>$component['nodeId'],
-            //                         'mainComponentId'=>$component['mainComponentId']);
-
-            //             // id wise components
-            //             $sourceAIdwiseComponents[$component['id']] = $comp;                       
-
-            //             if($component['nodeId'] !== NULL)
-            //             {                           
-            //                 // node id wise components             
-            //                 if(array_key_exists($component['nodeId'], $sourceANodeIdwiseComponents))
-            //                 {
-            //                     array_push($sourceANodeIdwiseComponents[$component['nodeId']], $comp );
-            //                 }
-            //                 else
-            //                 {
-            //                     $sourceANodeIdwiseComponents[$component['nodeId']] = array( $comp );
-            //                 }
-
-                                       
-            //                 // $sourceANodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
-            //                 //                                                     'name'=>$component['name'],  
-            //                 //                                                     'mainClass'=>$component['mainClass'],
-            //                 //                                                     'subClass'=>$component['subClass'],
-            //                 //                                                     'nodeId'=>$component['nodeId'],
-            //                 //                                                     'mainComponentId'=>$component['mainComponentId']); 
-            //             }
-            //             else
-            //             {
-            //                   // class wise components             
-            //                   if(array_key_exists($component['mainClass'], $sourceANodeIdwiseComponents))
-            //                   {
-            //                       array_push($sourceANodeIdwiseComponents[$component['mainClass']], $comp );
-            //                   }
-            //                   else
-            //                   {
-            //                       $sourceANodeIdwiseComponents[$component['mainClass']] = array( $comp );
-            //                   }
-
-            //                 //  // class wise components                        
-            //                 //  $sourceANodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
-            //                 //  'name'=>$component['name'],  
-            //                 //  'mainClass'=>$component['mainClass'],
-            //                 //  'subClass'=>$component['subClass'],
-            //                 //  'nodeId'=>$component['nodeId'],
-            //                 //  'mainComponentId'=>$component['mainComponentId']); 
-            //             }
-            //         }    
-            //     }
-            // }
-            
-            // // source b selected components
-            // $sourceBIdwiseComponents = [];
-            // $sourceBNodeIdwiseComponents = [];
-            // if(strtolower($source) === 'sourceb' || strtolower($source) === 'both')
-            // {
-            //     $results = $dbh->query("SELECT *FROM  SourceBSelectedComponents;");       
-            //     if($results)
-            //     {
-            //         while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
-            //         {
-            //             $comp = array('id'=>$component['id'], 
-            //                     'name'=>$component['name'],  
-            //                     'mainClass'=>$component['mainClass'],
-            //                     'subClass'=>$component['subClass'],
-            //                     'nodeId'=>$component['nodeId'],
-            //                     'mainComponentId'=>$component['mainComponentId']);
-
-            //             // id wise components
-            //             $sourceBIdwiseComponents[$component['id']] = $comp;     
-                      
-            //             if($component['nodeId'] !== NULL)
-            //             {
-            //                  // node id wise components             
-            //                  if(array_key_exists($component['nodeId'], $sourceBNodeIdwiseComponents))
-            //                  {
-            //                      array_push($sourceBNodeIdwiseComponents[$component['nodeId']], $comp );
-            //                  }
-            //                  else
-            //                  {
-            //                      $sourceBNodeIdwiseComponents[$component['nodeId']] = array( $comp );
-            //                  }
-
-            //                 // // node id wise components
-            //                 // $sourceBNodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
-            //                 //                                                     'name'=>$component['name'],  
-            //                 //                                                     'mainClass'=>$component['mainClass'],
-            //                 //                                                     'subClass'=>$component['subClass'],
-            //                 //                                                     'nodeId'=>$component['nodeId'],
-            //                 //                                                     'mainComponentId'=>$component['mainComponentId']); 
-            //             }
-            //             else
-            //             {
-            //                 // class wise components             
-            //                 if(array_key_exists($component['mainClass'], $sourceBNodeIdwiseComponents))
-            //                 {
-            //                     array_push($sourceBNodeIdwiseComponents[$component['mainClass']], $comp );
-            //                 }
-            //                 else
-            //                 {
-            //                     $sourceBNodeIdwiseComponents[$component['mainClass']] = array( $comp );
-            //                 }
-
-
-            //                 //  // node id wise components
-            //                 //  $sourceBNodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
-            //                 //                                                                 'name'=>$component['name'],  
-            //                 //                                                                 'mainClass'=>$component['mainClass'],
-            //                 //                                                                 'subClass'=>$component['subClass'],
-            //                 //                                                                 'nodeId'=>$component['nodeId'],
-            //                 //                                                                 'mainComponentId'=>$component['mainComponentId']); 
-            //             }
-            //         }    
-            //     }
-            // }
-           
-            // $selectedComponents =array();
-
-            // if( $sourceAIdwiseComponents !== NULL && 
-            //     $sourceANodeIdwiseComponents !== NULL)
-            // {
-            //     $selectedComponents['SourceAIdwiseSelectedComps'] = $sourceAIdwiseComponents;
-            //     $selectedComponents['SourceANodeIdwiseSelectedComps'] = $sourceANodeIdwiseComponents;
-            // }
-
-            // if( $sourceBIdwiseComponents !== NULL && 
-            //     $sourceBNodeIdwiseComponents !== NULL)
-            // {
-            //     $selectedComponents['SourceBIDwiseSelectedComps'] = $sourceBIdwiseComponents;
-            //     $selectedComponents['SourceBNodeIdwiseSelectedComps'] = $sourceBNodeIdwiseComponents;
-            // }
-
-            echo json_encode($selectedComponents);
-
-             // commit update
-             $dbh->commit();
-             $dbh = null; //This is how you close a PDO connection    
+        $table;
+        if (strtolower($source) === 'sourcea') {
+            $table = "SourceASelectedComponents";
+        } else if (strtolower($source) === 'sourceb') {
+            $table = "SourceBSelectedComponents";
+        } else if (strtolower($source) === 'sourcec') {
+            $table = "SourceCSelectedComponents";
+        } else if (strtolower($source) === 'sourced') {
+            $table = "SourceDSelectedComponents";
         }
-        catch(Exception $e) 
-        {        
-            return "fail"; 
-            //return;
-        } 
+
+        $selectedComponents = ReadSelectedComponentsFromDB($dbh, $table);
+        // // source a selected components
+        // $sourceAIdwiseComponents = NULL;
+        // $sourceANodeIdwiseComponents = [];
+        // if(strtolower($source) === 'sourcea' || strtolower($source) === 'both')
+        // {
+        //     $results = $dbh->query("SELECT *FROM  SourceASelectedComponents;");     
+        //     if($results)
+        //     {
+        //         while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+        //         {
+        //             $comp = array('id'=>$component['id'], 
+        //                         'name'=>$component['name'],  
+        //                         'mainClass'=>$component['mainClass'],
+        //                         'subClass'=>$component['subClass'],
+        //                         'nodeId'=>$component['nodeId'],
+        //                         'mainComponentId'=>$component['mainComponentId']);
+
+        //             // id wise components
+        //             $sourceAIdwiseComponents[$component['id']] = $comp;                       
+
+        //             if($component['nodeId'] !== NULL)
+        //             {                           
+        //                 // node id wise components             
+        //                 if(array_key_exists($component['nodeId'], $sourceANodeIdwiseComponents))
+        //                 {
+        //                     array_push($sourceANodeIdwiseComponents[$component['nodeId']], $comp );
+        //                 }
+        //                 else
+        //                 {
+        //                     $sourceANodeIdwiseComponents[$component['nodeId']] = array( $comp );
+        //                 }
+
+
+        //                 // $sourceANodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+        //                 //                                                     'name'=>$component['name'],  
+        //                 //                                                     'mainClass'=>$component['mainClass'],
+        //                 //                                                     'subClass'=>$component['subClass'],
+        //                 //                                                     'nodeId'=>$component['nodeId'],
+        //                 //                                                     'mainComponentId'=>$component['mainComponentId']); 
+        //             }
+        //             else
+        //             {
+        //                   // class wise components             
+        //                   if(array_key_exists($component['mainClass'], $sourceANodeIdwiseComponents))
+        //                   {
+        //                       array_push($sourceANodeIdwiseComponents[$component['mainClass']], $comp );
+        //                   }
+        //                   else
+        //                   {
+        //                       $sourceANodeIdwiseComponents[$component['mainClass']] = array( $comp );
+        //                   }
+
+        //                 //  // class wise components                        
+        //                 //  $sourceANodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
+        //                 //  'name'=>$component['name'],  
+        //                 //  'mainClass'=>$component['mainClass'],
+        //                 //  'subClass'=>$component['subClass'],
+        //                 //  'nodeId'=>$component['nodeId'],
+        //                 //  'mainComponentId'=>$component['mainComponentId']); 
+        //             }
+        //         }    
+        //     }
+        // }
+
+        // // source b selected components
+        // $sourceBIdwiseComponents = [];
+        // $sourceBNodeIdwiseComponents = [];
+        // if(strtolower($source) === 'sourceb' || strtolower($source) === 'both')
+        // {
+        //     $results = $dbh->query("SELECT *FROM  SourceBSelectedComponents;");       
+        //     if($results)
+        //     {
+        //         while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
+        //         {
+        //             $comp = array('id'=>$component['id'], 
+        //                     'name'=>$component['name'],  
+        //                     'mainClass'=>$component['mainClass'],
+        //                     'subClass'=>$component['subClass'],
+        //                     'nodeId'=>$component['nodeId'],
+        //                     'mainComponentId'=>$component['mainComponentId']);
+
+        //             // id wise components
+        //             $sourceBIdwiseComponents[$component['id']] = $comp;     
+
+        //             if($component['nodeId'] !== NULL)
+        //             {
+        //                  // node id wise components             
+        //                  if(array_key_exists($component['nodeId'], $sourceBNodeIdwiseComponents))
+        //                  {
+        //                      array_push($sourceBNodeIdwiseComponents[$component['nodeId']], $comp );
+        //                  }
+        //                  else
+        //                  {
+        //                      $sourceBNodeIdwiseComponents[$component['nodeId']] = array( $comp );
+        //                  }
+
+        //                 // // node id wise components
+        //                 // $sourceBNodeIdwiseComponents[$component['nodeId']] = array('id'=>$component['id'], 
+        //                 //                                                     'name'=>$component['name'],  
+        //                 //                                                     'mainClass'=>$component['mainClass'],
+        //                 //                                                     'subClass'=>$component['subClass'],
+        //                 //                                                     'nodeId'=>$component['nodeId'],
+        //                 //                                                     'mainComponentId'=>$component['mainComponentId']); 
+        //             }
+        //             else
+        //             {
+        //                 // class wise components             
+        //                 if(array_key_exists($component['mainClass'], $sourceBNodeIdwiseComponents))
+        //                 {
+        //                     array_push($sourceBNodeIdwiseComponents[$component['mainClass']], $comp );
+        //                 }
+        //                 else
+        //                 {
+        //                     $sourceBNodeIdwiseComponents[$component['mainClass']] = array( $comp );
+        //                 }
+
+
+        //                 //  // node id wise components
+        //                 //  $sourceBNodeIdwiseComponents[$component['mainClass']] = array('id'=>$component['id'], 
+        //                 //                                                                 'name'=>$component['name'],  
+        //                 //                                                                 'mainClass'=>$component['mainClass'],
+        //                 //                                                                 'subClass'=>$component['subClass'],
+        //                 //                                                                 'nodeId'=>$component['nodeId'],
+        //                 //                                                                 'mainComponentId'=>$component['mainComponentId']); 
+        //             }
+        //         }    
+        //     }
+        // }
+
+        // $selectedComponents =array();
+
+        // if( $sourceAIdwiseComponents !== NULL && 
+        //     $sourceANodeIdwiseComponents !== NULL)
+        // {
+        //     $selectedComponents['SourceAIdwiseSelectedComps'] = $sourceAIdwiseComponents;
+        //     $selectedComponents['SourceANodeIdwiseSelectedComps'] = $sourceANodeIdwiseComponents;
+        // }
+
+        // if( $sourceBIdwiseComponents !== NULL && 
+        //     $sourceBNodeIdwiseComponents !== NULL)
+        // {
+        //     $selectedComponents['SourceBIDwiseSelectedComps'] = $sourceBIdwiseComponents;
+        //     $selectedComponents['SourceBNodeIdwiseSelectedComps'] = $sourceBNodeIdwiseComponents;
+        // }
+
+        echo json_encode($selectedComponents);
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection    
+    } catch (Exception $e) {
+        return "fail";
+        //return;
+    }
 }
 
 function ReadSelectedComponentsFromDB($dbh, $table)
@@ -3246,59 +3152,50 @@ function ReadSelectedComponentsFromDB($dbh, $table)
     $idwiseComponents = NULL;
     $nodeIdwiseComponents = [];
 
-    $results = $dbh->query("SELECT *FROM  ".$table);     
-    if($results)
-    {
-        while ($component = $results->fetch(\PDO::FETCH_ASSOC)) 
-        {
-            $comp = array('id'=>$component['id'], 
-                        'name'=>$component['name'],  
-                        'mainClass'=>$component['mainClass'],
-                        'subClass'=>$component['subClass'],
-                        'nodeId'=>$component['nodeId'],
-                        'mainComponentId'=>$component['mainComponentId'],
-                        'componentId'=>$component['componentId']);
+    $results = $dbh->query("SELECT *FROM  " . $table);
+    if ($results) {
+        while ($component = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $comp = array(
+                'id' => $component['id'],
+                'name' => $component['name'],
+                'mainClass' => $component['mainClass'],
+                'subClass' => $component['subClass'],
+                'nodeId' => $component['nodeId'],
+                'mainComponentId' => $component['mainComponentId'],
+                'componentId' => $component['componentId']
+            );
 
             // id wise components
-            $idwiseComponents[$component['id']] = $comp;                       
+            $idwiseComponents[$component['id']] = $comp;
 
-            if($component['nodeId'] !== NULL)
-            {                           
+            if ($component['nodeId'] !== NULL) {
                 // node id wise components             
-                if(array_key_exists($component['nodeId'], $nodeIdwiseComponents))
-                {
-                    array_push($nodeIdwiseComponents[$component['nodeId']], $comp );
+                if (array_key_exists($component['nodeId'], $nodeIdwiseComponents)) {
+                    array_push($nodeIdwiseComponents[$component['nodeId']], $comp);
+                } else {
+                    $nodeIdwiseComponents[$component['nodeId']] = array($comp);
                 }
-                else
-                {
-                    $nodeIdwiseComponents[$component['nodeId']] = array( $comp );
-                }                            
-               
-            }
-            else
-            {
+            } else {
                 // class wise components             
-                if(array_key_exists($component['componentId'], $nodeIdwiseComponents))
-                {
-                    array_push($nodeIdwiseComponents[$component['componentId']], $comp );
-                }
-                else
-                {
-                    $nodeIdwiseComponents[$component['componentId']] = array( $comp );
+                if (array_key_exists($component['componentId'], $nodeIdwiseComponents)) {
+                    array_push($nodeIdwiseComponents[$component['componentId']], $comp);
+                } else {
+                    $nodeIdwiseComponents[$component['componentId']] = array($comp);
                 }
             }
-        }    
+        }
     }
 
-    $selectedComponents =array();
-    if( $idwiseComponents !== NULL && 
-        $nodeIdwiseComponents !== NULL)    
-      {
+    $selectedComponents = array();
+    if (
+        $idwiseComponents !== NULL &&
+        $nodeIdwiseComponents !== NULL
+    ) {
         $selectedComponents['IdwiseSelectedComps'] = $idwiseComponents;
         $selectedComponents['NodeIdwiseSelectedComps'] = $nodeIdwiseComponents;
-      }  
-      
-      return $selectedComponents;
+    }
+
+    return $selectedComponents;
 }
 
 // function CreateProjectSession()
@@ -3320,7 +3217,7 @@ function ReadSelectedComponentsFromDB($dbh, $table)
 //     $_SESSION['ProjectId'] =  $_POST['projectId'];
 //     $_SESSION['SourceAPath'] =  $_POST['sourceAPath'];
 //     $_SESSION['SourceBPath'] =  $_POST['sourceBPath'];
-       
+
 //     echo 'success';
 // }
 
@@ -3332,26 +3229,26 @@ function ReadSelectedComponentsFromDB($dbh, $table)
 //         echo $_SESSION['LoadProject'];
 //         return;
 //     }
-    
+
 //     echo 'false';    
 // }
 
 function CopyProject()
 {
 
-    $source = getProjectDirectoryPath(trim($_POST["source"], " "));  
-    $dest = getProjectDirectoryPath(trim($_POST["projectname"], " "));  
+    $source = getProjectDirectoryPath(trim($_POST["source"], " "));
+    $dest = getProjectDirectoryPath(trim($_POST["projectname"], " "));
     $result = CopyDirRecursively($source, $dest);
-    if(!$result)
-    {
-        echo json_encode(array("Msg" =>  "Failed to copy project dir(s) and file(s).",
-        "MsgCode" => 0)); 
+    if (!$result) {
+        echo json_encode(array(
+            "Msg" =>  "Failed to copy project dir(s) and file(s).",
+            "MsgCode" => 0
+        ));
         return;
     }
-    
+
     $result = CopyProjectToMainDB();
-    if($result["MsgCode"] != 1)
-    {
+    if ($result["MsgCode"] != 1) {
         echo json_encode($result);
         return;
     }
@@ -3400,32 +3297,32 @@ function CopyProject()
 // }
 
 function CopyProjectToMainDB()
-{   
+{
 
-    try{
-        $userid = trim($_POST["userid"], " ");      
+    try {
+        $userid = trim($_POST["userid"], " ");
         $projectName = trim($_POST["projectname"], " ");
-        $projectType = trim($_POST["projectType"], " ");    
+        $projectType = trim($_POST["projectType"], " ");
         $projectComments = trim($_POST["projectComments"], " ");
-        $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+        $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");
         $projectDescription = trim($_POST["projectDescription"], " ");
         $projectPath = trim($_POST["path"], " ");
-        $projectStatus = trim($_POST["projectStatus"], " ");  
+        $projectStatus = trim($_POST["projectStatus"], " ");
         $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
         $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
 
-        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");                
-       
-        $query =  "select projectname from Projects where projectname=\"". $projectName."\" COLLATE NOCASE;";      
-        $count=0;
-        foreach ($dbh->query($query) as $row)
-        {
-            $count = $count+1;
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+
+        $query =  "select projectname from Projects where projectname=\"" . $projectName . "\" COLLATE NOCASE;";
+        $count = 0;
+        foreach ($dbh->query($query) as $row) {
+            $count = $count + 1;
         }
-        if ($count != 0)
-        {
-            return array("Msg" =>  "Project '$projectName' already exists.",                       
-                        "MsgCode" => 0); 
+        if ($count != 0) {
+            return array(
+                "Msg" =>  "Project '$projectName' already exists.",
+                "MsgCode" => 0
+            );
             $dbh = null; //This is how you close a PDO connection
             return;
         }
@@ -3445,37 +3342,42 @@ function CopyProjectToMainDB()
                                         modifieddate) VALUES (?,?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
 
-        $stmt->execute(array( $userid, 
-                            $projectName, 
-                            $projectType, 
-                            $projectComments, 
-                            $projectIsFavorite, 
-                            $projectDescription, 
-                            $projectPath, 
-                            $projectStatus,
-                            $projectCreatedDate,
-                            $projectModifiedDate));
-        
+        $stmt->execute(array(
+            $userid,
+            $projectName,
+            $projectType,
+            $projectComments,
+            $projectIsFavorite,
+            $projectDescription,
+            $projectPath,
+            $projectStatus,
+            $projectCreatedDate,
+            $projectModifiedDate
+        ));
+
         $insertedId = $dbh->lastInsertId();
-        if($insertedId !=0 && 
-           $insertedId !=-1)
-        {
+        if (
+            $insertedId != 0 &&
+            $insertedId != -1
+        ) {
             $array = array(
-                            "projectid" => $dbh->lastInsertId(),
-                            "projectname" => $projectName,
-                            "type" => $projectType,
-                            "comments" => $projectComments,
-                            "IsFavourite" => $projectIsFavorite,
-                            "description" => $projectDescription,
-                            "path" => $projectPath,
-                            "status" => $projectStatus,
-                            "createddate" => $projectCreatedDate);
-        
+                "projectid" => $dbh->lastInsertId(),
+                "projectname" => $projectName,
+                "type" => $projectType,
+                "comments" => $projectComments,
+                "IsFavourite" => $projectIsFavorite,
+                "description" => $projectDescription,
+                "path" => $projectPath,
+                "status" => $projectStatus,
+                "createddate" => $projectCreatedDate
+            );
+
             $dbh = null;
-            return array("Msg" =>  "Success",
-                        "Data" => $array,
-                        "MsgCode" => 1); 
-            
+            return array(
+                "Msg" =>  "Success",
+                "Data" => $array,
+                "MsgCode" => 1
+            );
         }
         // else
         // {
@@ -3484,58 +3386,56 @@ function CopyProjectToMainDB()
         //     );
         //     echo json_encode($array);
         // }
-        
+
         // $dbh = null; //This is how you close a PDO connection
         // return;      
-    }
-    catch(Exception $e) {
+    } catch (Exception $e) {
         // //echo 'Message: ' .$e->getMessage();
         // $array = array(
         //     "projectid" => -1,
         // );
         // echo json_encode($array);
         // return;
-    } 
+    }
 
     $dbh = null;
-    return array("Msg" =>  "fail",
-                "MsgCode" => 0); 
+    return array(
+        "Msg" =>  "fail",
+        "MsgCode" => 0
+    );
 }
 
 /*
 |
 |   Creates new project in Main.db
 |
-*/   
+*/
 function CreateProject()
 {
     $projectName = trim($_POST["projectName"], " ");
-    if($projectName == "")
-    {
+    if ($projectName == "") {
         echo "Project Name cannot be empty";
         return;
     }
-    try{
+    try {
         if (CheckIfProjectExists($projectName) == TRUE) {
             echo "Project with provided name already exists. Please try some other name.";
             return;
         }
-    }
-    catch(Exception $e) {
-        echo 'Message: ' .$e->getMessage();
+    } catch (Exception $e) {
+        echo 'Message: ' . $e->getMessage();
         return;
-    } 
-    
-    $path = "../Projects/".$projectName;
+    }
+
+    $path = "../Projects/" . $projectName;
     if (!file_exists($path)) {
-        
+
         // create directory
-        if(mkdir($path, 0777, true))
-        {
+        if (mkdir($path, 0777, true)) {
             // create project database           
-            $database = new SQLite3($path."/Project.db");	
+            $database = new SQLite3($path . "/Project.db");
         }
-    }              	
+    }
     echo "success";
 }
 
@@ -3547,19 +3447,18 @@ function CreateProject()
 |
 */
 
-function CheckIfProjectExists($projectName) {
+function CheckIfProjectExists($projectName)
+{
     $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-    $query =  "select projectname from Projects where projectname=\"". $projectName."\" COLLATE NOCASE;";      
-    $count=0;
-    foreach ($dbh->query($query) as $row)
-    {
-        $count = $count+1;
+    $query =  "select projectname from Projects where projectname=\"" . $projectName . "\" COLLATE NOCASE;";
+    $count = 0;
+    foreach ($dbh->query($query) as $row) {
+        $count = $count + 1;
     }
     $dbh = null; //This is how you close a PDO connection
     if ($count != 0) {
         return TRUE;
-    }
-    else {
+    } else {
         return FALSE;
     }
 }
@@ -3571,19 +3470,19 @@ function CheckIfProjectExists($projectName) {
 */
 function AddNewProjectToMainDB()
 {
-    $userid = trim($_POST["userid"], " ");      
-    $projectName = trim($_POST["projectname"], " ");      
+    $userid = trim($_POST["userid"], " ");
+    $projectName = trim($_POST["projectname"], " ");
     $path = trim($_POST["path"], " ");
     $projectDescription = trim($_POST["projectDescription"], " ");
-    $projectType = trim($_POST["projectType"], " ");  
-    $projectStatus = trim($_POST["projectStatus"], " ");  
-    $projectComments = trim($_POST["projectComments"], " "); 
-    $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");   
+    $projectType = trim($_POST["projectType"], " ");
+    $projectStatus = trim($_POST["projectStatus"], " ");
+    $projectComments = trim($_POST["projectComments"], " ");
+    $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");
     $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
-    $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");   
-    
-    try{
-        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");        
+    $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
+
+    try {
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         // projectname is text column
         // userid is integer column
         // path is text column
@@ -3599,41 +3498,39 @@ function AddNewProjectToMainDB()
         modifieddate) VALUES (?,?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
 
-        $stmt->execute(array( $userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus,$projectCreatedDate,$projectModifiedDate));     
+        $stmt->execute(array($userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus, $projectCreatedDate, $projectModifiedDate));
         // $_SESSION['ProjectId'] = $dbh->lastInsertId();
         $insertedId = $dbh->lastInsertId();
-        if($insertedId !=0 && $insertedId !=-1){
+        if ($insertedId != 0 && $insertedId != -1) {
             $array = array(
-            "projectid" => $dbh->lastInsertId(),
-            "projectname" => $projectName,
-            "type" => $projectType,
-            "comments" => $projectComments,
-            "IsFavourite" => $projectIsFavorite,
-            "description" => $projectDescription,
-            "path" => $path,
-            "status" => $projectStatus,
-            "createddate" => $projectCreatedDate,
-            "modifieddate" => $projectModifiedDate,
+                "projectid" => $dbh->lastInsertId(),
+                "projectname" => $projectName,
+                "type" => $projectType,
+                "comments" => $projectComments,
+                "IsFavourite" => $projectIsFavorite,
+                "description" => $projectDescription,
+                "path" => $path,
+                "status" => $projectStatus,
+                "createddate" => $projectCreatedDate,
+                "modifieddate" => $projectModifiedDate,
             );
-         echo json_encode($array);
-        }
-        else{
+            echo json_encode($array);
+        } else {
             $array = array(
                 "projectid" => -1,
             );
             echo json_encode($array);
         }
         $dbh = null; //This is how you close a PDO connection
-        return;      
-    }
-    catch(Exception $e) {
+        return;
+    } catch (Exception $e) {
         //echo 'Message: ' .$e->getMessage();
         $array = array(
             "projectid" => -1,
         );
         echo json_encode($array);
         return;
-    } 
+    }
 }
 
 /*
@@ -3645,61 +3542,57 @@ function DeleteProject()
 {
     $projectid = trim($_POST["projectid"], " ");
     $projectname = trim($_POST["projectname"], " ");
-    if($projectid == "")
-    {
+    if ($projectid == "") {
         echo "Project Id cannot be empty";
         return;
     }
-    try{
+    try {
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query =  "Delete from Projects where projectid='". $projectid."';";  
-        $stmt = $dbh->prepare($query);      
+        $query =  "Delete from Projects where projectid='" . $projectid . "';";
+        $stmt = $dbh->prepare($query);
         $stmt->execute();
         echo $stmt->rowCount();
         $dbh = null;
         deleteFolder(getProjectDirectoryPath($projectname));
         return;
-    }
-    catch(Exception $e) {
-        echo 'Message: ' .$e->getMessage();
+    } catch (Exception $e) {
+        echo 'Message: ' . $e->getMessage();
         return;
-    } 
+    }
 }
 
 /*
 |
 |   Returns list of all projects for specific 'userid' from Main.db
 |
-*/ 
+*/
 
 function GetProjects()
 {
     $userid = trim($_POST["userid"], " ");
-    if($userid === -1)
-    {
+    if ($userid === -1) {
         echo 'fail';
         return;
     }
     $permission = GetUserPermission($userid);
-    try{
+    try {
         $privateprojects = array();
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        if(strcasecmp ($permission, "check") == 0) {
-            $query = "select project.*, logininfo.alias from Projects as project INNER JOIN LoginInfo AS logininfo ON project.userid=logininfo.userid AND project.userid=".$userid." AND project.type= 'Private' COLLATE NOCASE";
+        if (strcasecmp($permission, "check") == 0) {
+            $query = "select project.*, logininfo.alias from Projects as project INNER JOIN LoginInfo AS logininfo ON project.userid=logininfo.userid AND project.userid=" . $userid . " AND project.type= 'Private' COLLATE NOCASE";
             $stmt = $dbh->query($query);
             $privateprojects = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         $query = "select project.*, logininfo.alias from Projects as project INNER JOIN LoginInfo AS logininfo ON project.userid=logininfo.userid AND project.type= 'Public' COLLATE NOCASE";
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $data = array_merge($privateprojects, $data);  
+        $data = array_merge($privateprojects, $data);
         echo json_encode($data);
         $dbh = null;
-      }
-      catch(Exception $e) {
+    } catch (Exception $e) {
         echo 'fail';
         return;
-    } 
+    }
 }
 
 function SetProjectAsFavourite()
@@ -3707,21 +3600,19 @@ function SetProjectAsFavourite()
     $userid = trim($_POST["userid"], " ");
     $projectid = trim($_POST["ProjectId"], " ");
     $favourite = trim($_POST["Favourite"], " ");
-    if($projectid === -1)
-    {
+    if ($projectid === -1) {
         echo 'fail';
         return;
     }
-    try{
+    try {
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         $query = "UPDATE Projects SET IsFavourite=? WHERE projectid=?";
         $dbh->prepare($query)->execute([$favourite, $projectid]);
         $dbh = null;
-      }
-      catch(Exception $e) {
+    } catch (Exception $e) {
         echo 'fail';
         return;
-    } 
+    }
 }
 
 function UpdateProject()
@@ -3735,11 +3626,11 @@ function UpdateProject()
     $projectComments = trim($_POST["projectComments"], " ");
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");
     $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
-    
+
     /*Rename the project directory now*/
     $oldprojectname = trim($_POST["oldprojectname"], " ");
-    if (strcmp($oldprojectname, $projectName) != 0 ) {
-        if (CheckIfProjectExists($projectName) == TRUE){
+    if (strcmp($oldprojectname, $projectName) != 0) {
+        if (CheckIfProjectExists($projectName) == TRUE) {
             echo "Project with provided name already exists. Please try some other name.";
             return;
         }
@@ -3751,19 +3642,16 @@ function UpdateProject()
     }
 
     /*Update the project details in database*/
-    try{
+    try {
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
         $query = 'UPDATE Projects Set projectname=?, type=?,comments=?,IsFavourite=?,description=?,status=?,modifieddate=? WHERE projectid=?';
         $stmt = $dbh->prepare($query);
-        $response = $stmt->execute(array($projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus,$projectModifiedDate, $projectid));     
+        $response = $stmt->execute(array($projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectModifiedDate, $projectid));
         echo json_encode($response);
         $dbh = null; //This is how you close a PDO connection
-        return;      
-    }
-    catch(Exception $e) {
+        return;
+    } catch (Exception $e) {
         echo "failed";
         return;
     }
-    
 }
-?>

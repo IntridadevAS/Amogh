@@ -633,6 +633,7 @@ let controller = {
         "projectComments": projectComments,
         "projectIsFavorite": projectIsFavorite,
         "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime(),
+        "projectModifiedDate": xCheckStudio.Util.getCurrentDateTime(),
         "source": source
       },
       type: "POST",
@@ -742,14 +743,14 @@ let projectView = {
   },
 
   clearProjects: function () {
-    let newPrivateProjectCard = "", newPublicProjectCard="";
+    let newPrivateProjectCard = "", newPublicProjectCard = "";
     if (controller.permissions()) {
       newPrivateProjectCard += `
         <div class="card newProjectCard">\
             <div class="plusBtn"></div><div class="tooltiptext">Create a new private project</div>
         </div>`;
 
-        newPublicProjectCard += `
+      newPublicProjectCard += `
         <div class="card newProjectCard">\
             <div class="plusBtn"></div><div class="tooltiptext">Create a new public project</div>
         </div>`;
@@ -1138,8 +1139,8 @@ let editProjectView = {
     let editProjectStatus = document.getElementById("editProjectStatus");
     let editProjectType = document.getElementById("editProjectType");
     let editProjectDescription = document.getElementById("editProjectDescription");
-    
-    
+
+
     editProjectWin.classList.add("projectOverlaysOpen");
     onToggleOverlayDisplay(true);
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
@@ -1203,14 +1204,14 @@ let editProjectView = {
     let editProjectStatus = document.getElementById("editProjectStatus").value;
     let editProjectType = document.getElementById("editProjectType").value;
     let editProjectDescription = document.getElementById("editProjectDescription").value;
-      
 
-    if(model.currentProject.projectname === editProjectName && 
-      model.currentProject.comments === editComments && 
-      model.currentProject.description === editProjectDescription && 
+
+    if (model.currentProject.projectname === editProjectName &&
+      model.currentProject.comments === editComments &&
+      model.currentProject.description === editProjectDescription &&
       model.currentProject.status === editProjectStatus &&
       model.currentProject.type === editProjectType) {
-        this.cancelEditProject(true);
+      this.cancelEditProject(true);
     }
     else {
       var overlay = document.getElementById("uiBlockingOverlay");
@@ -1716,6 +1717,12 @@ function duplicateCheckspace() {
     return;
   }
 
+  if (!xCheckStudio.Util.isProjectorCheckSpaceNameValid(checkspaceName)) {
+    hideDuplicateForm();
+    showAlertForm("Check name cannot contain special characters (\ / : * ? \"< > |)");
+    return;
+  }
+
   var checkspaceData = {};
   checkspaceData["name"] = checkspaceName;
   checkspaceData["status"] = obj.checkstatus
@@ -1755,6 +1762,12 @@ function duplicateProject() {
   var projectName = document.getElementById("duplicateName").value;
   if (!projectName || projectName == "") {
     showAlertForm("Project Name cannot be empty.");
+    return;
+  }
+
+  if (!xCheckStudio.Util.isProjectorCheckSpaceNameValid(projectName)) {
+    hideDuplicateForm();
+    showAlertForm("Project name cannot contain special characters (\ / : * ? \"< > |)");
     return;
   }
 
