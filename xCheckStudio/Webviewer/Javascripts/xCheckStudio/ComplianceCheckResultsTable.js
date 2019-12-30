@@ -603,7 +603,7 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
     }
 
     if (property.accepted == "true") {
-        tableRowContent[CompliancePropertyColumnNames.Status] = "OK(A)";
+        tableRowContent[CompliancePropertyColumnNames.Status] = "ACCEPTED";
     }
 
     tableRowContent[CompliancePropertyColumnNames.PropertyId] = propertyId
