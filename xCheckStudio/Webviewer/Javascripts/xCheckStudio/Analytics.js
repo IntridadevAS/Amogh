@@ -63,6 +63,7 @@ let Analytics = {
         else {
             document.getElementById("IFrameSmallAnalyticsCompliance").contentWindow.LoadAnalyticsContent(this.AnalyticsData, currentCheck);
         }
+        // this.InitAnalyticsContextMenu("#" + analyticsContainerId);
     },
 
     LoadLargeAnalytics : function() {
@@ -70,7 +71,7 @@ let Analytics = {
         document.getElementById("IFramelargeAnalytics").contentWindow.LoadAnalyticsContent(this.AnalyticsData, currentCheck);
     },
 
-    showAnalytics: function (selected) {
+    ShowAnalytics: function (selected) {
         let parent = selected.parentNode;
     
         if (selected.id == Comparison.AnalyticsButton && model.selectedComparisons.length > 0) {
@@ -90,5 +91,38 @@ let Analytics = {
           }
         }
     },
+
+    GetSubClassMappingForHighlightedRow: function() {
+        var highlightedRow = model.checks[model.currentCheck].selectionManager.HighlightedCheckComponentRow;
+        var dataGrid = $(highlightedRow.tableId).dxDataGrid("instance");
+        var data = dataGrid.getDataSource().items();
+        var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
+        var rowData = data[rowIndex];
+
+        var subClass = rowData.ClassMappingInfo.split(":");
+
+        if(subClass) {
+            return subClass[1];
+        }
+
+        return undefined;
+    },
+
+    GetActiveCategory: function() {
+        var expandedItem;
+        if(model.currentCheck == 'comparison') {
+          expandedItem = $("#" + Comparison.MainReviewContainer).dxAccordion("instance").option("selectedItem");
+        }
+        else {
+          expandedItem = $("#" + Compliance.MainReviewContainer).dxAccordion("instance").option("selectedItem");
+        }
+        
+        if(expandedItem) {
+          return expandedItem.title;
+        }
+  
+        return undefined;
+    }
+
 }
 

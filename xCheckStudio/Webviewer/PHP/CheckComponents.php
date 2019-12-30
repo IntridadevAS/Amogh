@@ -22,6 +22,11 @@
                 var $SourceCName;
                 var $SourceDName;
 
+                var $SourceAMainComponentClass;
+                var $SourceBMainComponentClass;
+                var $SourceCMainComponentClass;
+                var $SourceDMainComponentClass;
+
                 var $SourceASubComponentClass;
                 var $SourceBSubComponentClass;
                 var $SourceCSubComponentClass;
@@ -46,6 +51,10 @@
                                      $sourceBName,
                                      $sourceCName,
                                      $sourceDName,
+                                     $sourceAMainComponentClass,
+                                     $sourceBMainComponentClass,
+                                     $sourceCMainComponentClass,
+                                     $sourceDMainComponentClass,
                                      $sourceASubComponentClass,
                                      $sourceBSubComponentClass,
                                      $sourceCSubComponentClass,
@@ -64,6 +73,11 @@
                     $this->SourceBName = $sourceBName; 
                     $this->SourceCName = $sourceCName;
                     $this->SourceDName = $sourceDName; 
+
+                    $this->SourceAMainComponentClass = $sourceAMainComponentClass;
+                    $this->SourceBMainComponentClass = $sourceBMainComponentClass;
+                    $this->SourceCMainComponentClass = $sourceCMainComponentClass;
+                    $this->SourceDMainComponentClass = $sourceDMainComponentClass;
 
                     $this->SourceASubComponentClass = $sourceASubComponentClass;
                     $this->SourceBSubComponentClass = $sourceBSubComponentClass;

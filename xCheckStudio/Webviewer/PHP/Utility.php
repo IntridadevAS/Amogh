@@ -20,6 +20,11 @@
         return $dbPath;
     }
 
+    function getVersionDatabasePath($projectName, $checkName, $versionName) {
+        $dbPath = getCheckDirectoryPath($projectName, $checkName)."/Versions/". $versionName . ".db";
+        return $dbPath;
+    }
+
     function getSavedCheckDatabasePath($projectName, $checkName) {
         $dbPath = getCheckDirectoryPath($projectName, $checkName)."/".$checkName.".db";
         return $dbPath;

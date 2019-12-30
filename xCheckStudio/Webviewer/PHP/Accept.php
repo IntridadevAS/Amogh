@@ -421,6 +421,9 @@ function acceptComplianceComponent() {
                 $command = $dbh->prepare("UPDATE $CheckComponentsTable SET accepted=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                 $command->execute(array($status, $components[$i]));
 
+                $command = $dbh->prepare("UPDATE $CheckComponentsTable SET status=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+                $command->execute(array('OK(A)', $components[$i]));
+
                 $command = $dbh->prepare("SELECT * FROM $CheckComponentsTable WHERE id=?");
                 $command->execute(array($components[$i]));
                 $comp = $command->fetchAll(PDO::FETCH_ASSOC);
@@ -611,6 +614,9 @@ function acceptComplianceCategory() {
 
     $command = $dbh->prepare("UPDATE $CheckComponentsTable SET accepted=? WHERE ownerGroup=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
     $command->execute(array($status, $groupid));
+
+    $command = $dbh->prepare("UPDATE $CheckComponentsTable SET status=? WHERE ownerGroup=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
+    $command->execute(array('OK(A)', $groupid));
 
     $components = $dbh->query("SELECT * FROM $CheckComponentsTable WHERE ownerGroup= $groupid;");
     if($components) 
@@ -993,9 +999,6 @@ function unAcceptComplianceComponent() {
                 $command->execute(array($components[$i]));
                 $comp = $command->fetchAll(PDO::FETCH_ASSOC);
 
-                $resultComponent = array();
-                $resultComponent["component"] = $comp[0];
-
                 $resultProperties = array();
         
                 $command = $dbh->prepare("UPDATE $CheckPropertiesTable SET accepted=? WHERE ownerComponent=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
@@ -1005,6 +1008,19 @@ function unAcceptComplianceComponent() {
                 $command->execute(array($components[$i]));
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $resultProperties = $properties;
+
+                $worststatus = getWorstSeverityForComponent($resultProperties, $comp[0], false);
+
+                $command = $dbh->prepare("UPDATE $CheckComponentsTable SET status=? WHERE id=?");
+                $command->execute(array($worststatus, $components[$i])); 
+
+                $command = $dbh->prepare("SELECT * FROM $CheckComponentsTable WHERE id=?");
+                $command->execute(array($components[$i]));
+                $comp = $command->fetchAll(PDO::FETCH_ASSOC);
+
+                $resultComponent = array();
+                $resultComponent["component"] = $comp[0];
+
 
                 $resultComponent["component"]["properties"] = $resultProperties;
 
@@ -1178,10 +1194,7 @@ function unAcceptComplianceCategory() {
     {            
         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
         {
-            $resultComponent = array();
-            $resultComponent["component"] = $comp;
-
-            if($comp['status'] !== $dontChangeOk) {
+            // if($comp['status'] !== $dontChangeOk) {
                 $command = $dbh->prepare("UPDATE $CheckPropertiesTable SET accepted=? WHERE ownerComponent=? AND severity NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                 $command->execute(array($status, $comp['id']));
 
@@ -1190,8 +1203,20 @@ function unAcceptComplianceCategory() {
                 $properties = $command->fetchAll(PDO::FETCH_ASSOC);
                 $resultProperties = $properties;
 
+                $worststatus = getWorstSeverityForComponent($resultProperties, $comp, false);
+
+                $command = $dbh->prepare("UPDATE $CheckComponentsTable SET status=? WHERE id=?");
+                $command->execute(array($worststatus, $comp['id'])); 
+
+                $command = $dbh->prepare("SELECT * FROM $CheckComponentsTable WHERE id=?");
+                $command->execute(array($comp['id']));
+                $component = $command->fetchAll(PDO::FETCH_ASSOC);
+
+                $resultComponent = array();
+                $resultComponent["component"] = $component[0];
+                
                 $resultComponent["component"]["properties"] = $resultProperties;
-            }
+            // }
 
             $componentsArray[$comp['id']] = $resultComponent;
         }

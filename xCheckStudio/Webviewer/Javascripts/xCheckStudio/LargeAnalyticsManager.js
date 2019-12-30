@@ -158,7 +158,7 @@ LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
         }               
     }
 
-    this.drawLineChart(checkGroupsInfo);
+    this.drawLineChart(comparisonData['Versioning']);
 }
 
 LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceType) {
@@ -271,7 +271,7 @@ LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceT
         }
     }
 
-    this.drawLineChart(checkGroupsInfo);
+    this.drawLineChart(complianceData['Versioning']);
 
 }
 
@@ -551,9 +551,18 @@ LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
     var _this = this;
     
     var Severitydata = [];
+
+    var dataObject = {}
+    dataObject["Version"] = 'Start';
+    dataObject["Error"] = 0;
+    dataObject["Warning"] = 0;
+    dataObject["OK"] = 0;
+
+    Severitydata.push(dataObject);
+
     for(key in checkGroupsInfo) {
         var dataObject = {}
-        dataObject["Category"] = key;
+        dataObject["Version"] = key;
         dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
         dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
         dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
@@ -568,7 +577,7 @@ LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
         palette: colorsArray,
         dataSource: Severitydata,
         commonSeriesSettings: {
-            argumentField: "Category",
+            argumentField: "Version",
             type: "line"
         },
         margin: {
