@@ -752,93 +752,95 @@
 
             $query =  "select *from Versions;";      
             $stmt = $mainDbh->query($query);
-            $versions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             $versionInfo = array();
 
-            for($i = 0; $i < count($versions); $i++) {
-                $versionName = $versions[$i]['name'];
-                $versionDbhPath = getVersionDatabasePath($projectName, $checkName, $versionName);
-                $versionDbh = new PDO("sqlite:$versionDbhPath") or die("cannot open the database");
+            if($stmt) {
+                $versions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                $versionDbh->beginTransaction(); 
-
-                            // get ok components count
-                $okCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('OK'));              
-                $okCount = $results->fetchColumn();
-
-                // get okA components count
-                $okACount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('OK(A)'));              
-                $okACount = $results->fetchColumn();
-
-
-                // get okT components count
-                $okTCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('OK(T)'));              
-                $okTCount = $results->fetchColumn();
-
-                // get okAT components count
-                $okATCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('OK(A)(T)'));              
-                $okATCount = $results->fetchColumn();
-
-
-                // get error components count
-                $errorCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Error'));              
-                $errorCount = $results->fetchColumn();
-
-                $errorACount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Error(A)'));              
-                $errorACount = $results->fetchColumn();
-
-                $errorTCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Error(T)'));              
-                $errorTCount = $results->fetchColumn();
-
-                $errorATCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Error(A)(T)'));              
-                $errorATCount = $results->fetchColumn();
-
-                // get Warning components count
-                $warningCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Warning'));              
-                $warningCount = $results->fetchColumn();
-
-                $warningACount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Warning(A)'));              
-                $warningACount = $results->fetchColumn();
-
-                $warningTCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Warning(T)'));              
-                $warningTCount = $results->fetchColumn();
-
-                $warningATCount = 0;
-                $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
-                $results->execute(array('Warning(A)(T)'));              
-                $warningATCount = $results->fetchColumn();
-
-                $oks =  $okCount + $okACount + $okTCount + $okATCount;
-                $errors = $errorCount + $errorACount + $errorTCount + $errorATCount;
-                $warnings = $warningCount + $warningACount + $warningTCount + $warningATCount;
-
-                $versionInfo[$versionName] = array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings);
-
-                $versionDbh->commit();           
-                $versionDbh = null; //This is how you close a PDO connection   
+                for($i = 0; $i < count($versions); $i++) {
+                    $versionName = $versions[$i]['name'];
+                    $versionDbhPath = getVersionDatabasePath($projectName, $checkName, $versionName);
+                    $versionDbh = new PDO("sqlite:$versionDbhPath") or die("cannot open the database");
+    
+                    $versionDbh->beginTransaction(); 
+    
+                                // get ok components count
+                    $okCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('OK'));              
+                    $okCount = $results->fetchColumn();
+    
+                    // get okA components count
+                    $okACount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('OK(A)'));              
+                    $okACount = $results->fetchColumn();
+    
+    
+                    // get okT components count
+                    $okTCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('OK(T)'));              
+                    $okTCount = $results->fetchColumn();
+    
+                    // get okAT components count
+                    $okATCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('OK(A)(T)'));              
+                    $okATCount = $results->fetchColumn();
+    
+    
+                    // get error components count
+                    $errorCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Error'));              
+                    $errorCount = $results->fetchColumn();
+    
+                    $errorACount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Error(A)'));              
+                    $errorACount = $results->fetchColumn();
+    
+                    $errorTCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Error(T)'));              
+                    $errorTCount = $results->fetchColumn();
+    
+                    $errorATCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Error(A)(T)'));              
+                    $errorATCount = $results->fetchColumn();
+    
+                    // get Warning components count
+                    $warningCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Warning'));              
+                    $warningCount = $results->fetchColumn();
+    
+                    $warningACount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Warning(A)'));              
+                    $warningACount = $results->fetchColumn();
+    
+                    $warningTCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Warning(T)'));              
+                    $warningTCount = $results->fetchColumn();
+    
+                    $warningATCount = 0;
+                    $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
+                    $results->execute(array('Warning(A)(T)'));              
+                    $warningATCount = $results->fetchColumn();
+    
+                    $oks =  $okCount + $okACount + $okTCount + $okATCount;
+                    $errors = $errorCount + $errorACount + $errorTCount + $errorATCount;
+                    $warnings = $warningCount + $warningACount + $warningTCount + $warningATCount;
+    
+                    $versionInfo[$versionName] = array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings);
+    
+                    $versionDbh->commit();           
+                    $versionDbh = null; //This is how you close a PDO connection   
+                }
             }
 
             $mainDbh->commit();           
