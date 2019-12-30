@@ -390,5 +390,15 @@ var xCheckStudio;
             return dateTime;
         }
         Util.getCurrentDateTime = getCurrentDateTime;
+
+        function isProjectorCheckSpaceNameValid(name) {
+            var pattern = new RegExp(/[\ / \\ : * ? "< > |]/); //unacceptable chars
+            if (pattern.test(name)) {
+                return false;
+            }
+            return true;
+        }
+        Util.isProjectorCheckSpaceNameValid = isProjectorCheckSpaceNameValid;
+
     })(Util = xCheckStudio.Util || (xCheckStudio.Util = {}));
 })(xCheckStudio || (xCheckStudio = {}));
