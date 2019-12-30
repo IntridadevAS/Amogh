@@ -455,7 +455,7 @@ ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function ()
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForComponent = function (selectedRow) {
 
     var transpose = true;
-    var ignore = ['OK', 'OK(A)', 'OK(A)(T)', 'No Match'];
+    var ignore = ['OK', 'OK(A)', 'OK(A)(T)', 'No Match', 'undefined'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -478,7 +478,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForCompo
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForComponent = function() {
     var restore = true;
-    var ignore = ['OK', 'OK(T)', 'OK(A)(T)', 'No Match'];
+    var ignore = ['OK', 'OK(T)', 'OK(A)(T)', 'No Match', 'undefined'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -502,7 +502,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForCompone
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
 
     var accept = true;
-    var ignore = ['OK', 'OK(T)', 'No Match'];
+    var ignore = ['OK', 'OK(T)', 'No Match', 'undefined'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -525,7 +525,7 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)', ' '];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)', ' ', 'undefined'];
     var accepted = true;
 
     if (selectedPropertiesKey.length == 0) {
@@ -610,7 +610,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
 
     var transpose = true;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED', 'Missing Property(s)'];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED', 'Missing Property(s)', 'undefined'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {
@@ -641,7 +641,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForProperty = function () {
     var restore = true;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)'];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)','undefined'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {

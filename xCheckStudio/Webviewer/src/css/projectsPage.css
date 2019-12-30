@@ -209,6 +209,25 @@ input[type=checkbox] + label {
   background-color: #47474733;
 }
 
+.newProjectCard .tooltiptext {
+  visibility: hidden;
+  width: 180px;
+  background-color:var(--xCheckWhite);;
+  color: var(--xCheckBlack);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  margin-top: 150px;
+  z-index: 1;
+}
+
+.newProjectCard:hover .tooltiptext {
+  visibility: visible;
+}
+
 .newCardCenter {
   justify-content: center;
   align-items: center;

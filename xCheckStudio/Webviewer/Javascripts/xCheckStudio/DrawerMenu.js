@@ -3,7 +3,7 @@ var DrawerMenu = {
     create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
-            height: "355px",
+            height: "400px",
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
@@ -115,6 +115,14 @@ var menuItems = [
         click: function () {
             menu.onSignOutClicked();
         }
+    },
+    {
+        id: 9,
+        text: "Sign Out All Users",
+        icon: "public/symbols/logout.png",
+        click: function () {
+            menu.onSignOutAllUsersClicked();
+        }
     }
 ];
 
@@ -212,6 +220,21 @@ let menu = {
 
         popup.style.top = ((window.innerHeight / 2) - 139) + "px";
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+    },
+
+    onSignOutAllUsersClicked: function (){
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("signOutAllUsersPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "155px";
+        popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 }
 
@@ -283,7 +306,7 @@ function cancelSignOut() {
 function signOut(callbackFunction) {
     if (callbackFunction) {
         callbackFunction().then(function (result) {
-            onLogoutUser().then(function (status) {
+            onLogoutUser("No").then(function (status) {
                 if (status) {
                     window.location.href = "index.html";
                 }
@@ -291,10 +314,42 @@ function signOut(callbackFunction) {
         });
     }
     else {
-        onLogoutUser().then(function (status) {
+        onLogoutUser("No").then(function (status) {
             if (status) {
                 window.location.href = "index.html";
             }
+        });
+    }
+}
+
+function cancelSignOutAllUsers() {
+    var overlay = document.getElementById("uiBlockingOverlay");
+    var popup = document.getElementById("signOutAllUsersPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function signOutAllUsers(callbackFunction) {
+    DrawerMenu.drawer.toggle();
+    if (callbackFunction) {
+        callbackFunction().then(function (result) {
+            onLogoutUser("Yes").then(function (status) {
+                var overlay = document.getElementById("uiBlockingOverlay");
+                var popup = document.getElementById("signOutAllUsersPopup");
+
+                overlay.style.display = 'none';
+                popup.style.display = 'none';
+            });
+        });
+    }
+    else {
+        onLogoutUser("Yes").then(function (status) {
+                var overlay = document.getElementById("uiBlockingOverlay");
+                var popup = document.getElementById("signOutAllUsersPopup");
+
+                overlay.style.display = 'none';
+                popup.style.display = 'none';
         });
     }
 }
@@ -351,6 +406,7 @@ function disableMenuItems(items) {
 
     if (userinfo.type.toLowerCase() !== 'admin') {
         disabledMenuItem.push("prep");
+        disabledMenuItem.push("sign out all users");
     }
 
     var mergedArrayWithoutDuplicates = items.concat(disabledMenuItem.filter(seccondArrayItem => !items.includes(seccondArrayItem)));

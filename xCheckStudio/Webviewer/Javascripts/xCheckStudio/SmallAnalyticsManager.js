@@ -146,6 +146,80 @@ SmallAnalyticsManager.prototype.populateComparisonAnalytics = function () {
 
 }
 
+SmallAnalyticsManager.prototype.populateComparisonCategoryAnalytics = function() {
+    var categoryWiseData = this.AnalyticsData[activeResultType].CheckGroupsInfo;
+    var categoryData = categoryWiseData[ActiveCategory];
+
+    var classArray = ActiveCategory.split("-");
+
+    var totalItemsChecked = Number(categoryData["OK"]) + Number(categoryData["Warning"]) + Number(categoryData["Error"]) + 
+    Number(categoryData["No Match"]) + Number(categoryData["undefined Item"]);
+
+    this.AnalyticsData[activeResultType].CheckGroupsInfo[ActiveCategory]['TotalItemsChecked'] = totalItemsChecked;
+
+    var sourceANotSelectedComponents = this.AnalyticsData[activeResultType]['SourceANotSelectedComps'];
+    var sourceBNotSelectedComponents = this.AnalyticsData[activeResultType]['SourceBNotSelectedComps'];
+    var sourceCNotSelectedComponents = this.AnalyticsData[activeResultType]['SourceCNotSelectedComps'];
+    var sourceDNotSelectedComponents = this.AnalyticsData[activeResultType]['SourceDNotSelectedComps'];
+
+    var sourceANotselected = 0;
+    if(Object.keys(sourceANotSelectedComponents).length > 0) {
+        if(sourceANotSelectedComponents[classArray[0]] !== undefined)
+            sourceANotselected = sourceANotSelectedComponents[classArray[0]];
+    }
+
+    var sourceBNotselected = 0;
+    if(Object.keys(sourceBNotSelectedComponents).length > 0) {
+        if(sourceBNotSelectedComponents[classArray[1]] !== undefined)
+        sourceBNotselected = sourceBNotSelectedComponents[classArray[1]];
+    }
+
+    var sourceCNotselected = 0;
+    if(Object.keys(sourceCNotSelectedComponents).length > 0) {
+        if(sourceCNotSelectedComponents[classArray[2]] !== undefined)
+        sourceCNotselected = sourceCNotSelectedComponents[classArray[2]];
+    }
+
+    var sourceDNotselected = 0;
+    if(Object.keys(sourceDNotSelectedComponents).length > 0) {
+        if(sourceDNotSelectedComponents[classArray[3]] !== undefined)
+        sourceDNotselected = sourceDNotSelectedComponents[classArray[3]];
+    }
+
+
+    var totalItemsNotChecked = Number(sourceANotselected) + Number(sourceBNotselected) +Number(sourceCNotselected) + Number(sourceDNotselected);
+    this.AnalyticsData[activeResultType].CheckGroupsInfo[ActiveCategory]['TotalItemsNotChecked'] = totalItemsNotChecked;
+
+    var totalItemsLoaded = totalItemsNotChecked + totalItemsChecked;
+    this.AnalyticsData[activeResultType].CheckGroupsInfo[ActiveCategory]['TotalItemsLoaded'] = totalItemsLoaded;
+
+    if (PieChartActive) {
+        this.ShowPieChartDiv();
+        this.drawComparisonPieCharts(categoryData["OK"],
+            categoryData["Warning"],
+            categoryData["Error"],
+            categoryData["No Match"],
+            categoryData["undefined Item"],
+            totalItemsNotChecked,
+            totalItemsChecked,
+            totalItemsLoaded);
+    }
+
+    var groupWiseSubClassInfo = this.AnalyticsData[activeResultType].GroupWiseSubClassInfo;
+    var subClassInfo = groupWiseSubClassInfo[ActiveCategory];
+    //  draw bar chart (total 1)
+    if (BarChartActive) {
+        this.ShowBarChartDiv();
+        if (SeveritybuttonActive) {
+            this.createSeverityBarCharts(subClassInfo);
+        }
+        else if (InfoButtonActive) {
+            this.CreateInfoBarCharts(subClassInfo);
+        }
+    }
+
+}
+
 SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complianceType) {
 
     var complianceData = this.AnalyticsData[complianceType];
@@ -244,6 +318,52 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
         }
     }
 
+}
+
+SmallAnalyticsManager.prototype.populateComplianceCategoryAnalytics = function (complianceType) {
+
+    var categoryWiseData = this.AnalyticsData[complianceType].CheckGroupsInfo;
+    var categoryData = categoryWiseData[ActiveCategory];
+
+    var totalItemsChecked = Number(categoryData["OK"]) + Number(categoryData["Warning"]) + Number(categoryData["Error"]) + 
+    Number(categoryData["No Match"]) + Number(categoryData["undefined Item"]);
+
+    this.AnalyticsData[complianceType].CheckGroupsInfo[ActiveCategory]['TotalItemsChecked'] = totalItemsChecked;
+
+    var totalItemsNotChecked = 0;
+    if(this.AnalyticsData[complianceType]['SourceNotSelectedComps'][ActiveCategory]) {
+        totalItemsNotChecked = this.AnalyticsData[complianceType]['SourceNotSelectedComps'][ActiveCategory];
+    }
+
+    this.AnalyticsData[complianceType].CheckGroupsInfo[ActiveCategory]['TotalItemsNotChecked'] = totalItemsNotChecked;
+
+    var totalItemsLoaded = totalItemsNotChecked + totalItemsChecked;
+    this.AnalyticsData[complianceType].CheckGroupsInfo[ActiveCategory]['TotalItemsLoaded'] = totalItemsLoaded;
+
+    if (PieChartActive) {
+        this.ShowPieChartDiv();
+        this.drawCompliancePieCharts(categoryData["OK"],
+            categoryData["Warning"],
+            categoryData["Error"],
+            categoryData["No Match"],
+            categoryData["undefined Item"],
+            totalItemsNotChecked,
+            totalItemsChecked,
+            totalItemsLoaded);
+    }
+
+    var groupWiseSubClassInfo = this.AnalyticsData[complianceType].GroupWiseSubClassInfo;
+    var subClassInfo = groupWiseSubClassInfo[ActiveCategory];
+    //  draw bar chart (total 1)
+    if (BarChartActive) {
+        this.ShowBarChartDiv();
+        if (SeveritybuttonActive) {
+            this.createSeverityBarCharts(subClassInfo);
+        }
+        else if (InfoButtonActive) {
+            this.CreateInfoBarCharts(subClassInfo);
+        }
+    }
 }
 
 SmallAnalyticsManager.prototype.ShowPieChartDiv = function () {
@@ -470,7 +590,32 @@ SmallAnalyticsManager.prototype.getSeveritySummary = function () {
     }
 }
 
-SmallAnalyticsManager.prototype.getInfoSummary = function (checkType) {
+SmallAnalyticsManager.prototype.getSeveritySummaryForCategory = function () {
+
+    var TotalItemsChecked = 0;
+    var TotalItemsMatched = 0;
+    var ErrorsCount = 0;
+    var OKCount = 0;
+    var WarningsCount = 0;
+    var OkATCount = 0;
+
+    var categoryWiseData = this.AnalyticsData[activeResultType].CheckGroupsInfo;
+    var categoryData = categoryWiseData[ActiveCategory];
+
+    TotalItemsChecked = categoryData['TotalItemsChecked'];
+    ErrorsCount = categoryData['Error'];
+    OKCount = categoryData["OK"];
+    WarningsCount = categoryData["Warning"];
+    TotalItemsMatched = Number(ErrorsCount) + Number(OKCount) + Number(WarningsCount);
+    OkATCount = this.AnalyticsData[activeResultType]['OKATCount'];
+
+    return {
+        "TotalItemsChecked": TotalItemsChecked, "ErrorsCount": ErrorsCount, "OKCount": OKCount,
+        "WarningCount": WarningsCount, "TotalItemsMatched": TotalItemsMatched, "oKATCount": OkATCount
+    }
+}
+
+SmallAnalyticsManager.prototype.getInfoSummary = function () {
 
     var TotalItemsLoaded = 0;
     var TotalItemsNotChecked = 0;
@@ -482,6 +627,28 @@ SmallAnalyticsManager.prototype.getInfoSummary = function (checkType) {
     if(this.AnalyticsData[activeResultType]["nomatchCount"])
         noMatchCount = this.AnalyticsData[activeResultType]["nomatchCount"];
     undefinedCount = this.AnalyticsData[activeResultType]["undefinedCount"];
+
+    return {
+        "TotalItemsLoaded": TotalItemsLoaded, "TotalItemsNotChecked": TotalItemsNotChecked, "noMatchCount": noMatchCount,
+        "undefinedCount": undefinedCount
+    }
+}
+
+SmallAnalyticsManager.prototype.getInfoSummaryForCategory = function () {
+
+    var TotalItemsLoaded = 0;
+    var TotalItemsNotChecked = 0;
+    var noMatchCount = 0;
+    var undefinedCount = 0;
+
+    var categoryWiseData = this.AnalyticsData[activeResultType].CheckGroupsInfo;
+    var categoryData = categoryWiseData[ActiveCategory];
+
+    TotalItemsLoaded = categoryData['TotalItemsLoaded'];
+    TotalItemsNotChecked = categoryData['TotalItemsNotChecked'];
+    if(categoryData["No Match"])
+        noMatchCount = categoryData["No Match"];
+    undefinedCount = categoryData["undefined Item"];
 
     return {
         "TotalItemsLoaded": TotalItemsLoaded, "TotalItemsNotChecked": TotalItemsNotChecked, "noMatchCount": noMatchCount,

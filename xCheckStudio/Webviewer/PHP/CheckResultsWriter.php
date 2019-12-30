@@ -39,7 +39,8 @@
 
              $command = 'CREATE TABLE '.$checkComponentsTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,                
+                name TEXT,     
+                mainComponentClass TEXT,           
                 subComponentClass TEXT,            
                 status TEXT,
                 accepted TEXT,
@@ -106,14 +107,16 @@
                 {                   
                     $insertComponentQuery = 'INSERT INTO '.$checkComponentsTable.'(
                         name, 
+                        mainComponentClass,
                         subComponentClass, 
                         status, 
                         accepted,
                         nodeId,
                         sourceId,
-                        ownerGroup) VALUES(?,?,?,?,?,?,?) ';                                                                          
+                        ownerGroup) VALUES(?,?,?,?,?,?,?,?) ';                                                                          
 
                     $componentValues = array($checkComponent->SourceAName, 
+                                             $checkComponent->SourceAMainComponentClass,
                                              $checkComponent->SourceASubComponentClass,
                                              $checkComponent->Status,
                                              'false',
@@ -343,10 +346,10 @@
                                              $checkComponent->SourceBName,
                                              $checkComponent->SourceCName,  
                                              $checkComponent->SourceDName,
-                                             NULL,
-                                             NULL,
-                                             NULL,
-                                             NULL,
+                                             $checkComponent->SourceAMainComponentClass,
+                                             $checkComponent->SourceBMainComponentClass,
+                                             $checkComponent->SourceCMainComponentClass,
+                                             $checkComponent->SourceDMainComponentClass,
                                              $checkComponent->SourceASubComponentClass,
                                              $checkComponent->SourceBSubComponentClass,
                                              $checkComponent->SourceCSubComponentClass,

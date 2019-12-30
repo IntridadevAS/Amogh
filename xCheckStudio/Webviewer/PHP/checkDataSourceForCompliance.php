@@ -650,6 +650,10 @@
                                                      NULL,
                                                      NULL,
                                                      NULL,
+                                                    $sourceComponent['mainclass'],
+                                                     NULL,
+                                                     NULL,
+                                                     NULL,
                                                     $sourceComponent['subclass'],
                                                     NULL,
                                                     NULL,
@@ -740,6 +744,10 @@
             }
 
             $checkComponent = new CheckComponent($sourceComponent['name'],
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        $sourceComponent['mainclass'],
                                         NULL,
                                         NULL,
                                         NULL,

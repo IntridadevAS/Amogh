@@ -742,16 +742,21 @@ let projectView = {
   },
 
   clearProjects: function () {
-    let newProjectCard = "";
+    let newPrivateProjectCard = "", newPublicProjectCard="";
     if (controller.permissions()) {
-      newProjectCard += `
+      newPrivateProjectCard += `
         <div class="card newProjectCard">\
-            <div class="plusBtn"></div>
-        </div>`
+            <div class="plusBtn"></div><div class="tooltiptext">Create a new private project</div>
+        </div>`;
+
+        newPublicProjectCard += `
+        <div class="card newProjectCard">\
+            <div class="plusBtn"></div><div class="tooltiptext">Create a new public project</div>
+        </div>`;
     }
 
-    this.projects.innerHTML = newProjectCard;
-    this.publicProjectsCont.innerHTML = newProjectCard;
+    this.projects.innerHTML = newPrivateProjectCard;
+    this.publicProjectsCont.innerHTML = newPublicProjectCard;
   },
 
   infoDeleteButtons: function () {
@@ -1133,7 +1138,8 @@ let editProjectView = {
     let editProjectStatus = document.getElementById("editProjectStatus");
     let editProjectType = document.getElementById("editProjectType");
     let editProjectDescription = document.getElementById("editProjectDescription");
-
+    
+    
     editProjectWin.classList.add("projectOverlaysOpen");
     onToggleOverlayDisplay(true);
     this.editProjectOverlay.classList.add("projectOverlaysOpen");
@@ -1148,7 +1154,7 @@ let editProjectView = {
     editComments.value = this.currentProject.comments;
     editProjectStatus.value = this.currentProject.status;
     editProjectType.value = this.currentProject.type;
-
+    editCreator.innerHTML = this.currentProject.alias;
     editProjectView.disableEditProjectForm();
   },
 

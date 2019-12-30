@@ -119,8 +119,7 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
 ReviewComplianceContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
 
     var selectedRowStatus = selectedRow.cells[ComplianceColumns.Status].innerHTML;
-    if (selectedRowStatus.includes("OK") &&
-        !selectedRowStatus.includes("(A)")) {
+    if ((selectedRowStatus.includes("OK") && !selectedRowStatus.includes("(A)")) || selectedRowStatus.includes("undefined")) {
         return true;
     }
 
@@ -130,7 +129,7 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForComponent = functio
 ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function(selectedRow) {
     
     var selectedPropertiesKey = model.checks["compliance"]["detailedInfoTable"].SelectedProperties;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED'];
+    var ignore = ['OK', 'No Value', 'OK(T)', 'undefined'];
     var accepted = false;
 
     if(selectedPropertiesKey.length == 0) {
@@ -146,12 +145,12 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForProperty = function
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
-        if (index == -1) {
+        if (index > 0) {
             accepted = true;
         }
     }
 
-    return false;
+    return accepted;
 }
 
 ReviewComplianceContextMenuManager.prototype.DisableAcceptForGroup = function (groupId) {

@@ -2009,18 +2009,22 @@
             $aId = NULL;
             $aName = NULL;
             $aSubclass = NULL;
+            $aMainclass = NULL;
             $aNodeId = NULL;
             $bId = NULL;
             $bName = NULL;
             $bSubclass = NULL;
+            $bMainclass = NULL;
             $bNodeId = NULL;
             $cId = NULL;
             $cName = NULL;
             $cSubclass = NULL;
+            $cMainclass = NULL;
             $cNodeId = NULL;
             $dId = NULL;
             $dName = NULL;
             $dSubclass = NULL;
+            $dMainclass = NULL;
             $dNodeId = NULL; 
            
             if($firstSourceComponent !== NULL && 
@@ -2028,7 +2032,8 @@
             {
                 $aId  = $firstSourceComponent['id'];
                 $aName = $firstSourceComponent["name"];
-                $aSubclass = $firstSourceComponent["subclass"];               
+                $aSubclass = $firstSourceComponent["subclass"];       
+                $aMainclass = $firstSourceComponent["mainclass"];
 
                 if(isset($firstSourceComponent['nodeid']))
                 {
@@ -2041,7 +2046,8 @@
             {
                 $bId  = $secondSourceComponent['id'];
                 $bName = $secondSourceComponent["name"];
-                $bSubclass = $secondSourceComponent["subclass"];               
+                $bSubclass = $secondSourceComponent["subclass"];  
+                $bMainclass = $secondSourceComponent["mainclass"];             
 
                 if(isset($secondSourceComponent['nodeid']))
                 {
@@ -2054,7 +2060,8 @@
             {
                 $cId  = $thirdSourceComponent['id'];
                 $cName = $thirdSourceComponent["name"];
-                $cSubclass = $thirdSourceComponent["subclass"];               
+                $cSubclass = $thirdSourceComponent["subclass"];   
+                $cMainclass = $thirdSourceComponent["mainclass"];                
 
                 if(isset($thirdSourceComponent['nodeid']))
                 {
@@ -2067,7 +2074,8 @@
             {
                 $dId  = $fourthSourceComponent['id'];
                 $dName = $fourthSourceComponent["name"];
-                $dSubclass = $fourthSourceComponent["subclass"];               
+                $dSubclass = $fourthSourceComponent["subclass"];    
+                $dMainclass = $fourthSourceComponent["mainclass"];           
 
                 if(isset($fourthSourceComponent['nodeid']))
                 {
@@ -2082,6 +2090,10 @@
                                                 $bName,
                                                 $cName,
                                                 $dName,
+                                                $aMainclass,
+                                                $bMainclass,
+                                                $cMainclass,
+                                                $dMainclass,
                                                 $aSubclass,
                                                 $bSubclass,
                                                 $cSubclass,
@@ -2516,24 +2528,29 @@
             $aId = NULL;
             $aName = NULL;
             $aSubclass = NULL;
+            $aMainclass = NULL;
             $aNodeId = NULL;
             $bId = NULL;
             $bName = NULL;
             $bSubclass = NULL;
+            $bMainclass = NULL;
             $bNodeId = NULL;
             $cId = NULL;
             $cName = NULL;
             $cSubclass = NULL;
+            $cMainclass = NULL;
             $cNodeId = NULL;
             $dId = NULL;
             $dName = NULL;
             $dSubclass = NULL;
+            $dMainclass = NULL;
             $dNodeId = NULL;
             if($sourceLoadOrder === 1)
             {
                 $aId  = $sourceComponent['id'];
                 $aName = $sourceComponent["name"];
-                $aSubclass = $sourceComponent["subclass"];               
+                $aSubclass = $sourceComponent["subclass"];    
+                $aMainclass = $sourceComponent["mainclass"];           
 
                 if(isset($sourceComponent['nodeid']))
                 {
@@ -2544,7 +2561,8 @@
             {
                 $bId  = $sourceComponent['id'];
                 $bName = $sourceComponent["name"];
-                $bSubclass = $sourceComponent["subclass"];               
+                $bSubclass = $sourceComponent["subclass"]; 
+                $bMainclass = $sourceComponent["mainclass"];              
 
                 if(isset($sourceComponent['nodeid']))
                 {
@@ -2555,7 +2573,8 @@
             {
                 $cId  = $sourceComponent['id'];
                 $cName = $sourceComponent["name"];
-                $cSubclass = $sourceComponent["subclass"];               
+                $cSubclass = $sourceComponent["subclass"];  
+                $cMainclass = $sourceComponent["mainclass"];             
 
                 if(isset($sourceComponent['nodeid']))
                 {
@@ -2566,7 +2585,8 @@
             {
                 $dId  = $sourceComponent['id'];
                 $dName = $sourceComponent["name"];
-                $dSubclass = $sourceComponent["subclass"];               
+                $dSubclass = $sourceComponent["subclass"];      
+                $dMainClass = $sourceComponent["mainclass"];         
 
                 if(isset($sourceComponent['nodeid']))
                 {
@@ -2577,6 +2597,10 @@
                                                  $bName,
                                                  $cName,
                                                  $dName,
+                                                 $aMainclass,
+                                                 $bMainclass,
+                                                 $cMainclass,
+                                                 $dMainclass,
                                                  $aSubclass,
                                                  $bSubclass,
                                                  $cSubclass,
@@ -2974,18 +2998,22 @@
             $aId = NULL;
             $aName = NULL;
             $aSubclass = NULL;
+            $aMainclass = NULL;
             $aNodeId = NULL;
             $bId = NULL;
             $bName = NULL;
             $bSubclass = NULL;
+            $bMainclass = NULL;
             $bNodeId = NULL;
             $cId = NULL;
             $cName = NULL;
             $cSubclass = NULL;
+            $cMainclass = NULL;
             $cNodeId = NULL;
             $dId = NULL;
             $dName = NULL;
             $dSubclass = NULL;
+            $dMainclass = NULL;
             $dNodeId = NULL;
 
             $properties;
@@ -2994,6 +3022,7 @@
                $aId =  $sourceComponent['id'];
                $aName = $sourceComponent["name"];
                $aSubclass =  $sourceComponent["subclass"];
+               $aMainclass =  $sourceComponent["mainclass"];
 
                 $aNodeId = NUll;
                 if(isset($sourceComponent['nodeid']))
@@ -3009,6 +3038,7 @@
                 $bId =  $sourceComponent['id'];
                 $bName = $sourceComponent["name"];
                 $bSubclass =  $sourceComponent["subclass"];
+                $bMainclass =  $sourceComponent["mainclass"];
  
                  $bNodeId = NUll;
                  if(isset($sourceComponent['nodeid']))
@@ -3024,6 +3054,7 @@
                 $cId =  $sourceComponent['id'];
                 $cName = $sourceComponent["name"];
                 $cSubclass =  $sourceComponent["subclass"];
+                $cMainclass =  $sourceComponent["mainclass"];
  
                  $cNodeId = NUll;
                  if(isset($sourceComponent['nodeid']))
@@ -3039,6 +3070,7 @@
                 $dId =  $sourceComponent['id'];
                 $dName = $sourceComponent["name"];
                 $dSubclass =  $sourceComponent["subclass"];
+                $dMainclass =  $sourceComponent["mainclass"];
  
                  $dNodeId = NUll;
                  if(isset($sourceComponent['nodeid']))
@@ -3054,6 +3086,10 @@
                                                 $bName,
                                                 $cName,
                                                 $dName,
+                                                $aMainclass,
+                                                $bMainclass,
+                                                $cMainclass,
+                                                $dMainclass,
                                                 $aSubclass,
                                                 $bSubclass,
                                                 $cSubclass,
