@@ -33,7 +33,8 @@ function CheckManager(name) {
 
     CheckManager.prototype.performCheck = function (checkCaseType,
         comparisonCheck,
-        interfaceObject) {
+        interfaceObject,
+        srcComponents) {
 
         return new Promise((resolve) => {
             // var $this = this;
@@ -102,7 +103,8 @@ function CheckManager(name) {
                         "SourceDSelectedComponents": JSON.stringify(sourceDSelectedComponents),
                         "dataSourceOrderInCheckCase": JSON.stringify(dataSourceOrderInCheckCase),
                         "ProjectName": projectinfo.projectname,
-                        'CheckName': checkinfo.checkname
+                        'CheckName': checkinfo.checkname,
+                        'SourceComponents' : JSON.stringify(srcComponents)
                     },
                     success: function (data) {
                         return resolve(true);
@@ -115,6 +117,10 @@ function CheckManager(name) {
             }
             else {
 
+                // flatten an array of arrays
+                var comps =  [].concat.apply([], Object.values(srcComponents['components']));
+                srcComponents['components'] = comps;
+                
                 var SelectedCompoents = interfaceObject.ModelTree.GetSelectedComponents();
                 var containerID = interfaceObject.GetViewerContainerID();
                 var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -128,7 +134,8 @@ function CheckManager(name) {
                         "SelectedCompoents": JSON.stringify(SelectedCompoents),
                         "SourceId": interfaceObject.Id,
                         'ProjectName': projectinfo.projectname,
-                        'CheckName': checkinfo.checkname
+                        'CheckName': checkinfo.checkname,
+                        'SourceComponents' : JSON.stringify(srcComponents)
                     },
                     success: function (data) {
                         return resolve(true);

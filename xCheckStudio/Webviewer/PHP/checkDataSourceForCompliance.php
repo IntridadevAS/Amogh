@@ -6,7 +6,8 @@
                !isset($_POST['SelectedCompoents'] ) ||
                !isset($_POST['ProjectName']) ||
                !isset($_POST['CheckName']) ||
-               !isset($_POST['SourceId'] ) )
+               !isset($_POST['SourceId'] )  ||
+               !isset($_POST['SourceComponents'] ))
             {
                 echo 'fail';
                 return;
@@ -93,9 +94,10 @@
         $SourceNotMatchedComponents = array();
        
         // get source components and thier properties from database
-        $SourceComponents= array();      
-        $SourceProperties= array();
-        getSourceComponents();          
+        $SourceComponentsObj = json_decode($_POST['SourceComponents'],true);        
+        $SourceComponents= $SourceComponentsObj['components'];      
+        $SourceProperties= $SourceComponentsObj['properties'];  
+        //getSourceComponents();          
      
         performComplianceCheck();
       
