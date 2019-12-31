@@ -1532,11 +1532,19 @@
     }
 
     function GetActiveCategory() {
-      Analytics.GetActiveCategory();
+      return Analytics.GetActiveCategory();
     }
 
     function GetSubClassMappingForHighlightedRow() {
-      Analytics.GetSubClassMappingForHighlightedRow();
+      return Analytics.GetSubClassMappingForHighlightedRow();
+    }
+
+    function GetSubClassAnalyticsData() {
+      return Analytics.GetSubClassAnalyticsData();
+    }
+
+    function GetComponentAnalyticsData() {
+      return Analytics.GetComponentAnalyticsData();
     }
 
     // reference related functions

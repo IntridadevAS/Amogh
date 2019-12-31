@@ -498,8 +498,19 @@
                         {
                             $sourceAnotSelectedCompsCount = 0;
                             $sourceAnotSelectedCompsCount = $results->fetchColumn();
-                           
-                            $SourceAClassWiseNotSelectedComps[$mainClass] =  $sourceAnotSelectedCompsCount;
+                            $SourceAClassWiseNotSelectedComps[$mainClass] = array();
+
+                            $SourceAClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceAnotSelectedCompsCount;
+
+                            $components = $mainDbh->query("SELECT * FROM  $sourceAnotSelectedCompsTable where mainClass='$mainClass';");
+                            while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                                $subclass = $comp['subClass'];
+
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where subClass='$subclass';"); 
+                                if($results  && !array_key_exists($subclass, $SourceAClassWiseNotSelectedComps[$mainClass])) {
+                                    $SourceAClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
+                                } 
+                            }
                         }
                     }
                 }
@@ -522,8 +533,19 @@
                         {
                             $sourceBnotSelectedCompsCount = 0;
                             $sourceBnotSelectedCompsCount = $results->fetchColumn();
+                            $SourceBClassWiseNotSelectedComps[$mainClass] = array();
 
-                            $SourceBClassWiseNotSelectedComps[$mainClass] =  $sourceBnotSelectedCompsCount;
+                            $SourceBClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceBnotSelectedCompsCount;
+
+                            $components = $mainDbh->query("SELECT * FROM  $SourceBClassWiseNotSelectedComps where mainClass='$mainClass';");
+                            while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                                $subclass = $comp['subClass'];
+
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $SourceBClassWiseNotSelectedComps where subClass='$subclass';"); 
+                                if($results  && !array_key_exists($subclass, $SourceBClassWiseNotSelectedComps[$mainClass])) {
+                                    $SourceBClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
+                                } 
+                            }
                         }
                     }
                 }
@@ -545,8 +567,18 @@
                          {
                              $sourceCnotSelectedCompsCount = 0;
                              $sourceCnotSelectedCompsCount = $results->fetchColumn();
- 
-                             $SourceCClassWiseNotSelectedComps[$mainClass] =  $sourceCnotSelectedCompsCount;
+                             $SourceCClassWiseNotSelectedComps[$mainClass] = array();
+
+                             $SourceCClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceCnotSelectedCompsCount;
+                             $components = $mainDbh->query("SELECT * FROM  $SourceCClassWiseNotSelectedComps where mainClass='$mainClass';");
+                             while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                                $subclass = $comp['subClass'];
+
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $SourceCClassWiseNotSelectedComps where subClass='$subclass';"); 
+                                if($results && !array_key_exists($subclass, $SourceCClassWiseNotSelectedComps[$mainClass])) {
+                                    $SourceCClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
+                                } 
+                             }
                          }
                      }
                  }
@@ -568,8 +600,18 @@
                         {
                             $sourceDnotSelectedCompsCount = 0;
                             $sourceDnotSelectedCompsCount = $results->fetchColumn();
+                            $SourceDClassWiseNotSelectedComps[$mainClass] = array();
 
-                            $SourceDClassWiseNotSelectedComps[$mainClass] =  $sourceDnotSelectedCompsCount;
+                            $SourceDClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceDnotSelectedCompsCount;
+                            $components = $mainDbh->query("SELECT * FROM  $SourceDClassWiseNotSelectedComps where mainClass='$mainClass';");
+                             while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                                $subclass = $comp['subClass'];
+
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $SourceDClassWiseNotSelectedComps where subClass='$subclass';"); 
+                                if($results && !array_key_exists($subclass, $SourceDClassWiseNotSelectedComps[$mainClass])) {
+                                    $SourceDClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
+                                } 
+                             }
                         }
                     }
                 }
@@ -676,6 +718,12 @@
 
                     $subClassStatistics[$class]['OK'] = $okcomponents;
 
+                    $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('OK(A)', 'OK(T)', 'OK(A)(T)');");
+                    $okcount->execute(array($ownerGroupId, $class));
+                    $okATcomponents = $okcount->fetchColumn();
+
+                    $subClassStatistics[$class]['OKAT'] = $okATcomponents;
+
                     $Errorcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND $subComponentClassColumn=? AND status=?;");
                     $Errorcount->execute(array($ownerGroupId, $class, 'Error'));
                     $Errorcomponents = $Errorcount->fetchColumn();
@@ -707,20 +755,26 @@
                         $subClassStatistics[$className] = array('OK'=>0, 'Error'=>0, 'Warning'=>0, 'No Match'=>0);
                     }
 
-                    $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status=?;");
-                    $okcount->execute(array($ownerGroupId, $class, 'OK'));
+                    $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('OK', 'OK(A)', 'OK(T)', 'OK(A)(T)');");
+                    $okcount->execute(array($ownerGroupId, $class));
                     $okcomponents = $okcount->fetchColumn();
 
                     $subClassStatistics[$className]['OK'] = $okcomponents;
 
-                    $Errorcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status=?;");
-                    $Errorcount->execute(array($ownerGroupId, $class, 'Error'));
+                    $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('OK(A)', 'OK(T)', 'OK(A)(T)');");
+                    $okcount->execute(array($ownerGroupId, $class));
+                    $okATcomponents = $okcount->fetchColumn();
+
+                    $subClassStatistics[$className]['OKAT'] = $okATcomponents;
+
+                    $Errorcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('Error', 'Error(A)', 'Error(T)', 'Error(A)(T)');");
+                    $Errorcount->execute(array($ownerGroupId, $class));
                     $Errorcomponents = $Errorcount->fetchColumn();
 
                     $subClassStatistics[$className]['Error'] = $Errorcomponents;
 
-                    $Warningcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status=?;");
-                    $Warningcount->execute(array($ownerGroupId, $class, 'Warning'));
+                    $Warningcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('Warning', 'Warning(A)', 'Warning(T)', 'Warning(A)(T)');");
+                    $Warningcount->execute(array($ownerGroupId, $class));
                     $Warningcomponents = $Warningcount->fetchColumn();
 
                     $subClassStatistics[$className]['Warning'] = $Warningcomponents;
@@ -764,7 +818,7 @@
     
                     $versionDbh->beginTransaction(); 
     
-                                // get ok components count
+                    // get ok components count
                     $okCount = 0;
                     $results = $versionDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where status=?;");  
                     $results->execute(array('OK'));              
@@ -1075,12 +1129,13 @@
                             $sourceSubClass = $comp['subComponentClass'];
 
                             if(!array_key_exists($sourceSubClass, $subClassStatistics)) {
-                                $subClassStatistics[$sourceSubClass] = array('OK'=>0, 'Error'=>0, 'Warning'=>0, 'No Match'=>0);
+                                $subClassStatistics[$sourceSubClass] = array('OK'=>0, 'Error'=>0, 'Warning'=>0, 'No Match'=>0, 'OKAT'=>0);
                             }
 
                             $status = strtolower($comp['status']);
 
                             $subClassOkCount = (int)$subClassStatistics[$sourceSubClass]['OK'];
+                            $subClassOkATCount = (int)$subClassStatistics[$sourceSubClass]['OKAT'];
                             $subClassErrorCount = (int)$subClassStatistics[$sourceSubClass]['Error'];
                             $subClassWarningCount = (int)$subClassStatistics[$sourceSubClass]['Warning'];
                             $subClassNoMatchCount = (int)$subClassStatistics[$sourceSubClass]['No Match'];
@@ -1100,6 +1155,11 @@
                             else if(strpos($status, 'no match') !== false || strpos($status, 'missing item(s)') !== false) {
                                 $subClassNoMatchCount++;
                                 $subClassStatistics[$sourceSubClass]['No Match'] = $subClassNoMatchCount;
+                            }
+
+                            if($status == 'OK(A)' || $status == "OK(T)" || $status == 'OK(A)(T)') {
+                                $subClassOkATCount++;
+                                $subClassStatistics[$sourceSubClass]['OKAT'] = $subClassOkATCount;
                             }
                         }
                         
