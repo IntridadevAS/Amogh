@@ -1160,16 +1160,13 @@ let editProjectView = {
 
   editProjectInfo: function () {
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if (userinfo.userid === this.currentProject.userid) {
+    if (userinfo.userid !== this.currentProject.userid) {
       this.cancelEditProject(false);
-      document.getElementById("editProjectName").disabled = false;
-      document.getElementById("editComments").disabled = false;
-      document.getElementById("editProjectStatus").disabled = false;
-      document.getElementById("editProjectType").disabled = false;
-      document.getElementById("editProjectDescription").disabled = false;
-      document.getElementById("favoriteCheck").disabled = false;
     } else {
-      showAlertForm("Sorry, you are not authorized to edit project information.");
+      var overlay = document.getElementById("uiBlockingOverlay");
+      var popup = document.getElementById("editpublicprojectPopup");
+      overlay.style.display = 'block';
+      popup.style.display = 'block';
     }
   },
 
@@ -1202,10 +1199,31 @@ let editProjectView = {
       this.cancelEditProject(true);
     }
     else {
-      var overlay = document.getElementById("uiBlockingOverlay");
-      var popup = document.getElementById("editProjectPopup");
-      overlay.style.display = 'block';
-      popup.style.display = 'block';
+      var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+      if (userinfo.userid !== this.currentProject.userid && model.currentProject.type !== editProjectType) {
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("editpublicproject");
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "155px";
+        popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+
+      } else {
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("editProjectPopup");
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+      }
     }
   },
 
@@ -1222,11 +1240,18 @@ let editProjectView = {
     let editProjectDescription = document.getElementById("editProjectDescription").value;
     this.currentProject = controller.getCurrentProj();
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    var userid;
+    if(model.currentProject.type !== editProjectType){
+      userid = userinfo.userid;
+    }
+    else {
+      userid = this.currentProject.userid;
+    }
     // add this project's entry in main DB
     $.ajax({
       data: {
         'InvokeFunction': 'UpdateProject',
-        'userid': userinfo.userid,
+        'userid': userid,
         'projectid': this.currentProject.projectid,
         'projectname': editProjectName,
         'oldprojectname': this.currentProject.projectname,
@@ -1413,6 +1438,24 @@ let deleteItems = {
 }
 
 controller.init();
+
+function onCancelPublicProjectEdit() {
+  var overlay = document.getElementById("uiBlockingOverlay");
+  var popup = document.getElementById("editpublicproject");
+  overlay.style.display = 'none';
+  popup.style.display = 'none';
+}
+
+function onPublicProjectEdit() {
+  var popup = document.getElementById("editpublicproject");
+  popup.style.display = 'none';
+
+  popup = document.getElementById("editProjectPopup");
+  popup.style.display = 'block';
+
+  popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+  popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
 
 function onToggleOverlayDisplay(show) {
   if (show === true) {

@@ -3644,9 +3644,9 @@ function UpdateProject()
     /*Update the project details in database*/
     try {
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        $query = 'UPDATE Projects Set projectname=?, type=?,comments=?,IsFavourite=?,description=?,status=?,modifieddate=? WHERE projectid=?';
+        $query = 'UPDATE Projects Set userid=?, projectname=?, type=?,comments=?,IsFavourite=?,description=?,status=?,modifieddate=? WHERE projectid=?';
         $stmt = $dbh->prepare($query);
-        $response = $stmt->execute(array($projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectModifiedDate, $projectid));
+        $response = $stmt->execute(array($userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $projectStatus, $projectModifiedDate, $projectid));
         echo json_encode($response);
         $dbh = null; //This is how you close a PDO connection
         return;
