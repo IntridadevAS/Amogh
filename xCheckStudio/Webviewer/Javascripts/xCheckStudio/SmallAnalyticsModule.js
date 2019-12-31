@@ -73,6 +73,10 @@ function ExecuteAnalyticsContextMenu(key) {
             AnalyticsType = key;
             onSubClassAnalyticsClick();
             break;
+        case "property" :
+            AnalyticsType = key;
+            onPropertyAnalyticsClick();
+            break;
             
     }
 }
@@ -102,7 +106,25 @@ function onTotalCheckAnalyticsClick() {
 }
 
 function onSubClassAnalyticsClick() {
+    ActiveCategory = window.parent.GetActiveCategory();
     var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
+    if(activeResultType == "comparison") {
+        analyticsManager.populateComparisonClassAnalytics(classMappingInfo);
+    }
+    else {
+        analyticsManager.populateComplianceClassAnalytics(classMappingInfo);
+    }
+}
+
+function onPropertyAnalyticsClick() {
+    var PropertyAnalyticsData = window.parent.GetComponentAnalyticsData();
+    if(activeResultType == "comparison") {
+        analyticsManager.populateCompariosonPropertyAnalytics(PropertyAnalyticsData);
+    }
+    else {
+        analyticsManager.populateCompliancePropertyAnalytics(PropertyAnalyticsData);
+    }
+    
 }
 
 function HideAnalyticsViewer() {
@@ -126,6 +148,16 @@ function ShowSeveritySummary() {
 
         case 'totalCheck' :
             summaryData = analyticsManager.getSeveritySummary();
+            break;
+
+        case 'subClassCheck' : 
+            var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
+            summaryData = analyticsManager.getSeveritySummaryForClass(classMappingInfo);
+            break;
+
+        case "property" :
+            var PropertyAnalyticsData = window.parent.GetComponentAnalyticsData();
+            summaryData = analyticsManager.getSeveritySummaryForProperties(PropertyAnalyticsData)
             break;
     }
 
@@ -159,6 +191,16 @@ function ShowInfoSummary() {
 
         case 'totalCheck' :
             infoSummary = analyticsManager.getInfoSummary();
+            break;
+
+        case 'subClassCheck' : 
+            var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
+            infoSummary = analyticsManager.getInfoSummaryForClass(classMappingInfo);
+            break;
+
+        case "property" :
+            var PropertyAnalyticsData = window.parent.GetComponentAnalyticsData();
+            infoSummary = analyticsManager.getInfoSummaryForProperties(PropertyAnalyticsData)
             break;
     }
 

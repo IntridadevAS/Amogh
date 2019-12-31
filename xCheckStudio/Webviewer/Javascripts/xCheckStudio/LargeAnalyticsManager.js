@@ -130,11 +130,10 @@ LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
     }
         
     // draw pie charts
-
+    var totalOk = okCount + okACount + okTCount + OkATCount;
     if(PieChartActive) {
-        // _this.ShowPieChartDiv();
         if(SeveritybuttonActive) {
-            this.drawComparisonSeverityPieCharts(okCount,
+            this.drawComparisonSeverityPieCharts(totalOk,
                 warningsCount,
                 errorsCount,
                 totalItemsChecked);
@@ -149,7 +148,6 @@ LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
 
     // //  draw bar chart (total 1)
     if(BarChartActive) {
-        // _this.ShowBarChartDiv();
         if(SeveritybuttonActive) {
             this.createSeverityBarCharts(checkGroupsInfo);
         }
@@ -157,6 +155,8 @@ LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
             this.createInfoBarCharts(checkGroupsInfo);
         }               
     }
+
+    comparisonData['Versioning']["CurrentCheck"] = {'OK' : totalOk, 'Error' : errorsCount, 'Warning' : warningsCount};
 
     this.drawLineChart(comparisonData['Versioning']);
 }
@@ -243,11 +243,11 @@ LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceT
     }
 
     // draw pie charts
-
+    var totalOk = okCount + okACount + okTCount + OkATCount;
     if (PieChartActive) {
         // _this.ShowPieChartDiv();
         if (SeveritybuttonActive) {
-            this.drawComparisonSeverityPieCharts(okCount,
+            this.drawComparisonSeverityPieCharts(totalOk,
                 warningsCount,
                 errorsCount,
                 totalItemsChecked);
@@ -271,6 +271,7 @@ LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceT
         }
     }
 
+    complianceData['Versioning']["CurrentCheck"] = {'OK' : totalOk, 'Error' : errorsCount, 'Warning' : warningsCount};
     this.drawLineChart(complianceData['Versioning']);
 
 }

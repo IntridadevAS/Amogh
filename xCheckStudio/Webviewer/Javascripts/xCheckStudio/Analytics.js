@@ -98,11 +98,35 @@ let Analytics = {
         var data = dataGrid.getDataSource().items();
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         var rowData = data[rowIndex];
-
-        var subClass = rowData.ClassMappingInfo.split(":");
+        var subClass;
+        var component = model.getCurrentReviewManager().GetCheckComponent(rowData.groupId, rowData.ID);
+        if(rowData.status == 'No Match') {
+            if(component.sourceASubComponentClass !== null) {
+                subClass = component.sourceASubComponentClass;
+            }
+            else if(component.sourceBSubComponentClass !== null) {
+                subClass = component.sourceBSubComponentClass;
+            }
+            else if(component.sourceCSubComponentClass !== null) {
+                subClass = component.sourceCSubComponentClass;
+            }
+            else if(component.sourceDSubComponentClass !== null) {
+                subClass = component.sourceDSubComponentClass;
+            }
+        }
+        else {
+            if(model.currentCheck.includes("comparison")) {
+                subClass = rowData.ClassMappingInfo.split(":");
+                subClass = subClass[1].trim();
+            }
+            else {
+                subClass = component.subComponentClass;
+            }
+           
+        }
 
         if(subClass) {
-            return subClass[1];
+            return subClass;
         }
 
         return undefined;
@@ -122,7 +146,167 @@ let Analytics = {
         }
   
         return undefined;
+    },
+
+    GetSubClassAnalyticsData :   function() {
+        var ComponentAnalytics = {};
+        var subclassMapping = GetSubClassMappingForHighlightedRow();
+        var highlightedRow = model.checks[model.currentCheck].selectionManager.HighlightedCheckComponentRow;
+        var dataGrid = $(highlightedRow.tableId).dxDataGrid("instance");
+        var data = dataGrid.getDataSource().items();
+
+        for(var rowIndex in data) {
+            var rowData = data[rowIndex];
+
+            var component = model.getCurrentReviewManager().GetCheckComponent(rowData.groupId, rowData.ID);
+            var subClass = "";
+            if(rowData.status == 'No Match') {
+                var component = model.getCurrentReviewManager().GetCheckComponent(rowData.groupId, rowData.ID);
+                if(component.sourceASubComponentClass !== null) {
+                    subClass = component.sourceASubComponentClass;
+                }
+                else if(component.sourceBSubComponentClass !== null) {
+                    subClass = component.sourceBSubComponentClass;
+                }
+                else if(component.sourceCSubComponentClass !== null) {
+                    subClass = component.sourceCSubComponentClass;
+                }
+                else if(component.sourceDSubComponentClass !== null) {
+                    subClass = component.sourceDSubComponentClass;
+                }
+            }
+            else {
+                if(model.currentCheck.includes("comparison")) {
+                    subClass = rowData.ClassMappingInfo.split(":");
+                    subClass = subClass[1].trim();
+                }
+                else {
+                    subClass = component.subComponentClass;
+                }
+            }
+
+            if(subclassMapping == subClass) {
+                var component = model.getCurrentReviewManager().GetCheckComponent(rowData.groupId, rowData.ID);
+                var properties = component.properties;
+
+                var componentName = "";
+
+                if(component.sourceAName != null) {
+                    componentName = component.sourceAName;
+                }
+                if(component.sourceBName != null) {
+                    if(componentName != "") {
+                        componentName = componentName + " & " + component.sourceBName;
+                    }
+                    else {
+                        componentName = component.sourceBName;
+                    }
+                }
+                if(component.sourceCName != null) {
+                    if(componentName != "") {
+                        componentName = componentName + " & " + component.sourceCName;
+                    }
+                    else {
+                        componentName = component.sourceCName;
+                    }
+                }
+                if(component.sourceDName != null) {
+                    if(componentName != "") {
+                        componentName = componentName + " & " + component.sourceDName;
+                    }
+                    else {
+                        componentName = component.sourceDName;
+                    }
+                }
+
+                var analyticsData = this.GetPropertyAnalytics(properties);
+
+                if(componentName == "") {
+                    componentName = component.name;
+                }
+                ComponentAnalytics[componentName] = analyticsData;
+            }
+        }
+
+        return ComponentAnalytics;
+    },
+
+    GetComponentAnalyticsData : function() {
+        var highlightedRow = model.checks[model.currentCheck].selectionManager.HighlightedCheckComponentRow;
+        var dataGrid = $(highlightedRow.tableId).dxDataGrid("instance");
+        var data = dataGrid.getDataSource().items();
+        var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
+        var rowData = data[rowIndex];
+        var component = model.getCurrentReviewManager().GetCheckComponent(rowData.groupId, rowData.ID);
+        var properties = component.properties;
+
+        var componentName = "";
+
+        if(component.sourceAName != null) {
+            componentName = component.sourceAName;
+        }
+        if(component.sourceBName != null) {
+            if(componentName != "") {
+                componentName = componentName + " & " + component.sourceBName;
+            }
+            else {
+                componentName = component.sourceBName;
+            }
+        }
+        if(component.sourceCName != null) {
+            if(componentName != "") {
+                componentName = componentName + " & " + component.sourceCName;
+            }
+            else {
+                componentName = component.sourceCName;
+            }
+        }
+        if(component.sourceDName != null) {
+            if(componentName != "") {
+                componentName = componentName + " & " + component.sourceDName;
+            }
+            else {
+                componentName = component.sourceDName;
+            }
+        }
+
+        var analyticsData = this.GetPropertyAnalytics(properties);
+
+        return [componentName, analyticsData];
+
+    },
+
+    GetPropertyAnalytics : function(properties) {
+        var error = 0;
+        var warning = 0;
+        var ok = 0;
+        var missing = 0;
+        var undefinedItems = 0;
+        var okat = 0;
+
+        for(var i = 0; i < properties.length; i++) {
+            if(properties[i].severity.toLowerCase().includes("error")) {
+                error++;
+            }
+            else if(properties[i].severity.toLowerCase().includes("warning")) {
+                warning++;
+            }
+            else if(properties[i].severity.toLowerCase().includes("ok")) {
+                ok++;
+            }
+            else {
+                missing++;
+            }
+
+            if(properties[i].severity.toLowerCase() == 'ok(a)' || properties[i].severity.toLowerCase() == 'ok(t)') {
+                okat++;
+            }
+        }
+
+        return {"Error" : error, "Warning" : warning, "OK" : ok, "No Match" : missing, "undefined Item": undefinedItems, "okAT" : okat}
     }
+
+
 
 }
 
