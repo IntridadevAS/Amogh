@@ -129,7 +129,8 @@ var menuItems = [
 let menu = {
 
     onHomeClick: function () {
-
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnHomePopup");
 
@@ -145,6 +146,8 @@ let menu = {
     },
 
     onProjectsClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnProjectCenterPopup");
 
@@ -160,6 +163,8 @@ let menu = {
     },
 
     onCheckClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnCheckPopup");
 
@@ -175,6 +180,8 @@ let menu = {
     },
 
     onPREPClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnPREPPopup");
 
@@ -190,12 +197,20 @@ let menu = {
     },
 
     onHelpClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
+        const shell = require('electron').shell;
+        shell.openExternal("https://www.intrida.com/");
     },
 
     onSettingsClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
     },
 
     onOutputClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("outputPopup");
 
@@ -205,9 +220,13 @@ let menu = {
     },
 
     onReportsClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
     },
 
     onSignOutClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("signOutPopup");
 
@@ -223,6 +242,8 @@ let menu = {
     },
 
     onSignOutAllUsersClicked: function (){
+        swapIcon();
+        DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("signOutAllUsersPopup");
 
@@ -331,7 +352,6 @@ function cancelSignOutAllUsers() {
 }
 
 function signOutAllUsers(callbackFunction) {
-    DrawerMenu.drawer.toggle();
     if (callbackFunction) {
         callbackFunction().then(function (result) {
             onLogoutUser("Yes").then(function (status) {
