@@ -1156,18 +1156,6 @@ let editProjectView = {
     editProjectStatus.value = this.currentProject.status;
     editProjectType.value = this.currentProject.type;
     editCreator.innerHTML = this.currentProject.alias;
-    editProjectView.disableEditProjectForm();
-  },
-
-  disableEditProjectForm: function () {
-    // create drawer menu
-    document.getElementById("editProjectName").disabled = true;
-    document.getElementById("editComments").disabled = true;
-    document.getElementById("editProjectStatus").disabled = true;
-    document.getElementById("editProjectType").disabled = true;
-    document.getElementById("editProjectDescription").disabled = true;
-    document.getElementById("favoriteCheck").disabled = true;
-
   },
 
   editProjectInfo: function () {
