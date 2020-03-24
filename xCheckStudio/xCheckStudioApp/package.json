@@ -21,11 +21,11 @@
 			"target": [
 				"nsis"
 			],
-			"icon": "build/coffee-icon (1).ico"
+			"icon": "build/main_256x256.ico"
 		},
 		"nsis": {
-			"installerIcon": "build/coffee-icon (1).ico",
-			"uninstallerIcon": "build/coffee-icon (1).ico",
+			"installerIcon": "build/main_32x32.ico",
+			"uninstallerIcon": "build/main_32x32.ico",
 			"runAfterFinish": false
 		}
 	}
