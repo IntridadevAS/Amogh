@@ -897,8 +897,8 @@
     <div id="There_is_no_valid_checkcase">
       <svg class="Rectangle_1204">
         <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-          y="0" width="581" height="155">
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
         </rect>
       </svg>
       <svg class="Rectangle_1215">
@@ -933,7 +933,23 @@
       </div>
     </div>
   </div>
-
+  
+  <!-- change background overlay -->
+  <div id="changeBGPopup" class="popup">
+    <div>
+      <label>Top color:</label>
+      <input type="color" id="topColor" value="#000000"><br>
+      <label>Bottom color:</label>
+      <input type="color" id="bottomColor" value="#F8F9F9"><br><br>
+      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
+        id="changeBGDefaultButton"> Default </button>
+      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
+        id="changeBGOkButton"> OK </button>
+      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
+        id="changeBGCancelButton">Cancel</button>
+    </div>
+  </div>
+  
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
       <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
@@ -953,16 +969,16 @@
             onclick="onExitClicked()"></button>
       </div>
     </div>
-
+  
   </header>
-
+  
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
     <div id="loadIndicator"></div>
-
+  
     <div class="background">
       <div id='contextMenu' style="z-index: 4; position: absolute;">
       </div>
-
+  
       <div class="tabButtonContainer" id="tabsContainer">
         <div id="tabContainer" class="tabContainer">
           <div id="comparisonTab" class="tab" data-id="comparison">
@@ -982,44 +998,44 @@
               <span class="tooltip" data-tooltip="ReCheck"></span>
               <img src="public/symbols/XD_ClearData.svg" alt="">
             </button>
-
+  
             <button id="showAll" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Show All"></span>
               <img src="public/symbols/XD_Show.svg" alt="">
             </button>
-
+  
             <button id="history" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="History"></span>
               <img src="public/symbols/XD_HistoryVersion.svg" alt="">
             </button>
-
+  
             <button id="units" data-tooltip="Units" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Units"></span>
               <img src="public/symbols/XD_Units.svg" alt="">
             </button>
-
+  
             <button id="checkInfo" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Check Info"></span>
               <img src="public/symbols/XD_Checkinfo.svg" alt="">
             </button>
-
+  
             <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Save Progress"></span>
               <img src="public/symbols/XD_SaveData.svg" alt="">
             </button>
-
+  
             <button id="reset" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Reset"></span>
               <img src="public/symbols/Reset.svg" alt="">
             </button>
-
+  
             <button id="navCube" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Navigation Cube"></span>
               <img src="public/symbols/Navigation box.svg" alt="">
             </button>
-
+  
           </div>
-
+  
         </div>
       </div>
       <div class="viewsContainer" id="viewsContainer">
@@ -1036,17 +1052,16 @@
           <div id="tableDataComparison" class="tableContainer">
             <div class="tablesArea">
               <div id="comparisonMainContainer" class="tempContainer">
-
+  
               </div>
             </div>
             <div class="infoArea" style="height: 40px">
               <div class="infoAreaHeader">
                 <img src="public/symbols/InfoMenu.svg" alt="">
                 <p>Detail Info</p>
-                <img class="invert arrow" src="public/symbols/ChevronDN.svg"
-                  onclick="viewPanels.toggleDetailInfo(this)">
+                <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
               </div>
-
+  
               <div id="comparisonDetailInfoContainer" class="detailInfoContainer">
                 <div id="comparisonDetailInfo"></div>
               </div>
@@ -1057,8 +1072,8 @@
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="comparisonAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
-              onclick="Analytics.ShowAnalytics(this)"></div>
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="Analytics.ShowAnalytics(this)">
+            </div>
             <div id="comparePanelA" class="comparePanel" style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
               <!-- Translucency slider -->
@@ -1068,7 +1083,7 @@
                   <p> <span id="translucencyValue1" style="color: grey"></span></p>
                 </div>
               </div>
-
+  
               <!-- explode slider -->
               <div id="explodeOverlay1" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1076,7 +1091,7 @@
                   <p><span id="explodeValue1"></span></p>
                 </div>
               </div>
-
+  
             </div>
             <div id="comparePanelB" class="comparePanel" style="display: none">
               <div id="compare2" class="tempContainer"></div>
@@ -1087,7 +1102,7 @@
                   <p> <span id="translucencyValue2" style="color: grey"></span></p>
                 </div>
               </div>
-
+  
               <!-- explode slider -->
               <div id="explodeOverlay2" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1095,7 +1110,7 @@
                   <p><span id="explodeValue2"></span></p>
                 </div>
               </div>
-
+  
             </div>
             <div id="comparePanelC" class="comparePanel" style="display: none">
               <div id="compare3" class="tempContainer"></div>
@@ -1106,7 +1121,7 @@
                   <p> <span id="translucencyValue3" style="color: grey"></span></p>
                 </div>
               </div>
-
+  
               <!-- explode slider -->
               <div id="explodeOverlay3" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1114,7 +1129,7 @@
                   <p><span id="explodeValue3"></span></p>
                 </div>
               </div>
-
+  
             </div>
             <div id="comparePanelD" class="comparePanel" style="display: none">
               <div id="compare4" class="tempContainer"></div>
@@ -1125,7 +1140,7 @@
                   <p> <span id="translucencyValue4" style="color: grey"></span></p>
                 </div>
               </div>
-
+  
               <!-- explode slider -->
               <div id="explodeOverlay4" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1133,13 +1148,13 @@
                   <p><span id="explodeValue4"></span></p>
                 </div>
               </div>
-
+  
             </div>
           </div>
           <div id="comparisonSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
             <iframe id="IFrameSmallAnalyticsComparison" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
-
+  
         </div>
         <div id="viewPanelCompliance" class="viewPanel hide">
           <div id="tableDataCompliance" class="tableContainer">
@@ -1150,14 +1165,13 @@
               <div class="infoAreaHeader">
                 <img src="public/symbols/InfoMenu.svg" alt="">
                 <p>Detail Info</p>
-                <img class="invert arrow" src="public/symbols/ChevronDN.svg"
-                  onclick="viewPanels.toggleDetailInfo(this)">
+                <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
               </div>
-
+  
               <div id="complianceDetailInfoContainer" class="detailInfoContainer">
                 <div id="complianceDetailInfo"></div>
               </div>
-
+  
             </div>
           </div>
           <div id="center" class="grabBar"></div>
@@ -1165,10 +1179,10 @@
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="complianceAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
-              onclick="Analytics.ShowAnalytics(this)"></div>
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="Analytics.ShowAnalytics(this)">
+            </div>
             <div id="compliance1" class="tempContainer">
-
+  
               <!-- Translucency slider -->
               <div id="translucencyOverlay5" class="sliderOverlay" style="display: none">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1176,7 +1190,7 @@
                   <p> <span id="translucencyValue5" style="color: grey"></span></p>
                 </div>
               </div>
-
+  
               <!-- explode slider -->
               <div id="explodeOverlay5" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1184,7 +1198,7 @@
                   <p><span id="explodeValue5"></span></p>
                 </div>
               </div>
-
+  
             </div>
           </div>
           <div id="complianceSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
@@ -1342,6 +1356,10 @@
       cursor: pointer;
 
     }
+    
+    .ignoreDefault { 
+            all: unset; 
+    } 
   </style>
 
   <!-- JQuery dependencies -->
