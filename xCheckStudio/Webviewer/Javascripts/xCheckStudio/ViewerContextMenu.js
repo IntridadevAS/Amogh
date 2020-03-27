@@ -24,9 +24,9 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     item.id = "hide";
     item.innerText = "Hide";
     item.onclick =
-    function () {
-        _this.OnHideClicked();
-    }
+        function () {
+            _this.OnHideClicked();
+        }
     itemGroup.appendChild(item);
 
     item = document.createElement("li");
@@ -48,7 +48,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     contextMenuDiv.appendChild(itemGroup);
 
     item = document.createElement("hr");
-    contextMenuDiv.appendChild(item);    
+    contextMenuDiv.appendChild(item);
 
     // 2nd group
     itemGroup = document.createElement("ul");
@@ -57,8 +57,8 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
         item = document.createElement("li");
         item.id = "startExplode";
         item.innerText = "Start Explode";
-        item.onclick =  function () {
-             _this.OnStartExplodeClicked();
+        item.onclick = function () {
+            _this.OnStartExplodeClicked();
         }
         itemGroup.appendChild(item);
     }
@@ -66,7 +66,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
         item = document.createElement("li");
         item.id = "stopExplode";
         item.innerText = "Stop Explode";
-        item.onclick =  function () {
+        item.onclick = function () {
             _this.OnStopExplodeClicked();
         }
         itemGroup.appendChild(item);
@@ -84,7 +84,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
         item = document.createElement("li");
         item.id = "startTranslucency";
         item.innerText = "Start Translucency";
-        item.onclick =  function () {
+        item.onclick = function () {
             _this.OnStartTranslucencyClicked();
         }
         itemGroup.appendChild(item);
@@ -93,11 +93,27 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
         item = document.createElement("li");
         item.id = "stopTranslucency";
         item.innerText = "Stop Translucency";
-        item.onclick =  function () {
+        item.onclick = function () {
             _this.OnStopTranslucencyClicked();
         }
         itemGroup.appendChild(item);
     }
+    contextMenuDiv.appendChild(itemGroup);
+
+    // 4th group
+    item = document.createElement("hr");
+    contextMenuDiv.appendChild(item);
+
+    itemGroup = document.createElement("ul");
+    itemGroup.id = "items";
+
+    item = document.createElement("li");
+    item.id = "changeBackground";
+    item.innerText = "Change Background";
+    item.onclick = function () {
+        _this.OnChangeBackgroundClicked();
+    }
+    itemGroup.appendChild(item);
     contextMenuDiv.appendChild(itemGroup);
 
     contextMenuDiv.style.display = "block";
@@ -125,22 +141,22 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     }
 
     contextMenuDiv.style.top = y + "px";
-    contextMenuDiv.style.left = x + "px";    
+    contextMenuDiv.style.left = x + "px";
 
     // close context menu, if mouse click is done outside
     document.onclick = function (e) {
-        if (e.target.id !== 'contextMenu') {            
+        if (e.target.id !== 'contextMenu') {
             contextMenuDiv.style.display = 'none';
         }
-    };  
-   
+    };
+
 }
 
 ViewerContextMenu.prototype.Init = function () {
 
     var _this = this;
     this.WebViewer.setCallbacks({
-        contextMenu: function (position) {          
+        contextMenu: function (position) {
             _this.ShowMenu(event.clientX, event.clientY);
         }
     });
@@ -157,7 +173,7 @@ ViewerContextMenu.prototype.OnStartExplodeClicked = function () {
     }
 
     this.ExplodeManager = new ExplodeManager(this.WebViewer, this.Controls["explode"]);
-    this.ExplodeManager.Start();    
+    this.ExplodeManager.Start();
 }
 
 ViewerContextMenu.prototype.OnStopExplodeClicked = function () {
@@ -184,7 +200,7 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 
         this.WebViewer.model.setNodesVisibilities(map);
 
-        if(model.currentTabId) {
+        if (model.currentTabId) {
             this.HideInCheck(selectedItem._nodeId);
         }
         else {
@@ -193,7 +209,7 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
     }
 }
 
-ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
+ViewerContextMenu.prototype.HideInCheck = function (nodeId) {
     // get highlighted row 
     var sourceManager = SourceManagers[model["currentTabId"]]
     // var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
@@ -204,41 +220,41 @@ ViewerContextMenu.prototype.HideInCheck = function(nodeId) {
     //Add nodeId to hidden elements list
     sourceManager.HandleHiddenNodeIdsList(true, nodeList)
 
-    if(nodeList.length > 0) {
+    if (nodeList.length > 0) {
         selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
     }
     //Grey out the text of hidden element rows
     sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
 }
 
-ViewerContextMenu.prototype.HideInReview = function() {
-        var checkComponentRows = [];
-        var row = model.getCurrentSelectionManager().GetHighlightedRow;
-        checkComponentRows.push(row["row"]);       
+ViewerContextMenu.prototype.HideInReview = function () {
+    var checkComponentRows = [];
+    var row = model.getCurrentSelectionManager().GetHighlightedRow;
+    checkComponentRows.push(row["row"]);
 
-        // get viewerInterface on which "hide" is called
-        var viewerInterface = this.GetViewerInterface();
+    // get viewerInterface on which "hide" is called
+    var viewerInterface = this.GetViewerInterface();
 
-        viewerInterface.StoreHiddenResultId(checkComponentRows);
-        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
+    viewerInterface.StoreHiddenResultId(checkComponentRows);
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
 }
 
-ViewerContextMenu.prototype.GetViewerInterface = function() {
+ViewerContextMenu.prototype.GetViewerInterface = function () {
     var viewerContainer = this.WebViewer._params["containerId"];
 
-    if(model.currentCheck == "comparison") {
-        if(viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
+    if (model.currentCheck == "comparison") {
+        if (viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
             return model.checks[model.currentCheck].sourceAViewer;
         }
-    
-        if(viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
+
+        if (viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
             return model.checks[model.currentCheck].sourceBViewer;
         }
     }
     else {
         return model.checks[model.currentCheck].viewer;
     }
-   
+
 }
 
 ViewerContextMenu.prototype.OnIsolateClicked = function () {
@@ -275,15 +291,14 @@ ViewerContextMenu.prototype.OnIsolateClicked = function () {
         }
 
         //Grey out the text of hidden element rows
-        var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);        
+        var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
         sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
 
         // unhighlight the hidden rows made visible
-        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(selectedNodes);        
+        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(selectedNodes);
         sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
     }
 }
-
 
 ViewerContextMenu.prototype.OnShowAllClicked = function () {
     if (!this.WebViewer) {
@@ -295,7 +310,7 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
         _this.WebViewer.view.fitWorld();
     });
 
-    if(model.currentTabId) {
+    if (model.currentTabId) {
         // Remove all nodeIds from list (Showing all) and show all rows
         var sourceManager = SourceManagers[model.currentTabId];
         sourceManager.ModelTree.ShowAllHiddenRows();
@@ -305,7 +320,6 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
         viewerInterface.ShowHiddenRows();
     }
 }
-
 
 ViewerContextMenu.prototype.OnStartTranslucencyClicked = function () {
     if (!this.WebViewer ||
@@ -356,3 +370,50 @@ ViewerContextMenu.prototype.ExplodeActive = function () {
     return false;
 }
 
+ViewerContextMenu.prototype.OnChangeBackgroundClicked = function () {
+    var overlay = document.getElementById("uiBlockingOverlay");
+    var popup = document.getElementById("changeBGPopup");
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+
+    popup.style.width = "220px";
+    popup.style.height = "110px";
+
+    popup.style.top = ((window.innerHeight / 2) - 110) + "px";
+    popup.style.left = ((window.innerWidth / 2) - 55) + "px";
+    
+    popup.style.padding = "5px";
+
+    var verticalGradient = this.WebViewer.view.getBackgroundColor();
+
+    document.getElementById("bottomColor").value = xCheckStudio.Util.rgbToHex(verticalGradient.bottom.r, verticalGradient.bottom.g, verticalGradient.bottom.b);
+    document.getElementById("topColor").value = xCheckStudio.Util.rgbToHex(verticalGradient.top.r, verticalGradient.top.g, verticalGradient.top.b);
+
+    var _this = this;
+
+    document.getElementById("changeBGDefaultButton").onclick = function () {
+
+        document.getElementById("topColor").value = "#000000";
+        document.getElementById("bottomColor").value = "#F8F9F9";
+
+        var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");
+        var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
+        _this.WebViewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
+    }
+
+    document.getElementById("changeBGOkButton").onclick = function () {     
+
+            var backgroundTopColor = xCheckStudio.Util.hexToRgb(document.getElementById("topColor").value);
+            var backgroundBottomColor = xCheckStudio.Util.hexToRgb(document.getElementById("bottomColor").value);
+            _this.WebViewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);        
+    };
+
+    document.getElementById("changeBGCancelButton").onclick = function () {
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("changeBGPopup");
+
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+    };
+}

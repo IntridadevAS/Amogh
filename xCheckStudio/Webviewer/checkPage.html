@@ -1031,6 +1031,19 @@
     </div>
   </div>
 
+  <!-- change background overlay -->
+  <div id="changeBGPopup" class="popup">
+    <div>
+      <label>Top color:</label>
+      <input type="color" id="topColor" value="#000000"><br>
+      <label>Bottom color:</label>
+      <input type="color" id="bottomColor" value="#F8F9F9"><br><br>
+      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGDefaultButton"> Default </button>
+      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGOkButton"> OK </button>
+      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGCancelButton" >Cancel</button>
+    </div>
+  </div>
+
   <header>
     <div id="mainMenu" class="dropDownMenu">
       <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
@@ -1308,7 +1321,7 @@
       width: 6px;
     }
 
-    .tempContainer {
+    .tempContainer {      
       position: absolute;
       top: 0;
       left: 0;
@@ -1355,6 +1368,10 @@
     .dx-loadpanel-message {
       color: white !important;
     }
+
+    .ignoreDefault { 
+            all: unset; 
+        } 
   </style>
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-3.4.1.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
