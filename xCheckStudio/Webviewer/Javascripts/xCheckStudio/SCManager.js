@@ -509,6 +509,16 @@ function DWGSourceManager(id,  sourceName, sourceType, viewerOptions) {
 DWGSourceManager.prototype = Object.create(SCManager.prototype);
 DWGSourceManager.prototype.constructor = DWGSourceManager;
 
+
+function DWFSourceManager(id,  sourceName, sourceType, viewerOptions) {
+    // call super constructor
+    SCManager.call(this, id,  sourceName, sourceType, viewerOptions);
+}
+// inherit from parent
+DWFSourceManager.prototype = Object.create(SCManager.prototype);
+DWFSourceManager.prototype.constructor = DWFSourceManager;
+
+
 function RVTSourceManager(id,  sourceName, sourceType, viewerOptions) {
     // call super constructor
     SCManager.call(this, id,  sourceName, sourceType, viewerOptions);

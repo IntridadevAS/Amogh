@@ -251,7 +251,7 @@ function getSourceSelectElement() {
     var sourceSelect = document.createElement("select");
 
     var sourceTypes = ["", ".XML", ".RVM", ".XLS",
-        ".SLDASM", ".DWG", ".SLDPRT",
+        ".SLDASM", ".DWG", ".DXF", ".DWF", ".DWFX", ".SLDPRT",
         ".RVT", ".RFA", ".IFC", ".STEP",
         ".JSON", ".IGS", "STE", "STP"];
 
