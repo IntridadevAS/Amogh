@@ -24,8 +24,12 @@ function createSourceManager(id,
             sourceManager = new SolidWorksSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "dwg":
+        case "dxf":
             sourceManager = new DWGSourceManager(id, fileName, sourceType, viewerOptions);
-        break;
+        case "dwf":
+        case "dwfx":
+            sourceManager = new DWFSourceManager(id, fileName, sourceType, viewerOptions);
+        break;        
         case "rvt":
         case "rfa":
             sourceManager = new RVTSourceManager(id, fileName, sourceType, viewerOptions);

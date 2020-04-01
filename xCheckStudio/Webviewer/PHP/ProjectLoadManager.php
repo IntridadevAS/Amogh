@@ -1179,8 +1179,8 @@
     function isDataSource3D($sourceExt) {
         $is3D = true;
 
-        $validSources = array("xml","XML","rvm","RVM", "sldasm", "SLDASM","DWG", "dwg", "sldprt", 
-        "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "IGS", "igs");
+        $validSources = array("xml","XML","rvm","RVM", "sldasm", "SLDASM", "DWG", "dwg", "DXF", "dxf", "DWF", "dwf", "DWFX", "dwfx",
+        "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "IGS", "igs");
            // open database
            if(in_array($sourceExt, $validSources) == false) {
                 $is3D = false;

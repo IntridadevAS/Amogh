@@ -10,8 +10,7 @@
     $operation = $_POST["Operation"];
 
     $validSources = json_decode($_POST['ValidSourceTypes'],true);    
-    // $validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "sldprt", 
-    // "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs");
+   
     $counter = 0;
     $uploadedFiles = array();
 

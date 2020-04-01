@@ -89,6 +89,9 @@ function fileExists($fileName, $caseSensitive = true) {
                 case "xls":
                 case "sldasm":               
                 case "dwg":
+                case "dxf":
+                case "dwf":
+                case "dwfx":
                 case "sldprt":               
                 case "rvt":
                 case "rfa":               

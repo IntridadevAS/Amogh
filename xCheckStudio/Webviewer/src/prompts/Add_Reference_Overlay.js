@@ -1674,8 +1674,7 @@ window.onload = function () {
 
 	$("#referenceFileInput").dxFileUploader({
 		name: "file",
-		multiple: false,
-		// accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS",
+		multiple: false,		
 		width: "551px",
 		height: "75px",
 		value: [],
