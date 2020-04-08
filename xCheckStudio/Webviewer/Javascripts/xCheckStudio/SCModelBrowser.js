@@ -1,12 +1,3 @@
-//var modelBrowserCheckColumn = 0;
-//var modelBrowserComponentColumn = 1;
-//var modelBrowserMainClassColumn = 2;
-//var modelBrowserSubClassColumn = 3;
-// var modelBrowserSourceColumn = 4;
-// var modelBrowserDestinationColumn = 5;
-// var modelBrowserOwnerColumn = 6;
-//var modelBrowserNodeIdColumn = 4;
-
 function SCModelBrowser(id,
     modelBrowserContainer,
     viewer,
@@ -20,22 +11,14 @@ function SCModelBrowser(id,
     this.Webviewer = viewer;
     this.SourceType = sourceType;
 
-    //this.NodeIdVsCellClassList = {};
-    //this.NodeIdVsRowClassList = {};
-    //this.modelTreeColumnHeaders = [];
     this.modelTreeRowData = [];
 
     this.ModelBrowserAddedNodes = [];
     this.NodeParentList = {};
-    //this.NodeGroups = [];
-
-    // this.CreateHeaders();
-    //this.InitEvents();
-
+    
     // selectiion manager
     this.SelectionManager = new SCSelectionManager(nodeIdvsSelectedComponents);
 }
-
 
 // assign ModelBrowser's method to this class
 SCModelBrowser.prototype = Object.create(ModelBrowser.prototype);
@@ -256,7 +239,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     checkBoxStatus = "off";
                     clickedCheckBoxRowKeys = e.currentDeselectedRowKeys;
                 }
-                _this.UpdateSelectionComponentFromCheckBox(clickedCheckBoxRowKeys, checkBoxStatus, e.component, containerDiv);
+                _this.UpdateSelectionComponentFromCheckBox(clickedCheckBoxRowKeys, 
+                    checkBoxStatus, 
+                    e.component, 
+                    containerDiv);
             },
             onRowClick: function(e) {
                 _this.SelectionManager.HandleRowSelect(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);

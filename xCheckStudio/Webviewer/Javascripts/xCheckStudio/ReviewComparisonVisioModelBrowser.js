@@ -1,4 +1,4 @@
-function ReviewComparison3DModelBrowser(id,
+function ReviewComparisonVisioModelBrowser(id,
     sourceFileName,
     checkData) {
     // call super constructor
@@ -16,28 +16,27 @@ function ReviewComparison3DModelBrowser(id,
 }
 
 // assign ReviewModelBrowser's method to this class
-ReviewComparison3DModelBrowser.prototype = Object.create(ReviewModelBrowser.prototype);
-ReviewComparison3DModelBrowser.prototype.constructor = ReviewComparison3DModelBrowser;
+ReviewComparisonVisioModelBrowser.prototype = Object.create(ReviewModelBrowser.prototype);
+ReviewComparisonVisioModelBrowser.prototype.constructor = ReviewComparisonVisioModelBrowser;
 
-ReviewComparison3DModelBrowser.prototype.Is3D = function () {
+ReviewComparisonVisioModelBrowser.prototype.IsVisio = function () {
     return true;
 }
 
-ReviewComparison3DModelBrowser.prototype.GetTableDivId = function () {
+ReviewComparisonVisioModelBrowser.prototype.GetTableDivId = function () {
     return this.SourceFileName.replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer;
 }
 
-ReviewComparison3DModelBrowser.prototype.GetSelectionManager = function () {
+ReviewComparisonVisioModelBrowser.prototype.GetSelectionManager = function () {
     var browser = model.checks["comparison"]["modelBrowsers"][this.SourceFileName];
     return browser["selectionManager"];
 }
 
-ReviewComparison3DModelBrowser.prototype.GetViewer = function () {
+ReviewComparisonVisioModelBrowser.prototype.GetViewer = function () {
     var browser = model.checks["comparison"]["modelBrowsers"][this.SourceFileName];
     return browser["viewer"];
 }
-
-ReviewComparison3DModelBrowser.prototype.AddModelBrowser = function (comparisonComponents) {
+ReviewComparisonVisioModelBrowser.prototype.AddModelBrowser = function (comparisonComponents) {
     this.Components = comparisonComponents;
 
     var headers = this.CreateHeaders();
@@ -50,9 +49,9 @@ ReviewComparison3DModelBrowser.prototype.AddModelBrowser = function (comparisonC
     this.LoadTable(headers);
 }
 
-ReviewComparison3DModelBrowser.prototype.CreateHeaders = function () {
+ReviewComparisonVisioModelBrowser.prototype.CreateHeaders = function () {
     var columnHeaders = [];
-    for (var i = 0; i < Object.keys(Comparison3DBrowserColumns).length; i++) {
+    for (var i = 0; i < Object.keys(ComparisonVisioBrowserColumns).length; i++) {
 
         var columnHeader = {};
         var caption;
@@ -60,51 +59,51 @@ ReviewComparison3DModelBrowser.prototype.CreateHeaders = function () {
         var width;
         var visible = true
 
-        if (i === Comparison3DBrowserColumns.Select) {
+        if (i === ComparisonVisioBrowserColumns.Select) {
             continue;
         }
-        else if (i === Comparison3DBrowserColumns.Component) {
-            caption = Comparison3DBrowserNames.Component;
-            dataField = Comparison3DBrowserNames.Component;
+        else if (i === ComparisonVisioBrowserColumns.Component) {
+            caption = ComparisonVisioBrowserNames.Component;
+            dataField = ComparisonVisioBrowserNames.Component;
             width = "30%";
         }
-        else if (i === Comparison3DBrowserColumns.MainClass) {
-            caption = Comparison3DBrowserNames.MainClass;
-            dataField = Comparison3DBrowserNames.MainClass;
+        else if (i === ComparisonVisioBrowserColumns.MainClass) {
+            caption = ComparisonVisioBrowserNames.MainClass;
+            dataField = ComparisonVisioBrowserNames.MainClass;
             width = "25%";
         }
-        else if (i === Comparison3DBrowserColumns.SubClass) {
-            caption = Comparison3DBrowserNames.SubClass;
-            dataField = Comparison3DBrowserNames.SubClass;
+        else if (i === ComparisonVisioBrowserColumns.SubClass) {
+            caption = ComparisonVisioBrowserNames.SubClass;
+            dataField = ComparisonVisioBrowserNames.SubClass;
             width = "25%";
         }
-        else if (i === Comparison3DBrowserColumns.Status) {
-            caption = Comparison3DBrowserNames.Status;
-            dataField = Comparison3DBrowserNames.Status;
+        else if (i === ComparisonVisioBrowserColumns.Status) {
+            caption = ComparisonVisioBrowserNames.Status;
+            dataField = ComparisonVisioBrowserNames.Status;
             width = "20%";
             visible = true;
         }
-        else if (i === Comparison3DBrowserColumns.NodeId) {
-            caption = Comparison3DBrowserNames.NodeId;
-            dataField = Comparison3DBrowserNames.NodeId;
+        else if (i === ComparisonVisioBrowserColumns.NodeId) {
+            caption = ComparisonVisioBrowserNames.NodeId;
+            dataField = ComparisonVisioBrowserNames.NodeId;
             width = "0%";
             visible = false;
         }
-        else if (i === Comparison3DBrowserColumns.ResultId) {
-            caption = Comparison3DBrowserNames.ResultId;
-            dataField = Comparison3DBrowserNames.ResultId;
+        else if (i === ComparisonVisioBrowserColumns.ResultId) {
+            caption = ComparisonVisioBrowserNames.ResultId;
+            dataField = ComparisonVisioBrowserNames.ResultId;
             width = "0%";
             visible = false;
         }
-        else if (i === Comparison3DBrowserColumns.GroupId) {
-            caption = Comparison3DBrowserNames.GroupId;
-            dataField = Comparison3DBrowserNames.GroupId;
+        else if (i === ComparisonVisioBrowserColumns.GroupId) {
+            caption = ComparisonVisioBrowserNames.GroupId;
+            dataField = ComparisonVisioBrowserNames.GroupId;
             width = "0%";
             visible = false;
         }
-        else if (i === Comparison3DBrowserColumns.Parent) {
-            caption = Comparison3DBrowserNames.Parent;
-            dataField = Comparison3DBrowserNames.Parent;
+        else if (i === ComparisonVisioBrowserColumns.Parent) {
+            caption = ComparisonVisioBrowserNames.Parent;
+            dataField = ComparisonVisioBrowserNames.Parent;
             width = "0%";
             visible = false;
         }
@@ -122,38 +121,54 @@ ReviewComparison3DModelBrowser.prototype.CreateHeaders = function () {
     return columnHeaders;
 }
 
-ReviewComparison3DModelBrowser.prototype.CreateBrowserData = function (component, parentNode) {
+ReviewComparisonVisioModelBrowser.prototype.CreateBrowserData = function (component, parentName) {
     tableRowContent = {};
-    tableRowContent[Comparison3DBrowserNames.Component] = component.Name;
-    tableRowContent[Comparison3DBrowserNames.MainClass] = component.MainClass;
-    tableRowContent[Comparison3DBrowserNames.SubClass] = component.SubClass;
-    tableRowContent[Comparison3DBrowserNames.Status] = component.Status;
-    tableRowContent[Comparison3DBrowserNames.NodeId] = (component.NodeId && component.NodeId != "") ? Number(component.NodeId) : "";
-    tableRowContent[Comparison3DBrowserNames.ResultId] = (component.Id && component.Id != "") ? Number(component.Id) : "";
-    tableRowContent[Comparison3DBrowserNames.GroupId] = (component.GroupId && component.GroupId != "") ? Number(component.GroupId) : "";
-    tableRowContent[Comparison3DBrowserNames.Parent] = Number(parentNode);
+    tableRowContent[ComparisonVisioBrowserNames.Component] = component.Name;
+    tableRowContent[ComparisonVisioBrowserNames.MainClass] = component.MainClass;
+    tableRowContent[ComparisonVisioBrowserNames.SubClass] = component.SubClass;
+    tableRowContent[ComparisonVisioBrowserNames.Status] = component.Status;
+    tableRowContent[ComparisonVisioBrowserNames.NodeId] = (component.NodeId && component.NodeId != "") ? component.NodeId : "";
+    tableRowContent[ComparisonVisioBrowserNames.ResultId] = (component.Id && component.Id != "") ? Number(component.Id) : "";
+    tableRowContent[ComparisonVisioBrowserNames.GroupId] = (component.GroupId && component.GroupId != "") ? Number(component.GroupId) : "";
+    tableRowContent[ComparisonVisioBrowserNames.Parent] = parentName;
     this.ModelTreeData.push(tableRowContent);
 
     // maintain nodeId vs component data
-    this.MaintainNodeIdVsCheckComponent(component);
+    this.MaintainNameVsCheckComponent(component);
 
     // maintain node id vs parent node
-    this.NodeParentList[Number(component.NodeId)] = Number(parentNode);
+    this.NodeParentList[component.Name] = parentName;
 
     if (component.Children && component.Children.length > 0) {
         for (var i = 0; i < component.Children.length; i++) {
-            this.CreateBrowserData(component.Children[i], component.NodeId);
+            this.CreateBrowserData(component.Children[i], component.Name);
         }
     }
 }
 
-ReviewComparison3DModelBrowser.prototype.LoadTable = function (headers) {
+ReviewComparisonVisioModelBrowser.prototype.MaintainNameVsCheckComponent = function (component) {
+
+    // maintain track of check components
+    if (component.Name) {
+        this.NodeIdvsCheckComponent[component.Name] = {
+            "ResultId": component.Id,
+            "Name": component.Name,
+            "MainClass": component.MainClass,
+            "SubClass": component.SubClass,
+            "Status": component.Status,
+            "NodeId": component.NodeId,
+            "GroupId": component.GroupId,
+        };
+    }
+}
+
+ReviewComparisonVisioModelBrowser.prototype.LoadTable = function (headers) {
     var _this = this;
     var container = "#" + this.GetTableDivId();
     $(container).dxTreeList({
         dataSource: _this.ModelTreeData,
-        keyExpr: Comparison3DBrowserNames.NodeId,
-        parentIdExpr: Comparison3DBrowserNames.Parent,
+        keyExpr: ComparisonVisioBrowserNames.Component,
+        parentIdExpr: ComparisonVisioBrowserNames.Parent,
         columns: headers,
         columnAutoWidth: true,
         columnResizingMode: 'widget',
@@ -207,7 +222,7 @@ ReviewComparison3DModelBrowser.prototype.LoadTable = function (headers) {
     });
 }
 
-ReviewComparison3DModelBrowser.prototype.AddTooltip = function (e) {
+ReviewComparisonVisioModelBrowser.prototype.AddTooltip = function (e) {
     var anotherSource;
     var anotherComponent;
     var groupID = e.node.data.GroupId;
@@ -239,19 +254,31 @@ ReviewComparison3DModelBrowser.prototype.AddTooltip = function (e) {
     }
 }
 
-ReviewComparison3DModelBrowser.prototype.CreateCheckGroupButton = function (title) {
+ReviewComparisonVisioModelBrowser.prototype.AddTableContentCount = function (containerId) {
+    var countDiv = document.getElementById(containerId + "_child");
+    if (countDiv) {
+        return;
+    }
+    else {
+        var modelBrowserData = document.getElementById(containerId);
 
-    var btn = document.createElement("BUTTON");
-    btn.className = "accordion";
-    btn.style.justifyContent = "center";
-    btn.style.color = "white";
-    btn.style.width = "100%";
-    var t = document.createTextNode(title);       // Create a text node
-    btn.appendChild(t);
-    return btn;
+        var modelBrowserDataTable = modelBrowserData.children[0];
+       
+        // var countBox;
+        var div2 = document.createElement("DIV");
+        var id = containerId + "_child";
+        div2.id = id;
+        div2.style.fontSize = "13px";
+
+        // var countBox = document.getElementById(id);
+        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
+        var rowCount = this.ModelTreeData.length;
+        div2.innerHTML = "Count :" + rowCount;
+        modelBrowserDataTable.appendChild(div2);
+    }
 }
 
-ReviewComparison3DModelBrowser.prototype.OnComponentRowClicked = function (rowData) {
+ReviewComparisonVisioModelBrowser.prototype.OnComponentRowClicked = function (rowData) {
 
     this.LoadDetailedTable(rowData);
 
@@ -261,7 +288,16 @@ ReviewComparison3DModelBrowser.prototype.OnComponentRowClicked = function (rowDa
     this.HighlightInAnotherBrowser(rowData);
 }
 
-ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (rowData) {
+ReviewComparisonVisioModelBrowser.prototype.HighlightInViewer = function (rowData) {
+
+    var viewerInterface = this.GetViewer();
+
+    if (viewerInterface) {
+        viewerInterface.HighlightComponent(rowData.NodeId);
+    }
+}
+
+ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function (rowData) {
     if (rowData.GroupId in this.CheckData.results) {
         var group = this.CheckData.results[rowData.GroupId];
 
@@ -281,7 +317,8 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                 if (browser.Is1D()) {
                     browsers[src]["viewer"].UnhighlightSheetRow();
                 }
-                else if (browser.Is3D()) {
+                else if (browser.Is3D() ||
+                         browser.IsVisio()) {
                     browsers[src]["viewer"].UnHighlightComponent();
                 }
 
@@ -290,9 +327,12 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                     if (browser.Is3D()) {
                         anotherBrowserRowData.NodeId = Number(checkComponent.sourceANodeId);
                     }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceANodeId;
+                    }
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
-                        if (mainClasses.length !== 2) {
+                        if (mainClasses.length !== 1) {
                             return;
                         }
 
@@ -305,6 +345,9 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                     if (browser.Is3D()) {
                         anotherBrowserRowData.NodeId = Number(checkComponent.sourceBNodeId);
                     }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceBNodeId;
+                    }
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
                         if (mainClasses.length !== 2) {
@@ -313,7 +356,43 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
 
                         anotherBrowserRowData.Item = checkComponent.sourceBName
                         anotherBrowserRowData.Class = checkComponent.sourceBSubComponentClass
-                        anotherBrowserRowData.Category = mainClasses[1];
+                        anotherBrowserRowData.Category = mainClasses[2];
+                    }
+                }
+                else if (browser.Id === "c") {
+                    if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceCNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceCNodeId;
+                    }
+                    else if (browser.Is1D()) {
+                        var mainClasses = group.componentClass.split("-");
+                        if (mainClasses.length !== 3) {
+                            return;
+                        }
+
+                        anotherBrowserRowData.Item = checkComponent.sourceCName
+                        anotherBrowserRowData.Class = checkComponent.sourceCSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[2];
+                    }
+                }
+                else if (browser.Id === "d") {
+                    if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceDNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceDNodeId;
+                    }
+                    else if (browser.Is1D()) {
+                        var mainClasses = group.componentClass.split("-");
+                        if (mainClasses.length !== 4) {
+                            return;
+                        }
+
+                        anotherBrowserRowData.Item = checkComponent.sourceDName
+                        anotherBrowserRowData.Class = checkComponent.sourceDSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[3];
                     }
                 }
 
@@ -329,21 +408,52 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                         browser.HighlightInViewer(anotherBrowserRowData);
                     }
                 }
+                else if (browser.IsVisio()) {
+                    browser.HighlightInViewer(anotherBrowserRowData);
+                }
             }
         }
     }
 }
 
-ReviewComparison3DModelBrowser.prototype.HighlightInViewer = function (rowData) {
+// ReviewComparisonVisioModelBrowser.prototype.HighlightBrowserComponentRow = function (selectedNodeId, originalComponent) {
+//     var _this = this;
 
-    var viewerInterface = this.GetViewer();
+//     var path = {};
+//     path['path'] = [selectedNodeId];
+//     this.GetTopMostParentNode(selectedNodeId, path);
 
-    if (viewerInterface) {
-        viewerInterface.HighlightComponent(rowData.NodeId);
-    }
-}
+//     this.HighlightRow(path, selectedNodeId);
 
-ReviewComparison3DModelBrowser.prototype.LoadDetailedTable = function (rowData) {
+
+//     if (originalComponent) {
+//         expandModelBrowserAccordion(this.SourceFileName, "#" + Comparison.MainReviewContainer).then(function (result) {
+//             var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
+//             var row = _this.TreeInstance.getRowElement(rowIndex);
+//             document.getElementById(Comparison.MainReviewContainer).scrollTop = row[0].offsetTop - row[0].offsetHeight;
+//             // _this.TreeInstance.navigateToRow(selectedNodeId).done(function () {
+//             // });
+//         });
+
+//         // load detailed table
+//         var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
+//         var rows = _this.TreeInstance.getVisibleRows();
+//         if (rowIndex in rows) {
+//             this.LoadDetailedTable(rows[rowIndex].data);
+//         }
+
+//         // highlight in another browser
+//         var rows = this.TreeInstance.getVisibleRows();
+//         var rowIndex = this.TreeInstance.getRowIndexByKey(selectedNodeId);
+//         if (rowIndex != -1 && (rowIndex in rows)) {
+//             var rowData = rows[rowIndex];
+//             this.HighlightInAnotherBrowser(rowData.data);
+//         }
+//     }
+//     // this.OpenHighlightedRow(path, selectedNodeId);
+// }
+
+ReviewComparisonVisioModelBrowser.prototype.LoadDetailedTable = function (rowData) {
     var componentId = rowData.ResultId;
     var groupId = rowData.GroupId;
     if (!componentId || componentId === "" ||
@@ -365,18 +475,7 @@ ReviewComparison3DModelBrowser.prototype.LoadDetailedTable = function (rowData) 
     this.LoadDetailedInfoTable(columnHeaders, tableData);
 }
 
-ReviewComparison3DModelBrowser.prototype.GetCheckComponent = function (groupId, componentId) {
-    var checkGroup = this.GetCheckGroup(groupId);
-    var component = checkGroup.components[componentId];
-
-    return component;
-}
-
-ReviewComparison3DModelBrowser.prototype.GetCheckGroup = function (groupId) {
-    return this.CheckData.results[groupId];
-}
-
-ReviewComparison3DModelBrowser.prototype.CreatePropertiesTableHeader = function () {
+ReviewComparisonVisioModelBrowser.prototype.CreatePropertiesTableHeader = function () {
     var columns = [];
     for (var i = 0; i < Object.keys(ComparisonBrowserDetailedColumns).length; i++) {
 
@@ -421,7 +520,7 @@ ReviewComparison3DModelBrowser.prototype.CreatePropertiesTableHeader = function 
     return columnHeaders;
 }
 
-ReviewComparison3DModelBrowser.prototype.CreateDetailedTableData = function (component) {
+ReviewComparisonVisioModelBrowser.prototype.CreateDetailedTableData = function (component) {
 
     var src;
     if (this.SourceFileName === this.CheckData.sources[0]) {
@@ -477,7 +576,7 @@ ReviewComparison3DModelBrowser.prototype.CreateDetailedTableData = function (com
     return tableData;
 }
 
-ReviewComparison3DModelBrowser.prototype.LoadDetailedInfoTable = function (columnHeaders, tableData) {
+ReviewComparisonVisioModelBrowser.prototype.LoadDetailedInfoTable = function (columnHeaders, tableData) {
     var tableContainer = "#" + Comparison.DetailInfoContainer;
     var _this = this;
 
@@ -536,7 +635,35 @@ ReviewComparison3DModelBrowser.prototype.LoadDetailedInfoTable = function (colum
     });
 };
 
-ReviewComparison3DModelBrowser.prototype.DestroyDetailedInfoTable = function () {
+ReviewComparisonVisioModelBrowser.prototype.GetCheckComponent = function (groupId, componentId) {
+    var checkGroup = this.GetCheckGroup(groupId);
+    var component = checkGroup.components[componentId];
+
+    return component;
+}
+
+ReviewComparisonVisioModelBrowser.prototype.GetCheckGroup = function (groupId) {
+    return this.CheckData.results[groupId];
+}
+
+ReviewComparisonVisioModelBrowser.prototype.Destroy = function () {
+
+    $("#" + this.GetTableDivId()).remove()
+    //Destroy accordion
+
+    var comparisonTableData = document.getElementById(Comparison.MainReviewContainer).innerHTML;
+    if (comparisonTableData !== "") {
+        $("#" + Comparison.MainReviewContainer).dxAccordion("dispose");
+        comparisonTableData = "";
+    }
+
+    this.DestroyDetailedInfoTable();
+
+     //clear view
+     this.GetViewer().Clear();
+}
+
+ReviewComparisonVisioModelBrowser.prototype.DestroyDetailedInfoTable = function () {
 
     var table = document.getElementById(Comparison.DetailInfoContainer);
     //Destroy dxDataGrid
@@ -550,177 +677,5 @@ ReviewComparison3DModelBrowser.prototype.DestroyDetailedInfoTable = function () 
     var tableDiv = document.createElement("div");
     tableDiv.id = Comparison.DetailInfoContainer;
     comparisonDetailInfoContainer.appendChild(tableDiv);
-}
-
-ReviewComparison3DModelBrowser.prototype.Destroy = function () {
-
-    $("#" + this.GetTableDivId()).remove()
-    //Destroy accordion
-
-    var comparisonTableData = document.getElementById(Comparison.MainReviewContainer).innerHTML;
-    if (comparisonTableData !== "") {
-        $("#" + Comparison.MainReviewContainer).dxAccordion("dispose");
-        comparisonTableData = "";
-    }
-
-    this.DestroyDetailedInfoTable();
-}
-
-ReviewComparison3DModelBrowser.prototype.MaintainNodeIdVsCheckComponent = function (component) {
-
-    // maintain track of check components
-    if (component.NodeId) {
-        this.NodeIdvsCheckComponent[Number(component.NodeId)] = {
-            "ResultId": component.Id,
-            "Name": component.Name,
-            "MainClass": component.MainClass,
-            "SubClass": component.SubClass,
-            "Status": component.Status,
-            "NodeId": Number(component.NodeId),
-            "GroupId": component.GroupId,
-        };
-    }
-}
-
-ReviewComparison3DModelBrowser.prototype.GetCheckComponetDataByNodeId = function (viewerId, selectedNode) {
-    var checkComponentData;
-
-    if (this.NodeIdvsCheckComponent !== undefined &&
-        selectedNode in this.NodeIdvsCheckComponent) {
-        checkComponentData = this.NodeIdvsCheckComponent[selectedNode];
-    }
-
-    return checkComponentData;
-}
-
-ReviewComparison3DModelBrowser.prototype.HighlightBrowserComponentRow = function (selectedNodeId, originalComponent) {
-    var _this = this;
-
-    var path = {};
-    path['path'] = [selectedNodeId];
-    this.GetTopMostParentNode(selectedNodeId, path);
-
-    this.HighlightRow(path, selectedNodeId);
-
-
-    if (originalComponent) {
-        expandModelBrowserAccordion(this.SourceFileName, "#" + Comparison.MainReviewContainer).then(function (result) {
-            var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
-            var row = _this.TreeInstance.getRowElement(rowIndex);
-            document.getElementById(Comparison.MainReviewContainer).scrollTop = row[0].offsetTop - row[0].offsetHeight;
-            // _this.TreeInstance.navigateToRow(selectedNodeId).done(function () {
-            // });
-        });
-
-        // load detailed table
-        var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
-        var rows = _this.TreeInstance.getVisibleRows();
-        if (rowIndex in rows) {
-            this.LoadDetailedTable(rows[rowIndex].data);
-        }
-
-        // highlight in another browser
-        var rows = this.TreeInstance.getVisibleRows();
-        var rowIndex = this.TreeInstance.getRowIndexByKey(selectedNodeId);
-        if (rowIndex != -1 && (rowIndex in rows)) {
-            var rowData = rows[rowIndex];
-            this.HighlightInAnotherBrowser(rowData.data);
-        }
-    }
-    // this.OpenHighlightedRow(path, selectedNodeId);
-}
-
-ReviewComparison3DModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
-
-    if (rowKey in this.NodeParentList) {
-
-        if (this.NodeParentList[rowKey] === 0) {
-            return;
-        }
-        path['path'].push(this.NodeParentList[rowKey])
-
-        this.GetTopMostParentNode(this.NodeParentList[rowKey], path);
-    }
-}
-
-ReviewComparison3DModelBrowser.prototype.HighlightRow = function (path, selectedNodeId) {
-
-    _this = this;
-    if (!('path' in path)) {
-        return;
-    }
-
-    var nodeList = path['path'];
-    nodeList = nodeList.reverse();
-
-    var container = "#" + _this.GetTableDivId();
-    var treeList = $(container).dxTreeList("instance");
-
-    // expand tree if not expanded else select row using key
-    for (var i = 0; i < nodeList.length; i++) {
-        var node = nodeList[i];
-
-        if (!treeList.isRowExpanded(node)) {
-            treeList.expandRow(node).done(function () {
-                _this.HighlightBrowserRowFromNodeId(selectedNodeId, container);
-            });
-        }
-        else {
-            if (i == nodeList.length - 1) {
-                _this.HighlightBrowserRowFromNodeId(selectedNodeId, container);
-            }
-        }
-    }
-    // });
-}
-
-
-ReviewComparison3DModelBrowser.prototype.HighlightBrowserRowFromNodeId = function (selectedNodeId, containerDiv) {
-
-    var _this = this;
-    var treeList = $(containerDiv).dxTreeList("instance");
-
-    // //navigate scrollbar to specified row using key
-    // treeList.navigateToRow(selectedNodeId).done(function () {
-
-    var rowIndex = treeList.getRowIndexByKey(selectedNodeId);
-    var row = treeList.getRowElement(rowIndex);
-
-    _this.GetSelectionManager().MaintainHighlightedRow(row[0], containerDiv, selectedNodeId);
-    // });
-}
-
-ReviewComparison3DModelBrowser.prototype.GetBrowserRow = function (rowKey, containerDiv) {
-    var modelBrowser = $(containerDiv).dxTreeList("instance");
-
-    var rowIndex = modelBrowser.getRowIndexByKey(rowKey);
-    if (rowIndex != -1) {
-        return modelBrowser.getRowElement(rowIndex);
-    }
-}
-
-ReviewComparison3DModelBrowser.prototype.AddTableContentCount = function (containerId) {
-    var countDiv = document.getElementById(containerId + "_child");
-    if (countDiv) {
-        return;
-    }
-    else {
-        var modelBrowserData = document.getElementById(containerId);
-
-        var modelBrowserDataTable = modelBrowserData.children[0];
-        var modelBrowserTableRows = modelBrowserDataTable.getElementsByTagName("tr");
-
-        // var countBox;
-        var div2 = document.createElement("DIV");
-        var id = containerId + "_child";
-        div2.id = id;
-        div2.style.fontSize = "13px";
-
-        // var countBox = document.getElementById(id);
-        // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        var rowCount = this.ModelTreeData.length;
-        div2.innerHTML = "Count :" + rowCount;
-        modelBrowserDataTable.appendChild(div2);
-    }
 }
 

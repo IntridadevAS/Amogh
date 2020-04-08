@@ -446,31 +446,48 @@ function populateComparisonModelBrowser(comparison) {
 
                     if (viewerOptions['a']['endPointUri'] !== undefined) {
 
-                        // model browser
-                        var modelBrowser = new ReviewComparison3DModelBrowser("a", source, comparison);
-                        modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
+                        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['a']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparison3DModelBrowser("a", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
-                        // viewer
-                        var options = ["compare1", viewerOptions['a']['endPointUri']];
-                        var viewerInterface = new ModelBrowser3DViewer("a", source, options);
-                        viewerInterface.setupViewer(550, 280);
+                            // viewer
+                            var options = ["compare1", viewerOptions['a']['endPointUri']];
+                            var viewerInterface = new ModelBrowser3DViewer("a", source, options);
+                            viewerInterface.setupViewer(550, 280);
+                          
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
 
-                        // var viewerInterface = new Review3DViewerInterface(["compare1", viewerOptions['a']['endPointUri']],
-                        //     undefined,
-                        //     undefined,
-                        //     source);
-                        // viewerInterface.setupViewer(550, 280);
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
 
-                        // selection manager
-                        var selectionManager = new ReviewModelBrowserSelectionManager();
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = browserComponents;
+                        }
+                        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(viewerOptions['a']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparisonVisioModelBrowser("a", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
-                        var browserComponents = {};
-                        browserComponents["browser"] = modelBrowser;
-                        browserComponents["viewer"] = viewerInterface;
-                        browserComponents["selectionManager"] = selectionManager;
+                            // viewer
+                            var options = ["compare1", viewerOptions['a']['endPointUri']];
+                            var viewerInterface = new ModelBrowserVisioViewer("a", source, options);
+                            viewerInterface.setupViewer(false);
 
-                        var comparisonData = model.checks["comparison"];
-                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = browserComponents;
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
+                        
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceAFileName] = browserComponents;
+                        }
                     }
                     else {
                         // get class wise properties for excel and other 1D datasources               
@@ -517,25 +534,48 @@ function populateComparisonModelBrowser(comparison) {
 
                     if (viewerOptions['b']['endPointUri'] !== undefined) {
 
-                        // model browser
-                        var modelBrowser = new ReviewComparison3DModelBrowser("b", source, comparison);
-                        modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
+                        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['b']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparison3DModelBrowser("b", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
 
-                        // viewer
-                        var options = ["compare2", viewerOptions['b']['endPointUri']];
-                        var viewerInterface = new ModelBrowser3DViewer("b", source, options);
-                        viewerInterface.setupViewer(550, 280);
+                            // viewer
+                            var options = ["compare2", viewerOptions['b']['endPointUri']];
+                            var viewerInterface = new ModelBrowser3DViewer("b", source, options);
+                            viewerInterface.setupViewer(550, 280);
 
-                        // selection manager
-                        var selectionManager = new ReviewModelBrowserSelectionManager();
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
 
-                        var browserComponents = {};
-                        browserComponents["browser"] = modelBrowser;
-                        browserComponents["viewer"] = viewerInterface;
-                        browserComponents["selectionManager"] = selectionManager;
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
 
-                        var comparisonData = model.checks["comparison"];
-                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = browserComponents;
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = browserComponents;
+                        }
+                        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(viewerOptions['b']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparisonVisioModelBrowser("b", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
+
+                            // viewer
+                            var options = ["compare2", viewerOptions['b']['endPointUri']];
+                            var viewerInterface = new ModelBrowserVisioViewer("b", source, options);
+                            viewerInterface.setupViewer(false);
+
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
+
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceBFileName] = browserComponents;
+                        }
                     }
                     else {
                         // get class wise properties for excel and other 1D datasources               
@@ -579,25 +619,48 @@ function populateComparisonModelBrowser(comparison) {
 
                     if (viewerOptions['c']['endPointUri'] !== undefined) {
 
-                        // model browser
-                        var modelBrowser = new ReviewComparison3DModelBrowser("c", source, comparison);
-                        modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
+                        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['c']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparison3DModelBrowser("c", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
 
-                        // viewer
-                        var options = ["compare3", viewerOptions['c']['endPointUri']];
-                        var viewerInterface = new ModelBrowser3DViewer("c", source, options);
-                        viewerInterface.setupViewer(550, 280);
+                            // viewer
+                            var options = ["compare3", viewerOptions['c']['endPointUri']];
+                            var viewerInterface = new ModelBrowser3DViewer("c", source, options);
+                            viewerInterface.setupViewer(550, 280);
 
-                        // selection manager
-                        var selectionManager = new ReviewModelBrowserSelectionManager();
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
 
-                        var browserComponents = {};
-                        browserComponents["browser"] = modelBrowser;
-                        browserComponents["viewer"] = viewerInterface;
-                        browserComponents["selectionManager"] = selectionManager;
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
 
-                        var comparisonData = model.checks["comparison"];
-                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceCFileName] = browserComponents;
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceCFileName] = browserComponents;
+                        }
+                        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(viewerOptions['c']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparisonVisioModelBrowser("c", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
+
+                            // viewer
+                            var options = ["compare3", viewerOptions['c']['endPointUri']];
+                            var viewerInterface = new ModelBrowserVisioViewer("c", source, options);
+                            viewerInterface.setupViewer(false);
+
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
+
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceCFileName] = browserComponents;
+                        }
                     }
                     else {
                         // get class wise properties for excel and other 1D datasources               
@@ -641,25 +704,48 @@ function populateComparisonModelBrowser(comparison) {
 
                     if (viewerOptions['d']['endPointUri'] !== undefined) {
 
-                        // model browser
-                        var modelBrowser = new ReviewComparison3DModelBrowser("d", source, comparison);
-                        modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
+                        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['d']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparison3DModelBrowser("d", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
 
-                        // viewer
-                        var options = ["compare4", viewerOptions['d']['endPointUri']];
-                        var viewerInterface = new ModelBrowser3DViewer("d", source, options);
-                        viewerInterface.setupViewer(550, 280);
+                            // viewer
+                            var options = ["compare4", viewerOptions['d']['endPointUri']];
+                            var viewerInterface = new ModelBrowser3DViewer("d", source, options);
+                            viewerInterface.setupViewer(550, 280);
 
-                        // selection manager
-                        var selectionManager = new ReviewModelBrowserSelectionManager();
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
 
-                        var browserComponents = {};
-                        browserComponents["browser"] = modelBrowser;
-                        browserComponents["viewer"] = viewerInterface;
-                        browserComponents["selectionManager"] = selectionManager;
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
 
-                        var comparisonData = model.checks["comparison"];
-                        comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceDFileName] = browserComponents;
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceDFileName] = browserComponents;
+                        }
+                        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(viewerOptions['d']["source"]))) {
+                            // model browser
+                            var modelBrowser = new ReviewComparisonVisioModelBrowser("d", source, comparison);
+                            modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
+
+                            // viewer
+                            var options = ["compare4", viewerOptions['d']['endPointUri']];
+                            var viewerInterface = new ModelBrowserVisioViewer("d", source, options);
+                            viewerInterface.setupViewer(false);
+
+                            // selection manager
+                            var selectionManager = new ReviewModelBrowserSelectionManager();
+
+                            var browserComponents = {};
+                            browserComponents["browser"] = modelBrowser;
+                            browserComponents["viewer"] = viewerInterface;
+                            browserComponents["selectionManager"] = selectionManager;
+
+                            var comparisonData = model.checks["comparison"];
+                            comparisonData["modelBrowsers"][checkResults.sourceInfo.sourceDFileName] = browserComponents;
+                        }
                     }
                     else {
                         // get class wise properties for excel and other 1D datasources               
@@ -729,25 +815,49 @@ function populateComplianceModelBrowser(compliance) {
 
                 if (viewerOption['endPointUri'] !== undefined) {
 
-                    // model browser
-                    var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
-                    modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
+                    if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOption["source"]))) {
 
-                    // viewer
-                    var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
-                    var viewerInterface = new ModelBrowser3DViewer(srcId, compliance.source, options);
-                    viewerInterface.setupViewer(550, 280);
+                        // model browser
+                        var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
+                        modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
-                    // selection manager
-                    var selectionManager = new ReviewModelBrowserSelectionManager();
+                        // viewer
+                        var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
+                        var viewerInterface = new ModelBrowser3DViewer(srcId, compliance.source, options);
+                        viewerInterface.setupViewer(550, 280);
 
-                    var browserComponents = {};
-                    browserComponents["browser"] = modelBrowser;
-                    browserComponents["viewer"] = viewerInterface;
-                    browserComponents["selectionManager"] = selectionManager;
+                        // selection manager
+                        var selectionManager = new ReviewModelBrowserSelectionManager();
 
-                    var complianceData = model.checks["compliance"];
-                    complianceData["modelBrowsers"][compliance.source] = browserComponents;
+                        var browserComponents = {};
+                        browserComponents["browser"] = modelBrowser;
+                        browserComponents["viewer"] = viewerInterface;
+                        browserComponents["selectionManager"] = selectionManager;
+
+                        var complianceData = model.checks["compliance"];
+                        complianceData["modelBrowsers"][compliance.source] = browserComponents;
+                    }
+                    else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(viewerOption["source"]))) {
+                        // model browser
+                        var modelBrowser = new ReviewComplianceVisioModelBrowser(srcId, compliance.source, compliance);
+                        modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
+
+                         // viewer
+                         var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
+                         var viewerInterface = new ModelBrowserVisioViewer(srcId, compliance.source, options);
+                         viewerInterface.setupViewer(true);
+ 
+                         // selection manager
+                         var selectionManager = new ReviewModelBrowserSelectionManager();
+ 
+                         var browserComponents = {};
+                         browserComponents["browser"] = modelBrowser;
+                         browserComponents["viewer"] = viewerInterface;
+                         browserComponents["selectionManager"] = selectionManager;
+ 
+                         var complianceData = model.checks["compliance"];
+                         complianceData["modelBrowsers"][compliance.source] = browserComponents;
+                    }
                 }
                 else {
 

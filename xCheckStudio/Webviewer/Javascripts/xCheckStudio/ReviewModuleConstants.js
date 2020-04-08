@@ -1,3 +1,27 @@
+
+// all 3D and 1D source extensions
+// source extensions in lowercase
+var Sources3D = ["xml",
+    "rvm",
+    "sldasm",
+    "dwg",
+    "dxf",
+    "dwf",
+    "dwfx",
+    "sldprt",
+    "rvt",
+    "rfa",
+    "ifc",
+    "step",
+    "stp",
+    "ste",
+    "igs"];
+var Sources1D = ["json", "xls"];
+var SourcesVSD = [ "vsd", "vsdx"];
+
+var ExcelSources = ["xls"];
+var DBSources = ["json"];
+
 // comparison main review table
 // indices
 const ComparisonColumns = {
@@ -202,6 +226,27 @@ const Comparison1DBrowserColumns = {
     Id : 7
 }
 
+const ComparisonVisioBrowserNames = {
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",
+    Status: "Status",
+    NodeId: "NodeId",
+    ResultId: "ResultId",
+    GroupId: "GroupId",
+    Parent: "Parent"
+}
+
+const ComparisonVisioBrowserColumns = {
+    Component: 0,
+    MainClass: 1,
+    SubClass: 2,
+    Status: 3,
+    NodeId: 4,
+    ResultId: 5,
+    GroupId: 6,
+    Parent : 7
+}
 
 /* Comparison model browser detailed table */
 const ComparisonBrowserDetailedNames = {    
@@ -263,6 +308,27 @@ const Compliance1DBrowserNames = {
     Id : "Id"
 }
 
+const ComplianceVisioBrowserColumns = {  
+    Component: 0,
+    MainClass: 1,
+    SubClass: 2,
+    Status: 3,
+    NodeId : 4,
+    ResultId : 5,
+    GroupId : 6,
+    Parent : 7
+}
+
+const ComplianceVisioBrowserNames = {    
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",
+    Status: "Status",
+    NodeId : "NodeId",
+    ResultId : "ResultId",
+    GroupId : "GroupId",
+    Parent : "Parent"
+}
 
 /* Compliance model browser detailed table */
 const ComplianceBrowserDetailedNames = {    

@@ -41,19 +41,27 @@ function ComplianceReviewManager(complianceCheckManager,
 ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
     if (this.ViewerData["endPointUri"] !== undefined) {
 
+        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.ViewerData["source"]))) {
+            var viewerInterface = new Review3DViewerInterface([containerId, this.ViewerData["endPointUri"]],
+                this.ComponentIdVsComponentData,
+                this.NodeIdVsComponentData,
+                this.ViewerData["source"]);
+            viewerInterface.NodeIdStatusData = this.NodeIdStatusData;
 
-        var viewerInterface = new Review3DViewerInterface([containerId, this.ViewerData["endPointUri"]],
-            this.ComponentIdVsComponentData,
-            this.NodeIdVsComponentData,
-            this.ViewerData["source"]);
-        viewerInterface.NodeIdStatusData = this.NodeIdStatusData;
+            viewerInterface.setupViewer(550, 300);
 
-        viewerInterface.setupViewer(550, 300);
+            model.checks["compliance"]["viewer"] = viewerInterface;
+        }
+        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.ViewerData["source"]))) {
+            var viewerInterface = new ReviewVisioViewerInterface([containerId, this.ViewerData["endPointUri"]],
+                this.ComponentIdVsComponentData,
+                this.NodeIdVsComponentData,
+                this.ViewerData["source"]);
+            viewerInterface.NodeIdStatusData = this.NodeIdStatusData;
+            viewerInterface.setupViewer("a", true);
 
-        model.checks["compliance"]["viewer"] = viewerInterface;
-        // var viewerContainer = document.getElementById(containerId);
-        // viewerContainer.style.height = "405px";
-        // viewerContainer.style.top = "70px";
+            model.checks["compliance"]["viewer"] = viewerInterface;
+        }
     }
     else if (this.SourceComponents !== undefined) {
         model.checks["compliance"]["viewer"] = new Review1DViewerInterface("a", this.SourceComponents);

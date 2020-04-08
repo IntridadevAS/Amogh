@@ -15,17 +15,6 @@ function ReviewComplianceContextMenuManager(complianceReviewManager) {
 ReviewComplianceContextMenuManager.prototype = Object.create(ReviewModuleContextMenuManager.prototype);
 ReviewComplianceContextMenuManager.prototype.constructor = ReviewComplianceContextMenuManager;
 
-// ReviewComplianceContextMenuManager.prototype.Init = function () {
-//     // components level
-//     this.InitComponentLevelContextMenu();
-
-//     // property level
-//     this.InitPropertyLevelContextMenu();
-
-//     // group level
-//     this.InitGroupLevelContextMenu();
-// }
-
 ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = function (componentTableContainer) {
     //"#SourceAComplianceMainReviewTbody"
     var _this = this;
@@ -119,7 +108,10 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
 ReviewComplianceContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
 
     var selectedRowStatus = selectedRow.cells[ComplianceColumns.Status].innerHTML;
-    if ((selectedRowStatus.includes("OK") && !selectedRowStatus.includes("(A)")) || selectedRowStatus.includes("undefined")) {
+    if (
+        (selectedRowStatus.includes("OK") && !selectedRowStatus.includes("(A)")) ||
+        selectedRowStatus.includes("undefined")
+    ) {
         return true;
     }
 
@@ -169,9 +161,9 @@ ReviewComplianceContextMenuManager.prototype.DisableAcceptForGroup = function (g
 
 
 ReviewComplianceContextMenuManager.prototype.HaveSCOperations = function () {
-    if (model.checks["compliance"]["viewer"].ViewerOptions) {
+    if (model.checks["compliance"]["viewer"].Is3DViewer()) {
         return true;
-    }
+    }  
 
     return false;
 }

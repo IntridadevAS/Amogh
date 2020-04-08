@@ -404,10 +404,6 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                 if (_this.NodeIdArray.length == 0) {
                     _this.NodeIdArray = undefined;
 
-                    // _this.ModelTree.addModelBrowser(_this.SourceProperties);
-
-                    // _this.AddComponentsToDB();
-
                     return resolve(true);
                 }                
             });
@@ -550,6 +546,3 @@ function IGSSourceManager(id,  sourceName, sourceType, viewerOptions) {
 // inherit from parent
 IGSSourceManager.prototype = Object.create(SCManager.prototype);
 IGSSourceManager.prototype.constructor = IGSSourceManager;
-
-
-

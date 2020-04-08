@@ -47,7 +47,6 @@ var xCheckStudio;
          ComponentIdentificationManager.IGSSourceNameProperty = "Name";
          ComponentIdentificationManager.IGSSourceMainClassProperty = "TYPE";
          ComponentIdentificationManager.IGSSourceSubComponentClassProperty = "TYPE";
-
          
         //IFC data source
         ComponentIdentificationManager.IFCSourceNameProperty = "Name";
@@ -69,12 +68,19 @@ var xCheckStudio;
         ComponentIdentificationManager.STPSourceMainClassProperty = "TYPE";
         ComponentIdentificationManager.STPSourceSubComponentClassProperty = "TYPE";
 
+         //Visio data source
+         ComponentIdentificationManager.VisioSourceNameProperty = "VMD_<*>_NAME";
+         ComponentIdentificationManager.VisioSourceMainClassProperty = "VMD_<*>_ACTTYP";
+         ComponentIdentificationManager.VisioSourceSubComponentClassProperty = "VMD_<*>_ACTTYP";
+         ComponentIdentificationManager.VisioOwnerProperty = "VMD_<*>_OWNER";
+
         function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
             var properties;
             properties = {};
             var name = "";
             var mainCategory = "";
             var subClass = "";
+            var owner = "";
 
             var extension = fileExtension.toLowerCase();
             switch(extension){
@@ -138,10 +144,18 @@ var xCheckStudio;
                     mainCategory = ComponentIdentificationManager.SLDPRTMainClassProperty;
                     subClass = ComponentIdentificationManager.SLDPRTSubComponentClassProperty;
                     break;
+                case "vsd":
+                case "vsdx":
+                    name = ComponentIdentificationManager.VisioSourceNameProperty;
+                    mainCategory = ComponentIdentificationManager.VisioSourceMainClassProperty;
+                    subClass = ComponentIdentificationManager.VisioSourceSubComponentClassProperty;
+                    owner = ComponentIdentificationManager.VisioOwnerProperty;
+                    break;
             }
             properties['name'] = name;        
             properties['mainCategory'] = mainCategory;
             properties['subClass'] = subClass;
+            properties['owner'] = owner;
             return properties;
         }
         ComponentIdentificationManager.getComponentIdentificationProperties = getComponentIdentificationProperties;

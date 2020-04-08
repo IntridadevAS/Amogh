@@ -5,7 +5,7 @@ function SourceManager(id, sourceName, sourceType)
     this.Id = id;
     this.SourceName = sourceName;  
     this.SourceType = sourceType;  
-    // this.IsFirstViewer = isFirstViewer;
+    
     this.SourceProperties = {};
     this.ModelTree = undefined;
    
@@ -22,16 +22,16 @@ function SourceManager(id, sourceName, sourceType)
         return false;
     }; 
 
-   // virtual function
-   SourceManager.prototype.Is1DSource = function () {
+    // virtual function
+    SourceManager.prototype.Is1DSource = function () {
+        return false;
+    };
+
+    // virtual function
+    SourceManager.prototype.IsSVGSource = function () {
         return false;
     }; 
-
-    // // virtual function
-    // SourceManager.prototype.Is1DSource = function () {
-    //     return false;
-    // }; 
-
+   
      // virtual function
     SourceManager.prototype.ResizeViewer = function () {
     }

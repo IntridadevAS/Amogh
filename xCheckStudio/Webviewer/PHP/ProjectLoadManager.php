@@ -567,6 +567,33 @@
                     }
                 }
             }
+            else if(($source === "a" && isDataSourceVisio($datasourceInfo["sourceAType"])) || 
+            ($source === "b"  && isDataSourceVisio($datasourceInfo["sourceBType"])) ||
+            ($source === "c"  && isDataSourceVisio($datasourceInfo["sourceCType"])) ||
+            ($source === "d"  && isDataSourceVisio($datasourceInfo["sourceDType"])))
+            {
+                $traversedNodes = [];
+                for($index = 1 ; $index <= count($complianceResult); $index++) {
+                    $group = $complianceResult[$index];
+
+                    foreach($group['components'] as $key =>  $value) {
+                        $status = $value['status'];                           
+                        $name = $value['name'];   
+
+                        $comp = traverseRecursivelyForVisioCompliance($dbh, 
+                                                                $name, 
+                                                                $traversedNodes, 
+                                                                $source); 
+                                                                
+                        if($comp !== NULL && 
+                        !array_key_exists($comp['Name'], $componentsHierarchy)) 
+                        {   
+                            $componentsHierarchy[$comp['Name']] =  $comp;          
+                        
+                        }
+                    }
+                }
+            }
             else
             {
                 // 1D data source
@@ -746,6 +773,97 @@
         return $component;                   
     }
 
+    function traverseRecursivelyForVisioCompliance(
+        $dbh,
+        $name,
+        &$traversedNodes,
+        $source
+    ) {
+        if ($name == null) {
+            return NULL;
+        }
+        if (
+            $traversedNodes != null &&
+            in_array($name, $traversedNodes)
+        ) {
+            return NULL;
+        }
+        array_push($traversedNodes, $name);
+
+        $component = [];
+        $component["Name"] = $name;
+        $component["accepted"] = '';
+        $component["Children"] = [];
+        $component["Status"] = '';
+
+        $componentsTable = NULL;
+        $nodeIdAttribute = NULL;
+        if ($source === "a") {
+            $componentsTable = "SourceAComponents";
+            $complianceComponentsTable = "SourceAComplianceCheckComponents";
+        } else  if ($source === "b") {
+            $componentsTable = "SourceBComponents";
+            $complianceComponentsTable = "SourceBComplianceCheckComponents";
+        } else  if ($source === "c") {
+            $componentsTable = "SourceCComponents";
+            $complianceComponentsTable = "SourceCComplianceCheckComponents";
+        } else  if ($source === "d") {
+            $componentsTable = "SourceDComponents";
+            $complianceComponentsTable = "SourceDComplianceCheckComponents";
+        }
+
+        // read component main class and subclass
+        $compStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where name ='$name'");
+        $compRow = $compStmt->fetch(\PDO::FETCH_ASSOC);
+        $component["NodeId"] = $compRow['nodeid'];
+        $component["MainClass"] = $compRow['mainclass'];
+        $component["SubClass"] = $compRow['subclass'];
+
+        // read an additional info
+        $stmt = $dbh->query("SELECT * FROM  " . $complianceComponentsTable . " where name ='$name'");
+        $complianceComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$complianceComponentRow) {
+            $component["accepted"] = NULL;
+            $component["Status"] =  "Not Checked";
+        } else {
+            $component["Id"] =  $complianceComponentRow['id'];
+            $component["GroupId"]  = $complianceComponentRow['ownerGroup'];
+            $component["CompId"] =  $complianceComponentRow['sourceId'];
+            $component["accepted"] = $complianceComponentRow['accepted'];
+            $component["Status"] =  $complianceComponentRow['status'];
+        }
+        // traverse children, if any
+        $childrenStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where parentid ='$name'");
+        while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC)) {
+            $childComponent = traverseRecursivelyForVisioCompliance($dbh, $childRow['name'], $traversedNodes, $source);
+
+            if ($childComponent !== NULL) {
+                array_push($component["Children"], $childComponent);
+            }
+        }
+
+        // traverse parent, if any
+        $parentComponent = NULL;
+        $parentNode = $compRow['parentid'];
+        $parentStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where name ='" . $parentNode."'");
+
+        while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) {
+            $parentComponent = traverseRecursivelyForVisioCompliance($dbh, $parentRow['name'], $traversedNodes, $source);
+
+            if ($parentComponent !== NULL) {
+                array_push($parentComponent["Children"], $component);
+            }
+
+            break;
+        }
+
+        if ($parentComponent != NULL) {
+            return $parentComponent;
+        }
+
+        return $component;
+    }
+
     function readComplianceCheckData($dbh,
                                      $checkGroupTable,
                                      $CheckComponentsTable,
@@ -906,11 +1024,29 @@
                         }
                     }
                 }
+                else if(isDataSourceVisio($datasourceInfo["sourceAType"]))
+                {
+                    $traversedNodes = [];
+                    for($index = 1 ; $index <= count($comparisonResult); $index++) {
+                        $group = $comparisonResult[$index];
+            
+                        foreach($group['components'] as $key =>  $value) {                         
+                                                
+                            $sourceAName = $value['sourceAName'];
+
+                            $comp = traverseRecursivelyForVisioComparison($dbh, $sourceAName, $traversedNodes, "a");                     
+                        
+                            if($comp !== NULL && 
+                            !array_key_exists($comp['Name'], $sourceAComparisonComponentsHierarchy)) {                                
+                                $sourceAComparisonComponentsHierarchy[$comp['Name']] = $comp;                                
+                            }
+                        }
+                    }
+                }
                 else
                 {
                     // 1D data source                       
-                    $sourceAComparisonComponentsHierarchy  = traverseRecursivelyFor1DComparison($dbh, "a");
-                    
+                    $sourceAComparisonComponentsHierarchy  = traverseRecursivelyFor1DComparison($dbh, "a");                    
                 }
                 if($sourceAComparisonComponentsHierarchy !== null) {
                     $results['SourceAComparisonComponentsHierarchy'] = $sourceAComparisonComponentsHierarchy;
@@ -932,6 +1068,25 @@
                             if($comp !== NULL && 
                             !array_key_exists($comp['NodeId'], $sourceBComparisonComponentsHierarchy)) {                                
                                 $sourceBComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
+                            }
+                        }
+                    }
+                }
+                else if(isDataSourceVisio($datasourceInfo["sourceBType"]))
+                {
+                    $traversedNodes = [];
+                    for($index = 1 ; $index <= count($comparisonResult); $index++) {
+                        $group = $comparisonResult[$index];
+            
+                        foreach($group['components'] as $key =>  $value) {                         
+                                                
+                            $sourceBName = $value['sourceBName'];
+
+                            $comp = traverseRecursivelyForVisioComparison($dbh, $sourceBName, $traversedNodes, "b");                     
+                        
+                            if($comp !== NULL && 
+                            !array_key_exists($comp['Name'], $sourceBComparisonComponentsHierarchy)) {                                
+                                $sourceBComparisonComponentsHierarchy[$comp['Name']] = $comp;                                
                             }
                         }
                     }
@@ -965,6 +1120,25 @@
                          }
                      }
                  }
+                 else if(isDataSourceVisio($datasourceInfo["sourceCType"]))
+                 {
+                    $traversedNodes = [];
+                    for($index = 1 ; $index <= count($comparisonResult); $index++) {
+                        $group = $comparisonResult[$index];
+            
+                        foreach($group['components'] as $key =>  $value) {                         
+                                                
+                            $sourceCName = $value['sourceCName'];
+
+                            $comp = traverseRecursivelyForVisioComparison($dbh, $sourceCName, $traversedNodes, "c");                     
+                        
+                            if($comp !== NULL && 
+                            !array_key_exists($comp['Name'], $sourceCComparisonComponentsHierarchy)) {                                
+                                $sourceCComparisonComponentsHierarchy[$comp['Name']] = $comp;                                
+                            }
+                        }
+                    }
+                 }
                  else
                  {
                      // 1D data source
@@ -991,6 +1165,25 @@
                             if($comp !== NULL && 
                             !array_key_exists($comp['NodeId'], $sourceDComparisonComponentsHierarchy)) {                                
                                 $sourceDComparisonComponentsHierarchy[$comp['NodeId']] = $comp;                                
+                            }
+                        }
+                    }
+                }
+                else if(isDataSourceVisio($datasourceInfo["sourceDType"]))
+                {
+                    $traversedNodes = [];
+                    for($index = 1 ; $index <= count($comparisonResult); $index++) {
+                        $group = $comparisonResult[$index];
+            
+                        foreach($group['components'] as $key =>  $value) {                           
+                            // $status = $value['status'];                            
+                            $sourceDName = $value['sourceDName'];
+
+                            $comp = traverseRecursivelyForVisioComparison($dbh, $sourceDName, $traversedNodes, "d");                     
+                        
+                            if($comp !== NULL && 
+                            !array_key_exists($comp['Name'], $sourceDComparisonComponentsHierarchy)) {                                
+                                $sourceDComparisonComponentsHierarchy[$comp['Name']] = $comp;                                
                             }
                         }
                     }
@@ -1174,7 +1367,102 @@
         }
 
         return $component;                   
-    }  
+    }
+
+    function traverseRecursivelyForVisioComparison(
+        $dbh,
+        $name,
+        &$traversedNodes,
+        $source) {
+    
+        if ($name == null) {
+            return NULL;
+        }
+        if (
+            $traversedNodes != null &&
+            in_array($name, $traversedNodes)
+        ) {
+            return NULL;
+        }
+        array_push($traversedNodes, $name);
+    
+        $component = [];
+        $component["Name"] = $name;
+        $component["accepted"] = '';
+        $component["transpose"] = '';
+        $component["Children"] = [];
+        $component["Status"] = '';
+    
+        $componentsTable = NULL;
+        $nameAttribute = NULL;
+        if ($source === "a") {
+            $componentsTable = "SourceAComponents";
+            $nameAttribute = "sourceAName";
+        } else if ($source === "b") {
+            $componentsTable = "SourceBComponents";
+            $nameAttribute = "sourceBName";
+        } else if ($source === "c") {
+            $componentsTable = "SourceCComponents";
+            $nameAttribute = "sourceCName";
+        } else if ($source === "d") {
+            $componentsTable = "SourceDComponents";
+            $nameAttribute = "sourceDName";
+        }
+    
+        // read component main class and subclass
+        $compStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where name ='$name'");
+        $compRow = $compStmt->fetch(\PDO::FETCH_ASSOC);
+        $component["NodeId"] = $compRow['nodeid'];
+        $component["MainClass"] = $compRow['mainclass'];
+        $component["SubClass"] = $compRow['subclass'];
+    
+        // read an additional info
+        $stmt = $dbh->query("SELECT * FROM  ComparisonCheckComponents where " . $nameAttribute . " ='$name'");
+        $comparisonComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$comparisonComponentRow) {
+            $component["Id"] =  NULL;
+            $component["GroupId"]  = NULL;
+            $component["accepted"] = NULL;
+            $component["transpose"] = NULL;
+            $component["Status"] =  "Not Checked";
+        } else {
+            $component["Id"] =  $comparisonComponentRow['id'];
+            $component["GroupId"]  = $comparisonComponentRow['ownerGroup'];
+            $component["accepted"] = $comparisonComponentRow['accepted'];
+            $component["transpose"] = $comparisonComponentRow['transpose'];
+            $component["Status"] =  $comparisonComponentRow['status'];
+        }
+    
+        // traverse child if any
+        $childrenStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where parentid ='$name'");
+        while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC)) {
+            $childComponent = traverseRecursivelyForVisioComparison($dbh, $childRow['name'], $traversedNodes, $source);
+    
+            if ($childComponent !== NULL) {
+                array_push($component["Children"], $childComponent);
+            }
+        }
+    
+        // traverse parent, if any
+        $parentComponent = NULL;
+        $parentNode = $compRow['parentid'];
+        $parentStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where name ='" . $parentNode."'");    
+        while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) {
+            $parentComponent = traverseRecursivelyForVisioComparison($dbh, $parentRow['name'], $traversedNodes, $source);
+    
+            if ($parentComponent !== NULL) {
+                array_push($parentComponent["Children"], $component);
+            }
+    
+            break;
+        }
+    
+        if ($parentComponent != NULL) {
+            return $parentComponent;
+        }
+    
+        return $component;
+    } 
     
     function isDataSource3D($sourceExt) {
         $is3D = true;
@@ -1186,6 +1474,14 @@
                 $is3D = false;
            }
            return $is3D;
+    }
+
+    function isDataSourceVisio($sourceExt) {        
+        $validSources = array("VSD", "vsd", "VSDX", "vsdx");                    
+        if(in_array($sourceExt, $validSources) == true) {
+            return true;
+        }
+        return false;
     }
 
     function readDataSourceInfo($dbh) {             
@@ -1566,26 +1862,43 @@
         $sourceViewerOptions = array();
             try
             {    
-                // read sources
-                $sourceA;
-                $sourceB;
-                $results = $tempDbh->query("SELECT *FROM  DatasourceInfo;");                     
-                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
-                {
-                    if($record['sourceAFileName'] !== NULL &&
-                       $record['sourceAType'] !== NULL)
-                    {
+                // read sources                
+                $results = $tempDbh->query("SELECT *FROM  DatasourceInfo;");
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                    if (
+                        $record['sourceAFileName'] !== NULL &&
+                        $record['sourceAType'] !== NULL
+                    ) {
                         $sourceViewerOptions['a']  = array();
-                        $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];                   
-                        $sourceViewerOptions['a']['sourceType'] =  $record['sourceAType'];                   
+                        $sourceViewerOptions['a']['source'] =  $record['sourceAFileName'];
+                        $sourceViewerOptions['a']['sourceType'] =  $record['sourceAType'];
                     }
-                   
-                    if($record['sourceBFileName'] !== NULL &&
-                        $record['sourceBType'] !== NULL)
-                    {
+
+                    if (
+                        $record['sourceBFileName'] !== NULL &&
+                        $record['sourceBType'] !== NULL
+                    ) {
                         $sourceViewerOptions['b']  = array();
-                        $sourceViewerOptions['b']['source'] = $record['sourceBFileName']; 
-                        $sourceViewerOptions['b']['sourceType'] = $record['sourceBType'];   
+                        $sourceViewerOptions['b']['source'] = $record['sourceBFileName'];
+                        $sourceViewerOptions['b']['sourceType'] = $record['sourceBType'];
+                    }
+
+                    if (
+                        $record['sourceCFileName'] !== NULL &&
+                        $record['sourceCType'] !== NULL
+                    ) {
+                        $sourceViewerOptions['c']  = array();
+                        $sourceViewerOptions['c']['source'] = $record['sourceCFileName'];
+                        $sourceViewerOptions['c']['sourceType'] = $record['sourceCType'];
+                    }
+
+                    if (
+                        $record['sourceDFileName'] !== NULL &&
+                        $record['sourceDType'] !== NULL
+                    ) {
+                        $sourceViewerOptions['d']  = array();
+                        $sourceViewerOptions['d']['source'] = $record['sourceDFileName'];
+                        $sourceViewerOptions['d']['sourceType'] = $record['sourceDType'];
                     }
                 }
 
@@ -1607,6 +1920,28 @@
                     while ($viewerOptions = $sourceBViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
                     {  
                         $sourceViewerOptions['b']['endPointUri'] = $viewerOptions['endpointUri'];                      
+                        break;
+                    }
+                 } 
+
+                  // read sourceCViewerOptions
+                  $sourceCViewerOptions = $tempDbh->query("SELECT *FROM SourceCViewerOptions;");
+                  if($sourceCViewerOptions) 
+                  {
+                     while ($viewerOptions = $sourceCViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
+                     {  
+                         $sourceViewerOptions['c']['endPointUri'] = $viewerOptions['endpointUri'];                      
+                         break;
+                     }
+                  } 
+
+                   // read sourceDViewerOptions
+                 $sourceDViewerOptions = $tempDbh->query("SELECT *FROM SourceDViewerOptions;");
+                 if($sourceDViewerOptions) 
+                 {
+                    while ($viewerOptions = $sourceDViewerOptions->fetch(\PDO::FETCH_ASSOC)) 
+                    {  
+                        $sourceViewerOptions['d']['endPointUri'] = $viewerOptions['endpointUri'];                      
                         break;
                     }
                  } 

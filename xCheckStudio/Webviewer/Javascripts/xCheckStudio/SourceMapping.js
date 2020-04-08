@@ -253,7 +253,7 @@ function getSourceSelectElement() {
     var sourceTypes = ["", ".XML", ".RVM", ".XLS",
         ".SLDASM", ".DWG", ".DXF", ".DWF", ".DWFX", ".SLDPRT",
         ".RVT", ".RFA", ".IFC", ".STEP",
-        ".JSON", ".IGS", "STE", "STP"];
+        ".JSON", ".IGS", "STE", "STP", "VSD", "VSDX"];
 
     for (var i = 0; i < sourceTypes.length; i++) {
         var option = document.createElement("option");

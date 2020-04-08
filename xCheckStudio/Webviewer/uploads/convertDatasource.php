@@ -1,7 +1,8 @@
 <?php 
     require_once '../PHP/Utility.php';
     // check if sourceA and sourceB paths are in session data
-    if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']))
+    if(!isset($_POST['CheckName']) || 
+       !isset($_POST['ProjectName']))
     {
         echo 'fail';
         return; 
@@ -13,9 +14,7 @@
     $array = explode("\\", __DIR__);
     unset($array[sizeof($array)-1]);
     unset($array[sizeof($array)-1]);
-    $studioPath = implode("/", $array);
-    //$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
-    $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    $studioPath = implode("/", $array);     
 
     $mainFileName = $_POST['MainFile'];
     $uploadDirectory = NULL;
@@ -43,6 +42,20 @@
 
     $file = basename($file);     
     $inputFileName=  $uploadDirectory."/".$file;
+
+    $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
+
+    $fileNameLowerCase = strtolower($fileName);
+    $file_parts = pathinfo($fileNameLowerCase);
+    if (isset($file_parts['extension'])) {
+        switch (strtolower($file_parts['extension'])) {
+            case "vsd":
+            case "vsdx":
+                $launch_converter = "../xCheckFileReader/x64/Release/VisioReader.exe";
+            break;
+        }
+    }
+
     $command = '"'.$launch_converter. '" "'. $inputFileName. '"';
     exec($command, $output);
     echo  trim($file);
@@ -100,6 +113,8 @@ function fileExists($fileName, $caseSensitive = true) {
                 case "stp":
                 case "ste":               
                 case "igs":
+                case "vsd":
+                case "vsdx":
                 if($filePathParts['filename'] ===  $file_parts['filename'])
                 {                    
                     return $file;

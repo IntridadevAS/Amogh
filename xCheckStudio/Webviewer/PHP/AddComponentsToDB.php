@@ -29,7 +29,8 @@
     {
         add1DComponentsToDB($ComponentsList);
     }     
-    else if(strtolower($DataSourceType) == '3d') {
+    else if(strtolower($DataSourceType) == '3d' ||
+            strtolower($DataSourceType) == 'visio') {
         addComponentsToDB($ComponentsList);
     }
     else {
