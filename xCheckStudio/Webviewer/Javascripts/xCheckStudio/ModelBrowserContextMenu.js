@@ -338,27 +338,4 @@ ModelBrowserContextMenu.prototype.GetSelectedNodes = function () {
       }
 
       return nodeIds;
-
-      // if (!this.ModelBrowser ||
-      //       !this.ModelBrowser.SelectionManager) {
-      //       return;
-      // }
-
-      // var browserSelectionManager = this.ModelBrowser.SelectionManager;
-      // if (browserSelectionManager.SelectedComponentNodeIds.length === 0) {
-      //       return;
-      // }
-
-      // var nodeIds = [];
-      // for (var i = 0; i < browserSelectionManager.SelectedComponentNodeIds.length; i++) {
-
-      //       // var selectedComponentRow = browserSelectionManager.SelectedComponentNodeIds[i];
-      //       var nodeId = Number(browserSelectionManager.SelectedComponentNodeIds[i]);
-
-      //       if (nodeId !== NaN) {
-      //             nodeIds.push(nodeId);
-      //       }
-      // }
-
-      // return nodeIds;
 }

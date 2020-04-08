@@ -3,7 +3,7 @@ let UploadManager = {
     createFileUploader: function () {
         $("#file-uploader").dxFileUploader({
             multiple: true,
-            accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .DXF, .dxf, .DWF, .dwf, .DWFX, .dwfx, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS",
+            accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .DXF, .dxf, .DWF, .dwf, .DWFX, .dwfx, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS, .VSD, .vsd, .VSDX, .vsdx",
             width: "100%",
             height: "100%",
             value: [],
@@ -301,6 +301,22 @@ let UploadManager = {
                             hideBusyIndicator();
                         });
                 }
+                else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
+                    var fileNames = [];
+                    fileNames.push(ret);
+                    //load model
+                    LoadManager.loadVisioModel(fileNames,
+                        addedSource.id,
+                        addedSource.visualizer.id,
+                        addedSource.tableData.id,
+                        UploadManager.formId).then(function () {
+                            // filter check case
+                            filterCheckCases(false);
+
+                            //hide busy spinner
+                            hideBusyIndicator();
+                        });
+                }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 // hide busy spinner
@@ -501,7 +517,8 @@ let UploadManager = {
         var fileExtension = xCheckStudio.Util.getFileExtension(fileNames[0]).toLowerCase();
 
         if (xCheckStudio.Util.isSource3D(fileExtension) ||
-            xCheckStudio.Util.isSourceDB(fileExtension)) {
+            xCheckStudio.Util.isSourceDB(fileExtension) ||
+            xCheckStudio.Util.isSourceVisio(fileExtension)) {
 
             UploadManager.uploadSource(fileExtension, formData, addedSource.id).then(function (result) {
 
@@ -526,6 +543,20 @@ let UploadManager = {
                         addedSource.id,
                         addedSource.visualizer.id,
                         addedSource.tableData.id).then(function () {
+                            // filter check case
+                            filterCheckCases(false);
+
+                            //hide busy spinner
+                            hideBusyIndicator();
+                        });
+                }
+                else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
+                    // load model
+                    LoadManager.loadVisioModel(fileNames,
+                        addedSource.id,
+                        addedSource.visualizer.id,
+                        addedSource.tableData.id,
+                        UploadManager.formId).then(function () {
                             // filter check case
                             filterCheckCases(false);
 
@@ -578,10 +609,16 @@ let UploadManager = {
             formData.append('CheckName', checkinfo.checkname);
 
             var convertToScs = "false";
+            var convertToSVG = "false";
             if (xCheckStudio.Util.isSource3D(fileExtension)) {
                 convertToScs = "true";
+            }            
+            else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
+                convertToSVG = "true";
             }
+
             formData.append('ConvertToSCS', convertToScs);
+            formData.append('ConvertToSVG', convertToSVG);
 
             xhr.send(formData);
         });

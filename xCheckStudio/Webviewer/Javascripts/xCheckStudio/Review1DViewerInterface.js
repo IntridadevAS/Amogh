@@ -15,7 +15,7 @@ function Review1DViewerInterface(id,
     this.SelectedSheetRow;
 
     this.Id = id;
-
+    
     this.RowWiseReviewRowData = {};
 }
 
@@ -25,29 +25,6 @@ Review1DViewerInterface.prototype.constructor = Review1DViewerInterface;
 
 Review1DViewerInterface.prototype.Is1DViewer = function () {
     return true;
-}
-
-Review1DViewerInterface.prototype.IsFirstViewer = function (viewerContainer) {
-    if (viewerContainer === "#compare1") {
-        return true;
-    }
-
-    return false;
-}
-Review1DViewerInterface.prototype.IsSecondViewer = function (viewerContainer) {
-    if (viewerContainer === "#compare2") {
-        return true;
-    }
-
-    return false;
-}
-
-Review1DViewerInterface.prototype.FirstViewerExists = function () {
-    if (document.getElementById("compare1").innerHTML !== "") {
-        return true;
-    }
-
-    return false;
 }
 
 Review1DViewerInterface.prototype.highlightComponent = function (viewerContainer,

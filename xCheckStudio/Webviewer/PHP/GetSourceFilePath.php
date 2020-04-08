@@ -1,7 +1,11 @@
 <?php
         require_once 'Utility.php';
         
-        if(!isset($_POST['CheckName']) || !isset($_POST['ProjectName']) || !isset($_POST['fileName']) || !isset($_POST['Source']) || !isset($_POST['dataSourceType']))
+        if(!isset($_POST['CheckName']) || 
+           !isset($_POST['ProjectName']) || 
+           !isset($_POST['fileName']) || 
+           !isset($_POST['Source']) || 
+           !isset($_POST['dataSourceType']))
         {
             echo 'Input argument not found';
             return; 
@@ -36,6 +40,11 @@
         else if($_POST['dataSourceType'] == "1D")
         {
             echo $sourceDirectory.'/'.$fileName.'.json';
+            return;
+        }
+        else if($_POST['dataSourceType'] == "Visio")
+        {
+            echo $sourceDirectory.'/'.$fileName.'.svg';
             return;
         }
 

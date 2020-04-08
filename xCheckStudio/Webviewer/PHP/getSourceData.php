@@ -16,7 +16,9 @@ $ValidDataSources = ["xml",
                      "step", 
                      "stp", 
                      "ste", 
-                     "igs"];
+                     "igs",
+                     "vsd",
+                     "vsdx"];
 
 foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name)
 {

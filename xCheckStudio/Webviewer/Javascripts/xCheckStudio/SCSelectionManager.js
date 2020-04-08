@@ -5,19 +5,6 @@ function SCSelectionManager(nodeIdvsSelectedComponents) {
     // restore selected components on load project
     this.NodeIdvsSelectedComponents = nodeIdvsSelectedComponents;
     this.SelectedCompoents = [];
-
-    // if (nodeIdvsSelectedComponents) {
-    //     for (var nodeId in this.NodeIdvsSelectedComponents) {
-    //         var selectedComponent = this.NodeIdvsSelectedComponents[nodeId];
-    //         var checkedComponent = {};
-    //         checkedComponent['Name'] = selectedComponent['name'];
-    //         checkedComponent['MainComponentClass'] = selectedComponent['mainClass'];
-    //         checkedComponent['ComponentClass'] = selectedComponent['subClass'];
-    //         checkedComponent["NodeId"] = Number(selectedComponent['nodeId']);
-
-    //         this.SelectedCompoents.push(checkedComponent);
-    //     }
-    // }
 }
 // assign SelectionManager's method to this class
 SCSelectionManager.prototype = Object.create(SelectionManager.prototype);

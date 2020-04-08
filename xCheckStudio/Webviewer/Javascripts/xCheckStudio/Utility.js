@@ -286,6 +286,16 @@ var xCheckStudio;
         }
         Util.isSourceDB = isSourceDB;
 
+        // this check whether input source is 1D
+        function isSourceVisio(fileExtension) {
+            if (SourcesVSD.includes(fileExtension.toLowerCase())) {
+                return true;
+            }
+
+            return false;
+        }
+        Util.isSourceVisio = isSourceVisio;
+
         // this returns the element occurrence count in an array
         function getArrayElementOccCount(arr) {
 

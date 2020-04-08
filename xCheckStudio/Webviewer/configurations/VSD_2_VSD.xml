@@ -1,0 +1,80 @@
+<CheckCase name="2D(.VSD) - 2D(.VSD)"  sourceA="VSD" sourceB="VSD">
+
+<Check type="Comparison" sourceAType="VSD" sourceBType="VSD">
+	<ComponentGroup sourceAGroupName="SCNOZZ"  sourceBGroupName="SCNOZZ">
+			  
+			  <ComponentClass sourceAComponentClass="SCNOZZ"  sourceBComponentClass="SCNOZZ">
+			      <Matchwith sourceAPropertyname="VMD_SCNOZZ_NAME"  sourceBPropertyname ="VMD_SCNOZZ_NAME"/>
+				  <Matchwith sourceAPropertyname="VMD_SCNOZZ_OWNER"  sourceBPropertyname ="VMD_SCNOZZ_OWNER"/>
+				  
+			      <Property sourceAName="VMD_SCNOZZ_ACTTYP" sourceBName="VMD_SCNOZZ_ACTTYP"  severity="Error"/>
+				  <Property sourceAName="VMD_SCNOZZ_OWNER" sourceBName="VMD_SCNOZZ_OWNER"  severity="Error"/>
+				  <Property sourceAName="VMD_SCNOZZ_DESC" sourceBName="VMD_SCNOZZ_DESC"  severity="Error"/>
+				  <Property sourceAName="VMD_SCNOZZ_FUNC" sourceBName="VMD_SCNOZZ_FUNC"  severity="Error"/>
+				  <Property sourceAName="VMD_SCNOZZ_BORE" sourceBName="VMD_SCNOZZ_BORE"  severity="Error"/>
+				  <Property sourceAName="VMD_SCNOZZ_CATR" sourceBName="VMD_SCNOZZ_CATR"  severity="Error"/>
+				  <Property sourceAName="VMD_SCNOZZ_TEMP" sourceBName="VMD_SCNOZZ_TEMP"  severity="Error"/>				  
+			  </ComponentClass> 
+			  
+	    </ComponentGroup> 
+		
+		<ComponentGroup sourceAGroupName="SCEQUI"  sourceBGroupName="SCEQUI">
+			  
+			  <ComponentClass sourceAComponentClass="SCEQUI"  sourceBComponentClass="SCEQUI">
+			      <Matchwith sourceAPropertyname="VMD_SCEQUI_NAME"  sourceBPropertyname ="VMD_SCEQUI_NAME"/>
+				  <Matchwith sourceAPropertyname="VMD_SCEQUI_OWNER"  sourceBPropertyname ="VMD_SCEQUI_OWNER"/>
+				  
+			      <Property sourceAName="VMD_SCEQUI_ACTTYP" sourceBName="VMD_SCEQUI_ACTTYP"  severity="Error"/>
+				  <Property sourceAName="VMD_SCEQUI_OWNER" sourceBName="VMD_SCEQUI_OWNER"  severity="Error"/>
+				  <Property sourceAName="VMD_SCEQUI_DESC" sourceBName="VMD_SCEQUI_DESC"  severity="Error"/>
+				  <Property sourceAName="VMD_SCEQUI_FUNC" sourceBName="VMD_SCEQUI_FUNC"  severity="Error"/>
+				  <Property sourceAName="VMD_SCEQUI_AREA" sourceBName="VMD_SCEQUI_AREA"  severity="Error"/>
+				  <Property sourceAName="VMD_SCEQUI_NUMB" sourceBName="VMD_SCEQUI_NUMB"  severity="Error"/>
+				  <Property sourceAName="VMD_SCEQUI_POS" sourceBName="VMD_SCEQUI_POS"  severity="Error"/>				  
+			  </ComponentClass> 
+			  
+	    </ComponentGroup> 
+
+</Check>
+	
+
+<Check type="Compliance" sourceType="VSD">
+   
+   <ComponentGroup name="SCEQUI">
+      <ComponentClass name="SCEQUI">	
+			      <Property name="VMD_SCEQUI_ACTTYP" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="VMD_SCEQUI_OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="VMD_SCEQUI_DESC" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="VMD_SCEQUI_FUNC" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="VMD_SCEQUI_AREA" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="VMD_SCEQUI_NUMB" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="VMD_SCEQUI_POS" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>
+	  
+      <ComponentClass name="Pump">	
+			      <Property name="Component class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="PartNo" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Location" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Manufacturer" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Number" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>	  
+	  
+    </ComponentGroup>
+
+	<ComponentGroup name="SCNOZZ">
+      <ComponentClass name="SCNOZZ">
+			<Property name="VMD_SCNOZZ_NAME" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="VMD_SCNOZZ_ACTTYP" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="VMD_SCNOZZ_OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="VMD_SCNOZZ_DESC" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="VMD_SCNOZZ_FUNC" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="VMD_SCNOZZ_BORE" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="VMD_SCNOZZ_CATR" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="VMD_SCNOZZ_TEMP" rule="Must have value" severity="Error" comment="Property must have value." />			
+      </ComponentClass>
+   </ComponentGroup>
+   </Check>
+
+</CheckCase>

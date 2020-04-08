@@ -239,7 +239,37 @@ function loadDataSource(viewerOption, data, checkCaseName) {
 
         sourceManager.RestoreData(classWiseComponents, selectedComponents["NodeIdwiseSelectedComps"]);  
         filterCheckCases(false);      
-    }   
+    } 
+    else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
+        xCheckStudio.Util.fileExists(viewerOption.endPointUri).then(function (success) {
+            if (!success) {
+                return;
+            }
+
+            var sourceManager = createSourceManager(addedSource.id, 
+                viewerOption.source,
+                fileExtension,
+                addedSource.visualizer.id,
+                addedSource.tableData.id,
+                viewerOption.endPointUri);
+            SourceManagers[addedSource.id] = sourceManager;
+
+            sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"]).then(function (result) {
+                filterCheckCases(false);
+
+                var checkCaseSelectElement = document.getElementById("checkCaseSelect");
+                if (checkCaseName) {
+                    checkCaseSelectElement.value = checkCaseName;
+                }
+                else {
+                    checkCaseSelectElement.value = "AutoSelect";
+                }
+
+                // triggere onchange manually
+                checkCaseSelectElement.dispatchEvent(new Event('change'));
+            });
+        });
+    }
 }
 
 function restoreComplianceSwitchState(addedSource, controlStates) {

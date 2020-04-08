@@ -315,13 +315,17 @@ var CheckModule = {
         var viewerOptionsObject = {};
         for (var srcId in SourceManagers) {
             var sourceManager = SourceManagers[srcId];
-            if (!sourceManager.Is3DSource()) {
-                continue;
-            }
-
             var viewerOptions = [];
-            viewerOptions.push(sourceManager.Webviewer._params.endpointUri);
-
+            if (sourceManager.Is3DSource()) {
+                viewerOptions.push(sourceManager.Webviewer._params.endpointUri);
+            }
+            else if (sourceManager.IsSVGSource()) {
+                viewerOptions.push(sourceManager.ViewerOptions.endpointUri);                
+            }
+            else {
+                continue;
+            }          
+            
             var tableName;
             if (srcId === GlobalConstants.SourceAId) {
                 tableName = GlobalConstants.SourceAViewerOptionsTable;
@@ -375,24 +379,6 @@ var CheckModule = {
                 "selectedCompoents": selectedCompoents,
                 "nodeIdvsComponentIdList": nodeIdvsComponentIdList
             };
-
-            // // write source a selected components
-            // $.ajax({
-            //     url: 'PHP/ProjectManager.php',
-            //     type: "POST",
-            //     async: false,
-            //     data:
-            //     {
-            //         'InvokeFunction': "SaveSelectedComponents",
-            //         "selectedComponentsTableName": tableName,
-            //         "nodeIdvsComponentIdList": JSON.stringify(nodeIdvsComponentIdList),
-            //         "selectedComponents": JSON.stringify(selectedCompoents),
-            //         "ProjectName": projectinfo.projectname,
-            //         'CheckName': checkinfo.checkname
-            //     },
-            //     success: function (msg) {
-            //     }
-            // });
         }
 
         return selectedComponentsObject;

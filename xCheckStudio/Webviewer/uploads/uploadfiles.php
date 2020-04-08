@@ -22,9 +22,11 @@
     $errors = array();
     $uploadedFiles = array();
     $extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM","DWG", "dwg", "DXF", "dxf",
-    "DWF", "dwf", "DWFX", "dwfx", "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs");
+    "DWF", "dwf", "DWFX", "dwfx", "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs",
+    "VSD", "vsd", "VSDX", "vsdx");
     $validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "DXF", "dxf", "sldprt", 
-    "DWF", "dwf", "DWFX", "dwfx", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs");
+    "DWF", "dwf", "DWFX", "dwfx", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs",
+    "VSD", "vsd", "VSDX", "vsdx");
 
     $UploadFolder = "UploadFolder";
     $counter = 0;
@@ -33,7 +35,7 @@
     unset($array[sizeof($array)-1]);
     unset($array[sizeof($array)-1]);
     $studioPath = implode("/", $array);
-    //$launch_converter = $studioPath."/xCheckFileReader/x64/Release/xCheckFileReader.exe";
+    
     $launch_converter = "../xCheckFileReader/x64/Release/xCheckFileReader.exe";
 
     foreach($_FILES["dataSouresName"]["tmp_name"] as $key=>$tmp_name)
@@ -102,10 +104,11 @@
                     {
                         $sourceBDirectory =  getCheckSourceBPath($projectName, $checkName);
                         $UploadFolder= $sourceBDirectory."/".$fileName; 
-                        $output_file_path=$sourceBDirectory."/".$output_name[0];              
+                        // $output_file_path=$sourceBDirectory."/".$output_name[0];              
                     }
                     
-                    $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';                  
+                    // $command = '"'.$launch_converter. '" "'. $UploadFolder. '" "'.$output_file_path.'"';  
+                    $command = '"'.$launch_converter. '" "'. $UploadFolder. '"';                
                     exec($command, $output);
                     echo 'File Conversion Complete..You can load the model..';
         

@@ -11,3 +11,7 @@ ReviewModelBrowser.prototype.Is1D = function () {
 ReviewModelBrowser.prototype.Is3D = function () {
     return false;
 }
+
+ReviewModelBrowser.prototype.IsVisio = function () {
+    return false;
+}

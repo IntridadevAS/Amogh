@@ -2203,7 +2203,11 @@ function SaveSelectedComponents($dbh)
                 $nodeId = null;
                 $componentId = null;
                 if (isset($selectedComponent['NodeId'])) {
-                    $nodeId = (int) $selectedComponent['NodeId'];
+                    $nodeIdStr = $selectedComponent['NodeId'];
+                    if (is_numeric($nodeIdStr))
+                        $nodeId = (int) $nodeIdStr;
+                    else
+                        $nodeId = $nodeIdStr;
                 }
 
                 if (isset($selectedComponent['ComponentId'])) {
@@ -2214,7 +2218,7 @@ function SaveSelectedComponents($dbh)
                 if (
                     $nodeId !== NULL &&
                     $nodeIdvsComponentIdList &&
-                    $nodeIdvsComponentIdList[$nodeId]
+                    isset($nodeIdvsComponentIdList[$nodeId])
                 ) {
                     $mainCompId = (int) $nodeIdvsComponentIdList[$nodeId];
                 }

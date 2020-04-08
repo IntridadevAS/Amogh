@@ -180,8 +180,18 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
 }
 
 ReviewComparisonContextMenuManager.prototype.HaveSCOperations = function () {
-    if (model.checks["comparison"]["sourceAViewer"].ViewerOptions ||
-        model.checks["comparison"]["sourceBViewer"].ViewerOptions) {
+    if (model.checks["comparison"]["sourceAViewer"].Is3DViewer() ||
+        model.checks["comparison"]["sourceBViewer"].Is3DViewer()) {
+        return true;
+    }
+
+    if (model.checks["comparison"]["sourceCViewer"] &&
+        model.checks["comparison"]["sourceCViewer"].Is3DViewer()) {
+        return true;
+    }
+
+    if (model.checks["comparison"]["sourceDViewer"] &&
+        model.checks["comparison"]["sourceDViewer"].Is3DViewer()) {
         return true;
     }
 

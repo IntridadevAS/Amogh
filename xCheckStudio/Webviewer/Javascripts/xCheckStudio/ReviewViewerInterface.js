@@ -12,10 +12,7 @@ function ReviewViewerInterface(viewerOptions,
     this.NodeIdStatusData = {};
 
     this.DataSource = source;
-    // this.ReviewManager = reviewManager;
-    // this.SelectedComponentRowFromSheetA;
-    // this.SelectedComponentRowFromSheetB;
-
+    
     this.DontColorComponents = {
         "centerline": {
             "mainClass": "component",
@@ -38,6 +35,10 @@ ReviewViewerInterface.prototype.Is3DViewer = function () {
 }
 
 ReviewViewerInterface.prototype.Is1DViewer = function () {
+    return false;
+}
+
+ReviewViewerInterface.prototype.IsVisioViewer = function () {
     return false;
 }
 

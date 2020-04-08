@@ -51,6 +51,10 @@ function createSourceManager(id,
         case "xls":
             sourceManager = new ExcelSourceManager(id, fileName, sourceType, viewerContainer, modelTreeContainer);
         break;
+        case "vsd":
+        case "vsdx":
+            sourceManager = new VisioManager(id, fileName, sourceType, viewerOptions);
+        break;
     }
     return sourceManager;
 }

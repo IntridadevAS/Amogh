@@ -16,8 +16,8 @@ var Sources3D = ["xml",
     "stp",
     "ste",
     "igs"];
-var Sources1D = ["json",
-    "xls"];
+var Sources1D = ["json", "xls"];
+var SourcesVSD = [ "vsd", "vsdx"];
 
 var ExcelSources = ["xls"];
 var DBSources = ["json"];
@@ -62,6 +62,24 @@ const ModelBrowserColumnNames1D = {
     SubClass: "Class",
     Description: "Description",
     ComponentId: "ComponentId"
+}
+
+const ModelBrowserColumnsVisio = {
+    Select: 0,
+    Component: 1,
+    MainClass: 2,
+    SubClass: 3, 
+    ID: 4,
+    Parent: 5
+}
+
+const ModelBrowserColumnNamesVisio = {
+    Select: "",
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",   
+    ID: "ID",
+    Parent: "parent"
 }
 
 // menu bar
