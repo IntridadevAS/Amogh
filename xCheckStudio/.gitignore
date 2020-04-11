@@ -1,4 +1,3 @@
-*.dll
 *.scs
 *.db
 *.tx
@@ -11,3 +10,4 @@
 *.ifc
 *.igs
 *.rvt
+Webviewer/xCheckFileReader/x64/Release/bin/
