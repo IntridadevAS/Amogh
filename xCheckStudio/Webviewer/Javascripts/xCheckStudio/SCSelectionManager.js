@@ -13,7 +13,7 @@ SCSelectionManager.prototype.constructor = SCSelectionManager;
 /* 
    This function is called when checkbox from the model browser table is checked or unchecked
 */
-SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
+SCSelectionManager.prototype.SelectComponent = function (currentRow,
     checkBoxState,
     componentData,
     containerDiv) {
@@ -49,6 +49,46 @@ SCSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
         // maintain selected rows
         if (this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
             var index = this.SelectedComponentNodeIds.indexOf(componentData.NodeId);
+            if (index !== -1) {
+                this.SelectedComponentNodeIds.splice(index, 1);
+            }
+        }
+    }
+}
+
+SCSelectionManager.prototype.SelectBrowserItem = function (currentRow,
+    checkBoxState,
+    itemData,
+    containerDiv) {
+
+    if (checkBoxState === "on" &&
+        !this.SelectedBrowserItemExists(itemData)) {
+
+        var checkedComponent = {};
+
+        checkedComponent['Name'] = itemData["Name"];      
+        checkedComponent['NodeId'] = itemData["NodeId"];
+
+        this.SelectedCompoents.push(checkedComponent);
+
+        // highlight selected row         
+        this.ApplyHighlightColor(currentRow);
+
+        // maintain selected rows
+        if (!this.SelectedComponentNodeIds.includes(itemData.NodeId)) {
+            this.SelectedComponentNodeIds.push(itemData.NodeId);
+        }
+    }
+    else if (checkBoxState === "off" &&
+        this.SelectedBrowserItemExists(itemData)) {
+        this.RemoveFromselectedBrowserItems(itemData);
+
+        // restore color        
+        this.RemoveHighlightColor(currentRow);
+
+        // maintain selected rows
+        if (this.SelectedComponentNodeIds.includes(itemData.NodeId)) {
+            var index = this.SelectedComponentNodeIds.indexOf(itemData.NodeId);
             if (index !== -1) {
                 this.SelectedComponentNodeIds.splice(index, 1);
             }
@@ -105,6 +145,37 @@ SCSelectionManager.prototype.RemoveFromselectedCompoents = function (componentDa
 }
 
 /* 
+   This function checks if component corresponding to input row in model browser is selected or not
+*/
+SCSelectionManager.prototype.SelectedBrowserItemExists = function (itemData) {
+    for (var i = 0; i < this.SelectedCompoents.length; i++) {
+        var item = this.SelectedCompoents[i];
+        if (item['Name'] === itemData["Name"] &&
+            item['NodeId'] === itemData["NodeId"]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/* 
+   This function removes selected component from selected components list
+*/
+SCSelectionManager.prototype.RemoveFromselectedBrowserItems = function (itemData) {
+    for (var i = 0; i < this.SelectedCompoents.length; i++) {
+        var item = this.SelectedCompoents[i];
+        if (item['Name'] === itemData["Name"] &&
+            item['NodeId'] === itemData["NodeId"]) {
+
+            this.SelectedCompoents.splice(i, 1);
+
+            break;
+        }
+    }
+}
+
+/* 
    This function 
 */
 SCSelectionManager.prototype.GetSelectedComponents = function () {
@@ -128,7 +199,7 @@ SCSelectionManager.prototype.ClearSelectedComponent = function () {
 /* 
    This function 
 */
-SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, containerDiv) {
+SCSelectionManager.prototype.OnComponentRowClicked = function (row, viewer, nodeId, containerDiv) {
 
     // check if row is already highlighted
     if (this.HighlightedComponentRow === row) {
@@ -159,18 +230,53 @@ SCSelectionManager.prototype.HandleRowSelect = function (row, viewer, nodeId, co
     this.HighlightedComponentRow = row;
     this.HighlightedComponentRowKey = nodeId;
 
-    if (viewer && nodeId) {
-        // var nodeId = row.cells[ModelBrowserColumns3D.NodeId].innerText
-        // if (nodeId !== undefined) {
-        this.BrowserItemClick(nodeId);
-        // }
+    if (viewer && nodeId) {      
+        this.HighlightInView(nodeId);        
     }
 }
 
 /* 
    This function 
 */
-SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
+SCSelectionManager.prototype.OnBrowserRowClicked = function (row, viewer, nodeId, containerDiv) {
+     // check if row is already highlighted
+     if (this.HighlightedComponentRow === row) {
+        return;
+    }
+
+    // unhighlight old row
+    var treeList = $("#" + containerDiv).dxTreeList("instance");
+    var selectedRows = treeList.getSelectedRowKeys("all");
+
+    if (this.HighlightedComponentRow &&
+        !selectedRows.includes(this.HighlightedComponentRowKey)) {
+        if (this.HighlightedComponentRow.rowElement)
+            this.RemoveHighlightColor(this.HighlightedComponentRow.rowElement[0]);
+        else {
+            this.RemoveHighlightColor(this.HighlightedComponentRow);
+        }
+    }
+
+    // highlight new row  
+    if (!selectedRows.includes(nodeId)) {
+        if (row.rowElement)
+            this.ApplyHighlightColor(row.rowElement[0]);
+        else {
+            this.ApplyHighlightColor(row);
+        }
+    }
+    this.HighlightedComponentRow = row;
+    this.HighlightedComponentRowKey = nodeId;
+
+    if (viewer && nodeId) {      
+        this.HighlightInView(nodeId);        
+    }
+}
+
+/* 
+   This function 
+*/
+SCSelectionManager.prototype.HighlightInView = function (nodeId) {
 
     if (!(model.currentTabId in SourceManagers)) {
         return;
@@ -185,16 +291,7 @@ SCSelectionManager.prototype.BrowserItemClick = function (nodeId) {
     // keep track of graphically selected node
     sourceManager.SelectedNodeId = nodeID;
     sourceManager.Webviewer.selectPart(nodeID);
-    sourceManager.Webviewer.view.fitNodes([nodeID]);
-    // if (viewer._params.containerId === "visualizerA") {
-    //     sourceManager1.SelectedNodeId = nodeID;
-    // }
-    // else if (viewer._params.containerId === "visualizerB") {
-    //     sourceManager2.SelectedNodeId = nodeID;
-    // }
-
-    // viewer.selectPart(nodeID);
-    // viewer.view.fitNodes([nodeID]);
+    sourceManager.Webviewer.view.fitNodes([nodeID]);    
 };
 
 /* 

@@ -54,7 +54,38 @@ function createSourceManager(id,
         case "vsd":
         case "vsdx":
             sourceManager = new VisioManager(id, fileName, sourceType, viewerOptions);
-        break;
+            break;
+        case "jt":
+        case "prt":
+        case "mf1":
+        case "arc":
+        case "unv":
+        case "pkg":
+        case "model":
+        case "session":
+        case "dlv":
+        case "exp":
+        case "catdrawing":
+        case "catpart":
+        case "catproduct":
+        case "catshape":
+        case "cgr":
+        case "3dxml":
+        case "obj":
+        case "asm":
+        case "neu":
+        case "xas":
+        case "xpr":
+        case "ipt":
+        case "iam":
+        case "asm":
+        case "par":
+        case "pwd":
+        case "psm":
+        case "3ds":
+        case "u3d":
+            sourceManager = new SCManager(id, fileName, sourceType, viewerOptions);
+            break;
     }
     return sourceManager;
 }

@@ -4,15 +4,8 @@ function SCManager(id,
     viewerOptions) {
 
     // call super constructor
-    SourceManager.call(this, id, sourceName, sourceType);
-
-    // Object.defineProperty(SCManager.prototype, 'constructor', {
-    //     value: SCManager,
-    //     enumerable: false, // so that it does not appear in 'for in' loop
-    //     writable: true
-    // });
-
-    // this.SourceType = sourceType;  
+    SourceManager.call(this, id, sourceName, sourceType);  
+   
     this.ViewerOptions = viewerOptions;
     this.NodeIdArray = [];
     this.SelectedNodeId = null;
@@ -20,6 +13,8 @@ function SCManager(id,
     this.HiddenNodeIds = [];
 
     this.CheckViewerContextMenu;
+
+    this.HasProperties = false;
 }
 
 // inherit from parent
@@ -98,9 +93,17 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
                 var rootNodeId = viewer.model.getAbsoluteRootNode();
                 _this.ReadProperties(rootNodeId, identifierProperties, undefined).then(function (res) {
                     if (res) {
-                        _this.ModelTree.addModelBrowser(_this.SourceProperties);
+                        if (Object.keys(_this.SourceProperties).length > 0) {
+                            _this.HasProperties = true;
 
-                        _this.AddComponentsToDB();
+                            _this.ModelTree.AddComponentTable(_this.SourceProperties);
+
+                            _this.AddComponentsToDB();
+                        }
+                        else {
+
+                            _this.ModelTree.AddModelBrowser();
+                        }
                     }
 
                     return resolve(true);
@@ -209,7 +212,15 @@ SCManager.prototype.BindEvents = function (viewer) {
                 var sel = selection.getSelection();
 
                 if (_this.SelectedNodeId !== sel.getNodeId()) {
-                    _this.OnSelection(selection);
+                   
+                    if(_this.HasProperties)
+                    {
+                        _this.SelectComponentRow(selection);
+                    }
+                    else
+                    {
+                        _this.SelectBrowserItem(selection);
+                    }
                 }
             }
         },
@@ -224,7 +235,7 @@ SCManager.prototype.menu = function (x, y) {
     i.opacity = "1";
 }
 
-SCManager.prototype.OnSelection = function (selectionEvent) {
+SCManager.prototype.SelectComponentRow = function (selectionEvent) {
     var selection = selectionEvent.getSelection();
     if (selection.isNodeSelection()) {
         if (selection.getNodeId() === this.SelectedNodeId) {
@@ -247,10 +258,28 @@ SCManager.prototype.OnSelection = function (selectionEvent) {
         if (model.getNodeType(this.SelectedNodeId) !== Communicator.NodeType.BodyInstance) {
 
             // highlight corresponding component in model browser table
-            this.ModelTree.HighlightModelBrowserRow(this.SelectedNodeId);
+            this.ModelTree.HighlightComponentRow(this.SelectedNodeId);
         }
     }
 };
+
+SCManager.prototype.SelectBrowserItem = function (selectionEvent) {
+    var selection = selectionEvent.getSelection();
+    if (selection.isNodeSelection()) {
+        if (selection.getNodeId() === this.SelectedNodeId) {
+            return;
+        }
+
+        this.SelectedNodeId = selection.getNodeId();
+        var model = this.Webviewer.model;
+
+        if (!model.isNodeLoaded(this.SelectedNodeId)) {
+            return;
+        }
+
+        this.ModelTree.HighlightComponentRow(this.SelectedNodeId);
+    }
+}
 
 SCManager.prototype.HandleHiddenNodeIdsList = function (isHide, nodeList) {
 

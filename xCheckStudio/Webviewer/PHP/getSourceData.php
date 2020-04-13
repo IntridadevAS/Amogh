@@ -18,7 +18,18 @@ $ValidDataSources = ["xml",
                      "ste", 
                      "igs",
                      "vsd",
-                     "vsdx"];
+                     "vsdx",
+                     "jt",
+                     "prt", "mf1", "arc", "unv", "pkg",
+                     "model", "session", "dlv", "exp",
+                     "catdrawing", "catpart", "catproduct", "catshape", "cgr",
+                     "3dxml",
+                     "obj",
+                     "asm", "neu", "prt", "xas", "xpr",
+                     "ipt", "iam",
+                     "asm", "par", "pwd", "psm",
+                     "3ds",
+                     "u3d"];
 
 foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name)
 {

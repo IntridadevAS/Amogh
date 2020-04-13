@@ -12,7 +12,7 @@ function ExcelSelectionManager(componentIdvsSelectedComponents) {
 ExcelSelectionManager.prototype = Object.create(SelectionManager.prototype);
 ExcelSelectionManager.prototype.constructor = ExcelSelectionManager;
 
-ExcelSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow, 
+ExcelSelectionManager.prototype.SelectComponent = function (currentRow, 
      checkBoxState, 
      componentData) {
 

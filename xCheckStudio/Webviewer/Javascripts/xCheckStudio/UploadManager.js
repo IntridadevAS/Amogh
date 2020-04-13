@@ -3,7 +3,16 @@ let UploadManager = {
     createFileUploader: function () {
         $("#file-uploader").dxFileUploader({
             multiple: true,
-            accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm, .DWG, .dwg, .DXF, .dxf, .DWF, .dwf, .DWFX, .dwfx, .sldprt, .SLDPRT, .rvt, .rfa, .RVT, .RFA, .IFC, .STEP, .stp, .ste, .json, .igs, .IGS, .VSD, .vsd, .VSDX, .vsdx",
+            accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm," +
+             ".DWG,.dwg,.DXF,.dxf,.DWF,.dwf,.DWFX,.dwfx,.sldprt,.SLDPRT,"+
+             ".rvt,.rfa,.RVT,.RFA,.IFC,.STEP,.stp,.ste,.json,.igs,.IGS,"+
+             ".VSD,.vsd,.VSDX,.vsdx," +
+             ".JT,.jt,.PRT,.prt,.MF1,.mf1,.ARC,.arc,.UNV,.unv,.PKG,.pkg," +
+             ".MODEL,.model,.SESSION,.session,.DLV,.dlv,.EXP,.exp," +
+             ".CATDrawing, .catdrawing, .CATPart, .catpart, .CATProduct, .catproduct, .CATShape, .catshape, .CGR, .cgr"+
+             ".3DXML, .3dxml, .OBJ, .obj, .NEU, .neu, .PRT, .prt, .XAS, .xas, .XPR, .xpr" +
+             ".IPT, .ipt, .IAM, .iam, .ASM, .asm, .PAR, .par, .PWD, .pwd, .PSM, .psm" + 
+             ".3DS, .3ds, .U3D, .u3d",
             width: "100%",
             height: "100%",
             value: [],

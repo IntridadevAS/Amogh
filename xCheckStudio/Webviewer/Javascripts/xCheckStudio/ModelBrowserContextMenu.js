@@ -1,7 +1,9 @@
-function ModelBrowserContextMenu() {
+function ModelBrowserContextMenu(haveComponentOptions = true) {
       this.ModelBrowser;
 
       this.IsolateManager;
+
+      this.HaveComponentOptions = haveComponentOptions;
 }
 
 ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
@@ -70,7 +72,13 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                     }
                               },
                               "reference": {
-                                    name: "Reference"
+                                    name: "Reference",
+                                    visible: function () {
+                                          if (_this.HaveComponentOptions) {
+                                                return true;
+                                          }
+                                          return false;
+                                    }
                               }
                         }
                   };
