@@ -103,89 +103,6 @@ ExcelModeBrowser.prototype.CreateModelBrowser = function (sourceProperties) {
 
         this.LoadModelBrowserTable(this, columnHeaders, tableData);
     } 
-    // if (this.SheetData !== null) {
-    //     var _this = this;
-
-
-    //     var columnHeaders = this.CreateHeaders();
-
-    //     tableData = [];
-
-    //     //add each sheet to model browser 
-    //     // iterate over sheets from excel file
-    //     var rowKey = 1;
-    //     for (var sheet in this.SheetData) {
-    //         var mainComponentClass = sheet;
-    //         var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
-    //         var styleList = undefined;
-    //         var componentStyleClass = this.getComponentstyleClass(mainComponentStyleClass);
-
-    //         //add sheet names as 1st parent(collapsible row)
-    //         // this.addComponentRow(styleList, componentStyleClass, rowData);
-    //         var parentMainClassStyleList = componentStyleClass;
-
-    //         //iterate over each component class in sheet
-
-    //         for (var component in this.SheetData[mainComponentClass]) {
-    //             styleList = parentMainClassStyleList;
-    //             var subComponentClass = component;
-    //             var subComponentStyleClass = subComponentClass + "_" + this.ModelBrowserContainer;
-    //             componentStyleClass = this.getComponentstyleClass(subComponentStyleClass);
-
-    //             //add component class as second level parent(collapsible row)
-    //             //iterate over each component having same component class 
-    //             var children = this.SheetData[mainComponentClass][subComponentClass];
-    //             for (i = 0; i < children.length; i++) {
-    //                 if (styleList !== undefined) {
-    //                     styleList = styleList + " " + componentStyleClass;
-    //                 }
-    //                 else {
-    //                     styleList = componentStyleClass;
-    //                 }
-    //                 var child = children[i];
-    //                 var name = child.Name;
-    //                 //var rowData = [];
-
-    //                 //if component name or main component class is undefined then only add compoment row to model browser
-    //                 if (name !== undefined &&
-    //                     mainComponentClass !== undefined) {
-
-    //                     tableRowContent = {};
-    //                     // var checkBox = document.createElement("INPUT");
-    //                     // checkBox.setAttribute("type", "checkbox");
-    //                     // // checkBox.checked = false;  
-    //                     // checkBox.checked = _this.SelectionManager.IsComponentChecked(name, mainComponentClass, subComponentClass);
-
-    //                     // // select component check box state change event
-    //                     // checkBox.onchange = function () {
-    //                     //     _this.SelectionManager.HandleSelectFormCheckBox(this);
-    //                     // }
-
-    //                     //tableRowContent[columnHeaders[0].name] = checkBox;
-    //                     tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = name;
-    //                     tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = mainComponentClass;
-    //                     tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = subComponentClass;
-
-    //                     var description = "";
-    //                     for (var j = 0; j < child.properties.length; j++) {
-    //                         var childProperties = child.properties[j];
-    //                         if (childProperties["Name"] === "Description") {
-
-    //                             description = childProperties["Value"];
-    //                             break;
-    //                         }
-    //                     }
-    //                     tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
-    //                     tableRowContent[ModelBrowserColumnNames1D.RowKey.replace(/\s/g, '')] = rowKey;
-    //                     tableData.push(tableRowContent);
-    //                     rowKey++;
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     this.LoadModelBrowserTable(this, columnHeaders, tableData);
-    // }
 };
 
 ExcelModeBrowser.prototype.GetModelBrowserHeaderTable = function () {
@@ -209,14 +126,8 @@ ExcelModeBrowser.prototype.getComponentstyleClass = function (componentName) {
     componentStyleClass = componentStyleClass.replace(":", "");
     componentStyleClass = componentStyleClass.replace(".", "");
     componentStyleClass = componentStyleClass.replace("/", "");
-    // while (this.NodeGroups.includes(componentStyleClass)) {
-    //     componentStyleClass += "-" + this.revisedRandId();
-    // }
+   
     return componentStyleClass;
-}
-
-ExcelModeBrowser.prototype.revisedRandId = function () {
-    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
 }
 
 ExcelModeBrowser.prototype.GetSelectedComponents = function () {
@@ -321,7 +232,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                         rows = e.component.getVisibleRows();
                         var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        _this.SelectionManager.HandleSelectFormCheckBox(row[0], "on", rows[rowIndex].data);
+                        _this.SelectionManager.SelectComponent(row[0], "on", rows[rowIndex].data);
                     }
                 }
                 else {
@@ -329,7 +240,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                         rows = e.component.getVisibleRows();
                         var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        _this.SelectionManager.HandleSelectFormCheckBox(row[0], "off", rows[rowIndex].data);
+                        _this.SelectionManager.SelectComponent(row[0], "off", rows[rowIndex].data);
                     }
                 }
             },

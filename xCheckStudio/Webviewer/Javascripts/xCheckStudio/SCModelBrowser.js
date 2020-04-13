@@ -15,7 +15,7 @@ function SCModelBrowser(id,
 
     this.ModelBrowserAddedNodes = [];
     this.NodeParentList = {};
-    
+
     // selectiion manager
     this.SelectionManager = new SCSelectionManager(nodeIdvsSelectedComponents);
 }
@@ -31,8 +31,7 @@ SCModelBrowser.prototype.CreateHeaders = function () {
         var caption;
         var width = "0%";
         var visible = true;
-        switch(i)
-        {
+        switch (i) {
             case ModelBrowserColumns3D.Select:
                 continue;
                 break;
@@ -66,30 +65,6 @@ SCModelBrowser.prototype.CreateHeaders = function () {
 
     return columnHeaders;
 }
-/*Found Absolute Method on 23/10/2019. Can be removed later..RK
-/*SCModelBrowser.prototype.InitEvents = function () {
-    var _this = this;
-    this.Webviewer.setCallbacks({
-        assemblyTreeReady: function () {
-        },
-        selectionArray: function (selectionEvents) {
-            for (var _i = 0, selectionEvents_1 = selectionEvents; _i < selectionEvents_1.length; _i++) {
-                var selectionEvent = selectionEvents_1[_i];
-                var selection = selectionEvent.getSelection();
-                if (selection.isNodeSelection()) {
-                    var nodeId = selection.getNodeId();
-                    var model = _this.Webviewer.model;
-                    if (model.isNodeLoaded(nodeId)) {
-                    }
-                }
-            }
-        }
-    });
-};*/
-
-SCModelBrowser.prototype.revisedRandId = function () {
-    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
-}
 
 SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
     //var _this = this;
@@ -103,9 +78,6 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
     this.ModelBrowserAddedNodes.push(nodeId);
 
     this.NodeParentList[nodeId] = parentNode;
-    // if (styleList !== undefined) {
-    //     this.NodeIdVsRowClassList[nodeId] = styleList;
-    // }
 
     //add node properties to model browser table
     var nodeData = this.Components[nodeId];
@@ -126,7 +98,7 @@ SCModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
     //return this.SelectionManager.SelectedCompoentExists(componentRow);
 }
 
-SCModelBrowser.prototype.addModelBrowser = function (components) {
+SCModelBrowser.prototype.AddComponentTable = function (components) {
     if (!components) {
         return;
     }
@@ -134,7 +106,7 @@ SCModelBrowser.prototype.addModelBrowser = function (components) {
     this.Components = components;
     var headers = this.CreateHeaders();
     var rootNode = this.Webviewer.model.getAbsoluteRootNode();
-    this.addModelBrowserComponent(rootNode, -1);    
+    this.AddComponentTableComponent(rootNode, -1);
     if (headers === undefined ||
         headers.length === 0 ||
         this.modelTreeRowData === undefined ||
@@ -145,14 +117,14 @@ SCModelBrowser.prototype.addModelBrowser = function (components) {
     this.loadModelBrowserTable(headers);
 };
 
-SCModelBrowser.prototype.addModelBrowserComponent = function (nodeId, parentNode) {
+SCModelBrowser.prototype.AddComponentTableComponent = function (nodeId, parentNode) {
 
     if (nodeId !== null) {
         var children = this.Webviewer.model.getNodeChildren(nodeId);
         if (children.length > 0) {
             this.addComponentRow(nodeId, parentNode);
             for (var i = 0; i < children.length; i++) {
-                this.addModelBrowserComponent(children[i], nodeId);
+                this.AddComponentTableComponent(children[i], nodeId);
             }
         }
     }
@@ -181,7 +153,7 @@ SCModelBrowser.prototype.Clear = function () {
 }
 
 SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
-    
+
     var loadingBrower = true;
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
@@ -199,30 +171,29 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             showRowLines: true,
             height: "100%",
             width: "100%",
-            allowColumnResizing : true,
+            allowColumnResizing: true,
             hoverStateEnabled: true,
             // focusedRowEnabled: true,
             filterRow: {
                 visible: true
             },
             scrolling: {
-                mode: "standard"          
+                mode: "standard"
             },
             paging: {
-                 pageSize: 50
+                pageSize: 50
             },
             selection: {
                 mode: "multiple",
                 recursive: true,
             },
             onContentReady: function (e) {
-                if(loadingBrower && _this.SelectionManager.NodeIdvsSelectedComponents)
-                {
+                if (loadingBrower && _this.SelectionManager.NodeIdvsSelectedComponents) {
                     e.component.selectRows(Object.keys(_this.SelectionManager.NodeIdvsSelectedComponents));
                 }
                 loadingBrower = false;
-            },  
-            onInitialized: function(e) {
+            },
+            onInitialized: function (e) {
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu();
                 modelBrowserContextMenu.Init(_this);
@@ -231,21 +202,21 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             onSelectionChanged: function (e) {
                 var checkBoxStatus;
                 var clickedCheckBoxRowKeys;
-                if(e.currentSelectedRowKeys.length > 0) {
-                    checkBoxStatus  = "on";
+                if (e.currentSelectedRowKeys.length > 0) {
+                    checkBoxStatus = "on";
                     clickedCheckBoxRowKeys = e.currentSelectedRowKeys;
                 }
                 else {
                     checkBoxStatus = "off";
                     clickedCheckBoxRowKeys = e.currentDeselectedRowKeys;
                 }
-                _this.UpdateSelectionComponentFromCheckBox(clickedCheckBoxRowKeys, 
-                    checkBoxStatus, 
-                    e.component, 
+                _this.OnComponentSelected(clickedCheckBoxRowKeys,
+                    checkBoxStatus,
+                    e.component,
                     containerDiv);
             },
-            onRowClick: function(e) {
-                _this.SelectionManager.HandleRowSelect(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
+            onRowClick: function (e) {
+                _this.SelectionManager.OnComponentRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
             },
             onRowPrepared: function (e) {
                 if (e.rowType !== "data") {
@@ -272,16 +243,16 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 }
 
 
-SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function(selectedNodeIds) {
+SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function (selectedNodeIds) {
     var selectedRows = [];
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
 
-    for(var i = 0; i < selectedNodeIds.length; i++) {
+    for (var i = 0; i < selectedNodeIds.length; i++) {
         var nodeId = Number(selectedNodeIds[i]);
 
-        var  rowIndex = treeList.getRowIndexByKey(nodeId);
+        var rowIndex = treeList.getRowIndexByKey(nodeId);
 
-        if(rowIndex !== -1) {
+        if (rowIndex !== -1) {
             var row = treeList.getRowElement(rowIndex);
             selectedRows.push(row[0]);
         }
@@ -289,17 +260,8 @@ SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function(selectedNodeIds) 
     return selectedRows;
 }
 
-SCModelBrowser.prototype.HighlightHiddenRows = function(isHide, selectedRows) {
-    // for (var i = 0; i < selectedRows.length; i++) {
-    //     var selectedRow = selectedRows[i];
-    //     selectedRow.style.backgroundColor = "#b3b5b5";
-    //     /*for(var j = 0; j < selectedRow.cells.length; j++) {
-    //         var cell = selectedRow.cells[j];
-    //         isHide ? cell.style.color = "#b3b5b5" : cell.style.color = "black";
-    //     }*/
-    // } 
-    
-    
+SCModelBrowser.prototype.HighlightHiddenRows = function (isHide, selectedRows) {
+
     for (var i = 0; i < selectedRows.length; i++) {
         var selectedRow = selectedRows[i];
 
@@ -315,16 +277,16 @@ SCModelBrowser.prototype.HighlightHiddenRows = function(isHide, selectedRows) {
     }
 }
 
-SCModelBrowser.prototype.ShowAllHiddenRows = function() {
+SCModelBrowser.prototype.ShowAllHiddenRows = function () {
     var selectedRows = [];
     var sourceManager = SourceManagers[this.Id];
     var hiddenNodeIds = sourceManager.HiddenNodeIds;
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
 
-    for(var i = 0; i < hiddenNodeIds.length; i++) {
-        var nodeId = Number(hiddenNodeIds[i]);      
-        var  rowIndex = treeList.getRowIndexByKey(nodeId);
-        if(rowIndex !== -1) {
+    for (var i = 0; i < hiddenNodeIds.length; i++) {
+        var nodeId = Number(hiddenNodeIds[i]);
+        var rowIndex = treeList.getRowIndexByKey(nodeId);
+        if (rowIndex !== -1) {
             var row = treeList.getRowElement(rowIndex);
             selectedRows.push(row[0]);
         }
@@ -334,33 +296,45 @@ SCModelBrowser.prototype.ShowAllHiddenRows = function() {
     this.HighlightHiddenRows(false, selectedRows);
 }
 
-SCModelBrowser.prototype.UpdateSelectionComponentFromCheckBox = function(clickedCheckBoxRowKeys, 
-                                                                        checkBoxStatus,
-                                                                        componentObj, 
-                                                                        containerDiv) {
+SCModelBrowser.prototype.OnComponentSelected = function (clickedCheckBoxRowKeys,
+    checkBoxStatus,
+    componentObj,
+    containerDiv) {
 
-    for(var i = 0; i < clickedCheckBoxRowKeys.length; i++) {
+    for (var i = 0; i < clickedCheckBoxRowKeys.length; i++) {
         // componentObj.expandRow(clickedCheckBoxRowKeys[i]);
         var nodeObj = componentObj.getNodeByKey(clickedCheckBoxRowKeys[i]);
-        var  row = componentObj.getRowElement(componentObj.getRowIndexByKey(nodeObj.key));
-        this.SelectionManager.HandleSelectFormCheckBox(row[0], checkBoxStatus, nodeObj.data, containerDiv);
-        if(nodeObj.hasChildren) {
+        var row = componentObj.getRowElement(componentObj.getRowIndexByKey(nodeObj.key));
+        this.SelectionManager.SelectComponent(row[0], checkBoxStatus, nodeObj.data, containerDiv);
+        if (nodeObj.hasChildren) {
             var children = this.GetSelectedChildren(componentObj, nodeObj);
-            for(var j = 0; j < children.length; j++) {
+            for (var j = 0; j < children.length; j++) {
                 row = componentObj.getRowElement(componentObj.getRowIndexByKey(children[j].key));
-                this.SelectionManager.HandleSelectFormCheckBox(row[0], checkBoxStatus, children[j].data, containerDiv);
+                this.SelectionManager.SelectComponent(row[0], checkBoxStatus, children[j].data, containerDiv);
             }
         }
     }
 }
 
-SCModelBrowser.prototype.GetSelectedChildren = function(componentObj, node) {
+SCModelBrowser.prototype.OnBrowserNodeSelected = function (clickedCheckBoxRowKeys,
+    checkBoxStatus,
+    rowComponent,
+    containerDiv) {
+
+    for (var i = 0; i < clickedCheckBoxRowKeys.length; i++) {
+        var nodeObj = rowComponent.getNodeByKey(clickedCheckBoxRowKeys[i]);
+        var row = rowComponent.getRowElement(rowComponent.getRowIndexByKey(nodeObj.key));
+        this.SelectionManager.SelectBrowserItem(row[0], checkBoxStatus, nodeObj.data, containerDiv);       
+    }
+}
+
+SCModelBrowser.prototype.GetSelectedChildren = function (componentObj, node) {
     var children = []
-    for(var i = 0; i < node.children.length; i++) {
+    for (var i = 0; i < node.children.length; i++) {
         var child = node.children[i];
-        if(child.hasChildren){
+        if (child.hasChildren) {
             var ChildrenComponents = this.GetSelectedChildren(componentObj, child);
-            for(var j = 0; j < ChildrenComponents.length; j++) {
+            for (var j = 0; j < ChildrenComponents.length; j++) {
                 children.push(ChildrenComponents[j]);
             }
         }
@@ -369,12 +343,12 @@ SCModelBrowser.prototype.GetSelectedChildren = function(componentObj, node) {
     return children;
 }
 
-SCModelBrowser.prototype.GetNodeChildren = function(nodeId) {
+SCModelBrowser.prototype.GetNodeChildren = function (nodeId) {
     var nodeList = [];
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
     var nodeObj = treeList.getNodeByKey(nodeId);
     var children = this.GetSelectedChildren(treeList, nodeObj);
-    for(var i = 0; i < children.length; i++) {
+    for (var i = 0; i < children.length; i++) {
         nodeList.push(children[i].key);
     }
     return nodeList;
@@ -390,18 +364,13 @@ SCModelBrowser.prototype.isAssemblyNode = function (nodeId) {
     }
 };
 
-SCModelBrowser.prototype.HighlightModelBrowserRow = function (selectedNodeId) {
+SCModelBrowser.prototype.HighlightComponentRow = function (selectedNodeId) {
 
     var path = {};
     path['path'] = [selectedNodeId];
     this.GetTopMostParentNode(selectedNodeId, path);
-    // if (!topMostParent ||
-    //     topMostParent === -1) {
-    //     return;
-    // }
 
     this.OpenHighlightedRow(path, selectedNodeId);
-
 }
 
 SCModelBrowser.prototype.GetSelectedComponents = function () {
@@ -433,25 +402,20 @@ SCModelBrowser.prototype.OpenHighlightedRow = function (path, selectedNodeId) {
         var node = nodeList[i];
 
         if (!treeList.isRowExpanded(node)) {
-                treeList.expandRow(node).done(function () {
-                _this.GetBrowserRowFromNodeId(selectedNodeId, _this.ModelBrowserContainer);
+            treeList.expandRow(node).done(function () {
+                _this.GetComponentRowFromNodeId(selectedNodeId, _this.ModelBrowserContainer);
             });
         }
         else {
-            if(i == nodeList.length-1) {
-               this.GetBrowserRowFromNodeId(selectedNodeId, this.ModelBrowserContainer);
+            if (i == nodeList.length - 1) {
+                this.GetComponentRowFromNodeId(selectedNodeId, this.ModelBrowserContainer);
             }
         }
-        
+
     }
 }
 
 SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
-    // if(rowKey !== -1 &&
-    //    !path['path'].includes(rowKey))
-    // {
-    //     path['path'].push(rowKey);
-    // }
 
     if (rowKey in this.NodeParentList) {
 
@@ -461,14 +425,10 @@ SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
         path['path'].push(this.NodeParentList[rowKey])
 
         this.GetTopMostParentNode(this.NodeParentList[rowKey], path);
-        // if (!parent ||
-        //     parent === -1) {
-        //         return rowKey;
-        // }        
     }
 }
 
-SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, containerDiv) {
+SCModelBrowser.prototype.GetComponentRowFromNodeId = function (selectedNodeId, containerDiv) {
 
     var treeList = $("#" + containerDiv).dxTreeList("instance");
 
@@ -476,6 +436,153 @@ SCModelBrowser.prototype.GetBrowserRowFromNodeId = function (selectedNodeId, con
     treeList.navigateToRow(selectedNodeId).done(function () {
         var rowIndex = treeList.getRowIndexByKey(selectedNodeId);
         row = treeList.getRowElement(rowIndex);
-        _this.SelectionManager.HandleRowSelect(row[0], undefined, selectedNodeId, _this.ModelBrowserContainer);
+        _this.SelectionManager.OnComponentRowClicked(row[0], undefined, selectedNodeId, _this.ModelBrowserContainer);
     });
+}
+
+SCModelBrowser.prototype.AddModelBrowser = function () {
+    // var modelStructure = this.GetModelStructure(this.Webviewer.model.getAbsoluteRootNode(), -1);
+    // if (Object.keys(modelStructure).length === 0) {
+    //     return;
+    // }
+
+    this.GetModelTreeData(this.Webviewer.model.getAbsoluteRootNode(), -1);
+    if (Object.keys(this.modelTreeRowData).length === 0) {
+        return;
+    }
+
+    // create headers
+    var columnHeaders = [];
+
+    var columnHeader = {};
+    columnHeader["caption"] = "Name";
+    columnHeader["dataField"] = "Name";
+    columnHeader["width"] = "100%";
+    columnHeader["visible"] = true;
+
+    columnHeaders.push(columnHeader);
+
+    var columnHeader = {};
+    columnHeader["caption"] = "NodeId";
+    columnHeader["dataField"] = "NodeId";
+    columnHeader["width"] = "0%";
+    columnHeader["visible"] = false;
+
+    columnHeaders.push(columnHeader);
+
+    var columnHeader = {};
+    columnHeader["caption"] = "ParentNodeId";
+    columnHeader["dataField"] = "ParentNodeId";
+    columnHeader["width"] = "0%";
+    columnHeader["visible"] = false;
+
+    columnHeaders.push(columnHeader);
+
+    // Load model browser tree    
+    var _this = this;
+    var containerDiv = "#" + _this.ModelBrowserContainer;
+    // this.Clear();
+    $(function () {
+        $(containerDiv).dxTreeList({
+            dataSource: _this.modelTreeRowData,
+            keyExpr: "NodeId",
+            parentIdExpr: "ParentNodeId",
+            columns: columnHeaders,
+            columnAutoWidth: true,
+            columnResizingMode: 'widget',
+            wordWrapEnabled: false,
+            showBorders: true,
+            showRowLines: true,
+            height: "100%",
+            width: "100%",
+            allowColumnResizing: true,
+            hoverStateEnabled: true,
+            // focusedRowEnabled: true,
+            filterRow: {
+                visible: true
+            },
+            scrolling: {
+                mode: "standard"
+            },
+            paging: {
+                pageSize: 50
+            },
+            selection: {
+                mode: "multiple",
+                recursive: true,
+            },
+            onContentReady: function (e) {
+            },
+            onInitialized: function (e) {
+                // initialize the context menu
+                var modelBrowserContextMenu = new ModelBrowserContextMenu(false);
+                modelBrowserContextMenu.Init(_this);
+                _this.ShowItemCount(_this.modelTreeRowData.length);
+            },
+            onSelectionChanged: function (e) {
+                var checkBoxStatus;
+                var clickedCheckBoxRowKeys;
+                if (e.currentSelectedRowKeys.length > 0) {
+                    checkBoxStatus = "on";
+                    clickedCheckBoxRowKeys = e.currentSelectedRowKeys;
+                }
+                else {
+                    checkBoxStatus = "off";
+                    clickedCheckBoxRowKeys = e.currentDeselectedRowKeys;
+                }
+                _this.OnBrowserNodeSelected(clickedCheckBoxRowKeys,
+                    checkBoxStatus,
+                    e.component,
+                    containerDiv);
+            },
+            onRowClick: function (e) {
+                _this.SelectionManager.OnBrowserRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
+            },
+            onRowPrepared: function (e) {
+            }
+        });
+    });
+
+}
+
+SCModelBrowser.prototype.GetModelTreeData = function (nodeId, parentNodeId) {
+    var name = this.Webviewer.model.getNodeName(nodeId)
+
+    var data = {};
+    data["Name"] = name;
+    data["NodeId"] = nodeId;
+    data["ParentNodeId"] = parentNodeId;
+    this.modelTreeRowData.push(data);
+    
+    this.NodeParentList[nodeId] = parentNodeId;
+
+    var children = this.Webviewer.model.getNodeChildren(nodeId);
+    if (children.length > 0) {
+        for (var i = 0; i < children.length; i++) {
+            var child = children[i];
+            this.GetModelTreeData(child, nodeId);
+        }
+    }
+}
+
+SCModelBrowser.prototype.GetModelStructure = function (nodeId, parentNodeId) {
+    var name = this.Webviewer.model.getNodeName(nodeId)
+
+    var structure = {};
+    structure["name"] = name;
+    structure["nodeId"] = nodeId;
+    structure["parenNodeId"] = parentNodeId;
+    structure["children"] = [];
+
+    var children = this.Webviewer.model.getNodeChildren(nodeId);
+    if (children.length > 0) {
+        for (var i = 0; i < children.length; i++) {
+            var child = children[i];
+            var childStructure = this.GetModelStructure(child, nodeId);
+
+            structure["children"].push(childStructure);
+        }
+    }
+
+    return structure;
 }

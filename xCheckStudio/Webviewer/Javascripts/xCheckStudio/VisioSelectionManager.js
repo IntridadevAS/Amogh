@@ -15,7 +15,7 @@ VisioSelectionManager.prototype.constructor = VisioSelectionManager;
 /* 
    This function 
 */
-VisioSelectionManager.prototype.HandleRowSelect = function (row, sourceId, nodeId, containerDiv) {
+VisioSelectionManager.prototype.OnComponentRowClicked = function (row, sourceId, nodeId, containerDiv) {
 
     // check if row is already highlighted
     if (this.HighlightedComponentRow === row) {
@@ -47,14 +47,14 @@ VisioSelectionManager.prototype.HandleRowSelect = function (row, sourceId, nodeI
     this.HighlightedComponentRowKey = nodeId;
 
     if (nodeId) {
-        this.BrowserItemClick(nodeId, sourceId);
+        this.HighlightInView(nodeId, sourceId);
     }
 }
 
 /* 
    This function 
 */
-VisioSelectionManager.prototype.BrowserItemClick = function (nodeId, sourceId) {
+VisioSelectionManager.prototype.HighlightInView = function (nodeId, sourceId) {
 
     // get the inner DOM of *.svg
     var objectElement = document.getElementById("svgViewerObject" + sourceId);
@@ -122,7 +122,7 @@ VisioSelectionManager.prototype.ZoomOnElement = function (selected, svgDoc) {
 /* 
    This function is called when checkbox from the model browser table is checked or unchecked
 */
-VisioSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
+VisioSelectionManager.prototype.SelectComponent = function (currentRow,
     checkBoxState,
     componentData) {
 

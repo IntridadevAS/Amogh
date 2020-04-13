@@ -89,7 +89,7 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
 
         _this.ReadProperties().then(function (result) {
             if (result) {
-                _this.ModelTree.addModelBrowser(_this.SourceProperties);
+                _this.ModelTree.AddComponentTable(_this.SourceProperties);
 
                 _this.AddComponentsToDB();
             }

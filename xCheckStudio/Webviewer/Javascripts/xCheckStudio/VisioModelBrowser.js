@@ -21,7 +21,7 @@ function VisioModelBrowser(id,
 VisioModelBrowser.prototype = Object.create(ModelBrowser.prototype);
 VisioModelBrowser.prototype.constructor = VisioModelBrowser;
 
-VisioModelBrowser.prototype.addModelBrowser = function (components) {
+VisioModelBrowser.prototype.AddComponentTable = function (components) {
     if (!components) {
         return;
     }
@@ -30,7 +30,7 @@ VisioModelBrowser.prototype.addModelBrowser = function (components) {
     var headers = this.CreateHeaders();  
 
     for (var index in this.Components) {
-        this.addModelBrowserComponent(this.Components[index], this.Components[index].ParentNodeId);
+        this.AddComponentTableComponent(this.Components[index], this.Components[index].ParentNodeId);
     }    
 
     if (headers === undefined ||
@@ -86,7 +86,7 @@ VisioModelBrowser.prototype.CreateHeaders = function () {
     return columnHeaders;
 }
 
-VisioModelBrowser.prototype.addModelBrowserComponent = function (component, parentid) {
+VisioModelBrowser.prototype.AddComponentTableComponent = function (component, parentid) {
     
     this.addComponentRow(component, parentid);   
 };
@@ -190,7 +190,7 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     e.component);
             },
             onRowClick: function(e) {
-                _this.SelectionManager.HandleRowSelect(e, 
+                _this.SelectionManager.OnComponentRowClicked(e, 
                                                       _this.Id, 
                                                       e.data.ID, 
                                                       _this.ModelBrowserContainer);
@@ -223,14 +223,14 @@ VisioModelBrowser.prototype.UpdateSelectionComponentFromCheckBox = function (cli
 
         var nodeObj = componentObj.getNodeByKey(clickedCheckBoxRowKeys[i]);
         var row = componentObj.getRowElement(componentObj.getRowIndexByKey(nodeObj.key));
-        this.SelectionManager.HandleSelectFormCheckBox(row[0], checkBoxStatus, nodeObj.data);
+        this.SelectionManager.SelectComponent(row[0], checkBoxStatus, nodeObj.data);
 
         if (nodeObj.hasChildren) {
             var children = this.GetSelectedChildren(componentObj, nodeObj);
            
             for (var j = 0; j < children.length; j++) {
                 row = componentObj.getRowElement(componentObj.getRowIndexByKey(children[j].key));
-                this.SelectionManager.HandleSelectFormCheckBox(row[0], checkBoxStatus, children[j].data);
+                this.SelectionManager.SelectComponent(row[0], checkBoxStatus, children[j].data);
             }
         }
     }

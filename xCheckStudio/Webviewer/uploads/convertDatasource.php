@@ -33,8 +33,8 @@
         $uploadDirectory =  getCheckSourceDPath($projectName, $checkName);
         break;
     }
-    $filename=  $uploadDirectory."/".$mainFileName; 
-    $file = fileExists($filename, false);
+    $fileName=  $uploadDirectory."/".$mainFileName; 
+    $file = fileExists($fileName, false);
     if (!$file) {
         echo "fail";
         return;
@@ -111,10 +111,39 @@ function fileExists($fileName, $caseSensitive = true) {
                 case "ifc":
                 case "step":
                 case "stp":
-                case "ste":               
+                case "ste":
                 case "igs":
                 case "vsd":
                 case "vsdx":
+                case "jt":
+                case "prt":
+                case "mf1":
+                case "arc":
+                case "unv":
+                case "pkg":
+                case "model":
+                case "session":
+                case "dlv":
+                case "exp":
+                case "catdrawing":
+                case "catpart":
+                case "catproduct":
+                case "catshape":
+                case "cgr":
+                case "3dxml":
+                case "obj":
+                case "asm":
+                case "neu":
+                case "xas":
+                case "xpr":
+                case "ipt":
+                case "iam":
+                case "asm":
+                case "par":
+                case "pwd":
+                case "psm":
+                case "3ds":
+                case "u3d":
                 if($filePathParts['filename'] ===  $file_parts['filename'])
                 {                    
                     return $file;

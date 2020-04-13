@@ -259,7 +259,7 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                         rows = e.component.getVisibleRows();
                         var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        _this.SelectionManager.HandleSelectFormCheckBox(row[0], "on", rows[rowIndex].data);
+                        _this.SelectionManager.SelectComponent(row[0], "on", rows[rowIndex].data);
                     }
                 }
                 else {
@@ -267,7 +267,7 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                         rows = e.component.getVisibleRows();
                         var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
                         var  row = e.component.getRowElement(rowIndex);
-                        _this.SelectionManager.HandleSelectFormCheckBox(row[0], "off", rows[rowIndex].data);
+                        _this.SelectionManager.SelectComponent(row[0], "off", rows[rowIndex].data);
                     }
                 }
             },

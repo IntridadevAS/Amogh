@@ -6,7 +6,7 @@ function SelectionManager()
     this.HighlightedComponentRowKey;   
 }
 
-SelectionManager.prototype.HandleSelectFormCheckBox = function (currentCheckBox) {   
+SelectionManager.prototype.SelectComponent = function (currentCheckBox) {   
 }
 
 SelectionManager.prototype.SelectedCompoentExists = function (componentRow) {   

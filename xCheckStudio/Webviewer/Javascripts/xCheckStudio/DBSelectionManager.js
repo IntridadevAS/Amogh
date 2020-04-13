@@ -11,7 +11,7 @@ function DBSelectionManager(componentIdvsSelectedComponents) {
 DBSelectionManager.prototype = Object.create(SelectionManager.prototype);
 DBSelectionManager.prototype.constructor = DBSelectionManager;
 
-DBSelectionManager.prototype.HandleSelectFormCheckBox = function (currentRow,
+DBSelectionManager.prototype.SelectComponent = function (currentRow,
      checkBoxState,
      componentData) {
 

@@ -1467,18 +1467,27 @@
     function isDataSource3D($sourceExt) {
         $is3D = true;
 
-        $validSources = array("xml","XML","rvm","RVM", "sldasm", "SLDASM", "DWG", "dwg", "DXF", "dxf", "DWF", "dwf", "DWFX", "dwfx",
-        "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "IGS", "igs");
+    $validSources = array(
+        "xml", "rvm",  "sldasm",
+        "dwg", "dxf",  "dwf", "dwfx",
+        "sldprt", "rvt", "rfa", "ifc",
+        "step", "stp", "ste", "igs", 
+        "jt","prt", "mf1", "arc", "unv", "pkg", "model", "session", "dlv", "exp",
+        "catdrawing", "catpart", "catproduct", "catshape", "cgr",
+        "3dxml", "obj", "asm", "neu", "prt", "xas", "xpr",
+        "ipt", "iam", "asm", "par", "pwd", "psm",
+        "3ds", "u3d"
+    );
            // open database
-           if(in_array($sourceExt, $validSources) == false) {
+           if(in_array(strtolower($sourceExt), $validSources) == false) {
                 $is3D = false;
            }
            return $is3D;
     }
 
     function isDataSourceVisio($sourceExt) {        
-        $validSources = array("VSD", "vsd", "VSDX", "vsdx");                    
-        if(in_array($sourceExt, $validSources) == true) {
+        $validSources = array("vsd", "vsdx");                    
+        if(in_array(strtolower($sourceExt), $validSources) == true) {
             return true;
         }
         return false;

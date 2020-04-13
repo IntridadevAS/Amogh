@@ -23,12 +23,22 @@
 
     $errors = array();
     $uploadedFiles = array();
-    $extension = array("xml","XML","rvm","RVM", "xls", "XLS", "att", "ATT", "sldasm", "SLDASM","DWG", "dwg", "DXF", "dxf",
-    "DWF", "dwf", "DWFX", "dwfx", "sldprt", "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs",
-    "VSD", "vsd", "VSDX", "vsdx");
-    $validSources = array("xml","XML","rvm","RVM", "xls", "XLS", "sldasm", "SLDASM","DWG", "dwg", "DXF", "dxf", "DWF", "dwf", "DWFX", "dwfx", "sldprt", 
-    "SLDPRT", "rvt", "rfa", "IFC", "STEP", "STE", "STP", "ifc", "step", "stp", "ste", "json", "IGS", "igs",
-    "VSD", "vsd", "VSDX", "vsdx");
+    $extension = array("xml","rvm", "xls", "att", "sldasm", "dwg", "dxf",
+    "dwf", "dwfx", "sldprt", "rvt", "rfa",  "ifc", "step", "stp", "ste", "json", "igs",
+    "vsd", "vsdx", 
+    "jt","prt", "mf1", "arc", "unv", "pkg", "model", "session", "dlv", "exp",
+    "catdrawing", "catpart", "catproduct", "catshape", "cgr",
+    "3dxml", "obj", "asm", "neu", "prt", "xas", "xpr",
+    "ipt", "iam", "asm", "par", "pwd", "psm",
+    "3ds", "u3d");
+    $validSources = array("xml","rvm", "xls", "sldasm", "dwg", "dxf", "dwf", "dwfx", "sldprt", 
+    "rvt", "rfa", "ifc", "step", "stp", "ste", "json", "igs",
+    "vsd", "vsdx", 
+    "jt","prt", "mf1", "arc", "unv", "pkg", "model", "session", "dlv", "exp",
+    "catdrawing", "catpart", "catproduct", "catshape", "cgr",
+    "3dxml", "obj", "asm", "neu", "prt", "xas", "xpr",
+    "ipt", "iam", "asm", "par", "pwd", "psm",
+    "3ds", "u3d");
 
     $UploadFolder = "UploadFolder";
     $counter = 0;
@@ -79,7 +89,7 @@
         $UploadOk = true;   
         
         $ext = pathinfo($name, PATHINFO_EXTENSION);
-        if(in_array($ext, $extension) == false)
+        if(in_array(strtolower($ext), $extension) == false)
         {
             $UploadOk = false;
             array_push($errors, $name." is invalid file type.");
@@ -105,7 +115,7 @@
         foreach($uploadedFiles as $fileName)
         {
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-            if(in_array($ext, $validSources) == true)
+            if(in_array(strtolower($ext), $validSources) == true)
             {
                 $UploadedFile= $uploadDirectory."/".$fileName;    
                 array_push($convertibleFiles, $UploadedFile);
