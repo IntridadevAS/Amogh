@@ -26,7 +26,8 @@ var Sources3D = ["xml",
     "ipt", "iam",
     "asm", "par", "pwd", "psm",
     "3ds",
-    "u3d"];
+    "u3d",
+    "sat", "sab"];
 var Sources1D = ["json", "xls"];
 var SourcesVSD = [ "vsd", "vsdx"];
 

@@ -12,7 +12,7 @@ let UploadManager = {
              ".CATDrawing, .catdrawing, .CATPart, .catpart, .CATProduct, .catproduct, .CATShape, .catshape, .CGR, .cgr"+
              ".3DXML, .3dxml, .OBJ, .obj, .NEU, .neu, .PRT, .prt, .XAS, .xas, .XPR, .xpr" +
              ".IPT, .ipt, .IAM, .iam, .ASM, .asm, .PAR, .par, .PWD, .pwd, .PSM, .psm" + 
-             ".3DS, .3ds, .U3D, .u3d",
+             ".3DS, .3ds, .U3D, .u3d, .SAT, .sat, .SAB, .sab",
             width: "100%",
             height: "100%",
             value: [],

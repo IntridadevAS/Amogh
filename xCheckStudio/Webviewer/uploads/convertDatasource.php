@@ -144,6 +144,8 @@ function fileExists($fileName, $caseSensitive = true) {
                 case "psm":
                 case "3ds":
                 case "u3d":
+                case "sat":
+                case "sab":
                 if($filePathParts['filename'] ===  $file_parts['filename'])
                 {                    
                     return $file;

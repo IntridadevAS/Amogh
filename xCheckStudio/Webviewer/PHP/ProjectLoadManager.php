@@ -1476,7 +1476,7 @@
         "catdrawing", "catpart", "catproduct", "catshape", "cgr",
         "3dxml", "obj", "asm", "neu", "prt", "xas", "xpr",
         "ipt", "iam", "asm", "par", "pwd", "psm",
-        "3ds", "u3d"
+        "3ds", "u3d", "sat", "sab"
     );
            // open database
            if(in_array(strtolower($sourceExt), $validSources) == false) {

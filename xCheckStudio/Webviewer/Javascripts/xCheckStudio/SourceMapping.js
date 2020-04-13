@@ -259,7 +259,7 @@ function getSourceSelectElement() {
          ".CATDrawing", ".CATPart", ".CATProduct", ".CATShape", ".CGR",
          ".3DXML", ".OBJ", ".ASM", ".NEU", ".PRT", ".XAS", ".XPR",
          ".IPT", ".IAM", ".ASM", ".PAR", ".PWD", ".PSM",
-         ".3DS", ".U3D"];
+         ".3DS", ".U3D", ".SAT", ".SAB"];
 
     for (var i = 0; i < sourceTypes.length; i++) {
         var option = document.createElement("option");

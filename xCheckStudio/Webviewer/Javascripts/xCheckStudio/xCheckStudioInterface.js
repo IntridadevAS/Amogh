@@ -84,6 +84,8 @@ function createSourceManager(id,
         case "psm":
         case "3ds":
         case "u3d":
+        case "sat":
+        case "sab":
             sourceManager = new SCManager(id, fileName, sourceType, viewerOptions);
             break;
     }

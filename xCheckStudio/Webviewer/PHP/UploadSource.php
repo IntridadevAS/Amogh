@@ -30,7 +30,7 @@
     "catdrawing", "catpart", "catproduct", "catshape", "cgr",
     "3dxml", "obj", "asm", "neu", "prt", "xas", "xpr",
     "ipt", "iam", "asm", "par", "pwd", "psm",
-    "3ds", "u3d");
+    "3ds", "u3d", "sat", "sab");
     $validSources = array("xml","rvm", "xls", "sldasm", "dwg", "dxf", "dwf", "dwfx", "sldprt", 
     "rvt", "rfa", "ifc", "step", "stp", "ste", "json", "igs",
     "vsd", "vsdx", 
@@ -38,7 +38,7 @@
     "catdrawing", "catpart", "catproduct", "catshape", "cgr",
     "3dxml", "obj", "asm", "neu", "prt", "xas", "xpr",
     "ipt", "iam", "asm", "par", "pwd", "psm",
-    "3ds", "u3d");
+    "3ds", "u3d", "sat", "sab");
 
     $UploadFolder = "UploadFolder";
     $counter = 0;
