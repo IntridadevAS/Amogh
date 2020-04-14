@@ -33,36 +33,6 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
     var _this = this;
     return new Promise((resolve) => {
 
-        /* version 1 */
-        // var iframeElement = document.createElement("iframe");
-        // iframeElement.id = "svgViewerIframe";
-        // iframeElement.setAttribute("src", _this.ViewerOptions.endpointUri);
-        // // iframeElement.setAttribute("src", "svgContainer.html");
-
-        // iframeElement.style.width = "100%";
-        // iframeElement.style.height = "100%";
-        // iframeElement.style.background = "white";
-        // document.getElementById(_this.GetViewerContainerID()).appendChild(iframeElement);
-
-        // var iframeDoc = document.getElementById('svgViewerIframe').contentWindow.document;
-        // iframeDoc.open();
-        // iframeDoc.write('<img id="svgContainer" src="' + _this.ViewerOptions.endpointUri + '"/>');
-        // iframeDoc.close();              
-
-        /* version 2 */
-        // var img = document.createElement("img");
-        // img.id = "svgContainer";
-        // img.style.width = "100%";
-        // img.style.height = "100%";
-        // img.src = _this.ViewerOptions.endpointUri;
-        // document.getElementById(_this.GetViewerContainerID()).appendChild(img);
-
-        // _this.SetViewerBackgroundColor("white");
-
-        // var scroll_zoom = new ScrollZoom($('#' + _this.GetViewerContainerID()), 10, 0.5)
-
-
-        /* version 3 */
         var objectElement = document.createElement("object");
         objectElement.id = "svgViewerObject" + _this.Id;
         objectElement.setAttribute("type", "image/svg+xml");
@@ -86,6 +56,10 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
             _this.ViewerOptions.modelTree,
             _this.SourceType,
             selectedComponents);
+
+        // create property callout
+        _this.PropertyCallout = new PropertyCallout(_this.Id);
+        _this.PropertyCallout.Init();
 
         _this.ReadProperties().then(function (result) {
             if (result) {
@@ -200,6 +174,8 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
 
         // add genericProperties object to sourceproperties collection
         this.SourceProperties[Object.keys(this.SourceProperties).length + 1] = componentObject;
+
+        this.PropertyCallout;
     }
 
     var childShapeElements = shapeElement.getElementsByTagName("Shape");
@@ -207,58 +183,6 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
         var childShapeElement = childShapeElements[childShapeKey];
         this.ReadShapeProperties(childShapeElement, identifierProperties);;
     }
-
-    // // Add an event listener for coorespondig element in SVG
-    // var title = shapeElement.getAttribute("nameU");
-    // var objectElement = document.getElementById("svgViewerObject" + _this.Id);
-    // // get the inner DOM of *.svg
-    // var svgDoc = objectElement.contentDocument;
-    // // get the inner element by id
-    // var tags = svgDoc.getElementsByTagName("title");
-    // for (var i = 0; i < tags.length; i++) {
-    //     if (tags[i].textContent == title) {
-    //         tags[i].parentElement.addEventListener("mousedown", function () {
-
-    //             if (_this.SelectedSVGElement === this) {
-    //                 return;
-    //             }
-
-    //             if (_this.SelectedSVGElement) {
-    //                 var paths = _this.SelectedSVGElement.getElementsByTagName("path");
-    //                 for (var j = 0; j < paths.length; j++) {
-    //                     var path = paths[j];
-    //                     if (path.hasAttribute("originalstroke")) {
-    //                         path.setAttribute("stroke", path.getAttribute("originalstroke"));
-    //                     }
-    //                     if (path.hasAttribute("originalstroke-width")) {
-    //                         path.setAttribute("stroke-width", path.getAttribute("originalstroke-width"));
-    //                     }
-    //                 }
-    //             }
-
-    //             _this.SelectedSVGElement = this;
-
-    //             var paths = this.getElementsByTagName("path");
-    //             for (var j = 0; j < paths.length; j++) {
-    //                 var path = paths[j];
-
-    //                 if (!path.hasAttribute("originalstroke")) {
-    //                     path.setAttribute("originalstroke", path.getAttribute("stroke"))
-    //                 }
-
-    //                 if (!path.hasAttribute("originalstroke-width")) {
-    //                     path.setAttribute("originalstroke-width", path.getAttribute("stroke-width"))
-    //                 }
-
-    //                 path.setAttribute("stroke", "red");
-    //                 path.setAttribute("stroke-width", "2");
-    //             }            
-
-    //         }, false);
-
-    //         break;
-    //     }
-    // }
 }
 
 VisioManager.prototype.GetPropertyValue = function (propertyElements, propertyToSearch) {

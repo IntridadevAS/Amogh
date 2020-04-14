@@ -217,6 +217,82 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             },
             onRowClick: function (e) {
                 _this.SelectionManager.OnComponentRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
+
+                // property call out               
+                var sourceProperties = SourceManagers[_this.Id].SourceProperties;
+                if (e.data.NodeId in sourceProperties) {
+                    
+                    // properties
+                    var properties = []
+                    for (var i = 0; i < sourceProperties[e.data.NodeId].properties.length; i++) {
+                        var property = {};
+                        property["Name"] = sourceProperties[e.data.NodeId].properties[i].Name;
+                        property["Value"] = sourceProperties[e.data.NodeId].properties[i].Value;
+                        properties.push(property);
+                    }
+
+                    // references
+                    var componentId = SourceManagers[_this.Id].NodeIdvsComponentIdList[e.data.NodeId];
+                    ReferenceManager.getReferences([componentId]).then(function (references) {
+                        var referencesData = [];
+                        var index = 0;
+                        if (references && _this.Id in references) {
+                            if("webAddress" in references[_this.Id])
+                            {
+                                for(var i = 0 ; i < references[_this.Id]["webAddress"].length; i++)
+                                {
+                                    index++;
+
+                                    var referenceData = {};
+                                    referenceData["id"] = index;
+                                    referenceData["value"] = references[_this.Id]["webAddress"][i];
+                                    referenceData["type"] = "Web Address";
+                                    
+                                    referencesData.push(referenceData);
+                                }
+                            }
+
+                            if("image" in references[_this.Id])
+                            {
+                                for(var i = 0 ; i < references[_this.Id]["image"].length; i++)
+                                {
+                                    index++;
+
+                                    var referenceData = {};
+                                    referenceData["id"] = index;
+                                    referenceData["value"] = references[_this.Id]["image"][i];
+                                    referenceData["type"] = "Image";
+                                    
+                                    referencesData.push(referenceData);
+                                }
+                            }
+
+                            if("document" in references[_this.Id])
+                            {
+                                for(var i = 0 ; i < references[_this.Id]["document"].length; i++)
+                                {
+                                    index++;
+
+                                    var referenceData = {};
+                                    referenceData["id"] = index;
+                                    referenceData["value"] = references[_this.Id]["document"][i];
+                                    referenceData["type"] = "Document";
+                                    
+                                    referencesData.push(referenceData);
+                                }
+                            }
+
+                            if("comment" in references[_this.Id])
+                            {
+                                
+                            }
+                        }
+
+                        if (properties.length > 0) {
+                            SourceManagers[_this.Id].PropertyCallout.Update(properties, referencesData);
+                        }
+                    });                    
+                }
             },
             onRowPrepared: function (e) {
                 if (e.rowType !== "data") {

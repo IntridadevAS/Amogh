@@ -11,6 +11,8 @@ function ExcelSourceManager(id,
 
   // call super constructor
   SourceManager.call(this, id, sourceName, sourceType);
+
+  this.PropertyCallout;
 }
 
 
@@ -42,8 +44,11 @@ ExcelSourceManager.prototype.LoadData = function (file) {
                                             excelReader.SheetData);
       _this.ModelTree.CreateModelBrowser(_this.SourceProperties);
      
-      return resolve(true);
+      // create property callout
+      _this.PropertyCallout = new PropertyCallout(_this.Id);
+      _this.PropertyCallout.Init();
 
+      return resolve(true);
     });
 
   });

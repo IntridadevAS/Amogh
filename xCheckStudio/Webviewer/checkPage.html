@@ -1164,31 +1164,46 @@
             </div>
             <div id="itemCountA" class="itemCountClass" style="position: absolute; height: 30px"></div>
           </div>
-          <div id="center" class="grabBar"></div>
-          <div class="visualizerContainer">
-            <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-              onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <!-- visualizerA -->
-
-            <!-- explode slider -->
-            <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
-              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
-                <p> <span id="explodeValue1"></span></p>
+          <div id="center" class="grabBar"></div>        
+         
+            <!-- viewer -->
+            <div class="visualizerContainer">
+              <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+                onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+              <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCallout(this)"
+                onmouseout="viewPanels.onMouseOutPropertyCallout(this)" onClick="viewPanels.propertyCallout(this)"></div>
+              <!-- visualizerA -->
+          
+              <!-- explode slider -->
+              <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
+                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                  <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
+                  <p> <span id="explodeValue1"></span></p>
+                </div>
               </div>
-            </div>
-
-            <!-- Translucency slider -->
-            <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
-              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
-                <p> <span id="translucencyValue1" style="color: grey"></span></p>
+          
+              <!-- Translucency slider -->
+              <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
+                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                  <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
+                  <p> <span id="translucencyValue1" style="color: grey"></span></p>
+                </div>
               </div>
-            </div>
+          
+              <!-- Property callout container-->
+              <div id="propertyCalloutContainera" class="propertyCalloutContainer">                              
+                  <div data-options="dxTemplate : { name: 'tab1' } ">
+                    
+                      <div id="propertyCalloutPropGrida"></div>
+                  </div>
+                  <div data-options="dxTemplate : { name: 'tab2' } ">
+                    <div id="propertyCalloutRefGrida"></div>
+                  </div>            
+              </div>
 
-            <div id="visualizerA" class="tempContainer"> </div>
-
-          </div>
+              <div id="visualizerA" class="tempContainer"> </div>
+          
+            </div>          
         </div>
         <div id="viewPanelB" class="viewPanel hide">
           <div class="tableContainer">
@@ -1203,6 +1218,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnb" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+            <div id="propertyCalloutb" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCallout(this)"
+              onmouseout="viewPanels.onMouseOutPropertyCallout(this)" onClick="viewPanels.propertyCallout(this)"></div>
             <!-- visualizerB -->
             <!-- explode slider -->
             <div id="explodeOverlay2" class="sliderOverlay" style="display: none">
@@ -1219,6 +1236,17 @@
                 <p> <span id="translucencyValue2" style="color: grey"></span></p>
               </div>
             </div>
+
+             <!-- Property callout container-->
+             <div id="propertyCalloutContainerb" class="propertyCalloutContainer">                              
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                
+                  <div id="propertyCalloutPropGridb"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="propertyCalloutRefGridb"></div>
+              </div>            
+          </div>
 
             <div id="visualizerB" class="tempContainer"> </div>
 
@@ -1237,6 +1265,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnc" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+            <div id="propertyCalloutc" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCallout(this)"
+              onmouseout="viewPanels.onMouseOutPropertyCallout(this)" onClick="viewPanels.propertyCallout(this)"></div>
             <!-- visualizerC -->
             <!-- explode slider -->
             <div id="explodeOverlay3" class="sliderOverlay" style="display: none">
@@ -1254,6 +1284,17 @@
               </div>
             </div>
 
+             <!-- Property callout container-->
+             <div id="propertyCalloutContainerc" class="propertyCalloutContainer">                              
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                
+                  <div id="propertyCalloutPropGridc"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="propertyCalloutRefGridc"></div>
+              </div>            
+          </div>
+
             <div id="visualizerC" class="tempContainer"> </div>
 
           </div>
@@ -1270,6 +1311,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnd" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+            <div id="propertyCalloutd" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCallout(this)"
+              onmouseout="viewPanels.onMouseOutPropertyCallout(this)" onClick="viewPanels.propertyCallout(this)"></div>
             <!-- visualizerD -->
             <!-- explode slider -->
             <div id="explodeOverlay4" class="sliderOverlay" style="display: none">
@@ -1286,6 +1329,17 @@
                 <p> <span id="translucencyValue4" style="color: grey"></span></p>
               </div>
             </div>
+
+             <!-- Property callout container-->
+             <div id="propertyCalloutContainerd" class="propertyCalloutContainer">                              
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                
+                  <div id="propertyCalloutPropGridd"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="propertyCalloutRefGridd"></div>
+              </div>            
+           </div>
 
             <div id="visualizerD" class="tempContainer"> </div>
           </div>
@@ -1476,6 +1530,8 @@
   <link rel="stylesheet" href="src\prompts\There_is_no_valid_checkcase.css" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script> 
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\PropertyCallout.js"></script> 
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,

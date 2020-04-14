@@ -12,47 +12,98 @@ let ReferenceManager = {
         // set title
         ReferenceManager.setTitle(title);
 
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        // add reference
-        $.ajax({
-            url: 'PHP/GetReferences.php',
-            type: "POST",
-            async: true,
-            data: {
-                'currentSource': model.currentTabId,
-                'components': JSON.stringify(componentIds),
-                'projectName': projectinfo.projectname,
-                'checkName': checkinfo.checkname
-            },
-            success: function (msg) {
-                if (msg != 'fail') {
-                    var references = JSON.parse(msg);
-                    for (source in references) {
-                        ReferenceManager.loadWebAddresses(references[source]['webAddress']);
-                        ReferenceManager.loadDocuments(references[source]['document']);
-                        ReferenceManager.loadImages(references[source]['image']);
-                        ReferenceManager.loadComments(references[source]['comment']);
-                    }
-
-                    // show div
-                    var overlay = document.getElementById("uiBlockingOverlay");
-                    var popup = document.getElementById("referencePopup");
-
-                    overlay.style.display = 'block';
-                    popup.style.display = 'block';
-
-                    popup.style.width = "585px";
-                    popup.style.height = "569px";
-
-                    popup.style.top = ((window.innerHeight / 2) - 290) + "px";
-                    popup.style.left = ((window.innerWidth / 2) - 257) + "px";
-
+        ReferenceManager.getReferences(componentIds).then(function (references) {
+            if (references) {
+                for (source in references) {
+                    ReferenceManager.loadWebAddresses(references[source]['webAddress']);
+                    ReferenceManager.loadDocuments(references[source]['document']);
+                    ReferenceManager.loadImages(references[source]['image']);
+                    ReferenceManager.loadComments(references[source]['comment']);
                 }
             }
+
+            // show div
+            var overlay = document.getElementById("uiBlockingOverlay");
+            var popup = document.getElementById("referencePopup");
+
+            overlay.style.display = 'block';
+            popup.style.display = 'block';
+
+            popup.style.width = "585px";
+            popup.style.height = "569px";
+
+            popup.style.top = ((window.innerHeight / 2) - 290) + "px";
+            popup.style.left = ((window.innerWidth / 2) - 257) + "px";
         });
 
+        // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // // add reference
+        // $.ajax({
+        //     url: 'PHP/GetReferences.php',
+        //     type: "POST",
+        //     async: true,
+        //     data: {
+        //         'currentSource': model.currentTabId,
+        //         'components': JSON.stringify(componentIds),
+        //         'projectName': projectinfo.projectname,
+        //         'checkName': checkinfo.checkname
+        //     },
+        //     success: function (msg) {
+        //         if (msg != 'fail') {
+        //             var references = JSON.parse(msg);
+        //             for (source in references) {
+        //                 ReferenceManager.loadWebAddresses(references[source]['webAddress']);
+        //                 ReferenceManager.loadDocuments(references[source]['document']);
+        //                 ReferenceManager.loadImages(references[source]['image']);
+        //                 ReferenceManager.loadComments(references[source]['comment']);
+        //             }
 
+        //             // show div
+        //             var overlay = document.getElementById("uiBlockingOverlay");
+        //             var popup = document.getElementById("referencePopup");
+
+        //             overlay.style.display = 'block';
+        //             popup.style.display = 'block';
+
+        //             popup.style.width = "585px";
+        //             popup.style.height = "569px";
+
+        //             popup.style.top = ((window.innerHeight / 2) - 290) + "px";
+        //             popup.style.left = ((window.innerWidth / 2) - 257) + "px";
+
+        //         }
+        //     }
+        // });
+
+
+    },
+
+    getReferences: function (componentIds) {
+        return new Promise((resolve) => {
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+            // add reference
+            $.ajax({
+                url: 'PHP/GetReferences.php',
+                type: "POST",
+                async: true,
+                data: {
+                    'currentSource': model.currentTabId,
+                    'components': JSON.stringify(componentIds),
+                    'projectName': projectinfo.projectname,
+                    'checkName': checkinfo.checkname
+                },
+                success: function (msg) {
+                    if (msg != 'fail') {
+                        var references = JSON.parse(msg);
+                        return resolve(references);
+                    }
+
+                    return resolve(undefined);
+                }
+            });
+        });
     },
 
     setTitle : function(title)

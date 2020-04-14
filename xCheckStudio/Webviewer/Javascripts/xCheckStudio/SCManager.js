@@ -15,6 +15,8 @@ function SCManager(id,
     this.CheckViewerContextMenu;
 
     this.HasProperties = false;
+
+    this.PropertyCallout;
 }
 
 // inherit from parent
@@ -105,6 +107,10 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
                             _this.ModelTree.AddModelBrowser();
                         }
                     }
+
+                     // create property callout
+                     _this.PropertyCallout = new PropertyCallout(_this.Id);
+                     _this.PropertyCallout.Init();
 
                     return resolve(true);
                 });

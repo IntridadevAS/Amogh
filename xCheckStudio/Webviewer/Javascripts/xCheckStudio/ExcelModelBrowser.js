@@ -247,6 +247,79 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
             onRowClick: function(e) {
                 _this.SelectionManager.HighlightBrowserRow(e, e.key, _this.ModelBrowserContainer);
                 _this.ShowSelectedSheetData(e.rowElement[0]);
+
+                //property call out
+                var component = SourceManagers[_this.Id].SourceProperties[e.data.ComponentId];
+                
+                // properties
+                var properties = []
+                for (var i = 0; i < component.properties.length; i++) {
+                    var property = {};
+                    property["Name"] = component.properties[i].Name;
+                    property["Value"] = component.properties[i].Value;
+                    properties.push(property);
+                }
+
+                // references                
+                ReferenceManager.getReferences([e.data.ComponentId]).then(function (references) {
+                    var referencesData = [];
+                    var index = 0;
+                    if (references && _this.Id in references) {
+                        if("webAddress" in references[_this.Id])
+                        {
+                            for(var i = 0 ; i < references[_this.Id]["webAddress"].length; i++)
+                            {
+                                index++;
+
+                                var referenceData = {};
+                                referenceData["id"] = index;
+                                referenceData["value"] = references[_this.Id]["webAddress"][i];
+                                referenceData["type"] = "Web Address";
+                                
+                                referencesData.push(referenceData);
+                            }
+                        }
+
+                        if("image" in references[_this.Id])
+                        {
+                            for(var i = 0 ; i < references[_this.Id]["image"].length; i++)
+                            {
+                                index++;
+
+                                var referenceData = {};
+                                referenceData["id"] = index;
+                                referenceData["value"] = references[_this.Id]["image"][i];
+                                referenceData["type"] = "Image";
+                                
+                                referencesData.push(referenceData);
+                            }
+                        }
+
+                        if("document" in references[_this.Id])
+                        {
+                            for(var i = 0 ; i < references[_this.Id]["document"].length; i++)
+                            {
+                                index++;
+
+                                var referenceData = {};
+                                referenceData["id"] = index;
+                                referenceData["value"] = references[_this.Id]["document"][i];
+                                referenceData["type"] = "Document";
+                                
+                                referencesData.push(referenceData);
+                            }
+                        }
+
+                        if("comment" in references[_this.Id])
+                        {
+                            
+                        }
+                    }
+
+                    if (properties.length > 0) {
+                        SourceManagers[_this.Id].PropertyCallout.Update(properties, referencesData);
+                    }
+                });
             }
         });
     });

@@ -299,7 +299,7 @@ button[type="submit"] {
   border: var(--borderWidth) solid var(--xCheckMedGrey);
   border-radius: var(--borderRadiusVal);
   cursor: pointer;
-  z-index: 2;
+  z-index: 3;
 }
 
 .maximize .maxMinBtn {
@@ -307,5 +307,54 @@ button[type="submit"] {
 }
 
 .hide {
+  display: none;
+}
+
+
+.propertyCalloutBtn{
+  background-color: var(--xCheckDarkGrey);
+  background-image: url("../../public/symbols/backArrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  opacity: 0.2;
+  right: 5px;
+  top: 50%;
+  height: 30px;
+  width: 30px;
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  cursor: pointer;
+  z-index: 3;
+  background-size :contain;
+}
+
+.propertyCalloutOpen {
+  background-image: url("../../public/symbols/forwardArrow.svg");
+  /* position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3; */
+}
+
+/* .propertyCalloutOpen, .propertyCalloutBtn {
+  background-image: url(../../public/symbols/XD_Minimise.svg);
+} */
+
+.propertyCalloutContainer{
+  position: absolute;
+  /* opacity: 0.2; */
+  right: 5px;
+  top: 105px;
+  width: 25%;
+  height: calc(100% - 105px);    
+  /* height : 100%; */
+  /* border: var(--borderWidth) solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal); */
+  cursor: pointer;
+  z-index: 2;
+  background: rgba(169,169,169, 0.2);
   display: none;
 }

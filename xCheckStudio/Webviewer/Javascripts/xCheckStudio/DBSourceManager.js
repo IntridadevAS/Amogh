@@ -11,6 +11,8 @@ function DBSourceManager(id,
 
   // call super constructor
   SourceManager.call(this, id, sourceName, sourceType);
+
+  this.PropertyCallout;
 }
 
 // assign SourceManager's method to this class
@@ -64,7 +66,12 @@ DBSourceManager.prototype.LoadData = function (uri) {
         _this.ViewerContainer,
         dbReader.DBData);
         
-      _this.ModelTree.CreateModelBrowserTable(_this.SourceProperties);     
+      _this.ModelTree.CreateModelBrowserTable(_this.SourceProperties);   
+      
+      // create property callout
+      _this.PropertyCallout = new PropertyCallout(_this.Id);
+      _this.PropertyCallout.Init();
+      
       return resolve(true);
     });
   });
