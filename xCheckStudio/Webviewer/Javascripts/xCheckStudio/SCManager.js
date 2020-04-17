@@ -16,6 +16,10 @@ function SCManager(id,
 
     this.HasProperties = false;
 
+    // These are the properties from metadata or properties of
+    // Components which don't have category and component class
+    this.Properties = {};
+
     this.PropertyCallout;
 }
 
@@ -265,6 +269,9 @@ SCManager.prototype.SelectComponentRow = function (selectionEvent) {
 
             // highlight corresponding component in model browser table
             this.ModelTree.HighlightComponentRow(this.SelectedNodeId);
+
+            //property callout
+            this.OpenPropertyCallout(undefined, this.SelectedNodeId);
         }
     }
 };
@@ -284,6 +291,9 @@ SCManager.prototype.SelectBrowserItem = function (selectionEvent) {
         }
 
         this.ModelTree.HighlightComponentRow(this.SelectedNodeId);
+
+        //property callout
+        this.OpenPropertyCallout(undefined, this.SelectedNodeId);
     }
 }
 
@@ -415,6 +425,19 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                         // add genericProperties object to sourceproperties collection
                         _this.SourceProperties[nodeId] = (genericPropertiesObject);
                     }
+                    else {
+                        // create generic properties object
+                        var genericPropertiesObject = new GenericComponent(name,
+                            undefined,
+                            undefined,
+                            nodeId,
+                            parentNodeId);
+                        for (var key in nodeProperties) {
+                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
+                            genericPropertiesObject.addProperty(genericPropertyObject);
+                        }
+                        _this.Properties[nodeId] = (genericPropertiesObject);
+                    }
                 }
 
                 var children = _this.Webviewer.model.getNodeChildren(nodeId);
@@ -504,6 +527,108 @@ SCManager.prototype.AddComponentsToDB = function () {
 
 SCManager.prototype.ResizeViewer = function () {
     this.Webviewer.resizeCanvas();
+}
+
+SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
+    var _this = this;
+
+    var sourceProperties = this.SourceProperties;
+    if (nodeId in sourceProperties) {
+
+        // properties
+        var properties = []
+        for (var i = 0; i < sourceProperties[nodeId].properties.length; i++) {
+            var property = {};
+            property["Name"] = sourceProperties[nodeId].properties[i].Name;
+            property["Value"] = sourceProperties[nodeId].properties[i].Value;
+            properties.push(property);
+
+        }
+
+        // references
+        var componentId = this.NodeIdvsComponentIdList[nodeId];
+        ReferenceManager.getReferences([componentId]).then(function (references) {
+            var referencesData = [];
+            var commentsData = [];
+            // var index = 0;
+            if (references && _this.Id in references) {
+                if ("webAddress" in references[_this.Id]) {
+                    for (var i = 0; i < references[_this.Id]["webAddress"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[_this.Id]["webAddress"][i];
+                        referenceData["Type"] = "Web Address";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("image" in references[_this.Id]) {
+                    for (var i = 0; i < references[_this.Id]["image"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[_this.Id]["image"][i];
+                        referenceData["Type"] = "Image";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("document" in references[_this.Id]) {
+                    for (var i = 0; i < references[_this.Id]["document"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[_this.Id]["document"][i];
+                        referenceData["Type"] = "Document";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("comment" in references[_this.Id]) {
+                    for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
+                        commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+                    }
+                }
+            }
+
+            if (properties.length > 0) {
+
+                if (!componentName) {
+                    componentName = _this.SourceProperties[nodeId].Name;
+                }
+
+                _this.PropertyCallout.Update(componentName,
+                    componentId,
+                    properties,
+                    referencesData,
+                    commentsData);
+            }
+        });
+    }
+    else if (nodeId in this.Properties) {
+        // properties
+        var properties = []
+        for (var i = 0; i < this.Properties[nodeId].properties.length; i++) {
+            var property = {};
+            property["Name"] = this.Properties[nodeId].properties[i].Name;
+            property["Value"] = this.Properties[nodeId].properties[i].Value;
+            properties.push(property);
+
+        }
+
+        this.PropertyCallout.Update(componentName,
+            undefined,
+            properties,
+            undefined,
+            undefined);
+    }
 }
 
 function XMLSourceManager(id, sourceName, sourceType, viewerOptions) {

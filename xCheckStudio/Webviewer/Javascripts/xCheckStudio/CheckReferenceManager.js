@@ -35,48 +35,6 @@ let ReferenceManager = {
             popup.style.top = ((window.innerHeight / 2) - 290) + "px";
             popup.style.left = ((window.innerWidth / 2) - 257) + "px";
         });
-
-        // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        // // add reference
-        // $.ajax({
-        //     url: 'PHP/GetReferences.php',
-        //     type: "POST",
-        //     async: true,
-        //     data: {
-        //         'currentSource': model.currentTabId,
-        //         'components': JSON.stringify(componentIds),
-        //         'projectName': projectinfo.projectname,
-        //         'checkName': checkinfo.checkname
-        //     },
-        //     success: function (msg) {
-        //         if (msg != 'fail') {
-        //             var references = JSON.parse(msg);
-        //             for (source in references) {
-        //                 ReferenceManager.loadWebAddresses(references[source]['webAddress']);
-        //                 ReferenceManager.loadDocuments(references[source]['document']);
-        //                 ReferenceManager.loadImages(references[source]['image']);
-        //                 ReferenceManager.loadComments(references[source]['comment']);
-        //             }
-
-        //             // show div
-        //             var overlay = document.getElementById("uiBlockingOverlay");
-        //             var popup = document.getElementById("referencePopup");
-
-        //             overlay.style.display = 'block';
-        //             popup.style.display = 'block';
-
-        //             popup.style.width = "585px";
-        //             popup.style.height = "569px";
-
-        //             popup.style.top = ((window.innerHeight / 2) - 290) + "px";
-        //             popup.style.left = ((window.innerWidth / 2) - 257) + "px";
-
-        //         }
-        //     }
-        // });
-
-
     },
 
     getReferences: function (componentIds) {
@@ -230,33 +188,7 @@ let ReferenceManager = {
 
         for (var i = 0; i < images.length; i++) {
             var image = images[i];
-            ReferenceManager.showImage(image);
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // listItem.innerText = image;
-            // imageList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
+            ReferenceManager.showImage(image);           
         }
     },
 
@@ -265,35 +197,10 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-        // if (!commentsList) {
-        //     return;
-        // }
-
         for (var i = 0; i < comments.length; i++) {
             var comment = comments[i];
 
-            ReferenceManager.showComment(JSON.parse(comment));
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // listItem.innerText = comment;
-            // commentsList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     ReferenceManager.select(this);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
+            ReferenceManager.showComment(JSON.parse(comment));            
         }
     },
 
@@ -604,59 +511,53 @@ let ReferenceManager = {
             },
             success: function (msg) {
                 if (msg != 'fail') {
-
                     var commentData = JSON.parse(msg);
                     ReferenceManager.showComment(commentData);
-
-                    // var referenceIFrame = document.getElementById("referenceIFrame");
-                    // if (!referenceIFrame) {
-                    //     return;
-                    // }
-
-                    // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-                    // if (!commentsList) {
-                    //     return;
-                    // }
-
-                    // var commentData = JSON.parse(msg);
-
-                    // var card = document.createElement("Div");
-                    // card.className = "commentCard";
-
-                    // var dataContainer = document.createElement("Div");
-                    // dataContainer.className = "commentContainer";
-
-                    // var commentValue = document.createElement("h3");                    
-                    // var bold = document.createElement("b");
-                    // bold.textContent = commentData.value;                    
-                    // commentValue.appendChild(bold);                    
-                    // dataContainer.appendChild(commentValue);
-
-                    // var userValue = document.createElement("p");
-                    // userValue.textContent = commentData.userinfo.alias;    
-                    // dataContainer.appendChild(userValue);
-
-                    // var timeValue = document.createElement("p");
-                    // timeValue.textContent = commentData.date;    
-                    // dataContainer.appendChild(timeValue);
-
-                    // card.appendChild(dataContainer);
-
-                    // commentsList.appendChild(card);                  
-
-                    // card.onclick = function () {                        
-                    //     ReferenceManager.select(this);
-                    // }
-
-                    // card.onmouseover = function () {
-                    //     ReferenceManager.Highlight(this);
-                    // }
-
-                    // card.onmouseout = function () {
-                    //     ReferenceManager.UnHighlight(this);
-                    // }
                 }
             }
+        });
+    },
+
+    processCommentForComponentIds: function (value, componentIds) {
+        return new Promise((resolve) => {
+
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            //create reference data
+            var referenceData = {};
+            referenceData["value"] = value;
+
+            // get user info 
+            var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+            referenceData["user"] = userinfo.alias;
+
+            // var date = new Date();
+            referenceData["date"] = ReferenceManager.getCurrentDate();
+
+            // add reference
+            $.ajax({
+                url: 'PHP/AddReference.php',
+                type: "POST",
+                async: true,
+                data: {
+                    'currentSource': model.currentTabId,
+                    'typeofReference': "Comment",
+                    'components': JSON.stringify(componentIds),
+                    'referenceData': JSON.stringify(referenceData),
+                    'projectName': projectinfo.projectname,
+                    'checkName': checkinfo.checkname
+                },
+                success: function (msg) {
+                    if (msg != 'fail') {
+                        var commentData = JSON.parse(msg);
+
+                        return resolve(commentData);
+                    }
+
+                    return resolve(undefined);
+                }
+            });
         });
     },
 

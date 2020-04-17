@@ -126,3 +126,78 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
 
 }
 
+DBSourceManager.prototype.OpenPropertyCallout = function (componentId) {
+  var _this = this;
+
+  var component = _this.SourceProperties[componentId];
+
+  // properties
+  var properties = []
+  for (var i = 0; i < component.properties.length; i++) {
+    var property = {};
+    property["Name"] = component.properties[i].Name;
+    property["Value"] = component.properties[i].Value;
+    properties.push(property);
+  }
+
+  // references                
+  ReferenceManager.getReferences([componentId]).then(function (references) {
+    var referencesData = [];
+    var commentsData = [];
+    var index = 0;
+    if (references && _this.Id in references) {
+      if ("webAddress" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["webAddress"].length; i++) {
+          index++;
+
+          var referenceData = {};
+          // referenceData["id"] = index;
+          referenceData["Value"] = references[_this.Id]["webAddress"][i];
+          referenceData["Type"] = "Web Address";
+
+          referencesData.push(referenceData);
+        }
+      }
+
+      if ("image" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["image"].length; i++) {
+          index++;
+
+          var referenceData = {};
+          // referenceData["id"] = index;
+          referenceData["Value"] = references[_this.Id]["image"][i];
+          referenceData["Type"] = "Image";
+
+          referencesData.push(referenceData);
+        }
+      }
+
+      if ("document" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["document"].length; i++) {
+          index++;
+
+          var referenceData = {};
+          // referenceData["id"] = index;
+          referenceData["Value"] = references[_this.Id]["document"][i];
+          referenceData["Type"] = "Document";
+
+          referencesData.push(referenceData);
+        }
+      }
+
+      if ("comment" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
+          commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+        }
+      }
+    }
+
+    if (properties.length > 0) {
+      _this.PropertyCallout.Update(component.Name,
+        componentId,
+        properties,
+        referencesData,
+        commentsData);
+    }
+  });
+}

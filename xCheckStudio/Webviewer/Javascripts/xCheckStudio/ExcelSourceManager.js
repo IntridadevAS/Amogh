@@ -28,7 +28,7 @@ ExcelSourceManager.prototype.Is1DSource = function () {
 ExcelSourceManager.prototype.LoadData = function (file) {
   var _this = this;
   return new Promise((resolve) => {
- 
+
     // read data
     var excelReader = new ExcelReader();
     excelReader.ReadFileData(file).then(function (properties) {
@@ -38,12 +38,12 @@ ExcelSourceManager.prototype.LoadData = function (file) {
       _this.AddComponentsToDB();
 
       //add model Browser Table
-      _this.ModelTree = new ExcelModeBrowser(_this.Id, 
-                                             _this.ModelBrowsercontainer, 
-                                            _this.ViewerContainer, 
-                                            excelReader.SheetData);
+      _this.ModelTree = new ExcelModeBrowser(_this.Id,
+        _this.ModelBrowsercontainer,
+        _this.ViewerContainer,
+        excelReader.SheetData);
       _this.ModelTree.CreateModelBrowser(_this.SourceProperties);
-     
+
       // create property callout
       _this.PropertyCallout = new PropertyCallout(_this.Id);
       _this.PropertyCallout.Init();
@@ -54,7 +54,7 @@ ExcelSourceManager.prototype.LoadData = function (file) {
   });
 }
 
-ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, selectedComponents) {  
+ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, selectedComponents) {
 
   //this.excelReader = new ExcelReader(this.SourceType, this.checkType, this.SelectedComponents);
   var excelReader = new ExcelReader();
@@ -63,10 +63,10 @@ ExcelSourceManager.prototype.RestoreData = function (classWiseComponents, select
   //add model Browser Table
   this.ModelTree = new ExcelModeBrowser(this.Id,
     this.ModelBrowsercontainer,
-    this.ViewerContainer, 
+    this.ViewerContainer,
     excelReader.SheetData,
     selectedComponents);
-    this.ModelTree.CreateModelBrowser(this.SourceProperties);
+  this.ModelTree.CreateModelBrowser(this.SourceProperties);
 }
 
 ExcelSourceManager.prototype.ClearSource = function () {
@@ -89,7 +89,7 @@ ExcelSourceManager.prototype.ClearSource = function () {
   // var styleRule = ""
   // // styleRule = "position: relative";
   // viewerContainerDiv.setAttribute("style", styleRule);
-  parent.appendChild(viewerContainerDiv); 
+  parent.appendChild(viewerContainerDiv);
 }
 
 ExcelSourceManager.prototype.AddComponentsToDB = function () {
@@ -129,3 +129,78 @@ ExcelSourceManager.prototype.GetViewerContainerID = function () {
   return this.ViewerContainer;
 }
 
+ExcelSourceManager.prototype.OpenPropertyCallout = function (componentId) {
+  var _this = this;
+
+  var component = _this.SourceProperties[componentId];
+
+  // properties
+  var properties = []
+  for (var i = 0; i < component.properties.length; i++) {
+    var property = {};
+    property["Name"] = component.properties[i].Name;
+    property["Value"] = component.properties[i].Value;
+    properties.push(property);
+  }
+
+  // references                
+  ReferenceManager.getReferences([componentId]).then(function (references) {
+    var referencesData = [];
+    var commentsData = [];
+    var index = 0;
+    if (references && _this.Id in references) {
+      if ("webAddress" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["webAddress"].length; i++) {
+          index++;
+
+          var referenceData = {};
+          // referenceData["id"] = index;
+          referenceData["Value"] = references[_this.Id]["webAddress"][i];
+          referenceData["Type"] = "Web Address";
+
+          referencesData.push(referenceData);
+        }
+      }
+
+      if ("image" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["image"].length; i++) {
+          index++;
+
+          var referenceData = {};
+          // referenceData["id"] = index;
+          referenceData["Value"] = references[_this.Id]["image"][i];
+          referenceData["Type"] = "Image";
+
+          referencesData.push(referenceData);
+        }
+      }
+
+      if ("document" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["document"].length; i++) {
+          index++;
+
+          var referenceData = {};
+          // referenceData["id"] = index;
+          referenceData["Value"] = references[_this.Id]["document"][i];
+          referenceData["Type"] = "Document";
+
+          referencesData.push(referenceData);
+        }
+      }
+
+      if ("comment" in references[_this.Id]) {
+        for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
+          commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+        }
+      }
+    }
+
+    if (properties.length > 0) {
+      _this.PropertyCallout.Update(component.Name,
+        componentId,
+        properties,
+        referencesData,
+        commentsData);
+    }
+  });
+}

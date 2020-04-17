@@ -212,6 +212,7 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                         var componentId = SourceManagers[_this.Id].NodeIdvsComponentIdList[e.data.NodeId];
                         ReferenceManager.getReferences([componentId]).then(function (references) {
                             var referencesData = [];
+                            var commentsData = [];
                             var index = 0;
                             if (references && _this.Id in references) {
                                 if ("webAddress" in references[_this.Id]) {
@@ -219,9 +220,9 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                                         index++;
 
                                         var referenceData = {};
-                                        referenceData["id"] = index;
-                                        referenceData["value"] = references[_this.Id]["webAddress"][i];
-                                        referenceData["type"] = "Web Address";
+                                        // referenceData["id"] = index;
+                                        referenceData["Value"] = references[_this.Id]["webAddress"][i];
+                                        referenceData["Type"] = "Web Address";
 
                                         referencesData.push(referenceData);
                                     }
@@ -232,9 +233,9 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                                         index++;
 
                                         var referenceData = {};
-                                        referenceData["id"] = index;
-                                        referenceData["value"] = references[_this.Id]["image"][i];
-                                        referenceData["type"] = "Image";
+                                        // referenceData["id"] = index;
+                                        referenceData["Value"] = references[_this.Id]["image"][i];
+                                        referenceData["Type"] = "Image";
 
                                         referencesData.push(referenceData);
                                     }
@@ -245,21 +246,27 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                                         index++;
 
                                         var referenceData = {};
-                                        referenceData["id"] = index;
-                                        referenceData["value"] = references[_this.Id]["document"][i];
-                                        referenceData["type"] = "Document";
+                                        // referenceData["id"] = index;
+                                        referenceData["Value"] = references[_this.Id]["document"][i];
+                                        referenceData["Type"] = "Document";
 
                                         referencesData.push(referenceData);
                                     }
                                 }
 
                                 if ("comment" in references[_this.Id]) {
-
+                                    for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
+                                        commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+                                    }
                                 }
                             }
 
                             if (properties.length > 0) {
-                                SourceManagers[_this.Id].PropertyCallout.Update(properties, referencesData);
+                                SourceManagers[_this.Id].PropertyCallout.Update(e.data.Item,
+                                    componentId,
+                                    properties, 
+                                    referencesData,
+                                    commentsData);
                             }
                         });
                     }
