@@ -1074,6 +1074,49 @@
             <div id="comparisonAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="Analytics.ShowAnalytics(this)">
             </div>
+
+            <!-- Property callout btn for comparison -->
+            <div id="propertyCalloutcomparison" class="propertyCalloutBtn"
+              onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
+              onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)"></div>
+            
+            <!-- Property callout container-->
+            <div id="propertyCalloutContainercomparison" class="propertyCalloutContainerForComparison" style="opacity: 0.6;"
+              onmouseover="viewPanels.onMouseOverPropertyCallout(this)" onmouseout="viewPanels.onMouseOutPropertyCallout(this)">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="propertyCalloutNameBarcomparison" class="propertyCalloutNameBar">
+                  <span> </span>
+                </div>
+                <div class="propertyCalloutPropertiesArea">
+                  <div id="propertyCalloutPropGridcomparison"></div>
+                </div>               
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="propertyCalloutRefGridcomparison"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab3' } ">
+                <div class="commentsTabPage">
+                  <div id="commentsAreacomparison" class="commentsArea">
+            
+                  </div>
+                  <div class="commentInput">
+                    <div id="commentInputcomparison">
+                    </div>
+                    <div id="addCommentBtncomparison" class="addCommentBtn">
+                      <img src="images\arrow.png" style="width: 50px; height: 50px;" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="propertyCalloutStatusBarcomparison" class="propertyCalloutStatusBar" 
+            onmouseover="viewPanels.onMouseOverPropertyCallout(this)" onmouseout="viewPanels.onMouseOutPropertyCallout(this)"> 
+              <!-- <div id="firstSource"> </div>
+              <div id="secondSource"> </div>
+              <div id="thirdSource"> </div>
+              <div id="fourthSource"> </div> -->
+            </div>
+
             <div id="comparePanelA" class="comparePanel" style="width: 200%">
               <div id="compare1" class="tempContainer"></div>
               <!-- Translucency slider -->
@@ -1181,6 +1224,42 @@
             <div id="complianceAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="Analytics.ShowAnalytics(this)">
             </div>
+
+             <!-- Property callout btn for comparison -->
+             <div id="propertyCalloutcompliance" class="propertyCalloutBtn"
+             onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
+             onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)"></div>
+           
+           <!-- Property callout container-->
+           <div id="propertyCalloutContainercompliance" class="propertyCalloutContainerForCompliance" style="opacity: 0.6;"
+             onmouseover="viewPanels.onMouseOverPropertyCallout(this)" onmouseout="viewPanels.onMouseOutPropertyCallout(this)">
+             <div data-options="dxTemplate : { name: 'tab1' } ">
+               <div id="propertyCalloutNameBarcompliance" class="propertyCalloutNameBar">
+                 <span> </span>
+               </div>
+               <div class="propertyCalloutPropertiesArea">
+                 <div id="propertyCalloutPropGridcompliance"></div>
+               </div>               
+             </div>
+             <div data-options="dxTemplate : { name: 'tab2' } ">
+               <div id="propertyCalloutRefGridcompliance"></div>
+             </div>
+             <div data-options="dxTemplate : { name: 'tab3' } ">
+               <div class="commentsTabPage">
+                 <div id="commentsAreacompliance" class="commentsArea">
+           
+                 </div>
+                 <div class="commentInput">
+                   <div id="commentInputcompliance">
+                   </div>
+                   <div id="addCommentBtncompliance" class="addCommentBtn">
+                     <img src="images\arrow.png" style="width: 50px; height: 50px;" />
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+
             <div id="compliance1" class="tempContainer">
   
               <!-- Translucency slider -->
@@ -1455,6 +1534,10 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\VersioningManager.js"></script>
 
   <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script> 
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewPropertyCallout.js"></script>
+  <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
+
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,

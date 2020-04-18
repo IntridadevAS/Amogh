@@ -275,6 +275,9 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                 // console.log(e)
                 _this.SelectionManager.HighlightBrowserRow(e, e.key, _this.ModelBrowserContainer);
                 _this.ShowSelectedDBData(e.rowElement[0]);
+
+                //property call out
+                SourceManagers[_this.Id].OpenPropertyCallout(e.data.ComponentId);                
             },
         });
     });

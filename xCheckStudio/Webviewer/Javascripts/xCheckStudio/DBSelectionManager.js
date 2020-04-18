@@ -242,6 +242,19 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
                // scroll to selected row                 
                modelBrowserDataGrid.getScrollable().scrollToElement(row[0])
 
+               if (viewerContainer.toLowerCase() === "visualizera") {
+                    SourceManagers["a"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               else if (viewerContainer.toLowerCase() === "visualizerb") {
+                    SourceManagers["b"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               else if (viewerContainer.toLowerCase() === "visualizerc") {
+                    SourceManagers["c"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               else if (viewerContainer.toLowerCase() === "visualizerd") {
+                    SourceManagers["d"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               
                break;
           }
      }

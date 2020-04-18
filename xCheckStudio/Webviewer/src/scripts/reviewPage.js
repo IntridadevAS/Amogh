@@ -537,6 +537,23 @@ let viewPanels = {
   onMouseOutMaxMin: function (selected) {
     selected.style.opacity = 0.2;
   },
+
+  onMouseOverPropertyCalloutBtn: function(selected)
+  {
+    selected.style.opacity = 1;
+  },
+  onMouseOutPropertyCalloutBtn: function(selected)
+  {
+    selected.style.opacity = 0.2;
+  },
+
+  onMouseOverPropertyCallout: function (selected) {
+    selected.style.opacity = 1;
+  },
+
+  onMouseOutPropertyCallout: function (selected) {
+    selected.style.opacity = 0.6;
+  }
 }
 
 controller.init();

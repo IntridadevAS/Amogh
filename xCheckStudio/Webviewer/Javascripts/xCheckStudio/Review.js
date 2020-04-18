@@ -342,6 +342,11 @@ function loadComparisonData(comparisonCheckGroups,
         var componentIdVsComponentData = this.GetComponentIdVsComponentData(checkResults.sourceDComponents);
         comparisonData["SourceDcomponentIdVsComponentData"] = componentIdVsComponentData;
     }
+
+    // property callout
+    var propertyCallout = new PropertyCallout("comparison");
+    propertyCallout.Init();
+    comparisonData["PropertyCallout"] = propertyCallout;
 }
 
 function GetComponentIdVsComponentData(sourceComponents) {
@@ -406,6 +411,10 @@ function loadComplianceData(compliance,
 
     complianceData["ComponentIdVsComponentData"] = componentIdVsComponentData;
 
+    // property callout
+    var propertyCallout = new PropertyCallout("compliance");
+    propertyCallout.Init();
+    complianceData["PropertyCallout"] = propertyCallout;
 }
 
 function getDataSourceFiles() {

@@ -383,7 +383,10 @@ ComplianceCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
                 var id = viewerContainer.replace("#", "");
                 _this.CurrentTableId = id;
                 model.getCurrentSelectionManager().MaintainHighlightedRow(e.rowElement[0], viewerContainer);
-                model.getCurrentReviewManager().OnCheckComponentRowClicked(e.data, id)
+                model.getCurrentReviewManager().OnCheckComponentRowClicked(e.data, id);
+
+                // property call out
+                model.getCurrentReviewManager().OpenPropertyCallout(e.data);
             },
             onRowPrepared: function (e) {
                 if (e.rowType !== "data") {

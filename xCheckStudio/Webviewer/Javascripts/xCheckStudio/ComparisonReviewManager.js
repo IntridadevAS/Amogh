@@ -1373,3 +1373,213 @@ ComparisonReviewManager.prototype.GetComponentData = function (checkComponentDat
 
     return sourceComponentData;
 }
+
+ComparisonReviewManager.prototype.OpenPropertyCallout = function (rowData) {
+
+    var propertyCalloutData = {};
+
+    if (rowData.SourceAId &&
+        rowData.SourceAId != "" &&
+        checkResults.sourceAComponents) {
+        // var sourceAId = Number(rowData.SourceAId);
+
+        for (var i = 0; i < checkResults.sourceAComponents.length; i++) {
+            var component = checkResults.sourceAComponents[i];
+            if (component.id != rowData.SourceAId) {
+                continue;
+            }
+
+
+            propertyCalloutData["a"] = {
+                name: component.name,
+                componentId : rowData.SourceAId,
+                properties: [],
+                references: [],
+                comments: []
+            };
+
+            // properties
+            for (var i = 0; i < component.properties.length; i++) {
+                var property = {};
+                property["Name"] = component.properties[i].name;
+                property["Value"] = component.properties[i].value;
+                propertyCalloutData["a"].properties.push(property);
+            }
+
+            // references
+            var referncesData = this.GetReferencesData(component.id, "a");
+            propertyCalloutData["a"]["references"] = referncesData["references"];
+            propertyCalloutData["a"]["comments"] = referncesData["comments"];
+
+            break;
+        }
+    }
+
+    if (rowData.SourceBId &&
+        rowData.SourceBId != "" &&
+        checkResults.sourceBComponents) {
+        for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
+            var component = checkResults.sourceBComponents[i];
+            if (component.id != rowData.SourceBId) {
+                continue;
+            }
+
+            propertyCalloutData["b"] = {
+                name: component.name,
+                componentId : rowData.SourceBId,
+                properties: [],
+                references: [],
+                comments: []
+            };
+            for (var i = 0; i < component.properties.length; i++) {
+                var property = {};
+                property["Name"] = component.properties[i].name;
+                property["Value"] = component.properties[i].value;
+                propertyCalloutData["b"].properties.push(property);
+            }
+
+            // references
+            var referncesData = this.GetReferencesData(component.id, "b");
+            propertyCalloutData["b"]["references"] = referncesData["references"];
+            propertyCalloutData["b"]["comments"] = referncesData["comments"];
+
+            break;
+        }
+    }
+
+    if (rowData.SourceCId &&
+        rowData.SourceCId != "" &&
+        checkResults.sourceCComponents) {
+        for (var i = 0; i < checkResults.sourceCComponents.length; i++) {
+            var component = checkResults.sourceCComponents[i];
+            if (component.id != rowData.SourceCId) {
+                continue;
+            }
+
+            propertyCalloutData["c"] = {
+                name: component.name,
+                componentId : rowData.SourceCId,
+                properties: [],
+                references: [],
+                comments: []
+            };
+            for (var i = 0; i < component.properties.length; i++) {
+                var property = {};
+                property["Name"] = component.properties[i].name;
+                property["Value"] = component.properties[i].value;
+                propertyCalloutData["c"].properties.push(property);
+            }
+
+            // references
+            var referncesData = this.GetReferencesData(component.id, "c");
+            propertyCalloutData["c"]["references"] = referncesData["references"];
+            propertyCalloutData["c"]["comments"] = referncesData["comments"];
+
+
+            break;
+        }
+    }
+
+    if (rowData.SourceDId &&
+        rowData.SourceDId != "" &&
+        checkResults.sourceDComponents) {
+        for (var i = 0; i < checkResults.sourceDComponents.length; i++) {
+            var component = checkResults.sourceDComponents[i];
+            if (component.id != rowData.SourceDId) {
+                continue;
+            }
+
+            propertyCalloutData["d"] = {
+                name: component.name,
+                componentId : rowData.SourceDId,
+                properties: [],
+                references: [],
+                comments: []
+            };
+            for (var i = 0; i < component.properties.length; i++) {
+                var property = {};
+                property["Name"] = component.properties[i].name;
+                property["Value"] = component.properties[i].value;
+                propertyCalloutData["d"].properties.push(property);
+            }
+
+            // references
+            var referncesData = this.GetReferencesData(component.id, "d");
+            propertyCalloutData["d"]["references"] = referncesData["references"];
+            propertyCalloutData["d"]["comments"] = referncesData["comments"];
+
+            break;
+        }
+    }
+
+    model.checks["comparison"].PropertyCallout.UpdateForComparison(propertyCalloutData);
+}
+
+ComparisonReviewManager.prototype.GetReferencesData = function (componentId, src) {
+    var _this = this;
+    var allData = {
+        references: [],
+        comments: [],
+    };
+
+    var references = ReferenceManager.getReferences([componentId], src, false);
+    // ReferenceManager.getReferences([componentId], src, false).then(function (references) {        
+        var referencesData = [];
+        var commentsData = [];
+
+        if (references) {
+
+            if (references && src in references) {
+                if ("webAddress" in references[src]) {
+                    for (var i = 0; i < references[src]["webAddress"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[src]["webAddress"][i];
+                        referenceData["Type"] = "Web Address";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("image" in references[src]) {
+                    for (var i = 0; i < references[src]["image"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[src]["image"][i];
+                        referenceData["Type"] = "Image";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("document" in references[src]) {
+                    for (var i = 0; i < references[src]["document"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[src]["document"][i];
+                        referenceData["Type"] = "Document";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("comment" in references[src]) {
+                    for (var i = 0; i < references[src]["comment"].length; i++) {
+                        commentsData.push(JSON.parse(references[src]["comment"][i]));
+                    }
+                }
+            }
+
+            allData["references"] = referencesData;
+            allData["comments"] = commentsData;
+        }
+    // });
+
+    return allData;
+}

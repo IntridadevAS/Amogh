@@ -244,9 +244,12 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                     }
                 }
             },
-            onRowClick: function(e) {
+            onRowClick: function (e) {
                 _this.SelectionManager.HighlightBrowserRow(e, e.key, _this.ModelBrowserContainer);
                 _this.ShowSelectedSheetData(e.rowElement[0]);
+
+                //property call out
+                SourceManagers[_this.Id].OpenPropertyCallout(e.data.ComponentId);
             }
         });
     });

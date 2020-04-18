@@ -217,6 +217,9 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             },
             onRowClick: function (e) {
                 _this.SelectionManager.OnComponentRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
+
+                // property call out      
+                SourceManagers[_this.Id].OpenPropertyCallout(e.data.Item, e.data.NodeId);
             },
             onRowPrepared: function (e) {
                 if (e.rowType !== "data") {
@@ -537,6 +540,9 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
             },
             onRowClick: function (e) {
                 _this.SelectionManager.OnBrowserRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
+
+                 // property call out    
+                 SourceManagers[_this.Id].OpenPropertyCallout(e.data.Name, e.data.NodeId);
             },
             onRowPrepared: function (e) {
             }

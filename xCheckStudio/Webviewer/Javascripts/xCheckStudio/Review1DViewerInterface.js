@@ -451,6 +451,9 @@ Review1DViewerInterface.prototype.HighlightRowInMainReviewTable = function (shee
  
     // scroll to rowElement
     dataGrid.getScrollable().scrollTo({top: reviewTableRow.offsetTop - reviewTableRow.offsetHeight});
+
+    // open property callout
+    model.getCurrentReviewManager().OpenPropertyCallout(rowData);
 }
 
 Review1DViewerInterface.prototype.GetClasswiseComponentsBySheetName = function (sheetName, caseInsensitiveSearch) {

@@ -225,70 +225,22 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
                // scroll to selected row                 
                modelBrowserDataGrid.getScrollable().scrollToElement(row[0])
 
+               if (viewerContainer.toLowerCase() === "visualizera") {
+                    SourceManagers["a"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               else if (viewerContainer.toLowerCase() === "visualizerb") {
+                    SourceManagers["b"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               else if (viewerContainer.toLowerCase() === "visualizerc") {
+                    SourceManagers["c"].OpenPropertyCallout(rowData.ComponentId);
+               }
+               else if (viewerContainer.toLowerCase() === "visualizerd") {
+                    SourceManagers["d"].OpenPropertyCallout(rowData.ComponentId);
+               }
+
                break;
           }
      }
-
-     // //////////////////////////////
-     // var viewerContainerData;
-     // if (modelBrowserContainer === "modelTree1") {
-     //      viewerContainerData = document.getElementById("visualizerA")
-     // }
-     // else if (modelBrowserContainer === "modelTree2") {
-     //      viewerContainerData = document.getElementById("visualizerB")
-     // }
-
-     // if (!viewerContainerData) {
-     //      return
-     // }
-
-     // var containerChildren = viewerContainerData.children;
-     // var columnHeaders = containerChildren[0].getElementsByTagName("th");
-
-     // // get identifier property names
-     // var identifierColumns = {};
-     // for (var i = 0; i < columnHeaders.length; i++) {
-     //      columnHeader = columnHeaders[i];
-     //      if (columnHeader.innerHTML.trim() === "Component Class" ||
-     //           columnHeader.innerHTML.trim() === "Name" ||
-     //           columnHeader.innerHTML.trim() === "Tagnumber" ||
-     //           columnHeader.innerHTML.trim() === "Description") {
-     //           identifierColumns[columnHeader.innerHTML.trim().replace(" ", "")] = i;
-     //      }
-     //      if (Object.keys(identifierColumns).length === 3) {
-     //           break;
-     //      }
-     // }
-
-     // var modelBrowserData = document.getElementById(modelBrowserContainer);
-     // var modelBrowserTable = modelBrowserData.children[1].getElementsByTagName("table")[0];;
-     // var modelBrowserRowsData = modelBrowserTable.getElementsByTagName("tr");
-
-     // for (var i = 0; i < modelBrowserRowsData.length; i++) {
-     //      rowData = modelBrowserRowsData[i];
-
-     //      if (rowData.cells.length > 1) {
-     //           var nameColumnIndex;
-     //           if (identifierColumns.Name !== undefined) {
-     //                nameColumnIndex = identifierColumns.Name;
-     //           }
-     //           else if (identifierColumns.Tagnumber !== undefined) {
-     //                nameColumnIndex = identifierColumns.Tagnumber;
-     //           }
-
-     //           if (thisRow.cells[nameColumnIndex].innerText === rowData.cells[1].innerText &&
-     //                thisRow.cells[identifierColumns.ComponentClass].innerText === rowData.cells[3].innerText) {
-
-     //                // highlight row in model browser     
-     //                this.HighlightBrowserRow(rowData);                   
-
-     //                // scroll to selected row    
-     //                modelBrowserTable.focus();
-     //                modelBrowserTable.parentNode.parentNode.scrollTop = rowData.offsetTop - rowData.offsetHeight;
-
-     //           }
-     //      }
-     // }
 }
 
 ExcelSelectionManager.prototype.HighlightSheetRow = function (row) {

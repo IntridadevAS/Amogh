@@ -1,10 +1,12 @@
 .commentCard {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    border-radius: 5px;
-    width: 98%;
-    background-color: gray;
+    /* border-radius: 5px; */
+    width: 100%;
+    background-color: white;
     margin-top: 5px;
+    border-style: solid;
+    border-width: 1px;
   }
   
   .commentCard:hover {
@@ -17,5 +19,5 @@
    */
   .commentContainer {
     padding: 2px 16px;
-    color: white;
+    color: black;
   }
