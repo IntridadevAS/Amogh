@@ -44,14 +44,50 @@ let ReferenceManager = {
                 continue;
             }
 
+            // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            // // add reference
+            // $.ajax({
+            //     url: 'PHP/GetReferences.php',
+            //     type: "POST",
+            //     async: true,
+            //     data: {
+            //         'currentSource': src,
+            //         'components': JSON.stringify(componentIds),
+            //         'projectName': projectinfo.projectname,
+            //         'checkName': checkinfo.checkname
+            //     },
+            //     success: function (msg) {
+            //         if (msg != 'fail') {
+            var references = ReferenceManager.getReferences(componentIds, src);
+            // ReferenceManager.getReferences(componentIds, src).then(function (references) {
+            if (references) {
+                for (source in references) {
+                    ReferenceManager.loadWebAddresses(source, references[source]['webAddress']);
+                    ReferenceManager.loadDocuments(source, references[source]['document']);
+                    ReferenceManager.loadImages(source, references[source]['image']);
+                    ReferenceManager.loadComments(source, references[source]['comment']);
+                }
+            }
+
+            // })
+        }
+        //         }
+        //     });
+        // }
+    },
+
+    getReferences: function (componentIds, src) {
+        var references;
+        // return new Promise((resolve) => {
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
             var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
             // add reference
             $.ajax({
                 url: 'PHP/GetReferences.php',
                 type: "POST",
-                async: true,
+                async: false,
                 data: {
                     'currentSource': src,
                     'components': JSON.stringify(componentIds),
@@ -60,18 +96,15 @@ let ReferenceManager = {
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
-                        var references = JSON.parse(msg);
-
-                        for (source in references) {
-                            ReferenceManager.loadWebAddresses(source, references[source]['webAddress']);
-                            ReferenceManager.loadDocuments(source, references[source]['document']);
-                            ReferenceManager.loadImages(source, references[source]['image']);
-                            ReferenceManager.loadComments(source, references[source]['comment']);
-                        }
+                         references = JSON.parse(msg);
+                        // return resolve(references);                        
                     }
+
+                    // return resolve(undefined);
                 }
             });
-        }
+        // });
+        return references;
     },
 
     setTitle : function(title)
@@ -415,6 +448,49 @@ let ReferenceManager = {
                     ReferenceManager.showComment(currentSource, commentData);
                 }
             }
+        });
+    },
+    
+    processCommentForComponentIds: function (value, componentIds, currentSource) {
+        return new Promise((resolve) => {
+
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            //create reference data
+            var referenceData = {};
+            referenceData["value"] = value;
+
+            // get user info 
+            var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+            referenceData["user"] = userinfo.alias;
+
+            // var date = new Date();
+            referenceData["date"] = ReferenceManager.getCurrentDate();
+
+            // add reference
+            $.ajax({
+                url: 'PHP/AddReference.php',
+                type: "POST",
+                async: true,
+                data: {
+                    'currentSource': currentSource,
+                    'typeofReference': "Comment",
+                    'components': JSON.stringify(componentIds),
+                    'referenceData': JSON.stringify(referenceData),
+                    'projectName': projectinfo.projectname,
+                    'checkName': checkinfo.checkname
+                },
+                success: function (msg) {
+                    if (msg != 'fail') {
+                        var commentData = JSON.parse(msg);
+
+                        return resolve(commentData);
+                    }
+
+                    return resolve(undefined);
+                }
+            });
         });
     },
 

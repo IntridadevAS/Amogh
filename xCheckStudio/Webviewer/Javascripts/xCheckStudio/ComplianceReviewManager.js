@@ -789,3 +789,133 @@ ComplianceReviewManager.prototype.GetComponentData = function (checkComponentDat
 
     return sourceComponentData;
 }
+
+ComplianceReviewManager.prototype.OpenPropertyCallout = function (rowData) {
+
+    var propertyCalloutData = {
+        name: undefined,
+        componentId : rowData.SourceId,
+        properties: [],
+        references: [],
+        comments: [],
+        src : undefined
+    };
+
+    var sourceComponents;    
+    if (checkResults.sourceInfo.sourceAFileName === this.ViewerData.source) {
+        sourceComponents = checkResults.sourceAComponents;
+        propertyCalloutData["src"] = "a";
+    }
+    else if (checkResults.sourceInfo.sourceBFileName === this.ViewerData.source) {
+        sourceComponents = checkResults.sourceBComponents;
+        propertyCalloutData["src"] = "b";
+    }
+    else if (checkResults.sourceInfo.sourceCFileName === this.ViewerData.source) {
+        sourceComponents = checkResults.sourceCComponents;
+        propertyCalloutData["src"] = "c";
+    }
+    else if (checkResults.sourceInfo.sourceDFileName === this.ViewerData.source) {
+        sourceComponents = checkResults.sourceDComponents;
+        propertyCalloutData["src"] = "d";
+    }
+
+    if (rowData.SourceId &&
+        rowData.SourceId != "" &&
+        sourceComponents) {
+      
+        for (var i = 0; i < sourceComponents.length; i++) {
+            var component = sourceComponents[i];
+            if (component.id != rowData.SourceId) {
+                continue;
+            }
+
+            propertyCalloutData["name"] = component.name;
+
+            // properties
+            for (var i = 0; i < component.properties.length; i++) {
+                var property = {};
+                property["Name"] = component.properties[i].name;
+                property["Value"] = component.properties[i].value;
+                propertyCalloutData["properties"].push(property);
+            }
+
+            // references
+            var referncesData = this.GetReferencesData(component.id, propertyCalloutData["src"]);
+            propertyCalloutData["references"] = referncesData["references"];
+            propertyCalloutData["comments"] = referncesData["comments"];
+
+            break;
+        }
+    }
+
+    model.checks["compliance"].PropertyCallout.UpdateForCompliance(propertyCalloutData);
+}
+
+ComplianceReviewManager.prototype.GetReferencesData = function (componentId, src) {
+    var _this = this;
+    var allData = {
+        references: [],
+        comments: [],
+    };
+
+    var references = ReferenceManager.getReferences([componentId], src, false);
+    // ReferenceManager.getReferences([componentId], src, false).then(function (references) {        
+        var referencesData = [];
+        var commentsData = [];
+
+        if (references) {
+
+            if (references && src in references) {
+                if ("webAddress" in references[src]) {
+                    for (var i = 0; i < references[src]["webAddress"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[src]["webAddress"][i];
+                        referenceData["Type"] = "Web Address";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("image" in references[src]) {
+                    for (var i = 0; i < references[src]["image"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[src]["image"][i];
+                        referenceData["Type"] = "Image";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("document" in references[src]) {
+                    for (var i = 0; i < references[src]["document"].length; i++) {
+                        // index++;
+
+                        var referenceData = {};
+                        // referenceData["id"] = index;
+                        referenceData["Value"] = references[src]["document"][i];
+                        referenceData["Type"] = "Document";
+
+                        referencesData.push(referenceData);
+                    }
+                }
+
+                if ("comment" in references[src]) {
+                    for (var i = 0; i < references[src]["comment"].length; i++) {
+                        commentsData.push(JSON.parse(references[src]["comment"][i]));
+                    }
+                }
+            }
+
+            allData["references"] = referencesData;
+            allData["comments"] = commentsData;
+        }
+    // });
+
+    return allData;
+}

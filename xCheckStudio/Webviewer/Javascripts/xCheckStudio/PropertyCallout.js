@@ -10,10 +10,7 @@ function PropertyCallout(id) {
 
 PropertyCallout.prototype.Init = function () {
     var _this = this;
-    
-    // var span = document.createElement("span");
-    // span.innerText = SourceManagers[_this.Id].SourceName;
-    // document.getElementById("propertyCalloutStatusBar" + _this.Id).appendChild(span);
+
     document.getElementById("propertyCalloutStatusBar" + _this.Id).children[0].innerText = "";
     
     document.getElementById("propertyCallout" + this.Id).onclick = function () {
@@ -22,18 +19,11 @@ PropertyCallout.prototype.Init = function () {
 
             document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "none";
             document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "0%";
-
-            // document.getElementById("propertyCalloutStatusBar" + _this.Id).style.display = "none";
-            // document.getElementById("propertyCalloutStatusBar" + _this.Id).style.width = "0%";
         } else {
             this.classList.add("propertyCalloutOpen");
 
             document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "block";
-            document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "25%";
-
-            // document.getElementById("propertyCalloutStatusBar" + _this.Id).style.display = "block";
-            // document.getElementById("propertyCalloutStatusBar" + _this.Id).style.width = "100%";
-        }
+            document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "25%";        }
     }
 }
 
@@ -170,22 +160,6 @@ PropertyCallout.prototype.Update = function (componentName,
             _this.SelectedRowKey["references"] = e.key;
 
             _this.ApplyHighlightColor(e.rowElement[0]);
-
-            // // open reference
-            // const BrowserWindow = require('electron').remote.BrowserWindow;
-            // win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-            // if (e.data.type.toLowerCase() === "web address") {
-            //     win.loadURL(e.data.value);
-            // }
-            // else if (e.data.type.toLowerCase() === "image" ||
-            //     e.data.type.toLowerCase() === "document") {
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const path = require("path");
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, e.data.value);
-            //     win.loadURL(docUrl);
-            // }
         }
     });
 
@@ -203,6 +177,7 @@ PropertyCallout.prototype.Update = function (componentName,
 
         var commentInput = $('#commentInput' + _this.Id).dxTextArea('instance');
         var value = commentInput.option('value');
+        commentInput.reset();
         if (!value || value === "") {
             return;
         }

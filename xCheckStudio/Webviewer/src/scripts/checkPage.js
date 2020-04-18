@@ -350,37 +350,37 @@ let viewPanels = {
   onMouseOverPropertyCallout: function (selected) {
     selected.style.opacity = 1;
 
-    var id = selected.id[selected.id.length - 1];
-    if (id === "a") {
-      document.getElementById("propertyCalloutStatusBara").style.opacity = 1;
-    }
-    else if (id === "b") {
-      document.getElementById("propertyCalloutStatusBarb").style.opacity = 1;
-    }
-    else if (id === "c") {
-      document.getElementById("propertyCalloutStatusBarc").style.opacity = 1;
-    }
-    else if (id === "d") {
-      document.getElementById("propertyCalloutStatusBard").style.opacity = 1;
-    }
+    // var id = selected.id[selected.id.length - 1];
+    // if (id === "a") {
+    //   document.getElementById("propertyCalloutStatusBara").style.opacity = 1;
+    // }
+    // else if (id === "b") {
+    //   document.getElementById("propertyCalloutStatusBarb").style.opacity = 1;
+    // }
+    // else if (id === "c") {
+    //   document.getElementById("propertyCalloutStatusBarc").style.opacity = 1;
+    // }
+    // else if (id === "d") {
+    //   document.getElementById("propertyCalloutStatusBard").style.opacity = 1;
+    // }
   },
 
   onMouseOutPropertyCallout: function (selected) {
     selected.style.opacity = 0.6;
 
-    var id = selected.id[selected.id.length - 1];
-    if (id === "a") {
-      document.getElementById("propertyCalloutStatusBara").style.opacity = 0.6;
-    }
-    else if (id === "b") {
-      document.getElementById("propertyCalloutStatusBarb").style.opacity = 0.6;
-    }
-    else if (id === "c") {
-      document.getElementById("propertyCalloutStatusBarc").style.opacity = 0.6;
-    }
-    else if (id === "d") {
-      document.getElementById("propertyCalloutStatusBard").style.opacity = 0.6;
-    }
+    // var id = selected.id[selected.id.length - 1];
+    // if (id === "a") {
+    //   document.getElementById("propertyCalloutStatusBara").style.opacity = 0.6;
+    // }
+    // else if (id === "b") {
+    //   document.getElementById("propertyCalloutStatusBarb").style.opacity = 0.6;
+    // }
+    // else if (id === "c") {
+    //   document.getElementById("propertyCalloutStatusBarc").style.opacity = 0.6;
+    // }
+    // else if (id === "d") {
+    //   document.getElementById("propertyCalloutStatusBard").style.opacity = 0.6;
+    // }
   }
 }
 

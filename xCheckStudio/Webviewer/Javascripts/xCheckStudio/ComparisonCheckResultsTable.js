@@ -27,7 +27,7 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         collapsible: true,
         dataSource: data,
         deferRendering: false,
-        selectedIndex: -1,       
+        selectedIndex: -1,
         itemTitleTemplate: function (itemData, itemIndex, itemElement) {
             var btn = $('<div>')
             $(btn).data("index", itemIndex)
@@ -59,20 +59,20 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         onItemClick: function (e) {
             e.event.stopPropagation();
         },
-        onItemContextMenu: function(e) {
+        onItemContextMenu: function (e) {
             var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
             if (!(containerDiv in _this.ContextMenus) && !e.itemData["template"].toLowerCase().includes("undefined")) {
                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
                 _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
             }
-            if(!e.itemData["template"].toLowerCase().includes("undefined")) {
+            if (!e.itemData["template"].toLowerCase().includes("undefined")) {
                 _this.ContextMenus[containerDiv].InitGroupLevelContextMenu(e);
             }
         }
     });
 }
 
-ComparisonCheckResultsTable.prototype.getTableId = function(tableName) {
+ComparisonCheckResultsTable.prototype.getTableId = function (tableName) {
     return tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
 }
 
@@ -93,7 +93,7 @@ ComparisonCheckResultsTable.prototype.ExpandAccordionScrollToRow = function (row
     }
 }
 
-ComparisonCheckResultsTable.prototype.GetAccordionData = function(groupName) {
+ComparisonCheckResultsTable.prototype.GetAccordionData = function (groupName) {
     var accordion = $("#" + this.MainReviewTableContainer).dxAccordion("instance");
     var accordionItems = accordion.getDataSource().items();
     var accordionData;
@@ -190,10 +190,10 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
         }
         else if (i === ComparisonColumns.SourceCName) {
 
-            caption = dataField = ComparisonColumnNames.SourceCName;   
+            caption = dataField = ComparisonColumnNames.SourceCName;
             if (sources.length > 2) {
                 caption = sources[2];
-                dataField = ComparisonColumnNames.SourceCName;              
+                dataField = ComparisonColumnNames.SourceCName;
                 if (sources.length === 3) {
                     width = "26%";
                 }
@@ -206,7 +206,7 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
             }
         }
         else if (i === ComparisonColumns.SourceDName) {
-            caption = dataField = ComparisonColumnNames.SourceDName;   
+            caption = dataField = ComparisonColumnNames.SourceDName;
             if (sources.length > 3) {
                 caption = sources[3];
                 dataField = ComparisonColumnNames.SourceDName;
@@ -281,16 +281,15 @@ ComparisonCheckResultsTable.prototype.CreateMainTableHeaders = function (sources
             visible = false;
             width = "0%";
         }
-        else if(i === ComparisonColumns.ClassMappingInfo)
-        {
+        else if (i === ComparisonColumns.ClassMappingInfo) {
             caption = ComparisonColumnNames.ClassMappingInfo;
             dataField = ComparisonColumnNames.ClassMappingInfo;
             visible = false;
-            width = "0%"; 
+            width = "0%";
         }
 
         columnHeader["caption"] = caption;
-        columnHeader["dataField"] = dataField;        
+        columnHeader["dataField"] = dataField;
         columnHeader["width"] = width;
 
         if (visible == false) {
@@ -316,24 +315,22 @@ ComparisonCheckResultsTable.prototype.CreateTableData = function (checkComponent
 
         tableRowContent[ComparisonColumnNames.SourceAName] = component.sourceAName;
         tableRowContent[ComparisonColumnNames.SourceBName] = component.sourceBName;
-        
+
         var cName = "";
-        if(component.sourceCName)
-        {
-            cName = component.sourceCName;           
+        if (component.sourceCName) {
+            cName = component.sourceCName;
         }
-        tableRowContent[ComparisonColumnNames.SourceCName] =cName;
+        tableRowContent[ComparisonColumnNames.SourceCName] = cName;
 
         var dName = "";
-        if(component.sourceDName)
-        {
-            dName = component.sourceDName;        
+        if (component.sourceDName) {
+            dName = component.sourceDName;
         }
         tableRowContent[ComparisonColumnNames.SourceDName] = dName;
 
         tableRowContent[ComparisonColumnNames.Status] = component.status;
 
-        if(component.accepted == "true") {
+        if (component.accepted == "true") {
             tableRowContent[ComparisonColumnNames.Status] = "OK(A)";
         }
 
@@ -425,89 +422,91 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
     var _this = this;
 
     // $(function () {
-        $(containerDiv).dxDataGrid({
-            dataSource: tableData,
-            keyExpr: ComparisonColumnNames.ResultId,
-            columns: columnHeaders,
-            columnAutoWidth: true,
-            columnResizingMode: 'widget',
-            wordWrapEnabled: false,
-            showBorders: true,
-            showRowLines: true,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            deferRendering: false,
-            filterRow: {
-                visible: true
-            },
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",                
-            },
-            paging: { enabled: false },
-            onContentReady: function (e) {
-                model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
-            },
-            onCellPrepared: function (e) {
-                if (e.rowType == "header") {
-                    e.cellElement.css("text-align", "center");
-                    e.cellElement.css("color", "black");
-                    e.cellElement.css("font-weight", "bold");
-                }
-            },
-            onInitialized: function (e) {
-                // initialize the context menu
-                if(!(containerDiv in _this.ContextMenus))
-                {
-                    var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
-                    _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
-                }
+    $(containerDiv).dxDataGrid({
+        dataSource: tableData,
+        keyExpr: ComparisonColumnNames.ResultId,
+        columns: columnHeaders,
+        columnAutoWidth: true,
+        columnResizingMode: 'widget',
+        wordWrapEnabled: false,
+        showBorders: true,
+        showRowLines: true,
+        allowColumnResizing: true,
+        hoverStateEnabled: true,
+        deferRendering: false,
+        filterRow: {
+            visible: true
+        },
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always",
+        },
+        paging: { enabled: false },
+        onContentReady: function (e) {
+            model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
+        },
+        onCellPrepared: function (e) {
+            if (e.rowType == "header") {
+                e.cellElement.css("text-align", "center");
+                e.cellElement.css("color", "black");
+                e.cellElement.css("font-weight", "bold");
+            }
+        },
+        onInitialized: function (e) {
+            // initialize the context menu
+            if (!(containerDiv in _this.ContextMenus)) {
+                var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
+                _this.ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
+            }
 
-                _this.ContextMenus[containerDiv].ComponentTableContainer = containerDiv;
-                _this.ContextMenus[containerDiv].InitComponentLevelContextMenu(containerDiv);                
-            },
-            onSelectionChanged: function (e) {
-                if (e.currentSelectedRowKeys.length > 0) {
-                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
-                        var row = e.component.getRowElement(rowIndex);
-                        model.checks["comparison"]["selectionManager"].HandleCheckComponentSelectFormCheckBox(row[0], containerDiv, "on");
-                    }
-                }
-                else {
-                    for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
-                        var row = e.component.getRowElement(rowIndex);
-                        model.checks["comparison"]["selectionManager"].HandleCheckComponentSelectFormCheckBox(row[0], containerDiv, "off");
-                    }
-                }
-            },
-            onRowClick: function (e) {
-                var id = containerDiv.replace("#", "");
-                // _this.CurrentTableId = id;
-                model.checks["comparison"]["selectionManager"].MaintainHighlightedRow(e.rowElement[0], containerDiv);
-                model.checks["comparison"]["reviewManager"].OnCheckComponentRowClicked(e.data, id);
-            },
-            onRowPrepared: function (e) {
-                if (e.rowType !== "data") {
-                    return;
-                }
-
-                _this.AddTooltip(e);
-                var highlightedRowKey;
-                if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
-                    highlightedRowKey = model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
-                }
-
-                if (e.key == highlightedRowKey) {
-                    model.getCurrentSelectionManager().ApplyHighlightColor(e.rowElement[0]);
-                }
-                else {
-                    var status = e.data["Status"];
-                    model.getCurrentSelectionManager().ChangeBackgroundColor(e.rowElement[0], status);
+            _this.ContextMenus[containerDiv].ComponentTableContainer = containerDiv;
+            _this.ContextMenus[containerDiv].InitComponentLevelContextMenu(containerDiv);
+        },
+        onSelectionChanged: function (e) {
+            if (e.currentSelectedRowKeys.length > 0) {
+                for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                    var rowIndex = e.component.getRowIndexByKey(e.currentSelectedRowKeys[i])
+                    var row = e.component.getRowElement(rowIndex);
+                    model.checks["comparison"]["selectionManager"].HandleCheckComponentSelectFormCheckBox(row[0], containerDiv, "on");
                 }
             }
-        });
+            else {
+                for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                    var rowIndex = e.component.getRowIndexByKey(e.currentDeselectedRowKeys[i])
+                    var row = e.component.getRowElement(rowIndex);
+                    model.checks["comparison"]["selectionManager"].HandleCheckComponentSelectFormCheckBox(row[0], containerDiv, "off");
+                }
+            }
+        },
+        onRowClick: function (e) {
+            var id = containerDiv.replace("#", "");
+            // _this.CurrentTableId = id;
+            model.checks["comparison"]["selectionManager"].MaintainHighlightedRow(e.rowElement[0], containerDiv);
+            model.checks["comparison"]["reviewManager"].OnCheckComponentRowClicked(e.data, id);
+
+            // property call out
+            model.getCurrentReviewManager().OpenPropertyCallout(e.data);
+        },
+        onRowPrepared: function (e) {
+            if (e.rowType !== "data") {
+                return;
+            }
+
+            _this.AddTooltip(e);
+            var highlightedRowKey;
+            if (model.getCurrentSelectionManager().HighlightedCheckComponentRow) {
+                highlightedRowKey = model.getCurrentSelectionManager().HighlightedCheckComponentRow["rowKey"];
+            }
+
+            if (e.key == highlightedRowKey) {
+                model.getCurrentSelectionManager().ApplyHighlightColor(e.rowElement[0]);
+            }
+            else {
+                var status = e.data["Status"];
+                model.getCurrentSelectionManager().ChangeBackgroundColor(e.rowElement[0], status);
+            }
+        }
+    });
     // });
 
     // var container = document.getElementById(containerDiv.replace("#", ""));
@@ -548,8 +547,8 @@ ComparisonCheckResultsTable.prototype.GetAccordionIndex = function (groupName) {
     var selectedItems = accordion._selection.getSelectedItemKeys();
     for (var i = 0; i < accordionItems.length; i++) {
         if (!accordionItems[i]["template"].includes(groupName) ||
-            (selectedItems.length > 0 && 
-             accordionItems[i]["template"] == selectedItems[0]["template"])) {
+            (selectedItems.length > 0 &&
+                accordionItems[i]["template"] == selectedItems[0]["template"])) {
             continue;
         }
         else {
@@ -595,7 +594,7 @@ ComparisonCheckResultsTable.prototype.UpdateGridData = function (componentId,
 }
 
 ComparisonCheckResultsTable.prototype.GetComponentIds = function () {
-    
+
     return new Promise((resolve) => {
 
         this.GetDataForSelectedRows().then(function (dataObjects) {
@@ -663,7 +662,7 @@ ComparisonCheckResultsTable.prototype.GetDataForSelectedRows = function () {
 
         for (var i = 0; i < selectedComponents.length; i++) {
             var selectedRow = selectedComponents[i];
-           
+
             this.GetDataForSelectedRow(selectedRow).then(function (dataObject) {
                 arr.push(dataObject);
 
@@ -767,8 +766,8 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 
         if (i == 2) {
             var group = [];
-            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {               
-                
+            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {
+
                 if (j === ComparisonPropertyColumns.SourceCName) {
                     caption = "Property";
                     dataField = ComparisonPropertyColumnNames.SourceCName;
@@ -783,19 +782,19 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                 else if (j === ComparisonPropertyColumns.SourceCValue) {
                     caption = "Value";
                     dataField = ComparisonPropertyColumnNames.SourceCValue;
-                    
+
                     var headerGroupComp = {}
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
                     group[group.length] = headerGroupComp;
-                }              
+                }
             }
             caption = "SourceC";
             dataField = null;
             columns = group;
-           
+
             if (sources.length < 3) {
                 visible = false;
             }
@@ -806,8 +805,8 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 
         if (i == 3) {
             var group = [];
-            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {               
-                
+            for (var j = 1; j < Object.keys(ComparisonPropertyColumns).length; j++) {
+
                 if (j === ComparisonPropertyColumns.SourceDName) {
                     caption = "Property";
                     dataField = ComparisonPropertyColumnNames.SourceDName;
@@ -822,19 +821,19 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
                 else if (j === ComparisonPropertyColumns.SourceDValue) {
                     caption = "Value";
                     dataField = ComparisonPropertyColumnNames.SourceDValue;
-                    
+
                     var headerGroupComp = {}
                     headerGroupComp["caption"] = caption;
                     headerGroupComp["dataField"] = dataField;
                     headerGroupComp["width"] = "20%";
 
                     group[group.length] = headerGroupComp;
-                }              
+                }
             }
             caption = "SourceD";
             dataField = null;
             columns = group;
-           
+
             if (sources.length < 4) {
                 visible = false;
             }
@@ -846,7 +845,7 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
         if (i == 4) {
             caption = "Status";
             dataField = ComparisonPropertyColumnNames.Status;
-            width = "20%";           
+            width = "20%";
             columns = []
         }
 
@@ -861,9 +860,9 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
             columnHeader["dataField"] = dataField;
         }
 
-        if(visible == false) {
+        if (visible == false) {
             columnHeader["visible"] = visible;
-        } 
+        }
 
         if (columns.length > 1 && columns !== undefined) {
             columnHeader["columns"] = columns;
@@ -890,12 +889,12 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
         tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceBValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceBName] = property.sourceBName;
         tableRowContent[ComparisonPropertyColumnNames.SourceCName] = property.sourceCName;
-        tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceCValue;  
+        tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceCValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceDValue] = property.sourceDValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceDName] = property.sourceDName;
 
         tableRowContent[ComparisonPropertyColumnNames.Status] = property.severity;
-        if(property.accepted == "true") {
+        if (property.accepted == "true") {
             tableRowContent[ComparisonPropertyColumnNames.Status] = 'ACCEPTED';
         }
         else if (property.transpose == 'FromDataSource1' && property.severity !== 'No Value') {
@@ -993,21 +992,20 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             onContentReady: function (e) {
                 // initialize the context menu  
                 // internal call from repaint rows gives containerId with # hence check
-                if(!containerDiv.includes("#")) {
+                if (!containerDiv.includes("#")) {
                     containerDiv = "#" + containerDiv;
                 }
 
                 // if(document.getElementById(_this.DetailedReviewTableContainer).style.display == "none") {
                 //     document.getElementById(_this.DetailedReviewTableContainer).style.display = "block";
                 // }
-                
-                if(!(containerDiv in model.getCurrentReviewTable().ContextMenus))
-                {
+
+                if (!(containerDiv in model.getCurrentReviewTable().ContextMenus)) {
                     var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());
                     model.getCurrentReviewTable().ContextMenus[containerDiv] = reviewComparisonContextMenuManager;
                 }
 
-                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);       
+                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);
                 _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
             },
             onCellPrepared: function (e) {
@@ -1018,13 +1016,13 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 }
             },
             onSelectionChanged: function (e) {
-                if(e.currentSelectedRowKeys.length > 0) {
-                    for(var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                if (e.currentSelectedRowKeys.length > 0) {
+                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
                         _this.SelectedProperties.push(e.currentSelectedRowKeys[i]);
                     }
                 }
                 else {
-                    for(var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                    for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
                         var index = _this.SelectedProperties.indexOf(e.currentDeselectedRowKeys[i]);
                         if (index > -1) {
                             _this.SelectedProperties.splice(index, 1);
@@ -1066,9 +1064,9 @@ ComparisonCheckPropertiesTable.prototype.highlightDetailedReviewTableFromCheckSt
         var detailedReviewTableRow = detailedReviewTableRows[i];
         var currentRow = dataGrid.getRowElement(detailedReviewTableRow.rowIndex);
         // if (currentRow[0].cells.length > 1) {
-            //var status = dataGrid.cellValue(detailedReviewTableRows[i].rowIndex, ComparisonPropertyColumns.Status)
-            var status = detailedReviewTableRow.data[ComparisonPropertyColumnNames.Status];
-            model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow[0], status);
+        //var status = dataGrid.cellValue(detailedReviewTableRows[i].rowIndex, ComparisonPropertyColumns.Status)
+        var status = detailedReviewTableRow.data[ComparisonPropertyColumnNames.Status];
+        model.getCurrentSelectionManager().ChangeBackgroundColor(currentRow[0], status);
         // }
     }
 }

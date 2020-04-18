@@ -273,10 +273,14 @@ Review3DViewerInterface.prototype.onSelection = function (selectionEvent) {
     var dataGrid = $(containerDiv).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
     var rowData = data[reviewRow.rowIndex];
+    // var rowData = reviewRowData["rowData"];
 
     this.HighlightMatchedComponent(containerDiv, rowData);
 
     model.getCurrentDetailedInfoTable().populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
+
+    // open property callout
+    reviewManager.OpenPropertyCallout(rowData);
 };
 
 Review3DViewerInterface.prototype.unHighlightComponent = function () {

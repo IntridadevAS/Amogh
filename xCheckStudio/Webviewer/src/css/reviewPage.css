@@ -421,3 +421,116 @@ tr {
 .hide {
   display: none;
 }
+
+.propertyCalloutBtn{
+  background-color: var(--xCheckDarkGrey);
+  background-image: url("../../public/symbols/backArrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  opacity: 0.2;
+  right: 5px;
+  top: 50%;
+  height: 30px;
+  width: 30px;
+  border: var(--borderWidth) solid var(--xCheckMedGrey);
+  border-radius: var(--borderRadiusVal);
+  cursor: pointer;
+  z-index: 3;
+  background-size :contain;
+}
+
+.propertyCalloutOpen {
+  background-image: url("../../public/symbols/forwardArrow.svg");
+}
+
+.propertyCalloutContainerForComparison{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 25%;
+  /* height: calc(100% - 30px);     */
+  height: calc(100% - 30px);
+  cursor: pointer;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.6);
+  display: none;
+}
+
+.propertyCalloutContainerForCompliance
+{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 25%;
+  /* height: calc(100% - 30px);     */
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.6);
+  display: none;
+}
+
+.propertyCalloutNameBar
+  {
+    /* position: absolute; */
+    /* right: 0px;     */
+    /* top: calc(100% - 30px);  */
+    top: 0px;
+    /* width: 25%; */
+    width: 100%;
+    height: 30px;
+    /* display: none;   */
+    z-index : 3;
+    /* opacity: 0.6;   */
+    background : white;
+    color: black;
+    padding : 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .commentsTabPage{
+    width: 100%;
+    height: 100%;
+    background: white;
+  }
+
+  .commentsArea{
+    width: 100%;
+    height: calc(100% - 62px);
+    top: 0px;
+    left: 0px;
+    padding: 2px;
+    overflow-y: scroll;
+  }
+
+  .commentInput{
+    width: 100%;
+    height: 62px;
+    top: calc(100% - 62px);
+  }
+
+  .addCommentBtn
+  {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;   
+  }
+
+  .propertyCalloutPropertiesArea
+  {
+    height: calc(100% - 30px);;
+  }
+
+  .propertyCalloutStatusBar{
+    position: absolute;
+    right: 0px;  
+    width: 25%;
+    top: calc(100% - 30px);
+    height: 30px;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.6);
+    display: none;
+  }
