@@ -15,22 +15,24 @@ PropertyCallout.prototype.Init = function () {
         if (this.classList.contains("propertyCalloutOpen")) {
             this.classList.remove("propertyCalloutOpen");
 
-            document.getElementById("propertyCalloutContainer" + _this.CheckType).style.display = "none";
-            document.getElementById("propertyCalloutContainer" + _this.CheckType).style.width = "0%";
+            var element = document.getElementById("propertyCalloutContainer" + _this.CheckType);
+            element.setAttribute('style', 'display:none !important');
+
+            document.getElementById("propertyCalloutNameBar" + _this.CheckType).style.display = "none";
 
             if (_this.CheckType.toLowerCase() === "comparison") {
                 document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.display = "none";
-                document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.width = "0%";
             }
         } else {
             this.classList.add("propertyCalloutOpen");
 
-            document.getElementById("propertyCalloutContainer" + _this.CheckType).style.display = "block";
-            document.getElementById("propertyCalloutContainer" + _this.CheckType).style.width = "25%";
+            var element = document.getElementById("propertyCalloutContainer" + _this.CheckType);
+            element.setAttribute('style', 'display:block !important');
+
+            document.getElementById("propertyCalloutNameBar" + _this.CheckType).style.display = "block";            
 
             if (_this.CheckType.toLowerCase() === "comparison") {
-                document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.display = "block";
-                document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.width = "25%";
+                document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.display = "block";            
             }
         }
     }
@@ -43,6 +45,8 @@ PropertyCallout.prototype.UpdateForComparison = function (
 
 
     $("#propertyCalloutContainer" + this.CheckType).dxTabPanel({
+        width: "100%",
+        height: "100%",
         dataSource: [
             { title: "Properties", template: "tab1" },
             { title: "References", template: "tab2" },

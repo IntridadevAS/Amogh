@@ -1081,12 +1081,15 @@
               onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)"></div>
             
             <!-- Property callout container-->
+            <div id="propertyCalloutNameBarcomparison" class="propertyCalloutNameBar"
+            onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')" 
+            onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')"s>
+              <span> </span>
+            </div>
             <div id="propertyCalloutContainercomparison" class="propertyCalloutContainerForComparison" style="opacity: 0.6;"
-              onmouseover="viewPanels.onMouseOverPropertyCallout(this)" onmouseout="viewPanels.onMouseOutPropertyCallout(this)">
-              <div data-options="dxTemplate : { name: 'tab1' } ">
-                <div id="propertyCalloutNameBarcomparison" class="propertyCalloutNameBar">
-                  <span> </span>
-                </div>
+              onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')" 
+              onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')">
+              <div data-options="dxTemplate : { name: 'tab1' } ">              
                 <div class="propertyCalloutPropertiesArea">
                   <div id="propertyCalloutPropGridcomparison"></div>
                 </div>               
@@ -1110,7 +1113,8 @@
               </div>
             </div>
             <div id="propertyCalloutStatusBarcomparison" class="propertyCalloutStatusBar" 
-            onmouseover="viewPanels.onMouseOverPropertyCallout(this)" onmouseout="viewPanels.onMouseOutPropertyCallout(this)"> 
+            onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')" 
+            onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')"> 
               <!-- <div id="firstSource"> </div>
               <div id="secondSource"> </div>
               <div id="thirdSource"> </div>
@@ -1231,12 +1235,15 @@
              onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)"></div>
            
            <!-- Property callout container-->
+           <div id="propertyCalloutNameBarcompliance" class="propertyCalloutNameBar"
+           onmouseover="viewPanels.onMouseOverPropertyCallout('compliance')" 
+           onmouseout="viewPanels.onMouseOutPropertyCallout('compliance')">
+            <span> </span>
+          </div>
            <div id="propertyCalloutContainercompliance" class="propertyCalloutContainerForCompliance" style="opacity: 0.6;"
-             onmouseover="viewPanels.onMouseOverPropertyCallout(this)" onmouseout="viewPanels.onMouseOutPropertyCallout(this)">
-             <div data-options="dxTemplate : { name: 'tab1' } ">
-               <div id="propertyCalloutNameBarcompliance" class="propertyCalloutNameBar">
-                 <span> </span>
-               </div>
+             onmouseover="viewPanels.onMouseOverPropertyCallout('compliance')" 
+             onmouseout="viewPanels.onMouseOutPropertyCallout('compliance')">
+             <div data-options="dxTemplate : { name: 'tab1' } ">               
                <div class="propertyCalloutPropertiesArea">
                  <div id="propertyCalloutPropGridcompliance"></div>
                </div>               

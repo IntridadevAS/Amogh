@@ -447,42 +447,40 @@ tr {
 .propertyCalloutContainerForComparison{
   position: absolute;
   right: 0px;
-  top: 0px;
-  width: 25%;
-  /* height: calc(100% - 30px);     */
-  height: calc(100% - 30px);
+  top: 30px;
+  width: 25%;  
+  height: calc(100% - 60px);
   cursor: pointer;
   z-index: 2;
   background: rgba(255, 255, 255, 0.6);
-  display: none;
+  display: none !important;
+  overflow: hidden;
 }
 
 .propertyCalloutContainerForCompliance
 {
   position: absolute;
   right: 0px;
-  top: 0px;
+  top: 30px;
   width: 25%;
-  /* height: calc(100% - 30px);     */
-  height: 100%;
+  height: calc(100% - 30px);     
   cursor: pointer;
   z-index: 2;
   background: rgba(255, 255, 255, 0.6);
-  display: none;
+  display: none !important;
+  overflow: hidden;
 }
 
 .propertyCalloutNameBar
   {
-    /* position: absolute; */
-    /* right: 0px;     */
-    /* top: calc(100% - 30px);  */
+    position: absolute;
+    right: 0px;       
     top: 0px;
-    /* width: 25%; */
-    width: 100%;
+    width: 25%;    
     height: 30px;
-    /* display: none;   */
+    display: none;  
     z-index : 3;
-    /* opacity: 0.6;   */
+    opacity: 0.6;  
     background : white;
     color: black;
     padding : 5px;
@@ -521,7 +519,7 @@ tr {
 
   .propertyCalloutPropertiesArea
   {
-    height: calc(100% - 30px);;
+    height: 100%;
   }
 
   .propertyCalloutStatusBar{

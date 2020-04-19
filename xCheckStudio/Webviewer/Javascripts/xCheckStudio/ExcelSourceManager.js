@@ -195,12 +195,12 @@ ExcelSourceManager.prototype.OpenPropertyCallout = function (componentId) {
       }
     }
 
-    if (properties.length > 0) {
+    // if (properties.length > 0) {
       _this.PropertyCallout.Update(component.Name,
         componentId,
         properties,
         referencesData,
         commentsData);
-    }
+    // }
   });
 }

@@ -261,13 +261,13 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                                 }
                             }
 
-                            if (properties.length > 0) {
+                            // if (properties.length > 0) {
                                 SourceManagers[_this.Id].PropertyCallout.Update(e.data.Item,
                                     componentId,
                                     properties, 
                                     referencesData,
                                     commentsData);
-                            }
+                            // }
                         });
                     }
                 }

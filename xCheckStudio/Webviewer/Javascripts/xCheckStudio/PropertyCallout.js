@@ -11,19 +11,31 @@ function PropertyCallout(id) {
 PropertyCallout.prototype.Init = function () {
     var _this = this;
 
-    document.getElementById("propertyCalloutStatusBar" + _this.Id).children[0].innerText = "";
+    document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].innerText = "";
     
     document.getElementById("propertyCallout" + this.Id).onclick = function () {
         if (this.classList.contains("propertyCalloutOpen")) {
             this.classList.remove("propertyCalloutOpen");
 
-            document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "none";
-            document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "0%";
+            var element = document.getElementById("propertyCalloutContainer" + _this.Id);
+            element.setAttribute('style', 'display:none !important');
+            // element.style.width = "0%";
+            // document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "none";
+            // document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "0%";
+
+            document.getElementById("propertyCalloutNameBar" + _this.Id).style.display = "none";
+
         } else {
             this.classList.add("propertyCalloutOpen");
 
-            document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "block";
-            document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "25%";        }
+            var element = document.getElementById("propertyCalloutContainer" + _this.Id);
+            element.setAttribute('style', 'display:block !important');
+            // element.style.width = "25%";
+            // document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "block";
+            // document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "25%";        
+
+            document.getElementById("propertyCalloutNameBar" + _this.Id).style.display = "block";
+        }
     }
 }
 
@@ -198,7 +210,7 @@ PropertyCallout.prototype.Update = function (componentName,
         }
     }
 
-    document.getElementById("propertyCalloutStatusBar" + _this.Id).children[0].textContent = componentName;
+    document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].textContent = componentName;
 }
 
 PropertyCallout.prototype.ApplyHighlightColor = function (row) {

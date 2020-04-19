@@ -598,7 +598,7 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
                 }
             }
 
-            if (properties.length > 0) {
+            // if (properties.length > 0) {
 
                 if (!componentName) {
                     componentName = _this.SourceProperties[nodeId].Name;
@@ -609,7 +609,7 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
                     properties,
                     referencesData,
                     commentsData);
-            }
+            // }
         });
     }
     else if (nodeId in this.Properties) {
@@ -626,6 +626,14 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
         this.PropertyCallout.Update(componentName,
             undefined,
             properties,
+            undefined,
+            undefined);
+    }
+    else
+    {
+        this.PropertyCallout.Update(componentName,
+            undefined,
+            undefined,
             undefined,
             undefined);
     }

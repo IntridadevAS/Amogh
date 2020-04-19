@@ -538,21 +538,29 @@ let viewPanels = {
     selected.style.opacity = 0.2;
   },
 
-  onMouseOverPropertyCalloutBtn: function(selected)
-  {
+  onMouseOverPropertyCalloutBtn: function (selected) {
     selected.style.opacity = 1;
   },
-  onMouseOutPropertyCalloutBtn: function(selected)
-  {
+  onMouseOutPropertyCalloutBtn: function (selected) {
     selected.style.opacity = 0.2;
   },
 
-  onMouseOverPropertyCallout: function (selected) {
-    selected.style.opacity = 1;
+  onMouseOverPropertyCallout: function (checkType) {
+    document.getElementById("propertyCalloutNameBar" + checkType).style.opacity = 1;
+    document.getElementById("propertyCalloutContainer" + checkType).style.opacity = 1;
+
+    if (checkType === 'comparison') {
+      document.getElementById("propertyCalloutStatusBar" + checkType).style.opacity = 1;
+    }
   },
 
-  onMouseOutPropertyCallout: function (selected) {
-    selected.style.opacity = 0.6;
+  onMouseOutPropertyCallout: function (checkType) {
+    document.getElementById("propertyCalloutNameBar" + checkType).style.opacity = 0.6;
+    document.getElementById("propertyCalloutContainer" + checkType).style.opacity = 0.6;
+
+    if (checkType === 'comparison') {
+      document.getElementById("propertyCalloutStatusBar" + checkType).style.opacity = 0.6;
+    }
   }
 }
 
