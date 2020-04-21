@@ -433,7 +433,7 @@ button[type="submit"] {
   }
 
   .commentInput{
-    width: 100%;
+    width: calc(100% - 30px);
     height: 62px;
     top: calc(100% - 62px);
   }

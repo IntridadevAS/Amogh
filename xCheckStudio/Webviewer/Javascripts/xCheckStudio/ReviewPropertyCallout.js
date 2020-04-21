@@ -14,15 +14,14 @@ PropertyCallout.prototype.Init = function () {
     document.getElementById("propertyCallout" + this.CheckType).onclick = function () {
         if (this.classList.contains("propertyCalloutOpen")) {
             _this.Close();
-        } 
+        }
         else {
             _this.Open();
         }
     }
 }
 
-PropertyCallout.prototype.Open = function ()
-{
+PropertyCallout.prototype.Open = function () {
     if (openCallout) {
         openCallout.Close();
     }
@@ -33,16 +32,16 @@ PropertyCallout.prototype.Open = function ()
     var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
     element.setAttribute('style', 'display:block !important');
 
-    document.getElementById("propertyCalloutNameBar" + this.CheckType).style.display = "block";            
+    document.getElementById("propertyCalloutNameBar" + this.CheckType).style.display = "block";
 
     if (this.CheckType.toLowerCase() === "comparison") {
-        document.getElementById("propertyCalloutStatusBar" + this.CheckType).style.display = "block";            
+        document.getElementById("propertyCalloutStatusBar" + this.CheckType).style.display = "block";
     }
 }
 
 PropertyCallout.prototype.Close = function () {
     openCallout = undefined;
-    
+
     document.getElementById("propertyCallout" + this.CheckType).classList.remove("propertyCalloutOpen");
 
     var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
@@ -59,7 +58,7 @@ PropertyCallout.prototype.UpdateForComparison = function (
     propertyCalloutData) {
 
     var _this = this;
- 
+
     // if callout is not open. OPen it while data loading to avoid
     // issues with size
     var calloutOpen = true;
@@ -71,14 +70,14 @@ PropertyCallout.prototype.UpdateForComparison = function (
         calloutOpen = false;
     }
 
-    $("#propertyCalloutContainer" + this.CheckType).dxTabPanel({      
+    $("#propertyCalloutContainer" + this.CheckType).dxTabPanel({
         dataSource: [
             { title: "Properties", template: "tab1" },
             { title: "References", template: "tab2" },
             { title: "Comments", template: "tab3" },
         ],
         deferRendering: false
-    });    
+    });
 
     // remove dataset buttons
     var firstSourceDiv = document.getElementById("firstSource");
@@ -232,11 +231,11 @@ PropertyCallout.prototype.UpdateForCompliance = function (
     document.getElementById("propertyCalloutNameBar" + this.CheckType).children[0].textContent = propertyCalloutData.name;
 
     // hide callout if it was open to avoid
-   // issues with size
-   if (!calloutOpen) {
-       var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
-       element.setAttribute('style', 'display:none !important');
-   }
+    // issues with size
+    if (!calloutOpen) {
+        var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+        element.setAttribute('style', 'display:none !important');
+    }
 }
 
 PropertyCallout.prototype.LoadProperties = function (properties) {
@@ -362,8 +361,7 @@ PropertyCallout.prototype.LoadReferences = function (references) {
     });
 }
 
-PropertyCallout.prototype.LoadComments =function (comments, componentId, currentSrc)
-{    
+PropertyCallout.prototype.LoadComments = function (comments, componentId, currentSrc) {
     var _this = this;
 
     document.getElementById("commentsArea" + this.CheckType).innerHTML = "";
@@ -371,33 +369,25 @@ PropertyCallout.prototype.LoadComments =function (comments, componentId, current
     // Comments page
     $("#commentInput" + this.CheckType).dxTextArea({
         height: "60px",
+        valueChangeEvent: "keyup",
         onChange: function (e) {
+        },
+        onEnterKey: function (e) {           
+            if(!e.jQueryEvent.shiftKey)
+            {
+                _this.AddComment(componentId, currentSrc, comments);
+            }
+        },
+        onKeyDown: function (e) {
+            if (e.jQueryEvent.which == 13 && 
+                !e.jQueryEvent.shiftKey) {
+                e.jQueryEvent.preventDefault();
+            }
         }
     });
 
     document.getElementById("addCommentBtn" + this.CheckType).onclick = function () {
-        if (!componentId) {
-            return;
-        }
-
-        var commentInput = $('#commentInput' + _this.CheckType).dxTextArea('instance');
-        var value = commentInput.option('value');
-        commentInput.reset();
-        if (!value || value === "") {
-            return;
-        }
-
-        ReferenceManager.processCommentForComponentIds(value, [componentId], currentSrc).then(function (commentData) {
-            if (!commentData) {
-                return;
-            }
-
-            _this.ShowComment(commentData);
-
-            if (_this.CheckType.toLowerCase() === "comparison") {
-                comments.push(commentData);
-            }
-        });
+        _this.AddComment(componentId, currentSrc, comments);
     }
 
     // restore comments
@@ -405,11 +395,38 @@ PropertyCallout.prototype.LoadComments =function (comments, componentId, current
         for (var i = 0; i < comments.length; i++) {
             this.ShowComment(comments[i]);
         }
-    }   
+    }
+}
+
+PropertyCallout.prototype.AddComment = function (componentId, currentSrc, comments) {
+    if (!componentId) {
+        return;
+    }
+
+    var _this = this;
+
+    var commentInput = $('#commentInput' + this.CheckType).dxTextArea('instance');
+    var value = commentInput.option('value');
+    commentInput.reset();
+    if (!value || value === "") {
+        return;
+    }
+
+    ReferenceManager.processCommentForComponentIds(value, [componentId], currentSrc).then(function (commentData) {
+        if (!commentData) {
+            return;
+        }
+
+        _this.ShowComment(commentData);
+
+        if (_this.CheckType.toLowerCase() === "comparison") {
+            comments.push(commentData);
+        }
+    });
 }
 
 PropertyCallout.prototype.ShowComment = function (commentData) {
-    
+
     var commentsArea = document.getElementById("commentsArea" + this.CheckType);
 
     var card = document.createElement("Div");
@@ -421,7 +438,8 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
     var commentorDiv = document.createElement("div");
     commentorDiv.textContent = commentData.user;
     commentorDiv.style.fontSize = "10px";
-    commentorDiv.style.textAlign = "right";
+    commentorDiv.style.textAlign = "left";
+    commentorDiv.style.color = "gray";
     dataContainer.appendChild(commentorDiv);
 
     var commentDiv = document.createElement("div");
@@ -433,8 +451,9 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
     timeDiv.textContent = commentData.date;
     timeDiv.style.fontSize = "10px";
     timeDiv.style.textAlign = "right";
+    timeDiv.style.color = "gray";
     dataContainer.appendChild(timeDiv);
-    
+
     card.appendChild(dataContainer);
 
     commentsArea.appendChild(card);
@@ -447,7 +466,7 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
         // ReferenceManager.select(this);
     }
 
-    card.ondblclick = function () {           
+    card.ondblclick = function () {
     }
 
     card.onmouseover = function () {
