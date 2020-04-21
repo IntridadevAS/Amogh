@@ -15,11 +15,50 @@ function setUserName() {
     document.getElementById("userName").innerHTML = userinfo.alias;
 }
 
-function setCheckSpaceName() {
+function setCheckSpaceName(moduleName) {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     if(projectinfo !== null){
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / " + checkinfo.checkname;
+        
+        var projectNameSpan = document.createElement("span");
+        projectNameSpan.innerText = projectinfo.projectname;
+        projectNameSpan.onclick = function () {
+            // localStorage.removeItem("checkinfo");
+
+            var fromInfo = {
+                "proj": projectinfo,
+                "fromModule": moduleName
+            };
+            localStorage.setItem("fromInfo", JSON.stringify(fromInfo));
+
+            var overlay = document.getElementById("uiBlockingOverlay");
+            var popup = document.getElementById("returnProjectCenterPopup");
+
+            overlay.style.display = 'block';
+            popup.style.display = 'block';
+
+            popup.style.width = "581px";
+            popup.style.height = "155px";
+            popup.style.overflow = "hidden";
+
+            popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+            popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+        }
+        projectNameSpan.onmouseover = function () {
+            this.style.color = "gray";
+        }
+        projectNameSpan.onmouseout = function () {
+            this.style.color = "white";
+        }
+
+        var checkspaceNameSpan = document.createElement("span");
+        checkspaceNameSpan.innerText = " / " + checkinfo.checkname;
+        
+        var span = document.createElement('span');
+        span.appendChild(projectNameSpan);
+        span.appendChild(checkspaceNameSpan);
+        document.getElementById("checkSpaceName").appendChild(span);
+        // document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / " + checkinfo.checkname;
     }
 }
 
