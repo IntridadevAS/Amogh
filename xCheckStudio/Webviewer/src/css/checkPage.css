@@ -425,8 +425,8 @@ button[type="submit"] {
 
   .commentsArea{
     width: 100%;
-    height: calc(100% - 62px);
-    top: 0px;
+    height: calc(100% - 98px);
+    top: 30px;
     left: 0px;
     padding: 2px;
     overflow-y: scroll;
@@ -444,3 +444,16 @@ button[type="submit"] {
     bottom: 13px;
     right: 2px;   
   }
+
+  .searchBox
+  {
+    width: calc(100% - 30px);
+    padding: 2px;
+  }
+  
+.searchButton{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 4px;
+}

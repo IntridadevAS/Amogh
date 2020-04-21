@@ -225,6 +225,29 @@ PropertyCallout.prototype.Update = function (componentName,
         }
     }
 
+    //Create search control
+    $("#propertyCalloutSearchText" + this.Id).dxTextArea({
+        height: "30px",
+        valueChangeEvent: "keyup",
+        onChange: function (e) {
+        },
+        onEnterKey: function (e) {
+            if (!e.jQueryEvent.shiftKey) {
+                _this.Search();
+            }
+        },
+        onKeyDown: function (e) {
+            if (e.jQueryEvent.which == 13 &&
+                !e.jQueryEvent.shiftKey) {
+                e.jQueryEvent.preventDefault();
+            }
+        }
+    });
+
+    document.getElementById("propertyCalloutSearchBtn" + this.Id).onclick = function () {
+        _this.Search();
+    }
+
     document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].textContent = componentName;
 
     // hide callout if it was open to avoid
@@ -330,5 +353,37 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
 
     card.onmouseout = function () {
         ReferenceManager.UnHighlight(this);
+    }
+}
+
+PropertyCallout.prototype.Search = function () {
+
+    var searchInput = $('#propertyCalloutSearchText'+ this.Id).dxTextArea('instance');
+    var searchText = searchInput.option('value');
+
+    var targetDiv = document.getElementById("commentsArea"+ this.Id);
+    var commentCards = targetDiv.getElementsByClassName('commentCard');
+
+    if (!searchText ||
+        searchText === "") {
+        // show all
+
+        for (i = 0; i < commentCards.length; i++) {
+            var card = commentCards[i];
+            card.style.display = "block";
+        }
+    }
+    {
+        var filter = searchText.toLowerCase();
+
+        for (i = 0; i < commentCards.length; i++) {
+            var card = commentCards[i];
+            card.style.display = "none";
+            for (var j = 0; j < card.children.length; j++) {
+                if (card.children[j].innerText.toLowerCase().includes(filter)) {
+                    card.style.display = "block";
+                }
+            }
+        }
     }
 }

@@ -396,6 +396,29 @@ PropertyCallout.prototype.LoadComments = function (comments, componentId, curren
             this.ShowComment(comments[i]);
         }
     }
+
+    //Create search control
+    $("#propertyCalloutSearchText" + this.CheckType).dxTextArea({
+        height: "30px",
+        valueChangeEvent: "keyup",
+        onChange: function (e) {
+        },
+        onEnterKey: function (e) {
+            if (!e.jQueryEvent.shiftKey) {
+                _this.Search();
+            }
+        },
+        onKeyDown: function (e) {
+            if (e.jQueryEvent.which == 13 &&
+                !e.jQueryEvent.shiftKey) {
+                e.jQueryEvent.preventDefault();
+            }
+        }
+    });
+
+    document.getElementById("propertyCalloutSearchBtn" + this.CheckType).onclick = function () {
+        _this.Search();
+    }
 }
 
 PropertyCallout.prototype.AddComment = function (componentId, currentSrc, comments) {
@@ -484,4 +507,36 @@ PropertyCallout.prototype.ApplyHighlightColor = function (row) {
 
 PropertyCallout.prototype.RemoveHighlightColor = function (row) {
     row.style.backgroundColor = "#ffffff";
+}
+
+PropertyCallout.prototype.Search = function () {
+
+    var searchInput = $('#propertyCalloutSearchText' + this.CheckType).dxTextArea('instance');
+    var searchText = searchInput.option('value');
+
+    var targetDiv = document.getElementById("commentsArea" + this.CheckType);
+    var commentCards = targetDiv.getElementsByClassName('commentCard');
+
+    if (!searchText ||
+        searchText === "") {
+        // show all
+
+        for (i = 0; i < commentCards.length; i++) {
+            var card = commentCards[i];
+            card.style.display = "block";
+        }
+    }
+    {
+        var filter = searchText.toLowerCase();
+
+        for (i = 0; i < commentCards.length; i++) {
+            var card = commentCards[i];
+            card.style.display = "none";
+            for (var j = 0; j < card.children.length; j++) {
+                if (card.children[j].innerText.toLowerCase().includes(filter)) {
+                    card.style.display = "block";
+                }
+            }
+        }
+    }
 }
