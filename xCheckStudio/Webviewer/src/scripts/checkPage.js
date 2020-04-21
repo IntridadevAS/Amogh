@@ -1,10 +1,11 @@
 //var currentTabId;
-
+var commentsCallout;
+var openCallout;
 let model = {
   activeTabs: 0,
   selectedTab: [],
   currentView: null,
-  currentTabId: undefined,
+  currentTabId: null,
   loadSavedCheckspace: false,
   datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
   checkcaseSupportedTypes: undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
@@ -339,11 +340,11 @@ let viewPanels = {
     selected.style.opacity = 0.2;
   },
   
-  onMouseOverPropertyCalloutBtn: function (selected) {
+  onMouseOverCalloutBtn: function (selected) {
     selected.style.opacity = 1;
   },
 
-  onMouseOutPropertyCalloutBtn: function (selected) {
+  onMouseOutCalloutBtn: function (selected) {
     selected.style.opacity = 0.2;
   },
 
@@ -355,6 +356,16 @@ let viewPanels = {
   onMouseOutPropertyCallout: function (id) {
     document.getElementById("propertyCalloutContainer" + id).style.opacity = 0.6;
     document.getElementById("propertyCalloutNameBar" + id).style.opacity = 0.6;
+  },
+  
+  onMouseOverCommentsCallout: function () {    
+    document.getElementById("commentsCalloutContainer").style.opacity = 1;
+    document.getElementById("commentsCalloutNameBar").style.opacity = 1;
+  },
+  
+  onMouseOutCommentsCallout: function () {
+    document.getElementById("commentsCalloutContainer").style.opacity = 0.6;
+    document.getElementById("commentsCalloutNameBar").style.opacity = 0.6;
   }
 }
 

@@ -1048,6 +1048,43 @@
             <iframe id="IFramelargeAnalytics" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
         </div>
+
+        <!-- Comments Callout -->
+        <div id="commentsCalloutBtn" class="commentsCalloutBtn" 
+          onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+          onmouseout="viewPanels.onMouseOutCalloutBtn(this)">
+        </div>
+        
+        <!-- Name Bar -->
+        <div id="commentsCalloutNameBar" class="commentsCalloutNameBar" 
+        onmouseover="viewPanels.onMouseOverCommentsCallout()"
+        onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          <span> </span>
+        </div>
+        
+        <!-- Comments Callout Container -->
+        <div id="commentsCalloutContainer" class="commentsCalloutContainer"
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" 
+          onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          <div data-options="dxTemplate : { name: 'tab1' } ">
+            <div class="commentsTabPage">
+              <div id="commentsCalloutCommentsArea" class="commentsArea">
+        
+              </div>
+              <div class="commentInput">
+                <div id="commentsCalloutCommentInput">
+                </div>
+                <div id="commentsCalloutAddCommentBtn" class="addCommentBtn">
+                  <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-options="dxTemplate : { name: 'tab2' } ">
+            <div style="width: 100%; height: 100%; background: white;"></div>
+          </div>
+        </div>
+
         <div id="viewPanelComparison" class="viewPanel">
           <div id="tableDataComparison" class="tableContainer">
             <div class="tablesArea">
@@ -1077,8 +1114,8 @@
 
             <!-- Property callout btn for comparison -->
             <div id="propertyCalloutcomparison" class="propertyCalloutBtn"
-              onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
-              onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)"></div>
+              onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
             
             <!-- Property callout container-->
             <div id="propertyCalloutNameBarcomparison" class="propertyCalloutNameBar"
@@ -1106,7 +1143,7 @@
                     <div id="commentInputcomparison">
                     </div>
                     <div id="addCommentBtncomparison" class="addCommentBtn">
-                      <img src="images\arrow.png" style="width: 50px; height: 50px;" />
+                      <img src="images\arrow.png" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
                 </div>
@@ -1231,8 +1268,8 @@
 
              <!-- Property callout btn for comparison -->
              <div id="propertyCalloutcompliance" class="propertyCalloutBtn"
-             onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
-             onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)"></div>
+             onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+             onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
            
            <!-- Property callout container-->
            <div id="propertyCalloutNameBarcompliance" class="propertyCalloutNameBar"
@@ -1260,7 +1297,7 @@
                    <div id="commentInputcompliance">
                    </div>
                    <div id="addCommentBtncompliance" class="addCommentBtn">
-                     <img src="images\arrow.png" style="width: 50px; height: 50px;" />
+                     <img src="images\arrow.png" style="width: 25px; height: 25px;" />
                    </div>
                  </div>
                </div>
@@ -1543,6 +1580,7 @@
   <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script> 
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewPropertyCallout.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewCommentsCallout.js"></script>
   <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
 
   <script>
@@ -1564,6 +1602,9 @@
       var disableItems = [];
       // create drawer menu
       DrawerMenu.create(disableItems);
+
+      commentsCallout = new CommentsCallout();
+      commentsCallout.Init();
 
       // init review module
       initReviewModule().then(function (result) {

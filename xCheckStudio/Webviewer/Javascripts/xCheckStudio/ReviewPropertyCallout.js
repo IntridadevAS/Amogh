@@ -13,28 +13,45 @@ PropertyCallout.prototype.Init = function () {
 
     document.getElementById("propertyCallout" + this.CheckType).onclick = function () {
         if (this.classList.contains("propertyCalloutOpen")) {
-            this.classList.remove("propertyCalloutOpen");
-
-            var element = document.getElementById("propertyCalloutContainer" + _this.CheckType);
-            element.setAttribute('style', 'display:none !important');
-
-            document.getElementById("propertyCalloutNameBar" + _this.CheckType).style.display = "none";
-
-            if (_this.CheckType.toLowerCase() === "comparison") {
-                document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.display = "none";
-            }
-        } else {
-            this.classList.add("propertyCalloutOpen");
-
-            var element = document.getElementById("propertyCalloutContainer" + _this.CheckType);
-            element.setAttribute('style', 'display:block !important');
-
-            document.getElementById("propertyCalloutNameBar" + _this.CheckType).style.display = "block";            
-
-            if (_this.CheckType.toLowerCase() === "comparison") {
-                document.getElementById("propertyCalloutStatusBar" + _this.CheckType).style.display = "block";            
-            }
+            _this.Close();
+        } 
+        else {
+            _this.Open();
         }
+    }
+}
+
+PropertyCallout.prototype.Open = function ()
+{
+    if (openCallout) {
+        openCallout.Close();
+    }
+    openCallout = this;
+
+    document.getElementById("propertyCallout" + this.CheckType).classList.add("propertyCalloutOpen");
+
+    var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+    element.setAttribute('style', 'display:block !important');
+
+    document.getElementById("propertyCalloutNameBar" + this.CheckType).style.display = "block";            
+
+    if (this.CheckType.toLowerCase() === "comparison") {
+        document.getElementById("propertyCalloutStatusBar" + this.CheckType).style.display = "block";            
+    }
+}
+
+PropertyCallout.prototype.Close = function () {
+    openCallout = undefined;
+    
+    document.getElementById("propertyCallout" + this.CheckType).classList.remove("propertyCalloutOpen");
+
+    var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+    element.setAttribute('style', 'display:none !important');
+
+    document.getElementById("propertyCalloutNameBar" + this.CheckType).style.display = "none";
+
+    if (this.CheckType.toLowerCase() === "comparison") {
+        document.getElementById("propertyCalloutStatusBar" + this.CheckType).style.display = "none";
     }
 }
 
@@ -42,11 +59,19 @@ PropertyCallout.prototype.UpdateForComparison = function (
     propertyCalloutData) {
 
     var _this = this;
+ 
+    // if callout is not open. OPen it while data loading to avoid
+    // issues with size
+    var calloutOpen = true;
+    var propertyCalloutBtn = document.getElementById("propertyCallout" + this.CheckType);
+    if (!propertyCalloutBtn.classList.contains("propertyCalloutOpen")) {
+        var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+        element.setAttribute('style', 'display:block !important');
 
+        calloutOpen = false;
+    }
 
-    $("#propertyCalloutContainer" + this.CheckType).dxTabPanel({
-        width: "100%",
-        height: "100%",
+    $("#propertyCalloutContainer" + this.CheckType).dxTabPanel({      
         dataSource: [
             { title: "Properties", template: "tab1" },
             { title: "References", template: "tab2" },
@@ -168,12 +193,29 @@ PropertyCallout.prototype.UpdateForComparison = function (
             isFirst = false;
         }
     }
+
+    // hide callout if it was open to avoid
+    // issues with size
+    if (!calloutOpen) {
+        var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+        element.setAttribute('style', 'display:none !important');
+    }
 }
 
 PropertyCallout.prototype.UpdateForCompliance = function (
     propertyCalloutData) {
     var _this = this;
 
+    // if callout is not open. OPen it while data loading to avoid
+    // issues with size
+    var calloutOpen = true;
+    var propertyCalloutBtn = document.getElementById("propertyCallout" + this.CheckType);
+    if (!propertyCalloutBtn.classList.contains("propertyCalloutOpen")) {
+        var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+        element.setAttribute('style', 'display:block !important');
+
+        calloutOpen = false;
+    }
 
     $("#propertyCalloutContainer" + this.CheckType).dxTabPanel({
         dataSource: [
@@ -188,6 +230,13 @@ PropertyCallout.prototype.UpdateForCompliance = function (
     this.LoadReferences(propertyCalloutData.references);
     this.LoadComments(propertyCalloutData.comments, propertyCalloutData.componentId, propertyCalloutData.src);
     document.getElementById("propertyCalloutNameBar" + this.CheckType).children[0].textContent = propertyCalloutData.name;
+
+    // hide callout if it was open to avoid
+   // issues with size
+   if (!calloutOpen) {
+       var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
+       element.setAttribute('style', 'display:none !important');
+   }
 }
 
 PropertyCallout.prototype.LoadProperties = function (properties) {
@@ -408,4 +457,12 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
     card.onmouseout = function () {
         ReferenceManager.UnHighlight(this);
     }
+}
+
+PropertyCallout.prototype.ApplyHighlightColor = function (row) {
+    row.style.backgroundColor = "#e6e8e8";
+}
+
+PropertyCallout.prototype.RemoveHighlightColor = function (row) {
+    row.style.backgroundColor = "#ffffff";
 }

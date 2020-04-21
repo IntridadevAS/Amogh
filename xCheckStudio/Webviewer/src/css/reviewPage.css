@@ -424,13 +424,13 @@ tr {
 
 .propertyCalloutBtn{
   background-color: var(--xCheckDarkGrey);
-  background-image: url("../../public/symbols/backArrow.svg");
+  background-image: url("../../public/symbols/PropertyCalloutOpen.svg");
   background-position: center;
   background-repeat: no-repeat;
   position: absolute;
   opacity: 0.2;
   right: 5px;
-  top: 50%;
+  top: calc(50% - 15px);
   height: 30px;
   width: 30px;
   border: var(--borderWidth) solid var(--xCheckMedGrey);
@@ -441,14 +441,14 @@ tr {
 }
 
 .propertyCalloutOpen {
-  background-image: url("../../public/symbols/forwardArrow.svg");
+  background-image: url("../../public/symbols/PropertyCalloutOpen.svg");
 }
 
 .propertyCalloutContainerForComparison{
   position: absolute;
   right: 0px;
   top: 30px;
-  width: 25%;  
+  width: 330px;  
   height: calc(100% - 60px);
   cursor: pointer;
   z-index: 2;
@@ -462,7 +462,7 @@ tr {
   position: absolute;
   right: 0px;
   top: 30px;
-  width: 25%;
+  width: 330px;
   height: calc(100% - 30px);     
   cursor: pointer;
   z-index: 2;
@@ -476,7 +476,7 @@ tr {
     position: absolute;
     right: 0px;       
     top: 0px;
-    width: 25%;    
+    width: 330px;    
     height: 30px;
     display: none;  
     z-index : 3;
@@ -513,7 +513,7 @@ tr {
   .addCommentBtn
   {
     position: absolute;
-    bottom: 2px;
+    bottom: 13px;
     right: 2px;   
   }
 
@@ -525,10 +525,63 @@ tr {
   .propertyCalloutStatusBar{
     position: absolute;
     right: 0px;  
-    width: 25%;
+    width: 330px;
     top: calc(100% - 30px);
     height: 30px;
     z-index: 2;
     background: rgba(255, 255, 255, 0.6);
     display: none;
+  }
+
+  .commentsCalloutBtn{
+    background-color: var(--xCheckDarkGrey);
+    background-image: url("../../public/symbols/ChatBubleOpen.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    opacity: 0.2;
+    right: 15px;
+    top: 50%;
+    height: 30px;
+    width: 30px;
+    border: var(--borderWidth) solid var(--xCheckMedGrey);
+    border-radius: var(--borderRadiusVal);
+    cursor: pointer;
+    z-index: 4;
+    background-size :contain;
+  }
+  
+  .commentsCalloutOpen {
+    background-image: url("../../public/symbols/ChatBubleOpen.svg");
+  }
+
+  .commentsCalloutNameBar
+  {
+    position: absolute;
+    right: 10px;       
+    top: 10px;
+    width: 330px;
+    height: 30px;
+    display: none;  
+    z-index : 3;
+    /* opacity: 0.6;   */
+    background : white;
+    color: black;
+    padding : 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .commentsCalloutContainer{
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    width: 330px;
+    height: 100% ; 
+    cursor: pointer;
+    z-index: 2;
+    background: rgba(169,169,169, 0.6);
+    display: none !important;
+    overflow: hidden;
   }

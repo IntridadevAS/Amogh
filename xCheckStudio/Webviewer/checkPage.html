@@ -1136,8 +1136,44 @@
 
           </div>
         </div>
-      </div>
+      </div>      
+
       <div class="viewsContainer" id="viewsContainer">
+      
+        <!-- Comments Callout -->
+        <div id="commentsCalloutBtn" class="commentsCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+          onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
+        
+        <!-- Name Bar -->
+        <div id="commentsCalloutNameBar" class="commentsCalloutNameBar"
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" 
+          onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          <span> </span>
+        </div>
+        
+        <!-- Comments Callout Container -->
+        <div id="commentsCalloutContainer" class="commentsCalloutContainer"
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" 
+          onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          <div data-options="dxTemplate : { name: 'tab1' } ">
+            <div class="commentsTabPage">
+              <div id="commentsCalloutCommentsArea" class="commentsArea">
+        
+              </div>
+              <div class="commentInput">
+                <div id="commentsCalloutCommentInput">
+                </div>
+                <div id="commentsCalloutAddCommentBtn" class="addCommentBtn">
+                  <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-options="dxTemplate : { name: 'tab2' } ">
+            <div style="width: 100%; height: 100%; background: white;"></div>
+          </div>
+        </div>
+
         <div id="addFiles" class="addFiles" onClick="viewPanels.hideAddPanel()">
           <div class="loadDataContent">
             <h3>Load Data</h3>
@@ -1170,8 +1206,11 @@
             <div class="visualizerContainer">
               <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
                 onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-              <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
-                onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)" onClick="viewPanels.propertyCallout(this)"></div>
+              
+              <!-- Properties Callout Button -->
+              <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+                onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
+
               <!-- visualizerA -->
           
               <!-- explode slider -->
@@ -1190,37 +1229,36 @@
                 </div>
               </div>
           
-              <!-- Property callout container--> 
+              <!-- Property callout container-->
               <div id="propertyCalloutNameBara" class="propertyCalloutNameBar"
-              onmouseover="viewPanels.onMouseOverPropertyCallout('a')" 
-              onmouseout="viewPanels.onMouseOutPropertyCallout('a')" >
+                onmouseover="viewPanels.onMouseOverPropertyCallout('a')" 
+                onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
                 <span> </span>
-               </div>
-              <div id="propertyCalloutContainera" class="propertyCalloutContainer" 
-              style="opacity: 0.6;" 
-              onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')" >                              
-                  <div data-options="dxTemplate : { name: 'tab1' } ">                  
-                      <div id="propertyCalloutPropGrida"></div>
-                  </div>
-                  <div data-options="dxTemplate : { name: 'tab2' } ">
-                    <div id="propertyCalloutRefGrida"></div>
-                  </div>
-                  <div data-options="dxTemplate : { name: 'tab3' } ">
-                    <div class="commentsTabPage">
-                      <div id="commentsAreaa" class="commentsArea">
-                   
+              </div>
+              <div id="propertyCalloutContainera" class="propertyCalloutContainer" style="opacity: 0.6;"
+                onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="propertyCalloutPropGrida"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab2' } ">
+                  <div id="propertyCalloutRefGrida"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab3' } ">
+                  <div class="commentsTabPage">
+                    <div id="commentsAreaa" class="commentsArea">
+              
+                    </div>
+                    <div class="commentInput">
+                      <div id="commentInputa">
                       </div>
-                      <div class="commentInput">
-                        <div id="commentInputa">                        
-                        </div>
-                        <div id="addCommentBtna" class="addCommentBtn">
-                            <img src="images\arrow.png" style="width: 50px; height: 50px;"/>
-                        </div>
+                      <div id="addCommentBtna" class="addCommentBtn">
+                        <img src="images\arrow.png" style="width: 25px; height: 25px;" />
                       </div>
                     </div>
                   </div>
-                  </div>
-            
+                </div>
+              </div>             
+              
               <div id="visualizerA" class="tempContainer"> </div>
           
             </div>          
@@ -1238,8 +1276,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnb" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="propertyCalloutb" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
-              onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)" onClick="viewPanels.propertyCallout(this)"></div>
+            <div id="propertyCalloutb" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
             <!-- visualizerB -->
             <!-- explode slider -->
             <div id="explodeOverlay2" class="sliderOverlay" style="display: none">
@@ -1281,7 +1319,7 @@
                     <div id="commentInputb">                        
                     </div>
                     <div id="addCommentBtnb" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 50px; height: 50px;"/>
+                        <img src="images\arrow.png" style="width: 25px; height: 25px;"/>
                     </div>
                   </div>
                 </div>
@@ -1305,8 +1343,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnc" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="propertyCalloutc" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
-              onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)" onClick="viewPanels.propertyCallout(this)"></div>
+            <div id="propertyCalloutc" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
             <!-- visualizerC -->
             <!-- explode slider -->
             <div id="explodeOverlay3" class="sliderOverlay" style="display: none">
@@ -1348,7 +1386,7 @@
                     <div id="commentInputc">                        
                     </div>
                     <div id="addCommentBtnc" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 50px; height: 50px;"/>
+                        <img src="images\arrow.png" style="width: 25px; height: 25px;"/>
                     </div>
                   </div>
                 </div>
@@ -1371,8 +1409,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnd" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="propertyCalloutd" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverPropertyCalloutBtn(this)"
-              onmouseout="viewPanels.onMouseOutPropertyCalloutBtn(this)" onClick="viewPanels.propertyCallout(this)"></div>
+            <div id="propertyCalloutd" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
             <!-- visualizerD -->
             <!-- explode slider -->
             <div id="explodeOverlay4" class="sliderOverlay" style="display: none">
@@ -1414,7 +1452,7 @@
                     <div id="commentInputd">                        
                     </div>
                     <div id="addCommentBtnd" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 50px; height: 50px;"/>
+                        <img src="images\arrow.png" style="width: 25px; height: 25px;"/>
                     </div>
                   </div>
                 </div>             
@@ -1612,6 +1650,7 @@
   <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script> 
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\PropertyCallout.js"></script>   
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CommentsCallout.js"></script>
   <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
 
   <script>
@@ -1644,6 +1683,10 @@
         // create drawer menu
         DrawerMenu.create(["check", "output"]);
 
+        //Init comments callout
+        commentsCallout = new CommentsCallout();
+        commentsCallout.Init();
+
         loadCheckCases().then(function (result) {
 
           //load data from saved check space
@@ -1653,7 +1696,7 @@
           // hideBusyIndicator();
           // hide loading overlay
           document.getElementById("uiBlockingOverlay").style.display = "none";
-        });
+        }); 
       }
 
     function showBusyIndicator() {

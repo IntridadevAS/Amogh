@@ -12,31 +12,41 @@ PropertyCallout.prototype.Init = function () {
     var _this = this;
 
     document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].innerText = "";
-    
+
     document.getElementById("propertyCallout" + this.Id).onclick = function () {
         if (this.classList.contains("propertyCalloutOpen")) {
-            this.classList.remove("propertyCalloutOpen");
-
-            var element = document.getElementById("propertyCalloutContainer" + _this.Id);
-            element.setAttribute('style', 'display:none !important');
-            // element.style.width = "0%";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "none";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "0%";
-
-            document.getElementById("propertyCalloutNameBar" + _this.Id).style.display = "none";
-
-        } else {
-            this.classList.add("propertyCalloutOpen");
-
-            var element = document.getElementById("propertyCalloutContainer" + _this.Id);
-            element.setAttribute('style', 'display:block !important');
-            // element.style.width = "25%";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "block";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "25%";        
-
-            document.getElementById("propertyCalloutNameBar" + _this.Id).style.display = "block";
+            _this.Close();
+        }
+         else 
+         {
+            _this.Open();
         }
     }
+}
+
+PropertyCallout.prototype.Open = function () {
+    if (openCallout) {
+        openCallout.Close();
+    }
+    openCallout = this;
+
+    document.getElementById("propertyCallout" + this.Id).classList.add("propertyCalloutOpen");
+
+    var element = document.getElementById("propertyCalloutContainer" + this.Id);
+    element.setAttribute('style', 'display:block !important');    
+
+    document.getElementById("propertyCalloutNameBar" + this.Id).style.display = "block";
+}
+
+PropertyCallout.prototype.Close = function () {
+    openCallout = undefined;
+
+    document.getElementById("propertyCallout" + this.Id).classList.remove("propertyCalloutOpen");
+
+    var element = document.getElementById("propertyCalloutContainer" + this.Id);
+    element.setAttribute('style', 'display:none !important');
+  
+    document.getElementById("propertyCalloutNameBar" + this.Id).style.display = "none";
 }
 
 PropertyCallout.prototype.Update = function (componentName,
@@ -46,8 +56,18 @@ PropertyCallout.prototype.Update = function (componentName,
                                              commentsData) {
 
     var _this = this;  
-       
-   
+      
+    // if callout is not open. OPen it while data loading to avoid
+    // issues with size
+    var calloutOpen = true;
+    var propertyCalloutBtn = document.getElementById("propertyCallout" + this.Id);
+    if (!propertyCalloutBtn.classList.contains("propertyCalloutOpen")) {
+        var element = document.getElementById("propertyCalloutContainer" + this.Id);
+        element.setAttribute('style', 'display:block !important');
+
+        calloutOpen = false;
+    }
+
     $("#propertyCalloutContainer" + this.Id).dxTabPanel({
         dataSource: [
             { title: "Properties", template: "tab1" },
@@ -211,6 +231,13 @@ PropertyCallout.prototype.Update = function (componentName,
     }
 
     document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].textContent = componentName;
+
+    // hide callout if it was open to avoid
+    // issues with size
+    if (!calloutOpen) {
+        var element = document.getElementById("propertyCalloutContainer" + this.Id);
+        element.setAttribute('style', 'display:none !important');
+    }
 }
 
 PropertyCallout.prototype.ApplyHighlightColor = function (row) {
@@ -221,16 +248,7 @@ PropertyCallout.prototype.RemoveHighlightColor = function (row) {
     row.style.backgroundColor = "#ffffff";
 }
 
-PropertyCallout.prototype.ShowComment = function (commentData) {
-    // var referenceIFrame = document.getElementById("referenceIFrame");
-    // if (!referenceIFrame) {
-    //     return;
-    // }
-
-    // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-    // if (!commentsList) {
-    //     return;
-    // }
+PropertyCallout.prototype.ShowComment = function (commentData) {  
 
     var commentsArea = document.getElementById("commentsArea" + this.Id);
 
