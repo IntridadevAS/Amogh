@@ -168,6 +168,9 @@
             // copy hidden components
             CopyVersions($dbh, $tempDbh);
 
+            // copy hidden components
+            CopyCheckspaceComments($dbh, $tempDbh);
+
             $tempDbh->commit();
             $tempDbh->beginTransaction();     
             
@@ -235,6 +238,50 @@
             }   
         }     
     }
+
+function CopyCheckspaceComments($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM checkspaceComments;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS checkspaceComments;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS checkspaceComments(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            comment TEXT     
+          )';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO checkspaceComments(id, comment) VALUES(?,?)");
+
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['comment']
+            ));
+        }
+    }
+}
+
+function ReadCheckspaceComments($tempDbh)
+{
+    $comments = array();
+    if ($tempDbh) {
+        try {
+            $results = $tempDbh->query("SELECT *FROM checkspaceComments;");
+
+            if ($results) {
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                    array_push($comments, $record['comment']);
+                }
+            }
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+    return $comments;
+}
 
     function  CopyHiddenComponents($fromDbh, $toDbh)
     {     
@@ -473,6 +520,9 @@
                 $results['checkcaseInfo'] = $checkcaseInfo;
                 
             }
+
+            $checkspaceComments = ReadCheckspaceComments($tempDbh);
+            $results["checkspaceComments"] = $checkspaceComments;
         }
         catch(Exception $e) 
         {             

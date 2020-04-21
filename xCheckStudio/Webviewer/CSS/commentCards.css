@@ -20,4 +20,5 @@
   .commentContainer {
     padding: 2px 16px;
     color: black;
+    overflow: hidden
   }

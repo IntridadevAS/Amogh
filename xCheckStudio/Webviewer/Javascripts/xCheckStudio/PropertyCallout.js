@@ -1,5 +1,5 @@
 function PropertyCallout(id) {
-    this.Id = id;  
+    this.Id = id;
 
     this.SelectedRowKey = {
         "properties": undefined,
@@ -12,67 +12,86 @@ PropertyCallout.prototype.Init = function () {
     var _this = this;
 
     document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].innerText = "";
-    
+
     document.getElementById("propertyCallout" + this.Id).onclick = function () {
         if (this.classList.contains("propertyCalloutOpen")) {
-            this.classList.remove("propertyCalloutOpen");
-
-            var element = document.getElementById("propertyCalloutContainer" + _this.Id);
-            element.setAttribute('style', 'display:none !important');
-            // element.style.width = "0%";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "none";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "0%";
-
-            document.getElementById("propertyCalloutNameBar" + _this.Id).style.display = "none";
-
-        } else {
-            this.classList.add("propertyCalloutOpen");
-
-            var element = document.getElementById("propertyCalloutContainer" + _this.Id);
-            element.setAttribute('style', 'display:block !important');
-            // element.style.width = "25%";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.display = "block";
-            // document.getElementById("propertyCalloutContainer" + _this.Id).style.width = "25%";        
-
-            document.getElementById("propertyCalloutNameBar" + _this.Id).style.display = "block";
+            _this.Close();
+        }
+        else {
+            _this.Open();
         }
     }
 }
 
-PropertyCallout.prototype.Update = function (componentName,
-                                             componentId,
-                                             properties, 
-                                             references,
-                                             commentsData) {
+PropertyCallout.prototype.Open = function () {
+    if (openCallout) {
+        openCallout.Close();
+    }
+    openCallout = this;
 
-    var _this = this;  
-       
-   
+    document.getElementById("propertyCallout" + this.Id).classList.add("propertyCalloutOpen");
+
+    var element = document.getElementById("propertyCalloutContainer" + this.Id);
+    element.setAttribute('style', 'display:block !important');
+
+    document.getElementById("propertyCalloutNameBar" + this.Id).style.display = "block";
+}
+
+PropertyCallout.prototype.Close = function () {
+    openCallout = undefined;
+
+    document.getElementById("propertyCallout" + this.Id).classList.remove("propertyCalloutOpen");
+
+    var element = document.getElementById("propertyCalloutContainer" + this.Id);
+    element.setAttribute('style', 'display:none !important');
+
+    document.getElementById("propertyCalloutNameBar" + this.Id).style.display = "none";
+}
+
+PropertyCallout.prototype.Update = function (componentName,
+    componentId,
+    properties,
+    references,
+    commentsData) {
+
+    var _this = this;
+
+    // if callout is not open. OPen it while data loading to avoid
+    // issues with size
+    var calloutOpen = true;
+    var propertyCalloutBtn = document.getElementById("propertyCallout" + this.Id);
+    if (!propertyCalloutBtn.classList.contains("propertyCalloutOpen")) {
+        var element = document.getElementById("propertyCalloutContainer" + this.Id);
+        element.setAttribute('style', 'display:block !important');
+
+        calloutOpen = false;
+    }
+
     $("#propertyCalloutContainer" + this.Id).dxTabPanel({
         dataSource: [
             { title: "Properties", template: "tab1" },
-            { title: "References", template: "tab2"  },
+            { title: "References", template: "tab2" },
             { title: "Comments", template: "tab3" },
         ],
         deferRendering: false
     });
 
-     // properties grid
-     var propertiesColumns = [];
+    // properties grid
+    var propertiesColumns = [];
 
-     var column = {};
-     column["caption"] = "Name";
-     column["dataField"] = "Name";
-     column["width"] = "50%";
-     column["visible"] = true;
-     propertiesColumns.push(column);
+    var column = {};
+    column["caption"] = "Name";
+    column["dataField"] = "Name";
+    column["width"] = "50%";
+    column["visible"] = true;
+    propertiesColumns.push(column);
 
-     column = {};
-     column["caption"] = "Value";
-     column["dataField"] = "Value";
-     column["width"] = "50%";
-     column["visible"] = true;
-     propertiesColumns.push(column);
+    column = {};
+    column["caption"] = "Value";
+    column["dataField"] = "Value";
+    column["width"] = "50%";
+    column["visible"] = true;
+    propertiesColumns.push(column);
 
     $("#propertyCalloutPropGrid" + this.Id).dxDataGrid({
         columns: propertiesColumns,
@@ -107,7 +126,7 @@ PropertyCallout.prototype.Update = function (componentName,
     // Reference grid
     var referencesColumns = [];
 
-    var column = {};   
+    var column = {};
     column["caption"] = "Type";
     column["dataField"] = "Type";
     column["width"] = "25%";
@@ -120,8 +139,8 @@ PropertyCallout.prototype.Update = function (componentName,
     column["width"] = "75%";
     column["visible"] = true;
     column["cellTemplate"] = function (container, options) {
-         var value =options.data.Value;
-         var type =options.data.Type;
+        var value = options.data.Value;
+        var type = options.data.Type;
         $('<a/>').addClass('dx-link')
             .text(options.data.Value)
             .on('dxclick', function () {
@@ -132,7 +151,7 @@ PropertyCallout.prototype.Update = function (componentName,
                     win.loadURL(value);
                 }
                 else if (type.toLowerCase() === "image" ||
-                type.toLowerCase() === "document") {
+                    type.toLowerCase() === "document") {
                     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
                     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
@@ -142,7 +161,7 @@ PropertyCallout.prototype.Update = function (componentName,
                 }
             })
             .appendTo(container);
-    } 
+    }
     referencesColumns.push(column);
 
     $("#propertyCalloutRefGrid" + this.Id).dxDataGrid({
@@ -178,29 +197,25 @@ PropertyCallout.prototype.Update = function (componentName,
     // Comments page
     $("#commentInput" + this.Id).dxTextArea({
         height: "60px",
-        onChange: function (e) {          
+        valueChangeEvent: "keyup",
+        onChange: function (e) {
+        },
+        onEnterKey: function (e) {           
+            if(!e.jQueryEvent.shiftKey)
+            {
+                _this.AddComment(componentId);
+            }
+        },
+        onKeyDown: function (e) {
+            if (e.jQueryEvent.which == 13 && 
+                !e.jQueryEvent.shiftKey) {
+                e.jQueryEvent.preventDefault();
+            }
         }
     });
 
     document.getElementById("addCommentBtn" + this.Id).onclick = function () {
-        if (!componentId) {
-            return;
-        }
-
-        var commentInput = $('#commentInput' + _this.Id).dxTextArea('instance');
-        var value = commentInput.option('value');
-        commentInput.reset();
-        if (!value || value === "") {
-            return;
-        }
-
-        ReferenceManager.processCommentForComponentIds(value, [componentId]).then(function (commentData) {
-            if (!commentData) {
-                return;
-            }
-
-            _this.ShowComment(commentData);
-        });
+        _this.AddComment(componentId);
     }
 
     // restore comments
@@ -210,7 +225,60 @@ PropertyCallout.prototype.Update = function (componentName,
         }
     }
 
+    //Create search control
+    $("#propertyCalloutSearchText" + this.Id).dxTextArea({
+        height: "30px",
+        valueChangeEvent: "keyup",
+        onChange: function (e) {
+        },
+        onEnterKey: function (e) {
+            if (!e.jQueryEvent.shiftKey) {
+                _this.Search();
+            }
+        },
+        onKeyDown: function (e) {
+            if (e.jQueryEvent.which == 13 &&
+                !e.jQueryEvent.shiftKey) {
+                e.jQueryEvent.preventDefault();
+            }
+        }
+    });
+
+    document.getElementById("propertyCalloutSearchBtn" + this.Id).onclick = function () {
+        _this.Search();
+    }
+
     document.getElementById("propertyCalloutNameBar" + _this.Id).children[0].textContent = componentName;
+
+    // hide callout if it was open to avoid
+    // issues with size
+    if (!calloutOpen) {
+        var element = document.getElementById("propertyCalloutContainer" + this.Id);
+        element.setAttribute('style', 'display:none !important');
+    }
+}
+
+PropertyCallout.prototype.AddComment = function (componentId) {
+    if (!componentId) {
+        return;
+    }
+
+    var _this = this;
+
+    var commentInput = $('#commentInput' + this.Id).dxTextArea('instance');
+    var value = commentInput.option('value');
+    commentInput.reset();
+    if (!value || value === "") {
+        return;
+    }
+
+    ReferenceManager.processCommentForComponentIds(value, [componentId]).then(function (commentData) {
+        if (!commentData) {
+            return;
+        }
+
+        _this.ShowComment(commentData);
+    });
 }
 
 PropertyCallout.prototype.ApplyHighlightColor = function (row) {
@@ -222,15 +290,6 @@ PropertyCallout.prototype.RemoveHighlightColor = function (row) {
 }
 
 PropertyCallout.prototype.ShowComment = function (commentData) {
-    // var referenceIFrame = document.getElementById("referenceIFrame");
-    // if (!referenceIFrame) {
-    //     return;
-    // }
-
-    // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-    // if (!commentsList) {
-    //     return;
-    // }
 
     var commentsArea = document.getElementById("commentsArea" + this.Id);
 
@@ -243,7 +302,8 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
     var commentorDiv = document.createElement("div");
     commentorDiv.textContent = commentData.user;
     commentorDiv.style.fontSize = "10px";
-    commentorDiv.style.textAlign = "right";
+    commentorDiv.style.textAlign = "left";
+    commentorDiv.style.color = "gray";
     dataContainer.appendChild(commentorDiv);
 
     var commentDiv = document.createElement("div");
@@ -255,6 +315,7 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
     timeDiv.textContent = commentData.date;
     timeDiv.style.fontSize = "10px";
     timeDiv.style.textAlign = "right";
+    timeDiv.style.color = "gray";
     dataContainer.appendChild(timeDiv);
 
     // var commentValue = document.createElement("h3");
@@ -283,7 +344,7 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
         // ReferenceManager.select(this);
     }
 
-    card.ondblclick = function () {           
+    card.ondblclick = function () {
     }
 
     card.onmouseover = function () {
@@ -292,5 +353,37 @@ PropertyCallout.prototype.ShowComment = function (commentData) {
 
     card.onmouseout = function () {
         ReferenceManager.UnHighlight(this);
+    }
+}
+
+PropertyCallout.prototype.Search = function () {
+
+    var searchInput = $('#propertyCalloutSearchText'+ this.Id).dxTextArea('instance');
+    var searchText = searchInput.option('value');
+
+    var targetDiv = document.getElementById("commentsArea"+ this.Id);
+    var commentCards = targetDiv.getElementsByClassName('commentCard');
+
+    if (!searchText ||
+        searchText === "") {
+        // show all
+
+        for (i = 0; i < commentCards.length; i++) {
+            var card = commentCards[i];
+            card.style.display = "block";
+        }
+    }
+    {
+        var filter = searchText.toLowerCase();
+
+        for (i = 0; i < commentCards.length; i++) {
+            var card = commentCards[i];
+            card.style.display = "none";
+            for (var j = 0; j < card.children.length; j++) {
+                if (card.children[j].innerText.toLowerCase().includes(filter)) {
+                    card.style.display = "block";
+                }
+            }
+        }
     }
 }

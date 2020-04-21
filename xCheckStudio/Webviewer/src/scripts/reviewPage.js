@@ -1,3 +1,5 @@
+var commentsCallout;
+var openCallout;
 let model = {
   selectedComparisons: [],
   selectedCompliance: "",
@@ -538,10 +540,10 @@ let viewPanels = {
     selected.style.opacity = 0.2;
   },
 
-  onMouseOverPropertyCalloutBtn: function (selected) {
+  onMouseOverCalloutBtn: function (selected) {
     selected.style.opacity = 1;
   },
-  onMouseOutPropertyCalloutBtn: function (selected) {
+  onMouseOutCalloutBtn: function (selected) {
     selected.style.opacity = 0.2;
   },
 
@@ -561,6 +563,16 @@ let viewPanels = {
     if (checkType === 'comparison') {
       document.getElementById("propertyCalloutStatusBar" + checkType).style.opacity = 0.6;
     }
+  },
+  
+  onMouseOverCommentsCallout: function () {    
+    document.getElementById("commentsCalloutContainer").style.opacity = 1;
+    document.getElementById("commentsCalloutNameBar").style.opacity = 1;
+  },
+  
+  onMouseOutCommentsCallout: function () {
+    document.getElementById("commentsCalloutContainer").style.opacity = 0.6;
+    document.getElementById("commentsCalloutNameBar").style.opacity = 0.6;
   }
 }
 

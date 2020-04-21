@@ -11,15 +11,23 @@ var comparisonReviewManager;
 var complianceReviewManager;
 
 function initReviewModule() {
-    return new Promise((resolve) => {       
+    return new Promise((resolve) => {
 
         loadCheckSpaceInReviewPage().then(function (result) {
-            if(!result)
-            {
+            if (!result) {
                 return resolve(false);
             }
             checkResults = result.Data;
             processCheckResults();
+
+            // load comments in comment callout
+            if ("checkspaceComments" in checkResults &&
+                checkResults["checkspaceComments"].length > 0) {
+                for (var i = 0; i < checkResults["checkspaceComments"].length; i++) {
+                    var commentData = JSON.parse(checkResults["checkspaceComments"][i]);
+                    commentsCallout.ShowComment(commentData);
+                }
+            }
 
             return resolve(true);
         });

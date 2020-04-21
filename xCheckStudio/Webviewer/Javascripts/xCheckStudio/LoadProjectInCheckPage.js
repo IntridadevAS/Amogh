@@ -71,7 +71,16 @@ function loadCheckSpaceForCheck(data) {
 
     // load data sets 
     loadDataSets(data);
-    
+
+    if ("checkspaceComments" in data &&
+        data["checkspaceComments"].length > 0) {
+            for(var i = 0;  i < data["checkspaceComments"].length; i++)
+            {
+                var commentData = JSON.parse(data["checkspaceComments"][i]);
+                commentsCallout.ShowComment(commentData);
+            }
+    }
+
     // hide add new data source button  
     // if( model.checkcaseSupportedTypes.length === Object.keys(data.sourceViewerOptions).length)
     // {

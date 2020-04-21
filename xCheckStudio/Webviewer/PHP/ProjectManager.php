@@ -510,6 +510,9 @@ function SaveAll()
         // save versions
         SaveVersionsFromTemp($tempDbh, $dbh);
 
+        // save comments from temp
+        SaveCheckspaceCommentsFromTemp($tempDbh, $dbh);
+
         // commit update
         $dbh->commit();
         $tempDbh->commit();
@@ -830,6 +833,32 @@ function SaveVersionsFromTemp($tempDbh, $dbh)
                 $row['createdByAlias'],
                 $row['createdOn'],
                 $row['IsFav']
+            ));
+        }
+    }
+}
+
+// Save checkspace comments
+function SaveCheckspaceCommentsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM checkspaceComments;");
+    if ($selectResults) {
+        $command = 'DROP TABLE IF EXISTS checkspaceComments;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS checkspaceComments(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            comment TEXT     
+          )';
+        $dbh->exec($command);
+
+        $insertReferenceStmt = $dbh->prepare("INSERT INTO checkspaceComments(id, comment) VALUES(?,?)");
+
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertReferenceStmt->execute(array(
+                $row['id'],
+                $row['comment']
             ));
         }
     }
