@@ -952,7 +952,7 @@
   
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
-      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+      <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
     </button>
     <h1 id="pageName"></h1>
     <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
@@ -994,44 +994,44 @@
         </div>
         <div class="buttonContainer">
           <div class="buttonGroup">
-            <button id="reCheck" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="ReCheck"></span>
-              <img src="public/symbols/XD_ClearData.svg" alt="">
-            </button>
-  
             <button id="showAll" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Show All"></span>
-              <img src="public/symbols/XD_Show.svg" alt="">
+              <img src="public/symbols/ShowAll.svg" style="width: 25px; height: 25px;" alt="">
+            </button>
+
+            <button id="reload" type="button" class="btnSymbol tooltipHov">
+              <span class="tooltip" data-tooltip="Reload"></span>
+              <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px;" alt="">
+            </button>
+
+            <button id="reCheck" type="button" class="btnSymbol tooltipHov">
+              <span class="tooltip" data-tooltip="ReCheck"></span>
+              <img src="public/symbols/ReCheck.svg" style="width: 25px; height: 25px;" alt="">
+            </button>
+             
+            <button id="revision" type="button" class="btnSymbol tooltipHov">
+              <span class="tooltip" data-tooltip="Revision"></span>
+              <img src="public/symbols/Revision.svg" style="width: 25px; height: 25px;" alt="">
             </button>
   
-            <button id="history" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="History"></span>
-              <img src="public/symbols/XD_HistoryVersion.svg" alt="">
-            </button>
-  
-            <button id="units" data-tooltip="Units" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Units"></span>
-              <img src="public/symbols/XD_Units.svg" alt="">
+            <button id="display" data-tooltip="Display" type="button" class="btnSymbol tooltipHov">
+              <span class="tooltip" data-tooltip="Display"></span>
+              <img src="public/symbols/Display.svg" style="width: 25px; height: 25px;" alt="">
             </button>
   
             <button id="checkInfo" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Check Info"></span>
-              <img src="public/symbols/XD_Checkinfo.svg" alt="">
+              <span class="tooltip" data-tooltip="Check Summary"></span>
+              <img src="public/symbols/CheckSummary.svg" style="width: 25px; height: 25px;" alt="">
             </button>
   
             <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Save Progress"></span>
-              <img src="public/symbols/XD_SaveData.svg" alt="">
-            </button>
-  
-            <button id="reset" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Reset"></span>
-              <img src="public/symbols/Reset.svg" alt="">
-            </button>
-  
+              <span class="tooltip" data-tooltip="Save"></span>
+              <img src="public/symbols/Save.svg" style="width: 25px; height: 25px;" alt="">
+            </button> 
+              
             <button id="navCube" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Navigation Cube"></span>
-              <img src="public/symbols/Navigation box.svg" alt="">
+              <img src="public/symbols/Cube.svg" style="width: 25px; height: 25px;" alt="">
             </button>
   
           </div>
@@ -1623,9 +1623,9 @@
 
       // enable menu options
       enableMenuOptions();
-      var disableItems = [];
+      var disableItems = ["review"];
       // create drawer menu
-      DrawerMenu.create(disableItems);
+      DrawerMenu.create(disableItems, []);
 
       commentsCallout = new CommentsCallout();
       commentsCallout.Init();

@@ -5,12 +5,7 @@ CommentsCallout.prototype.Init = function () {
     var _this = this;
 
     document.getElementById("commentsCalloutBtn").onclick = function () {
-        if (this.classList.contains("commentsCalloutOpen")) {
-            _this.Close();
-        }
-        else {
-            _this.Open();
-        }
+        _this.Toggle();
     }
 
     // set checkspace name
@@ -78,6 +73,16 @@ CommentsCallout.prototype.Init = function () {
 
     document.getElementById("commentsCalloutSearchBtn").onclick = function () {
         _this.Search();
+    }
+}
+
+CommentsCallout.prototype.Toggle = function () {
+    var commentsCalloutBtn = document.getElementById("commentsCalloutBtn");
+    if (commentsCalloutBtn.classList.contains("commentsCalloutOpen")) {
+        this.Close();
+    }
+    else {
+        this.Open();
     }
 }
 

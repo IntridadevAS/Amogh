@@ -4,7 +4,15 @@
 /* Only edit this if you know what you are doing! */
 
 /* Only edit this if you know what you are doing! */
-.srcImg { position: absolute; display: block; margin: 0px; border: none; padding: 0px; }
+.srcImg { 
+	position: absolute; 
+	display: block; 
+	margin: 0px; 
+	border: none; 
+	padding: 0px; 
+	width: 30px; 
+	height: 30px;
+}
 
 /* Only edit this if you know what you are doing! */
 /* div { position: absolute; } */

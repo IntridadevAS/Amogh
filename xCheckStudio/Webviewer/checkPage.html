@@ -818,7 +818,6 @@
     </div>
   </div>
 
-
   <!-- select valid checkcase overlay -->
   <div id="selectValidCheckcasePopup" class="popup">
     <div id="There_is_no_valid_checkcase">
@@ -1044,9 +1043,64 @@
     </div>
   </div>
 
+  <!--Go to Review overlay -->
+  <div id="goToReviewPopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Save Before Going To Review</span>
+      </div>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save data before going to Review?</span><span></span>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="gotoReview(CheckPageCleanUp.onLeavingPage)">
+          <span>No</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="gotoReview(CheckPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelGotoReview()">
+          <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <header>
     <div id="mainMenu" class="dropDownMenu">
-      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+      <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
     </div>
     <h1 id="pageName"></h1>
 
@@ -1068,7 +1122,7 @@
 
   </header>
 
-  <div id="drawer" style="position: fixed; top:50px; left: 0px">
+  <div id="drawer" class="drawerArea" style="position: fixed; top:50px; left: 0px">
     <div id="loadIndicator"></div>
 
     <div class="background">
@@ -1096,42 +1150,42 @@
 
             <button id="showAll" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Show All"></span>
-              <img src="public/symbols/XD_Show.svg" alt="">
+              <img src="public/symbols/ShowAll.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
             <button id="reloadData" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Reload Data(Reset)"></span>
-              <img src="public/symbols/Reset.svg" alt="">
+              <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
             <button id="clearData" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Clear Data"></span>
-              <img src="public/symbols/ClearData.svg" alt="">
+              <img src="public/symbols/ClearAll.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
-            <button id="history" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="History"></span>
-              <img src="public/symbols/XD_HistoryVersion.svg" alt="">
+            <button id="revision" type="button" class="btnSymbol tooltipHov">
+              <span class="tooltip" data-tooltip="Revision"></span>
+              <img src="public/symbols/Revision.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
-            <button id="units" data-tooltip="Units" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Units"></span>
-              <img src="public/symbols/XD_Units.svg" alt="">
+            <button id="display" data-tooltip="Display" type="button" class="btnSymbol tooltipHov">
+              <span class="tooltip" data-tooltip="Display"></span>
+              <img src="public/symbols/Display.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
             <button id="checkInfo" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Check Info"></span>
-              <img src="public/symbols/XD_Checkinfo.svg" alt="">
+              <span class="tooltip" data-tooltip="Check Summary"></span>
+              <img src="public/symbols/CheckSummary.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
             <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Save Progress"></span>
-              <img src="public/symbols/XD_SaveData.svg" alt="">
+              <span class="tooltip" data-tooltip="Save"></span>
+              <img src="public/symbols/Save.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
             <button id="navCube" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Navigation Cube"></span>
-              <img src="public/symbols/Navigation box.svg" alt="">
+              <img src="public/symbols/Cube.svg" style="width: 25px; height: 25px;" alt="">
             </button>
 
           </div>
@@ -1590,7 +1644,7 @@
 
     .ignoreDefault { 
             all: unset; 
-        } 
+        }   
   </style>
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-3.4.1.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
@@ -1728,11 +1782,17 @@
         UploadManager.createFileUploader();
 
         // create drawer menu
-        DrawerMenu.create(["check", "output"]);
+      var hiddenItems = ["check", "output"];
+      var disabledItems = [];
+      var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+      if (checkinfo.review != 1) {
+        disabledItems.push("review");
+      }
+      DrawerMenu.create(hiddenItems, disabledItems);
 
-        //Init comments callout
-        commentsCallout = new CommentsCallout();
-        commentsCallout.Init();
+      //Init comments callout
+      commentsCallout = new CommentsCallout();
+      commentsCallout.Init();
 
         loadCheckCases().then(function (result) {
 

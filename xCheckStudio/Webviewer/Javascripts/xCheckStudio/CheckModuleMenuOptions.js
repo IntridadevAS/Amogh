@@ -41,13 +41,13 @@ function enableMenuOptions() {
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
-    // on history
-    document.getElementById(MenuBar.HistoryBtn).onclick = function () {
+    // on Revision
+    document.getElementById(MenuBar.RevisionBtn).onclick = function () {
         alert("Not Handled");
     }
 
-    // on units
-    document.getElementById(MenuBar.UnitsBtn).onclick = function () {
+    // on Display
+    document.getElementById(MenuBar.DisplayBtn).onclick = function () {
         alert("Not Handled");
     }
 

@@ -702,7 +702,7 @@
 
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
-      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+      <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
     </button>
     <h1 id="pageName"></h1>
     <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
@@ -1099,13 +1099,22 @@
         setUserName();
 
         // create drawer menu
-        var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-        var disabledMenuItem = ["check", "projects", "output", "reports"];
+        var userinfo = JSON.parse(localStorage.getItem('userinfo'));        
+        var disabledMenuItem = ["search",
+          "check mode",
+          "projects",
+          "check",
+          "review",
+          "comments",
+          "properties",
+          "reports",
+          "output",
+          "preferences"];
         if (userinfo.type.toLowerCase() !== 'admin') {
           disabledMenuItem.push("prep");
         }
 
-        DrawerMenu.create(disabledMenuItem);
+        DrawerMenu.create(disabledMenuItem, []);
         ContextMenu.init();
 
         var fromInfoStr = localStorage.getItem('fromInfo');

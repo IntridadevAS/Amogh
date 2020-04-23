@@ -3,7 +3,7 @@ var LoginPageDrawerMenu = {
     create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
-            height: "210px",
+            height: "100%",
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
@@ -13,6 +13,13 @@ var LoginPageDrawerMenu = {
                 if (disableItems) {
                     disableMenuItems(disableItems);
                 }
+                
+                // $list.mouseover(function () {
+                //     this.style.opacity = 1;
+                // });
+                // $list.mouseout(function () {
+                //     this.style.opacity = 0.2;
+                // });
 
                 return $list.dxList({
                     
@@ -20,9 +27,22 @@ var LoginPageDrawerMenu = {
                     hoverStateEnabled: true,
                     focusStateEnabled: true,
                     activeStateEnabled: false,
-                    width: 200,
+                    width: "80px",
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
+                    itemTemplate: function(data, index) {
+                        var result = $("<div>").addClass("menuItem");                
+                       
+                        $("<img>").attr({
+                            "src": data.ImageSrc,
+                             style: "width: 25px; height: 25px;"
+                        }).appendTo(result);
+                        $("<div>").text(data.Title).attr({                            
+                            style: "white-space: initial;"
+                        }).appendTo(result);
+                                        
+                        return result;                
+                    },
                     onSelectionChanged: function (e) {
                         if (e.component._selection.getSelectedItems().length > 0)
                         {
@@ -57,41 +77,40 @@ var LoginPageDrawerMenu = {
 var menuItems = [
     {
         id: 1,
-        text: "Version Info",
-        //icon: "public/symbols/InfoMenu.svg",
+        Title: "Version Info",
+        ImageSrc: "public/symbols/InfoMenu.svg",
         click: function () {
             menu.onVersionInfoClicked();
         }
     },
     {
         id: 2,
-        text: "Help",
-
-        //icon: "public/symbols/Group 99.svg",
+        Title: "Help",
+        ImageSrc: "public/symbols/Group 99.svg",
         click: function () {
             menu.onHelpClicked();
         }
     },
     {
         id: 3,
-        text: "FAQs",
-        // icon: "public/symbols/check.png",
+        Title: "FAQs",
+        ImageSrc: "public/symbols/check.png",
         click: function () {
             menu.onFAQsClicked();
         }
     },
     {
         id: 4,
-        text: "What's New",
-        // icon: "public/symbols/prep.png",
+        Title: "What's New",
+        ImageSrc: "public/symbols/prep.png",
         click: function () {
             menu.onWhatsNewClicked();
         }
     },
     {
         id: 5,
-        text: "Exit",
-        //icon: "public/symbols/closeWin.svg",
+        Title: "Exit",
+        ImageSrc: "public/symbols/closeWin.svg",
         click: function () {
             menu.onExitClicked();
         }
@@ -132,7 +151,7 @@ function disableMenuItems(items) {
     for (var i = 0; i < items.length; i++) {
         for (var j = 0; j < menuItems.length; j++) {
             var menuItem = menuItems[j];
-            if (menuItem.text.toLowerCase() === items[i].toLowerCase()) {
+            if (menuItem.Title.toLowerCase() === items[i].toLowerCase()) {
                 menuItem["disabled"] = true;
             }
         }
@@ -141,11 +160,11 @@ function disableMenuItems(items) {
 
 function swapIcon() {
     var menuIcon = document.getElementById("menuIcon").src
-    if (menuIcon.includes("MenuRound.svg")) {
-        document.getElementById("menuIcon").src = "public/symbols/Backward Arrow.png";
+    if (menuIcon.includes("Menu.svg")) {
+        document.getElementById("menuIcon").src = "public/symbols/Close.svg";
     }
     else {
-        document.getElementById("menuIcon").src = "public/symbols/MenuRound.svg";
+        document.getElementById("menuIcon").src = "public/symbols/Menu.svg";
     }
 }
 

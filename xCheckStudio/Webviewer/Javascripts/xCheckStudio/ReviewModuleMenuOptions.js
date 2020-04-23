@@ -49,13 +49,13 @@ function enableMenuOptions() {
         }
     }
 
-    // on history
-    document.getElementById(MenuBar.HistoryBtn).onclick = function () {
+    // on Revision
+    document.getElementById(MenuBar.RevisionBtn).onclick = function () {
         VersioningManager.showRevisioningForm();
     }
 
-    // on units
-    document.getElementById(MenuBar.UnitsBtn).onclick = function () {
+    // on Display
+    document.getElementById(MenuBar.DisplayBtn).onclick = function () {
         alert("Not Handled");
     }
 
@@ -79,8 +79,8 @@ function enableMenuOptions() {
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     }
 
-    // on reset
-    document.getElementById(MenuBar.ResetBtn).onclick = function () {
+    // on Reload
+    document.getElementById(MenuBar.ReloadBtn).onclick = function () {
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("resetDataPopup");
 
