@@ -3,7 +3,7 @@ var DrawerMenu = {
     create: function (disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
-            height: "400px",
+            // height: "100%",
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
@@ -12,14 +12,34 @@ var DrawerMenu = {
                 var $list = $("<div>").addClass("panel-list");
                 disableMenuItems(disableItems);
 
+                $list.mouseover(function () {
+                    this.style.opacity = 1;
+                });
+                $list.mouseout(function () {
+                    this.style.opacity = 0.2;
+                });
+                  
                 return $list.dxList({
                     dataSource: menuItems,
                     hoverStateEnabled: true,
                     focusStateEnabled: true,
                     activeStateEnabled: false,
-                    width: 200,
+                    width: "80px",
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
+                    itemTemplate: function(data, index) {
+                        var result = $("<div>").addClass("menuItem");                
+                       
+                        $("<img>").attr({
+                            "src": data.ImageSrc,
+                             style: "width: 25px; height: 25px;"
+                        }).appendTo(result);
+                        $("<div>").text(data.Title).attr({                            
+                            style: "white-space: initial;"
+                        }).appendTo(result);
+                                        
+                        return result;                
+                    },
                     onSelectionChanged: function (e) {                       
                         if (e.component._selection.getSelectedItems().length > 0)
                         {
@@ -54,79 +74,152 @@ var DrawerMenu = {
 var menuItems = [
     {
         id: 1,
-        text: "Home",
-        icon: "public/symbols/home.png",
+        Title: "Search",
+        ImageSrc: "public/symbols/Search.svg",
+        click: function () {
+            menu.onSearchClick();
+        }
+    },
+    {
+        id: 2,
+        Title: "Check Mode",
+        ImageSrc: "public/symbols/UserMode.svg",
+        click: function () {
+            menu.onUserModeClick();
+        }
+    },
+    {
+        id: 3,
+        Title: "Home",
+        ImageSrc: "public/symbols/home.png",
         click: function () {
             menu.onHomeClick();
         }
     },
     {
-        id: 2,
-        text: "Projects",
-        icon: "public/symbols/projects.png",
+        id: 4,
+        Title: "Projects",
+        ImageSrc: "public/symbols/projects.png",
         click: function () {
             menu.onProjectsClicked();
         }
     },
     {
-        id: 3,
-        text: "Check",
-        icon: "public/symbols/check.png",
+        id: 5,
+        Title: "Check",
+        ImageSrc: "public/symbols/check.png",
         click: function () {
             menu.onCheckClicked();
         }
     },
     {
-        id: 4,
-        text: "Prep",
-        icon: "public/symbols/prep.png",
-        click: function () {
-            menu.onPREPClicked();
-        }
-    },
-    {
-        id: 5,
-        text: "Help",
-        icon: "public/symbols/Group 99.svg",
-        click: function () {
-            menu.onHelpClicked();
-        }
-    },
-    {
         id: 6,
-        text: "Output",
-        icon: "public/symbols/Output.png",
+        Title: "Review",
+        ImageSrc: "public/symbols/review.png",
         click: function () {
-            menu.onOutputClicked();
+            menu.onReviewClicked();
         }
     },
     {
         id: 7,
-        text: "Reports",
-        icon: "public/symbols/reports.png",
+        Title: "Comments",
+        ImageSrc: "public/symbols/Comments.svg",
+        click: function () {
+            menu.onCommentsClicked();
+        }
+    },
+    {
+        id: 8,
+        Title: "Properties",
+        ImageSrc: "public/symbols/Properties.svg",
+        click: function () {
+            menu.onPropertiesClicked();
+        }
+    },
+    {
+        id: 9,
+        Title: "Reports",
+        ImageSrc: "public/symbols/Reports.svg",
         click: function () {
             menu.onReportsClicked();
         }
     },
     {
-        id: 8,
-        text: "Sign Out",
-        icon: "public/symbols/logout.png",
+        id: 10,
+        Title: "Output",
+        ImageSrc: "public/symbols/Output.svg",
         click: function () {
-            menu.onSignOutClicked();
+            menu.onOutputClicked();
         }
     },
     {
-        id: 9,
-        text: "Sign Out All Users",
-        icon: "public/symbols/logout.png",
+        id: 11,
+        Title: "Preferences",
+        ImageSrc: "public/symbols/Preferences.svg",
         click: function () {
-            menu.onSignOutAllUsersClicked();
+            menu.onPreferencesClicked();
+        }
+    },
+    {
+        id: 12,
+        Title: "Help",
+        ImageSrc: "public/symbols/Help.svg",
+        click: function () {
+            menu.onHelpClicked();
+        }
+    },
+    {
+        id: 13,
+        Title: "Sign Out",
+        ImageSrc: "public/symbols/SignOut.svg",
+        click: function () {
+            menu.onSignOutClicked();
         }
     }
 ];
 
 let menu = {
+
+    onSearchClick: function () {
+        console.log("Seacrh not implemented");
+    },
+
+    onUserModeClick: function () {
+        console.log("Check Mode not implemented");
+    },
+
+    onReviewClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
+
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("goToReviewPopup");
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+
+        popup.style.width = "581px";
+        popup.style.height = "155px";
+        popup.style.overflow = "hidden";
+
+        popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+        popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+    },
+
+    onCommentsClicked: function () {
+        swapIcon();
+        DrawerMenu.drawer.hide();
+
+        commentsCallout.Toggle();
+    },
+
+    onPropertiesClicked: function () {
+        console.log("Properties not implemented");
+    },
+
+    onPreferencesClicked: function () {
+        console.log("Preferences not implemented");
+    },
 
     onHomeClick: function () {
         swapIcon();
@@ -147,7 +240,7 @@ let menu = {
 
     onProjectsClicked: function () {
         swapIcon();
-        DrawerMenu.drawer.hide();
+        // DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("returnProjectCenterPopup");
 
@@ -376,11 +469,11 @@ function signOutAllUsers(callbackFunction) {
 
 function swapIcon() {
     var menuIcon = document.getElementById("menuIcon").src
-    if (menuIcon.includes("MenuRound.svg")) {
-        document.getElementById("menuIcon").src = "public/symbols/Backward Arrow.png";
+    if (menuIcon.includes("Menu.svg")) {
+        document.getElementById("menuIcon").src = "public/symbols/Close.svg";
     }
     else {
-        document.getElementById("menuIcon").src = "public/symbols/MenuRound.svg";
+        document.getElementById("menuIcon").src = "public/symbols/Menu.svg";
     }
 }
 
@@ -434,9 +527,25 @@ function disableMenuItems(items) {
     for (var i = 0; i < mergedArrayWithoutDuplicates.length; i++) {
         for (var j = 0; j < menuItems.length; j++) {
             var menuItem = menuItems[j];
-            if (menuItem.text.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
+            if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
                 menuItem["disabled"] = true;
             }
         }
     }
+}
+
+function cancelGotoReview() {
+    var overlay = document.getElementById("uiBlockingOverlay");
+    var popup = document.getElementById("goToReviewPopup");
+
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+function gotoReview(callbackFunction) {
+    if (callbackFunction) {
+        callbackFunction();
+    }
+
+    window.location = "reviewPage.html";
 }

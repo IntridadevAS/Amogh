@@ -726,24 +726,7 @@ function ClearTemporaryCheckSpaceDB()
         $tempDBPath = getCheckDatabasePath($projectName, $checkName);
         if (file_exists($tempDBPath)) {
             unlink($tempDBPath);
-        }
-
-        //   // check if checkspace db is saved. If not saved, then 
-        // // delete the checkspace entry from project db
-        // $dbPath = getSavedCheckDatabasePath($projectName, $checkName);   
-        // if(!file_exists ($dbPath))
-        // {           
-        //     // remove checkspace entry from main project db 
-        //     $projectDbPath = getProjectDatabasePath($projectName);
-        //     $dbh = new PDO("sqlite:".$projectDbPath) or die("cannot open the database");            
-        //     $query =  "Delete from CheckSpace where checkname='".$checkName."' and projectid='". $projectId."';";  
-        //     $stmt = $dbh->prepare($query);      
-        //     $stmt->execute();
-
-        //     // delete checkspace directory
-        //     $checkspaceDir = getCheckDirectoryPath($projectName, $checkName);
-        //     deleteDirectory($checkspaceDir);           
-        // }  
+        }       
     } catch (Exception $e) {
         echo "fail";
         return;

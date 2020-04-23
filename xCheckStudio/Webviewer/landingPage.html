@@ -409,7 +409,7 @@
 
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
-      <img id="menuIcon" src="public/symbols/MenuRound.svg" alt="" class="srcImg">
+      <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
     </button>
     <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
@@ -447,7 +447,16 @@
 
       // create drawer menu
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-      var disabledMenuItem = ["check", "home", "output", "reports"];
+      var disabledMenuItem = ["search",
+        "check mode",
+        "home",
+        "check",
+        "review",
+        "comments",
+        "properties",
+        "reports",
+        "output",
+        "preferences"];
       if (userinfo.type.toLowerCase() !== 'admin') {
         disabledMenuItem.push("prep");
       }

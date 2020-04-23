@@ -394,7 +394,7 @@ button[type="submit"] {
     /* opacity: 0.6;   */
     background : white;
     color: black;
-    padding : 5px;
+    /* padding : 5px; */
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -411,7 +411,7 @@ button[type="submit"] {
     /* opacity: 0.6;   */
     background : white;
     color: black;
-    padding : 5px;
+    /* padding : 5px; */
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
