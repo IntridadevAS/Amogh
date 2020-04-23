@@ -1782,12 +1782,13 @@
         UploadManager.createFileUploader();
 
         // create drawer menu
-      var disabledItems = ["check", "output"];
+      var hiddenItems = ["check", "output"];
+      var disabledItems = [];
       var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
       if (checkinfo.review != 1) {
         disabledItems.push("review");
       }
-      DrawerMenu.create(disabledItems);
+      DrawerMenu.create(hiddenItems, disabledItems);
 
       //Init comments callout
       commentsCallout = new CommentsCallout();

@@ -1,6 +1,6 @@
 var DrawerMenu = {
 
-    create: function (disableItems) {
+    create: function (hiddenItems, disableItems) {
         this.drawer = $("#drawer").dxDrawer({
             opened: false,
             // height: "100%",
@@ -10,14 +10,15 @@ var DrawerMenu = {
             revealMode: "expand",
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
+                hideMenuItems(hiddenItems);
                 disableMenuItems(disableItems);
 
-                $list.mouseover(function () {
-                    this.style.opacity = 1;
-                });
-                $list.mouseout(function () {
-                    this.style.opacity = 0.2;
-                });
+                // $list.mouseover(function () {
+                //     this.style.opacity = 0.7;
+                // });
+                // $list.mouseout(function () {
+                //     this.style.opacity = 0.7;
+                // });
                   
                 return $list.dxList({
                     dataSource: menuItems,
@@ -509,6 +510,31 @@ function returnCheck(callbackFunction) {
     window.location = "checkPage.html";
 }
 
+function hideMenuItems(items) {
+    var disabledMenuItem=[];
+    // create drawer menu
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if (userinfo.permission.toLowerCase() === 'review') {
+        disabledMenuItem = ["check", "output", "reports"];
+    }
+
+    if (userinfo.type.toLowerCase() !== 'admin') {
+        disabledMenuItem.push("prep");
+        disabledMenuItem.push("sign out all users");
+    }
+
+    var mergedArrayWithoutDuplicates = items.concat(disabledMenuItem.filter(seccondArrayItem => !items.includes(seccondArrayItem)));
+
+    for (var i = 0; i < mergedArrayWithoutDuplicates.length; i++) {
+        for (var j = 0; j < menuItems.length; j++) {
+            var menuItem = menuItems[j];
+            if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {               
+                menuItem["visible"] = false;
+            }
+        }
+    }
+}
+
 function disableMenuItems(items) {
     var disabledMenuItem=[];
     // create drawer menu
@@ -528,8 +554,7 @@ function disableMenuItems(items) {
         for (var j = 0; j < menuItems.length; j++) {
             var menuItem = menuItems[j];
             if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
-                // menuItem["disabled"] = true;
-                menuItem["visible"] = false;
+                menuItem["disabled"] = true;               
             }
         }
     }

@@ -14,12 +14,12 @@ var LoginPageDrawerMenu = {
                     disableMenuItems(disableItems);
                 }
                 
-                $list.mouseover(function () {
-                    this.style.opacity = 1;
-                });
-                $list.mouseout(function () {
-                    this.style.opacity = 0.2;
-                });
+                // $list.mouseover(function () {
+                //     this.style.opacity = 1;
+                // });
+                // $list.mouseout(function () {
+                //     this.style.opacity = 0.2;
+                // });
 
                 return $list.dxList({
                     
