@@ -185,11 +185,11 @@ const Compliance = {
 const MenuBar = {
     ReCheckBtn: "reCheck",
     ShowAllBtn: "showAll",
-    HistoryBtn: "history",
-    UnitsBtn: "units",
+    RevisionBtn: "revision",
+    DisplayBtn: "display",
     CheckInfoBtn: "checkInfo",
     SaveProgressBtn: "saveProgress",
-    ResetBtn: "reset",
+    ReloadBtn: "reload",
     NavCubeBtn: "navCube",
 }
 

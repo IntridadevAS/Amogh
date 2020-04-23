@@ -528,7 +528,8 @@ function disableMenuItems(items) {
         for (var j = 0; j < menuItems.length; j++) {
             var menuItem = menuItems[j];
             if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
-                menuItem["disabled"] = true;
+                // menuItem["disabled"] = true;
+                menuItem["visible"] = false;
             }
         }
     }
