@@ -78,39 +78,39 @@ var menuItems = [
     {
         id: 1,
         Title: "Version Info",
-        ImageSrc: "public/symbols/InfoMenu.svg",
+        ImageSrc: "public/symbols/VersionInfo.svg",
         click: function () {
             menu.onVersionInfoClicked();
         }
     },
     {
         id: 2,
-        Title: "Help",
-        ImageSrc: "public/symbols/Group 99.svg",
+        Title: "What's New",
+        ImageSrc: "public/symbols/WhatsNew.svg",
         click: function () {
-            menu.onHelpClicked();
+            menu.onWhatsNewClicked();
         }
     },
     {
         id: 3,
         Title: "FAQs",
-        ImageSrc: "public/symbols/check.png",
+        ImageSrc: "public/symbols/FAQ.svg",
         click: function () {
             menu.onFAQsClicked();
         }
     },
     {
         id: 4,
-        Title: "What's New",
-        ImageSrc: "public/symbols/prep.png",
+        Title: "Help",
+        ImageSrc: "public/symbols/Help.svg",
         click: function () {
-            menu.onWhatsNewClicked();
+            menu.onHelpClicked();
         }
     },
     {
         id: 5,
         Title: "Exit",
-        ImageSrc: "public/symbols/closeWin.svg",
+        ImageSrc: "public/symbols/Exit.svg",
         click: function () {
             menu.onExitClicked();
         }
