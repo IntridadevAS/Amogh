@@ -20,7 +20,7 @@ function SCManager(id,
     // Components which don't have category and component class
     this.Properties = {};
 
-    this.PropertyCallout;
+    this.PropertyCallout;    
 }
 
 // inherit from parent
@@ -55,6 +55,9 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
             firstModelLoaded: function () {
                 viewer.view.fitWorld();
                 viewer.resizeCanvas();
+
+                // init display menu class
+                model.views[_this.Id].displayMenu = new DisplayMenu(_this.Id);
 
                 // set viewer's background color
                 _this.SetViewerBackgroundColor();

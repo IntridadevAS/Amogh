@@ -22,36 +22,127 @@
     box-shadow: 2px 2px 2px 0px rgba(143, 144, 145, 1); */
   } 
   
- /* #menuList a {
-    display: block;
-    color: #555;
-    text-decoration: none;
-    padding: 6px 8px 6px 30px;
-    width: 150px;
-    position: relative;
-  }
+  /* .markupMenu:hover{
+    opacity: 1;
+  } */
+
   
-  #menuList a img,
-  #menuList a i.fa {
-    height: 20px;
-    font-size: 8px;
-    width: 20px;
-    position: absolute;
-    left: 5px;
-    top: 2px;
-  }
-  
-  #menuList a span {
-    color: #BCB1B3;
-    float: right;
-  }
-  
-  #menuList a:hover {
-    color: #fff;
-    background: #3879D9;
-  }
-  
-  #menuList hr {
-    border: 1px solid #EBEBEB;
-    border-bottom: 0;
-  }   */
+.displayMenu{
+  position: absolute;
+  z-index: 1;
+  top: calc( 50% - 80px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  width: 40px;
+  height: 160px;
+  left: 2px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+.displayMenu:hover, .markupMenu:hover, 
+.shapesMenu:hover, .bookmarkMenu:hover{
+  opacity: 1;
+}
+
+.displayMenu .dx-list-item-content, .markupMenu .dx-list-item-content, .shapesMenu .dx-list-item-content,
+.bookmarkMenu .dx-list-item-content
+{
+  padding: 4px 4px !important;
+}
+
+.markupMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 400px;
+  top: calc( 50% - 200px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  left: 2px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+
+.markupViewsContainer
+{
+position: absolute;
+z-index: 1; 
+width: 250px;
+display: none;
+/* top : calc(50% - 165px); */
+/* left : calc(50% - 125px); */
+top: 0px;
+right: 0px;
+}
+
+.markupViewsCaptionBar
+{
+height: 30px; 
+background: white;
+}
+
+.markupViewsTabs
+{
+/* height: 250px;  */
+background: white;
+}
+
+.markupViewsBottomStrip
+{
+height: 40px; 
+background: white;
+}
+
+.markupViewsContainerClose
+{
+position: absolute;
+right: 0px;
+}
+
+.markupViewsClearBtn{
+width: 25px;
+height: 25px;
+bottom: 7px;
+position: absolute;
+}
+
+.markupViewsCaption{
+color: black;
+top: 5px;
+left: 4px;
+position: absolute;
+}
+
+.shapesMenu
+{
+position: absolute;
+z-index: 1;
+width: 40px;
+height: 80px;
+top: calc( 50% - 200px);
+background: rgba(25.5, 25.5, 25.5) !important;
+left: 42px;
+overflow: hidden !important;
+text-align: center;
+opacity: 0.2;
+display: none;
+}
+
+.bookmarkMenu
+{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 320px;
+  top: calc( 50% - 160px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  left: 2px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}

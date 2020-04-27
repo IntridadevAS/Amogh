@@ -214,15 +214,6 @@ var CheckModule = {
             sourceDComplianceSwitchOn = 'true';
         }
 
-        //var sourceACheckAllSwitchOn = 'false';
-        // if (sourceACheckAllCB.classList.contains("state2")) {
-        //     sourceACheckAllSwitchOn = 'true';
-        // }
-        //var sourceBCheckAllSwitchOn = 'false';
-        // if (sourceBCheckAllCB.classList.contains("state2")) {
-        //     sourceBCheckAllSwitchOn = 'true';
-        // }
-
         var controlStatesArray = {};
         controlStatesArray['comparisonSwithOn'] = comparisonSwitchOn;
         controlStatesArray['sourceAComplianceSwitchOn'] = sourceAComplianceSwitchOn;
@@ -236,8 +227,6 @@ var CheckModule = {
         else {
             controlStatesArray['selectedCheckCase'] = "AutoSelect";
         }
-        // controlStatesArray['SourceACheckAllSwitch'] = sourceACheckAllSwitchOn;
-        // controlStatesArray['SourceBCheckAllSwitch'] = sourceBCheckAllSwitchOn;       
 
         return controlStatesArray;
     },

@@ -286,13 +286,18 @@ let viewTabs = {
 
     var browserImg = document.createElement("img");
     browserImg.src = "public/symbols/Model Explorer Icon.svg";
+    browserImg.classList.add("ModelExplorerViewBtn");
+
     browserImg.setAttribute("onclick", "viewTabs.enterComparisonBrowser()");
     enterComparisonBtn.appendChild(browserImg);
 
     reviewTableImg = document.createElement("img");
-    reviewTableImg.src = "public/symbols/Display Review Table icon.svg";
-    reviewTableImg.style.position = "relative";
-    reviewTableImg.style.top = "24px";
+    reviewTableImg.src = "public/symbols/FlatView.svg";
+    reviewTableImg.classList.add("flatViewBtn");
+    // reviewTableImg.style.position = "relative";
+    // reviewTableImg.style.width = "25px";
+    // reviewTableImg.style.height = "25px";
+    // reviewTableImg.style.top = "24px";
     reviewTableImg.setAttribute("onclick", "viewTabs.enterComparison()");
     enterComparisonBtn.appendChild(reviewTableImg);
 
@@ -378,13 +383,17 @@ let viewTabs = {
 
     var browserImg = document.createElement("img");
     browserImg.src = "public/symbols/Model Explorer Icon.svg";
+    browserImg.classList.add("ModelExplorerViewBtn");
     browserImg.setAttribute("onclick", "viewTabs.enterComplianceBrowser()");
     enterComparisonBtn.appendChild(browserImg);
 
     reviewTableImg = document.createElement("img");
-    reviewTableImg.src = "public/symbols/Display Review Table icon.svg";
-    reviewTableImg.style.position = "relative";
-    reviewTableImg.style.top = "24px";
+    reviewTableImg.src = "public/symbols/FlatView.svg";
+    reviewTableImg.classList.add("flatViewBtn");
+    // reviewTableImg.style.position = "relative";
+    // reviewTableImg.style.width = "25px";
+    // reviewTableImg.style.height = "25px";
+    // reviewTableImg.style.top = "24px";
     reviewTableImg.setAttribute("onclick", "viewTabs.enterCompliance()");
     enterComparisonBtn.appendChild(reviewTableImg);
 

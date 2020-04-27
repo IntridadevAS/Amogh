@@ -18,7 +18,8 @@ let model = {
       visualizer: document.getElementById("visualizerA"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null      
     },
     b: {
       id: "b",
@@ -28,7 +29,8 @@ let model = {
       visualizer: document.getElementById("visualizerB"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null  
     },
     c: {
       id: "c",
@@ -38,7 +40,8 @@ let model = {
       visualizer: document.getElementById("visualizerC"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null
     },
     d: {
       id: "d",
@@ -48,7 +51,8 @@ let model = {
       visualizer: document.getElementById("visualizerD"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null
     }
   },
   onDataSourceTabChanged: function (tabID) {
@@ -152,7 +156,11 @@ let viewTabs = {
       } else if (changeTab) {
         controller.selectView(changeTab.dataset.id);
         viewTabs.selectTab(changeTab);
-      } else { return };
+      }
+      else {
+        model.currentTabId = null;
+        return
+      };
     })
 
     this.addTab.addEventListener("click", viewPanels.showAddPanel);

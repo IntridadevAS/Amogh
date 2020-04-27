@@ -311,7 +311,7 @@ button[type="submit"] {
 }
 
 .propertyCalloutBtn{
-  background-color: var(--xCheckDarkGrey);
+  background: rgb(25.5, 25.5, 25.5);
   background-image: url("../../public/symbols/PropertyCalloutOpen.svg");
   background-position: center;
   background-repeat: no-repeat;
@@ -333,7 +333,7 @@ button[type="submit"] {
 }
 
 .commentsCalloutBtn{
-  background-color: var(--xCheckDarkGrey);
+  background: rgb(25.5, 25.5, 25.5);
   background-image: url("../../public/symbols/ChatBubleOpen.svg");
   background-position: center;
   background-repeat: no-repeat;

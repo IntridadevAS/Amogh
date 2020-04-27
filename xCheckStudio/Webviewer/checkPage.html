@@ -1155,7 +1155,7 @@
 
             <button id="reloadData" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Reload Data(Reset)"></span>
-              <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px;" alt="">
+              <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px; transform: scaleX(-1);" alt="">
             </button>
 
             <button id="clearData" type="button" class="btnSymbol tooltipHov">
@@ -1274,9 +1274,7 @@
               <!-- Properties Callout Button -->
               <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
                 onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-
-              <!-- visualizerA -->
-          
+                        
               <!-- explode slider -->
               <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1333,6 +1331,37 @@
                 </div>
               </div>             
               
+              <!-- Display menu -->
+              <div id="displayMenua" class="displayMenu"> </div>
+              <div id="markupMenua" class="markupMenu"> </div>
+              <div id="shapesMenua" class="shapesMenu"> </div>
+              <div id="bookmarkMenua" class="bookmarkMenu"> </div>
+
+              <!-- Markup views overlay -->
+              <div id="markupViewsContainera" class="markupViewsContainer">
+                <div id="markupViewsCaptionBara" class="markupViewsCaptionBar">
+                  <div class="markupViewsCaption">Views</div>
+                  <img  id="markupViewsContainerClosea" 
+                  class="markupViewsContainerClose" 
+                  src="public\symbols\CloseBlack.svg" 
+                  style="width: 25px; height: 25px;" />                 
+                </div>
+                <div id="markupViewTabsa" class="markupViewsTabs">
+                  <div data-options="dxTemplate : { name: 'tab1' } ">
+                    <div id="bookmarksGrida" style="height: 250px;"></div>
+                  </div>
+                  <div data-options="dxTemplate : { name: 'tab2' } ">
+                    <div id="markupsGrida" style="height: 250px;"></div>
+                  </div>
+                </div>
+                <div class="markupViewsBottomStrip"> 
+                  <img  id="markupViewsClearBtna" 
+                  class="markupViewsClearBtn" 
+                  src="public\symbols\MarkupDeleteBlack.svg"/>  
+                </div>
+              </div>
+
+              <!-- visualizerA -->
               <div id="visualizerA" class="tempContainer"> </div>
           
             </div>          
@@ -1352,7 +1381,7 @@
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="propertyCalloutb" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
               onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-            <!-- visualizerB -->
+
             <!-- explode slider -->
             <div id="explodeOverlay2" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1409,8 +1438,35 @@
               </div>         
           </div>         
 
-            <div id="visualizerB" class="tempContainer"> </div>
+          <!-- Display menu -->
+          <div id="displayMenub" class="displayMenu"> </div>
+          <div id="markupMenub" class="markupMenu"> </div>
+          <div id="shapesMenub" class="shapesMenu"> </div>
+          <div id="bookmarkMenub" class="bookmarkMenu"> </div>
 
+          <!-- Markup views overlay -->
+          <div id="markupViewsContainerb" class="markupViewsContainer">
+            <div id="markupViewsCaptionBarb" class="markupViewsCaptionBar">
+              <div class="markupViewsCaption">Views</div>
+              <img id="markupViewsContainerCloseb" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                style="width: 25px; height: 25px;" />
+            </div>
+            <div id="markupViewTabsb" class="markupViewsTabs">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="bookmarksGridb"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="markupsGridb"></div>
+              </div>
+            </div>
+            <div class="markupViewsBottomStrip">
+              <img id="markupViewsClearBtnb" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+            </div>
+          </div>
+
+          <!-- visualizerB -->
+          <div id="visualizerB" class="tempContainer"> </div>
+          
           </div>
 
         </div>
@@ -1485,8 +1541,34 @@
               </div>    
           </div>
        
-            <div id="visualizerC" class="tempContainer"> </div>
+          <!-- Display menu -->
+          <div id="displayMenuc" class="displayMenu"> </div>
+          <div id="markupMenuc" class="markupMenu"> </div>
+          <div id="shapesMenuc" class="shapesMenu"> </div>
+          <div id="bookmarkMenuc" class="bookmarkMenu"> </div>
 
+          <!-- Markup views overlay -->
+          <div id="markupViewsContainerc" class="markupViewsContainer">
+            <div id="markupViewsCaptionBarc" class="markupViewsCaptionBar">
+              <div class="markupViewsCaption">Views</div>
+              <img id="markupViewsContainerClosec" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                style="width: 25px; height: 25px;" />
+            </div>
+            <div id="markupViewTabsc" class="markupViewsTabs">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="bookmarksGridc"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="markupsGridc"></div>
+              </div>
+            </div>
+            <div class="markupViewsBottomStrip">
+              <img id="markupViewsClearBtnc" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+            </div>
+          </div>
+          
+          <div id="visualizerC" class="tempContainer"> </div>
+          
           </div>
         </div>
         <div id="viewPanelD" class="viewPanel hide">
@@ -1547,35 +1629,59 @@
                 
                   <!-- Comments Area -->                     
                   <div id="commentsAread" class="commentsArea">
-               
-                  </div>
-                  <div class="commentInput">
-                    <div id="commentInputd">                        
-                    </div>
-                    <div id="addCommentBtnd" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 25px; height: 25px;"/>
-                    </div>
-                  </div>
-                </div>             
-              </div>          
-           </div>           
+              </div>
+              <div class="commentInput">
+                <div id="commentInputd">
+                </div>
+                <div id="addCommentBtnd" class="addCommentBtn">
+                  <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+                </div>
+              </div>
+              </div>
+              </div>
+              </div>
+              <!-- Display menu -->
+              <div id="displayMenud" class="displayMenu"> </div>
+              <div id="markupMenud" class="markupMenu"> </div>
+              <div id="shapesMenud" class="shapesMenu"> </div>
+              <div id="bookmarkMenud" class="bookmarkMenu"> </div>
 
-            <div id="visualizerD" class="tempContainer"> </div>
-          </div>
-        </div>
-
-        <div class="checkTogglesContainer">
-          <label class="toggleContainer" style="grid-area:compliance">Compliance
-            <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance"
-              onchange="onComplianceSwitchStateChanged(this)">
-            <span class="toggleSlider"></span>
-          </label>
+              <!-- Markup views overlay -->
+              <div id="markupViewsContainerd" class="markupViewsContainer">
+                <div id="markupViewsCaptionBard" class="markupViewsCaptionBar">
+                  <div class="markupViewsCaption">Views</div>
+                  <img id="markupViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                    style="width: 25px; height: 25px;" />
+                </div>
+                <div id="markupViewTabsd" class="markupViewsTabs">
+                  <div data-options="dxTemplate : { name: 'tab1' } ">
+                    <div id="bookmarksGridd"></div>
+                  </div>
+                  <div data-options="dxTemplate : { name: 'tab2' } ">
+                    <div id="markupsGridd"></div>
+                  </div>
+                </div>
+                <div class="markupViewsBottomStrip">
+                  <img id="markupViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+                </div>
+              </div>
+              
+              <div id="visualizerD" class="tempContainer"> </div>
+              </div>
+              </div>
+              
+              <div class="checkTogglesContainer">
+                <label class="toggleContainer" style="grid-area:compliance">Compliance
+                  <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance"
+                    onchange="onComplianceSwitchStateChanged(this)">
+                  <span class="toggleSlider"></span>
+                </label>
           <label class="toggleContainer" style="grid-area:comparison">Comparison
             <input id="comparisonSwitch" type="checkbox" class="toggleCheckBox" name="comparison">
             <span class="toggleSlider"></span>
           </label>
-          <button id="checkButton" type="submit" name="button" style="cursor: pointer;"><img
-              src="public/symbols/Check Icon.svg"></button>
+          <button id="checkButton" type="submit" name="button" style="cursor: pointer; position: absolute; bottom: 22px; right: 35px;"><img
+              src="public/symbols/CheckButton.svg" style="width: 50px; height: 50px;"></button>
         </div>
         <div class="checkName">
           <p id="checkSpaceName"></p>
@@ -1600,7 +1706,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      overflow: auto;
+      overflow: auto;      
     }
 
     .dx-fileuploader-button {
@@ -1754,6 +1860,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CommentsCallout.js"></script>
   <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DisplayMenu.js"></script>
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,

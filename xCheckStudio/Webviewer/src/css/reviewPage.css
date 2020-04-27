@@ -423,7 +423,7 @@ tr {
 }
 
 .propertyCalloutBtn{
-  background-color: var(--xCheckDarkGrey);
+  background: rgb(25.5, 25.5, 25.5);
   background-image: url("../../public/symbols/PropertyCalloutOpen.svg");
   background-position: center;
   background-repeat: no-repeat;
@@ -534,7 +534,7 @@ tr {
   }
 
   .commentsCalloutBtn{
-    background-color: var(--xCheckDarkGrey);
+    background: rgb(25.5, 25.5, 25.5);
     background-image: url("../../public/symbols/ChatBubleOpen.svg");
     background-position: center;
     background-repeat: no-repeat;
@@ -597,4 +597,27 @@ tr {
   right: 0px;
   top: 0px;
   padding: 4px;
+}
+
+.flatViewBtn
+{
+  position : relative;
+  width : 35px;
+  height : 35px;
+  top : 13px;
+  border: 0.5px solid white;
+  border-radius: 5px;
+}
+
+.ModelExplorerViewBtn
+{
+  width : 35px;
+  height : 35px;  
+}
+
+.flatViewBtn:hover, .ModelExplorerViewBtn:hover
+{
+  border: 1px solid var(--intridaBlue);
+  border-radius: 5px;
+  cursor: pointer;
 }
