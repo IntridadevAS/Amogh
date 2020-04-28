@@ -1336,6 +1336,7 @@
               <div id="markupMenua" class="markupMenu"> </div>
               <div id="shapesMenua" class="shapesMenu"> </div>
               <div id="bookmarkMenua" class="bookmarkMenu"> </div>
+              <div id="tagsMenua" class="tagsMenu"> </div>
 
               <!-- Markup views overlay -->
               <div id="markupViewsContainera" class="markupViewsContainer">
@@ -1352,6 +1353,9 @@
                   </div>
                   <div data-options="dxTemplate : { name: 'tab2' } ">
                     <div id="markupsGrida" style="height: 250px;"></div>
+                  </div>
+                  <div data-options="dxTemplate : { name: 'tab3' } ">
+                    <div id="annotationsGrida" style="height: 250px;"></div>
                   </div>
                 </div>
                 <div class="markupViewsBottomStrip"> 
@@ -1443,6 +1447,7 @@
           <div id="markupMenub" class="markupMenu"> </div>
           <div id="shapesMenub" class="shapesMenu"> </div>
           <div id="bookmarkMenub" class="bookmarkMenu"> </div>
+          <div id="tagsMenub" class="tagsMenu"> </div>
 
           <!-- Markup views overlay -->
           <div id="markupViewsContainerb" class="markupViewsContainer">
@@ -1457,6 +1462,9 @@
               </div>
               <div data-options="dxTemplate : { name: 'tab2' } ">
                 <div id="markupsGridb"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab3' } ">
+                <div id="annotationsGridb" style="height: 250px;"></div>
               </div>
             </div>
             <div class="markupViewsBottomStrip">
@@ -1546,6 +1554,7 @@
           <div id="markupMenuc" class="markupMenu"> </div>
           <div id="shapesMenuc" class="shapesMenu"> </div>
           <div id="bookmarkMenuc" class="bookmarkMenu"> </div>
+          <div id="tagsMenuc" class="tagsMenu"> </div>
 
           <!-- Markup views overlay -->
           <div id="markupViewsContainerc" class="markupViewsContainer">
@@ -1560,6 +1569,9 @@
               </div>
               <div data-options="dxTemplate : { name: 'tab2' } ">
                 <div id="markupsGridc"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab3' } ">
+                <div id="annotationsGridc" style="height: 250px;"></div>
               </div>
             </div>
             <div class="markupViewsBottomStrip">
@@ -1645,6 +1657,7 @@
               <div id="markupMenud" class="markupMenu"> </div>
               <div id="shapesMenud" class="shapesMenu"> </div>
               <div id="bookmarkMenud" class="bookmarkMenu"> </div>
+              <div id="tagsMenud" class="tagsMenu"> </div>
 
               <!-- Markup views overlay -->
               <div id="markupViewsContainerd" class="markupViewsContainer">
@@ -1659,6 +1672,9 @@
                   </div>
                   <div data-options="dxTemplate : { name: 'tab2' } ">
                     <div id="markupsGridd"></div>
+                  </div>
+                  <div data-options="dxTemplate : { name: 'tab3' } ">
+                    <div id="annotationsGridd" style="height: 250px;"></div>
                   </div>
                 </div>
                 <div class="markupViewsBottomStrip">
@@ -1861,6 +1877,15 @@
   <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\DisplayMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\MarkupMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\BookmarkMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\TagsMenu.js"></script>
+  <link rel="stylesheet" href="CSS/CheckPageMenus.css" type="text/css" />
+
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationMarkup.js"></script>  
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperatorBase.js"></script>
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperator.js"></script>
+ 
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,

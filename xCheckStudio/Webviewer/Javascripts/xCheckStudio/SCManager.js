@@ -57,7 +57,11 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
                 viewer.resizeCanvas();
 
                 // init display menu class
-                model.views[_this.Id].displayMenu = new DisplayMenu(_this.Id);
+                var currentView = model.views[_this.Id];
+                currentView.displayMenu = new DisplayMenu(_this.Id);               
+                currentView.annotationOperator = new Example.AnnotationOperator(
+                    viewer);
+                currentView.annotationOperatorId = viewer.registerCustomOperator( currentView.annotationOperator);                        
 
                 // set viewer's background color
                 _this.SetViewerBackgroundColor();

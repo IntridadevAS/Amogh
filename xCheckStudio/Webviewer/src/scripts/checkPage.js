@@ -19,7 +19,12 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null      
+      displayMenu : null,      
+      annotationOperator : null,      
+      annotationOperatorId : null,    
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
     },
     b: {
       id: "b",
@@ -30,7 +35,12 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null  
+      displayMenu : null,      
+      annotationOperator : null,      
+      annotationOperatorId : null,
+      markupViews : {},
+      bookmarks : {},
+      annotations : {}, 
     },
     c: {
       id: "c",
@@ -41,7 +51,12 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null
+      displayMenu : null,      
+      annotationOperator : null,     
+      annotationOperatorId : null,
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
     },
     d: {
       id: "d",
@@ -52,7 +67,12 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null
+      displayMenu : null,      
+      annotationOperator : null,     
+      annotationOperatorId : null,
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
     }
   },
   onDataSourceTabChanged: function (tabID) {
