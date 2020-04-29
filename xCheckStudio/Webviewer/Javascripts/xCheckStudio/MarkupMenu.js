@@ -241,7 +241,11 @@ MarkupMenu.prototype.InitEvents = function () {
 }
 
 MarkupMenu.prototype.OnViewAdded = function (view) {
-    var name = view.getName();;
+    var index = Object.keys(model.views[this.Id].markupViews).length + 1;
+    var name = "Markup-" + index;
+    view.setName(name);
+
+    // var name = view.getName();;
     var uniqueId = view.getUniqueId();
     model.views[this.Id].markupViews[name] = uniqueId;
 
@@ -257,7 +261,9 @@ MarkupMenu.prototype.OnViewDeleted = function (view) {
 }
 
 MarkupMenu.prototype.ActivateView = function (viewId) {
-    this.Webviewer.markupManager.activateMarkupViewWithPromise(viewId);
+    this.Webviewer.markupManager.activateMarkupViewWithPromise(viewId).then(function(result){
+
+    })
 
     this.ViewActivatedBefore = true;
 };
@@ -277,25 +283,25 @@ MarkupMenu.prototype.DeleteViews = function () {
     this.LoadMarkupViews();
 };
 
-MarkupMenu.prototype.SerializeView = function () {
-    // var selectedView = this._viewPanel.getSelectedViewUniqueId();
-    // if (selectedView) {
-    //     var outputText = document.getElementById("outputText");
-    //     var markupManager = this._viewer.markupManager;
-    //     var markupView = markupManager.getMarkupView(selectedView);
-    //     console.assert(markupView !== null);
-    //     var markupData = {
-    //         views: [markupView.toJson()]
-    //     };
-    //     outputText.value = JSON.stringify(markupData);
-    // }
-};
+// MarkupMenu.prototype.SerializeView = function () {
+//     // var selectedView = this._viewPanel.getSelectedViewUniqueId();
+//     // if (selectedView) {
+//     //     var outputText = document.getElementById("outputText");
+//     //     var markupManager = this._viewer.markupManager;
+//     //     var markupView = markupManager.getMarkupView(selectedView);
+//     //     console.assert(markupView !== null);
+//     //     var markupData = {
+//     //         views: [markupView.toJson()]
+//     //     };
+//     //     outputText.value = JSON.stringify(markupData);
+//     // }
+// };
 
-MarkupMenu.prototype.LoadMarkup = function () {
-    // var inputText = document.getElementById("inputText");
-    // var markupManager = this._viewer.markupManager;
-    // return markupManager.loadMarkupData(inputText.value);
-};
+// MarkupMenu.prototype.LoadMarkup = function () {
+//     // var inputText = document.getElementById("inputText");
+//     // var markupManager = this._viewer.markupManager;
+//     // return markupManager.loadMarkupData(inputText.value);
+// };
 
 MarkupMenu.prototype.ShowViews = function () {
     var _this = this;

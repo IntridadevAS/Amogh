@@ -83,6 +83,15 @@ var CheckModule = {
             // get hidden items
             var hiddenItems = this.getHiddenItems();
 
+            // get markup views
+            var markupViews = this.getMarkupViews();
+
+            // get bookmark views
+            var bookmarkViews = this.getBookmarkViews();
+
+            // get bookmark views
+            var annotations = this.getAnnotations();
+
             $.ajax({
                 url: 'PHP/ProjectManager.php',
                 type: "POST",
@@ -98,7 +107,10 @@ var CheckModule = {
                     'viewerOptions': JSON.stringify(viewerOptions),
                     'selectedComponents': JSON.stringify(selectedComponents),
                     'notSelectedComponents': JSON.stringify(notSelectedComponents),
-                    'hiddenItems': JSON.stringify(hiddenItems)
+                    'hiddenItems': JSON.stringify(hiddenItems),
+                    'markupViews': JSON.stringify(markupViews),
+                    'bookmarkViews': JSON.stringify(bookmarkViews),
+                    'annotations': JSON.stringify(annotations),                    
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
@@ -143,49 +155,48 @@ var CheckModule = {
         return hiddenComponentsObject;
     },
 
-    // saveComponentsToCheckSpaceDB: function () {
-    //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    //     $.ajax({
-    //         url: 'PHP/ProjectManager.php',
-    //         type: "POST",
-    //         async: false,
-    //         data:
-    //         {
-    //             'InvokeFunction': "SaveComponents",
-    //             'ProjectName': projectinfo.projectname,
-    //             'CheckName': checkinfo.checkname
-    //         },
-    //         success: function (msg) {
-    //         }
-    //     });
-    // },
+    getMarkupViews: function () {
+        var views = {};
+        for (var srcId in SourceManagers) {
+            var sourceManager = SourceManagers[srcId];
+            if (!sourceManager.Is3DSource()) {
+                continue;
+            }
 
-    // createCheckSpaceDBonSave: function () {
-    //     return new Promise((resolve) => {
-    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+            views[srcId] = sourceManager.SerializeMarkupViews();
+        }
 
-    //         $.ajax({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "CreateCheckSpaceDBonSave",
-    //                 'ProjectName': projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-    //                 if (msg != 'fail') {
-    //                     return resolve(true);
-    //                 }
+        return views;
+    },
 
-    //                 return resolve(false);
-    //             }
-    //         });
-    //     });
-    // },
+    
+    getBookmarkViews: function () {
+        var views = {};
+        for (var srcId in SourceManagers) {
+            var sourceManager = SourceManagers[srcId];
+            if (!sourceManager.Is3DSource()) {
+                continue;
+            }
+
+            views[srcId] = sourceManager.SerializeBookmarkViews();
+        }
+
+        return views;
+    },    
+
+    getAnnotations: function(){
+        var annotations = {};
+        for (var srcId in SourceManagers) {
+            var sourceManager = SourceManagers[srcId];
+            if (!sourceManager.Is3DSource()) {
+                continue;
+            }
+
+            annotations[srcId] = sourceManager.SerializeAnnotations();
+        }       
+
+        return annotations;
+    },
 
     getControlStates: function () {
         // control states

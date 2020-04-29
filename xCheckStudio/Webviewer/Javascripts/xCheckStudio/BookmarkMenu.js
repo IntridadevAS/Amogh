@@ -208,7 +208,11 @@ BookmarkMenu.prototype.InitEvents = function () {
 }
 
 BookmarkMenu.prototype.OnViewAdded = function (view) {
-    var name = view.getName();;
+
+    var index = Object.keys(model.views[this.Id].bookmarks).length + 1;
+    var name = "Bookmark-" + index;
+    view.setName(name);
+    // var name = view.getName();
     var uniqueId = view.getUniqueId();
     model.views[this.Id].bookmarks[name] = uniqueId;
 

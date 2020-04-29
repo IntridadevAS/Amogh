@@ -70,6 +70,10 @@ var Example;
         AnnotationMarkup.prototype.getLeaderLineAnchor = function () {
             return this._leaderAnchor.copy();
         };
+        AnnotationMarkup.prototype.setLeaderLineAnchor = function (newAnchorPoint) {
+            this._leaderAnchor.assign(newAnchorPoint);
+        };
+
         AnnotationMarkup.prototype.getTextBoxAnchor = function () {
             return this._textBoxAnchor;
         };

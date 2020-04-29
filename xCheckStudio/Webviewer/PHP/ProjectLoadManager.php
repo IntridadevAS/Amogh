@@ -175,7 +175,7 @@
             $tempDbh->beginTransaction();     
             
             // read data to load checkspace
-            $results = ReadCheckSpaceData($tempDbh, $_POST['Context']);
+            $results = ReadCheckSpaceData($dbh, $tempDbh, $_POST['Context']);
 
             // commit changes
             $dbh->commit();
@@ -283,6 +283,75 @@ function ReadCheckspaceComments($tempDbh)
     return $comments;
 }
 
+function ReadMarkupViews($dbh)
+{
+    $markupViews = array();
+    if ($dbh) {
+        try {
+            $results = $dbh->query("SELECT *FROM markupViews;");
+
+            if ($results) {
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                    $markupViews["a"] = $record['a'];
+                    $markupViews["b"] = $record['b'];
+                    $markupViews["c"] = $record['c'];
+                    $markupViews["d"] = $record['d'];
+                }
+            }
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+    return $markupViews;
+}
+
+function ReadBookmarkViews($dbh)
+{
+    $markupViews = array();
+    if ($dbh) {
+        try {
+            $results = $dbh->query("SELECT *FROM bookmarkViews;");
+
+            if ($results) {
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                    $markupViews["a"] = $record['a'];
+                    $markupViews["b"] = $record['b'];
+                    $markupViews["c"] = $record['c'];
+                    $markupViews["d"] = $record['d'];
+                }
+            }
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+    return $markupViews;
+}
+
+function ReadAnnotations($dbh)
+{
+    $annotations = array();
+    if ($dbh) {
+        try {
+            $results = $dbh->query("SELECT *FROM annotations;");
+
+            if ($results) {
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                    $annotations["a"] = $record['a'];
+                    $annotations["b"] = $record['b'];
+                    $annotations["c"] = $record['c'];
+                    $annotations["d"] = $record['d'];
+                }
+            }
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+
+    return $annotations;
+}
+
     function  CopyHiddenComponents($fromDbh, $toDbh)
     {     
         $results = $fromDbh->query("SELECT * FROM hiddenComponents;");
@@ -308,7 +377,7 @@ function ReadCheckspaceComments($tempDbh)
         }     
     }
 
-    function ReadCheckSpaceData($tempDbh, $context)
+    function ReadCheckSpaceData($dbh, $tempDbh, $context)
     {
         $results = array();
         try
@@ -523,6 +592,15 @@ function ReadCheckspaceComments($tempDbh)
 
             $checkspaceComments = ReadCheckspaceComments($tempDbh);
             $results["checkspaceComments"] = $checkspaceComments;
+
+            $markupViews = ReadMarkupViews($dbh);
+            $results["markupViews"] = $markupViews;
+
+            $bookmarkViews = ReadBookmarkViews($dbh);
+            $results["bookmarkViews"] = $bookmarkViews;
+
+            $annotations = ReadAnnotations($dbh);
+            $results["annotations"] = $annotations;
         }
         catch(Exception $e) 
         {             
