@@ -57,6 +57,20 @@ TagsMenu.prototype.ShowMenu = function () {
                 e.addedItems[0].click(e);
                 e.component._selection.deselectAll();
             }
+        },
+        onContentReady: function (e) {
+            var listitems = e.element.find('.dx-item');
+            var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
+                position: "right"
+            }).dxTooltip('instance');
+            listitems.on('dxhoverstart', function (args) {
+                tooltip.content().text($(this).data().dxListItemData.Title);
+                tooltip.show(args.target);
+            });
+
+            listitems.on('dxhoverend', function () {
+                tooltip.hide();
+            });
         }
     });
 }
@@ -72,7 +86,7 @@ TagsMenu.prototype.GetControls = function () {
             }
         },
         {
-            Title: "Markup Views",
+            Title: "Tag Views",
             ImageSrc: "public/symbols/MarkupViews.svg",
             click: function () {
                 if (!model.views[_this.Id].displayMenu.ViewsOpen) {
@@ -118,7 +132,7 @@ TagsMenu.prototype.ShowViews = function () {
         dataSource: [
             { title: "Bookmarks", template: "tab1" },
             { title: "Markups", template: "tab2" },
-            { title: "Annotations", template: "tab3" }
+            { title: "Tags", template: "tab3" }
         ],
         deferRendering: false,
         selectedIndex: 2
@@ -150,8 +164,8 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
     var annotationColumns = [];
 
     var column = {};
-    column["caption"] = "Annotation";
-    column["dataField"] = "Annotation";
+    column["caption"] = "Tag";
+    column["dataField"] = "Tag";
     column["width"] = "100%";
     column["visible"] = true;
     annotationColumns.push(column);
@@ -166,7 +180,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
     var annotations = model.views[this.Id].annotations;
     for (var id in annotations) {
         annotationsData.push({
-            "Annotation": annotations[id].getLabel(),
+            "Tag": annotations[id].getLabel(),
             "Id": id
         });
     }
@@ -253,7 +267,7 @@ TagsMenu.prototype.HideViews = function () {
 }
 
 TagsMenu.prototype.DeleteAnnotations = function () {
-
+    var totalClearedAnnotatios = Object.keys(model.views[_this.Id].annotations).length;
     for (var markupHandle in model.views[this.Id].annotations) {
         this.DeleteAnnotation(markupHandle);
     }
@@ -264,6 +278,8 @@ TagsMenu.prototype.DeleteAnnotations = function () {
     if (model.views[_this.Id].displayMenu.ViewsOpen) {
         this.LoadAnnotations();
     }
+
+    DevExpress.ui.notify("'" + totalClearedAnnotatios + "'" + " tags cleared.", "success", 1500);
 };
 
 TagsMenu.prototype.ApplyHighlightColor = function (row) {

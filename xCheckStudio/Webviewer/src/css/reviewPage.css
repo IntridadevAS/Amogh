@@ -329,6 +329,10 @@ tr {
   z-index: 2;
 }
 
+.projectName:hover {
+  background-color: black;
+}
+
 .maxMinBtn{
   background-color: var(--xCheckDarkGrey);
   background-image: url(../../public/symbols/XD_Maximise.svg);

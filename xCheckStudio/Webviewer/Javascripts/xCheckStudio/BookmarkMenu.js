@@ -63,7 +63,21 @@ BookmarkMenu.prototype.ShowMenu = function () {
                 e.addedItems[0].click(e);
                 e.component._selection.deselectAll();
             }
-        }
+        },
+        onContentReady: function (e) {
+            var listitems = e.element.find('.dx-item');
+            var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
+                position: "right"
+            }).dxTooltip('instance');
+           listitems.on('dxhoverstart', function (args) {
+               tooltip.content().text($(this).data().dxListItemData.Title);
+               tooltip.show(args.target);
+           });
+
+           listitems.on('dxhoverend', function () {
+               tooltip.hide();
+           });
+       }
     });
 }
 
@@ -84,6 +98,7 @@ BookmarkMenu.prototype.GetControls = function () {
             var canvasSize = _this.Webviewer.view.getCanvasSize();
             var config = new Communicator.SnapshotConfig(canvasSize.x, canvasSize.y);
             _this.Webviewer.takeSnapshot(config).then(function (image) {
+                DevExpress.ui.notify("Screenshot is captured.", "success", 1500);
             });
         }
     },
@@ -103,7 +118,7 @@ BookmarkMenu.prototype.GetControls = function () {
         Title: "Backward",
         ImageSrc: "public/symbols/Backward.svg",
         click: function () {
-            var views = model.views[this.Id].bookmarks;
+            var views = model.views[_this.Id].bookmarks;
             var viewNames = Object.keys(views);
             if (viewNames.length === 0) {
                 return;
@@ -131,7 +146,7 @@ BookmarkMenu.prototype.GetControls = function () {
         Title: "Forward",
         ImageSrc: "public/symbols/Forward.svg",
         click: function () {
-            var views = model.views[this.Id].bookmarks;
+            var views = model.views[_this.Id].bookmarks;
             var viewNames = Object.keys(views);
             if (viewNames.length === 0) {
                 return;
@@ -156,15 +171,18 @@ BookmarkMenu.prototype.GetControls = function () {
         }
     },
     {
-        Title: "ClearAll",
+        Title: "Clear All",
         ImageSrc: "public/symbols/MarkupDelete.svg",
         click: function () {
-            model.views[this.Id].bookmarks = {};
+            var totalClearedBookmarks = Object.keys(model.views[_this.Id].bookmarks).length;
+            model.views[_this.Id].bookmarks = {};
 
             // refresh grid
             if (model.views[_this.Id].displayMenu.ViewsOpen) {
                 _this.LoadBookmarkViews(true);
             }
+            
+            DevExpress.ui.notify("'" + totalClearedBookmarks + "'" + " bookmarks cleared.", "success", 1500);
         }
     },
     {
@@ -220,6 +238,8 @@ BookmarkMenu.prototype.OnViewAdded = function (view) {
     if (model.views[_this.Id].displayMenu.ViewsOpen) {
         this.LoadBookmarkViews();
     }
+
+    DevExpress.ui.notify("'" + name + "'" + " bookmark created.", "success", 1500);
 }
 
 BookmarkMenu.prototype.OnViewDeleted = function (view) {
@@ -237,7 +257,7 @@ BookmarkMenu.prototype.ShowViews = function () {
         dataSource: [
             { title: "Bookmarks", template: "tab1" },
             { title: "Markups", template: "tab2" },
-            { title: "Annotations", template: "tab3" }
+            { title: "Tags", template: "tab3" }
         ],
         deferRendering: false,
         selectedIndex : 0

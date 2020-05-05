@@ -6,15 +6,15 @@ function DisplayMenu(id) {
     this.MarkupMenu = new MarkupMenu(id);
     this.BookmarkMenu = new BookmarkMenu(id);
     this.TagsMenu = new TagsMenu(id);
-
+    this.ModelViewsMenu = new ModelViewsMenu(id);
     this.ViewsOpen = false;
 }
 
 DisplayMenu.prototype.Toggle = function () {
-    if (this.Active) {
-        this.Close();
-    }
-    else {
+    if (!this.Active) {
+    //     this.Close();
+    // }
+    // else {
         this.Open();
     }
 }
@@ -64,7 +64,21 @@ DisplayMenu.prototype.ShowMenu = function () {
                 e.addedItems[0].click(e);
                 e.component._selection.deselectAll();
             }
-        }
+        },
+        onContentReady: function (e) {
+            var listitems = e.element.find('.dx-item');
+            var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
+                position: "right"
+            }).dxTooltip('instance');
+           listitems.on('dxhoverstart', function (args) {
+               tooltip.content().text($(this).data().dxListItemData.Title);
+               tooltip.show(args.target);
+           });
+
+           listitems.on('dxhoverend', function () {
+               tooltip.hide();
+           });
+       }
     });
 }
 
@@ -88,20 +102,22 @@ DisplayMenu.prototype.GetControls = function () {
                 _this.BookmarkMenu.Open();
                 _this.Hide();
             }
-        },
+        },        
         {
             id: 3,
-            Title: "Model Views",
-            ImageSrc: "public/symbols/ModelView.svg",
-            click: function () {
-            }
-        },
-        {
-            id: 4,
             Title: "Tags",
             ImageSrc: "public/symbols/Tags.svg",
             click: function () {
                 _this.TagsMenu.Open();
+                _this.Hide();
+            }
+        },
+        {
+            id: 4,
+            Title: "Model Views",
+            ImageSrc: "public/symbols/ModelView.svg",
+            click: function () {
+                _this.ModelViewsMenu.Open();
                 _this.Hide();
             }
         },

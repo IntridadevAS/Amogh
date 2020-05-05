@@ -7,12 +7,179 @@ function ViewerContextMenu(webViewer, ids) {
     this.ExplodeManager;
 
     this.NavCubeVisible = true;
+
+    this.MenuItems;
+}
+
+ViewerContextMenu.prototype.GetControls = function () {
+    var _this = this;
+    this.MenuItems = [
+        {
+            text: "Hide",
+            icon: "public/symbols/Hide.svg",
+            click: function () {
+                _this.OnHideClicked();
+            }
+        },
+        {           
+            text: "Isolate",
+            icon: "public/symbols/projects.png",
+            click: function () {
+                _this.OnIsolateClicked();
+            }
+        },
+        {
+            text: "Area Select",
+            icon: "public/symbols/check.png",
+            active : false,
+            click: function () {
+                _this.OnAreaSelectClicked(this);
+            }
+        },
+        {
+            text: "Model Views",
+            icon: "public/symbols/ModelView.svg",
+            click: function () {
+                _this.OnModelViewsClicked();
+            }
+        },
+        {
+            text: "Translucency",
+            icon: "public/symbols/Transparency.svg",
+            active: false,
+            click: function () {
+                if (!this.active) {
+                    _this.OnStartTranslucencyClicked();
+                }
+                else {
+                    _this.OnStopTranslucencyClicked();
+                }
+
+                this.active = !this.active;
+            }
+        },
+        {
+            text: "Zoom To Fit",
+            icon: "public/symbols/ZoomFit.svg",
+            click: function () {
+                _this.OnZoomToFitClicked();
+            }
+        },
+        {
+            text: "Set Defaults",
+            icon: "public/symbols/reports.png",
+            click: function () {
+                _this.OnSetDefaultsClicked();
+            }
+        }
+    ];
+
+    return this.MenuItems;
+}
+
+ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
+    if (!itemData.active) {
+        this.WebViewer.operatorManager.set(Communicator.OperatorId.AreaSelect, 1);
+        itemData.text = "Select";
+    }
+    else {
+        this.WebViewer.operatorManager.set(Communicator.OperatorId.Select, 1);
+        itemData.text = "Area Select";
+    }
+
+    itemData.active = !itemData.active;
+}
+
+ViewerContextMenu.prototype.OnModelViewsClicked = function () {
+    model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
+}
+
+ViewerContextMenu.prototype.OnZoomToFitClicked = function () {
+    this.WebViewer.view.fitWorld();
+}
+
+ViewerContextMenu.prototype.OnSetDefaultsClicked = function () {
+}
+
+
+ViewerContextMenu.prototype.DisableMenuItems = function (items) {
+    for (var i = 0; i < items.length; i++) {
+        for (var j = 0; j < this.MenuItems.length; j++) {
+            var menuItem = this.MenuItems[j];
+            if (menuItem.text.toLowerCase() === items[i].toLowerCase()) {
+                menuItem["disabled"] = true;
+            }
+        }
+    }
 }
 
 ViewerContextMenu.prototype.ShowMenu = function (x, y) {
 
     var _this = this;
+    if (!this.MenuItems) {
+        this.GetControls();
+    }
 
+    var contextMenuDiv = document.getElementById("contextMenu");
+   
+    $("#contextMenu").dxList({
+        dataSource: _this.MenuItems,
+        hoverStateEnabled: true,
+        focusStateEnabled: true,
+        activeStateEnabled: false,
+        width: 200,
+        elementAttr: { class: "dx-theme-accent-as-background-color" },
+        selectionMode: "single",
+        onSelectionChanged: function (e) {
+            if (e.component._selection.getSelectedItems().length > 0) {
+                e.addedItems[0].click(e);
+                e.component._selection.deselectAll();
+            }
+        },
+        onContentReady(e) {
+            contextMenuDiv.style.display = "block";
+
+            var itemHeight = e.element[0].getElementsByClassName("dx-list-item").item(0).offsetHeight;
+            const itemCount = e.component.option("items").length;
+            e.component.option("height", itemHeight * itemCount);
+        }
+    });   
+
+    // position the context menu
+    var menuHeight = contextMenuDiv.offsetHeight;
+    var menuWidth = contextMenuDiv.offsetWidth;
+
+    var viewerContainer = document.getElementById(this.WebViewer._params.containerId);
+
+    // get mouse X position relative to viewerContainer
+    var viewerX = x - $("#" + this.WebViewer._params.containerId).offset().left;
+
+    // get mouse Y position relative to viewerContainer
+    var viewerY = y - $("#" + this.WebViewer._params.containerId).offset().top;
+
+    // adjust x
+    if ((viewerContainer.offsetWidth - viewerX) < menuWidth) {
+        x = x - menuWidth;
+    }
+
+    // adjust y
+    if ((viewerContainer.offsetHeight - viewerY) < menuHeight) {
+        y = y - menuHeight;
+    }
+
+    contextMenuDiv.style.top = y + "px";
+    contextMenuDiv.style.left = x + "px";
+
+    // close context menu, if mouse click is done outside
+    document.onclick = function (e) {
+        if (e.target.id !== 'contextMenu') {
+            contextMenuDiv.style.display = 'none';
+        }
+    };
+
+
+    return;
+    ///////////////////
     var contextMenuDiv = document.getElementById("contextMenu");
     contextMenuDiv.innerHTML = "";
 
@@ -371,6 +538,10 @@ ViewerContextMenu.prototype.ExplodeActive = function () {
 }
 
 ViewerContextMenu.prototype.OnChangeBackgroundClicked = function () {
+    openBackgroundColorPallete(this.WebViewer);
+}
+
+function openBackgroundColorPallete(viewer) {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("changeBGPopup");
 
@@ -382,15 +553,13 @@ ViewerContextMenu.prototype.OnChangeBackgroundClicked = function () {
 
     popup.style.top = ((window.innerHeight / 2) - 110) + "px";
     popup.style.left = ((window.innerWidth / 2) - 55) + "px";
-    
+
     popup.style.padding = "5px";
 
-    var verticalGradient = this.WebViewer.view.getBackgroundColor();
+    var verticalGradient = viewer.view.getBackgroundColor();
 
     document.getElementById("bottomColor").value = xCheckStudio.Util.rgbToHex(verticalGradient.bottom.r, verticalGradient.bottom.g, verticalGradient.bottom.b);
     document.getElementById("topColor").value = xCheckStudio.Util.rgbToHex(verticalGradient.top.r, verticalGradient.top.g, verticalGradient.top.b);
-
-    var _this = this;
 
     document.getElementById("changeBGDefaultButton").onclick = function () {
 
@@ -399,14 +568,14 @@ ViewerContextMenu.prototype.OnChangeBackgroundClicked = function () {
 
         var backgroundTopColor = xCheckStudio.Util.hexToRgb("#000000");
         var backgroundBottomColor = xCheckStudio.Util.hexToRgb("#F8F9F9");
-        _this.WebViewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
+        viewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
     }
 
-    document.getElementById("changeBGOkButton").onclick = function () {     
+    document.getElementById("changeBGOkButton").onclick = function () {
 
-            var backgroundTopColor = xCheckStudio.Util.hexToRgb(document.getElementById("topColor").value);
-            var backgroundBottomColor = xCheckStudio.Util.hexToRgb(document.getElementById("bottomColor").value);
-            _this.WebViewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);        
+        var backgroundTopColor = xCheckStudio.Util.hexToRgb(document.getElementById("topColor").value);
+        var backgroundBottomColor = xCheckStudio.Util.hexToRgb(document.getElementById("bottomColor").value);
+        viewer.view.setBackgroundColor(backgroundTopColor, backgroundBottomColor);
     };
 
     document.getElementById("changeBGCancelButton").onclick = function () {

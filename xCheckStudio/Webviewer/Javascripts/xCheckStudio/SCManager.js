@@ -87,6 +87,7 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
 
                 // show navigation cube
                 showNavigationCube(viewer);
+                showAxisTriad(viewer);
 
                 // construct model tree
                 _this.ModelTree = new SCModelBrowser(_this.Id,

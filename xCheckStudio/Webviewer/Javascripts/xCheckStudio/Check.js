@@ -499,6 +499,8 @@ function SetCheckSpaceReviewStatus() {
             url: "PHP/CheckSpaceManager.php"
         }).done(function (msg) {
             if (msg === "true") {
+                checkinfo.review = "1";
+                localStorage.setItem("checkinfo", JSON.stringify(checkinfo));
                 return resolve(true);
             }
             return resolve(false);

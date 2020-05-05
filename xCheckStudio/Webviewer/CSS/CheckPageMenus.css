@@ -2,10 +2,10 @@
 .displayMenu{
     position: absolute;
     z-index: 1;
-    top: calc( 50% - 100px);
+    top: calc( 50% - 95px);
     background: rgba(25.5, 25.5, 25.5) !important;
     width: 40px;
-    height: 200px;
+    height: 190px;
     left: 2px;
     overflow: hidden !important;
     text-align: center;
@@ -15,22 +15,33 @@
   
   .displayMenu:hover, .markupMenu:hover, 
   .shapesMenu:hover, .bookmarkMenu:hover,
-  .tagsMenu:hover {
+  .tagsMenu:hover, .modelViewsMenu:hover,
+  .displayStylesMenu:hover, .sectioningMenu:hover,
+  .measureMenu:hover {
     opacity: 1;
   }
   
   .displayMenu .dx-list-item-content, .markupMenu .dx-list-item-content, .shapesMenu .dx-list-item-content,
-  .bookmarkMenu .dx-list-item-content, .tagsMenu .dx-list-item-content
+  .bookmarkMenu .dx-list-item-content, .tagsMenu .dx-list-item-content, .modelViewsMenu .dx-list-item-content,
+  .displayStylesMenu .dx-list-item-content, .sectioningMenu .dx-list-item-content, .measureMenu .dx-list-item-content
   {
     padding: 4px 4px !important;
   }
   
+  
+  .displayMenu .dx-list-item, .markupMenu .dx-list-item, .shapesMenu .dx-list-item,
+  .bookmarkMenu .dx-list-item, .tagsMenu .dx-list-item, .modelViewsMenu .dx-list-item,
+  .displayStylesMenu .dx-list-item, .sectioningMenu .dx-list-item, .measureMenu .dx-list-item
+  {
+    border-top: none !important;
+  }
+
   .markupMenu{
     position: absolute;
     z-index: 1;
     width: 40px;
-    height: 400px;
-    top: calc( 50% - 200px);
+    height: 380px;
+    top: calc( 50% - 190px);
     background: rgba(25.5, 25.5, 25.5) !important;
     left: 2px;
     overflow: hidden !important;
@@ -49,6 +60,18 @@
   /* top : calc(50% - 165px); */
   /* left : calc(50% - 125px); */
   top: 0px;
+  right: 0px;
+  }
+
+  .measureViewsContainer
+  {
+  position: absolute;
+  z-index: 1; 
+  width: 340px;
+  display: none;
+  /* top : calc(50% - 165px); */
+  /* left : calc(50% - 125px); */
+  bottom: 0px;
   right: 0px;
   }
   
@@ -95,8 +118,8 @@
   position: absolute;
   z-index: 1;
   width: 40px;
-  height: 80px;
-  top: calc( 50% - 200px);
+  height: 76px;
+  top: calc( 50% - 190px);
   background: rgba(25.5, 25.5, 25.5) !important;
   left: 42px;
   overflow: hidden !important;
@@ -110,8 +133,8 @@
     position: absolute;
     z-index: 1;
     width: 40px;
-    height: 320px;
-    top: calc( 50% - 160px);
+    height: 304px;
+    top: calc( 50% - 152px);
     background: rgba(25.5, 25.5, 25.5) !important;
     left: 2px;
     overflow: hidden !important;
@@ -124,8 +147,8 @@
     position: absolute;
     z-index: 1;
     width: 40px;
-    height: 200px;
-    top: calc( 50% - 100px);
+    height: 190px;
+    top: calc( 50% - 95px);
     background: rgba(25.5, 25.5, 25.5) !important;
     left: 2px;
     overflow: hidden !important;
@@ -134,10 +157,68 @@
     display: none;
   }
 
-  .markupViewsContainer .dx-tabpanel .dx-tab {
+  .markupViewsContainer .dx-tabpanel .dx-tab ,
+  .measureViewsContainer .dx-tabpanel .dx-tab{
     width: 110px !important;
 }
 
-.markupViewsContainer .dx-tab {
+.markupViewsContainer .dx-tab ,
+.measureViewsContainer .dx-tab {
   padding: 5px !important;; 
+}
+
+.modelViewsMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 456px;
+  top: calc( 50% - 228px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  left: 2px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+.displayStylesMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 190px;
+  top: calc( 50% - 380px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  left: 42px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+.sectioningMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 228px;
+  top: calc( 50% - 380px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  left: 42px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+.measureMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 228px;
+  top: calc( 50% - 190px);
+  background: rgba(25.5, 25.5, 25.5) !important;
+  left: 42px;
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
 }

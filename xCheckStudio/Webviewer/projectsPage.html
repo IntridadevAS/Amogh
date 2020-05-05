@@ -1117,24 +1117,25 @@
         DrawerMenu.create(disabledMenuItem, []);
         ContextMenu.init();
 
-        var fromInfoStr = localStorage.getItem('fromInfo');
-        if (fromInfoStr) {
-          localStorage.removeItem('fromInfo');
-          var fromInfo = JSON.parse(fromInfoStr);
+        
+        controller.init().then(function () {
+          var fromInfoStr = localStorage.getItem('fromInfo');
+          if (fromInfoStr) {
+            localStorage.removeItem('fromInfo');
+            var fromInfo = JSON.parse(fromInfoStr);
 
-          model.currentModule = fromInfo.fromModule;
-          
-          if(fromInfo.proj.type.toLowerCase() === "public")
-          {
-            controller.setPublicCurrentProj(fromInfo.proj.projectid);
-            controller.fetchProjectInfo(fromInfo.proj.projectid);
+            model.currentModule = fromInfo.fromModule;
+
+            if (fromInfo.proj.type.toLowerCase() === "public") {
+              controller.setPublicCurrentProj(fromInfo.proj.projectid);
+              controller.fetchProjectInfo(fromInfo.proj.projectid);
+            }
+            else if (fromInfo.proj.type.toLowerCase() === "private") {
+              controller.setMyCurrentProj(fromInfo.proj.projectid);
+              controller.fetchProjectInfo(fromInfo.proj.projectid);
+            }
           }
-          else if(fromInfo.proj.type.toLowerCase() === "private")
-          {
-            controller.setMyCurrentProj(fromInfo.proj.projectid);
-            controller.fetchProjectInfo(fromInfo.proj.projectid);          
-          }
-        }
+        });
       }
 
     function OnCreateProject() {

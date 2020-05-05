@@ -49,7 +49,8 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
 
             // create nav cube
             showNavigationCube(viewer);
-
+            showAxisTriad(viewer);
+            
             _this.highlightComponentsfromResult();
 
             //activate context menu            

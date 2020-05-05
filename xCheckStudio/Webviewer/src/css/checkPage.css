@@ -226,6 +226,10 @@ button + button {
   z-index: 1;
 }
 
+.checkName:hover {
+  background-color: black;
+}
+
 .checkTogglesContainer{
   grid-area: buttons;
   display: grid;

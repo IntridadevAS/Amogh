@@ -25,6 +25,7 @@ let model = {
       markupViews : {},
       bookmarks : {},
       annotations : {},
+      measures:{}
     },
     b: {
       id: "b",
@@ -40,7 +41,8 @@ let model = {
       annotationOperatorId : null,
       markupViews : {},
       bookmarks : {},
-      annotations : {}, 
+      annotations : {},
+      measures:{}
     },
     c: {
       id: "c",
@@ -57,6 +59,7 @@ let model = {
       markupViews : {},
       bookmarks : {},
       annotations : {},
+      measures:{}
     },
     d: {
       id: "d",
@@ -73,6 +76,7 @@ let model = {
       markupViews : {},
       bookmarks : {},
       annotations : {},
+      measures:{}
     }
   },
   onDataSourceTabChanged: function (tabID) {

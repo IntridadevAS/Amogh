@@ -118,6 +118,7 @@ button {
 
 .btnSymbol:hover {
   border: 1px solid var(--intridaBlue);
+  cursor: pointer;
 }
 
 .dropDownMenu {
@@ -354,17 +355,19 @@ input:checked + .slider:before {
   cursor: pointer;
   left: 50%;
   margin-left: -5px;
-  max-width: 40px;
+  max-width: 40px; 
   justify-content: center;
   align-items: center;
   text-align: center;
   top: 15px;
+  white-space: nowrap;
 }
 
 .tooltip::before {
   content: attr(data-tooltip);
   position: absolute;
   top: 1.5em;
+  right: 0px;
   font-size: 1em;
   padding: 1px 5px;
   color: white;

@@ -1127,7 +1127,7 @@
 
     <div class="background">
 
-      <div id='contextMenu' style="z-index: 1; position: absolute;">
+      <div id='contextMenu' style="display: none;">
       </div>
 
       <div class="tabButtonContainer" id="tabsContainer">
@@ -1154,7 +1154,7 @@
             </button>
 
             <button id="reloadData" type="button" class="btnSymbol tooltipHov">
-              <span class="tooltip" data-tooltip="Reload Data(Reset)"></span>
+              <span class="tooltip" data-tooltip="Reload"></span>
               <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px; transform: scaleX(-1);" alt="">
             </button>
 
@@ -1337,6 +1337,11 @@
               <div id="shapesMenua" class="shapesMenu"> </div>
               <div id="bookmarkMenua" class="bookmarkMenu"> </div>
               <div id="tagsMenua" class="tagsMenu"> </div>
+              <div id="modelViewsMenua" class="modelViewsMenu"> </div>
+              <div id="displayStylesMenua" class="displayStylesMenu"> </div>
+              <div id="sectioningMenua" class="sectioningMenu"> </div>
+              <div id="measureMenua" class="measureMenu"> </div>
+              <div id="menuTooltipa" style="z-index:1;"> </div>
 
               <!-- Markup views overlay -->
               <div id="markupViewsContainera" class="markupViewsContainer">
@@ -1364,6 +1369,23 @@
                   src="public\symbols\MarkupDeleteBlack.svg"/>  
                 </div>
               </div>
+
+                <!-- Measure views overlay -->
+                <div id="measureViewsContainera" class="measureViewsContainer">
+                  <div id="measureViewsCaptionBara" class="markupViewsCaptionBar">
+                    <div class="markupViewsCaption">Measure Views</div>
+                    <img id="measureViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                      style="width: 25px; height: 25px;" />
+                  </div>
+                  <div id="measureViewTabsa" class="markupViewsTabs">
+                    <div data-options="dxTemplate : { name: 'tab1' } ">
+                      <div id="measuresGrida" style="height: 250px;"></div>
+                    </div>
+                  </div>
+                  <div class="markupViewsBottomStrip">
+                    <img id="measureViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+                  </div>
+                </div>
 
               <!-- visualizerA -->
               <div id="visualizerA" class="tempContainer"> </div>
@@ -1448,7 +1470,11 @@
           <div id="shapesMenub" class="shapesMenu"> </div>
           <div id="bookmarkMenub" class="bookmarkMenu"> </div>
           <div id="tagsMenub" class="tagsMenu"> </div>
-
+          <div id="modelViewsMenub" class="modelViewsMenu"> </div>
+          <div id="displayStylesMenub" class="displayStylesMenu"> </div>
+          <div id="sectioningMenub" class="sectioningMenu"> </div>
+          <div id="measureMenub" class="measureMenu"> </div>
+          <div id="menuTooltipb" style="z-index:1;"> </div>
           <!-- Markup views overlay -->
           <div id="markupViewsContainerb" class="markupViewsContainer">
             <div id="markupViewsCaptionBarb" class="markupViewsCaptionBar">
@@ -1471,10 +1497,26 @@
               <img id="markupViewsClearBtnb" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
             </div>
           </div>
-
+          
+          <!-- Measure views overlay -->
+          <div id="measureViewsContainerb" class="measureViewsContainer">
+            <div id="measureViewsCaptionBarb" class="markupViewsCaptionBar">
+              <div class="markupViewsCaption">Measure Views</div>
+              <img id="measureViewsContainerCloseb" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                style="width: 25px; height: 25px;" />
+            </div>
+            <div id="measureViewTabsb" class="markupViewsTabs">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="measuresGridb" style="height: 250px;"></div>
+              </div>
+            </div>
+            <div class="markupViewsBottomStrip">
+              <img id="measureViewsClearBtnb" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+            </div>
+          </div>
+          
           <!-- visualizerB -->
           <div id="visualizerB" class="tempContainer"> </div>
-          
           </div>
 
         </div>
@@ -1555,7 +1597,12 @@
           <div id="shapesMenuc" class="shapesMenu"> </div>
           <div id="bookmarkMenuc" class="bookmarkMenu"> </div>
           <div id="tagsMenuc" class="tagsMenu"> </div>
-
+          <div id="modelViewsMenuc" class="modelViewsMenu"> </div>
+          <div id="displayStylesMenuc" class="displayStylesMenu"> </div>
+          <div id="sectioningMenuc" class="sectioningMenu"> </div>
+          <div id="measureMenuc" class="measureMenu"> </div>
+          <div id="menuTooltipc" style="z-index:1;"> </div>
+          
           <!-- Markup views overlay -->
           <div id="markupViewsContainerc" class="markupViewsContainer">
             <div id="markupViewsCaptionBarc" class="markupViewsCaptionBar">
@@ -1576,6 +1623,23 @@
             </div>
             <div class="markupViewsBottomStrip">
               <img id="markupViewsClearBtnc" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+            </div>
+          </div>
+          
+          <!-- Measure views overlay -->
+          <div id="measureViewsContainerc" class="measureViewsContainer">
+            <div id="measureViewsCaptionBarc" class="markupViewsCaptionBar">
+              <div class="markupViewsCaption">Measure Views</div>
+              <img id="measureViewsContainerClosec" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                style="width: 25px; height: 25px;" />
+            </div>
+            <div id="measureViewTabsc" class="markupViewsTabs">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="measuresGridc" style="height: 250px;"></div>
+              </div>
+            </div>
+            <div class="markupViewsBottomStrip">
+              <img id="measureViewsClearBtnc" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
             </div>
           </div>
           
@@ -1658,7 +1722,12 @@
               <div id="shapesMenud" class="shapesMenu"> </div>
               <div id="bookmarkMenud" class="bookmarkMenu"> </div>
               <div id="tagsMenud" class="tagsMenu"> </div>
-
+              <div id="modelViewsMenud" class="modelViewsMenu"> </div>
+              <div id="displayStylesMenud" class="displayStylesMenu"> </div>
+              <div id="sectioningMenud" class="sectioningMenu"> </div>
+              <div id="measureMenud" class="measureMenu"> </div>
+              <div id="menuTooltipd" style="z-index:1;"> </div>
+              
               <!-- Markup views overlay -->
               <div id="markupViewsContainerd" class="markupViewsContainer">
                 <div id="markupViewsCaptionBard" class="markupViewsCaptionBar">
@@ -1679,6 +1748,23 @@
                 </div>
                 <div class="markupViewsBottomStrip">
                   <img id="markupViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+                </div>
+              </div>
+              
+              <!-- Measure views overlay -->
+              <div id="measureViewsContainerd" class="measureViewsContainer">
+                <div id="measureViewsCaptionBard" class="markupViewsCaptionBar">
+                  <div class="markupViewsCaption">Measure Views</div>
+                  <img id="measureViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                    style="width: 25px; height: 25px;" />
+                </div>
+                <div id="measureViewTabsd" class="markupViewsTabs">
+                  <div data-options="dxTemplate : { name: 'tab1' } ">
+                    <div id="measuresGridd" style="height: 250px;"></div>
+                  </div>
+                </div>
+                <div class="markupViewsBottomStrip">
+                  <img id="measureViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
                 </div>
               </div>
               
@@ -1880,6 +1966,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\MarkupMenu.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\BookmarkMenu.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\TagsMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ModelViewsMenu.js"></script>
   <link rel="stylesheet" href="CSS/CheckPageMenus.css" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationMarkup.js"></script>  

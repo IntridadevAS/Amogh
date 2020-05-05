@@ -45,6 +45,7 @@ ModelBrowser3DViewer.prototype.bindEvents = function (viewer) {
 
             // create nav cube
             showNavigationCube(viewer);
+            showAxisTriad(viewer);
 
             // highlight components
             _this.HighlightComponentsfromResult();

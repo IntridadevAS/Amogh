@@ -16,14 +16,20 @@ let controller = {
   projectToCopy: undefined,
   checkSpaceToCopy: undefined,
   init: function () {
-    this.fetchProjects();
-    projectView.init();
-    this.permissions();
-    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if (userinfo.permission === "check" || userinfo.permission === "prep" || userinfo.permission === "Admin")
-      model.currentModule = "check";
-    else
-      model.currentModule = "review";
+    return new Promise((resolve) => {
+
+      projectView.init();
+      this.permissions();
+      var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+      if (userinfo.permission === "check" || userinfo.permission === "prep" || userinfo.permission === "Admin")
+        model.currentModule = "check";
+      else
+        model.currentModule = "review";
+
+      this.fetchProjects().then(function (success) {
+        return resolve(true);
+      });
+    });
   },
 
   permissions: function () {
@@ -275,7 +281,6 @@ let controller = {
   setMyCurrentProj: function (projID) {
     let obj = model.myProjects.find(obj => obj.projectid == projID);
     model.currentProject = obj;
-
   },
 
   setPublicCurrentProj: function (projID) {
@@ -373,29 +378,34 @@ let controller = {
   // TODO: Prototech - where is this stored? Provided by server? In electronJS? How to access?
   // Sort header for how projects to be sorted in server provided JSON file.
   fetchProjects: function () {
-    model.myProjects = [];
-    model.publicProjects = [];
-    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    $.ajax({
-      data: {
-        'InvokeFunction': 'GetProjects',
-        'userid': userinfo.userid,
-      },
-      type: "POST",
-      url: "PHP/ProjectManager.php"
-    }).done(function (msg) {
-      var object = JSON.parse(msg);
-      var array = [];
-      for (var i in object) {
-        var obj = object[i];
-        if (obj.type.toLowerCase() === 'private')
-          model.myProjects.push(object[i]);
-        else
-          model.publicProjects.push(object[i]);
-      }
-      controller.sortProjects();
-      projectView.renderProjects();
-      onToggleOverlayDisplayForCheckSpaces(false);
+    return new Promise((resolve) => {
+
+      model.myProjects = [];
+      model.publicProjects = [];
+      var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+      $.ajax({
+        data: {
+          'InvokeFunction': 'GetProjects',
+          'userid': userinfo.userid,
+        },
+        type: "POST",
+        url: "PHP/ProjectManager.php"
+      }).done(function (msg) {
+        var object = JSON.parse(msg);
+        var array = [];
+        for (var i in object) {
+          var obj = object[i];
+          if (obj.type.toLowerCase() === 'private')
+            model.myProjects.push(object[i]);
+          else
+            model.publicProjects.push(object[i]);
+        }
+        controller.sortProjects();
+        projectView.renderProjects();
+        onToggleOverlayDisplayForCheckSpaces(false);
+
+        return resolve(true);
+      });
     });
   },
 
@@ -1437,7 +1447,7 @@ let deleteItems = {
   }
 }
 
-controller.init();
+// controller.init();
 
 function onCancelPublicProjectEdit() {
   var overlay = document.getElementById("uiBlockingOverlay");

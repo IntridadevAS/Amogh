@@ -40,6 +40,11 @@ MarkupMenu.prototype.Close = function () {
 
     var element = document.getElementById("markupMenu" + this.Id);
     element.setAttribute('style', 'display:none');
+
+    // Close shapes menu, if open
+    if (this.ShapesMenu.Active) {
+        this.ShapesMenu.Close();
+    }
 }
 
 MarkupMenu.prototype.ShowMenu = function () {
@@ -67,7 +72,21 @@ MarkupMenu.prototype.ShowMenu = function () {
                 e.addedItems[0].click(e);
                 e.component._selection.deselectAll();
             }
-        }
+        },
+        onContentReady: function (e) {
+            var listitems = e.element.find('.dx-item');
+            var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
+                position: "right"
+            }).dxTooltip('instance');
+           listitems.on('dxhoverstart', function (args) {
+               tooltip.content().text($(this).data().dxListItemData.Title);
+               tooltip.show(args.target);
+           });
+
+           listitems.on('dxhoverend', function () {
+               tooltip.hide();
+           });
+       }
     });
 }
 
@@ -87,7 +106,12 @@ MarkupMenu.prototype.GetControls = function () {
             Title: "Shapes",
             ImageSrc: "public/symbols/MarkupShapes.svg",
             click: function () {
-                _this.ShapesMenu.Open();
+                if (!_this.ShapesMenu.Active) {
+                    _this.ShapesMenu.Open();
+                }
+                else {
+                    _this.ShapesMenu.Close();
+                }
             }
         },
         {
@@ -106,6 +130,7 @@ MarkupMenu.prototype.GetControls = function () {
                 var canvasSize = _this.Webviewer.view.getCanvasSize();
                 var config = new Communicator.SnapshotConfig(canvasSize.x, canvasSize.y);
                 _this.Webviewer.takeSnapshot(config).then(function (image) {
+                    DevExpress.ui.notify("Screenshot is captured.", "success", 1500);
                 });
             }
         },
@@ -124,10 +149,10 @@ MarkupMenu.prototype.GetControls = function () {
         },
         {
             id: 6,
-            Title: "Backwards",
+            Title: "Backward",
             ImageSrc: "public/symbols/Backward.svg",
             click: function () {
-                var views = model.views[this.Id].markupViews;
+                var views = model.views[_this.Id].markupViews;
                 var viewNames = Object.keys(views);
                 if (viewNames.length === 0) {
                     return;
@@ -153,10 +178,10 @@ MarkupMenu.prototype.GetControls = function () {
         },
         {
             id: 7,
-            Title: "Forwards",
+            Title: "Forward",
             ImageSrc: "public/symbols/Forward.svg",
             click: function () {
-                var views = model.views[this.Id].markupViews;
+                var views = model.views[_this.Id].markupViews;
                 var viewNames = Object.keys(views);
                 if (viewNames.length === 0) {
                     return;
@@ -185,12 +210,15 @@ MarkupMenu.prototype.GetControls = function () {
             Title: "Clear Marks",
             ImageSrc: "public/symbols/MarkupDelete.svg",
             click: function () {
-                model.views[this.Id].markupViews = {};
+                var totalClearedMarkups = Object.keys(model.views[_this.Id].markupViews).length;
+                model.views[_this.Id].markupViews = {};
 
                 // refresh grid
                 if (model.views[_this.Id].displayMenu.ViewsOpen) {
                     _this.LoadMarkupViews(true);
                 }
+
+                DevExpress.ui.notify("'" + totalClearedMarkups + "'" + " markups cleared.", "success", 1500);
             }
         },
         {
@@ -253,6 +281,8 @@ MarkupMenu.prototype.OnViewAdded = function (view) {
     if (model.views[_this.Id].displayMenu.ViewsOpen) {
         this.LoadMarkupViews();
     }
+
+    DevExpress.ui.notify("'" + name + "'" + " markup created.", "success", 1500);
 }
 
 MarkupMenu.prototype.OnViewDeleted = function (view) {
@@ -283,26 +313,6 @@ MarkupMenu.prototype.DeleteViews = function () {
     this.LoadMarkupViews();
 };
 
-// MarkupMenu.prototype.SerializeView = function () {
-//     // var selectedView = this._viewPanel.getSelectedViewUniqueId();
-//     // if (selectedView) {
-//     //     var outputText = document.getElementById("outputText");
-//     //     var markupManager = this._viewer.markupManager;
-//     //     var markupView = markupManager.getMarkupView(selectedView);
-//     //     console.assert(markupView !== null);
-//     //     var markupData = {
-//     //         views: [markupView.toJson()]
-//     //     };
-//     //     outputText.value = JSON.stringify(markupData);
-//     // }
-// };
-
-// MarkupMenu.prototype.LoadMarkup = function () {
-//     // var inputText = document.getElementById("inputText");
-//     // var markupManager = this._viewer.markupManager;
-//     // return markupManager.loadMarkupData(inputText.value);
-// };
-
 MarkupMenu.prototype.ShowViews = function () {
     var _this = this;
     model.views[_this.Id].displayMenu.ViewsOpen = true;
@@ -313,7 +323,7 @@ MarkupMenu.prototype.ShowViews = function () {
         dataSource: [
             { title: "Bookmarks", template: "tab1" },
             { title: "Markups", template: "tab2" },
-            { title: "Annotations", template: "tab3" }
+            { title: "Tags", template: "tab3" }
         ],
         deferRendering: false,
         selectedIndex : 1
@@ -448,9 +458,13 @@ function ShapesMenu(id, webviewer, markupMenu) {
     this.Id = id;
     this.Webviewer = webviewer;
     this.MarkupMenu = markupMenu;
+
+    this.Active = false;
 }
 
 ShapesMenu.prototype.Open = function () {
+    this.Active = true;
+
     var element = document.getElementById("shapesMenu" + this.Id);
     element.setAttribute('style', 'display:block');
 
@@ -458,6 +472,8 @@ ShapesMenu.prototype.Open = function () {
 }
 
 ShapesMenu.prototype.Close = function () {
+    this.Active = false;
+
     var element = document.getElementById("shapesMenu" + this.Id);
     element.setAttribute('style', 'display:none');
 }
@@ -488,7 +504,21 @@ ShapesMenu.prototype.ShowMenu = function () {
                 e.addedItems[0].click(e);
                 e.component._selection.deselectAll();
             }
-        }
+        },
+        onContentReady: function (e) {
+            var listitems = e.element.find('.dx-item');
+            var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
+                position: "right"
+            }).dxTooltip('instance');
+            listitems.on('dxhoverstart', function (args) {
+                tooltip.content().text($(this).data().dxListItemData.Title);
+                tooltip.show(args.target);
+            });
+
+           listitems.on('dxhoverend', function () {
+               tooltip.hide();
+           });
+       }
     });
 }
 
