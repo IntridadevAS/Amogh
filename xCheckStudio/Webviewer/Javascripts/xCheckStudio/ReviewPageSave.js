@@ -59,30 +59,4 @@ var ReviewModule = {
             });
         });
     },
-
-    // createCheckSpaceDBonSave: function () {
-    //     return new Promise((resolve) => {
-    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    //         $.ajax({
-    //             url: 'PHP/ProjectManager.php',
-    //             type: "POST",
-    //             async: false,
-    //             data:
-    //             {
-    //                 'InvokeFunction': "CreateCheckSpaceDBonSave",
-    //                 'ProjectName': projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             success: function (msg) {
-    //                 if (msg != 'fail') {
-    //                     return resolve(true);
-    //                 }
-
-    //                 return resolve(false);
-    //             }
-    //         });
-    //     });
-    // },
 }

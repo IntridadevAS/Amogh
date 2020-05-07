@@ -20,7 +20,7 @@ function SCManager(id,
     // Components which don't have category and component class
     this.Properties = {};
 
-    this.PropertyCallout;
+    this.PropertyCallout;    
 }
 
 // inherit from parent
@@ -56,6 +56,13 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
                 viewer.view.fitWorld();
                 viewer.resizeCanvas();
 
+                // init display menu class
+                var currentView = model.views[_this.Id];
+                currentView.displayMenu = new DisplayMenu(_this.Id);               
+                currentView.annotationOperator = new Example.AnnotationOperator(
+                    viewer);
+                currentView.annotationOperatorId = viewer.registerCustomOperator( currentView.annotationOperator);                        
+
                 // set viewer's background color
                 _this.SetViewerBackgroundColor();
 
@@ -80,6 +87,7 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
 
                 // show navigation cube
                 showNavigationCube(viewer);
+                showAxisTriad(viewer);
 
                 // construct model tree
                 _this.ModelTree = new SCModelBrowser(_this.Id,
@@ -637,6 +645,135 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
             undefined,
             undefined);
     }
+}
+
+SCManager.prototype.SerializeMarkupViews = function () {
+    var currentView = model.views[this.Id];
+
+    var markupData = this.SerializeViews(currentView.markupViews);
+    // var allViews = [];
+    // for (var viewName in currentView.markupViews) {
+
+    //     var viewId = currentView.markupViews[viewName];
+    //     var markupManager = this.Webviewer.markupManager;
+    //     var markupView = markupManager.getMarkupView(viewId);
+
+    //     allViews.push(markupView.toJson());
+    // }
+
+    // var markupData = {
+    //     views: allViews
+    // };
+    return JSON.stringify(markupData);
+};
+
+SCManager.prototype.RestoreMarkupViews = function (viewsStr) {
+    var markupManager = this.Webviewer.markupManager;
+    markupManager.loadMarkupData(JSON.parse(viewsStr)).then(function(result){
+
+    });
+    var currentView = model.views[this.Id];
+    var views = JSON.parse(JSON.parse(viewsStr)).views;
+    for (var i = 0; i < views.length; i++) {
+        currentView.markupViews[views[i].name] = views[i].uniqueId;
+    }
+};
+
+SCManager.prototype.SerializeBookmarkViews = function () {
+    var currentView = model.views[this.Id];
+
+    var markupData = this.SerializeViews(currentView.bookmarks);
+    // var allViews = [];
+    // for (var viewName in currentView.bookmarks) {
+
+    //     var viewId = currentView.bookmarks[viewName];
+    //     var markupManager = this.Webviewer.markupManager;
+    //     var markupView = markupManager.getMarkupView(viewId);
+
+    //     allViews.push(markupView.toJson());
+    // }
+
+    // var markupData = {
+    //     views: allViews
+    // };
+    return JSON.stringify(markupData);
+};
+
+SCManager.prototype.SerializeViews = function (views) {
+    var allViews = [];
+    for (var viewName in views) {
+
+        var viewId = views[viewName];
+        var markupManager = this.Webviewer.markupManager;
+        var markupView = markupManager.getMarkupView(viewId);
+
+        allViews.push(markupView.toJson());
+    }
+
+    var markupData = {
+        views: allViews
+    };
+
+    return markupData;
+}
+
+SCManager.prototype.RestoreBookmarkViews = function (viewsStr) {
+    var markupManager = this.Webviewer.markupManager;
+    markupManager.loadMarkupData(JSON.parse(viewsStr)).then(function(result){
+
+    });
+    
+    var currentView = model.views[this.Id];
+    var views = JSON.parse(JSON.parse(viewsStr)).views;
+    for (var i = 0; i < views.length; i++) {
+        currentView.bookmarks[views[i].name] = views[i].uniqueId;
+    }
+};
+
+SCManager.prototype.SerializeAnnotations = function () {
+    var currentView = model.views[this.Id];
+
+    var allAnnotations = [];
+    for (var markupHandle in currentView.annotations) {
+        var annotation = currentView.annotations[markupHandle];
+        var leaderLineAnchor = annotation.getLeaderLineAnchor();
+        var textboxAnchor = annotation.getTextBoxAnchor();
+        var text = annotation.getLabel();
+
+        allAnnotations.push({
+            "text" : text,
+            "leaderLineAnchor" : [leaderLineAnchor.x, leaderLineAnchor.y, leaderLineAnchor.z],
+            "textboxAnchor" : [textboxAnchor.x, textboxAnchor.y, textboxAnchor.z]
+        });
+    }
+
+    return allAnnotations;
+}
+
+SCManager.prototype.RestoreAnnotations = function (annotationsStr) {
+    var annotations = JSON.parse(annotationsStr);
+    for (var i = 0; i < annotations.length; i++) {
+        var annotation = annotations[i];
+
+        var leaderLineAnchor = new Communicator.Point3(
+            Number(annotation.leaderLineAnchor[0]),
+            Number(annotation.leaderLineAnchor[1]),
+            Number(annotation.leaderLineAnchor[2])
+        );
+
+        var annotationMarkup = new Example.AnnotationMarkup(this.Webviewer, leaderLineAnchor, annotation.text);
+        annotationMarkup.setTextBoxAnchor(new Communicator.Point3(
+            Number(annotation.textboxAnchor[0]),
+            Number(annotation.textboxAnchor[1]),
+            Number(annotation.textboxAnchor[2])
+        ));
+        annotationMarkup.draw();
+        var markupHandle = this.Webviewer.markupManager.registerMarkup(annotationMarkup);
+
+        model.views[this.Id].annotations[markupHandle] = annotationMarkup;
+    }
+
+    model.views[this.Id].annotationOperator._annotationCount = annotations.length + 1;
 }
 
 function XMLSourceManager(id, sourceName, sourceType, viewerOptions) {

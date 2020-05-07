@@ -7,7 +7,7 @@ var DrawerMenu = {
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
-            revealMode: "expand",
+            revealMode: "expand",            
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
                 hideMenuItems(hiddenItems);
@@ -29,7 +29,7 @@ var DrawerMenu = {
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
                     itemTemplate: function(data, index) {
-                        var result = $("<div>").addClass("menuItem");                
+                        var result = $("<div>").addClass("menuItem");              
                        
                         $("<img>").attr({
                             "src": data.ImageSrc,
@@ -116,7 +116,7 @@ var menuItems = [
     {
         id: 6,
         Title: "Review",
-        ImageSrc: "public/symbols/review.png",
+        ImageSrc: "public/symbols/Review_Module_Icon.svg",       
         click: function () {
             menu.onReviewClicked();
         }

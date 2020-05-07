@@ -22,36 +22,8 @@
     box-shadow: 2px 2px 2px 0px rgba(143, 144, 145, 1); */
   } 
   
- /* #menuList a {
-    display: block;
-    color: #555;
-    text-decoration: none;
-    padding: 6px 8px 6px 30px;
-    width: 150px;
-    position: relative;
-  }
+  /* .markupMenu:hover{
+    opacity: 1;
+  } */
+
   
-  #menuList a img,
-  #menuList a i.fa {
-    height: 20px;
-    font-size: 8px;
-    width: 20px;
-    position: absolute;
-    left: 5px;
-    top: 2px;
-  }
-  
-  #menuList a span {
-    color: #BCB1B3;
-    float: right;
-  }
-  
-  #menuList a:hover {
-    color: #fff;
-    background: #3879D9;
-  }
-  
-  #menuList hr {
-    border: 1px solid #EBEBEB;
-    border-bottom: 0;
-  }   */

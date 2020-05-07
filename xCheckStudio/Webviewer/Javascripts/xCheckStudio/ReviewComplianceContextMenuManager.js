@@ -9,6 +9,8 @@ function ReviewComplianceContextMenuManager(complianceReviewManager) {
 
     this.ComponentTableContainer;
     this.PropertyTableContainer;
+
+    this.TranslucencyActive = false;
 }
 
 // assign parent's method to this class
@@ -45,9 +47,16 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             disable = _this.DisableAcceptForComponent(this[0]);
                             return disable;
                         }
-                    },
-                    "reference": {
-                        name: "Reference",
+                    },                   
+                    "hide": {
+                        name: "Hide",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
                     },
                     "isolate": {
                         name: "Isolate",
@@ -69,8 +78,19 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             return false;
                         }
                     },
-                    "hide": {
-                        name: "Hide",
+                    "modelViews": {
+                        name: "Model Views",
+                        icon: "modelViews",
+                        visible: function () {
+                            if (_this.HaveSCOperations()) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    },                   
+                    "translucency": {
+                        name: "Translucency",
                         visible: function () {
                             if (_this.HaveSCOperations()) {
                                 return true;
@@ -79,26 +99,9 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                             return false;
                         }
                     },
-                    "startTranslucency": {
-                        name: "Start Translucency",
-                        visible: function () {
-                            if (_this.HaveSCOperations()) {
-                                return true;
-                            }
-
-                            return false;
-                        }
+                    "reference": {
+                        name: "Reference",
                     },
-                    "stopTranslucency": {
-                        name: "Stop Translucency",
-                        visible: function () {
-                            if (_this.HaveSCOperations()) {
-                                return true;
-                            }
-
-                            return false;
-                        }
-                    }
                 }
             };
         }
@@ -353,11 +356,37 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key === "hide") {
         this.OnHideClick();
     }
-    else if (key === "startTranslucency") {
-        this.OnStartTranslucency();
+    else if (key.toLowerCase() === "translucency") {
+
+        if (!this.TranslucencyActive) {
+            this.OnStartTranslucency();
+        }
+        else {
+            this.OnStopTranslucency();
+        }
     }
-    else if (key === "stopTranslucency") {
-        this.OnStopTranslucency();
+    else if (key.toLowerCase() === "modelviews") {
+        this.OnModelViewsClicked();
+    }
+}
+
+ReviewComplianceContextMenuManager.prototype.OnModelViewsClicked = function () {
+    var menus = model.checks[model.currentCheck].menus;
+    for (var viewerId in menus) {
+        if ("ModelViewsMenu" in menus[viewerId]) {
+            menus[viewerId]["ModelViewsMenu"].Open();
+
+            var sourceName = model.checks[model.currentCheck].reviewManager.ComplianceCheckManager.source;
+
+            if (sourceName) {
+                DevExpress.ui.notify(
+                    "Hovering menus enabled for " + "'" + sourceName + "'",
+                    "success",
+                    1500);
+            }
+        }
+
+        break;
     }
 }
 
@@ -737,6 +766,7 @@ ReviewComplianceContextMenuManager.prototype.OnStartTranslucency = function () {
     if (!nodes) {
         return;
     }
+    this.TranslucencyActive = true;
 
     // activate translucency 
     var viewerInterface = model.checks["compliance"]["viewer"];
@@ -766,6 +796,7 @@ ReviewComplianceContextMenuManager.prototype.OnStopTranslucency = function () {
     if (!(viewerInterface.Viewer._params.containerId in translucencyManagers)) {
         return;
     }
+    this.TranslucencyActive = false;
 
     translucencyManagers[viewerInterface.Viewer._params.containerId].Stop();
     delete translucencyManagers[viewerInterface.Viewer._params.containerId];

@@ -176,7 +176,30 @@ ReviewViewerInterface.prototype.StoreHiddenResultId = function(selectedComponent
                         }
                     }
                 }
+
+                
+            // source C
+            if (model.checks[model.currentCheck].sourceCViewer) {
+                var viewerInterface = model.checks[model.currentCheck].sourceCViewer;
+                if (viewerInterface == this) {
+                    if (rowData.SourceCNodeId !== "" &&
+                        rowData.SourceCNodeId !== null) {
+                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = selectedRow["tableId"];
+                    }
+                }
             }
+
+            // source D
+            if (model.checks[model.currentCheck].sourceDViewer) {
+                var viewerInterface = model.checks[model.currentCheck].sourceDViewer;
+                if (viewerInterface == this) {
+                    if (rowData.SourceDNodeId !== "" &&
+                        rowData.SourceDNodeId !== null) {
+                        viewerInterface.HiddenResultIdVsTableId[Number(rowData.ID)] = selectedRow["tableId"];
+                    }
+                }
+            }
+        }
     }
     else {
         if(model.checks[model.currentCheck].viewer) {

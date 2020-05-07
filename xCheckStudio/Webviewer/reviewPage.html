@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="src/prompts/promptForms.css" type="text/css" />
   <link href="CSS/OverlayStyles.css" rel="stylesheet" type="text/css" />
   <link href="CSS/accordionButton.css" rel="stylesheet" type="text/css" />
+
 </head>
 
 <body>
@@ -650,7 +651,8 @@
         <span>Sign Out</span>
       </div>
       <div class="promptMessageDiv">
-        <span></span><span style="font-style:normal;font-weight:normal;">Are you sure you want to sign out all users forcefully?</span>
+        <span></span><span style="font-style:normal;font-weight:normal;">Are you sure you want to sign out all users
+          forcefully?</span>
       </div>
       <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelSignOutAllUsers()">
         <svg class="Path_310" viewBox="0 0 90 30">
@@ -701,8 +703,8 @@
         <span>Save before Exit</span>
       </div>
       <div id="Save_data_and_Exit_XcheckStudi">
-        <span>Save data before Exiting </span><span
-          style="font-style:normal;font-weight:bold;">XcheckStudio</span><span style="font-style:normal;font-weight:normal;">?</span>
+        <span>Save data before Exiting </span><span style="font-style:normal;font-weight:bold;">XcheckStudio</span><span
+          style="font-style:normal;font-weight:normal;">?</span>
       </div>
       <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
         <svg class="Path_310" viewBox="0 0 90 30">
@@ -897,8 +899,8 @@
     <div id="There_is_no_valid_checkcase">
       <svg class="Rectangle_1204">
         <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
-          width="581" height="155">
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
         </rect>
       </svg>
       <svg class="Rectangle_1215">
@@ -933,7 +935,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- change background overlay -->
   <div id="changeBGPopup" class="popup">
     <div>
@@ -941,15 +943,17 @@
       <input type="color" id="topColor" value="#000000"><br>
       <label>Bottom color:</label>
       <input type="color" id="bottomColor" value="#F8F9F9"><br><br>
-      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
-        id="changeBGDefaultButton"> Default </button>
-      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
-        id="changeBGOkButton"> OK </button>
-      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
+      <button type="button" class="ignoreDefault"
+        style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGDefaultButton"> Default
+      </button>
+      <button type="button" class="ignoreDefault"
+        style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGOkButton"> OK </button>
+      <button type="button" class="ignoreDefault"
+        style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
         id="changeBGCancelButton">Cancel</button>
     </div>
   </div>
-  
+
   <header>
     <button id="mainMenu" type="button" class="dropDownMenu">
       <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
@@ -969,16 +973,16 @@
             onclick="onExitClicked()"></button>
       </div>
     </div>
-  
+
   </header>
-  
+
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
     <div id="loadIndicator"></div>
-  
+
     <div class="background">
       <div id='contextMenu' style="z-index: 4; position: absolute;">
       </div>
-  
+
       <div class="tabButtonContainer" id="tabsContainer">
         <div id="tabContainer" class="tabContainer">
           <div id="comparisonTab" class="tab" data-id="comparison">
@@ -1001,41 +1005,41 @@
 
             <button id="reload" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Reload"></span>
-              <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px;" alt="">
+              <img src="public/symbols/Reload.svg" style="width: 25px; height: 25px; transform: scaleX(-1);" alt="">
             </button>
 
             <button id="reCheck" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="ReCheck"></span>
               <img src="public/symbols/ReCheck.svg" style="width: 25px; height: 25px;" alt="">
             </button>
-             
+
             <button id="revision" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Revision"></span>
               <img src="public/symbols/Revision.svg" style="width: 25px; height: 25px;" alt="">
             </button>
-  
+
             <button id="display" data-tooltip="Display" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Display"></span>
               <img src="public/symbols/Display.svg" style="width: 25px; height: 25px;" alt="">
             </button>
-  
+
             <button id="checkInfo" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Check Summary"></span>
               <img src="public/symbols/CheckSummary.svg" style="width: 25px; height: 25px;" alt="">
             </button>
-  
+
             <button id="saveProgress" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Save"></span>
               <img src="public/symbols/Save.svg" style="width: 25px; height: 25px;" alt="">
-            </button> 
-              
+            </button>
+
             <button id="navCube" type="button" class="btnSymbol tooltipHov">
               <span class="tooltip" data-tooltip="Navigation Cube"></span>
               <img src="public/symbols/Cube.svg" style="width: 25px; height: 25px;" alt="">
             </button>
-  
+
           </div>
-  
+
         </div>
       </div>
       <div class="viewsContainer" id="viewsContainer">
@@ -1050,34 +1054,31 @@
         </div>
 
         <!-- Comments Callout -->
-        <div id="commentsCalloutBtn" class="commentsCalloutBtn" 
-          onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+        <div id="commentsCalloutBtn" class="commentsCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
           onmouseout="viewPanels.onMouseOutCalloutBtn(this)">
         </div>
-        
+
         <!-- Name Bar -->
-        <div id="commentsCalloutNameBar" class="commentsCalloutNameBar" 
-        onmouseover="viewPanels.onMouseOverCommentsCallout()"
-        onmouseout="viewPanels.onMouseOutCommentsCallout()">
+        <div id="commentsCalloutNameBar" class="commentsCalloutNameBar"
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" onmouseout="viewPanels.onMouseOutCommentsCallout()">
           <span> </span>
         </div>
-        
+
         <!-- Comments Callout Container -->
         <div id="commentsCalloutContainer" class="commentsCalloutContainer"
-          onmouseover="viewPanels.onMouseOverCommentsCallout()" 
-          onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" onmouseout="viewPanels.onMouseOutCommentsCallout()">
           <div data-options="dxTemplate : { name: 'tab1' } ">
             <div class="commentsTabPage">
-               <!-- Search control -->
-               <div id="commentsCalloutSearchBox" class="searchBox">
+              <!-- Search control -->
+              <div id="commentsCalloutSearchBox" class="searchBox">
                 <div id="commentsCalloutSearchText"> </div>
-                <div id="commentsCalloutSearchBtn" class="searchButton"> 
-                 <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
+                <div id="commentsCalloutSearchBtn" class="searchButton">
+                  <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                 </div>
-               </div> 
+              </div>
 
               <div id="commentsCalloutCommentsArea" class="commentsArea">
-        
+
               </div>
               <div class="commentInput">
                 <div id="commentsCalloutCommentInput">
@@ -1097,16 +1098,19 @@
           <div id="tableDataComparison" class="tableContainer">
             <div class="tablesArea">
               <div id="comparisonMainContainer" class="tempContainer">
-  
+
               </div>
             </div>
             <div class="infoArea" style="height: 40px">
               <div class="infoAreaHeader">
-                <img src="public/symbols/InfoMenu.svg" alt="">
-                <p>Detail Info</p>
-                <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
+                <img src="public/symbols/CheckSummary.svg" style="width: 22px; height: 22px;" alt="">
+                <img src="public/symbols/Properties.svg"
+                  style="width: 25px; height: 25px; position: absolute; left: 15px;" alt="">
+                <p style="position: absolute; left: 45px; top:9px">Detail Info</p>
+                <img class="invert arrow" src="public/symbols/ChevronDN.svg"
+                  onclick="viewPanels.toggleDetailInfo(this)">
               </div>
-  
+
               <div id="comparisonDetailInfoContainer" class="detailInfoContainer">
                 <div id="comparisonDetailInfo"></div>
               </div>
@@ -1117,34 +1121,35 @@
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="comparisonAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="Analytics.ShowAnalytics(this)">
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
+              onclick="Analytics.ShowAnalytics(this)">
             </div>
 
             <!-- Property callout btn for comparison -->
             <div id="propertyCalloutcomparison" class="propertyCalloutBtn"
-              onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
-              onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-            
+              onmouseover="viewPanels.onMouseOverCalloutBtn(this)" onmouseout="viewPanels.onMouseOutCalloutBtn(this)">
+            </div>
+
             <!-- Property callout container-->
             <div id="propertyCalloutNameBarcomparison" class="propertyCalloutNameBar"
-            onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')" 
-            onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')"s>
+              onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')" s>
               <span> </span>
             </div>
-            <div id="propertyCalloutContainercomparison" class="propertyCalloutContainerForComparison" style="opacity: 0.6;"
-              onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')" 
+            <div id="propertyCalloutContainercomparison" class="propertyCalloutContainerForComparison"
+              style="opacity: 0.6;" onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')"
               onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')">
-              <div data-options="dxTemplate : { name: 'tab1' } ">              
+              <div data-options="dxTemplate : { name: 'tab1' } ">
                 <div class="propertyCalloutPropertiesArea">
                   <div id="propertyCalloutPropGridcomparison"></div>
-                </div>               
+                </div>
               </div>
               <div data-options="dxTemplate : { name: 'tab2' } ">
                 <div id="propertyCalloutRefGridcomparison"></div>
               </div>
               <div data-options="dxTemplate : { name: 'tab3' } ">
                 <div class="commentsTabPage">
-                
+
                   <!-- Search control -->
                   <div id="propertyCalloutSearchBoxcomparison" class="searchBox">
                     <div id="propertyCalloutSearchTextcomparison"> </div>
@@ -1152,7 +1157,7 @@
                       <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
-                
+
                   <div id="commentsAreacomparison" class="commentsArea">
                   </div>
                   <div class="commentInput">
@@ -1165,13 +1170,65 @@
                 </div>
               </div>
             </div>
-            <div id="propertyCalloutStatusBarcomparison" class="propertyCalloutStatusBar" 
-            onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')" 
-            onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')"> 
-              <!-- <div id="firstSource"> </div>
-              <div id="secondSource"> </div>
-              <div id="thirdSource"> </div>
-              <div id="fourthSource"> </div> -->
+            <div id="propertyCalloutStatusBarcomparison" class="propertyCalloutStatusBar"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('comparison')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('comparison')">
+            </div>
+
+            <!-- Display menu -->
+            <div id="displayMenucomparison" class="displayMenu" style="position:absolute;"> </div>
+            <div id="markupMenucomparison" class="markupMenu" style="position:absolute;"> </div>
+            <div id="shapesMenucomparison" class="shapesMenu" style="position:absolute;"> </div>
+            <div id="bookmarkMenucomparison" class="bookmarkMenu" style="position:absolute;"> </div>
+            <div id="tagsMenucomparison" class="tagsMenu" style="position:absolute;"> </div>
+            <div id="modelViewsMenucomparison" class="modelViewsMenu" style="position:absolute;"> </div>
+            <div id="displayStylesMenucomparison" class="displayStylesMenu" style="position:absolute;"> </div>
+            <div id="sectioningMenucomparison" class="sectioningMenu" style="position:absolute;"> </div>
+            <div id="measureMenucomparison" class="measureMenu" style="position:absolute;"> </div>
+            <div id="menuTooltipcomparison" style="z-index:1; position:absolute;"> </div>
+
+            <!-- Markup views overlay -->
+            <div id="markupViewsContainercomparison" class="markupViewsContainer"
+              style="position:absolute; display: none;">
+              <div id="markupViewsCaptionBarcomparison" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Views</div>
+                <img id="markupViewsContainerClosecomparison" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
+              </div>
+              <div id="markupViewTabscomparison" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="bookmarksGridcomparison" style="height: 250px;"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab2' } ">
+                  <div id="markupsGridcomparison" style="height: 250px;"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab3' } ">
+                  <div id="annotationsGridcomparison" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="markupViewsClearBtncomparison" class="markupViewsClearBtn"
+                  src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
+            </div>
+
+            <!-- Measure views overlay -->
+            <div id="measureViewsContainercomparison" class="measureViewsContainer"
+              style="position:absolute; display: none;">
+              <div id="measureViewsCaptionBarcomparison" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Measure Views</div>
+                <img id="measureViewsContainerClosecomparison" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
+              </div>
+              <div id="measureViewTabscomparison" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="measuresGridcomparison" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="measureViewsClearBtncomparison" class="markupViewsClearBtn"
+                  src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
             </div>
 
             <div id="comparePanelA" class="comparePanel" style="width: 200%">
@@ -1183,7 +1240,7 @@
                   <p> <span id="translucencyValue1" style="color: grey"></span></p>
                 </div>
               </div>
-  
+
               <!-- explode slider -->
               <div id="explodeOverlay1" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1191,7 +1248,7 @@
                   <p><span id="explodeValue1"></span></p>
                 </div>
               </div>
-  
+
             </div>
             <div id="comparePanelB" class="comparePanel" style="display: none">
               <div id="compare2" class="tempContainer"></div>
@@ -1202,7 +1259,7 @@
                   <p> <span id="translucencyValue2" style="color: grey"></span></p>
                 </div>
               </div>
-  
+
               <!-- explode slider -->
               <div id="explodeOverlay2" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1210,7 +1267,7 @@
                   <p><span id="explodeValue2"></span></p>
                 </div>
               </div>
-  
+
             </div>
             <div id="comparePanelC" class="comparePanel" style="display: none">
               <div id="compare3" class="tempContainer"></div>
@@ -1221,7 +1278,7 @@
                   <p> <span id="translucencyValue3" style="color: grey"></span></p>
                 </div>
               </div>
-  
+
               <!-- explode slider -->
               <div id="explodeOverlay3" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1229,7 +1286,7 @@
                   <p><span id="explodeValue3"></span></p>
                 </div>
               </div>
-  
+
             </div>
             <div id="comparePanelD" class="comparePanel" style="display: none">
               <div id="compare4" class="tempContainer"></div>
@@ -1240,7 +1297,7 @@
                   <p> <span id="translucencyValue4" style="color: grey"></span></p>
                 </div>
               </div>
-  
+
               <!-- explode slider -->
               <div id="explodeOverlay4" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1248,13 +1305,13 @@
                   <p><span id="explodeValue4"></span></p>
                 </div>
               </div>
-  
+
             </div>
           </div>
           <div id="comparisonSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
             <iframe id="IFrameSmallAnalyticsComparison" src=" " style="height: 100%; width: 100%"></iframe>
           </div>
-  
+
         </div>
         <div id="viewPanelCompliance" class="viewPanel hide">
           <div id="tableDataCompliance" class="tableContainer">
@@ -1263,15 +1320,18 @@
             </div>
             <div class="infoArea" style="height: 40px">
               <div class="infoAreaHeader">
-                <img src="public/symbols/InfoMenu.svg" alt="">
-                <p>Detail Info</p>
-                <img class="invert arrow" src="public/symbols/ChevronDN.svg" onclick="viewPanels.toggleDetailInfo(this)">
+                <img src="public/symbols/CheckSummary.svg" style="width: 22px; height: 22px;" alt="">
+                <img src="public/symbols/Properties.svg"
+                  style="width: 25px; height: 25px; position: absolute; left: 15px;" alt="">
+                <p style="position: absolute; left: 45px; top:9px">Detail Info</p>
+                <img class="invert arrow" src="public/symbols/ChevronDN.svg"
+                  onclick="viewPanels.toggleDetailInfo(this)">
               </div>
-  
+
               <div id="complianceDetailInfoContainer" class="detailInfoContainer">
                 <div id="complianceDetailInfo"></div>
               </div>
-  
+
             </div>
           </div>
           <div id="center" class="grabBar"></div>
@@ -1279,33 +1339,34 @@
             <div class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
             <div id="complianceAnalyticsBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn" onclick="Analytics.ShowAnalytics(this)">
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" class="analyticsBtn"
+              onclick="Analytics.ShowAnalytics(this)">
             </div>
 
-             <!-- Property callout btn for comparison -->
-             <div id="propertyCalloutcompliance" class="propertyCalloutBtn"
-             onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
-             onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-           
-           <!-- Property callout container-->
-           <div id="propertyCalloutNameBarcompliance" class="propertyCalloutNameBar"
-           onmouseover="viewPanels.onMouseOverPropertyCallout('compliance')" 
-           onmouseout="viewPanels.onMouseOutPropertyCallout('compliance')">
-            <span> </span>
-          </div>
-           <div id="propertyCalloutContainercompliance" class="propertyCalloutContainerForCompliance" style="opacity: 0.6;"
-             onmouseover="viewPanels.onMouseOverPropertyCallout('compliance')" 
-             onmouseout="viewPanels.onMouseOutPropertyCallout('compliance')">
-             <div data-options="dxTemplate : { name: 'tab1' } ">               
-               <div class="propertyCalloutPropertiesArea">
-                 <div id="propertyCalloutPropGridcompliance"></div>
-               </div>               
-             </div>
-             <div data-options="dxTemplate : { name: 'tab2' } ">
-               <div id="propertyCalloutRefGridcompliance"></div>
-             </div>
-             <div data-options="dxTemplate : { name: 'tab3' } ">
-               <div class="commentsTabPage">
+            <!-- Property callout btn for comparison -->
+            <div id="propertyCalloutcompliance" class="propertyCalloutBtn"
+              onmouseover="viewPanels.onMouseOverCalloutBtn(this)" onmouseout="viewPanels.onMouseOutCalloutBtn(this)">
+            </div>
+
+            <!-- Property callout container-->
+            <div id="propertyCalloutNameBarcompliance" class="propertyCalloutNameBar"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('compliance')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('compliance')">
+              <span> </span>
+            </div>
+            <div id="propertyCalloutContainercompliance" class="propertyCalloutContainerForCompliance"
+              style="opacity: 0.6;" onmouseover="viewPanels.onMouseOverPropertyCallout('compliance')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('compliance')">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div class="propertyCalloutPropertiesArea">
+                  <div id="propertyCalloutPropGridcompliance"></div>
+                </div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="propertyCalloutRefGridcompliance"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab3' } ">
+                <div class="commentsTabPage">
                   <!-- Search control -->
                   <div id="propertyCalloutSearchBoxcompliance" class="searchBox">
                     <div id="propertyCalloutSearchTextcompliance"> </div>
@@ -1314,22 +1375,74 @@
                     </div>
                   </div>
 
-                 <div id="commentsAreacompliance" class="commentsArea">
-           
-                 </div>
-                 <div class="commentInput">
-                   <div id="commentInputcompliance">
-                   </div>
-                   <div id="addCommentBtncompliance" class="addCommentBtn">
-                     <img src="images\arrow.png" style="width: 25px; height: 25px;" />
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
+                  <div id="commentsAreacompliance" class="commentsArea">
+
+                  </div>
+                  <div class="commentInput">
+                    <div id="commentInputcompliance">
+                    </div>
+                    <div id="addCommentBtncompliance" class="addCommentBtn">
+                      <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Display menu -->
+            <div id="displayMenucompliance" class="displayMenu" style="position:absolute;"> </div>
+            <div id="markupMenucompliance" class="markupMenu" style="position:absolute;"> </div>
+            <div id="shapesMenucompliance" class="shapesMenu" style="position:absolute;"> </div>
+            <div id="bookmarkMenucompliance" class="bookmarkMenu" style="position:absolute;"> </div>
+            <div id="tagsMenucompliance" class="tagsMenu" style="position:absolute;"> </div>
+            <div id="modelViewsMenucompliance" class="modelViewsMenu" style="position:absolute;"> </div>
+            <div id="displayStylesMenucompliance" class="displayStylesMenu" style="position:absolute;"> </div>
+            <div id="sectioningMenucompliance" class="sectioningMenu" style="position:absolute;"> </div>
+            <div id="measureMenucompliance" class="measureMenu" style="position:absolute;"> </div>
+            <div id="menuTooltipcompliance" style="z-index:1; position:absolute;"> </div>
+
+            <!-- Markup views overlay -->
+            <div id="markupViewsContainercompliance" class="markupViewsContainer" style="position:absolute; display: none;">
+              <div id="markupViewsCaptionBarcompliance" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Views</div>
+                <img id="markupViewsContainerClosecompliance" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                  style="width: 25px; height: 25px;" />
+              </div>
+              <div id="markupViewTabscompliance" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="bookmarksGridcompliance" style="height: 250px;"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab2' } ">
+                  <div id="markupsGridcompliance" style="height: 250px;"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab3' } ">
+                  <div id="annotationsGridcompliance" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="markupViewsClearBtncompliance" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
+            </div>
+
+            <!-- Measure views overlay -->
+            <div id="measureViewsContainercompliance" class="measureViewsContainer" style="position:absolute; display: none;">
+              <div id="measureViewsCaptionBarcompliance" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Measure Views</div>
+                <img id="measureViewsContainerClosecompliance" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                  style="width: 25px; height: 25px;" />
+              </div>
+              <div id="measureViewTabscompliance" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="measuresGridcompliance" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="measureViewsClearBtncompliance" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
+            </div>
 
             <div id="compliance1" class="tempContainer">
-  
+
               <!-- Translucency slider -->
               <div id="translucencyOverlay5" class="sliderOverlay" style="display: none">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1337,7 +1450,7 @@
                   <p> <span id="translucencyValue5" style="color: grey"></span></p>
                 </div>
               </div>
-  
+
               <!-- explode slider -->
               <div id="explodeOverlay5" class="sliderOverlay">
                 <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1345,7 +1458,7 @@
                   <p><span id="explodeValue5"></span></p>
                 </div>
               </div>
-  
+
             </div>
           </div>
           <div id="complianceSmallAnalyticsContainer" class="visualizerContainer" style="display: none">
@@ -1406,8 +1519,8 @@
     }
 
     .dx-datagrid-headers .dx-header-row {
-      color: #ffffff !important;
-      background-color: lightgray !important;
+      color: black !important;
+      /* background-color: lightgray !important; */
     }
 
     .dx-loadindicator-icon .dx-loadindicator-segment {
@@ -1503,10 +1616,10 @@
       cursor: pointer;
 
     }
-    
-    .ignoreDefault { 
-            all: unset; 
-    } 
+
+    .ignoreDefault {
+      all: unset;
+    }
   </style>
 
   <!-- JQuery dependencies -->
@@ -1523,16 +1636,23 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\LogoutManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ElectronCheck.js"></script>
 
-  <!-- devExpress Dependancies -->
-  <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
-  <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
-  <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
-
   <!-- excel export dependancies -->
   <script type="text/javascript" src="src\devExtreme\js\jszip.min.js"></script>
   <script type="text/javascript" src="src\devExtreme\js\exceljs.min.js"></script>
   <script type="text/javascript" src="src\devExtreme\js\FileSaver.min.js"></script>
 
+  <!-- devExpress Dependancies -->
+  <link rel="stylesheet" href="src\devExtreme\css\dx.common.css" type="text/css" />
+  <link rel="stylesheet" href="src\devExtreme\css\dx.light.css" type="text/css" />
+  <script type="text/javascript" src="src\devExtreme\js\dx.all.js"></script>
+
+  <link rel="stylesheet" href="CSS/ReviewPageMenus.css" type="text/css" /> 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\HoveringMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewDisplayMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewMarkupMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewBookmarkMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewTagsMenu.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewModelViewsMenu.js"></script>
 
   <script type="text/javascript" src="src/scripts/main.js"></script>
   <script type="text/javascript" src="src/scripts/reviewPage.js"></script>
@@ -1601,11 +1721,15 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\VersioningManager.js"></script>
 
-  <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script> 
+  <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewPropertyCallout.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ReviewCommentsCallout.js"></script>
   <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
+
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationMarkup.js"></script>
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperatorBase.js"></script>
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperator.js"></script>
 
   <script>
     $("#loadIndicator").dxLoadPanel({
@@ -1848,12 +1972,12 @@
 
     function setFavoriteVersion(versionId) {
       VersioningManager.setFavoriteVersion(versionId);
-    }    
+    }
 
     function deleteVersion(versionId) {
       VersioningManager.deleteVersion(versionId);
-    }    
-    
+    }
+
 
   </script>
 </body>

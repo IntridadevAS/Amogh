@@ -355,6 +355,73 @@ function loadComparisonData(comparisonCheckGroups,
     var propertyCallout = new PropertyCallout("comparison");
     propertyCallout.Init();
     comparisonData["PropertyCallout"] = propertyCallout;
+
+    // Menus
+    menus = comparisonData["menus"];
+    if (comparisonData["sourceAViewer"] &&
+        comparisonData["sourceAViewer"].Is3DViewer()) {
+        var id = "comparison";
+        var viewerId = "a";
+        var menusA = menus[viewerId];
+        menusA["DisplayMenu"] = new DisplayMenu(id, viewerId);
+        menusA["MarkupMenu"] = new MarkupMenu(id, viewerId);
+        menusA["BookmarkMenu"] = new BookmarkMenu(id, viewerId);
+        menusA["TagsMenu"] = new TagsMenu(id, viewerId);
+        menusA["ModelViewsMenu"] = new ModelViewsMenu(id, viewerId);        
+        
+        menusA["ShapesMenu"] = new ShapesMenu(id, viewerId);
+        menusA["DisplayStylesMenu"] = new DisplayStylesMenu(id, viewerId);
+        menusA["SectioningMenu"] = new SectioningMenu(id, viewerId);
+        menusA["MeasureMenu"] = new MeasureMenu(id, viewerId);
+    }
+    if (comparisonData["sourceBViewer"] &&
+        comparisonData["sourceBViewer"].Is3DViewer()) {
+        var id = "comparison";
+        var viewerId = "b";
+        var menusB = menus[viewerId];
+        menusB['DisplayMenu'] = new DisplayMenu(id, viewerId);
+        menusB["MarkupMenu"] = new MarkupMenu(id, viewerId);
+        menusB["BookmarkMenu"] = new BookmarkMenu(id, viewerId);
+        menusB["TagsMenu"] = new TagsMenu(id, viewerId);
+        menusB["ModelViewsMenu"] = new ModelViewsMenu(id, viewerId);
+       
+        menusB["ShapesMenu"] = new ShapesMenu(id, viewerId);
+        menusB["DisplayStylesMenu"] = new DisplayStylesMenu(id, viewerId);
+        menusB["SectioningMenu"] = new SectioningMenu(id, viewerId);
+        menusB["MeasureMenu"] = new MeasureMenu(id, viewerId);
+    }
+    if (comparisonData["sourceCViewer"] &&
+        comparisonData["sourceCViewer"].Is3DViewer()) {
+        var id = "comparison";
+        var viewerId = "c";
+        var menusC = menus[viewerId];
+        menusC['DisplayMenu'] = new DisplayMenu(id, viewerId);
+        menusC["MarkupMenu"] = new MarkupMenu(id, viewerId);
+        menusC["BookmarkMenu"] = new BookmarkMenu(id, viewerId);
+        menusC["TagsMenu"] = new TagsMenu(id, viewerId);
+        menusC["ModelViewsMenu"] = new ModelViewsMenu(id, viewerId);
+        
+        menusC["ShapesMenu"] = new ShapesMenu(id, viewerId);
+        menusC["DisplayStylesMenu"] = new DisplayStylesMenu(id, viewerId);
+        menusC["SectioningMenu"] = new SectioningMenu(id, viewerId);
+        menusC["MeasureMenu"] = new MeasureMenu(id, viewerId);
+    }
+    if (comparisonData["sourceDViewer"]  &&
+        comparisonData["sourceDViewer"].Is3DViewer()) {
+        var id = "comparison";
+        var viewerId = "d";
+        var menusD = menus[viewerId];
+        menusD['DisplayMenu'] = new DisplayMenu(id, viewerId);
+        menusD["MarkupMenu"] = new MarkupMenu(id, viewerId);
+        menusD["BookmarkMenu"] = new BookmarkMenu(id, viewerId);
+        menusD["TagsMenu"] = new TagsMenu(id, viewerId);
+        menusD["ModelViewsMenu"] = new ModelViewsMenu(id, viewerId);
+      
+        menusD["ShapesMenu"] = new ShapesMenu(id, viewerId);
+        menusD["DisplayStylesMenu"] = new DisplayStylesMenu(id, viewerId);
+        menusD["SectioningMenu"] = new SectioningMenu(id, viewerId);
+        menusD["MeasureMenu"] = new MeasureMenu(id, viewerId);
+    }    
 }
 
 function GetComponentIdVsComponentData(sourceComponents) {
@@ -423,6 +490,25 @@ function loadComplianceData(compliance,
     var propertyCallout = new PropertyCallout("compliance");
     propertyCallout.Init();
     complianceData["PropertyCallout"] = propertyCallout;
+
+    // Menus    
+    if (("viewer" in complianceData) &&
+         complianceData["viewer"].Is3DViewer()) {
+
+        var id = "compliance";
+        var viewerId = "a";
+        var menus = complianceData["menus"][viewerId];
+        menus['DisplayMenu'] = new DisplayMenu(id, viewerId);
+        menus["MarkupMenu"] = new MarkupMenu(id, viewerId);
+        menus["BookmarkMenu"] = new BookmarkMenu(id, viewerId);
+        menus["TagsMenu"] = new TagsMenu(id, viewerId);
+        menus["ModelViewsMenu"] = new ModelViewsMenu(id, viewerId);
+       
+        menus["ShapesMenu"] = new ShapesMenu(id, viewerId);
+        menus["DisplayStylesMenu"] = new DisplayStylesMenu(id, viewerId);
+        menus["SectioningMenu"] = new SectioningMenu(id, viewerId);
+        menus["MeasureMenu"] = new MeasureMenu(id, viewerId);
+    }
 }
 
 function getDataSourceFiles() {

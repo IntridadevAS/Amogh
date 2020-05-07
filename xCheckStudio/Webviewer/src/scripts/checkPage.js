@@ -18,7 +18,14 @@ let model = {
       visualizer: document.getElementById("visualizerA"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null,      
+      annotationOperator : null,      
+      annotationOperatorId : null,    
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
+      measures:{}
     },
     b: {
       id: "b",
@@ -28,7 +35,14 @@ let model = {
       visualizer: document.getElementById("visualizerB"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null,      
+      annotationOperator : null,      
+      annotationOperatorId : null,
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
+      measures:{}
     },
     c: {
       id: "c",
@@ -38,7 +52,14 @@ let model = {
       visualizer: document.getElementById("visualizerC"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null,      
+      annotationOperator : null,     
+      annotationOperatorId : null,
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
+      measures:{}
     },
     d: {
       id: "d",
@@ -48,7 +69,14 @@ let model = {
       visualizer: document.getElementById("visualizerD"),
       fileName: "",
       type: undefined,
-      complianceSwitchChecked: false
+      complianceSwitchChecked: false,
+      displayMenu : null,      
+      annotationOperator : null,     
+      annotationOperatorId : null,
+      markupViews : {},
+      bookmarks : {},
+      annotations : {},
+      measures:{}
     }
   },
   onDataSourceTabChanged: function (tabID) {
@@ -152,7 +180,11 @@ let viewTabs = {
       } else if (changeTab) {
         controller.selectView(changeTab.dataset.id);
         viewTabs.selectTab(changeTab);
-      } else { return };
+      }
+      else {
+        model.currentTabId = null;
+        return
+      };
     })
 
     this.addTab.addEventListener("click", viewPanels.showAddPanel);

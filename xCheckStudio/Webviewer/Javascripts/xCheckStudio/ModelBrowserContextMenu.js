@@ -4,6 +4,8 @@ function ModelBrowserContextMenu(haveComponentOptions = true) {
       this.IsolateManager;
 
       this.HaveComponentOptions = haveComponentOptions;
+
+      this.TranslucencyActive = false;
 }
 
 ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
@@ -13,16 +15,16 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
 
       $("#" + this.ModelBrowser.ModelBrowserContainer).contextMenu({
             className: 'contextMenu_style',
-            selector: 'tr',
-            // selector: '.jsgrid-row, .jsgrid-alt-row',
+            selector: 'tr',           
             build: function ($triggerElement, e) {
                   return {
                         callback: function (key, options) {
                               _this.OnMenuItemClicked(key, options);
                         },
-                        items: {
-                              "isolate": {
-                                    name: "Isolate",
+                        items: {                   
+                              "hide": {
+                                    name: "Hide",
+                                    icon: "hide",
                                     visible: function () {
                                           if (_this.HaveSCOperations()) {
                                                 return true;
@@ -31,8 +33,9 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
-                              "hide": {
-                                    name: "Hide",
+                              "isolate": {
+                                    name: "Isolate",
+                                    icon: "isolate",
                                     visible: function () {
                                           if (_this.HaveSCOperations()) {
                                                 return true;
@@ -43,6 +46,7 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                               },
                               "show": {
                                     name: "Show",
+                                    icon: "show",
                                     visible: function () {
                                           if (_this.HaveSCOperations()) {
                                                 return true;
@@ -51,8 +55,9 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
-                              "startTranslucency": {
-                                    name: "Start Translucency",
+                              "modelViews": {
+                                    name: "Model Views",
+                                    icon: "modelViews",
                                     visible: function () {
                                           if (_this.HaveSCOperations()) {
                                                 return true;
@@ -61,8 +66,9 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
-                              "stopTranslucency": {
-                                    name: "Stop Translucency",
+                              "translucency": {
+                                    name: "Translucency",
+                                    icon: "translucency",
                                     visible: function () {
                                           if (_this.HaveSCOperations()) {
                                                 return true;
@@ -71,8 +77,19 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
+                              // "stopTranslucency": {
+                              //       name: "Stop Translucency",
+                              //       visible: function () {
+                              //             if (_this.HaveSCOperations()) {
+                              //                   return true;
+                              //             }
+
+                              //             return false;
+                              //       }
+                              // },
                               "reference": {
                                     name: "Reference",
+                                    icon: "reference",
                                     visible: function () {
                                           if (_this.HaveComponentOptions) {
                                                 return true;
@@ -106,15 +123,26 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       else if (key.toLowerCase() === "show") {
             this.OnShowClicked();
       }
-      else if (key.toLowerCase() === "starttranslucency") {
-            this.OnStartTranslucencyClicked();
-      }
-      else if (key.toLowerCase() === "stoptranslucency") {
-            this.OnStopTranslucencyClicked();
+      else if (key.toLowerCase() === "translucency") {
+
+            if (!this.TranslucencyActive) {
+                  this.OnStartTranslucencyClicked();
+            }
+            else {
+                  this.OnStopTranslucencyClicked();
+            }
       }
       else if (key.toLowerCase() === "reference") {
             this.OnReferenceClicked();
       }
+      else if (key.toLowerCase() === "modelviews") {
+            this.OnModelViewsClicked();
+      }
+}
+
+ModelBrowserContextMenu.prototype.OnModelViewsClicked = function () {
+      closeAnyOpenMenu();
+      model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
 }
 
 ModelBrowserContextMenu.prototype.OnReferenceClicked = function () {
@@ -245,6 +273,7 @@ ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {
             nodeIds.length === 0) {
             return;
       }
+      this.TranslucencyActive = true;
 
       var selectedNodes = {};
       selectedNodes[this.ModelBrowser.Webviewer._params.containerId] = nodeIds;
@@ -323,6 +352,7 @@ ModelBrowserContextMenu.prototype.OnStopTranslucencyClicked = function () {
       if (!(viewerId in translucencyManagers)) {
             return;
       }
+      this.TranslucencyActive = false;
 
       translucencyManagers[viewerId].Stop();
       delete translucencyManagers[viewerId];

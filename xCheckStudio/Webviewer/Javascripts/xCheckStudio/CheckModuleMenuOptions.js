@@ -48,8 +48,17 @@ function enableMenuOptions() {
 
     // on Display
     document.getElementById(MenuBar.DisplayBtn).onclick = function () {
-        alert("Not Handled");
-    }
+        if (!model.currentTabId ||
+            !model.currentTabId in model.views) {
+            return;
+        }
+
+        if (!model.views[model.currentTabId].displayMenu) {
+            return;
+        }
+
+        model.views[model.currentTabId].displayMenu.Toggle();
+    }  
 
     // on check info
     document.getElementById(MenuBar.CheckInfoBtn).onclick = function () {

@@ -57,3 +57,38 @@ var toggleNavCube = function (viewer) {
             Communicator.OverlayUnit.Pixels);
     }
 }
+
+function showAxisTriad(viewer) {
+    // create axis triad
+    var axisTriad = viewer.view.getAxisTriad();
+    axisTriad.enable();
+
+    // resize nav cube
+    var overlayManager = viewer.getOverlayManager();
+    overlayManager.setViewport(Communicator.BuiltinOverlayIndex.AxisTriad,
+        Communicator.OverlayAnchor.LowerLeftCorner,
+        0,
+        Communicator.OverlayUnit.ProportionOfCanvas,
+        0,
+        Communicator.OverlayUnit.ProportionOfCanvas,
+        100,
+        Communicator.OverlayUnit.Pixels,
+        100,
+        Communicator.OverlayUnit.Pixels);
+}
+
+var toggleAxisTriad = function (viewer) {
+    if (!viewer) {
+        return;
+    }
+
+    // create nav cube
+    var axisTriad = viewer.view.getAxisTriad();
+
+    if (axisTriad.getEnabled()) {
+        axisTriad.disable();
+    }
+    else {
+        showAxisTriad(viewer);
+    }
+}

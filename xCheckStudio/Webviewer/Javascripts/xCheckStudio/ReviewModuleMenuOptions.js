@@ -56,7 +56,42 @@ function enableMenuOptions() {
 
     // on Display
     document.getElementById(MenuBar.DisplayBtn).onclick = function () {
-        alert("Not Handled");
+        var menus = model.checks[model.currentCheck].menus;
+        for (var viewerId in menus) {
+            if ("DisplayMenu" in menus[viewerId]) {
+                var success = menus[viewerId]["DisplayMenu"].Toggle();
+
+                if (success) {
+                    var sourceName;
+                    if (model.currentCheck === "comparison") {
+                        if (viewerId == "a") {
+                            sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[0];
+                        }
+                        else if (viewerId == "b") {
+                            sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[1];
+                        }
+                        else if (viewerId == "c") {
+                            sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[2];
+                        }
+                        else if (viewerId == "d") {
+                            sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[3];
+                        }
+                    }
+                    else if (model.currentCheck === "compliance") {
+                        sourceName = model.checks[model.currentCheck].reviewManager.ComplianceCheckManager.source;
+                    }
+
+                    if (sourceName) {
+                        DevExpress.ui.notify(
+                            "Hovering menus enabled for " + "'" + sourceName + "'",
+                            "success",
+                            1500);
+                    }
+                }
+
+                break;
+            }
+        }
     }
 
     // on check info

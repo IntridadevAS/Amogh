@@ -66,11 +66,7 @@ function filterCheckCases(loadAll) {
             checkCaseSelect.value = selectedCheckCase;
         }
     }
-    else {
-        // if (!(model.currentTabId in SourceManagers)) {
-        //     return;
-        // }
-
+    else {        
         // get all loaded source types
         var allSourceTypes = [];
         for (var tabId in SourceManagers) {

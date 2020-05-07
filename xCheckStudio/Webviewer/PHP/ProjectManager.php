@@ -513,6 +513,11 @@ function SaveAll()
         // save comments from temp
         SaveCheckspaceCommentsFromTemp($tempDbh, $dbh);
 
+        // save markup views
+        SaveMarkupViews($dbh);
+        SaveBookmarkViews($dbh);
+        SaveAnnotations($dbh);
+
         // commit update
         $dbh->commit();
         $tempDbh->commit();
@@ -2426,45 +2431,6 @@ function SaveDatasourceInfo($dbh)
         $orderMaintained  = $dataSourceInfo['orderMaintained'];
     }
 
-    // if(isset($_POST["SourceAFileName"]))
-    // {
-    //     $sourceAName =  $_POST['SourceAFileName'];   
-    // }
-    // if(isset($_POST["SourceBFileName"]))
-    // {
-    //     $sourceBName =  $_POST['SourceBFileName'];   
-    // }
-    // if(isset($_POST["SourceCFileName"]))
-    // {
-    //     $sourceCName =  $_POST['SourceCFileName'];   
-    // }
-    // if(isset($_POST["SourceDFileName"]))
-    // {
-    //     $sourceDName =  $_POST['SourceDFileName'];   
-    // }
-
-    // if(isset($_POST["SourceAType"]))
-    // {
-    //     $sourceAType =  $_POST['SourceAType'];   
-    // }
-    // if(isset($_POST["SourceBType"]))
-    // {
-    //     $sourceBType =  $_POST['SourceBType'];   
-    // }
-    // if(isset($_POST["SourceCType"]))
-    // {
-    //     $sourceCType =  $_POST['SourceCType'];   
-    // }
-    // if(isset($_POST["SourceDType"]))
-    // {
-    //     $sourceDType =  $_POST['SourceDType'];   
-    // }  
-
-    // if(isset($_POST["orderMaintained"]))
-    // {
-    //     $orderMaintained  = $_POST['orderMaintained'];   
-    // } 
-
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
@@ -2518,6 +2484,195 @@ function SaveDatasourceInfo($dbh)
 }
 
 
+function SaveMarkupViews($dbh)
+{
+    if (!isset($_POST["markupViews"])) {
+        return false;
+    }
+
+    $markupViews = json_decode($_POST['markupViews'], true);
+
+    $sourceAViews  = NULL;
+    $sourceBViews  = NULL;
+    $sourceCViews  = NULL;
+    $sourceDViews  = NULL;
+
+    if (array_key_exists("a", $markupViews)) {
+        $sourceAViews =  json_encode($markupViews['a']);
+    }
+    if (array_key_exists("b", $markupViews)) {
+        $sourceBViews =  json_encode($markupViews['b']);
+    }
+    if (array_key_exists("c", $markupViews)) {
+        $sourceCViews =  json_encode($markupViews['c']);
+    }
+    if (array_key_exists("d", $markupViews)) {
+        $sourceDViews =  json_encode($markupViews['d']);
+    }
+    
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
+
+    //  $dbh;
+    try {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS markupViews;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE markupViews(
+             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+             a TEXT,
+             b TEXT,
+             c TEXT,
+             d TEXT)';
+        $dbh->exec($command);
+
+        $insertQuery = 'INSERT INTO markupViews(a, 
+         b, 
+         c, 
+         d) VALUES(?,?,?,?) ';
+        $values = array(
+            $sourceAViews,
+            $sourceBViews,
+            $sourceCViews,
+            $sourceDViews
+        );
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
+}
+
+function SaveBookmarkViews($dbh)
+{
+    if (!isset($_POST["bookmarkViews"])) {
+        return false;
+    }
+
+    $bookmarkViews = json_decode($_POST['bookmarkViews'], true);
+
+    $sourceAViews  = NULL;
+    $sourceBViews  = NULL;
+    $sourceCViews  = NULL;
+    $sourceDViews  = NULL;
+
+    if (array_key_exists("a", $bookmarkViews)) {
+        $sourceAViews =  json_encode($bookmarkViews['a']);
+    }
+    if (array_key_exists("b", $bookmarkViews)) {
+        $sourceBViews =  json_encode($bookmarkViews['b']);
+    }
+    if (array_key_exists("c", $bookmarkViews)) {
+        $sourceCViews =  json_encode($bookmarkViews['c']);
+    }
+    if (array_key_exists("d", $bookmarkViews)) {
+        $sourceDViews =  json_encode($bookmarkViews['d']);
+    }
+    
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
+
+    //  $dbh;
+    try {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS bookmarkViews;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE bookmarkViews(
+             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+             a TEXT,
+             b TEXT,
+             c TEXT,
+             d TEXT)';
+        $dbh->exec($command);
+
+        $insertQuery = 'INSERT INTO bookmarkViews(a, 
+         b, 
+         c, 
+         d) VALUES(?,?,?,?) ';
+        $values = array(
+            $sourceAViews,
+            $sourceBViews,
+            $sourceCViews,
+            $sourceDViews
+        );
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
+}
+
+function SaveAnnotations($dbh)
+{
+    if (!isset($_POST["annotations"])) {
+        return false;
+    }
+
+    $annotations = json_decode($_POST['annotations'], true);
+
+    $sourceAannotations  = NULL;
+    $sourceBannotations  = NULL;
+    $sourceCannotations  = NULL;
+    $sourceDannotations  = NULL;
+
+    if (array_key_exists("a", $annotations)) {
+        $sourceAannotations =  json_encode($annotations['a']);
+    }
+    if (array_key_exists("b", $annotations)) {
+        $sourceBannotations =  json_encode($annotations['b']);
+    }
+    if (array_key_exists("c", $annotations)) {
+        $sourceCannotations =  json_encode($annotations['c']);
+    }
+    if (array_key_exists("d", $annotations)) {
+        $sourceDannotations =  json_encode($annotations['d']);
+    }
+    
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
+
+    //  $dbh;
+    try {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS annotations;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE annotations(
+             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+             a TEXT,
+             b TEXT,
+             c TEXT,
+             d TEXT)';
+        $dbh->exec($command);
+
+        $insertQuery = 'INSERT INTO annotations(a, 
+         b, 
+         c, 
+         d) VALUES(?,?,?,?) ';
+        $values = array(
+            $sourceAannotations,
+            $sourceBannotations,
+            $sourceCannotations,
+            $sourceDannotations
+        );
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
+
+}
 
 
 /*
