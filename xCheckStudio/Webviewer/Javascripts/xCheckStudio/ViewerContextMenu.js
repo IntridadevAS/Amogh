@@ -21,7 +21,7 @@ ViewerContextMenu.prototype.GetControls = function () {
                 _this.OnHideClicked();
             }
         },
-        {           
+        {
             text: "Isolate",
             icon: "public/symbols/projects.png",
             click: function () {
@@ -31,7 +31,7 @@ ViewerContextMenu.prototype.GetControls = function () {
         {
             text: "Area Select",
             icon: "public/symbols/check.png",
-            active : false,
+            active: false,
             click: function () {
                 _this.OnAreaSelectClicked(this);
             }
@@ -91,7 +91,76 @@ ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
 }
 
 ViewerContextMenu.prototype.OnModelViewsClicked = function () {
-    model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
+    if (model.views) {
+        model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
+    }
+    else {
+        if (model.currentCheck === "comparison") {
+            // Close other menus open
+            closeAnyOpenMenu();
+            // for (var id in model.checks[model.currentCheck].menus) {
+            //     var menus = model.checks[model.currentCheck].menus[id];
+            //     for (var menuName in menus) {
+            //         var menu = menus[menuName];
+            //         if (menu.Active) {
+            //             menu.Close();
+            //             menu.HideAllOpenViewForms();
+            //         }
+            //     }
+            // }
+
+            var viewerId;
+            switch (this.WebViewer._params.containerId) {
+                case "compare1":
+                    viewerId = "a";
+                    break;
+                case "compare2":
+                    viewerId = "b";
+                    break;
+                case "compare3":
+                    viewerId = "c";
+                    break;
+                case "compare4":
+                    viewerId = "d";
+                    break;
+            }
+
+            if (viewerId) {
+                model.checks[model.currentCheck].menus[viewerId].ModelViewsMenu.Open();
+                var sourceName;
+                // if (model.currentCheck === "comparison") {
+                if (viewerId == "a") {
+                    sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[0];
+                }
+                else if (viewerId == "b") {
+                    sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[1];
+                }
+                else if (viewerId == "c") {
+                    sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[2];
+                }
+                else if (viewerId == "d") {
+                    sourceName = model.checks[model.currentCheck].reviewManager.ComparisonCheckManager.sources[3];
+                }
+                // }
+
+                if (sourceName) {
+                    DevExpress.ui.notify(
+                        "Hovering menus enabled for " + "'" + sourceName + "'",
+                        "success",
+                        1500);
+                }
+            }
+        }
+        else if (model.currentCheck === "compliance") {
+            model.checks[model.currentCheck].menus["a"].ModelViewsMenu.Open();
+
+            var sourceName = model.checks[model.currentCheck].reviewManager.ComplianceCheckManager.source;
+            DevExpress.ui.notify(
+                "Hovering menus enabled for " + "'" + sourceName + "'",
+                "success",
+                1500);
+        }
+    }
 }
 
 ViewerContextMenu.prototype.OnZoomToFitClicked = function () {
@@ -121,7 +190,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
     }
 
     var contextMenuDiv = document.getElementById("contextMenu");
-   
+
     $("#contextMenu").dxList({
         dataSource: _this.MenuItems,
         hoverStateEnabled: true,
@@ -143,7 +212,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
             const itemCount = e.component.option("items").length;
             e.component.option("height", itemHeight * itemCount);
         }
-    });   
+    });
 
     // position the context menu
     var menuHeight = contextMenuDiv.offsetHeight;
@@ -396,14 +465,25 @@ ViewerContextMenu.prototype.HideInCheck = function (nodeId) {
 
 ViewerContextMenu.prototype.HideInReview = function () {
     var checkComponentRows = [];
-    var row = model.getCurrentSelectionManager().GetHighlightedRow;
-    checkComponentRows.push(row["row"]);
+    var row = model.getCurrentSelectionManager().GetHighlightedRow();
+    if (!row) {
+        return;
+    }
+    checkComponentRows.push(row);
 
     // get viewerInterface on which "hide" is called
     var viewerInterface = this.GetViewerInterface();
 
     viewerInterface.StoreHiddenResultId(checkComponentRows);
-    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, checkComponentRows);
+
+    var rows = [];
+    for (var i = 0; i < checkComponentRows.length; i++) {
+        var dataGrid = $(checkComponentRows[i]["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(checkComponentRows[i]["rowKey"]);
+        var row = dataGrid.getRowElement(rowIndex)[0];
+        rows.push(row);
+    }
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
 }
 
 ViewerContextMenu.prototype.GetViewerInterface = function () {
@@ -445,7 +525,8 @@ ViewerContextMenu.prototype.OnIsolateClicked = function () {
     });
 
     // maintain hidden elements
-    if (model.currentTabId in SourceManagers) {
+    if (model.currentTabId &&
+        model.currentTabId in SourceManagers) {
         var sourceManager = SourceManagers[model.currentTabId];
         sourceManager.HiddenNodeIds = [];
 

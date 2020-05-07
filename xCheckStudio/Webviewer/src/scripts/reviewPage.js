@@ -17,6 +17,46 @@ let model = {
       sourceDViewer: null,
       selectionManager: null,
       modelBrowsers: {},
+      markupViews: {
+        a: {},
+        b: {},
+        c: {},
+        d: {}
+      },
+      bookmarks: {
+        a: {},
+        b: {},
+        c: {},
+        d: {}
+      },
+      annotations: {
+        a: {},
+        b: {},
+        c: {},
+        d: {}
+      },
+      measures: {
+        a: {},
+        b: {},
+        c: {},
+        d: {}
+      },
+      annotationOperator : null,      
+      annotationOperatorId : null,
+      menus: {
+        a: {},
+        b: {},
+        c: {},
+        d: {},
+      },
+      viewsOpen: false,
+      measuresOpen : false,
+      isViewsOpen: function () {
+        return this.viewsOpen;
+      },
+      isMeasuresOpen: function () {
+        return this.measuresOpen;
+      },
       resizeViewers: function () {
         if (this.reviewManager) {
           if (this.sourceAViewer) {
@@ -37,7 +77,7 @@ let model = {
             this.modelBrowsers[browser]["viewer"].ResizeViewer();
           }
         }
-      }
+      },
     },
     "compliance": {
       reviewManager: null,
@@ -46,6 +86,23 @@ let model = {
       viewer: null,
       selectionManager: null,
       modelBrowsers: {},
+      markupViews: { a: {} },
+      bookmarks: { a: {} },
+      annotations: { a: {} },
+      measures: { a: {} },
+      annotationOperator : null,      
+      annotationOperatorId : null,  
+      menus: {
+        a: {}
+      },
+      viewsOpen: false,
+      measuresOpen : false,
+      isViewsOpen: function () {
+        return this.viewsOpen;
+      },
+      isMeasuresOpen: function () {
+        return this.measuresOpen;
+      },
       resizeViewers: function () {
         if (this.reviewManager) {
           if (this.viewer) {
@@ -664,6 +721,9 @@ function clearData() {
       currentCheckData["viewer"] = null;
     }
   }
+
+  // Close open hovering machine
+  closeAnyOpenMenu();  
 }
 
 function getDataSourceOrderInCheckcase() {

@@ -1,4 +1,3 @@
-
 .displayMenu{
     position: absolute;
     z-index: 1;
@@ -68,6 +67,7 @@
   position: absolute;
   z-index: 1; 
   width: 340px;
+  /* height: 320px; */
   display: none;
   /* top : calc(50% - 165px); */
   /* left : calc(50% - 125px); */

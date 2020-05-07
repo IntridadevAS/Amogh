@@ -1,16 +1,25 @@
 // TagsMenu menu
-function TagsMenu(id) {
-    this.Id = id;
+function TagsMenu(id, viewerId) {
+    // call super constructor
+    HoveringMenu.call(this, id, viewerId);
+  
+    this.InitAnnotationOperator();
 
-    this.Webviewer = SourceManagers[model.currentTabId].Webviewer;
-
-    this.Active = false;  
+    this.Active = false;
 
     this.SelectedRowKey = {
         "bookmark": null,
         "markup": null,
         "annotations": null
     };
+}
+// inherit from parent
+TagsMenu.prototype = Object.create(HoveringMenu.prototype);
+TagsMenu.prototype.constructor = TagsMenu;
+
+TagsMenu.prototype.InitAnnotationOperator = function () {
+    model.checks[this.Id].annotationOperator = new Example.AnnotationOperator(this.Webviewer);
+    model.checks[this.Id].annotationOperatorId = this.Webviewer.registerCustomOperator(model.checks[this.Id].annotationOperator);
 }
 
 TagsMenu.prototype.Open = function () {
@@ -21,15 +30,19 @@ TagsMenu.prototype.Open = function () {
 
     this.ShowMenu();
     this.InitEvents();
+
+    this.RegisterOnClick();
 }
 
 TagsMenu.prototype.Close = function () {
     this.Active = false;
 
-    model.views[this.Id].displayMenu.Close();
+    this.GetDisplayMenu().Close();
 
     var element = document.getElementById("tagsMenu" + this.Id);
     element.setAttribute('style', 'display:none');
+
+    this.UnRegisterOnClick();
 }
 
 TagsMenu.prototype.ShowMenu = function () {
@@ -89,10 +102,16 @@ TagsMenu.prototype.GetControls = function () {
             Title: "Tag Views",
             ImageSrc: "public/symbols/MarkupViews.svg",
             click: function () {
-                if (!model.views[_this.Id].displayMenu.ViewsOpen) {
+                if (!model.checks[_this.Id].isViewsOpen()) {
                     _this.ShowViews();
                 }
                 else {
+                    // unhighlight
+                    if (_this.SelectedRowKey["annotations"]) {
+                        var annotation = model.checks[_this.Id].annotations[_this.ViewerId][_this.SelectedRowKey["annotations"].Id];
+                        annotation.unHighlight();
+                        _this.Webviewer.markupManager.refreshMarkup();
+                    }
                     _this.HideViews();
                 }
             }
@@ -109,7 +128,7 @@ TagsMenu.prototype.GetControls = function () {
             ImageSrc: "public/symbols/MenuReturn.svg",
             click: function () {
                 _this.Close();
-                model.views[_this.Id].displayMenu.Open();
+                _this.GetDisplayMenu().Open();
             }
         },
         {
@@ -117,6 +136,9 @@ TagsMenu.prototype.GetControls = function () {
             ImageSrc: "public/symbols/Close.svg",
             click: function () {
                 _this.Close();
+                
+                // Close open views and Measures form
+                _this.HideAllOpenViewForms();
             }
         }
     ];
@@ -124,7 +146,7 @@ TagsMenu.prototype.GetControls = function () {
 
 TagsMenu.prototype.ShowViews = function () {
     var _this = this;
-    model.views[_this.Id].displayMenu.ViewsOpen = true;
+    model.checks[_this.Id].viewsOpen = true;
 
     document.getElementById("markupViewsContainer" + this.Id).style.display = "block";
 
@@ -138,8 +160,8 @@ TagsMenu.prototype.ShowViews = function () {
         selectedIndex: 2
     });
 
-    model.views[_this.Id].displayMenu.MarkupMenu.LoadMarkupViews(false);
-    model.views[_this.Id].displayMenu.BookmarkMenu.LoadBookmarkViews(false);
+    this.GetMarkupMenu().LoadMarkupViews(false);
+    this.GetBookmarkMenu().LoadBookmarkViews(false);
     this.LoadAnnotations(true);
 
     // enable close btn
@@ -177,7 +199,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
     annotationColumns.push(column);
 
     var annotationsData = [];
-    var annotations = model.views[this.Id].annotations;
+    var annotations = model.checks[this.Id].annotations[this.ViewerId];
     for (var id in annotations) {
         annotationsData.push({
             "Tag": annotations[id].getLabel(),
@@ -225,7 +247,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
                 
                 _this.RemoveHighlightColor(rowElement);
 
-                var annotation = model.views[_this.Id].annotations[_this.SelectedRowKey["annotations"].Id];   
+                var annotation = model.checks[_this.Id].annotations[_this.ViewerId][_this.SelectedRowKey["annotations"].Id];   
                 annotation.unHighlight();
             }
 
@@ -233,7 +255,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
 
             _this.ApplyHighlightColor(e.rowElement[0]);
             
-            var annotation = model.views[_this.Id].annotations[e.data.Id];   
+            var annotation = model.checks[_this.Id].annotations[_this.ViewerId][e.data.Id];   
             annotation.highlight();
             _this.Webviewer.markupManager.refreshMarkup();
         },
@@ -253,33 +275,33 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
     });
 }
 
-TagsMenu.prototype.HideViews = function () {
-    model.views[this.Id].displayMenu.ViewsOpen = false;
+// TagsMenu.prototype.HideViews = function () {
+//     model.checks[this.Id].viewsOpen = false;
 
-    // unhighlight
-    if (this.SelectedRowKey["annotations"]) {
-        var annotation = model.views[this.Id].annotations[this.SelectedRowKey["annotations"].Id];
-        annotation.unHighlight();
-        this.Webviewer.markupManager.refreshMarkup();
-    }
+//     // unhighlight
+//     if (this.SelectedRowKey["annotations"]) {
+//         var annotation = model.checks[this.Id].annotations[this.ViewerId][this.SelectedRowKey["annotations"].Id];
+//         annotation.unHighlight();
+//         this.Webviewer.markupManager.refreshMarkup();
+//     }
 
-    this.SelectedRowKey["annotations"] = null;
-    
-    document.getElementById("markupViewsContainer" + this.Id).style.display = "none";
-}
+//     document.getElementById("markupViewsContainer" + this.Id).style.display = "none";
+// }
 
 TagsMenu.prototype.DeleteAnnotations = function () {
-    var totalClearedAnnotatios = Object.keys(model.views[_this.Id].annotations).length;
-    for (var markupHandle in model.views[this.Id].annotations) {
+    var totalClearedAnnotatios = Object.keys(model.checks[this.Id].annotations[this.ViewerId]).length;
+    for (var markupHandle in model.checks[this.Id].annotations[this.ViewerId]) {
         this.DeleteAnnotation(markupHandle);
     }
 
-    model.views[this.Id].annotations = {};
+    model.checks[this.Id].annotations[this.ViewerId] = {};
 
     // refresh grid
-    if (model.views[_this.Id].displayMenu.ViewsOpen) {
+    if (model.checks[this.Id].isViewsOpen()) {
         this.LoadAnnotations();
     }
+    
+    this.SelectedRowKey["annotations"] = null;
 
     DevExpress.ui.notify("'" + totalClearedAnnotatios + "'" + " tags cleared.", "success", 1500);
 };
@@ -293,17 +315,17 @@ TagsMenu.prototype.RemoveHighlightColor = function (row) {
 }
 
 TagsMenu.prototype.ActivateOperator = function () {
-    this.Webviewer.operatorManager.set(model.views[this.Id].annotationOperatorId, 1);
+    this.Webviewer.operatorManager.set(model.checks[this.Id].annotationOperatorId, 1);
 }
 
 TagsMenu.prototype.DeActivateOperator = function () {
-    this.Webviewer.operatorManager.remove(model.views[this.Id].annotationOperatorId);
+    this.Webviewer.operatorManager.remove(model.checks[this.Id].annotationOperatorId);
 }
 
 TagsMenu.prototype.InitEvents = function () {
     var _this = this;
 
-    model.views[this.Id].annotationOperator.setCallbacks({
+    model.checks[this.Id].annotationOperator.setCallbacks({
         annotationAdded: function (markupHandle, annotationMarkup) {
             if (_this.Active) {
                 _this.OnAnnotationAdded(markupHandle, annotationMarkup);
@@ -316,15 +338,15 @@ TagsMenu.prototype.InitEvents = function () {
         }
     });
 
-    document.getElementById("visualizer" + this.Id.toUpperCase()).addEventListener("wheel", function () {
+    document.getElementById(_this.Webviewer._params.containerId).addEventListener("wheel", function () {
         event.stopPropagation();
         _this.DeActivateOperator();
     });
 }
 
 TagsMenu.prototype.OnAnnotationAdded = function (markupHandle, annotationMarkup) {
-    model.views[this.Id].annotations[markupHandle] = annotationMarkup;
-    if (model.views[this.Id].displayMenu.ViewsOpen) {
+    model.checks[this.Id].annotations[this.ViewerId][markupHandle] = annotationMarkup;
+    if (model.checks[this.Id].isViewsOpen()) {
         this.LoadAnnotations();
     }
 }
@@ -333,7 +355,7 @@ TagsMenu.prototype.OnAnnotationDeleted = function (annotationMarkup) {
 }
 
 TagsMenu.prototype.RenameAnnotation = function (markupHandle, newMarkupName) {
-    var annotation = model.views[this.Id].annotations[markupHandle];   
+    var annotation = model.checks[this.Id].annotations[this.ViewerId][markupHandle];   
     if (newMarkupName !== null) {
         annotation.setLabel(newMarkupName);
         this.Webviewer.markupManager.refreshMarkup();
@@ -342,5 +364,5 @@ TagsMenu.prototype.RenameAnnotation = function (markupHandle, newMarkupName) {
 
 TagsMenu.prototype.DeleteAnnotation = function (markupHandle) {
     this.Webviewer.markupManager.unregisterMarkup(markupHandle);
-    delete model.views[this.Id].annotations[markupHandle];   
+    delete model.checks[this.Id].annotations[this.ViewerId][markupHandle];   
 };
