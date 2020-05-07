@@ -23,14 +23,14 @@ ViewerContextMenu.prototype.GetControls = function () {
         },
         {
             text: "Isolate",
-            icon: "public/symbols/projects.png",
+            icon: "public/symbols/Isolate.svg",
             click: function () {
                 _this.OnIsolateClicked();
             }
         },
         {
             text: "Area Select",
-            icon: "public/symbols/check.png",
+            icon: this.active? "public/symbols/Single Select.svg" : "public/symbols/Box Select.svg",
             active: false,
             click: function () {
                 _this.OnAreaSelectClicked(this);
@@ -67,7 +67,7 @@ ViewerContextMenu.prototype.GetControls = function () {
         },
         {
             text: "Set Defaults",
-            icon: "public/symbols/reports.png",
+            icon: "public/symbols/Set Defaults.svg",
             click: function () {
                 _this.OnSetDefaultsClicked();
             }
@@ -81,10 +81,12 @@ ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
     if (!itemData.active) {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.AreaSelect, 1);
         itemData.text = "Select";
+        itemData.icon = "public/symbols/Single Select.svg";
     }
     else {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.Select, 1);
         itemData.text = "Area Select";
+        itemData.icon = "public/symbols/Box Select.svg";
     }
 
     itemData.active = !itemData.active;
@@ -92,6 +94,7 @@ ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
 
 ViewerContextMenu.prototype.OnModelViewsClicked = function () {
     if (model.views) {
+        closeAnyOpenMenu();
         model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
     }
     else {

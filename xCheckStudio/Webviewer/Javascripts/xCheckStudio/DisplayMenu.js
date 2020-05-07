@@ -12,9 +12,9 @@ function DisplayMenu(id) {
 
 DisplayMenu.prototype.Toggle = function () {
     if (!this.Active) {
-    //     this.Close();
-    // }
-    // else {
+        // Close other menus open
+        closeAnyOpenMenu();
+        
         this.Open();
     }
 }
@@ -70,15 +70,15 @@ DisplayMenu.prototype.ShowMenu = function () {
             var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
                 position: "right"
             }).dxTooltip('instance');
-           listitems.on('dxhoverstart', function (args) {
-               tooltip.content().text($(this).data().dxListItemData.Title);
-               tooltip.show(args.target);
-           });
+            listitems.on('dxhoverstart', function (args) {
+                tooltip.content().text($(this).data().dxListItemData.Title);
+                tooltip.show(args.target);
+            });
 
-           listitems.on('dxhoverend', function () {
-               tooltip.hide();
-           });
-       }
+            listitems.on('dxhoverend', function () {
+                tooltip.hide();
+            });
+        }
     });
 }
 
@@ -102,7 +102,7 @@ DisplayMenu.prototype.GetControls = function () {
                 _this.BookmarkMenu.Open();
                 _this.Hide();
             }
-        },        
+        },
         {
             id: 3,
             Title: "Tags",
@@ -170,5 +170,35 @@ function DragElement(elmnt, draggableArea) {
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
+    }
+}
+
+function closeAnyOpenMenu() {
+    if (model.views[model.currentTabId].displayMenu.Active) {
+        model.views[model.currentTabId].displayMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.MarkupMenu.Active) {
+        model.views[model.currentTabId].displayMenu.MarkupMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.MarkupMenu.ShapesMenu.Active) {
+        model.views[model.currentTabId].displayMenu.MarkupMenu.ShapesMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.BookmarkMenu.Active) {
+        model.views[model.currentTabId].displayMenu.BookmarkMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.TagsMenu.Active) {
+        model.views[model.currentTabId].displayMenu.TagsMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.Active) {
+        model.views[model.currentTabId].displayMenu.ModelViewsMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.DisplayStylesMenu.Active) {
+        model.views[model.currentTabId].displayMenu.ModelViewsMenu.DisplayStylesMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.SectioningMenu.Active) {
+        model.views[model.currentTabId].displayMenu.ModelViewsMenu.SectioningMenu.Close();
+    }
+    if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.MeasureMenu.Active) {
+        model.views[model.currentTabId].displayMenu.ModelViewsMenu.MeasureMenu.Close();
     }
 }
