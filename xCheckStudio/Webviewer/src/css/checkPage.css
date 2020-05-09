@@ -228,6 +228,7 @@ button + button {
 
 .checkName:hover {
   background-color: black;
+  cursor: pointer;
 }
 
 .checkTogglesContainer{

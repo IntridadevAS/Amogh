@@ -331,6 +331,7 @@ tr {
 
 .projectName:hover {
   background-color: black;
+  cursor: pointer;
 }
 
 .maxMinBtn{

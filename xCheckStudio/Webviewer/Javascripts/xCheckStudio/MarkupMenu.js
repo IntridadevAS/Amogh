@@ -2,12 +2,12 @@
 function MarkupMenu(id) {
     this.Id = id;
 
-    this.ActiveOperator = null;    
- 
+    this.ActiveOperator = null;
+
     this.SelectedRowKey = {
         "bookmark": null,
         "markup": null,
-        "annotations" : null
+        "annotations": null
     };
 
     this.Webviewer = SourceManagers[model.currentTabId].Webviewer;
@@ -16,6 +16,25 @@ function MarkupMenu(id) {
 
     this.Active = false;
     this.ViewActivatedBefore = false;
+
+    var _this = this;
+    this.ViewerCallbackMap = {
+        viewCreated: function (view) {
+            if (_this.Active) {
+                _this.OnViewAdded(view);
+            }
+        },
+        viewLoaded: function (view) {
+            if (_this.Active) {
+                _this.OnViewAdded(view);
+            }
+        },
+        viewDeleted: function (view) {
+            if (_this.Active) {
+                _this.OnViewDeleted(view);
+            }
+        }
+    };
 }
 
 MarkupMenu.prototype.Open = function () {
@@ -27,7 +46,7 @@ MarkupMenu.prototype.Open = function () {
     this.ShowMenu();
     this.InitEvents();
 
-    if (model.views[_this.Id].displayMenu.ViewsOpen) {
+    if (model.views[this.Id].displayMenu.ViewsOpen) {
         this.ShowViews();
     }
 }
@@ -45,6 +64,8 @@ MarkupMenu.prototype.Close = function () {
     if (this.ShapesMenu.Active) {
         this.ShapesMenu.Close();
     }
+
+    this.TerminateEvents();    
 }
 
 MarkupMenu.prototype.ShowMenu = function () {
@@ -69,7 +90,7 @@ MarkupMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -78,39 +99,39 @@ MarkupMenu.prototype.ShowMenu = function () {
             var tooltip = $("#menuTooltip" + _this.Id).dxTooltip({
                 position: "right"
             }).dxTooltip('instance');
-           listitems.on('dxhoverstart', function (args) {
-               tooltip.content().text($(this).data().dxListItemData.Title);
-               tooltip.show(args.target);
-           });
+            listitems.on('dxhoverstart', function (args) {
+                tooltip.content().text($(this).data().dxListItemData.Title);
+                tooltip.show(args.target);
+            });
 
-           listitems.on('dxhoverend', function () {
-               tooltip.hide();
-           });
-       }
+            listitems.on('dxhoverend', function () {
+                tooltip.hide();
+            });
+        }
     });
 }
 
 MarkupMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     return controls = [
         {
             id: 1,
             Title: "Pen",
             ImageSrc: "public/symbols/MarkupPen.svg",
-            click: function () {
-                _this.ActivateOperator(Communicator.OperatorId.RedlinePolyline);
+            click: function (e, menu) {
+                menu.ActivateOperator(Communicator.OperatorId.RedlinePolyline);
             }
         },
         {
             id: 2,
             Title: "Shapes",
             ImageSrc: "public/symbols/MarkupShapes.svg",
-            click: function () {
-                if (!_this.ShapesMenu.Active) {
-                    _this.ShapesMenu.Open();
+            click: function (e, menu) {
+                if (!menu.ShapesMenu.Active) {
+                    menu.ShapesMenu.Open();
                 }
                 else {
-                    _this.ShapesMenu.Close();
+                    menu.ShapesMenu.Close();
                 }
             }
         },
@@ -118,18 +139,18 @@ MarkupMenu.prototype.GetControls = function () {
             id: 3,
             Title: "Comments",
             ImageSrc: "public/symbols/MarkupComments.svg",
-            click: function () {
-                _this.ActivateOperator(Communicator.OperatorId.RedlineText);
+            click: function (e, menu) {
+                menu.ActivateOperator(Communicator.OperatorId.RedlineText);
             }
         },
         {
             id: 4,
             Title: "Capture",
             ImageSrc: "public/symbols/Capture.svg",
-            click: function () {
-                var canvasSize = _this.Webviewer.view.getCanvasSize();
+            click: function (e, menu) {
+                var canvasSize = menu.Webviewer.view.getCanvasSize();
                 var config = new Communicator.SnapshotConfig(canvasSize.x, canvasSize.y);
-                _this.Webviewer.takeSnapshot(config).then(function (image) {
+                menu.Webviewer.takeSnapshot(config).then(function (image) {
                     DevExpress.ui.notify("Screenshot is captured.", "success", 1500);
                 });
             }
@@ -138,12 +159,12 @@ MarkupMenu.prototype.GetControls = function () {
             id: 5,
             Title: "Markup Views",
             ImageSrc: "public/symbols/MarkupViews.svg",
-            click: function () {
-                if (!model.views[_this.Id].displayMenu.ViewsOpen) {
-                    _this.ShowViews();
+            click: function (e, menu) {
+                if (!model.views[menu.Id].displayMenu.ViewsOpen) {
+                    menu.ShowViews();
                 }
                 else {
-                    _this.HideViews();
+                    menu.HideViews();
                 }
             }
         },
@@ -151,26 +172,26 @@ MarkupMenu.prototype.GetControls = function () {
             id: 6,
             Title: "Backward",
             ImageSrc: "public/symbols/Backward.svg",
-            click: function () {
-                var views = model.views[_this.Id].markupViews;
+            click: function (e, menu) {
+                var views = model.views[menu.Id].markupViews;
                 var viewNames = Object.keys(views);
                 if (viewNames.length === 0) {
                     return;
                 }
 
-                var activeView = _this.Webviewer.markupManager.getActiveMarkupView();
-                if (!activeView || !_this.ViewActivatedBefore) {
-                    _this.ActivateView(views[viewNames[viewNames.length - 1]]);
+                var activeView = menu.Webviewer.markupManager.getActiveMarkupView();
+                if (!activeView || !menu.ViewActivatedBefore) {
+                    menu.ActivateView(views[viewNames[viewNames.length - 1]]);
                 }
                 else {
                     var viewName = activeView.getName();
                     var index = viewNames.indexOf(viewName);
                     if (index > -1) {
                         if (index === 0) {
-                            _this.ActivateView(views[viewNames[viewNames.length - 1]]);
+                            menu.ActivateView(views[viewNames[viewNames.length - 1]]);
                         }
                         else {
-                            _this.ActivateView(views[viewNames[index - 1]]);
+                            menu.ActivateView(views[viewNames[index - 1]]);
                         }
                     }
                 }
@@ -180,26 +201,26 @@ MarkupMenu.prototype.GetControls = function () {
             id: 7,
             Title: "Forward",
             ImageSrc: "public/symbols/Forward.svg",
-            click: function () {
-                var views = model.views[_this.Id].markupViews;
+            click: function (e, menu) {
+                var views = model.views[menu.Id].markupViews;
                 var viewNames = Object.keys(views);
                 if (viewNames.length === 0) {
                     return;
                 }
 
-                var activeView = _this.Webviewer.markupManager.getActiveMarkupView();
-                if (!activeView || !_this.ViewActivatedBefore) {
-                    _this.ActivateView(views[viewNames[0]]);
+                var activeView = menu.Webviewer.markupManager.getActiveMarkupView();
+                if (!activeView || !menu.ViewActivatedBefore) {
+                    menu.ActivateView(views[viewNames[0]]);
                 }
                 else {
                     var viewName = activeView.getName();
                     var index = viewNames.indexOf(viewName);
                     if (index > -1) {
                         if (index === viewNames.length - 1) {
-                            _this.ActivateView(views[viewNames[0]]);
+                            menu.ActivateView(views[viewNames[0]]);
                         }
                         else {
-                            _this.ActivateView(views[viewNames[index + 1]]);
+                            menu.ActivateView(views[viewNames[index + 1]]);
                         }
                     }
                 }
@@ -209,13 +230,13 @@ MarkupMenu.prototype.GetControls = function () {
             id: 8,
             Title: "Clear Marks",
             ImageSrc: "public/symbols/MarkupDelete.svg",
-            click: function () {
-                var totalClearedMarkups = Object.keys(model.views[_this.Id].markupViews).length;
-                model.views[_this.Id].markupViews = {};
+            click: function (e, menu) {
+                var totalClearedMarkups = Object.keys(model.views[menu.Id].markupViews).length;
+                model.views[menu.Id].markupViews = {};
 
                 // refresh grid
-                if (model.views[_this.Id].displayMenu.ViewsOpen) {
-                    _this.LoadMarkupViews(true);
+                if (model.views[menu.Id].displayMenu.ViewsOpen) {
+                    menu.LoadMarkupViews(true);
                 }
 
                 DevExpress.ui.notify("'" + totalClearedMarkups + "'" + " markups cleared.", "success", 1500);
@@ -225,17 +246,17 @@ MarkupMenu.prototype.GetControls = function () {
             id: 9,
             Title: "Return",
             ImageSrc: "public/symbols/MenuReturn.svg",
-            click: function () {
-                _this.Close();
-                model.views[_this.Id].displayMenu.Open();
+            click: function (e, menu) {
+                menu.Close();
+                model.views[menu.Id].displayMenu.Open();
             }
         },
         {
             id: 10,
             Title: "Close",
             ImageSrc: "public/symbols/Close.svg",
-            click: function () {
-                _this.Close();
+            click: function (e, menu) {
+                menu.Close();
             }
         }
     ];
@@ -244,28 +265,17 @@ MarkupMenu.prototype.GetControls = function () {
 MarkupMenu.prototype.InitEvents = function () {
     var _this = this;
 
-    _this.Webviewer.setCallbacks({
-        viewCreated: function (view) {
-            if (_this.Active) {
-                _this.OnViewAdded(view);
-            }
-        },
-        viewLoaded: function (view) {
-            if (_this.Active) {
-                _this.OnViewAdded(view);
-            }
-        },
-        viewDeleted: function (view) {
-            if (_this.Active) {
-                _this.OnViewDeleted(view);
-            }
-        }
-    });
+    _this.Webviewer.setCallbacks(_this.ViewerCallbackMap);
 
-    document.getElementById("visualizer" + this.Id.toUpperCase()).addEventListener("wheel", function(){
+    document.getElementById("visualizer" + this.Id.toUpperCase()).addEventListener("wheel", function () {
         event.stopPropagation();
         _this.DeActivateOperator();
     });
+}
+
+MarkupMenu.prototype.TerminateEvents = function () {
+    var _this = this;
+    _this.Webviewer.unsetCallbacks(_this.ViewerCallbackMap);
 }
 
 MarkupMenu.prototype.OnViewAdded = function (view) {
@@ -278,7 +288,7 @@ MarkupMenu.prototype.OnViewAdded = function (view) {
     model.views[this.Id].markupViews[name] = uniqueId;
 
     // refresh grid
-    if (model.views[_this.Id].displayMenu.ViewsOpen) {
+    if (model.views[this.Id].displayMenu.ViewsOpen) {
         this.LoadMarkupViews();
     }
 
@@ -291,7 +301,7 @@ MarkupMenu.prototype.OnViewDeleted = function (view) {
 }
 
 MarkupMenu.prototype.ActivateView = function (viewId) {
-    this.Webviewer.markupManager.activateMarkupViewWithPromise(viewId).then(function(result){
+    this.Webviewer.markupManager.activateMarkupViewWithPromise(viewId).then(function (result) {
 
     })
 
@@ -326,7 +336,7 @@ MarkupMenu.prototype.ShowViews = function () {
             { title: "Tags", template: "tab3" }
         ],
         deferRendering: false,
-        selectedIndex : 1
+        selectedIndex: 1
     });
 
     this.LoadMarkupViews(true);
@@ -417,9 +427,9 @@ MarkupMenu.prototype.LoadMarkupViews = function (fromMarkupMenu = true) {
             _this.ApplyHighlightColor(e.rowElement[0]);
             _this.ActivateView(e.data.Id);
         },
-        onContentReady :function(e){
-            var scrollable = e.component.getScrollable();  
-            scrollable.scrollTo(scrollable.scrollHeight());  
+        onContentReady: function (e) {
+            var scrollable = e.component.getScrollable();
+            scrollable.scrollTo(scrollable.scrollHeight());
         }
     });
 }
@@ -501,7 +511,7 @@ ShapesMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -515,29 +525,29 @@ ShapesMenu.prototype.ShowMenu = function () {
                 tooltip.show(args.target);
             });
 
-           listitems.on('dxhoverend', function () {
-               tooltip.hide();
-           });
-       }
+            listitems.on('dxhoverend', function () {
+                tooltip.hide();
+            });
+        }
     });
 }
 
 ShapesMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
 
     return [{
         Title: "Circle",
         ImageSrc: "public/symbols/ShapesCircle.svg",
-        click: function () {
-            _this.MarkupMenu.ActivateOperator(Communicator.OperatorId.RedlineCircle);
-            _this.Close();
+        click: function (e, menu) {
+            menu.MarkupMenu.ActivateOperator(Communicator.OperatorId.RedlineCircle);
+            menu.Close();
         }
     }, {
         Title: "Rectangle",
         ImageSrc: "public/symbols/ShapesRectangle.svg",
         click: function () {
-            _this.MarkupMenu.ActivateOperator(Communicator.OperatorId.RedlineRectangle);
-            _this.Close();
+            menu.MarkupMenu.ActivateOperator(Communicator.OperatorId.RedlineRectangle);
+            menu.Close();
         }
     }];
 }

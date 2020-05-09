@@ -79,7 +79,7 @@ DisplayMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -101,53 +101,53 @@ DisplayMenu.prototype.ShowMenu = function () {
 }
 
 DisplayMenu.prototype.GetControls = function () {
-    _this = this;
+    // _this = this;
     return controls = [
         {
             id: 1,
             Title: "Markup",
             ImageSrc: "public/symbols/Markup.svg",
-            click: function () {
-                _this.GetMarkupMenu().Open();
-                _this.Hide();
+            click: function (e, menu) {
+                menu.GetMarkupMenu().Open();
+                menu.Hide();
             }
         },
         {
             id: 2,
             Title: "BookMarks",
             ImageSrc: "public/symbols/Bookmarks.svg",
-            click: function () {
-                _this.GetBookmarkMenu().Open();
-                _this.Hide();
+            click: function (e, menu) {
+                menu.GetBookmarkMenu().Open();
+                menu.Hide();
             }
         },
         {
             id: 3,
             Title: "Tags",
             ImageSrc: "public/symbols/Tags.svg",
-            click: function () {
-                _this.GetTagsMenu().Open();
-                _this.Hide();
+            click: function (e, menu) {
+                menu.GetTagsMenu().Open();
+                menu.Hide();
             }
         },
         {
             id: 4,
             Title: "Model Views",
             ImageSrc: "public/symbols/ModelView.svg",
-            click: function () {
-                _this.GetModelViewsMenu().Open();
-                _this.Hide();
+            click: function (e, menu) {
+                menu.GetModelViewsMenu().Open();
+                menu.Hide();
             }
         },
         {
             id: 5,
             Title: "Close",
             ImageSrc: "public/symbols/Close.svg",
-            click: function () {
-                _this.Close();
+            click: function (e, menu) {
+                menu.Close();
 
                 // Close open views and Measures form
-                _this.HideAllOpenViewForms();
+                menu.HideAllOpenViewForms();
             }
         }
     ];

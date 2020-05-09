@@ -11,6 +11,25 @@ function BookmarkMenu(id) {
 
     this.Active = false;
     this.ViewActivatedBefore = false;
+
+    var _this = this;
+    this.ViewerCallbackMap = {
+        viewCreated: function (view) {
+            if (_this.Active) {
+                _this.OnViewAdded(view);
+            }
+        },
+        viewLoaded: function (view) {
+            if (_this.Active) {
+                _this.OnViewAdded(view);
+            }
+        },
+        viewDeleted: function (view) {
+            if (_this.Active) {
+                _this.OnViewDeleted(view);
+            }
+        }
+    };
 }
 
 BookmarkMenu.prototype.Open = function () {
@@ -22,7 +41,7 @@ BookmarkMenu.prototype.Open = function () {
     this.ShowMenu();
     this.InitEvents();
 
-    if (model.views[_this.Id].displayMenu.ViewsOpen) {
+    if (model.views[this.Id].displayMenu.ViewsOpen) {
         this.ShowViews();
     }
 }
@@ -35,6 +54,8 @@ BookmarkMenu.prototype.Close = function () {
 
     var element = document.getElementById("bookmarkMenu" + this.Id);
     element.setAttribute('style', 'display:none');
+
+    this.TerminateEvents();
 }
 
 BookmarkMenu.prototype.ShowMenu = function () {
@@ -60,7 +81,7 @@ BookmarkMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -82,22 +103,22 @@ BookmarkMenu.prototype.ShowMenu = function () {
 }
 
 BookmarkMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
 
     return [{
         Title: "Bookmark",
         ImageSrc: "public/symbols/Bookmark.svg",
-        click: function () {
-            var viewId = _this.Webviewer.markupManager.createMarkupView();           
+        click: function (e, menu) {
+            menu.Webviewer.markupManager.createMarkupView();           
         }
     },
     {
         Title: "Capture",
         ImageSrc: "public/symbols/Capture.svg",
-        click: function () {
-            var canvasSize = _this.Webviewer.view.getCanvasSize();
+        click: function (e, menu) {
+            var canvasSize = menu.Webviewer.view.getCanvasSize();
             var config = new Communicator.SnapshotConfig(canvasSize.x, canvasSize.y);
-            _this.Webviewer.takeSnapshot(config).then(function (image) {
+            menu.Webviewer.takeSnapshot(config).then(function (image) {
                 DevExpress.ui.notify("Screenshot is captured.", "success", 1500);
             });
         }
@@ -105,38 +126,38 @@ BookmarkMenu.prototype.GetControls = function () {
     {
         Title: "Bookmark Views",
         ImageSrc: "public/symbols/MarkupViews.svg",
-        click: function () {
-            if (!model.views[_this.Id].displayMenu.ViewsOpen) {
-                _this.ShowViews();
+        click: function (e, menu) {
+            if (!model.views[menu.Id].displayMenu.ViewsOpen) {
+                menu.ShowViews();
             }
             else {
-                _this.HideViews();
+                menu.HideViews();
             }
         }
     },
     {
         Title: "Backward",
         ImageSrc: "public/symbols/Backward.svg",
-        click: function () {
-            var views = model.views[_this.Id].bookmarks;
+        click: function (e, menu) {
+            var views = model.views[menu.Id].bookmarks;
             var viewNames = Object.keys(views);
             if (viewNames.length === 0) {
                 return;
             }
 
-            var activeView = _this.Webviewer.markupManager.getActiveMarkupView();
-            if (!activeView || !_this.ViewActivatedBefore) {
-                _this.ActivateView(views[viewNames[viewNames.length - 1]]);
+            var activeView = menu.Webviewer.markupManager.getActiveMarkupView();
+            if (!activeView || !menu.ViewActivatedBefore) {
+                menu.ActivateView(views[viewNames[viewNames.length - 1]]);
             }
             else {
                 var viewName = activeView.getName();
                 var index = viewNames.indexOf(viewName);
                 if (index > -1) {
                     if (index === 0) {
-                        _this.ActivateView(views[viewNames[viewNames.length - 1]]);
+                        menu.ActivateView(views[viewNames[viewNames.length - 1]]);
                     }
                     else {
-                        _this.ActivateView(views[viewNames[index - 1]]);
+                        menu.ActivateView(views[viewNames[index - 1]]);
                     }
                 }
             }
@@ -145,26 +166,26 @@ BookmarkMenu.prototype.GetControls = function () {
     {
         Title: "Forward",
         ImageSrc: "public/symbols/Forward.svg",
-        click: function () {
-            var views = model.views[_this.Id].bookmarks;
+        click: function (e, menu) {
+            var views = model.views[menu.Id].bookmarks;
             var viewNames = Object.keys(views);
             if (viewNames.length === 0) {
                 return;
             }
 
-            var activeView = _this.Webviewer.markupManager.getActiveMarkupView();
-            if (!activeView || !_this.ViewActivatedBefore) {
-                _this.ActivateView(views[viewNames[0]]);
+            var activeView = menu.Webviewer.markupManager.getActiveMarkupView();
+            if (!activeView || !menu.ViewActivatedBefore) {
+                menu.ActivateView(views[viewNames[0]]);
             }
             else {
                 var viewName = activeView.getName();
                 var index = viewNames.indexOf(viewName);
                 if (index > -1) {
                     if (index === viewNames.length - 1) {
-                        _this.ActivateView(views[viewNames[0]]);
+                        menu.ActivateView(views[viewNames[0]]);
                     }
                     else {
-                        _this.ActivateView(views[viewNames[index + 1]]);
+                        menu.ActivateView(views[viewNames[index + 1]]);
                     }
                 }
             }
@@ -173,13 +194,13 @@ BookmarkMenu.prototype.GetControls = function () {
     {
         Title: "Clear All",
         ImageSrc: "public/symbols/MarkupDelete.svg",
-        click: function () {
-            var totalClearedBookmarks = Object.keys(model.views[_this.Id].bookmarks).length;
-            model.views[_this.Id].bookmarks = {};
+        click: function (e, menu) {
+            var totalClearedBookmarks = Object.keys(model.views[menu.Id].bookmarks).length;
+            model.views[menu.Id].bookmarks = {};
 
             // refresh grid
-            if (model.views[_this.Id].displayMenu.ViewsOpen) {
-                _this.LoadBookmarkViews(true);
+            if (model.views[menu.Id].displayMenu.ViewsOpen) {
+                menu.LoadBookmarkViews(true);
             }
             
             DevExpress.ui.notify("'" + totalClearedBookmarks + "'" + " bookmarks cleared.", "success", 1500);
@@ -188,16 +209,16 @@ BookmarkMenu.prototype.GetControls = function () {
     {
         Title: "Return",
         ImageSrc: "public/symbols/MenuReturn.svg",
-        click: function () {
-            _this.Close();
-            model.views[_this.Id].displayMenu.Open();
+        click: function (e, menu) {
+            menu.Close();
+            model.views[menu.Id].displayMenu.Open();
         }
     },
     {
         Title: "Close",
         ImageSrc: "public/symbols/Close.svg",
-        click: function () {
-            _this.Close();
+        click: function (e, menu) {
+            menu.Close();
         }
     }
     ];
@@ -206,23 +227,13 @@ BookmarkMenu.prototype.GetControls = function () {
 BookmarkMenu.prototype.InitEvents = function () {
     var _this = this;
 
-    _this.Webviewer.setCallbacks({
-        viewCreated: function (view) {
-            if (_this.Active) {
-                _this.OnViewAdded(view);
-            }
-        },
-        viewLoaded: function (view) {
-            if (_this.Active) {
-                _this.OnViewAdded(view);
-            }
-        },
-        viewDeleted: function (view) {
-            if (_this.Active) {
-                _this.OnViewDeleted(view);
-            }
-        }
-    });
+    _this.Webviewer.setCallbacks(_this.ViewerCallbackMap);
+}
+
+BookmarkMenu.prototype.TerminateEvents = function () {
+    var _this = this;
+
+    _this.Webviewer.unsetCallbacks(_this.ViewerCallbackMap);
 }
 
 BookmarkMenu.prototype.OnViewAdded = function (view) {
@@ -235,7 +246,7 @@ BookmarkMenu.prototype.OnViewAdded = function (view) {
     model.views[this.Id].bookmarks[name] = uniqueId;
 
     // refresh grid
-    if (model.views[_this.Id].displayMenu.ViewsOpen) {
+    if (model.views[this.Id].displayMenu.ViewsOpen) {
         this.LoadBookmarkViews();
     }
 

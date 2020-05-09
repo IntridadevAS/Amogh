@@ -96,12 +96,7 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
                     _this.SourceType,
                     selectedComponents);
 
-
                 _this.CreateNodeIdArray(viewer.model.getAbsoluteRootNode());
-
-                // // show busy spinner
-                // var busySpinner = document.getElementById("divLoading");
-                // busySpinner.className = 'show';
 
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
                 var rootNodeId = viewer.model.getAbsoluteRootNode();

@@ -21,6 +21,10 @@ TagsMenu.prototype.Open = function () {
 
     this.ShowMenu();
     this.InitEvents();
+
+    if (model.views[this.Id].displayMenu.ViewsOpen) {
+        this.ShowViews();
+    }
 }
 
 TagsMenu.prototype.Close = function () {
@@ -54,7 +58,7 @@ TagsMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -76,47 +80,47 @@ TagsMenu.prototype.ShowMenu = function () {
 }
 
 TagsMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     return controls = [
         {
             Title: "Tag",
             ImageSrc: "public/symbols/Tag.svg",
-            click: function () {
-                _this.ActivateOperator();                
+            click: function (e, menu) {
+                menu.ActivateOperator();                
             }
         },
         {
             Title: "Tag Views",
             ImageSrc: "public/symbols/MarkupViews.svg",
-            click: function () {
-                if (!model.views[_this.Id].displayMenu.ViewsOpen) {
-                    _this.ShowViews();
+            click: function (e, menu) {
+                if (!model.views[menu.Id].displayMenu.ViewsOpen) {
+                    menu.ShowViews();
                 }
                 else {
-                    _this.HideViews();
+                    menu.HideViews();
                 }
             }
         },
         {
             Title: "Clear Tags",
             ImageSrc: "public/symbols/MarkupDelete.svg",
-            click: function () {
-               _this.DeleteAnnotations();
+            click: function (e, menu) {
+                menu.DeleteAnnotations();
             }
         },
         {
             Title: "Return",
             ImageSrc: "public/symbols/MenuReturn.svg",
-            click: function () {
-                _this.Close();
-                model.views[_this.Id].displayMenu.Open();
+            click: function (e, menu) {
+                menu.Close();
+                model.views[menu.Id].displayMenu.Open();
             }
         },
         {
             Title: "Close",
             ImageSrc: "public/symbols/Close.svg",
-            click: function () {
-                _this.Close();
+            click: function (e, menu) {
+                menu.Close();
             }
         }
     ];
@@ -269,7 +273,7 @@ TagsMenu.prototype.HideViews = function () {
 }
 
 TagsMenu.prototype.DeleteAnnotations = function () {
-    var totalClearedAnnotatios = Object.keys(model.views[_this.Id].annotations).length;
+    var totalClearedAnnotatios = Object.keys(model.views[this.Id].annotations).length;
     for (var markupHandle in model.views[this.Id].annotations) {
         this.DeleteAnnotation(markupHandle);
     }
@@ -277,7 +281,7 @@ TagsMenu.prototype.DeleteAnnotations = function () {
     model.views[this.Id].annotations = {};
 
     // refresh grid
-    if (model.views[_this.Id].displayMenu.ViewsOpen) {
+    if (model.views[this.Id].displayMenu.ViewsOpen) {
         this.LoadAnnotations();
     }
 

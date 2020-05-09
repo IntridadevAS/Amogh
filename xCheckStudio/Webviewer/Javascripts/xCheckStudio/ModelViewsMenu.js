@@ -13,7 +13,7 @@ function ModelViewsMenu(id) {
     this.ExplodeManager;
     this.TranslucencyManager;
 
-    this.ListItems;
+    this.ListItems;   
 }
 
 ModelViewsMenu.prototype.Open = function () {
@@ -71,7 +71,7 @@ ModelViewsMenu.prototype.LoadMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -93,7 +93,7 @@ ModelViewsMenu.prototype.LoadMenu = function () {
 }
 
 ModelViewsMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     if (this.ListItems) {
         return this.ListItems;
     }
@@ -102,144 +102,144 @@ ModelViewsMenu.prototype.GetControls = function () {
         {
             Title: "3D Display Styles",
             ImageSrc: "public/symbols/DisplayStyles.svg",
-            click: function () {
-                if (_this.DisplayStylesMenu.Active) {
-                    _this.DisplayStylesMenu.Close();
+            click: function (e, menu) {
+                if (menu.DisplayStylesMenu.Active) {
+                    menu.DisplayStylesMenu.Close();
                 }
                 else {
-                    _this.DisplayStylesMenu.Open();
+                    menu.DisplayStylesMenu.Open();
                 }
             }
         },
         {
             Title: "Sectioning",
             ImageSrc: "public/symbols/Sectioning.svg",
-            click: function () {
-                if (!_this.SectioningMenu.Active) {
-                    _this.SectioningMenu.Open();
+            click: function (e, menu) {
+                if (!menu.SectioningMenu.Active) {
+                    menu.SectioningMenu.Open();
                 }
                 else {
-                    _this.SectioningMenu.Close();
+                    menu.SectioningMenu.Close();
                 }
             }
         },
         {
             Title: "Background Colors",
             ImageSrc: "public/symbols/ColorPallete.svg",
-            click: function () {
-                openBackgroundColorPallete(_this.Webviewer);
+            click: function (e, menu) {
+                openBackgroundColorPallete(menu.Webviewer);
             }
         },
         {
             Title: "Fit",
             ImageSrc: "public/symbols/ZoomFit.svg",
-            click: function () {
-                _this.Webviewer.view.fitWorld();
+            click: function (e, menu) {
+                menu.Webviewer.view.fitWorld();
             }
         },
         {
             Title: "Explode",
             ImageSrc: "public/symbols/Explode.svg",
-            click: function () {
-                if (!_this.ExplodeManager) {
-                    _this.StartExplode();
+            click: function (e, menu) {
+                if (!menu.ExplodeManager) {
+                    menu.StartExplode();
                 }
                 else {
-                    _this.StopExplode();
+                    menu.StopExplode();
                 }
             }
         },
         {
             Title: "Translucency",
             ImageSrc: "public/symbols/Transparency.svg",
-            click: function () {
-                if (!_this.TranslucencyManager) {
-                    _this.StartTranslucency();
+            click: function (e, menu) {
+                if (!menu.TranslucencyManager) {
+                    menu.StartTranslucency();
                 }
                 else {
-                    _this.StopTranslucency();
+                    menu.StopTranslucency();
                 }
             }
         },
         {
             Title: "Measure",
             ImageSrc: "public/symbols/Measure.svg",
-            click: function () {
-                if (!_this.MeasureMenu.Active) {
-                    _this.MeasureMenu.Open();
+            click: function (e, menu) {
+                if (!menu.MeasureMenu.Active) {
+                    menu.MeasureMenu.Open();
                 }
                 else {
-                    _this.MeasureMenu.Close();
+                    menu.MeasureMenu.Close();
                 }
             }
         },
         {
             Title: "Navigation: Orbit",
             ImageSrc: "public/symbols/Orbit.svg",
-            click: function () {
+            click: function (e, menu) {
                 if (this.Title === "Navigation: Orbit") {
                     this.Title = "Navigation: Walkthrough";
                     this.ImageSrc = "public/symbols/Walkthrough.svg";
                     event.target.src = this.ImageSrc;
 
-                    _this.Webviewer.operatorManager.set(Communicator.OperatorId.Walk, 0);
+                    menu.Webviewer.operatorManager.set(Communicator.OperatorId.Walk, 0);
 
                     // Chnaging to walk mode forces projection to be chnaged to
                     // perspective so to make projection menu item consistent
                     // update items and load menu
                     // update the list items dynamically
-                    _this.UpdateListItems();
+                    menu.UpdateListItems();
                     // Load menu
-                    _this.LoadMenu();
+                    menu.LoadMenu();
                 }
                 else {
                     this.Title = "Navigation: Orbit";
                     this.ImageSrc = "public/symbols/Orbit.svg";
                     event.target.src = this.ImageSrc;
 
-                    _this.Webviewer.operatorManager.set(Communicator.OperatorId.Navigate, 0);
+                    menu.Webviewer.operatorManager.set(Communicator.OperatorId.Navigate, 0);
                 }
             }
         },
         {
             Title: "Projection: Perspective",
             ImageSrc: "public/symbols/Perspective.svg",
-            click: function () {
+            click: function (e, menu) {
                 if (this.Title === "Projection: Perspective") {
                     this.Title = "Projection: Orthographic";
                     this.ImageSrc = "public/symbols/Orthographic.svg";
                     event.target.src = this.ImageSrc;
 
-                    _this.Webviewer.view.setProjectionMode(Communicator.Projection.Orthographic);
+                    menu.Webviewer.view.setProjectionMode(Communicator.Projection.Orthographic);
                 }
                 else {
                     this.Title = "Projection: Perspective";
                     this.ImageSrc = "public/symbols/Perspective.svg";
                     event.target.src = this.ImageSrc;
-                    _this.Webviewer.view.setProjectionMode(Communicator.Projection.Perspective);
+                    menu.Webviewer.view.setProjectionMode(Communicator.Projection.Perspective);
                 }
             }
         },
         {
             Title: "Axis Triad",
             ImageSrc: "public/symbols/Triad.svg",
-            click: function () {
-                toggleAxisTriad(_this.Webviewer);
+            click: function (e, menu) {
+                toggleAxisTriad(menu.Webviewer);
             }
         },
         {
             Title: "Return",
             ImageSrc: "public/symbols/MenuReturn.svg",
-            click: function () {
-                _this.Close();
-                model.views[_this.Id].displayMenu.Open();
+            click: function (e, menu) {
+                menu.Close();
+                model.views[menu.Id].displayMenu.Open();
             }
         },
         {
             Title: "Close",
             ImageSrc: "public/symbols/Close.svg",
-            click: function () {
-                _this.Close();
+            click: function (e, menu) {
+                menu.Close();
             }
         }
     ];
@@ -355,7 +355,7 @@ DisplayStylesMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -377,46 +377,46 @@ DisplayStylesMenu.prototype.ShowMenu = function () {
 }
 
 DisplayStylesMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     return controls = [
         {
             Title: "Ghost",
             ImageSrc: "public/symbols/Xray.svg",
-            click: function () {
-                _this.Webviewer.view.setDrawMode(Communicator.DrawMode.XRay);
-                _this.Close();
+            click: function (e, menu) {
+                menu.Webviewer.view.setDrawMode(Communicator.DrawMode.XRay);
+                menu.Close();
             }
         },
         {
             Title: "Shaded With Lines",
             ImageSrc: "public/symbols/ShadedWithLines.svg",
-            click: function () {
-                _this.Webviewer.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded);
-                _this.Close();
+            click: function (e, menu) {
+                menu.Webviewer.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded);
+                menu.Close();
             }
         },
         {
             Title: "Shaded",
             ImageSrc: "public/symbols/Shaded.svg",
-            click: function () {
-                _this.Webviewer.view.setDrawMode(Communicator.DrawMode.Shaded);
-                _this.Close();
+            click: function (e, menu) {
+                menu.Webviewer.view.setDrawMode(Communicator.DrawMode.Shaded);
+                menu.Close();
             }
         },
         {
             Title: "Hidden Lines",
             ImageSrc: "public/symbols/HiddenLines.svg",
-            click: function () {
-                _this.Webviewer.view.setDrawMode(Communicator.DrawMode.HiddenLine);
-                _this.Close();
+            click: function (e, menu) {
+                menu.Webviewer.view.setDrawMode(Communicator.DrawMode.HiddenLine);
+                menu.Close();
             }
         },
         {
             Title: "Wireframe",
             ImageSrc: "public/symbols/Wireframe.svg",
-            click: function () {
-                _this.Webviewer.view.setDrawMode(Communicator.DrawMode.Wireframe);
-                _this.Close();
+            click: function (e, menu) {
+                menu.Webviewer.view.setDrawMode(Communicator.DrawMode.Wireframe);
+                menu.Close();
             }
         }
     ];
@@ -481,7 +481,7 @@ SectioningMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -504,93 +504,93 @@ SectioningMenu.prototype.ShowMenu = function () {
 }
 
 SectioningMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     return controls = [
         {
             Title: "Toggle Planes Visibility",
-            ImageSrc: _this.PlanesVisible ? "public/symbols/Hide.svg" : "public/symbols/ShowAll.svg",
-            click: function () {
-                _this.PlanesVisible = !_this.PlanesVisible;
+            ImageSrc: menu.PlanesVisible ? "public/symbols/Hide.svg" : "public/symbols/ShowAll.svg",
+            click: function (e, menu) {
+                menu.PlanesVisible = !menu.PlanesVisible;
 
-                if (_this.PlanesVisible) {
-                    _this.ImageSrc = "public/symbols/Hide.svg";
-                    event.target.src = _this.ImageSrc;
+                if (menu.PlanesVisible) {
+                    menu.ImageSrc = "public/symbols/Hide.svg";
+                    event.target.src = menu.ImageSrc;
                 }
                 else {
-                    _this.ImageSrc = "public/symbols/ShowAll.svg";
-                    event.target.src = _this.ImageSrc;
+                    menu.ImageSrc = "public/symbols/ShowAll.svg";
+                    event.target.src = menu.ImageSrc;
                 }
 
-                _this.UpdateCuttingPlane2();
-                _this.Close();
+                menu.UpdateCuttingPlane2();
+                menu.Close();
             }
         },
         {
             Title: "Toggle Intersection",
             ImageSrc: "public/symbols/Intersection.svg",
-            click: function () {
-                _this.UseIndividualSection = !_this.UseIndividualSection;
-                _this.UpdateCuttingPlane2();
-                _this.Close();
+            click: function (e, menu) {
+                menu.UseIndividualSection = !menu.UseIndividualSection;
+                menu.UpdateCuttingPlane2();
+                menu.Close();
             }
         },
         {
             Title: "Toggle XY Sectioning",
             ImageSrc: "public/symbols/XYPlane.svg",
-            click: function () {
-                if (!('XY' in _this.Planes)) {
-                    _this.AddCuttingPlane(Communicator.Axis.Z);
+            click: function (e, menu) {
+                if (!('XY' in menu.Planes)) {
+                    menu.AddCuttingPlane(Communicator.Axis.Z);
                 }
                 else {
-                    _this.UpdateCuttingPlane(
-                        _this.Planes['XY'],
+                    menu.UpdateCuttingPlane(
+                        menu.Planes['XY'],
                         'XY',
                         true);
                 }
 
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Toggle XZ Sectioning",
             ImageSrc: "public/symbols/XZPlane.svg",
-            click: function () {
-                if (!('XZ' in _this.Planes)) {
-                    _this.AddCuttingPlane(Communicator.Axis.Y);
+            click: function (e, menu) {
+                if (!('XZ' in menu.Planes)) {
+                    menu.AddCuttingPlane(Communicator.Axis.Y);
                 }
                 else {
-                    _this.UpdateCuttingPlane(
-                        _this.Planes['XZ'],
+                    menu.UpdateCuttingPlane(
+                        menu.Planes['XZ'],
                         'XZ',
                         true);
                 }
 
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Toggle YZ Sectioning",
             ImageSrc: "public/symbols/YZPlane.svg",
-            click: function () {
-                if (!('YZ' in _this.Planes)) {
-                    _this.AddCuttingPlane(Communicator.Axis.X);
+            click: function (e, menu) {
+                if (!('YZ' in menu.Planes)) {
+                    menu.AddCuttingPlane(Communicator.Axis.X);
                 }
                 else {
-                    _this.UpdateCuttingPlane(
-                        _this.Planes['YZ'],
+                    menu.UpdateCuttingPlane(
+                        menu.Planes['YZ'],
                         'YZ',
                         true);
                 }
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Clear Sectioning",
             ImageSrc: "public/symbols/ClearAll.svg",
-            click: function () {
-                _this.DeactivateCuttingSections();
+            click: function (e, menu) {
+                menu.DeactivateCuttingSections();
                 DevExpress.ui.notify("Cleared cutting sections.", "success", 1500);
-                _this.Close();
+                menu.Close();
             }
         }
     ];
@@ -927,6 +927,13 @@ function MeasureMenu(id, viewer) {
     this.ViewsOpen = false;
 
     this.SelectedRowKey;
+
+    var _this = this;
+    this.ViewerCallbackMap = {
+        measurementCreated: function (measureMarkup) {
+            _this.MeasurementCreated(measureMarkup);
+        }
+    };
 }
 
 MeasureMenu.prototype.Open = function () {
@@ -952,6 +959,8 @@ MeasureMenu.prototype.Close = function () {
 
     var element = document.getElementById("measureMenu" + this.Id);
     element.setAttribute('style', 'display:none');
+
+    this.TerminateEvents();
 }
 
 MeasureMenu.prototype.ShowMenu = function () {
@@ -976,7 +985,7 @@ MeasureMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -998,95 +1007,95 @@ MeasureMenu.prototype.ShowMenu = function () {
 }
 
 MeasureMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     return controls = [
         {
             Title: "Point To Point Measure",
             ImageSrc: "public/symbols/Measure.svg",
-            click: function () {
-                if (_this.ActiveOperator !== Communicator.OperatorId.MeasurePointPointDistance) {
-                    _this.ActivateOperator(Communicator.OperatorId.MeasurePointPointDistance);
+            click: function (e, menu) {
+                if (menu.ActiveOperator !== Communicator.OperatorId.MeasurePointPointDistance) {
+                    menu.ActivateOperator(Communicator.OperatorId.MeasurePointPointDistance);
                 }
                 else {
-                    _this.DeActivateOperator();
+                    menu.DeActivateOperator();
                 }
 
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Face To Face Measure",
             ImageSrc: "public/symbols/FaceToFaceMeasure.svg",
-            click: function () {
-                if (_this.ActiveOperator !== Communicator.OperatorId.MeasureFaceFaceDistance) {
-                    _this.ActivateOperator(Communicator.OperatorId.MeasureFaceFaceDistance);
+            click: function (e, menu) {
+                if (menu.ActiveOperator !== Communicator.OperatorId.MeasureFaceFaceDistance) {
+                    menu.ActivateOperator(Communicator.OperatorId.MeasureFaceFaceDistance);
                 }
                 else {
-                    _this.DeActivateOperator();
+                    menu.DeActivateOperator();
                 }
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Face Angle Measure",
             ImageSrc: "public/symbols/FaceAngleMeasure.svg",
-            click: function () {
-                if (_this.ActiveOperator !== Communicator.OperatorId.MeasureFaceFaceAngle) {
-                    _this.ActivateOperator(Communicator.OperatorId.MeasureFaceFaceAngle);
+            click: function (e, menu) {
+                if (menu.ActiveOperator !== Communicator.OperatorId.MeasureFaceFaceAngle) {
+                    menu.ActivateOperator(Communicator.OperatorId.MeasureFaceFaceAngle);
                 }
                 else {
-                    _this.DeActivateOperator();
+                    menu.DeActivateOperator();
                 }
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Edge Measure",
             ImageSrc: "public/symbols/Edge Measure.svg",
-            click: function () {
-                if (_this.ActiveOperator !== Communicator.OperatorId.MeasureEdgeLength) {
-                    _this.ActivateOperator(Communicator.OperatorId.MeasureEdgeLength);
+            click: function (e, menu) {
+                if (menu.ActiveOperator !== Communicator.OperatorId.MeasureEdgeLength) {
+                    menu.ActivateOperator(Communicator.OperatorId.MeasureEdgeLength);
                 }
                 else {
-                    _this.DeActivateOperator();
+                    menu.DeActivateOperator();
                 }
-                _this.Close();
+                menu.Close();
             }
         },
         {           
             Title: "Measure Views",
             ImageSrc: "public/symbols/MarkupViews.svg",
-            click: function () {
-                if (!_this.ViewsOpen) {
-                    _this.ShowViews();
+            click: function (e, menu) {
+                if (!menu.ViewsOpen) {
+                    menu.ShowViews();
                 }
                 else {
-                    _this.HideViews();
+                    menu.HideViews();
                 }
 
-                _this.Close();
+                menu.Close();
             }
         },
         {
             Title: "Clear Measures",
             ImageSrc: "public/symbols/ClearAll.svg",
-            click: function () {
-                model.views[_this.Id].measures = {};
+            click: function (e, menu) {
+                model.views[menu.Id].measures = {};
 
-                var allMeasures = _this.Webviewer.measureManager.getAllMeasurements();
+                var allMeasures = menu.Webviewer.measureManager.getAllMeasurements();
                 var totalMeasuresCleared = allMeasures.length;
                 for (var i = 0; i < allMeasures.length; i++) {
-                    _this.Webviewer.measureManager.removeMeasurement(allMeasures[i]);
+                    menu.Webviewer.measureManager.removeMeasurement(allMeasures[i]);
                 }
 
                 DevExpress.ui.notify("'" + totalMeasuresCleared + "'" + " measures cleared.", "success", 1500);
 
                 // refresh grid
-                if (_this.ViewsOpen) {
-                    _this.LoadMeasures();
+                if (menu.ViewsOpen) {
+                    menu.LoadMeasures();
                 }
 
-                _this.Close();
+                menu.Close();
             }
         }
     ];
@@ -1095,11 +1104,12 @@ MeasureMenu.prototype.GetControls = function () {
 MeasureMenu.prototype.InitEvents = function () {
     var _this = this;
 
-    _this.Webviewer.setCallbacks({
-        measurementCreated: function (measureMarkup) {            
-                _this.MeasurementCreated(measureMarkup);          
-        }
-    });
+    _this.Webviewer.setCallbacks(_this.ViewerCallbackMap);
+}
+
+MeasureMenu.prototype.TerminateEvents = function () {
+    var _this = this;
+    _this.Webviewer.unsetCallbacks(_this.ViewerCallbackMap);
 }
 
 MeasureMenu.prototype.MeasurementCreated = function (measureMarkup) {

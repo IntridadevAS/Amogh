@@ -12,47 +12,47 @@ function ViewerContextMenu(webViewer, ids) {
 }
 
 ViewerContextMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     this.MenuItems = [
         {
             text: "Hide",
             icon: "public/symbols/Hide.svg",
-            click: function () {
-                _this.OnHideClicked();
+            click: function (e, menu) {
+                menu.OnHideClicked();
             }
         },
         {
             text: "Isolate",
             icon: "public/symbols/Isolate.svg",
-            click: function () {
-                _this.OnIsolateClicked();
+            click: function (e, menu) {
+                menu.OnIsolateClicked();
             }
         },
         {
-            text: "Area Select",
-            icon: this.active? "public/symbols/Single Select.svg" : "public/symbols/Box Select.svg",
+            text: this.active ? "Single Select" : "Box Select",
+            icon: this.active ? "public/symbols/Single Select.svg" : "public/symbols/Box Select.svg",
             active: false,
-            click: function () {
-                _this.OnAreaSelectClicked(this);
+            click: function (e, menu) {
+                menu.OnAreaSelectClicked(this);
             }
         },
         {
             text: "Model Views",
             icon: "public/symbols/ModelView.svg",
-            click: function () {
-                _this.OnModelViewsClicked();
+            click: function (e, menu) {
+                menu.OnModelViewsClicked();
             }
         },
         {
             text: "Translucency",
             icon: "public/symbols/Transparency.svg",
             active: false,
-            click: function () {
+            click: function (e, menu) {
                 if (!this.active) {
-                    _this.OnStartTranslucencyClicked();
+                    menu.OnStartTranslucencyClicked();
                 }
                 else {
-                    _this.OnStopTranslucencyClicked();
+                    menu.OnStopTranslucencyClicked();
                 }
 
                 this.active = !this.active;
@@ -61,15 +61,15 @@ ViewerContextMenu.prototype.GetControls = function () {
         {
             text: "Zoom To Fit",
             icon: "public/symbols/ZoomFit.svg",
-            click: function () {
-                _this.OnZoomToFitClicked();
+            click: function (e, menu) {
+                menu.OnZoomToFitClicked();
             }
         },
         {
             text: "Set Defaults",
             icon: "public/symbols/Set Defaults.svg",
-            click: function () {
-                _this.OnSetDefaultsClicked();
+            click: function (e, menu) {
+                menu.OnSetDefaultsClicked();
             }
         }
     ];
@@ -80,12 +80,12 @@ ViewerContextMenu.prototype.GetControls = function () {
 ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
     if (!itemData.active) {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.AreaSelect, 1);
-        itemData.text = "Select";
+        itemData.text = "Single Select";
         itemData.icon = "public/symbols/Single Select.svg";
     }
     else {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.Select, 1);
-        itemData.text = "Area Select";
+        itemData.text = "Box Select";
         itemData.icon = "public/symbols/Box Select.svg";
     }
 
@@ -204,7 +204,7 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
         selectionMode: "single",
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },

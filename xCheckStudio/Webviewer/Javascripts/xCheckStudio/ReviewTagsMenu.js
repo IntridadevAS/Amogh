@@ -67,7 +67,7 @@ TagsMenu.prototype.ShowMenu = function () {
         },
         onSelectionChanged: function (e) {
             if (e.component._selection.getSelectedItems().length > 0) {
-                e.addedItems[0].click(e);
+                e.addedItems[0].click(e, _this);
                 e.component._selection.deselectAll();
             }
         },
@@ -89,56 +89,56 @@ TagsMenu.prototype.ShowMenu = function () {
 }
 
 TagsMenu.prototype.GetControls = function () {
-    var _this = this;
+    // var _this = this;
     return controls = [
         {
             Title: "Tag",
             ImageSrc: "public/symbols/Tag.svg",
-            click: function () {
-                _this.ActivateOperator();                
+            click: function (e, menu) {
+                menu.ActivateOperator();                
             }
         },
         {
             Title: "Tag Views",
             ImageSrc: "public/symbols/MarkupViews.svg",
-            click: function () {
-                if (!model.checks[_this.Id].isViewsOpen()) {
-                    _this.ShowViews();
+            click: function (e, menu) {
+                if (!model.checks[menu.Id].isViewsOpen()) {
+                    menu.ShowViews();
                 }
                 else {
                     // unhighlight
-                    if (_this.SelectedRowKey["annotations"]) {
-                        var annotation = model.checks[_this.Id].annotations[_this.ViewerId][_this.SelectedRowKey["annotations"].Id];
+                    if (menu.SelectedRowKey["annotations"]) {
+                        var annotation = model.checks[menu.Id].annotations[menu.ViewerId][menu.SelectedRowKey["annotations"].Id];
                         annotation.unHighlight();
-                        _this.Webviewer.markupManager.refreshMarkup();
+                        menu.Webviewer.markupManager.refreshMarkup();
                     }
-                    _this.HideViews();
+                    menu.HideViews();
                 }
             }
         },
         {
             Title: "Clear Tags",
             ImageSrc: "public/symbols/MarkupDelete.svg",
-            click: function () {
-               _this.DeleteAnnotations();
+            click: function (e, menu) {
+                menu.DeleteAnnotations();
             }
         },
         {
             Title: "Return",
             ImageSrc: "public/symbols/MenuReturn.svg",
-            click: function () {
-                _this.Close();
-                _this.GetDisplayMenu().Open();
+            click: function (e, menu) {
+                menu.Close();
+                menu.GetDisplayMenu().Open();
             }
         },
         {
             Title: "Close",
             ImageSrc: "public/symbols/Close.svg",
-            click: function () {
-                _this.Close();
+            click: function (e, menu) {
+                menu.Close();
                 
                 // Close open views and Measures form
-                _this.HideAllOpenViewForms();
+                menu.HideAllOpenViewForms();
             }
         }
     ];
