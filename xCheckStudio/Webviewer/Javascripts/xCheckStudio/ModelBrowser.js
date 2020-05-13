@@ -29,3 +29,43 @@ ModelBrowser.prototype.GetItemCountDiv = function () {
 
     return undefined;
 }
+
+ModelBrowser.prototype.Clear = function (tableControl) {
+    if (model.views[this.Id].tableViewInstance) {
+        var containerDiv = "#" + this.ModelBrowserContainer;
+
+        var browserContainer = document.getElementById(this.ModelBrowserContainer);
+        var parent = browserContainer.parentElement;
+
+        //remove html element which holds grid
+        //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
+        if (tableControl.toLowerCase() === "treelist") {
+            $(containerDiv).dxTreeList("dispose");
+        }
+        else if (tableControl.toLowerCase() === "datagrid") {
+            $(containerDiv).dxDataGrid("dispose");
+        }
+        $(containerDiv).remove();
+
+        //Create and add div with same id to add grid again
+        var browserContainerDiv = document.createElement("div")
+        browserContainerDiv.id = this.ModelBrowserContainer;
+        var styleRule = ""
+        styleRule = "position: relative";
+        browserContainerDiv.setAttribute("style", styleRule);
+        parent.appendChild(browserContainerDiv);
+
+        model.views[this.Id].tableViewInstance = null;
+
+        // disable list view switches
+        if (SourceManagers[this.Id].IncludeMemberItemsSwitch) {
+            SourceManagers[this.Id].IncludeMemberItemsSwitch.option("disabled", true);
+        }
+        if (SourceManagers[this.Id].ListTypeSwitch) {
+            SourceManagers[this.Id].ListTypeSwitch.option("disabled", true);
+        }
+    }
+
+    // clear count
+    this.GetItemCountDiv().innerHTML = "";
+}

@@ -55,6 +55,26 @@ const ModelBrowserColumnNames3D = {
     Parent: "parent"
 }
 
+// 3D List view columns
+const ListViewColumns3D ={
+    Select: 0,
+    Component: 1,
+    MainClass: 2,
+    SubClass: 3,
+    NodeId: 4,
+    Parent: 5
+}
+
+// 3D List view column names
+const ListViewColumnNames3D ={
+    Select: "",
+    Component: "Item",
+    MainClass: "Category",
+    SubClass: "Class",
+    NodeId: "NodeId",
+    Parent: "parent"
+}
+
 // 1D Model browser
 // column indices
 const ModelBrowserColumns1D = {
@@ -127,4 +147,14 @@ const GlobalConstants = {
     SourceBNotSelectedComponentsTable :  "SourceBNotSelectedComponents",
     SourceCNotSelectedComponentsTable :  "SourceCNotSelectedComponents",
     SourceDNotSelectedComponentsTable :  "SourceDNotSelectedComponents",
+
+    TableView : {
+        "DataBrowser" : "Data Browser",
+        "List" : "List",
+        "Groups" : "Groups"
+    },
+
+    TableRowSelectedColor : "#e6e6e6",
+    TableRowHighlightedColor : "darkgray",
+    TableRowNormalColor : "#fff",
 }

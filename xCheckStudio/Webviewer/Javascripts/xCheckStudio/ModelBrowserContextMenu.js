@@ -77,16 +77,6 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
                                           return false;
                                     }
                               },
-                              // "stopTranslucency": {
-                              //       name: "Stop Translucency",
-                              //       visible: function () {
-                              //             if (_this.HaveSCOperations()) {
-                              //                   return true;
-                              //             }
-
-                              //             return false;
-                              //       }
-                              // },
                               "reference": {
                                     name: "Reference",
                                     icon: "reference",
@@ -105,8 +95,7 @@ ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
 
 ModelBrowserContextMenu.prototype.HaveSCOperations = function () {
       if (!this.ModelBrowser ||
-            !this.ModelBrowser.Webviewer ||
-            !this.ModelBrowser.SelectionManager) {
+            !this.ModelBrowser.Webviewer) {
             return false;
       }
 
@@ -188,12 +177,14 @@ ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
             }
 
             //Grey out the text of hidden element rows
-            var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
-            sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
+            sourceManager.ModelTree.HighlightHiddenRowsFromNodeIds(true, sourceManager.HiddenNodeIds);
+            // var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
+            // sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
 
             // unhighlight the hidden rows made visible
-            selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(nodeIds);
-            sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
+            sourceManager.ModelTree.HighlightHiddenRowsFromNodeIds(false, nodeIds);
+            // selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(nodeIds);
+            // sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
       }
 }
 
@@ -211,16 +202,17 @@ ModelBrowserContextMenu.prototype.OnHideClicked = function () {
 
       this.SetNodesVisibility(this.ModelBrowser.Webviewer, nodeIds, false);
 
-      var selectedNodeIds = this.ModelBrowser.SelectionManager.SelectedComponentNodeIds;
+      var selectedNodeIds = this.ModelBrowser.GetSelectedNodeIds();
 
       // Handle hidden elements nodeIds list 
       SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(true, selectedNodeIds);
 
-      //Get rows of selected node Ids to change text color 
-      var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds(selectedNodeIds);
-
       //Grey out the text of hidden element rows
-      this.ModelBrowser.HighlightHiddenRows(true, selectedRows);
+      this.ModelBrowser.HighlightHiddenRowsFromNodeIds(true, selectedNodeIds);
+      // //Get rows of selected node Ids to change text color 
+      // var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds(selectedNodeIds);
+      // //Grey out the text of hidden element rows
+      // this.ModelBrowser.HighlightHiddenRows(true, selectedRows);
 }
 
 ModelBrowserContextMenu.prototype.SetNodesVisibility = function (viewer, nodeIds, visible) {
@@ -251,15 +243,16 @@ ModelBrowserContextMenu.prototype.OnShowClicked = function () {
             this.IsolateManager.IsolatedNodes = [];
       }
 
-      var selectedNodeIds = this.ModelBrowser.SelectionManager.SelectedComponentNodeIds;
+      var selectedNodeIds = this.ModelBrowser.GetSelectedNodeIds();
       // Handle hidden elements nodeIds list 
       SourceManagers[model.currentTabId].HandleHiddenNodeIdsList(false, selectedNodeIds);
 
-      //Get rows of selected node Ids to change text color 
-      var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds(selectedNodeIds);
-
       //Grey out the text of hidden element rows
-      this.ModelBrowser.HighlightHiddenRows(false, selectedRows);
+      this.ModelBrowser.HighlightHiddenRowsFromNodeIds(false, selectedNodeIds);
+      // //Get rows of selected node Ids to change text color 
+      // var selectedRows = this.ModelBrowser.GetSelectedRowsFromNodeIds(selectedNodeIds);
+      // //Grey out the text of hidden element rows
+      // this.ModelBrowser.HighlightHiddenRows(false, selectedRows);
 }
 
 ModelBrowserContextMenu.prototype.OnStartTranslucencyClicked = function () {

@@ -169,10 +169,14 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 loadingBrower = false;
             },  
             onInitialized: function(e) {
+                model.views[_this.Id].tableViewInstance = e.component; 
+            
                 // // initialize the context menu
                 // var modelBrowserContextMenu = new ModelBrowserContextMenu();
                 // modelBrowserContextMenu.Init(_this);
                 _this.ShowItemCount(_this.modelTreeRowData.length);
+
+                document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.DataBrowser;
             },
             onSelectionChanged: function (e) {
                 var checkBoxStatus;

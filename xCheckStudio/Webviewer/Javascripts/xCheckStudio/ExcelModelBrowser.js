@@ -162,27 +162,27 @@ ExcelModeBrowser.prototype.RemoveHighlightColor = function (row) {
     }
 }
 
-ExcelModeBrowser.prototype.Clear = function () {   
-    var containerDiv = "#" + this.ModelBrowserContainer;
+// ExcelModeBrowser.prototype.Clear = function () {   
+//     var containerDiv = "#" + this.ModelBrowserContainer;
 
-    var browserContainer = document.getElementById(this.ModelBrowserContainer);
-    var parent = browserContainer.parentElement;
+//     var browserContainer = document.getElementById(this.ModelBrowserContainer);
+//     var parent = browserContainer.parentElement;
 
-    //remove html element which holds grid
-    $(containerDiv).remove();
+//     //remove html element which holds grid
+//     $(containerDiv).remove();
 
-    //Create and add div with same id to add grid again
-    //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
-    var browserContainerDiv = document.createElement("div")
-    browserContainerDiv.id = this.ModelBrowserContainer;
-    var styleRule = ""
-    styleRule = "position: relative";
-    browserContainerDiv.setAttribute("style", styleRule);
-    parent.appendChild(browserContainerDiv);
+//     //Create and add div with same id to add grid again
+//     //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
+//     var browserContainerDiv = document.createElement("div")
+//     browserContainerDiv.id = this.ModelBrowserContainer;
+//     var styleRule = ""
+//     styleRule = "position: relative";
+//     browserContainerDiv.setAttribute("style", styleRule);
+//     parent.appendChild(browserContainerDiv);
     
-     // clear count
-     this.GetItemCountDiv().innerHTML = "";
-}
+//      // clear count
+//      this.GetItemCountDiv().innerHTML = "";
+// }
 
 ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeaders, tableData) {
     var _this = this;
@@ -219,12 +219,16 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                 }
                 loadingBrower = false;
             },  
-            onInitialized: function(e) {
-                  // initialize the context menu
-                  var modelBrowserContextMenu = new ModelBrowserContextMenu();
-                  modelBrowserContextMenu.Init(_this);
-                  
+            onInitialized: function (e) {
+                smodel.views[_this.Id].tableViewInstance = e.component;
+
+                // initialize the context menu
+                var modelBrowserContextMenu = new ModelBrowserContextMenu();
+                modelBrowserContextMenu.Init(_this);
+
                 _this.ShowItemCount(tableData.length);
+
+                document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.DataBrowser;
             },
             onSelectionChanged: function (e) {
                 if(e.currentSelectedRowKeys.length > 0) {
