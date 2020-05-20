@@ -18,6 +18,7 @@ function ModelViewsMenu(id) {
 
 ModelViewsMenu.prototype.Open = function () {
     this.Active = true;
+    model.views[this.Id].activeMenu = this;
 
     var element = document.getElementById("modelViewsMenu" + this.Id);
     element.setAttribute('style', 'display:block');
@@ -31,6 +32,7 @@ ModelViewsMenu.prototype.Open = function () {
 
 ModelViewsMenu.prototype.Close = function () {
     this.Active = false;
+    model.views[this.Id].activeMenu = null;
 
     model.views[this.Id].displayMenu.Close();
 
@@ -1155,7 +1157,7 @@ MeasureMenu.prototype.ShowViews = function () {
     }
 
     // Make the DIV element draggable:
-    DragElement(document.getElementById("measureViewsContainer" + this.Id),
+    xCheckStudio.Util.dragElement(document.getElementById("measureViewsContainer" + this.Id),
         document.getElementById("measureViewsCaptionBar" + this.Id));
 }
 

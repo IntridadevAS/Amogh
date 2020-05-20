@@ -15,6 +15,7 @@ function TagsMenu(id) {
 
 TagsMenu.prototype.Open = function () {
     this.Active = true;
+    model.views[this.Id].activeMenu = this;
 
     var element = document.getElementById("tagsMenu" + this.Id);
     element.setAttribute('style', 'display:block');
@@ -29,6 +30,7 @@ TagsMenu.prototype.Open = function () {
 
 TagsMenu.prototype.Close = function () {
     this.Active = false;
+    model.views[this.Id].activeMenu = null;
 
     model.views[this.Id].displayMenu.Close();
 
@@ -157,7 +159,7 @@ TagsMenu.prototype.ShowViews = function () {
     }
 
     // Make the DIV element draggable:
-    DragElement(document.getElementById("markupViewsContainer" + this.Id),
+    xCheckStudio.Util.dragElement(document.getElementById("markupViewsContainer" + this.Id),
         document.getElementById("markupViewsCaptionBar" + this.Id));
 }
 
@@ -244,7 +246,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
         onContentReady: function (e) {
             var scrollable = e.component.getScrollable();
             scrollable.scrollTo(scrollable.scrollHeight());
-        },
+        },        
         onEditorPrepared(e) {  
             if (e.parentType == 'dataRow') {       
                 e.editorElement.dxTextBox('instance').option('onValueChanged', args => {  

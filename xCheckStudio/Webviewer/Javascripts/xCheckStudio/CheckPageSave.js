@@ -92,6 +92,8 @@ var CheckModule = {
             // get bookmark views
             var annotations = this.getAnnotations();
 
+            // get all components
+            var allComponents = this.getAllComponents();
             $.ajax({
                 url: 'PHP/ProjectManager.php',
                 type: "POST",
@@ -110,7 +112,8 @@ var CheckModule = {
                     'hiddenItems': JSON.stringify(hiddenItems),
                     'markupViews': JSON.stringify(markupViews),
                     'bookmarkViews': JSON.stringify(bookmarkViews),
-                    'annotations': JSON.stringify(annotations),                    
+                    'annotations': JSON.stringify(annotations),
+                    "allComponents": JSON.stringify(allComponents),
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
@@ -121,6 +124,23 @@ var CheckModule = {
                 }
             });
         });
+    },
+
+    getAllComponents: function () {
+
+        var allComponents = {};
+        for (var srcId in SourceManagers) {
+            var sourceManager = SourceManagers[srcId];
+            if (!sourceManager.Is3DSource()) {
+                continue;
+            }
+
+            var tableName = "AllComponents" + srcId;
+
+            allComponents[tableName] = sourceManager.AllComponents;
+        }
+
+        return allComponents;
     },
 
     getHiddenItems: function () {
@@ -419,71 +439,9 @@ var CheckModule = {
                 "selectedComponents": selectedComponents,
                 "componentsTable": componentsTable
             };
-
-            // // write not selected components
-            // $.ajax({
-            //     url: 'PHP/ProjectManager.php',
-            //     type: "POST",
-            //     async: false,
-            //     data:
-            //     {
-            //         'InvokeFunction': "SaveNotSelectedComponents",
-            //         "notSelectedComponentsTable": notSelectedComponentsTable,
-            //         "selectedComponents": JSON.stringify(selectedCompoents),
-            //         "componentsTable": componentsTable,
-            //         "ProjectName": projectinfo.projectname,
-            //         'CheckName': checkinfo.checkname
-            //     },
-            //     success: function (msg) {
-            //     }
-            // });
         }
 
         return notSelectedComponentsObject;
-        // if (sourceManager1) {
-        //     var selectedCompoents = sourceManager1.ModelTree.GetSelectedComponents();
-
-        //     // write source a selected components
-        //     $.ajax({
-        //         url: 'PHP/ProjectManager.php',
-        //         type: "POST",
-        //         async: false,
-        //         data:
-        //         {
-        //             'InvokeFunction': "SaveNotSelectedComponents",
-        //             "notSelectedComponentsTable": "SourceANotSelectedComponents",
-        //             "selectedComponents": JSON.stringify(selectedCompoents),
-        //             "componentsTable": "SourceAComponents",
-        //             "ProjectName": projectinfo.projectname,
-        //             'CheckName': checkinfo.checkname
-        //         },
-        //         success: function (msg) {
-        //         }
-        //     });
-        // }
-
-        // // write source Bselected components
-        // if (sourceManager2) {
-        //     var selectedCompoents = sourceManager2.ModelTree.GetSelectedComponents();
-
-        //     // write source a selected components
-        //     $.ajax({
-        //         url: 'PHP/ProjectManager.php',
-        //         type: "POST",
-        //         async: false,
-        //         data:
-        //         {
-        //             'InvokeFunction': "SaveNotSelectedComponents",
-        //             "notSelectedComponentsTable": "SourceBNotSelectedComponents",
-        //             "selectedComponents": JSON.stringify(selectedCompoents),
-        //             "componentsTable": "SourceBComponents",
-        //             "ProjectName": projectinfo.projectname,
-        //             'CheckName': checkinfo.checkname
-        //         },
-        //         success: function (msg) {
-        //         }
-        //     });
-        // }
     },
 }
 

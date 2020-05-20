@@ -189,6 +189,40 @@ button + button {
   max-width: 85%;  
 }
 
+.tableHeaderArea{
+  top: 0px;
+  height: 60px;
+}
+.tableHeaderNameRow{
+  height: 30px;
+  width:100%;
+  color:white;
+  padding: 6px 10px;
+}
+
+.includeMemberItemsSwitch{
+position: absolute;
+right: 5px;
+width: 65px !important;
+}
+
+.listTypeSwitch{
+  position: absolute;
+right: 80px;
+width: 65px !important;
+}
+
+.tableHeaderControlRow{
+  height: 30px;
+  width:100%;
+}
+
+.tableArea{
+  position: absolute; 
+  top: 60px;
+  height: calc(100% - 100px);
+}
+
 .visualizerContainer {
   position: relative;
   background-color: black;
@@ -461,4 +495,66 @@ button[type="submit"] {
   right: 0px;
   top: 0px;
   padding: 4px;
+}
+
+.tableViewAction{
+  position: absolute;
+  right : 2px;
+  bottom: 2px;
+  width: 50px;
+    height: 50px;
+    text-align: center;
+    background-color: lightskyblue;
+    border-radius: 25px;
+    opacity: 0.5;
+}
+
+.dataBrowserAction{
+  position: absolute;
+  right: 12px;
+  bottom: 72px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background-color: gainsboro;
+  border-radius: 20px;
+  display: none;
+  opacity: 0.5;
+}
+
+.listviewAction{
+  position: absolute;
+  right: 12px;
+  bottom: 127px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background-color: gainsboro;
+  border-radius: 20px;
+  display: none;
+  opacity: 0.5;
+}
+
+.groupsAction{
+  position: absolute;
+  right: 12px;
+  bottom: 182px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background-color: gainsboro;
+  border-radius: 20px;
+  display: none;
+  opacity: 0.5;
+}
+
+.tableViewAction:hover,
+.dataBrowserAction:hover,
+.listviewAction:hover,
+.groupsAction:hover {
+  opacity: 1;
+}
+
+.showSDA{
+  display: block;
 }

@@ -92,8 +92,8 @@
             $command = 'CREATE TABLE '. $componentsTableName. '(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT NOT NULL,
-                mainclass TEXT NOT NULL,
-                subclass TEXT NOT NULL,
+                mainclass TEXT,
+                subclass TEXT,
                 nodeid INTEGER,
                 ischecked TEXT,
                 parentid INTEGER,
@@ -111,7 +111,8 @@
                         name TEXT NOT NULL,
                         format TEXT,
                         value TEXT,                
-                        ownercomponent INTEGER NOT NULL               
+                        ownercomponent INTEGER NOT NULL,
+                        userdefined INTEGER default 0
               )';         
              $dbh->exec($command);     
 
@@ -233,8 +234,8 @@
             $command = 'CREATE TABLE '. $componentsTableName. '(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT NOT NULL,
-                mainclass TEXT NOT NULL,
-                subclass TEXT NOT NULL,
+                mainclass,
+                subclass,
                 nodeid INTEGER,
                 ischecked TEXT,
                 parentid INTEGER,
@@ -252,7 +253,8 @@
                         name TEXT NOT NULL,
                         format TEXT,
                         value TEXT,                
-                        ownercomponent INTEGER NOT NULL               
+                        ownercomponent INTEGER NOT NULL,
+                        userdefined INTEGER default 0               
               )';         
              $dbh->exec($command);     
 

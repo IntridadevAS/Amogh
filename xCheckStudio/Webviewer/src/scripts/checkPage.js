@@ -19,13 +19,20 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null,      
-      annotationOperator : null,      
-      annotationOperatorId : null,    
-      markupViews : {},
-      bookmarks : {},
-      annotations : {},
-      measures:{}
+      displayMenu: null,
+      annotationOperator: null,
+      annotationOperatorId: null,
+      markupViews: {},
+      bookmarks: {},
+      annotations: {},
+      measures: {},
+      listView: null,
+      activeTableView: null,
+      tableViewInstance: null,
+      dataDefinitionMenu: null,
+      userPropertiesForm : null,
+      activeMenu : null,
+      editUserPropertiesForm :null
     },
     b: {
       id: "b",
@@ -36,13 +43,20 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null,      
-      annotationOperator : null,      
-      annotationOperatorId : null,
-      markupViews : {},
-      bookmarks : {},
-      annotations : {},
-      measures:{}
+      displayMenu: null,
+      annotationOperator: null,
+      annotationOperatorId: null,
+      markupViews: {},
+      bookmarks: {},
+      annotations: {},
+      measures: {},
+      listView: null,
+      activeTableView: null,
+      tableViewInstance: null,
+      dataDefinitionMenu: null,
+      userPropertiesForm : null,
+      activeMenu : null,
+      editUserPropertiesForm :null
     },
     c: {
       id: "c",
@@ -53,13 +67,20 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null,      
-      annotationOperator : null,     
-      annotationOperatorId : null,
-      markupViews : {},
-      bookmarks : {},
-      annotations : {},
-      measures:{}
+      displayMenu: null,
+      annotationOperator: null,
+      annotationOperatorId: null,
+      markupViews: {},
+      bookmarks: {},
+      annotations: {},
+      measures: {},
+      listView: null,
+      activeTableView: null,
+      tableViewInstance: null,
+      dataDefinitionMenu: null,
+      userPropertiesForm : null,
+      activeMenu : null,
+      editUserPropertiesForm :null
     },
     d: {
       id: "d",
@@ -70,13 +91,20 @@ let model = {
       fileName: "",
       type: undefined,
       complianceSwitchChecked: false,
-      displayMenu : null,      
-      annotationOperator : null,     
-      annotationOperatorId : null,
-      markupViews : {},
-      bookmarks : {},
-      annotations : {},
-      measures:{}
+      displayMenu: null,
+      annotationOperator: null,
+      annotationOperatorId: null,
+      markupViews: {},
+      bookmarks: {},
+      annotations: {},
+      measures: {},
+      listView: null,
+      activeTableView: null,
+      tableViewInstance: null,
+      dataDefinitionMenu: null,
+      userPropertiesForm : null,
+      activeMenu : null,
+      editUserPropertiesForm :null
     }
   },
   onDataSourceTabChanged: function (tabID) {
@@ -90,6 +118,20 @@ let model = {
 
     if (this.currentTabId in SourceManagers) {
       SourceManagers[this.currentTabId].ResizeViewer();
+    }
+
+    // manage list view speed dial action menus
+    for (var srcId in SourceManagers) {
+      if (!SourceManagers[srcId].Is3DSource()) {
+        continue;
+      }
+
+      if (srcId === this.currentTabId) {
+        SourceManagers[srcId].ShowListViewFloatingMenu(true);
+      }
+      else {
+        SourceManagers[srcId].ShowListViewFloatingMenu(false);
+      }
     }
   }
 }
@@ -183,6 +225,15 @@ let viewTabs = {
       }
       else {
         model.currentTabId = null;
+      
+        // hide all list view speed dial action menus
+        for (var srcId in SourceManagers) {
+          if (!SourceManagers[srcId].Is3DSource()) {
+            continue;
+          }
+          SourceManagers[srcId].ShowListViewFloatingMenu(false);
+        }
+
         return
       };
     })

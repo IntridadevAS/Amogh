@@ -246,24 +246,7 @@
             // drop table if exists
             $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
             $dbh->exec($command);
-
-            // $command = 'CREATE TABLE ComparisonCheckProperties(
-            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-            //     sourceAName TEXT,
-            //     sourceBName TEXT,
-            //     sourceCName TEXT,
-            //     sourceDName TEXT,
-            //     sourceAValue TEXT,
-            //     sourceBValue TEXT,
-            //     sourceCValue TEXT,
-            //     sourceDValue TEXT,
-            //     result TEXT,
-            //     severity TEXT,
-            //     accepted TEXT,
-            //     performCheck TEXT,
-            //     description TEXT,
-            //     ownerComponent INTEGER NOT NULL,
-            //     transpose TEXT)'; 
+             
             $command = CREATE_COMPARISONPROPERTIES_TABLE;
             $dbh->exec($command);    
 

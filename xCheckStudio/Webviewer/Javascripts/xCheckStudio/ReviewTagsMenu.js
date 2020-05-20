@@ -175,7 +175,7 @@ TagsMenu.prototype.ShowViews = function () {
     }
 
     // Make the DIV element draggable:
-    DragElement(document.getElementById("markupViewsContainer" + this.Id),
+    xCheckStudio.Util.dragElement(document.getElementById("markupViewsContainer" + this.Id),
         document.getElementById("markupViewsCaptionBar" + this.Id));
 }
 

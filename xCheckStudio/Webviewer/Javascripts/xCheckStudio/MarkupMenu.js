@@ -39,6 +39,7 @@ function MarkupMenu(id) {
 
 MarkupMenu.prototype.Open = function () {
     this.Active = true;
+    model.views[this.Id].activeMenu = this;
 
     var element = document.getElementById("markupMenu" + this.Id);
     element.setAttribute('style', 'display:block');
@@ -54,6 +55,7 @@ MarkupMenu.prototype.Open = function () {
 MarkupMenu.prototype.Close = function () {
     this.Active = false;
     this.ViewActivatedBefore = false;
+    model.views[this.Id].activeMenu = null;
 
     model.views[this.Id].displayMenu.Close();
 
@@ -354,7 +356,7 @@ MarkupMenu.prototype.ShowViews = function () {
     }
 
     // Make the DIV element draggable:
-    DragElement(document.getElementById("markupViewsContainer" + this.Id),
+    xCheckStudio.Util.dragElement(document.getElementById("markupViewsContainer" + this.Id),
         document.getElementById("markupViewsCaptionBar" + this.Id));
 }
 
@@ -474,7 +476,7 @@ function ShapesMenu(id, webviewer, markupMenu) {
 
 ShapesMenu.prototype.Open = function () {
     this.Active = true;
-
+    
     var element = document.getElementById("shapesMenu" + this.Id);
     element.setAttribute('style', 'display:block');
 

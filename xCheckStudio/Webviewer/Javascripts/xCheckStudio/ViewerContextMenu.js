@@ -7,13 +7,11 @@ function ViewerContextMenu(webViewer, ids) {
     this.ExplodeManager;
 
     this.NavCubeVisible = true;
-
-    this.MenuItems;
 }
 
 ViewerContextMenu.prototype.GetControls = function () {
     // var _this = this;
-    this.MenuItems = [
+    return [
         {
             text: "Hide",
             icon: "public/symbols/Hide.svg",
@@ -31,7 +29,8 @@ ViewerContextMenu.prototype.GetControls = function () {
         {
             text: this.active ? "Single Select" : "Box Select",
             icon: this.active ? "public/symbols/Single Select.svg" : "public/symbols/Box Select.svg",
-            active: false,
+            active: false,         
+            disabled : (model.views[model.currentTabId].activeTableView !== GlobalConstants.TableView.List),
             click: function (e, menu) {
                 menu.OnAreaSelectClicked(this);
             }
@@ -72,9 +71,7 @@ ViewerContextMenu.prototype.GetControls = function () {
                 menu.OnSetDefaultsClicked();
             }
         }
-    ];
-
-    return this.MenuItems;
+    ];    
 }
 
 ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
@@ -173,29 +170,15 @@ ViewerContextMenu.prototype.OnZoomToFitClicked = function () {
 ViewerContextMenu.prototype.OnSetDefaultsClicked = function () {
 }
 
-
-ViewerContextMenu.prototype.DisableMenuItems = function (items) {
-    for (var i = 0; i < items.length; i++) {
-        for (var j = 0; j < this.MenuItems.length; j++) {
-            var menuItem = this.MenuItems[j];
-            if (menuItem.text.toLowerCase() === items[i].toLowerCase()) {
-                menuItem["disabled"] = true;
-            }
-        }
-    }
-}
-
 ViewerContextMenu.prototype.ShowMenu = function (x, y) {
 
     var _this = this;
-    if (!this.MenuItems) {
-        this.GetControls();
-    }
+    var menuItems = this.GetControls();
 
     var contextMenuDiv = document.getElementById("contextMenu");
 
     $("#contextMenu").dxList({
-        dataSource: _this.MenuItems,
+        dataSource: menuItems,
         hoverStateEnabled: true,
         focusStateEnabled: true,
         activeStateEnabled: false,
@@ -451,19 +434,22 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 ViewerContextMenu.prototype.HideInCheck = function (nodeId) {
     // get highlighted row 
     var sourceManager = SourceManagers[model["currentTabId"]]
-    // var row = sourceManager.ModelTree.SelectionManager.HighlightedComponentRow; 
-    var selectedRows = [];
 
-    var nodeList = sourceManager.ModelTree.GetNodeChildren(nodeId);
+    var nodeList = [];
     nodeList.push(nodeId);
-    //Add nodeId to hidden elements list
-    sourceManager.HandleHiddenNodeIdsList(true, nodeList)
+
+    var currentTable = sourceManager.GetCurrentTable();
+    if (model.views[model.currentTabId].activeTableView === GlobalConstants.TableView.DataBrowser) {
+        var childNodes = currentTable.GetNodeChildren(nodeId);
+        nodeList = nodeList.concat(childNodes);
+    }
 
     if (nodeList.length > 0) {
-        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
+        //Add nodeId to hidden elements list
+        sourceManager.HandleHiddenNodeIdsList(true, nodeList)
+
+        currentTable.HighlightHiddenRowsFromNodeIds(true, sourceManager.HiddenNodeIds);
     }
-    //Grey out the text of hidden element rows
-    sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
 }
 
 ViewerContextMenu.prototype.HideInReview = function () {
@@ -489,67 +475,65 @@ ViewerContextMenu.prototype.HideInReview = function () {
     model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
 }
 
-ViewerContextMenu.prototype.GetViewerInterface = function () {
-    var viewerContainer = this.WebViewer._params["containerId"];
+    ViewerContextMenu.prototype.GetViewerInterface = function () {
+        var viewerContainer = this.WebViewer._params["containerId"];
 
-    if (model.currentCheck == "comparison") {
-        if (viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
-            return model.checks[model.currentCheck].sourceAViewer;
-        }
+        if (model.currentCheck == "comparison") {
+            if (viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
+                return model.checks[model.currentCheck].sourceAViewer;
+            }
 
-        if (viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
-            return model.checks[model.currentCheck].sourceBViewer;
-        }
-    }
-    else {
-        return model.checks[model.currentCheck].viewer;
-    }
-
-}
-
-ViewerContextMenu.prototype.OnIsolateClicked = function () {
-    if (!this.WebViewer) {
-        return;
-    }
-
-    var selectionManager = this.WebViewer.selectionManager;
-
-    var selectedNodes = [];
-    selectionManager.each(function (selectionItem) {
-        if (selectionItem.isNodeSelection()) {
-            selectedNodes.push(selectionItem._nodeId);
-        }
-    });
-
-    // perform isolate
-    var isolateManager = new IsolateManager(this.WebViewer);
-    isolateManager.Isolate(selectedNodes).then(function (affectedNodes) {
-
-    });
-
-    // maintain hidden elements
-    if (model.currentTabId &&
-        model.currentTabId in SourceManagers) {
-        var sourceManager = SourceManagers[model.currentTabId];
-        sourceManager.HiddenNodeIds = [];
-
-        var allNodeIds = Object.keys(sourceManager.NodeIdvsComponentIdList);
-        for (var i = 0; i < Object.keys(allNodeIds).length; i++) {
-            var nodeId = Number(allNodeIds[i]);
-            if (!selectedNodes.includes(nodeId)) {
-                sourceManager.HiddenNodeIds.push(nodeId);
+            if (viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
+                return model.checks[model.currentCheck].sourceBViewer;
             }
         }
+        else {
+            return model.checks[model.currentCheck].viewer;
+        }
 
-        //Grey out the text of hidden element rows
-        var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
-        sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
-
-        // unhighlight the hidden rows made visible
-        selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(selectedNodes);
-        sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
     }
-}
+
+    ViewerContextMenu.prototype.OnIsolateClicked = function () {
+        if (!this.WebViewer) {
+            return;
+        }
+
+        var selectionManager = this.WebViewer.selectionManager;
+
+        var selectedNodes = [];
+        selectionManager.each(function (selectionItem) {
+            if (selectionItem.isNodeSelection()) {
+                selectedNodes.push(selectionItem._nodeId);
+            }
+        });
+
+        // perform isolate
+        var isolateManager = new IsolateManager(this.WebViewer);
+        isolateManager.Isolate(selectedNodes).then(function (affectedNodes) {
+
+        });
+
+        // maintain hidden elements
+        if (model.currentTabId &&
+            model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
+            sourceManager.HiddenNodeIds = [];
+
+            var allNodeIds = Object.keys(sourceManager.NodeIdvsComponentIdList);
+            for (var i = 0; i < Object.keys(allNodeIds).length; i++) {
+                var nodeId = Number(allNodeIds[i]);
+                if (!selectedNodes.includes(nodeId)) {
+                    sourceManager.HiddenNodeIds.push(nodeId);
+                }
+            }
+
+            //Grey out the text of hidden element rows
+            sourceManager.GetCurrentTable().HighlightHiddenRowsFromNodeIds(true, sourceManager.HiddenNodeIds);
+
+            // unhighlight the hidden rows made visible
+            sourceManager.GetCurrentTable().HighlightHiddenRowsFromNodeIds(false, selectedNodes);
+        }
+    }
 
 ViewerContextMenu.prototype.OnShowAllClicked = function () {
     if (!this.WebViewer) {
@@ -564,7 +548,7 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
     if (model.currentTabId) {
         // Remove all nodeIds from list (Showing all) and show all rows
         var sourceManager = SourceManagers[model.currentTabId];
-        sourceManager.ModelTree.ShowAllHiddenRows();
+        sourceManager.GetCurrentTable().ShowAllHiddenRows();
     }
     else {
         var viewerInterface = this.GetViewerInterface();

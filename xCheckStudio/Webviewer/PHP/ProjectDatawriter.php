@@ -209,8 +209,8 @@
                 $command = 'CREATE TABLE '. $selectedComponentsTable. '(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT NOT NULL,
-                    mainClass TEXT NOT NULL,
-                    subClass TEXT NOT NULL,
+                    mainClass TEXT,
+                    subClass TEXT,
                     nodeId INTEGER,
                     mainComponentId INTEGER,
                     componentId INTEGER
