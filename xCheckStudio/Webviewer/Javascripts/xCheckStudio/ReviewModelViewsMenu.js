@@ -1189,7 +1189,7 @@ MeasureMenu.prototype.ShowViews = function () {
     }
 
     // Make the DIV element draggable:
-    DragElement(document.getElementById("measureViewsContainer" + this.Id),
+    xCheckStudio.Util.dragElement(document.getElementById("measureViewsContainer" + this.Id),
         document.getElementById("measureViewsCaptionBar" + this.Id));
 }
 

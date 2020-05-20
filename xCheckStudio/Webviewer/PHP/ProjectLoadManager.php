@@ -171,6 +171,12 @@
             // copy hidden components
             CopyCheckspaceComments($dbh, $tempDbh);
 
+            // copy hidden components
+            CopyAllComponents($dbh, $tempDbh, "AllComponentsa");
+            CopyAllComponents($dbh, $tempDbh, "AllComponentsb");
+            CopyAllComponents($dbh, $tempDbh, "AllComponentsc");
+            CopyAllComponents($dbh, $tempDbh, "AllComponentsd");
+
             $tempDbh->commit();
             $tempDbh->beginTransaction();     
             
@@ -194,17 +200,16 @@
         "Data" => $results,
         "MsgCode" => 1));                      
         return;
-    } 
-    
-    function  CopyVersions($fromDbh, $toDbh)
-    {     
-        $results = $fromDbh->query("SELECT * FROM Versions;");
-        if($results)
-        {
+    }
 
-            $command = 'DROP TABLE IF EXISTS Versions;';
-            $toDbh->exec($command);  
-            $command = 'CREATE TABLE IF NOT EXISTS Versions(
+function  CopyVersions($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM Versions;");
+    if ($results) {
+
+        $command = 'DROP TABLE IF EXISTS Versions;';
+        $toDbh->exec($command);
+        $command = 'CREATE TABLE IF NOT EXISTS Versions(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT,
                 description TEXT,
@@ -214,30 +219,55 @@
                 createdOn TEXT,
                 IsFav INTEGER       
                 )';
-            $toDbh->exec($command);
-           
-            $insertStmt = $toDbh->prepare("INSERT INTO Versions(id, 
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO Versions(id, 
             name, 
             description, 
             comments, 
             createdById, 
             createdByAlias, 
             createdOn, 
-            IsFav) VALUES(?,?,?,?,?,?,?,?)");            
+            IsFav) VALUES(?,?,?,?,?,?,?,?)");
 
-            while ($row = $results->fetch(\PDO::FETCH_ASSOC)) 
-            {  
-                $insertStmt->execute(array($row['id'], 
-                                    $row['name'],
-                                    $row['description'],
-                                    $row['comments'], 
-                                    $row['createdById'],
-                                    $row['createdByAlias'],
-                                    $row['createdOn'], 
-                                    $row['IsFav']));
-            }   
-        }     
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['description'],
+                $row['comments'],
+                $row['createdById'],
+                $row['createdByAlias'],
+                $row['createdOn'],
+                $row['IsFav']
+            ));
+        }
     }
+}
+
+function CopyAllComponents($fromDbh, $toDbh, $table)
+{
+    $results = $fromDbh->query("SELECT * FROM $table;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS '.$table.';';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS '.$table.'(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT NOT NULL     
+          )';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO $table(id, value) VALUES(?,?)");
+
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+    }
+}
 
 function CopyCheckspaceComments($fromDbh, $toDbh)
 {
@@ -401,7 +431,25 @@ function ReadAnnotations($dbh)
 
                 $hiddenComponents = ReadHiddenComponents($tempDbh);
                 $results["hiddenComponents"] = $hiddenComponents;
+
+            $results["allComponents"] = array();
+            $allComponents = ReadAllComponents($tempDbh, "AllComponentsa");
+            if ($allComponents != NULL) {
+                $results["allComponents"]["a"] = $allComponents;
             }
+            $allComponents = ReadAllComponents($tempDbh, "AllComponentsb");
+            if ($allComponents != NULL) {
+                $results["allComponents"]["b"] = $allComponents;
+            }
+            $allComponents = ReadAllComponents($tempDbh, "AllComponentsc");
+            if ($allComponents != NULL) {
+                $results["allComponents"]["c"] = $allComponents;
+            }
+            $allComponents = ReadAllComponents($tempDbh, "AllComponentsd");
+            if ($allComponents != NULL) {
+                $results["allComponents"]["d"] = $allComponents;
+            }
+        }
             else if(strtolower($context) === 'review')
             {
                 // read datasource info
@@ -1787,6 +1835,22 @@ function ReadAnnotations($dbh)
         return NULL;        
     }
 
+function ReadAllComponents($tempDbh, $table)
+{
+    try {
+        $results = $tempDbh->query("SELECT *FROM $table;");
+
+        if ($results) {
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                return  $record['value'];
+            }
+        }
+    } catch (Exception $e) {
+    }
+
+    return NULL;
+}
+
     function ReadHiddenComponents($tempDbh)
     {
         try
@@ -1815,9 +1879,13 @@ function ReadAnnotations($dbh)
 
         $srcA = ReadSelectedComponentsForSource($tempDbh, "SourceA");
         $srcB = ReadSelectedComponentsForSource($tempDbh, "SourceB");
+        $srcC = ReadSelectedComponentsForSource($tempDbh, "SourceC");
+        $srcD = ReadSelectedComponentsForSource($tempDbh, "SourceD");
 
         $selectedComponents["SourceA"] = $srcA;
         $selectedComponents["SourceB"] = $srcB;
+        $selectedComponents["SourceC"] = $srcC;
+        $selectedComponents["SourceD"] = $srcD;
 
         return $selectedComponents;
     }
@@ -2794,24 +2862,10 @@ function ReadAnnotations($dbh)
             // create table
             $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
             $toDbh->exec($command); 
-            // $command = 'CREATE TABLE ComparisonCheckProperties(
-            //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-            //     sourceAName TEXT,
-            //     sourceBName TEXT,
-            //     sourceAValue TEXT,
-            //     sourceBValue TEXT,
-            //     result TEXT,
-            //     severity TEXT,
-            //     accepted TEXT,
-            //     performCheck TEXT,
-            //     description TEXT,
-            //     ownerComponent INTEGER NOT NULL,
-            //     transpose TEXT)';
+    
             $command = CREATE_COMPARISONPROPERTIES_TABLE; 
-            $toDbh->exec($command); 
+            $toDbh->exec($command);             
             
-            // $insertStmt = $toDbh->prepare("INSERT INTO ComparisonCheckProperties(id, sourceAName, sourceBName,
-            //             sourceAValue, sourceBValue, result, severity, accepted, performCheck, description, ownerComponent, transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
             $insertStmt = $toDbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);        
         
             while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -2906,8 +2960,8 @@ function ReadAnnotations($dbh)
             $command = 'CREATE TABLE '. $tableName. '(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT NOT NULL,
-                mainClass TEXT NOT NULL,
-                subClass TEXT NOT NULL,
+                mainClass TEXT,
+                subClass TEXT,
                 nodeId INTEGER,
                 mainComponentId INTEGER,
                 componentId INTEGER
@@ -3072,8 +3126,8 @@ function ReadAnnotations($dbh)
             $command = 'CREATE TABLE '.$componentTable.'(
                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 name TEXT NOT NULL,
-                mainclass TEXT NOT NULL,
-                subclass TEXT NOT NULL,
+                mainclass TEXT,
+                subclass TEXT,
                 nodeid INTEGER,
                 ischecked TEXT,
                 parentid INTEGER,
@@ -3111,12 +3165,13 @@ function ReadAnnotations($dbh)
                             name TEXT NOT NULL,
                             format TEXT,
                             value TEXT,                
-                            ownercomponent INTEGER NOT NULL               
+                            ownercomponent INTEGER NOT NULL,
+                            userdefined INTEGER default 0              
                 )';         
                 $tempDbh->exec($command);  
                 
                 $insertPropertiesStmt = $tempDbh->prepare("INSERT INTO  ".$propertiesTable."(id, name, format, value, 
-                        ownercomponent) VALUES(?,?,?,?,?)");
+                        ownercomponent, userdefined) VALUES(?,?,?,?,?,?)");
         
         
                 while ($row = $selectPropertiesResults->fetch(\PDO::FETCH_ASSOC)) 
@@ -3125,10 +3180,10 @@ function ReadAnnotations($dbh)
                                             $row['name'], 
                                             $row['format'],
                                             $row['value'], 
-                                            $row['ownercomponent']));
+                                            $row['ownercomponent'],
+                                            $row['userdefined']));
                 }  
             }
         }     
     
     }
-?>

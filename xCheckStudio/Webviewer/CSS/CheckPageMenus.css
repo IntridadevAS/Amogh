@@ -17,13 +17,14 @@
   .shapesMenu:hover, .bookmarkMenu:hover,
   .tagsMenu:hover, .modelViewsMenu:hover,
   .displayStylesMenu:hover, .sectioningMenu:hover,
-  .measureMenu:hover {
+  .measureMenu:hover, .dataDefinitionMenu:hover {
     opacity: 1;
   }
   
   .displayMenu .dx-list-item-content, .markupMenu .dx-list-item-content, .shapesMenu .dx-list-item-content,
   .bookmarkMenu .dx-list-item-content, .tagsMenu .dx-list-item-content, .modelViewsMenu .dx-list-item-content,
-  .displayStylesMenu .dx-list-item-content, .sectioningMenu .dx-list-item-content, .measureMenu .dx-list-item-content
+  .displayStylesMenu .dx-list-item-content, .sectioningMenu .dx-list-item-content, .measureMenu .dx-list-item-content,
+  .dataDefinitionMenu .dx-list-item-content
   {
     padding: 4px 4px !important;
   }
@@ -31,7 +32,8 @@
   
   .displayMenu .dx-list-item, .markupMenu .dx-list-item, .shapesMenu .dx-list-item,
   .bookmarkMenu .dx-list-item, .tagsMenu .dx-list-item, .modelViewsMenu .dx-list-item,
-  .displayStylesMenu .dx-list-item, .sectioningMenu .dx-list-item, .measureMenu .dx-list-item
+  .displayStylesMenu .dx-list-item, .sectioningMenu .dx-list-item, .measureMenu .dx-list-item,
+  .dataDefinitionMenu .dx-list-item
   {
     border-top: none !important;
   }
@@ -106,7 +108,8 @@
   position: absolute;
   }
   
-  .markupViewsCaption{
+  .markupViewsCaption, .userPropertiesCaption, 
+  .editUserPropertiesCaption, .clearUserPropertiesCaption{
   color: black;
   top: 5px;
   left: 4px;
@@ -240,4 +243,226 @@
 .contextMenu_style:hover{
  
   opacity: 1;
+}
+
+.dataDefinitionMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 228px;
+  left: 2px;
+  top: calc( 50% - 114px);
+  background: rgba(25.5, 25.5, 25.5) !important; 
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+.userPropertiesForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 1;
+  width: 450px;
+  background: white;
+  right: 0px;
+}
+
+.editUserPropertiesForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 1;
+  width: 800px;
+  background: white;
+  right: 0px;
+}
+
+.clearUserPropertiesForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 1;
+  width: 400px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
+.userPropertiesFormCaptionBar, .editUserPropertiesFormCaptionBar,
+.clearUserPropertiesFormCaptionBar
+{
+  height: 30px;
+  width: 100%;
+  border-bottom: 1px solid rgb(25.5, 25.5, 25.5);
+}
+
+.userPropertiesFormGridArea
+{
+  height: 180px;
+  width: 100%;  
+}
+
+.editUserPropertiesFormGridArea
+{
+  height: 500px;
+  width: 100%;
+  padding: 2px;
+  /* border-bottom: 1px solid black; */
+}
+
+.clearUserPropertiesFormArea
+{
+  /* height: 100px; */
+  width: 100%;
+  padding: 2px;
+}
+
+.dx-field-label
+{
+  width: 10% !important;
+}
+
+.dx-field-value
+{
+  width: 90% !important;
+}
+
+.userPropertiesFormControlColumn
+{
+  /* position: absolute; */
+  left:0px;
+  width: 60px;
+  height : 100%; 
+}
+
+.userPropertiesGrid
+{
+  /* position: absolute; */
+  right:0px;
+  width: calc(100% - 60px);
+  height : 100%;
+}
+
+.userPropertiesFormAdd
+{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 45px;  
+  left : 10px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.userPropertiesFormClear
+{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 125px;
+  left : 10px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.userPropertiesFormBottomBar, .editUserPropertiesFormBottomBar,
+.clearUserPropertiesFormBottomBar
+{
+  height: 40px;
+  width: 100%;
+  padding: 2px;
+}
+
+.userPropertiesPropogateBtn
+{
+  position: absolute;
+  left: 2px;
+  width: 30px;
+  height: 30px;
+  opacity: 0.75;  
+  text-align: center;
+  vertical-align: middle; 
+  border-radius: 6px;
+  bottom: 4px;
+  background: rgb(25.5, 25.5, 25.5);
+  cursor: pointer;
+}
+
+.userPropertiesApplyBtn, .editUserPropertiesApplyBtn,
+.clearUserPropertiesApplyBtn
+{  
+  position: absolute;
+  right: 2px;
+  width: 70px;
+  height: 30px;
+  /* color: black; */
+  background: rgb(25.5, 25.5, 25.5);
+  text-align: center;
+  border-radius: 6px;
+  bottom: 4px;
+  vertical-align: middle;
+  line-height: 26px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.editUserPropertiesClearBtn
+{
+  position: absolute;
+  left: 2px;
+  width: 70px;
+  height: 30px;
+  /* color: black; */
+  background: rgb(25.5, 25.5, 25.5);
+  text-align: center;
+  border-radius: 6px;
+  bottom: 4px;
+  vertical-align: middle;
+  line-height: 26px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.userPropertiesApplyBtn:hover,
+.userPropertiesPropogateBtn:hover,
+.userPropertiesFormAdd:hover,
+.userPropertiesFormClear:hover,
+.userPropertiesCloseBtn:hover,
+.editUserPropertiesCloseBtn:hover,
+.editUserPropertiesClearBtn:hover,
+.editUserPropertiesApplyBtn:hover,
+.clearUserPropertiesCloseBtn:hover,
+..clearUserPropertiesApplyBtn:hover
+{
+  opacity: 1;
+}
+
+.userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
+.clearUserPropertiesCloseBtn
+{ 
+  font-size: 12px;
+  position: absolute;
+  right : 2px;
+  width : 25px;
+  height : 25px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.userPropertiesFormAddText
+{
+  color: black;
+  position: absolute;
+  top: 85px;  
+  left: 15px;
+}
+
+.userPropertiesFormClearText
+{
+  color: black;
+  position: absolute;
+  top: 163px;  
+  left: 13px;
 }

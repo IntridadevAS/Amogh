@@ -60,7 +60,7 @@ SCManager.prototype.GetViewerContainerID = function () {
     return this.ViewerOptions.containerId;
 }
 
-SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
+SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadFromSaved = false) {
 
     var _this = this;
 
@@ -83,7 +83,8 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
 
                 // init display menu class
                 var currentView = model.views[_this.Id];
-                currentView.displayMenu = new DisplayMenu(_this.Id);               
+                currentView.displayMenu = new DisplayMenu(_this.Id);    
+                currentView.dataDefinitionMenu = new DataDefinitionMenu(_this.Id);              
                 currentView.annotationOperator = new Example.AnnotationOperator(
                     viewer);
                 currentView.annotationOperatorId = viewer.registerCustomOperator( currentView.annotationOperator);                       
@@ -123,50 +124,56 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems) {
 
                 _this.CreateNodeIdArray(viewer.model.getAbsoluteRootNode());
 
-                var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
-                var rootNodeId = viewer.model.getAbsoluteRootNode();
-                _this.ReadProperties(rootNodeId, identifierProperties, undefined).then(function (res) {
-                    if (res) {
-                        if (Object.keys(_this.SourceProperties).length > 0) {
-                            _this.HasProperties = true;
+                if (!loadFromSaved) {
+                    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
+                    var rootNodeId = viewer.model.getAbsoluteRootNode();
+                    _this.ReadProperties(rootNodeId, identifierProperties, undefined).then(function (res) {
+                        if (res) {
+                            if (Object.keys(_this.SourceProperties).length > 0) {
+                                _this.HasProperties = true;
 
-                            _this.ModelTree.AddComponentTable(_this.SourceProperties);
+                                _this.ModelTree.AddComponentTable(_this.SourceProperties);
 
-                            _this.AddComponentsToDB();
+                                _this.AddComponentsToDB();
+                            }
+                            else {
+
+                                _this.ModelTree.AddModelBrowser();
+                            }
+
+                            model.views[_this.Id].activeTableView = GlobalConstants.TableView.DataBrowser;
+
+                            // Init list view
+                            model.views[_this.Id].listView = new ListView(
+                                _this.Id,
+                                _this.ViewerOptions.modelTree,
+                                _this.AllComponents,
+                                viewer);
+
+                            // Init table views action menu
+                            _this.InitViewActionMenu();
+
+                            // init list view switches
+                            _this.InitListViewSwitches();
                         }
-                        else {
 
-                            _this.ModelTree.AddModelBrowser();
-                        }
+                        // create property callout
+                        _this.PropertyCallout = new PropertyCallout(_this.Id);
+                        _this.PropertyCallout.Init();
 
-                        model.views[_this.Id].activeTableView = GlobalConstants.TableView.DataBrowser;
-
-                        // Init list view
-                        model.views[_this.Id].listView = new ListView(
-                            _this.Id,
-                            _this.ViewerOptions.modelTree,
-                            _this.AllComponents,
-                            viewer);
-
-                        // Init table views action menu
-                        _this.InitViewActionMenu();
-
-                        // init list view switches
-                        _this.InitListViewSwitches();
-                    }
-
-                     // create property callout
-                     _this.PropertyCallout = new PropertyCallout(_this.Id);
-                     _this.PropertyCallout.Init();
-
-                    return resolve(true);
-                });
+                        return resolve(true);
+                    });
+                };
 
                 //activate context menu            
                 var ids = _this.GetControlIds();
 
                 _this.CheckViewerContextMenu = new ViewerContextMenu(viewer, ids);
                 _this.CheckViewerContextMenu.Init();
+
+                if (loadFromSaved) {
+                    return resolve(true);
+                }
              },
             modelLoadFailure: function () {
                 return resolve(false);
@@ -239,93 +246,8 @@ SCManager.prototype.InitViewActionMenu = function () {
         }
         else {
             _this.OpenTableViewsMenu();
-        }      
-        
-        // var dataBrowserSDA = document.getElementById("dataBrowserAction" + _this.Id);
-        // if (dataBrowserSDA.classList.contains("showSDA")) {
-        //     dataBrowserSDA.classList.remove("showSDA");
-        // }
-        // else {
-        //     dataBrowserSDA.classList.add("showSDA");
-        //     dataBrowserSDA.onclick = function () {
-        //         _this.ModelTree.AddComponentTable(_this.SourceProperties);
-                
-        //         dataBrowserSDA.classList.remove("showSDA");
-        //         listViewSDA.classList.remove("showSDA");
-        //         groupsSDA.classList.remove("showSDA");
-        //     }
-        // }
-
-        // var listViewSDA = document.getElementById("listviewAction" + _this.Id);
-        // if (listViewSDA.classList.contains("showSDA")) {
-        //     listViewSDA.classList.remove("showSDA");
-        // }
-        // else {
-        //     listViewSDA.classList.add("showSDA");
-        //     listViewSDA.onclick = function () {
-        //         model.views[_this.Id].listView.Show();
-                
-        //         dataBrowserSDA.classList.remove("showSDA");
-        //         listViewSDA.classList.remove("showSDA");
-        //         groupsSDA.classList.remove("showSDA");
-        //     }
-        // }
-
-        // var groupsSDA = document.getElementById("groupsAction" + _this.Id);
-        // if (groupsSDA.classList.contains("showSDA")) {
-        //     groupsSDA.classList.remove("showSDA");
-        // }
-        // else {
-        //     groupsSDA.classList.add("showSDA");
-        //     groupsSDA.onclick = function () {
-        //         model.views[_this.Id].activeTableView = GlobalConstants.TableView.Groups;
-               
-        //         dataBrowserSDA.classList.remove("showSDA");
-        //         listViewSDA.classList.remove("showSDA");
-        //         groupsSDA.classList.remove("showSDA");
-        //     }
-        // }
+        }     
     }
-    // $(function () {
-    //     DevExpress.config({
-    //         floatingActionButtonConfig: {
-    //             icon: "public/symbols/Table Views.svg",
-    //             position: {
-    //                 my: "right bottom",
-    //                 at: "right bottom",
-    //                 of: "#tableContainer" + _this.Id,
-    //                 offset: "-5 -5"
-    //             }
-    //         }
-    //     });
-
-    //     _this.DataBrowserSDA = $("#dataBrowserAction" + _this.Id).dxSpeedDialAction({
-    //         hint: "Data Browser",
-    //         icon: "public/symbols/Browser Icon-Black.svg",   
-    //         // index : 1,        
-    //         onClick: function () {
-    //             _this.ModelTree.AddComponentTable(_this.SourceProperties);
-    //         }
-    //     }).dxSpeedDialAction("instance");
-
-    //     _this.ListViewSDA = $("#listviewAction" + _this.Id).dxSpeedDialAction({
-    //         hint: "List",
-    //         icon: "public/symbols/FlatView-Black.svg",
-    //         // index : 2,
-    //         onClick: function () {
-    //             model.views[_this.Id].listView.Show();
-    //         }
-    //     }).dxSpeedDialAction("instance");
-
-    //     _this.GroupsSDA = $("#groupsAction" + _this.Id).dxSpeedDialAction({
-    //         hint: "Groups",
-    //         icon: "public/symbols/Groups-Black.svg",   
-    //         // index : 3,  
-    //         onClick: function () {
-    //             model.views[this.Id].activeTableView = GlobalConstants.TableView.Groups;
-    //         }
-    //     }).dxSpeedDialAction("instance");
-    // });
 }
 
 SCManager.prototype.InitListViewSwitches = function () { 
@@ -640,7 +562,8 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                         // add component class as generic property
                         var componentClassPropertyObject = new GenericProperty("ComponentClass",
                             "String",
-                            subComponentClass);
+                            subComponentClass,
+                            true);
 
                         genericPropertiesObject.addProperty(componentClassPropertyObject);
 
@@ -648,14 +571,15 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                         if (_this.SourceType.toLowerCase() == "rvt") {
                             var elementName = new GenericProperty("Name",
                                 "String",
-                                name);
+                                name,
+                                true);
 
                             genericPropertiesObject.addProperty(elementName);
                         }
 
                         // iterate node properties and add to generic properties object
                         for (var key in nodeProperties) {
-                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
+                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key], false);
                             genericPropertiesObject.addProperty(genericPropertyObject);
                         }
 
@@ -670,7 +594,7 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                             nodeId,
                             parentNodeId);
                         for (var key in nodeProperties) {
-                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key]);
+                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key], false);
                             genericPropertiesObject.addProperty(genericPropertyObject);
                         }
                         _this.Properties[nodeId] = genericPropertiesObject;
@@ -683,7 +607,7 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                         nodeId,
                         parentNodeId);
                     for (var key in nodeProperties) {
-                        var prop = new GenericProperty(key, "String", nodeProperties[key]);
+                        var prop = new GenericProperty(key, "String", nodeProperties[key], false);
                         dataComponentObject.addProperty(prop);
                     }
                     _this.AllComponents[nodeId] = dataComponentObject;
@@ -1003,6 +927,75 @@ SCManager.prototype.RestoreAnnotations = function (annotationsStr) {
     }
 
     model.views[this.Id].annotationOperator._annotationCount = annotations.length + 1;
+}
+
+SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
+    var _this = this;
+
+    var allComponents = JSON.parse(allComponentsStr);
+    for (var nodeId in allComponents) {
+        var component = allComponents[nodeId];
+
+        // var nodeId = Number(component.NodeId);
+        var parentNodeId = Number(component.ParentNodeId);
+        var componentObj = new GenericComponent(component.Name,
+            component.MainComponentClass,
+            component.SubComponentClass,
+            nodeId,
+            parentNodeId);
+        for (var j = 0; j < component.properties.length; j++) {
+            var property = component.properties[j];
+            var prop = new GenericProperty(property.Name, property.Format, property.Value, properties.UserDefined);
+            componentObj.addProperty(prop);
+        }
+        this.AllComponents[nodeId] = componentObj;
+
+        if (component.properties.length > 0 &&
+            component.MainComponentClass &&
+            component.SubComponentClass) {
+            // add genericProperties object to sourceproperties collection
+            _this.SourceProperties[nodeId] = componentObj;
+        }
+    }
+
+    // if (res) {
+    if (Object.keys(_this.SourceProperties).length > 0) {
+        _this.HasProperties = true;
+        _this.ModelTree.AddComponentTable(_this.SourceProperties);
+    }
+    else {
+        _this.ModelTree.AddModelBrowser();
+    }
+
+    model.views[_this.Id].activeTableView = GlobalConstants.TableView.DataBrowser;
+
+    // Init list view
+    model.views[_this.Id].listView = new ListView(
+        _this.Id,
+        _this.ViewerOptions.modelTree,
+        _this.AllComponents,
+        _this.Webviewer);
+
+    // Init table views action menu
+    _this.InitViewActionMenu();
+
+    // init list view switches
+    _this.InitListViewSwitches();
+    // }
+
+    // create property callout
+    _this.PropertyCallout = new PropertyCallout(_this.Id);
+    _this.PropertyCallout.Init();
+
+    // return resolve(true);
+}
+
+SCManager.prototype.GetNodeName = function (nodeId) {
+    return this.Webviewer.model.getNodeName(nodeId)
+}
+
+SCManager.prototype.GetNodeParent = function (nodeId) {
+    return this.Webviewer.model.getNodeParent(nodeId)
 }
 
 function XMLSourceManager(id, sourceName, sourceType, viewerOptions) {

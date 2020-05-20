@@ -72,16 +72,23 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
         return;
     }
 
+    //add node properties to model browser table
+    var nodeData = this.Components[nodeId];
+    if (!nodeData.Name ||
+        !nodeData.MainComponentClass ||
+        !nodeData.SubComponentClass) {
+        return;
+    }
+
     if (!this.ModelBrowserAddedNodes.includes(parentNode)) {
-        parentNode = 0;
+        parentNode = -4;
     }
     this.ModelBrowserAddedNodes.push(nodeId);
 
-    this.NodeParentList[nodeId] = parentNode;
+    this.NodeParentList[nodeId] = parentNode;    
 
-    //add node properties to model browser table
-    var nodeData = this.Components[nodeId];
-
+    // //add node properties to model browser table
+    // var nodeData = this.Components[nodeId];
 
     tableRowContent = {};
 
@@ -122,14 +129,14 @@ SCModelBrowser.prototype.AddComponentTableComponent = function (nodeId, parentNo
 
     if (nodeId !== null) {
         var children = this.Webviewer.model.getNodeChildren(nodeId);
-        if (children.length > 0) {
+        // if (children.length > 0) {
             this.addComponentRow(nodeId, parentNode);
             for (var i = 0; i < children.length; i++) {
                 this.AddComponentTableComponent(children[i], nodeId);
             }
-        }
+        // }
     }
-};
+}
 
 SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 
@@ -142,6 +149,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             dataSource: _this.modelTreeRowData,
             keyExpr: "NodeId",
             parentIdExpr: "parent",
+            rootValue: -4,
             columns: columnHeaders,
             columnAutoWidth: true,
             columnResizingMode: 'widget',

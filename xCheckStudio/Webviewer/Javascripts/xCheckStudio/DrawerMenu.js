@@ -83,10 +83,10 @@ var menuItems = [
     },
     {
         id: 2,
-        Title: "Check Mode",
+        Title: "Studio Modes",
         ImageSrc: "public/symbols/UserMode.svg",
         click: function () {
-            menu.onUserModeClick();
+            menu.onStudioModesClick();
         }
     },
     {
@@ -131,10 +131,10 @@ var menuItems = [
     },
     {
         id: 8,
-        Title: "Properties",
+        Title: "Data Definitions",
         ImageSrc: "public/symbols/Properties.svg",
         click: function () {
-            menu.onPropertiesClicked();
+            menu.onDataDefinitionsClicked();
         }
     },
     {
@@ -185,8 +185,8 @@ let menu = {
         console.log("Seacrh not implemented");
     },
 
-    onUserModeClick: function () {
-        console.log("Check Mode not implemented");
+    onStudioModesClick: function () {
+        console.log("Studio Modes not implemented");
     },
 
     onReviewClicked: function () {
@@ -214,8 +214,8 @@ let menu = {
         commentsCallout.Toggle();
     },
 
-    onPropertiesClicked: function () {
-        console.log("Properties not implemented");
+    onDataDefinitionsClicked: function () {
+        model.views[model.currentTabId].dataDefinitionMenu.Open();
     },
 
     onPreferencesClicked: function () {

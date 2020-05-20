@@ -80,11 +80,6 @@ function loadCheckSpaceForCheck(data) {
                 commentsCallout.ShowComment(commentData);
             }
     }   
-    // hide add new data source button  
-    // if( model.checkcaseSupportedTypes.length === Object.keys(data.sourceViewerOptions).length)
-    // {
-    //     viewTabs.hideAddTab();   
-    // }
 }
 
 function loadDataSets(data) {
@@ -200,7 +195,7 @@ function loadDataSource(viewerOption, data, checkCaseName) {
 
                 sourceManager.HiddenNodeIds = hiddenItems;
 
-                sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"], visibleItems).then(function (result) {
+                sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"], visibleItems, true).then(function (result) {
                     filterCheckCases(false);
 
                     // restore views                    
@@ -212,6 +207,11 @@ function loadDataSource(viewerOption, data, checkCaseName) {
                     }
                     if (data.annotations[sourceManager.Id]) {
                         sourceManager.RestoreAnnotations(data.annotations[sourceManager.Id]);
+                    }
+
+                    // restore allcomponents                    
+                    if (sourceManager.Id in data.allComponents) {
+                        sourceManager.RestoreAllComponents(data.allComponents[sourceManager.Id]);
                     }
 
                     var checkCaseSelectElement = document.getElementById("checkCaseSelect");

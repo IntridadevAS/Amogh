@@ -1,29 +1,43 @@
 function GenericComponent(name,
-                           mainComponentClass, 
-                           subComponentClass,                          
-                           nodeId,
-                           parentNodeId,
-                           componentId)
-{
-    this.Name = name;  
+    mainComponentClass,
+    subComponentClass,
+    nodeId,
+    parentNodeId,
+    componentId) {
+    this.Name = name;
     this.MainComponentClass = mainComponentClass;
     this.SubComponentClass = subComponentClass;
     this.ParentNodeId = parentNodeId;
-   
-    
+
+
     this.NodeId = nodeId;
-   
+
     this.ID = componentId;
 
-    this.properties=[];
-    GenericComponent.prototype.addProperty = function(genericProperty)
-    {
+    this.properties = [];
+    GenericComponent.prototype.addProperty = function (genericProperty) {
         this.properties.push(genericProperty);
     }
+    
+    GenericComponent.prototype.removeProperty = function (propertyName) {
+        var index = -1;
+        for (var i = 0; i < this.properties.length; i++) {
+            if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase() &&
+                this.properties[i].UserDefined) {
+                index = i;
+                break;
+            }
+        }
 
-    GenericComponent.prototype.propertyExists = function(propertyName)
-    {
-        for (var i = 0; i < this.properties.length; i++) {           
+        if (index !== -1) {
+            this.properties.splice(index, 1);
+        }
+
+        return undefined;
+    }
+
+    GenericComponent.prototype.propertyExists = function (propertyName) {
+        for (var i = 0; i < this.properties.length; i++) {
             if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
                 return true;
             }
@@ -33,20 +47,23 @@ function GenericComponent(name,
     }
 
     GenericComponent.prototype.getProperty = function (propertyName) {
-        for (var i = 0; i < this.properties.length; i++) {   
+        for (var i = 0; i < this.properties.length; i++) {
             if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
                 return this.properties[i];
             }
         }
-      
+
         return undefined;
     }
 }
 
-function GenericProperty(name, format, value)
-{
-    this.Name = name.replace('Intrida Data/','');
-    //this.Name = name;
+function GenericProperty(
+    name,
+    format,
+    value,
+    userDefined = false) {
+    this.Name = name.replace('Intrida Data/', '');
     this.Format = format;
     this.Value = value;
+    this.UserDefined = userDefined;
 }

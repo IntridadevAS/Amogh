@@ -34,6 +34,7 @@ function BookmarkMenu(id) {
 
 BookmarkMenu.prototype.Open = function () {
     this.Active = true;
+    model.views[this.Id].activeMenu = this;
 
     var element = document.getElementById("bookmarkMenu" + this.Id);
     element.setAttribute('style', 'display:block');
@@ -49,6 +50,7 @@ BookmarkMenu.prototype.Open = function () {
 BookmarkMenu.prototype.Close = function () {
     this.Active = false;
     this.ViewActivatedBefore = false;
+    model.views[this.Id].activeMenu = null;
 
     model.views[this.Id].displayMenu.Close();
 
@@ -289,7 +291,7 @@ BookmarkMenu.prototype.ShowViews = function () {
     }
 
     // Make the DIV element draggable:
-    DragElement(document.getElementById("markupViewsContainer" + this.Id),
+    xCheckStudio.Util.dragElement(document.getElementById("markupViewsContainer" + this.Id),
         document.getElementById("markupViewsCaptionBar" + this.Id));
 }
 

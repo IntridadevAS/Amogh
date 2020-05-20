@@ -33,10 +33,122 @@ function ListView(
             _this.OnSelectionFromViewer(selections);
         }
     };
+
+    this.UpdateRequiredRows = {};
+
+    this.CurrentRowId = 0;
 }
 // assign ModelBrowser's method to this class
 ListView.prototype = Object.create(ModelBrowser.prototype);
 ListView.prototype.constructor = ListView;
+
+ListView.prototype.UpdateComponents = function (componentsData) {
+    var needsUpdate = false;
+
+    var sourceManager = SourceManagers[this.Id];
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    for (var nodeId in componentsData) {
+        var componentData = componentsData[nodeId];
+
+        // Update all components from this class
+        if (nodeId in this.Components) {
+            var component = this.Components[nodeId];
+            if (componentData.name &&
+                component.Name !== componentData.name) {
+                component.Name = componentData.name;
+
+                needsUpdate = true;
+            }
+            if (componentData.category) {
+                component.MainComponentClass = componentData.category;
+
+                needsUpdate = true;
+            }
+            if (componentData.componentClass) {
+                component.SubComponentClass = componentData.componentClass;
+
+                needsUpdate = true;
+            }
+
+            // add properties to components
+            for (var i = 0; i < componentData.properties.length; i++) {
+                var prop = componentData.properties[i];
+               
+                if (prop.action.toLowerCase() === "add") {
+                    var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
+                    component.addProperty(genericPropertyObject);
+                }
+                else if (prop.action.toLowerCase() === "remove") {
+                    if (prop.property.toLowerCase() === categoryProperty.toLowerCase()) {
+                        component.MainComponentClass = null;
+                        needsUpdate = true;
+                    }
+                    if (prop.property.toLowerCase() === classProperty.toLowerCase()) {
+                        component.SubComponentClass = null;
+                        needsUpdate = true;
+                    }
+
+                    component.removeProperty(prop.property);
+                }
+                else if (prop.action.toLowerCase() === "update") {
+                    if (prop.oldProperty.toLowerCase() === categoryProperty.toLowerCase()) {
+                        if (prop.property.toLowerCase() !== categoryProperty.toLowerCase()) {
+                            component.MainComponentClass = null;
+                        }
+                        else {
+                            component.MainComponentClass = prop.value;
+                        }
+
+                        needsUpdate = true;
+                    }
+                    if (prop.oldProperty.toLowerCase() === classProperty.toLowerCase()) {
+                        if (prop.property.toLowerCase() !== classProperty.toLowerCase()) {
+                            component.SubComponentClass = null;
+                        }
+                        else {
+                            component.SubComponentClass = prop.value;
+                        }
+                        needsUpdate = true;
+                    }                
+
+                    component.removeProperty(prop.oldProperty);
+                   
+                    var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
+                    component.addProperty(genericPropertyObject);
+                }
+            }
+        }
+
+        // Update SourceProperty components from SCManager which are shown in modelbrowser        
+        sourceManager.SourceProperties[nodeId] = this.Components[nodeId];
+    }
+
+    // Sourcemanagers all components as well
+    sourceManager.AllComponents = this.Components;
+
+    if (needsUpdate) {
+        for (var rowKey in this.SelectedRows) {
+            var rowIndex = this.ListViewTableInstance.getRowIndexByKey(Number(rowKey));
+            if (rowIndex === -1) {
+                this.UpdateRequiredRows[rowKey] = {
+                    nodeId: this.SelectedRows[rowKey],
+                    data: componentsData[this.SelectedRows[rowKey]]
+                };
+            }
+            else {
+                var component = this.Components[this.SelectedRows[rowKey]];
+                this.ListViewTableInstance.cellValue(rowIndex, 0, component.Name);
+                this.ListViewTableInstance.cellValue(rowIndex, 1, component.MainComponentClass);
+                this.ListViewTableInstance.cellValue(rowIndex, 2, component.SubComponentClass);
+            }
+        }
+
+        this.ListViewTableInstance.saveEditData();
+    }
+}
 
 ListView.prototype.Show = function () {
     this.Headers = [];
@@ -53,10 +165,13 @@ ListView.prototype.Show = function () {
 
     // Create Table data
     var rootNode = this.Webviewer.model.getAbsoluteRootNode();
+    
+    this.CurrentRowId = 1;
     var tableData = this.CreateTableData(rootNode, -1, flat);
     if (!flat) {
         this.TableData = [tableData];
     }
+    this.CurrentRowId = 1;
 
     if (this.Headers === undefined ||
         this.Headers.length === 0 ||
@@ -136,9 +251,25 @@ ListView.prototype.LoadTable = function () {
     $(function () {
         _this.ListViewTableInstance = $(containerDiv).dxTreeList({
             columns: _this.Headers,
-            dataSource: _this.TableData,
-            itemsExpr: "items",
+            // dataSource: _this.TableData,
+            dataSource: {
+                key: "rowId",
+                load: function () {
+                    return _this.TableData;
+                },
+                update: function (key, values) {
+                    var item = findItem(_this.TableData, key);
+                    if (item) {
+                        Object.assign(item, values);
+                    }
+                }
+            },
+            // itemsExpr: "items",
+            // dataStructure: "tree",
             dataStructure: "tree",
+            keyExpr: "rowId",
+            itemsExpr: "items",
+            parentIdExpr: "Parent_ID",
             columnAutoWidth: true,
             columnResizingMode: 'widget',
             wordWrapEnabled: false,
@@ -181,7 +312,7 @@ ListView.prototype.LoadTable = function () {
 
                 // enable events
                 _this.InitEvents();
-            },
+            },           
             onSelectionChanged: function (e) {
                 if (_this.AvoidTableEvents) {
                     return;
@@ -214,6 +345,15 @@ ListView.prototype.LoadTable = function () {
                             }
                         }
                     }
+                }
+
+                if (model.views[_this.Id].userPropertiesForm.Active) {
+                    model.views[_this.Id].userPropertiesForm.LoadData();
+                }
+
+                if(model.views[_this.Id].editUserPropertiesForm.Active)
+                {
+                    model.views[_this.Id].editUserPropertiesForm.LoadData();
                 }
             },
             onRowClick: function (e) {
@@ -252,8 +392,9 @@ ListView.prototype.LoadTable = function () {
                 }
                 _this.Webviewer.view.fitNodes([e.data.NodeId]);
             },
-            onRowPrepared: function (e) {
-                if (e.rowType !== "data") {
+            onRowPrepared: function (e) {                
+                if (_this.AvoidTableEvents ||
+                    e.rowType !== "data") {
                     return;
                 }
 
@@ -261,6 +402,22 @@ ListView.prototype.LoadTable = function () {
                     var selectedRows = [e.rowElement[0]];
                     _this.HighlightHiddenRows(true, selectedRows);
                 }
+
+                // Updated row
+                _this.AvoidTableEvents = true;
+                if (e.key in _this.UpdateRequiredRows) {
+                    var updateData = _this.UpdateRequiredRows[e.key];
+                    var component = _this.Components[updateData.nodeId];
+                   
+                    e.component.cellValue(e.rowIndex, 0, component.Name);
+                    e.component.cellValue(e.rowIndex, 1, component.MainComponentClass);
+                    e.component.cellValue(e.rowIndex, 2, component.SubComponentClass);
+
+                    delete _this.UpdateRequiredRows[e.key];
+                    e.component.saveEditData();
+                }
+                _this.AvoidTableEvents = false;
+                
             },
             onDisposing: function (e) {
                 // enable events
@@ -388,7 +545,7 @@ ListView.prototype.GetItemHierarchy = function (rowKey, itemHierarchy) {
 
     var item = this.KeyVsTableItems[rowKey];
 
-    if (item.parentKey != 0) {
+    if (item.parentKey && item.parentKey != 0) {
         this.GetItemHierarchy(item.parentKey, itemHierarchy);
     }
 }
@@ -431,12 +588,9 @@ ListView.prototype.CreateTableData = function (nodeId, parentNode, flat) {
     var children = this.Webviewer.model.getNodeChildren(nodeId);
     for (var i = 0; i < children.length; i++) {
         var childRowData = this.CreateTableData(children[i], nodeId, flat);
-        if (!flat) {
+        if (!flat && childRowData) {
             rowData["items"].push(childRowData);
-        }
-        // else {
-        //     this.TableData.push(childRowData);
-        // }
+        }        
     }
 
     return rowData;
@@ -448,10 +602,6 @@ ListView.prototype.GetRowData = function (nodeId, parentNode) {
         return null;
     }
 
-    // if (flat) {
-    //     parentNode = -1;
-    // }
-
     //add node properties to model browser table
     var nodeData = this.Components[nodeId];
 
@@ -462,9 +612,10 @@ ListView.prototype.GetRowData = function (nodeId, parentNode) {
     tableRowContent[ModelBrowserColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
     tableRowContent[ModelBrowserColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
     tableRowContent["parent"] = parentNode;
-
+    tableRowContent["rowId"] = this.CurrentRowId;
+    this.CurrentRowId++;
+    
     return tableRowContent;
-    // this.TableData.push(tableRowContent);
 }
 
 ListView.prototype.GetSelectedNodeIds = function () {
@@ -517,4 +668,42 @@ ListView.prototype.ShowAllHiddenRows = function () {
     var sourceManager = SourceManagers[this.Id];
     this.HighlightHiddenRowsFromNodeIds(false, sourceManager.HiddenNodeIds)
     sourceManager.HiddenNodeIds = [];
+}
+
+ListView.prototype.GetAllSelectedRowNodeIds = function () {
+    var selectedNodeIds = [];
+    if (this.ListViewTableInstance) {
+        var selectedRowsData = this.ListViewTableInstance.getSelectedRowsData()
+        for (var i = 0; i < selectedRowsData.length; i++) {
+            selectedNodeIds.push(selectedRowsData[i].NodeId);
+        }
+    }
+
+    return selectedNodeIds;
+}
+
+ListView.prototype.GetSelectedComponents = function () {
+    var selectedNodeIds = this.GetSelectedNodeIds();
+
+    var selected = {};
+    for (var i = 0; i < selectedNodeIds.length; i++) {
+        var nodeId = selectedNodeIds[i];
+        selected[nodeId] = this.Components[nodeId];
+    }
+
+    return selected;
+}
+
+function findItem(items, key, withIndex) {
+    var item;
+    for (var i = 0; i < items.length; i++) {
+        item = items[i];
+        if (item["rowId"] === key) {
+            return withIndex ? { item, items, index: i } : item;
+        }
+        item = item.items && findItem(item.items, key, withIndex);
+        if (item) {
+            return item;
+        }
+    }
 }

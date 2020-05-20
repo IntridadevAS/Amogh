@@ -440,6 +440,9 @@ function SaveAll()
             if (!SaveCheckStatistics($tempDbh, $dbh)) {
                 SaveCheckStatisticsFromTemp($tempDbh, $dbh);
             }
+
+            // Save all components
+            SaveAllComponents($dbh);
         } else {
             // save check module control state from temp check space db to main checkspace db
             SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh);
@@ -548,34 +551,9 @@ function SaveComparisonPropertiesFromTemp($tempDbh, $dbh)
     $dbh->exec($command);
     if ($selectResults) {
 
-        // $command = 'CREATE TABLE ComparisonCheckProperties(
-        //     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-        //     sourceAName TEXT,
-        //     sourceBName TEXT,
-        //     sourceAValue TEXT,
-        //     sourceBValue TEXT,
-        //     result TEXT,
-        //     severity TEXT,
-        //     accepted TEXT,
-        //     performCheck TEXT,
-        //     description TEXT,
-        //     ownerComponent INTEGER NOT NULL,
-        //     transpose TEXT)';
         $command = CREATE_COMPARISONPROPERTIES_TABLE;
         $dbh->exec($command);
 
-        //  $insertStmt = $dbh->prepare("INSERT INTO ComparisonCheckProperties(id, 
-        //  sourceAName, 
-        //  sourceBName, 
-        //  sourceAValue,
-        //  sourceBValue, 
-        //  result, 
-        //  severity,
-        //  accepted, 
-        //  performCheck, 
-        //  description,
-        //  ownerComponent,
-        //  transpose) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);
 
 
@@ -1034,8 +1012,8 @@ function SaveComponentsFromTemp($tempDbh, $dbh, $componentTable, $propertiesTabl
         $command = 'CREATE TABLE ' . $componentTable . '(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT NOT NULL,
-            mainclass TEXT NOT NULL,
-            subclass TEXT NOT NULL,
+            mainclass TEXT,
+            subclass TEXT,
             nodeid INTEGER,
             ischecked TEXT,
             parentid INTEGER,
@@ -1069,12 +1047,13 @@ function SaveComponentsFromTemp($tempDbh, $dbh, $componentTable, $propertiesTabl
                         name TEXT NOT NULL,
                         format TEXT,
                         value TEXT,                
-                        ownercomponent INTEGER NOT NULL               
+                        ownercomponent INTEGER NOT NULL,
+                        userdefined INTEGER default 0              
               )';
             $dbh->exec($command);
 
             $insertPropertiesStmt = $dbh->prepare("INSERT INTO  " . $propertiesTable . "(id, name, format, value, 
-                      ownercomponent) VALUES(?,?,?,?,?)");
+                      ownercomponent, userdefined) VALUES(?,?,?,?,?,?)");
 
 
             while ($row = $selectPropertiesResults->fetch(\PDO::FETCH_ASSOC)) {
@@ -1083,7 +1062,8 @@ function SaveComponentsFromTemp($tempDbh, $dbh, $componentTable, $propertiesTabl
                     $row['name'],
                     $row['format'],
                     $row['value'],
-                    $row['ownercomponent']
+                    $row['ownercomponent'],
+                    $row['userdefined']
                 ));
             }
         }
@@ -2144,8 +2124,8 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
         $command = 'CREATE TABLE ' . $tableName . '(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             name TEXT NOT NULL,
-            mainClass TEXT NOT NULL,
-            subClass TEXT NOT NULL,
+            mainClass,
+            subClass,
             nodeId INTEGER,
             mainComponentId INTEGER,
             componentId INTEGER
@@ -2169,6 +2149,40 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
         }
     }
 }
+
+
+function SaveAllComponents($dbh)
+{
+    if (!isset($_POST['allComponents'])) {
+        return false;
+    }
+
+    try {
+        $allComponents = json_decode($_POST['allComponents'], true);
+        foreach ($allComponents as $table => $components) {
+
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS ' . $table . ';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE ' . $table . '(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    value TEXT NOT NULL)';
+            $dbh->exec($command);
+
+            $insertQuery = 'INSERT INTO ' .  $table . '(value) VALUES(?) ';
+            $values = array(json_encode($components));
+
+            $stmt = $dbh->prepare($insertQuery);
+            $stmt->execute($values);
+        }
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
+}
+
 
 function SaveSelectedComponents($dbh)
 {
@@ -2202,8 +2216,8 @@ function SaveSelectedComponents($dbh)
             $command = 'CREATE TABLE ' . $selectedComponentsTable . '(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     name TEXT NOT NULL,
-                    mainClass TEXT NOT NULL,
-                    subClass TEXT NOT NULL,
+                    mainClass TEXT,
+                    subClass TEXT,
                     nodeId INTEGER,
                     mainComponentId INTEGER,
                     componentId INTEGER
@@ -2252,80 +2266,7 @@ function SaveSelectedComponents($dbh)
     }
 
     return true;
-    // $nodeIdvsComponentIdList = NULL;
-    // if(isset($_POST['nodeIdvsComponentIdList']))
-    // {
-    //     $nodeIdvsComponentIdList = json_decode($_POST['nodeIdvsComponentIdList'], true);
-    // }
-
-    // $projectName = $_POST['ProjectName'];
-    // $checkName = $_POST['CheckName'];
-    // $dbh;
-    // try
-    //     {        
-    //         // open database
-    //         $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
-    //         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-
-    //         // begin the transaction
-    //         $dbh->beginTransaction();
-
-    //         // create selected components table
-
-    //         // drop table if exists
-    //         $command = 'DROP TABLE IF EXISTS '.$selectedComponentsTable. ';';
-    //         $dbh->exec($command);
-
-    //         $command = 'CREATE TABLE '. $selectedComponentsTable. '(
-    //             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-    //             name TEXT NOT NULL,
-    //             mainClass TEXT NOT NULL,
-    //             subClass TEXT NOT NULL,
-    //             nodeId INTEGER,
-    //             mainComponentId INTEGER
-    //             )';         
-    //         $dbh->exec($command);    
-
-    //         for($index = 0; $index < count($selectedComponents); $index++)
-    //         {
-    //             $selectedComponent = $selectedComponents[$index];     
-
-
-    //             $name = $selectedComponent['Name'];
-    //             $mainClass =  $selectedComponent['MainComponentClass'];
-    //             $subClass =$selectedComponent['ComponentClass'];
-    //             $nodeId = null;
-    //             if(isset($selectedComponent['NodeId']))
-    //             {
-    //                 $nodeId = (int)$selectedComponent['NodeId'];
-    //             }
-
-    //             $mainCompId = null;
-    //             if($nodeId !== NULL && 
-    //                $nodeIdvsComponentIdList &&
-    //                $nodeIdvsComponentIdList[$nodeId])
-    //             {
-    //                 $mainCompId = (int)$nodeIdvsComponentIdList[$nodeId];
-    //             }
-
-    //             $insertQuery = 'INSERT INTO '.  $selectedComponentsTable.'(name, mainClass, subClass, nodeId, mainComponentId) VALUES(?,?,?,?,?) ';
-    //             $values = array($name,  $mainClass, $subClass,  $nodeId, $mainCompId);
-
-    //             $stmt = $dbh->prepare($insertQuery);                    
-    //             $stmt->execute($values);   
-    //         }
-
-    //         // commit update
-    //         $dbh->commit();
-    //         $dbh = null; //This is how you close a PDO connection                    
-
-    //         return;
-    //     }
-    //     catch(Exception $e) 
-    //     {        
-    //         echo "fail"; 
-    //         return;
-    //     } 
+    
 }
 
 /*
