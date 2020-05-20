@@ -945,7 +945,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
             parentNodeId);
         for (var j = 0; j < component.properties.length; j++) {
             var property = component.properties[j];
-            var prop = new GenericProperty(property.Name, property.Format, property.Value, properties.UserDefined);
+            var prop = new GenericProperty(property.Name, property.Format, property.Value, property.UserDefined);
             componentObj.addProperty(prop);
         }
         this.AllComponents[nodeId] = componentObj;

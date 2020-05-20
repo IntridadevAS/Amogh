@@ -32,7 +32,9 @@ let model = {
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
-      editUserPropertiesForm :null
+      editUserPropertiesForm :null,
+      defineGroupsForm : null,
+      propertyGroups : {}
     },
     b: {
       id: "b",
@@ -56,7 +58,9 @@ let model = {
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
-      editUserPropertiesForm :null
+      editUserPropertiesForm :null,
+      defineGroupsForm : null,
+      propertyGroups : {}
     },
     c: {
       id: "c",
@@ -80,7 +84,9 @@ let model = {
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
-      editUserPropertiesForm :null
+      editUserPropertiesForm :null,
+      defineGroupsForm : null,
+      propertyGroups : {}
     },
     d: {
       id: "d",
@@ -104,7 +110,9 @@ let model = {
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
-      editUserPropertiesForm :null
+      editUserPropertiesForm :null,
+      defineGroupsForm : null,
+      propertyGroups : {}
     }
   },
   onDataSourceTabChanged: function (tabID) {

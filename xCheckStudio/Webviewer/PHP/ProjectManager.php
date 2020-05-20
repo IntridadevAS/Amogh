@@ -441,8 +441,17 @@ function SaveAll()
                 SaveCheckStatisticsFromTemp($tempDbh, $dbh);
             }
 
+              // save markup views
+              SaveMarkupViews($dbh);
+              SaveBookmarkViews($dbh);
+              SaveAnnotations($dbh);
+
             // Save all components
             SaveAllComponents($dbh);
+
+            // save property goups
+            SavePropertyGroups($dbh);
+            
         } else {
             // save check module control state from temp check space db to main checkspace db
             SaveCheckModuleControlsStateFromTemp($tempDbh, $dbh);
@@ -472,7 +481,18 @@ function SaveAll()
             SaveHiddenItemsFromTemp($tempDbh, $dbh);
 
             // save check result statistics
-            SaveCheckStatisticsFromTemp($tempDbh, $dbh);
+            SaveCheckStatisticsFromTemp($tempDbh, $dbh);   
+
+            SavMarkupViewsFromTemp($tempDbh, $dbh);  
+            SaveBookmarkViewsFromTemp($tempDbh, $dbh);  
+            SaveAnnotationsFromTemp($tempDbh, $dbh);  
+
+            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsa");  
+            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsb");  
+            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsc");  
+            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsd");  
+
+            SavePropertyGroupsFromTemp($tempDbh, $dbh);  
         }
 
         // comparison result tables table                               
@@ -514,12 +534,7 @@ function SaveAll()
         SaveVersionsFromTemp($tempDbh, $dbh);
 
         // save comments from temp
-        SaveCheckspaceCommentsFromTemp($tempDbh, $dbh);
-
-        // save markup views
-        SaveMarkupViews($dbh);
-        SaveBookmarkViews($dbh);
-        SaveAnnotations($dbh);
+        SaveCheckspaceCommentsFromTemp($tempDbh, $dbh);      
 
         // commit update
         $dbh->commit();
@@ -1486,6 +1501,164 @@ function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 //     }
 // }
 
+function SavMarkupViewsFromTemp($tempDbh, $dbh)
+{
+
+    $selectResults = $tempDbh->query("SELECT * FROM markupViews");
+    if ($selectResults) {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS markupViews;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE markupViews(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            a TEXT,
+            b TEXT,
+            c TEXT,
+            d TEXT)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO markupViews(id, a, b, c, d) VALUES(?,?,?,?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['a'],
+                $row['b'],
+                $row['c'],
+                $row['d']
+            ));
+        }
+
+        return true;
+    }
+    return false;
+}
+
+function SaveBookmarkViewsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM bookmarkViews");
+    if ($selectResults) {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS bookmarkViews;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE bookmarkViews(
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    a TEXT,
+    b TEXT,
+    c TEXT,
+    d TEXT)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO bookmarkViews(id, a, b, c, d) VALUES(?,?,?,?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['a'],
+                $row['b'],
+                $row['c'],
+                $row['d']
+            ));
+        }
+
+        return true;
+    }
+    return false;
+}
+
+function SaveAnnotationsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM annotations");
+    if ($selectResults) {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS annotations;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE annotations(
+          id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+          a TEXT,
+          b TEXT,
+          c TEXT,
+          d TEXT)';
+        $dbh->exec($command);
+
+
+        $insertStmt = $dbh->prepare('INSERT INTO annotations(id, a, b, c, d) VALUES(?,?,?,?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['a'],
+                $row['b'],
+                $row['c'],
+                $row['d']
+            ));
+        }
+
+        return true;
+    }
+
+
+    return false;
+}
+
+function SaveAllComponentsFromTemp($tempDbh, $dbh, $table)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM $table");
+    if ($selectResults) {
+        $command = 'DROP TABLE IF EXISTS ' . $table . ';';
+        $dbh->exec($command);
+
+
+        $command = 'CREATE TABLE ' . $table . '(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO ' . $table . '(id, value) VALUES(?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+
+
+        return true;
+    }
+    return false;
+}
+
+function SavePropertyGroupsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM propertyGroups");
+    if ($selectResults) {
+        $command = 'DROP TABLE IF EXISTS propertyGroups;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE propertyGroups(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO propertyGroups(id, value) VALUES(?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+
+
+        return true;
+    }
+    return false;
+}  
+
 /* 
     Save check statistics
 */
@@ -2150,6 +2323,34 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
     }
 }
 
+function SavePropertyGroups($dbh)
+{
+    if (!isset($_POST['propertyGroups'])) {
+        return false;
+    }
+
+    try {
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS propertyGroups;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE propertyGroups(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertQuery = 'INSERT INTO propertyGroups(value) VALUES(?) ';
+        $values = array($_POST['propertyGroups']);
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
+}
 
 function SaveAllComponents($dbh)
 {

@@ -80,6 +80,13 @@ function loadCheckSpaceForCheck(data) {
                 commentsCallout.ShowComment(commentData);
             }
     }   
+
+    // restore property groups
+    var propertyGroups = JSON.parse(data.propertyGroups);
+    for(var srcId in propertyGroups)
+    {
+        model.views[srcId].propertyGroups = propertyGroups[srcId];
+    }
 }
 
 function loadDataSets(data) {
