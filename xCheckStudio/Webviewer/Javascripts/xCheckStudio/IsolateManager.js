@@ -6,16 +6,17 @@ function IsolateManager(webviewer)
 }
 
 
-IsolateManager.prototype.Isolate = function (nodes) {
+IsolateManager.prototype.Isolate = function (nodes, add) {
     return new Promise((resolve) => {
-         var _this = this;
+        var _this = this;
 
-          this.Webviewer.view.isolateNodes(nodes).then(function () {
-               
-                _this.IsolatedNodes = nodes;
-                
-                return resolve(nodes);
-          });
+        if (add) {
+            nodes = nodes.concat(this.IsolatedNodes);
+        }
+        _this.IsolatedNodes = nodes;
+        this.Webviewer.view.isolateNodes(nodes).then(function () {          
+            return resolve(nodes);
+        });
     });
 }
 

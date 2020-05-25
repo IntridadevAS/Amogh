@@ -120,9 +120,9 @@ DefineGroupsForm.prototype.PopulateGroups = function () {
             else {
                 _this.NameTextBox.option("value", "");
                 _this.NameTextBox.option("disabled", false);
-                return;
+                // return;
             }
-
+            
             _this.LoadData();
         }
 
@@ -259,6 +259,15 @@ DefineGroupsForm.prototype.OnApply = function () {
     };
 
     model.views[this.Id].propertyGroups[groupName] = group;
+
+    SourceManagers[this.Id].GroupTemplateSelect.option("items", Object.keys(model.views[this.Id].propertyGroups));
+    
+    // Reset controls
+    this.NameTextBox.option("value", "");     
+    this.PopulateGroups();
+    this.LoadData();
+
+    DevExpress.ui.notify("Group '" + groupName + "' created successfully.");
 }
 
 DefineGroupsForm.prototype.GetAllSourceProperties = function () {

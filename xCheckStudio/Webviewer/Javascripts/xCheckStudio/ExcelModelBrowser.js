@@ -220,7 +220,8 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                 loadingBrower = false;
             },  
             onInitialized: function (e) {
-                smodel.views[_this.Id].tableViewInstance = e.component;
+                model.views[_this.Id].tableViewInstance = e.component;
+                model.views[_this.Id].tableViewWidget = "datagrid";
 
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu();

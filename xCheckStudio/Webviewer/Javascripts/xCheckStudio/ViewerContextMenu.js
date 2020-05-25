@@ -232,146 +232,6 @@ ViewerContextMenu.prototype.ShowMenu = function (x, y) {
         }
     };
 
-
-    return;
-    ///////////////////
-    var contextMenuDiv = document.getElementById("contextMenu");
-    contextMenuDiv.innerHTML = "";
-
-    // 1st group
-    var itemGroup = document.createElement("ul");
-    itemGroup.id = "items";
-
-    var item = document.createElement("li");
-    item.id = "hide";
-    item.innerText = "Hide";
-    item.onclick =
-        function () {
-            _this.OnHideClicked();
-        }
-    itemGroup.appendChild(item);
-
-    item = document.createElement("li");
-    item.id = "isolate";
-    item.innerText = "Isolate";
-    item.onclick = function () {
-        _this.OnIsolateClicked();
-    }
-    itemGroup.appendChild(item);
-
-    item = document.createElement("li");
-    item.id = "showAll";
-    item.innerText = "Show All";
-    item.onclick = function () {
-        _this.OnShowAllClicked();
-    }
-    itemGroup.appendChild(item);
-
-    contextMenuDiv.appendChild(itemGroup);
-
-    item = document.createElement("hr");
-    contextMenuDiv.appendChild(item);
-
-    // 2nd group
-    itemGroup = document.createElement("ul");
-    itemGroup.id = "items";
-    if (!this.ExplodeManager) {
-        item = document.createElement("li");
-        item.id = "startExplode";
-        item.innerText = "Start Explode";
-        item.onclick = function () {
-            _this.OnStartExplodeClicked();
-        }
-        itemGroup.appendChild(item);
-    }
-    else {
-        item = document.createElement("li");
-        item.id = "stopExplode";
-        item.innerText = "Stop Explode";
-        item.onclick = function () {
-            _this.OnStopExplodeClicked();
-        }
-        itemGroup.appendChild(item);
-    }
-    contextMenuDiv.appendChild(itemGroup);
-
-    item = document.createElement("hr");
-    contextMenuDiv.appendChild(item);
-
-    // 3rd group
-    itemGroup = document.createElement("ul");
-    itemGroup.id = "items";
-
-    if (!this.TranslucencyManager) {
-        item = document.createElement("li");
-        item.id = "startTranslucency";
-        item.innerText = "Start Translucency";
-        item.onclick = function () {
-            _this.OnStartTranslucencyClicked();
-        }
-        itemGroup.appendChild(item);
-    }
-    else {
-        item = document.createElement("li");
-        item.id = "stopTranslucency";
-        item.innerText = "Stop Translucency";
-        item.onclick = function () {
-            _this.OnStopTranslucencyClicked();
-        }
-        itemGroup.appendChild(item);
-    }
-    contextMenuDiv.appendChild(itemGroup);
-
-    // 4th group
-    item = document.createElement("hr");
-    contextMenuDiv.appendChild(item);
-
-    itemGroup = document.createElement("ul");
-    itemGroup.id = "items";
-
-    item = document.createElement("li");
-    item.id = "changeBackground";
-    item.innerText = "Change Background";
-    item.onclick = function () {
-        _this.OnChangeBackgroundClicked();
-    }
-    itemGroup.appendChild(item);
-    contextMenuDiv.appendChild(itemGroup);
-
-    contextMenuDiv.style.display = "block";
-
-    // position the context menu
-    var menuHeight = contextMenuDiv.offsetHeight;
-    var menuWidth = contextMenuDiv.offsetWidth;
-
-    var viewerContainer = document.getElementById(this.WebViewer._params.containerId);
-
-    // get mouse X position relative to viewerContainer
-    var viewerX = x - $("#" + this.WebViewer._params.containerId).offset().left;
-
-    // get mouse Y position relative to viewerContainer
-    var viewerY = y - $("#" + this.WebViewer._params.containerId).offset().top;
-
-    // adjust x
-    if ((viewerContainer.offsetWidth - viewerX) < menuWidth) {
-        x = x - menuWidth;
-    }
-
-    // adjust y
-    if ((viewerContainer.offsetHeight - viewerY) < menuHeight) {
-        y = y - menuHeight;
-    }
-
-    contextMenuDiv.style.top = y + "px";
-    contextMenuDiv.style.left = x + "px";
-
-    // close context menu, if mouse click is done outside
-    document.onclick = function (e) {
-        if (e.target.id !== 'contextMenu') {
-            contextMenuDiv.style.display = 'none';
-        }
-    };
-
 }
 
 ViewerContextMenu.prototype.Init = function () {
@@ -519,7 +379,8 @@ ViewerContextMenu.prototype.HideInReview = function () {
             var sourceManager = SourceManagers[model.currentTabId];
             sourceManager.HiddenNodeIds = [];
 
-            var allNodeIds = Object.keys(sourceManager.NodeIdvsComponentIdList);
+            //var allNodeIds = Object.keys(sourceManager.NodeIdvsComponentIdList);
+            var allNodeIds = Object.keys(sourceManager.AllComponents);
             for (var i = 0; i < Object.keys(allNodeIds).length; i++) {
                 var nodeId = Number(allNodeIds[i]);
                 if (!selectedNodes.includes(nodeId)) {

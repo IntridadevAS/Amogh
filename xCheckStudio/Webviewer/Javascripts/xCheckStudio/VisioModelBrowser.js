@@ -170,7 +170,8 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             },  
             onInitialized: function(e) {
                 model.views[_this.Id].tableViewInstance = e.component; 
-            
+                model.views[_this.Id].tableViewWidget = "treelist";
+                
                 // // initialize the context menu
                 // var modelBrowserContextMenu = new ModelBrowserContextMenu();
                 // modelBrowserContextMenu.Init(_this);

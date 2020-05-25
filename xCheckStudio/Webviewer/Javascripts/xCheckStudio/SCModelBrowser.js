@@ -143,7 +143,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
     var loadingBrower = true;
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
-    this.Clear("treelist");
+    this.Clear();
     $(function () {
         $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
@@ -166,9 +166,9 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             scrolling: {
                 mode: "standard"
             },
-            paging: {
-                pageSize: 50
-            },
+            // paging: {
+            //     pageSize: 50
+            // },
             selection: {
                 mode: "multiple",
                 recursive: true,
@@ -181,6 +181,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             },
             onInitialized: function (e) {                
                 model.views[_this.Id].tableViewInstance = e.component;  
+                model.views[_this.Id].tableViewWidget = "treelist";
 
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu();
@@ -468,7 +469,7 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
     // Load model browser tree    
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
-    this.Clear("treelist");
+    this.Clear();
     $(function () {
         $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
@@ -502,6 +503,7 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
             },
             onInitialized: function (e) {
                 model.views[_this.Id].tableViewInstance = e.component;  
+                model.views[_this.Id].tableViewWidget = "treelist";
 
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu(false);

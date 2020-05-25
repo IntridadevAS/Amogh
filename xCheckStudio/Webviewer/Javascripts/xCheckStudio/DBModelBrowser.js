@@ -241,7 +241,8 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
             paging: { enabled: false },
             onInitialized: function (e) {
                 model.views[_this.Id].tableViewInstance = e.component;
-
+                model.views[_this.Id].tableViewWidget = "datagrid";
+                
                 // initialize the context menu
                 var modelBrowserContextMenu = new ModelBrowserContextMenu();
                 modelBrowserContextMenu.Init(_this);

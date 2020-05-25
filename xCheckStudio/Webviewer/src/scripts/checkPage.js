@@ -27,14 +27,17 @@ let model = {
       annotations: {},
       measures: {},
       listView: null,
+      groupView: null,
       activeTableView: null,
       tableViewInstance: null,
+      tableViewWidget: null,
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {}
+      propertyGroups : {},
+      isolateManager : null
     },
     b: {
       id: "b",
@@ -53,14 +56,17 @@ let model = {
       annotations: {},
       measures: {},
       listView: null,
+      groupView: null,
       activeTableView: null,
       tableViewInstance: null,
+      tableViewWidget: null,
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {}
+      propertyGroups : {},
+      isolateManager : null
     },
     c: {
       id: "c",
@@ -79,14 +85,17 @@ let model = {
       annotations: {},
       measures: {},
       listView: null,
+      groupView: null,
       activeTableView: null,
       tableViewInstance: null,
+      tableViewWidget: null,
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {}
+      propertyGroups : {},
+      isolateManager : null
     },
     d: {
       id: "d",
@@ -105,14 +114,17 @@ let model = {
       annotations: {},
       measures: {},
       listView: null,
+      groupView: null,
       activeTableView: null,
       tableViewInstance: null,
+      tableViewWidget: null,
       dataDefinitionMenu: null,
       userPropertiesForm : null,
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {}
+      propertyGroups : {},
+      isolateManager : null
     }
   },
   onDataSourceTabChanged: function (tabID) {

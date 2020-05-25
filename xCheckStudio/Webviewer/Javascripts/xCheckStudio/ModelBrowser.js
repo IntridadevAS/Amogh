@@ -10,7 +10,7 @@ ModelBrowser.prototype.ShowItemCount = function (count) {
         return;
     }
 
-    itemCountDiv.innerHTML = "Count : "+ count;
+    itemCountDiv.innerHTML = "Count : " + count;
 }
 
 ModelBrowser.prototype.GetItemCountDiv = function () {
@@ -31,41 +31,43 @@ ModelBrowser.prototype.GetItemCountDiv = function () {
 }
 
 ModelBrowser.prototype.Clear = function (tableControl) {
-    if (model.views[this.Id].tableViewInstance) {
-        if(tableControl)
-        {
-            var containerDiv = "#" + this.ModelBrowserContainer;
+    if (model.views[this.Id].tableViewInstance &&
+        model.views[this.Id].tableViewWidget) {
+        // if(tableControl)
+        // {
+        var containerDiv = "#" + this.ModelBrowserContainer;
 
-            var browserContainer = document.getElementById(this.ModelBrowserContainer);
-            var parent = browserContainer.parentElement;
+        var browserContainer = document.getElementById(this.ModelBrowserContainer);
+        var parent = browserContainer.parentElement;
 
-            //remove html element which holds grid
-            //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
-            if (tableControl.toLowerCase() === "treelist") {
-                $(containerDiv).dxTreeList("dispose");
-            }
-            else if (tableControl.toLowerCase() === "datagrid") {
-                $(containerDiv).dxDataGrid("dispose");
-            }
-            $(containerDiv).remove();
-
-            //Create and add div with same id to add grid again
-            var browserContainerDiv = document.createElement("div")
-            browserContainerDiv.id = this.ModelBrowserContainer;
-            var styleRule = ""
-            styleRule = "position: relative";
-            browserContainerDiv.setAttribute("style", styleRule);
-            parent.appendChild(browserContainerDiv);
+        //remove html element which holds grid
+        //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
+        if (model.views[this.Id].tableViewWidget.toLowerCase() === "treelist") {
+            $(containerDiv).dxTreeList("dispose");
         }
+        else if (model.views[this.Id].tableViewWidget.toLowerCase() === "datagrid") {
+            $(containerDiv).dxDataGrid("dispose");
+        }
+        $(containerDiv).remove();
+
+        //Create and add div with same id to add grid again
+        var browserContainerDiv = document.createElement("div")
+        browserContainerDiv.id = this.ModelBrowserContainer;
+        var styleRule = ""
+        styleRule = "position: relative";
+        browserContainerDiv.setAttribute("style", styleRule);
+        parent.appendChild(browserContainerDiv);
+        // }
 
         model.views[this.Id].tableViewInstance = null;
+        model.views[this.Id].tableViewWidget = null;
 
         // disable list view switches
         if (SourceManagers[this.Id].IncludeMemberItemsSwitch) {
-            SourceManagers[this.Id].IncludeMemberItemsSwitch.option("disabled", true);
+            SourceManagers[this.Id].IncludeMemberItemsSwitch.option("visible", false);
         }
         if (SourceManagers[this.Id].ListTypeSwitch) {
-            SourceManagers[this.Id].ListTypeSwitch.option("disabled", true);
+            SourceManagers[this.Id].IncludeMemberItemsSwitch.option("visible", false);
         }
     }
 
