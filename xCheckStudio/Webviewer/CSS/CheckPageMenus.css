@@ -109,7 +109,8 @@
   }
   
   .markupViewsCaption, .userPropertiesCaption, 
-  .editUserPropertiesCaption, .clearUserPropertiesCaption{
+  .editUserPropertiesCaption, .clearUserPropertiesCaption,
+  .defineGroupsFormCaption{
   color: black;
   top: 5px;
   left: 4px;
@@ -259,7 +260,7 @@
   display: none;
 }
 
-.userPropertiesForm
+.userPropertiesForm, .defineGroupsForm
 {
   position: absolute; 
   display: none;
@@ -267,6 +268,7 @@
   width: 450px;
   background: white;
   right: 0px;
+  border: 1px solid black;
 }
 
 .editUserPropertiesForm
@@ -291,14 +293,14 @@
 }
 
 .userPropertiesFormCaptionBar, .editUserPropertiesFormCaptionBar,
-.clearUserPropertiesFormCaptionBar
+.clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar
 {
   height: 30px;
   width: 100%;
   border-bottom: 1px solid rgb(25.5, 25.5, 25.5);
 }
 
-.userPropertiesFormGridArea
+.userPropertiesFormGridArea, .defineGroupsFormGridArea
 {
   height: 180px;
   width: 100%;  
@@ -329,7 +331,7 @@
   width: 90% !important;
 }
 
-.userPropertiesFormControlColumn
+.userPropertiesFormControlColumn, .defineGroupsFormControlColumn
 {
   /* position: absolute; */
   left:0px;
@@ -337,7 +339,7 @@
   height : 100%; 
 }
 
-.userPropertiesGrid
+.userPropertiesGrid, .defineGroupsGrid
 {
   /* position: absolute; */
   right:0px;
@@ -345,7 +347,7 @@
   height : 100%;
 }
 
-.userPropertiesFormAdd
+.userPropertiesFormAdd, .defineGroupsFormAdd
 {
   position: absolute;
   width: 40px;
@@ -356,7 +358,7 @@
   cursor: pointer;
 }
 
-.userPropertiesFormClear
+.userPropertiesFormClear, .defineGroupsFormClear
 {
   position: absolute;
   width: 40px;
@@ -371,6 +373,13 @@
 .clearUserPropertiesFormBottomBar
 {
   height: 40px;
+  width: 100%;
+  padding: 2px;
+}
+
+.defineGroupsFormBottomBar
+{
+  height: 70px;
   width: 100%;
   padding: 2px;
 }
@@ -391,7 +400,7 @@
 }
 
 .userPropertiesApplyBtn, .editUserPropertiesApplyBtn,
-.clearUserPropertiesApplyBtn
+.clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn
 {  
   position: absolute;
   right: 2px;
@@ -425,22 +434,19 @@
   cursor: pointer;
 }
 
-.userPropertiesApplyBtn:hover,
-.userPropertiesPropogateBtn:hover,
-.userPropertiesFormAdd:hover,
-.userPropertiesFormClear:hover,
-.userPropertiesCloseBtn:hover,
-.editUserPropertiesCloseBtn:hover,
-.editUserPropertiesClearBtn:hover,
-.editUserPropertiesApplyBtn:hover,
-.clearUserPropertiesCloseBtn:hover,
-..clearUserPropertiesApplyBtn:hover
+.userPropertiesApplyBtn:hover, .userPropertiesPropogateBtn:hover,
+.userPropertiesFormAdd:hover, .userPropertiesFormClear:hover,
+.userPropertiesCloseBtn:hover, .editUserPropertiesCloseBtn:hover,
+.editUserPropertiesClearBtn:hover, .editUserPropertiesApplyBtn:hover,
+.clearUserPropertiesCloseBtn:hover, .clearUserPropertiesApplyBtn:hover,
+.defineGroupsFormCloseBtn:hover, .defineGroupsFormAdd:hover,
+.defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover
 {
   opacity: 1;
 }
 
 .userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
-.clearUserPropertiesCloseBtn
+.clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn
 { 
   font-size: 12px;
   position: absolute;
@@ -451,7 +457,7 @@
   cursor: pointer;
 }
 
-.userPropertiesFormAddText
+.userPropertiesFormAddText, .defineGroupsFormAddText
 {
   color: black;
   position: absolute;
@@ -459,10 +465,29 @@
   left: 15px;
 }
 
-.userPropertiesFormClearText
+.userPropertiesFormClearText, .defineGroupsFormClearText
 {
   color: black;
   position: absolute;
   top: 163px;  
   left: 13px;
+}
+
+.defineGroupsFormNameBox{
+  height: 30px;
+  width: 200px;
+  top: 4px;
+  position: relative;
+}
+
+.defineGroupsFormTypeDL{
+  width: 200px;
+  font-size: 10px;
+  height: 30px;
+}
+
+.deleteGroupBtn{
+  top: 214px;
+  position: absolute;
+  left: 200px;
 }

@@ -9,6 +9,9 @@ function SCManager(id,
     this.ViewerOptions = viewerOptions;
     this.NodeIdArray = [];
     this.SelectedNodeId = null;
+
+    // we need to handle this, as NodeIdvsComponentIdList is not 
+    // being properly restored from saved data
     this.NodeIdvsComponentIdList = {};
     this.HiddenNodeIds = [];
 
@@ -24,12 +27,12 @@ function SCManager(id,
     this.AllComponents = {};
 
     this.PropertyCallout;    
-
-    // this.DataBrowserSDA;
-    // this.ListViewSDA;
-    // this.GroupsSDA;
+    
     this.IncludeMemberItemsSwitch;
     this.ListTypeSwitch;
+    this.GroupTemplateSelect;
+    this.GroupHighlightSwitch;
+    this.HighlightSelectionBtn;
 }
 
 // inherit from parent
@@ -48,8 +51,8 @@ SCManager.prototype.GetCurrentTable = function () {
     else if (activeTableView === GlobalConstants.TableView.List) {
         return model.views[this.Id].listView;
     }
-    else if (activeTableView === GlobalConstants.TableView.Groups) {
-        return null;
+    else if (activeTableView === GlobalConstants.TableView.Group) {
+        return model.views[this.Id].groupView;
     }
 
     return null;
@@ -150,11 +153,23 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                                 _this.AllComponents,
                                 viewer);
 
+                            // Init group view
+                            model.views[_this.Id].groupView = new GroupView(
+                                _this.Id,
+                                _this.ViewerOptions.modelTree,
+                                _this.AllComponents,
+                                viewer);
+
+                            // Init isolatemanager
+                            model.views[_this.Id].isolateManager = new IsolateManager(viewer);
+
                             // Init table views action menu
                             _this.InitViewActionMenu();
 
                             // init list view switches
                             _this.InitListViewSwitches();
+                            // init group view controls
+                            _this.InitGroupViewControls();
                         }
 
                         // create property callout
@@ -196,6 +211,9 @@ SCManager.prototype.OpenTableViewsMenu = function () {
             _this.ModelTree.AddComponentTable(_this.SourceProperties);
 
             _this.CloseTableViewsMenu();
+
+            // hide group view controls
+            _this.ShowGroupViewControls(false);
         }
     }
 
@@ -206,16 +224,24 @@ SCManager.prototype.OpenTableViewsMenu = function () {
             model.views[_this.Id].listView.Show();
 
             _this.CloseTableViewsMenu();
+
+            // hide group view controls
+            _this.ShowGroupViewControls(false);
         }
     }
 
     var groupsSDA = document.getElementById("groupsAction" + _this.Id);
     groupsSDA.classList.add("showSDA");
     groupsSDA.onclick = function () {
-        if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Groups) {
-            model.views[_this.Id].activeTableView = GlobalConstants.TableView.Groups;
+        if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {
+            model.views[_this.Id].groupView.Show();
+
+            model.views[_this.Id].activeTableView = GlobalConstants.TableView.Group;
 
             _this.CloseTableViewsMenu();
+
+            // show group view controls
+            _this.ShowGroupViewControls(true);
         }
     }
 }
@@ -254,25 +280,69 @@ SCManager.prototype.InitListViewSwitches = function () {
     var _this = this;
     this.IncludeMemberItemsSwitch = $("#includeMemberItemsSwitch" + this.Id).dxSwitch({
         value: false,
-        disabled: true,
+        // disabled: true,
+        visible: false,
         switchedOffText: "Exclude",
         switchedOnText: "Include",
         onValueChanged: function (e) {
             if (model.views[_this.Id].listView.ListViewTableInstance) {
-            model.views[_this.Id].listView.ListViewTableInstance.option("selection.recursive", e.value);
+                model.views[_this.Id].listView.ListViewTableInstance.option("selection.recursive", e.value);
             }
         }
     }).dxSwitch("instance");
 
     this.ListTypeSwitch = $("#listTypeSwitch" + this.Id).dxSwitch({
         value: false,
-        disabled: true,
+        // disabled: true,
+        visible: false,
         switchedOffText: "Nested",
         switchedOnText: "Flat",
         onValueChanged: function (e) {
             model.views[_this.Id].listView.Show();
         }
     }).dxSwitch("instance");
+}
+
+SCManager.prototype.InitGroupViewControls = function(){
+    var _this = this;
+
+    // var groups = ["New"];
+    this.GroupTemplateSelect = $("#groupTemplateSelect" + this.Id).dxSelectBox({
+        items: Object.keys(model.views[_this.Id].propertyGroups),
+        value: "New",
+        visible: false,
+        onValueChanged: function (data) {
+            model.views[_this.Id].groupView.OnGroupChanged(data.value);
+        }
+
+    }).dxSelectBox("instance");
+
+    this.GroupHighlightSwitch = $("#groupHighlightSwitch" + this.Id).dxSwitch({
+        value: false,        
+        visible: false,
+        switchedOffText: "Group",
+        switchedOnText: "Highlight",
+        onValueChanged: function (e) {
+            // if (model.views[_this.Id].listView.ListViewTableInstance) {
+            //     model.views[_this.Id].listView.ListViewTableInstance.option("selection.recursive", e.value);
+            // }
+        }
+    }).dxSwitch("instance");
+
+    this.HighlightSelectionBtn = document.getElementById("highlightSelectionBtn" + this.Id);
+}
+
+SCManager.prototype.ShowGroupViewControls = function (show) {
+    this.GroupTemplateSelect.option("visible", show);
+    this.GroupHighlightSwitch.option("visible", show);
+    if (show) {
+        this.HighlightSelectionBtn.style.display = "block";
+    }
+    else {
+        this.HighlightSelectionBtn.style.display = "none";
+    }
+
+    this.GroupTemplateSelect.option("value", null);
 }
 
 SCManager.prototype.ShowListViewFloatingMenu = function (show) {
@@ -945,7 +1015,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
             parentNodeId);
         for (var j = 0; j < component.properties.length; j++) {
             var property = component.properties[j];
-            var prop = new GenericProperty(property.Name, property.Format, property.Value, properties.UserDefined);
+            var prop = new GenericProperty(property.Name, property.Format, property.Value, property.UserDefined);
             componentObj.addProperty(prop);
         }
         this.AllComponents[nodeId] = componentObj;
@@ -976,12 +1046,24 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
         _this.AllComponents,
         _this.Webviewer);
 
+    // Init group view
+    model.views[_this.Id].groupView = new GroupView(
+        _this.Id,
+        _this.ViewerOptions.modelTree,
+        _this.AllComponents,
+        _this.Webviewer);
+
+    // Init isolatemanager
+    model.views[_this.Id].isolateManager = new IsolateManager(_this.Webviewer);
+
     // Init table views action menu
     _this.InitViewActionMenu();
 
     // init list view switches
     _this.InitListViewSwitches();
     // }
+    // init group view controls
+    _this.InitGroupViewControls();
 
     // create property callout
     _this.PropertyCallout = new PropertyCallout(_this.Id);

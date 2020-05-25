@@ -171,11 +171,21 @@
             // copy hidden components
             CopyCheckspaceComments($dbh, $tempDbh);
 
-            // copy hidden components
+            // copy all components
             CopyAllComponents($dbh, $tempDbh, "AllComponentsa");
             CopyAllComponents($dbh, $tempDbh, "AllComponentsb");
             CopyAllComponents($dbh, $tempDbh, "AllComponentsc");
             CopyAllComponents($dbh, $tempDbh, "AllComponentsd");
+
+            // copy property groups
+            CopyPropertyGroups($dbh, $tempDbh);
+
+            // Copy markup views
+            CopyMarkupViews($dbh, $tempDbh);
+            // Copy bookmark views
+            CopyBookmarkViews($dbh, $tempDbh);
+            // Copy annotations
+            CopyAnnotations($dbh, $tempDbh);
 
             $tempDbh->commit();
             $tempDbh->beginTransaction();     
@@ -240,6 +250,115 @@ function  CopyVersions($fromDbh, $toDbh)
                 $row['createdByAlias'],
                 $row['createdOn'],
                 $row['IsFav']
+            ));
+        }
+    }
+}
+
+// Copy markup views
+function CopyMarkupViews($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM markupViews;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS markupViews;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE markupViews(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            a TEXT,
+            b TEXT,
+            c TEXT,
+            d TEXT)';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare('INSERT INTO markupViews(id, a, b, c, d) VALUES(?,?,?,?,?) ');
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['a'],
+                $row['b'],
+                $row['c'],
+                $row['d']
+            ));
+        }
+    }
+}
+
+// Copy bookmark views
+function CopyBookmarkViews($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM bookmarkViews;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS bookmarkViews;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE bookmarkViews(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            a TEXT,
+            b TEXT,
+            c TEXT,
+            d TEXT)';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare('INSERT INTO bookmarkViews(id, a, b, c, d) VALUES(?,?,?,?,?) ');
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['a'],
+                $row['b'],
+                $row['c'],
+                $row['d']
+            ));
+        }
+    }
+}
+// Copy annotations
+function CopyAnnotations($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM annotations;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS annotations;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE annotations(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            a TEXT,
+            b TEXT,
+            c TEXT,
+            d TEXT)';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare('INSERT INTO annotations(id, a, b, c, d) VALUES(?,?,?,?,?) ');
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['a'],
+                $row['b'],
+                $row['c'],
+                $row['d']
+            ));
+        }
+    }
+}
+
+function CopyPropertyGroups($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM propertyGroups;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS propertyGroups;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS propertyGroups(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT NOT NULL     
+          )';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO propertyGroups(id, value) VALUES(?,?)");
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
             ));
         }
     }
@@ -407,30 +526,28 @@ function ReadAnnotations($dbh)
         }     
     }
 
-    function ReadCheckSpaceData($dbh, $tempDbh, $context)
-    {
-        $results = array();
-        try
-        {
-            if(strtolower($context) === 'check')
-            {
-                $controlsStates = ReadCheckModuleControlStates($tempDbh);
-                $results["controlStates"] = $controlsStates;
+function ReadCheckSpaceData($dbh, $tempDbh, $context)
+{
+    $results = array();
+    try {
+        if (strtolower($context) === 'check') {
+            $controlsStates = ReadCheckModuleControlStates($tempDbh);
+            $results["controlStates"] = $controlsStates;
 
-                $checkCaseInfo = ReadCheckCaseInfo($tempDbh);
-                $results["checkCaseInfo"] = $checkCaseInfo;
+            $checkCaseInfo = ReadCheckCaseInfo($tempDbh);
+            $results["checkCaseInfo"] = $checkCaseInfo;
 
-                $sourceViewerOptions = ReadSourceViewerOptions($tempDbh);
-                $results["sourceViewerOptions"] = $sourceViewerOptions;
+            $sourceViewerOptions = ReadSourceViewerOptions($tempDbh);
+            $results["sourceViewerOptions"] = $sourceViewerOptions;
 
-                $classWiseComponents = ReadClassWiseComponents($tempDbh, 'mainclass');
-                $results["classWiseComponents"] = $classWiseComponents;
+            $classWiseComponents = ReadClassWiseComponents($tempDbh, 'mainclass');
+            $results["classWiseComponents"] = $classWiseComponents;
 
-                $selectedComponents = ReadSelectedComponents($tempDbh);
-                $results["selectedComponents"] = $selectedComponents;
+            $selectedComponents = ReadSelectedComponents($tempDbh);
+            $results["selectedComponents"] = $selectedComponents;
 
-                $hiddenComponents = ReadHiddenComponents($tempDbh);
-                $results["hiddenComponents"] = $hiddenComponents;
+            $hiddenComponents = ReadHiddenComponents($tempDbh);
+            $results["hiddenComponents"] = $hiddenComponents;
 
             $results["allComponents"] = array();
             $allComponents = ReadAllComponents($tempDbh, "AllComponentsa");
@@ -449,214 +566,211 @@ function ReadAnnotations($dbh)
             if ($allComponents != NULL) {
                 $results["allComponents"]["d"] = $allComponents;
             }
-        }
-            else if(strtolower($context) === 'review')
-            {
-                // read datasource info
-                $datasourceInfo = readDataSourceInfo($tempDbh);
-                if($datasourceInfo != NULL)
-                {
-                    $results['sourceInfo'] = $datasourceInfo;
-                }
 
-                // read comparison results
-                $comparisonResult = readComparisonCheckData($tempDbh);
-                if($comparisonResult != NULL)
-                {   
-                    $results['Comparisons'] = array();
-                    $comparison = array();
-                    $comparison["sources"] = array($datasourceInfo["sourceAFileName"], 
-                                                   $datasourceInfo["sourceBFileName"]);
-                    
-                    if($datasourceInfo["sourceCFileName"] !== NULL)
-                    {
-                        array_push($comparison["sources"], $datasourceInfo["sourceCFileName"]);
-                    }
-                    if($datasourceInfo["sourceDFileName"] !== NULL)
-                    {
-                        array_push($comparison["sources"], $datasourceInfo["sourceDFileName"]);
-                    }
-                    
-                    $comparison["results"] = $comparisonResult;
-                    array_push($results['Comparisons'], $comparison);
-
-                    // create component hierarchy
-                    createComparisonComponentsHierarchy($tempDbh, 
-                    $datasourceInfo, 
-                    $comparisonResult, 
-                    $results);                               
-                }   
-
-                // read source a compliance results
-                $sourceAComplianceResult = readComplianceCheckData($tempDbh,
-                                                                   'SourceAComplianceCheckGroups',
-                                                                   'SourceAComplianceCheckComponents',
-                                                                   'SourceAComplianceCheckProperties');
-                if($sourceAComplianceResult != NULL)
-                {           
-                    if(! array_key_exists("Compliances", $results))
-                    {
-                        $results['Compliances'] = array();
-                    }
-        
-                    $compliance = array();
-                    $compliance["source"] = $datasourceInfo["sourceAFileName"];
-                    $compliance["results"] = $sourceAComplianceResult;            
-                    
-                    // create component hierarchy
-                    $sourceAComplianceComponentsHierarchy = createComplianceComponentsHierarchy($tempDbh,
-                                                                                                $sourceAComplianceResult,                                                  
-                                                                                                "a",
-                                                                                                $datasourceInfo);
-                    if($sourceAComplianceComponentsHierarchy !== null)
-                    {               
-                        $compliance['ComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
-                    }
-        
-                    array_push($results['Compliances'], $compliance);
-                }  
-
-                // read source b compliance results
-                $sourceBComplianceResult = readComplianceCheckData($tempDbh,
-                                                                    'SourceBComplianceCheckGroups',
-                                                                    'SourceBComplianceCheckComponents',
-                                                                    'SourceBComplianceCheckProperties');
-                if($sourceBComplianceResult != NULL)
-                {
-                    if(! array_key_exists("Compliances", $results))
-                    {
-                        $results['Compliances'] = array();
-                    }
-        
-                    $compliance = array();
-                    $compliance["source"] = $datasourceInfo["sourceBFileName"];
-                    $compliance["results"] = $sourceBComplianceResult;        
-                   
-                    // create component hierarchy
-                    $sourceBComplianceComponentsHierarchy = createComplianceComponentsHierarchy($tempDbh,
-                                                        $sourceBComplianceResult,                                                 
-                                                        "b",
-                                                        $datasourceInfo);
-                    if($sourceBComplianceComponentsHierarchy !== null)
-                    {                
-                        $compliance['ComponentsHierarchy'] = $sourceBComplianceComponentsHierarchy;
-                    }
-        
-                    array_push($results['Compliances'], $compliance);
-                }  
-
-
-                // read source c compliance results
-                $sourceCComplianceResult = readComplianceCheckData($tempDbh,
-                                                           'SourceCComplianceCheckGroups',
-                                                           'SourceCComplianceCheckComponents',
-                                                           'SourceCComplianceCheckProperties');                
-                if($sourceCComplianceResult != NULL)
-                {
-                    if(! array_key_exists("Compliances", $results))
-                    {
-                        $results['Compliances'] = array();
-                    }
-
-                    $compliance = array();
-                    $compliance["source"] = $datasourceInfo["sourceCFileName"];
-                    $compliance["results"] = $sourceCComplianceResult;
-                
-                    // create component hierarchy
-                    $sourceCComplianceComponentsHierarchy = createComplianceComponentsHierarchy($tempDbh,
-                                                        $sourceCComplianceResult,                                                 
-                                                        "c",
-                                                        $datasourceInfo);
-                    if($sourceCComplianceComponentsHierarchy !== null)
-                    {                
-                        $compliance['ComponentsHierarchy'] = $sourceCComplianceComponentsHierarchy;
-                    }
-
-                    array_push($results['Compliances'], $compliance);
-                }
-
-                // read source d compliance results
-                $sourceDComplianceResult = readComplianceCheckData($tempDbh,
-                                                           'SourceDComplianceCheckGroups',
-                                                           'SourceDComplianceCheckComponents',
-                                                           'SourceDComplianceCheckProperties');
-                if($sourceDComplianceResult != NULL)
-                {
-                    if(! array_key_exists("Compliances", $results))
-                    {
-                        $results['Compliances'] = array();
-                    }
-
-                    $compliance = array();
-                    $compliance["source"] = $datasourceInfo["sourceDFileName"];
-                    $compliance["results"] = $sourceDComplianceResult;
-                
-                    // create component hierarchy
-                    $sourceDComplianceComponentsHierarchy = createComplianceComponentsHierarchy($tempDbh,
-                                                        $sourceDComplianceResult,                                                 
-                                                        "d",
-                                                        $datasourceInfo);
-                    if($sourceDComplianceComponentsHierarchy !== null)
-                    {                
-                        $compliance['ComponentsHierarchy'] = $sourceDComplianceComponentsHierarchy;
-                    }
-
-                    array_push($results['Compliances'], $compliance);
-                }
-
-                // source A components
-                $sourceAComponents = readComponents($tempDbh, "a");
-                if($sourceAComponents)
-                {
-                    $results['sourceAComponents'] = $sourceAComponents;
-                }
-
-                // source b components
-                $sourceBComponents = readComponents($tempDbh, "b");  
-                if($sourceBComponents)
-                {
-                    $results['sourceBComponents'] = $sourceBComponents;
-                }   
-
-                // source c components
-                $sourceCComponents = readComponents($tempDbh, "c");  
-                if($sourceCComponents)
-                {
-                    $results['sourceCComponents'] = $sourceCComponents;
-                }   
-
-                // source d components
-                $sourceDComponents = readComponents($tempDbh, "d");  
-                if($sourceDComponents)
-                {
-                    $results['sourceDComponents'] = $sourceDComponents;
-                }  
-                
-                // read checkcase info               
-                $checkcaseInfo =  ReadCheckCaseInfo($tempDbh);
-                $results['checkcaseInfo'] = $checkcaseInfo;
-                
+            $propertyGroups =  ReadPropertyGroups($dbh);
+            $results["propertyGroups"] = $propertyGroups;
+        } else if (strtolower($context) === 'review') {
+            // read datasource info
+            $datasourceInfo = readDataSourceInfo($tempDbh);
+            if ($datasourceInfo != NULL) {
+                $results['sourceInfo'] = $datasourceInfo;
             }
 
-            $checkspaceComments = ReadCheckspaceComments($tempDbh);
-            $results["checkspaceComments"] = $checkspaceComments;
+            // read comparison results
+            $comparisonResult = readComparisonCheckData($tempDbh);
+            if ($comparisonResult != NULL) {
+                $results['Comparisons'] = array();
+                $comparison = array();
+                $comparison["sources"] = array(
+                    $datasourceInfo["sourceAFileName"],
+                    $datasourceInfo["sourceBFileName"]
+                );
 
-            $markupViews = ReadMarkupViews($dbh);
-            $results["markupViews"] = $markupViews;
+                if ($datasourceInfo["sourceCFileName"] !== NULL) {
+                    array_push($comparison["sources"], $datasourceInfo["sourceCFileName"]);
+                }
+                if ($datasourceInfo["sourceDFileName"] !== NULL) {
+                    array_push($comparison["sources"], $datasourceInfo["sourceDFileName"]);
+                }
 
-            $bookmarkViews = ReadBookmarkViews($dbh);
-            $results["bookmarkViews"] = $bookmarkViews;
+                $comparison["results"] = $comparisonResult;
+                array_push($results['Comparisons'], $comparison);
 
-            $annotations = ReadAnnotations($dbh);
-            $results["annotations"] = $annotations;
+                // create component hierarchy
+                createComparisonComponentsHierarchy(
+                    $tempDbh,
+                    $datasourceInfo,
+                    $comparisonResult,
+                    $results
+                );
+            }
+
+            // read source a compliance results
+            $sourceAComplianceResult = readComplianceCheckData(
+                $tempDbh,
+                'SourceAComplianceCheckGroups',
+                'SourceAComplianceCheckComponents',
+                'SourceAComplianceCheckProperties'
+            );
+            if ($sourceAComplianceResult != NULL) {
+                if (!array_key_exists("Compliances", $results)) {
+                    $results['Compliances'] = array();
+                }
+
+                $compliance = array();
+                $compliance["source"] = $datasourceInfo["sourceAFileName"];
+                $compliance["results"] = $sourceAComplianceResult;
+
+                // create component hierarchy
+                $sourceAComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
+                    $tempDbh,
+                    $sourceAComplianceResult,
+                    "a",
+                    $datasourceInfo
+                );
+                if ($sourceAComplianceComponentsHierarchy !== null) {
+                    $compliance['ComponentsHierarchy'] = $sourceAComplianceComponentsHierarchy;
+                }
+
+                array_push($results['Compliances'], $compliance);
+            }
+
+            // read source b compliance results
+            $sourceBComplianceResult = readComplianceCheckData(
+                $tempDbh,
+                'SourceBComplianceCheckGroups',
+                'SourceBComplianceCheckComponents',
+                'SourceBComplianceCheckProperties'
+            );
+            if ($sourceBComplianceResult != NULL) {
+                if (!array_key_exists("Compliances", $results)) {
+                    $results['Compliances'] = array();
+                }
+
+                $compliance = array();
+                $compliance["source"] = $datasourceInfo["sourceBFileName"];
+                $compliance["results"] = $sourceBComplianceResult;
+
+                // create component hierarchy
+                $sourceBComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
+                    $tempDbh,
+                    $sourceBComplianceResult,
+                    "b",
+                    $datasourceInfo
+                );
+                if ($sourceBComplianceComponentsHierarchy !== null) {
+                    $compliance['ComponentsHierarchy'] = $sourceBComplianceComponentsHierarchy;
+                }
+
+                array_push($results['Compliances'], $compliance);
+            }
+
+
+            // read source c compliance results
+            $sourceCComplianceResult = readComplianceCheckData(
+                $tempDbh,
+                'SourceCComplianceCheckGroups',
+                'SourceCComplianceCheckComponents',
+                'SourceCComplianceCheckProperties'
+            );
+            if ($sourceCComplianceResult != NULL) {
+                if (!array_key_exists("Compliances", $results)) {
+                    $results['Compliances'] = array();
+                }
+
+                $compliance = array();
+                $compliance["source"] = $datasourceInfo["sourceCFileName"];
+                $compliance["results"] = $sourceCComplianceResult;
+
+                // create component hierarchy
+                $sourceCComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
+                    $tempDbh,
+                    $sourceCComplianceResult,
+                    "c",
+                    $datasourceInfo
+                );
+                if ($sourceCComplianceComponentsHierarchy !== null) {
+                    $compliance['ComponentsHierarchy'] = $sourceCComplianceComponentsHierarchy;
+                }
+
+                array_push($results['Compliances'], $compliance);
+            }
+
+            // read source d compliance results
+            $sourceDComplianceResult = readComplianceCheckData(
+                $tempDbh,
+                'SourceDComplianceCheckGroups',
+                'SourceDComplianceCheckComponents',
+                'SourceDComplianceCheckProperties'
+            );
+            if ($sourceDComplianceResult != NULL) {
+                if (!array_key_exists("Compliances", $results)) {
+                    $results['Compliances'] = array();
+                }
+
+                $compliance = array();
+                $compliance["source"] = $datasourceInfo["sourceDFileName"];
+                $compliance["results"] = $sourceDComplianceResult;
+
+                // create component hierarchy
+                $sourceDComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
+                    $tempDbh,
+                    $sourceDComplianceResult,
+                    "d",
+                    $datasourceInfo
+                );
+                if ($sourceDComplianceComponentsHierarchy !== null) {
+                    $compliance['ComponentsHierarchy'] = $sourceDComplianceComponentsHierarchy;
+                }
+
+                array_push($results['Compliances'], $compliance);
+            }
+
+            // source A components
+            $sourceAComponents = readComponents($tempDbh, "a");
+            if ($sourceAComponents) {
+                $results['sourceAComponents'] = $sourceAComponents;
+            }
+
+            // source b components
+            $sourceBComponents = readComponents($tempDbh, "b");
+            if ($sourceBComponents) {
+                $results['sourceBComponents'] = $sourceBComponents;
+            }
+
+            // source c components
+            $sourceCComponents = readComponents($tempDbh, "c");
+            if ($sourceCComponents) {
+                $results['sourceCComponents'] = $sourceCComponents;
+            }
+
+            // source d components
+            $sourceDComponents = readComponents($tempDbh, "d");
+            if ($sourceDComponents) {
+                $results['sourceDComponents'] = $sourceDComponents;
+            }
+
+            // read checkcase info               
+            $checkcaseInfo =  ReadCheckCaseInfo($tempDbh);
+            $results['checkcaseInfo'] = $checkcaseInfo;
         }
-        catch(Exception $e) 
-        {             
-            
-        } 
 
-        return $results;
+        $checkspaceComments = ReadCheckspaceComments($tempDbh);
+        $results["checkspaceComments"] = $checkspaceComments;
+
+        $markupViews = ReadMarkupViews($dbh);
+        $results["markupViews"] = $markupViews;
+
+        $bookmarkViews = ReadBookmarkViews($dbh);
+        $results["bookmarkViews"] = $bookmarkViews;
+
+        $annotations = ReadAnnotations($dbh);
+        $results["annotations"] = $annotations;
+    } catch (Exception $e) {
     }
+
+    return $results;
+}
 
     function readComponents($dbh, $source)
     {
@@ -929,7 +1043,9 @@ function ReadAnnotations($dbh)
         $parentNode = $compRow['parentid'];
         $parentStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where nodeid =".$parentNode);
         
-        while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) 
+        if($parentStmt)
+        {
+            while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) 
         {    
             $parentComponent = traverseRecursivelyFor3DCompliance($dbh, $parentRow['nodeid'], $traversedNodes, $source);
 
@@ -945,6 +1061,7 @@ function ReadAnnotations($dbh)
         {
             return $parentComponent;
         }
+    }
 
         return $component;                   
     }
@@ -1834,6 +1951,22 @@ function ReadAnnotations($dbh)
 
         return NULL;        
     }
+
+function ReadPropertyGroups($tempDbh)
+{
+    try {
+        $results = $tempDbh->query("SELECT *FROM propertyGroups;");
+
+        if ($results) {
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                return  $record['value'];
+            }
+        }
+    } catch (Exception $e) {
+    }
+
+    return NULL;
+}
 
 function ReadAllComponents($tempDbh, $table)
 {

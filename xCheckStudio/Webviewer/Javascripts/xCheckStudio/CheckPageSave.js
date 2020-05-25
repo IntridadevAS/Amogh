@@ -94,6 +94,10 @@ var CheckModule = {
 
             // get all components
             var allComponents = this.getAllComponents();
+
+            // get all property groups
+            var propertyGroups = this.getPropertyGroups();
+
             $.ajax({
                 url: 'PHP/ProjectManager.php',
                 type: "POST",
@@ -114,6 +118,7 @@ var CheckModule = {
                     'bookmarkViews': JSON.stringify(bookmarkViews),
                     'annotations': JSON.stringify(annotations),
                     "allComponents": JSON.stringify(allComponents),
+                    "propertyGroups": JSON.stringify(propertyGroups),
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
@@ -124,6 +129,15 @@ var CheckModule = {
                 }
             });
         });
+    },
+
+    getPropertyGroups : function(){
+        var propertyGroups = {};
+        for (var srcId in SourceManagers) {
+            propertyGroups[srcId] = model.views[srcId].propertyGroups;
+        }
+
+        return propertyGroups;
     },
 
     getAllComponents: function () {

@@ -6,6 +6,7 @@ function DataDefinitionMenu(id) {
 
     model.views[this.Id].userPropertiesForm = new UserPropertiesForm(this.Id);
     model.views[this.Id].editUserPropertiesForm = new EditUserPropertiesForm(this.Id);
+    model.views[this.Id].defineGroupsForm = new DefineGroupsForm(this.Id);
 }
 
 DataDefinitionMenu.prototype.GetHtmlElementId = function () {
@@ -88,8 +89,7 @@ DataDefinitionMenu.prototype.GetControls = function () {
             Title: "User Properties",
             ImageSrc: "public/symbols/User Properties.svg",
             click: function (e, menu) {
-                menu.OnUserProperties();
-                // menu.Close();
+                menu.OnUserProperties();                
             }
         },
         {
@@ -105,7 +105,7 @@ DataDefinitionMenu.prototype.GetControls = function () {
             Title: "Property Groups",
             ImageSrc: "public/symbols/Property Groups.svg",
             click: function (e, menu) {
-                menu.Close();
+                menu.OnDefineGroups();
             }
         },
         {
@@ -151,4 +151,13 @@ DataDefinitionMenu.prototype.OnEditUserProperties = function () {
     else {
         model.views[this.Id].editUserPropertiesForm.Open();
     }      
+}
+
+DataDefinitionMenu.prototype.OnDefineGroups= function () {
+    if (model.views[this.Id].defineGroupsForm.Active) {
+        model.views[this.Id].defineGroupsForm.Close();
+    }
+    else {
+        model.views[this.Id].defineGroupsForm.Open();
+    }     
 }

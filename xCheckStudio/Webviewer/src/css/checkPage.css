@@ -185,7 +185,8 @@ button + button {
   background-color: black;
   color: white;
   width: 500px;
-  min-width: 15%;
+  /* min-width: 15%; */
+  min-width: 310px;
   max-width: 85%;  
 }
 
@@ -213,6 +214,7 @@ width: 65px !important;
 }
 
 .tableHeaderControlRow{
+  position: relative;
   height: 30px;
   width:100%;
 }
@@ -220,6 +222,9 @@ width: 65px !important;
 .tableArea{
   position: absolute; 
   top: 60px;
+  /* position: relative;
+  top: 0px; */
+  width: 100%;
   height: calc(100% - 100px);
 }
 
@@ -557,4 +562,37 @@ button[type="submit"] {
 
 .showSDA{
   display: block;
+}
+
+.groupTemplateSelect{
+  position: absolute;
+  width: 200px;
+  height: 25px;
+  left: 2px;
+  font-size: 12px;
+}
+
+.groupHighlightSwitch{
+  position: absolute;
+  right : 35px;
+  top: 0px;
+  width: 70px !important;
+}
+
+.highlightSelectionBtn{
+  position: absolute;
+  right : 2px;
+  width: 25px;
+  height: 25px;
+  top: 0px;
+  display: none;
+}
+
+.groupTemplateSelect .dx-texteditor-container{
+  align-items : center !important;
+}
+
+.dx-menu-item-text
+{
+  font-size: 14px;
 }

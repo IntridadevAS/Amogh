@@ -232,7 +232,7 @@ ListView.prototype.LoadTable = function () {
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
 
-    this.Clear("treelist");
+    this.Clear();
 
     // set selection mode
     var selectionAttribute = {
@@ -299,15 +299,18 @@ ListView.prototype.LoadTable = function () {
             },
             onInitialized: function (e) {
                 model.views[_this.Id].tableViewInstance = e.component;
+                model.views[_this.Id].tableViewWidget = "treelist";
 
                 document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.List;
 
                 // enable list view switches
                 if (SourceManagers[_this.Id].IncludeMemberItemsSwitch) {
-                    SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("disabled", false);
+                    // SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("disabled", false);
+                    SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("visible", true);
                 }
                 if (SourceManagers[_this.Id].ListTypeSwitch) {
-                    SourceManagers[_this.Id].ListTypeSwitch.option("disabled", false);
+                    // SourceManagers[_this.Id].ListTypeSwitch.option("disabled", false);
+                    SourceManagers[_this.Id].ListTypeSwitch.option("visible", true);
                 }
 
                 // enable events
@@ -420,10 +423,11 @@ ListView.prototype.LoadTable = function () {
                 
             },
             onDisposing: function (e) {
-                // enable events
+                 // disable events
                 _this.TerminateEvents();
 
                 model.views[_this.Id].tableViewInstance = null;
+                model.views[_this.Id].tableViewWidget = null;
 
                 _this.Webviewer.selectionManager.clear();
 
@@ -434,6 +438,9 @@ ListView.prototype.LoadTable = function () {
 
                 _this.KeyVsTableItems = {};
                 _this.NodeIdVsTableItems = {};
+
+                SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("visible", false);
+                SourceManagers[_this.Id].ListTypeSwitch.option("visible", false);
             }
         }).dxTreeList("instance");
     });

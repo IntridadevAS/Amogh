@@ -1263,14 +1263,19 @@
               <div id="tableHeaderNamea" class="tableHeaderNameRow"> </div>
               <div id="tableHeaderControla" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitcha" class="includeMemberItemsSwitch"> </div>
-                <div id="listTypeSwitcha"  class="listTypeSwitch"> </div>
+                <div id="listTypeSwitcha" class="listTypeSwitch"> </div>
+
+                <div id="groupTemplateSelecta" class="groupTemplateSelect"> </div>
+                <div id="groupHighlightSwitcha" class="groupHighlightSwitch"> </div>               
+                <img id="highlightSelectionBtna" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
+
               </div>
             </div>
             <div class="tableArea">
-              <div id="tableDataA" style="position: relative"></div>
+              <div id="tableDataA" style="position: relative;"></div>
             </div>
             <div id="itemCountA" class="itemCountClass"></div>
-            
+        
             <div id="tableViewActiona" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
             </div>
@@ -1286,217 +1291,259 @@
               <span class="tooltip" data-tooltip="Groups"></span>
               <img src="public/symbols/GroupsView-Black.svg" style="width: 20px; height: 30px;" />
             </div>
-           
+        
           </div>
-          <div id="center" class="grabBar"></div>        
-         
-            <!-- viewer -->
-            <div class="visualizerContainer">
-              <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
-                onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-              
-              <!-- Properties Callout Button -->
-              <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
-                onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-                        
-              <!-- explode slider -->
-              <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
-                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                  <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
-                  <p> <span id="explodeValue1"></span></p>
+          <div id="center" class="grabBar"></div>
+        
+          <!-- viewer -->
+          <div class="visualizerContainer">
+            <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
+              onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
+        
+            <!-- Properties Callout Button -->
+            <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
+        
+            <!-- explode slider -->
+            <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="10" value="0" step="0.5" class="slider" id="explodeSlider1">
+                <p> <span id="explodeValue1"></span></p>
+              </div>
+            </div>
+        
+            <!-- Translucency slider -->
+            <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
+              <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
+                <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
+                <p> <span id="translucencyValue1" style="color: grey"></span></p>
+              </div>
+            </div>
+        
+            <!-- Property callout container-->
+            <div id="propertyCalloutNameBara" class="propertyCalloutNameBar"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
+              <span> </span>
+            </div>
+            <div id="propertyCalloutContainera" class="propertyCalloutContainer" style="opacity: 0.6;"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="propertyCalloutPropGrida"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab2' } ">
+                <div id="propertyCalloutRefGrida"></div>
+              </div>
+              <div data-options="dxTemplate : { name: 'tab3' } ">
+                <div class="commentsTabPage">
+        
+                  <!-- Search control -->
+                  <div id="propertyCalloutSearchBoxa" class="searchBox">
+                    <div id="propertyCalloutSearchTexta"> </div>
+                    <div id="propertyCalloutSearchBtna" class="searchButton">
+                      <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
+                    </div>
+                  </div>
+        
+                  <!-- Comments Area -->
+                  <div id="commentsAreaa" class="commentsArea">
+        
+                  </div>
+                  <div class="commentInput">
+                    <div id="commentInputa">
+                    </div>
+                    <div id="addCommentBtna" class="addCommentBtn">
+                      <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+                    </div>
+                  </div>
                 </div>
               </div>
-          
-              <!-- Translucency slider -->
-              <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
-                <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
-                  <input type="range" min="0" max="1" value="1" step="0.1" class="slider" id="translucencySlider1">
-                  <p> <span id="translucencyValue1" style="color: grey"></span></p>
-                </div>
+            </div>
+        
+            <!-- Hovering menus -->
+            <div id="displayMenua" class="displayMenu"> </div>
+            <div id="markupMenua" class="markupMenu"> </div>
+            <div id="shapesMenua" class="shapesMenu"> </div>
+            <div id="bookmarkMenua" class="bookmarkMenu"> </div>
+            <div id="tagsMenua" class="tagsMenu"> </div>
+            <div id="modelViewsMenua" class="modelViewsMenu"> </div>
+            <div id="displayStylesMenua" class="displayStylesMenu"> </div>
+            <div id="sectioningMenua" class="sectioningMenu"> </div>
+            <div id="measureMenua" class="measureMenu"> </div>
+            <div id="dataDefinitionMenua" class="dataDefinitionMenu"> </div>
+            <div id="menuTooltipa" style="z-index:1;"> </div>
+        
+            <!-- Markup views overlay -->
+            <div id="markupViewsContainera" class="markupViewsContainer">
+              <div id="markupViewsCaptionBara" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Views</div>
+                <img id="markupViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                  style="width: 25px; height: 25px;" />
               </div>
-          
-              <!-- Property callout container-->
-              <div id="propertyCalloutNameBara" class="propertyCalloutNameBar"
-                onmouseover="viewPanels.onMouseOverPropertyCallout('a')" 
-                onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
-                <span> </span>
-              </div>
-              <div id="propertyCalloutContainera" class="propertyCalloutContainer" style="opacity: 0.6;"
-                onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
+              <div id="markupViewTabsa" class="markupViewsTabs">
                 <div data-options="dxTemplate : { name: 'tab1' } ">
-                  <div id="propertyCalloutPropGrida"></div>
+                  <div id="bookmarksGrida" style="height: 250px;"></div>
                 </div>
                 <div data-options="dxTemplate : { name: 'tab2' } ">
-                  <div id="propertyCalloutRefGrida"></div>
+                  <div id="markupsGrida" style="height: 250px;"></div>
                 </div>
                 <div data-options="dxTemplate : { name: 'tab3' } ">
-                  <div class="commentsTabPage">
-                   
-                    <!-- Search control -->
-                    <div id="propertyCalloutSearchBoxa" class="searchBox">
-                      <div id="propertyCalloutSearchTexta"> </div>
-                      <div id="propertyCalloutSearchBtna" class="searchButton">
-                        <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
+                  <div id="annotationsGrida" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="markupViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
+            </div>
+        
+            <!-- Measure views overlay -->
+            <div id="measureViewsContainera" class="measureViewsContainer">
+              <div id="measureViewsCaptionBara" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Measure Views</div>
+                <img id="measureViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                  style="width: 25px; height: 25px;" />
+              </div>
+              <div id="measureViewTabsa" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="measuresGrida" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="measureViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
+            </div>
+        
+            <!-- Add User Properties Form -->
+            <div id="userPropertiesForma" class="userPropertiesForm">
+              <div id="userPropertiesFormCaptionBara" class="userPropertiesFormCaptionBar">
+                <div class="userPropertiesCaption">User Properties</div>
+                <img id="userPropertiesCloseBtna" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="userPropertiesFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="userPropertiesFormControlColumn" style="overflow: hidden;">
+        
+                      <div class="userPropertiesFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="userPropertiesFormAdda" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
                       </div>
-                    </div>
-                  
-                    <!-- Comments Area -->
-                    <div id="commentsAreaa" class="commentsArea">
-              
-                    </div>
-                    <div class="commentInput">
-                      <div id="commentInputa">
+                      <div id="userPropertiesFormAddTexta" class="userPropertiesFormAddText">Add</div>
+        
+                      <div class="userPropertiesFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="userPropertiesFormCleara" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
                       </div>
-                      <div id="addCommentBtna" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+        
+                      <div id="userPropertiesFormClearTexta" class="userPropertiesFormClearText">Clear</div>
+                    </td>
+                    <td class="userPropertiesGrid" style="overflow: hidden;">
+                      <div id="userPropertiesGrida" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="userPropertiesFormBottomBara" class="userPropertiesFormBottomBar">
+                <div class="userPropertiesPropogateBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Propagate"></span>
+                  <img id="userPropertiesPropogateBtna" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
+                </div>
+                <div id="userPropertiesApplyBtna" class="userPropertiesApplyBtn">Apply</div>
+              </div>
+            </div>
+        
+            <!-- Edit User Properties Form -->
+            <div id="editUserPropertiesForma" class="editUserPropertiesForm">
+              <div id="editUserPropertiesFormCaptionBara" class="editUserPropertiesFormCaptionBar">
+                <div class="editUserPropertiesCaption">Edit User Properties</div>
+                <img id="editUserPropertiesCloseBtna" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="editUserPropertiesFormGridArea">
+                <div id="editUserPropertiesGrida" style="height: 500px; overflow:hidden"> </div>
+              </div>
+              <div id="editUserPropertiesFormBottomBara" class="editUserPropertiesFormBottomBar">
+                <div id="editUserPropertiesClearBtna" class="editUserPropertiesClearBtn tooltipHov">Clear
+                  <span class="tooltip" data-tooltip="Clear"></span>
+                </div>
+                <div id="editUserPropertiesApplyBtna" class="editUserPropertiesApplyBtn tooltipHov">Apply
+                  <span class="tooltip" data-tooltip="Apply"></span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Clear User Properties Form -->
+            <div id="clearUserPropertiesForma" class="clearUserPropertiesForm">
+              <div id="clearUserPropertiesFormCaptionBara" class="clearUserPropertiesFormCaptionBar">
+                <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
+                <img id="clearUserPropertiesCloseBtna" class="clearUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="clearUserPropertiesFormArea">
+                <div class="dx-field" style="height: 50%; width: 100%;">
+                  <div id="clearUserPropertiesCBa" class="dx-field-label"> </div>
+                  <div id="clearUserPropertiesTagBoxa" class="dx-field-value"> </div>
+                </div>
+                <div class="dx-field" style="height: 50%; width: 100%;">
+                  <div id="clearUserPropertiesValuesCBa" class="dx-field-label"> </div>
+                  <div class="dx-field-value" style="position: relative; top: 10px;">Clear Values</div>
+                </div>
+              </div>
+              <div class="clearUserPropertiesFormBottomBar">
+                <div id="clearUserPropertiesApplyBtna" class="clearUserPropertiesApplyBtn tooltipHov">Apply
+                  <span class="tooltip" data-tooltip="Apply"></span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Define Data Groups Form -->
+            <div id="defineGroupsForma" class="defineGroupsForm">
+              <div id="defineGroupsFormCaptionBara" class="defineGroupsFormCaptionBar">
+                <div class="defineGroupsFormCaption">Define Groups</div>
+                <img id="defineGroupsFormCloseBtna" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="defineGroupsFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
+        
+                      <div class="defineGroupsFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="defineGroupsFormAdda" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>             
-              
-              <!-- Hovering menus -->
-              <div id="displayMenua" class="displayMenu"> </div>
-              <div id="markupMenua" class="markupMenu"> </div>
-              <div id="shapesMenua" class="shapesMenu"> </div>
-              <div id="bookmarkMenua" class="bookmarkMenu"> </div>
-              <div id="tagsMenua" class="tagsMenu"> </div>
-              <div id="modelViewsMenua" class="modelViewsMenu"> </div>
-              <div id="displayStylesMenua" class="displayStylesMenu"> </div>
-              <div id="sectioningMenua" class="sectioningMenu"> </div>
-              <div id="measureMenua" class="measureMenu"> </div>
-              <div id="dataDefinitionMenua" class="dataDefinitionMenu"> </div>
-              <div id="menuTooltipa" style="z-index:1;"> </div>
-              
-              <!-- Markup views overlay -->
-              <div id="markupViewsContainera" class="markupViewsContainer">
-                <div id="markupViewsCaptionBara" class="markupViewsCaptionBar">
-                  <div class="markupViewsCaption">Views</div>
-                  <img id="markupViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                    style="width: 25px; height: 25px;" />
-                </div>
-                <div id="markupViewTabsa" class="markupViewsTabs">
-                  <div data-options="dxTemplate : { name: 'tab1' } ">
-                    <div id="bookmarksGrida" style="height: 250px;"></div>
-                  </div>
-                  <div data-options="dxTemplate : { name: 'tab2' } ">
-                    <div id="markupsGrida" style="height: 250px;"></div>
-                  </div>
-                  <div data-options="dxTemplate : { name: 'tab3' } ">
-                    <div id="annotationsGrida" style="height: 250px;"></div>
-                  </div>
-                </div>
-                <div class="markupViewsBottomStrip">
-                  <img id="markupViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-                </div>
+                      <div id="defineGroupsFormAddTexta" class="defineGroupsFormAddText">Add</div>
+        
+                      <div class="defineGroupsFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="defineGroupsFormCleara" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
+                      </div>
+        
+                      <div id="defineGroupsFormClearTexta" class="defineGroupsFormClearText">Clear</div>
+                    </td>
+                    <td class="defineGroupsGrid" style="overflow: hidden;">
+                      <div id="defineGroupsGrida" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
               </div>
-              
-              <!-- Measure views overlay -->
-              <div id="measureViewsContainera" class="measureViewsContainer">
-                <div id="measureViewsCaptionBara" class="markupViewsCaptionBar">
-                  <div class="markupViewsCaption">Measure Views</div>
-                  <img id="measureViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                    style="width: 25px; height: 25px;" />
+              <div id="defineGroupsFormBottomBara" class="defineGroupsFormBottomBar">
+                <div id="defineGroupsFormTypeDLa"  class="defineGroupsFormTypeDL"></div>
+                <div id="defineGroupsFormNameBoxa" class="defineGroupsFormNameBox"></div>
+                
+                <div class="deleteGroupBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Delete Group"></span>
+                  <img id="deleteGroupBtna" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
                 </div>
-                <div id="measureViewTabsa" class="markupViewsTabs">
-                  <div data-options="dxTemplate : { name: 'tab1' } ">
-                    <div id="measuresGrida" style="height: 250px;"></div>
-                  </div>
-                </div>
-                <div class="markupViewsBottomStrip">
-                  <img id="measureViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-                </div>
-              </div>
-              
-              <!-- Add User Properties Form -->
-              <div id="userPropertiesForma" class="userPropertiesForm">
-                <div id="userPropertiesFormCaptionBara" class="userPropertiesFormCaptionBar">
-                  <div class="userPropertiesCaption">User Properties</div>
-                  <img id="userPropertiesCloseBtna" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-                </div>
-                <div class="userPropertiesFormGridArea">
-                  <table style="width: 100%; height: 180px; overflow: hidden;">
-                    <tr   style="overflow: hidden;">
-                      <td class="userPropertiesFormControlColumn"  style="overflow: hidden;">
-                        
-                        <div class="userPropertiesFormAdd tooltipHov">
-                          <span class="tooltip" data-tooltip="Add"></span>
-                          <img id="userPropertiesFormAdda" 
-                          src="public\symbols\Add-Filled.svg" 
-                          style="width: 40px; height: 40px;"/>
-                        </div>
-                        <div id="userPropertiesFormAddTexta" class="userPropertiesFormAddText">Add</div>
-                       
-                        <div class="userPropertiesFormClear tooltipHov">
-                          <span class="tooltip" data-tooltip="Clear"></span>
-                          <img id="userPropertiesFormCleara" 
-                            style="width: 40px; height: 40px;"
-                            src="public\symbols\Clear-Filled.svg" />
-                        </div>
 
-                        <div id="userPropertiesFormClearTexta" class="userPropertiesFormClearText">Clear</div>
-                      </td>
-                      <td class="userPropertiesGrid"  style="overflow: hidden;">
-                        <div id="userPropertiesGrida" style="height: 180px; overflow:hidden"> </div>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="userPropertiesFormBottomBara" class="userPropertiesFormBottomBar">
-                  <div class="userPropertiesPropogateBtn tooltipHov">
-                    <span class="tooltip" data-tooltip="Propagate"></span>
-                    <img id="userPropertiesPropogateBtna" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
-                  </div>
-                  <div id="userPropertiesApplyBtna" class="userPropertiesApplyBtn">Apply</div>                 
-                </div>
+                <div id="defineGroupsFormApplyBtna" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
-
-              <!-- Edit User Properties Form -->
-              <div id="editUserPropertiesForma" class="editUserPropertiesForm">
-                <div id="editUserPropertiesFormCaptionBara" class="editUserPropertiesFormCaptionBar">
-                  <div class="editUserPropertiesCaption">Edit User Properties</div>
-                  <img id="editUserPropertiesCloseBtna" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-                </div>
-                <div class="editUserPropertiesFormGridArea">           
-                        <div id="editUserPropertiesGrida" style="height: 500px; overflow:hidden"> </div>                    
-                </div>
-                <div id="editUserPropertiesFormBottomBara" class="editUserPropertiesFormBottomBar">
-                  <div id="editUserPropertiesClearBtna" class="editUserPropertiesClearBtn tooltipHov">Clear
-                    <span class="tooltip" data-tooltip="Clear"></span>
-                  </div>
-                  <div id="editUserPropertiesApplyBtna" class="editUserPropertiesApplyBtn tooltipHov">Apply
-                    <span class="tooltip" data-tooltip="Apply"></span>
-                  </div>                  
-                </div>
-              </div>
-
-              <!-- Clear User Properties Form -->
-              <div id="clearUserPropertiesForma" class="clearUserPropertiesForm">
-                <div id="clearUserPropertiesFormCaptionBara" class="clearUserPropertiesFormCaptionBar">
-                  <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
-                  <img id="clearUserPropertiesCloseBtna" class="clearUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-                </div>
-                <div class="clearUserPropertiesFormArea">
-                  <div class="dx-field" style="height: 50%; width: 100%;">
-                    <div id="clearUserPropertiesCBa" class="dx-field-label"> </div>
-                    <div id="clearUserPropertiesTagBoxa" class="dx-field-value"> </div>
-                  </div>
-                    <div class="dx-field" style="height: 50%; width: 100%;">
-                      <div id="clearUserPropertiesValuesCBa" class="dx-field-label"> </div>
-                      <div class="dx-field-value" style="position: relative; top: 10px;">Clear Values</div>
-                    </div>                  
-                </div>
-                <div class="clearUserPropertiesFormBottomBar">
-                  <div id="clearUserPropertiesApplyBtna" class="clearUserPropertiesApplyBtn tooltipHov">Apply
-                    <span class="tooltip" data-tooltip="Apply"></span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- visualizerA -->
-              <div id="visualizerA" class="tempContainer"> </div>
-          
-            </div>          
+            </div>
+        
+            <!-- visualizerA -->
+            <div id="visualizerA" class="tempContainer"> </div>
+        
+          </div>
         </div>
         <div id="viewPanelB" class="viewPanel hide">
           <div id="tableContainerb" class="tableContainer">
@@ -1506,6 +1553,11 @@
               <div  id="tableHeaderControlb" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitchb"  class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitchb"  class="listTypeSwitch"> </div>  
+
+                <div id="groupTemplateSelectb" class="groupTemplateSelect"> </div>
+                <div id="groupHighlightSwitchb" class="groupHighlightSwitch"> </div>               
+                <img id="highlightSelectionBtnb" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
+
               </div>
            </div>
 
@@ -1731,6 +1783,48 @@
               </div>
             </div>
             
+            <!-- Define Data Groups Form -->
+            <div id="defineGroupsFormb" class="defineGroupsForm">
+              <div id="defineGroupsFormCaptionBarb" class="defineGroupsFormCaptionBar">
+                <div class="defineGroupsFormCaption">Define Groups</div>
+                <img id="defineGroupsFormCloseBtnb" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="defineGroupsFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
+            
+                      <div class="defineGroupsFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="defineGroupsFormAddb" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                      </div>
+                      <div id="defineGroupsFormAddTextb" class="defineGroupsFormAddText">Add</div>
+            
+                      <div class="defineGroupsFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="defineGroupsFormClearb" style="width: 40px; height: 40px;" src="public\symbols\Clear-Filled.svg" />
+                      </div>
+            
+                      <div id="defineGroupsFormClearTextb" class="defineGroupsFormClearText">Clear</div>
+                    </td>
+                    <td class="defineGroupsGrid" style="overflow: hidden;">
+                      <div id="defineGroupsGridb" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="defineGroupsFormBottomBarb" class="defineGroupsFormBottomBar">
+                <div id="defineGroupsFormTypeDLb" class="defineGroupsFormTypeDL"></div>
+                <div id="defineGroupsFormNameBoxb" class="defineGroupsFormNameBox"></div>
+            
+                <div class="deleteGroupBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Delete Group"></span>
+                  <img id="deleteGroupBtnb" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                </div>
+            
+                <div id="defineGroupsFormApplyBtnb" class="defineGroupsFormApplyBtn">Apply</div>
+              </div>
+            </div>
             
             <!-- visualizerB -->
             <div id="visualizerB" class="tempContainer"> </div>
@@ -1745,6 +1839,10 @@
               <div  id="tableHeaderControlc" class="tableHeaderControlRow"> 
                 <div id="includeMemberItemsSwitchc"  class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitchc"  class="listTypeSwitch"> </div>
+
+                <div id="groupTemplateSelectc" class="groupTemplateSelect"> </div>
+                <div id="groupHighlightSwitchc" class="groupHighlightSwitch"> </div>               
+                <img id="highlightSelectionBtnc" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
               </div>
             </div>
 
@@ -1968,9 +2066,51 @@
                   <span class="tooltip" data-tooltip="Apply"></span>
                 </div>
               </div>
+            </div> 
+            
+            <!-- Define Data Groups Form -->
+            <div id="defineGroupsFormc" class="defineGroupsForm">
+              <div id="defineGroupsFormCaptionBarc" class="defineGroupsFormCaptionBar">
+                <div class="defineGroupsFormCaption">Define Groups</div>
+                <img id="defineGroupsFormCloseBtnc" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="defineGroupsFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
+            
+                      <div class="defineGroupsFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="defineGroupsFormAddc" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                      </div>
+                      <div id="defineGroupsFormAddTextc" class="defineGroupsFormAddText">Add</div>
+            
+                      <div class="defineGroupsFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="defineGroupsFormClearc" style="width: 40px; height: 40px;" src="public\symbols\Clear-Filled.svg" />
+                      </div>
+            
+                      <div id="defineGroupsFormClearTextc" class="defineGroupsFormClearText">Clear</div>
+                    </td>
+                    <td class="defineGroupsGrid" style="overflow: hidden;">
+                      <div id="defineGroupsGridc" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="defineGroupsFormBottomBarc" class="defineGroupsFormBottomBar">
+                <div id="defineGroupsFormTypeDLc" class="defineGroupsFormTypeDL"></div>
+                <div id="defineGroupsFormNameBoxc" class="defineGroupsFormNameBox"></div>
+            
+                <div class="deleteGroupBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Delete Group"></span>
+                  <img id="deleteGroupBtnc" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                </div>
+            
+                <div id="defineGroupsFormApplyBtnc" class="defineGroupsFormApplyBtn">Apply</div>
+              </div>
             </div>
             
-
             <div id="visualizerC" class="tempContainer"> </div>
           
           </div>
@@ -1983,6 +2123,10 @@
               <div id="tableHeaderControld" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitchd" class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitchd" class="listTypeSwitch"> </div>
+
+                <div id="groupTemplateSelectd" class="groupTemplateSelect"> </div>
+                <div id="groupHighlightSwitchd" class="groupHighlightSwitch"> </div>               
+                <img id="highlightSelectionBtnd" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
               </div>
             </div>
         
@@ -2022,7 +2166,7 @@
                 <p> <span id="explodeValue4"></span></p>
               </div>
             </div>
-
+        
             <!-- Translucency slider -->
             <div id="translucencyOverlay4" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -2030,185 +2174,226 @@
                 <p> <span id="translucencyValue4" style="color: grey"></span></p>
               </div>
             </div>
-
-             <!-- Property callout container-->
-             <div id="propertyCalloutNameBard" class="propertyCalloutNameBar"
-             onmouseover="viewPanels.onMouseOverPropertyCallout('d')" 
-             onmouseout="viewPanels.onMouseOutPropertyCallout('d')"> 
+        
+            <!-- Property callout container-->
+            <div id="propertyCalloutNameBard" class="propertyCalloutNameBar"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('d')" onmouseout="viewPanels.onMouseOutPropertyCallout('d')">
               <span> </span>
             </div>
-             <div id="propertyCalloutContainerd" class="propertyCalloutContainer"
-             style="opacity: 0.6;" 
-             onmouseover="viewPanels.onMouseOverPropertyCallout('d')" onmouseout="viewPanels.onMouseOutPropertyCallout('d')" >                              
-              <div data-options="dxTemplate : { name: 'tab1' } ">                
-                  <div id="propertyCalloutPropGridd"></div>
+            <div id="propertyCalloutContainerd" class="propertyCalloutContainer" style="opacity: 0.6;"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('d')" onmouseout="viewPanels.onMouseOutPropertyCallout('d')">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="propertyCalloutPropGridd"></div>
               </div>
               <div data-options="dxTemplate : { name: 'tab2' } ">
                 <div id="propertyCalloutRefGridd"></div>
-              </div>  
-              <div data-options="dxTemplate : { name: 'tab3' } ">   
+              </div>
+              <div data-options="dxTemplate : { name: 'tab3' } ">
                 <div class="commentsTabPage">
-                   <!-- Search control -->
-                   <div id="propertyCalloutSearchBoxd" class="searchBox">
+                  <!-- Search control -->
+                  <div id="propertyCalloutSearchBoxd" class="searchBox">
                     <div id="propertyCalloutSearchTextd"> </div>
                     <div id="propertyCalloutSearchBtnd" class="searchButton">
                       <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
-                
-                  <!-- Comments Area -->                     
+        
+                  <!-- Comments Area -->
                   <div id="commentsAread" class="commentsArea">
-              </div>
-              <div class="commentInput">
-                <div id="commentInputd">
-                </div>
-                <div id="addCommentBtnd" class="addCommentBtn">
-                  <img src="images\arrow.png" style="width: 25px; height: 25px;" />
-                </div>
-              </div>
-              </div>
-              </div>
-              </div>
-              <!-- Hovering menus -->
-              <div id="displayMenud" class="displayMenu"> </div>
-              <div id="markupMenud" class="markupMenu"> </div>
-              <div id="shapesMenud" class="shapesMenu"> </div>
-              <div id="bookmarkMenud" class="bookmarkMenu"> </div>
-              <div id="tagsMenud" class="tagsMenu"> </div>
-              <div id="modelViewsMenud" class="modelViewsMenu"> </div>
-              <div id="displayStylesMenud" class="displayStylesMenu"> </div>
-              <div id="sectioningMenud" class="sectioningMenu"> </div>
-              <div id="measureMenud" class="measureMenu"> </div>
-              <div id="dataDefinitionMenud" class="dataDefinitionMenu"> </div>
-              <div id="menuTooltipd" style="z-index:1;"> </div>
-              
-              <!-- Markup views overlay -->
-              <div id="markupViewsContainerd" class="markupViewsContainer">
-                <div id="markupViewsCaptionBard" class="markupViewsCaptionBar">
-                  <div class="markupViewsCaption">Views</div>
-                  <img id="markupViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                    style="width: 25px; height: 25px;" />
-                </div>
-                <div id="markupViewTabsd" class="markupViewsTabs">
-                  <div data-options="dxTemplate : { name: 'tab1' } ">
-                    <div id="bookmarksGridd"></div>
                   </div>
-                  <div data-options="dxTemplate : { name: 'tab2' } ">
-                    <div id="markupsGridd"></div>
-                  </div>
-                  <div data-options="dxTemplate : { name: 'tab3' } ">
-                    <div id="annotationsGridd" style="height: 250px;"></div>
-                  </div>
-                </div>
-                <div class="markupViewsBottomStrip">
-                  <img id="markupViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-                </div>
-              </div>
-              
-              <!-- Measure views overlay -->
-              <div id="measureViewsContainerd" class="measureViewsContainer">
-                <div id="measureViewsCaptionBard" class="markupViewsCaptionBar">
-                  <div class="markupViewsCaption">Measure Views</div>
-                  <img id="measureViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                    style="width: 25px; height: 25px;" />
-                </div>
-                <div id="measureViewTabsd" class="markupViewsTabs">
-                  <div data-options="dxTemplate : { name: 'tab1' } ">
-                    <div id="measuresGridd" style="height: 250px;"></div>
-                  </div>
-                </div>
-                <div class="markupViewsBottomStrip">
-                  <img id="measureViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-                </div>
-              </div>              
-      
-              <div id="userPropertiesFormd" class="userPropertiesForm">
-                <div id="userPropertiesFormCaptionBard" class="userPropertiesFormCaptionBar">
-                  <div class="userPropertiesCaption">User Properties</div>
-                  <img id="userPropertiesCloseBtnd" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-                </div>
-                <div class="userPropertiesFormGridArea">
-                  <table style="width: 100%; height: 180px; overflow: hidden;">
-                    <tr   style="overflow: hidden;">
-                      <td class="userPropertiesFormControlColumn"  style="overflow: hidden;">
-                        
-                        <div class="userPropertiesFormAdd tooltipHov">
-                          <span class="tooltip" data-tooltip="Add"></span>
-                          <img id="userPropertiesFormAddd" 
-                          src="public\symbols\Add-Filled.svg" 
-                          style="width: 40px; height: 40px;"/>
-                        </div>
-                        <div id="userPropertiesFormAddTextd" class="userPropertiesFormAddText">Add</div>
-                       
-                        <div class="userPropertiesFormClear tooltipHov">
-                          <span class="tooltip" data-tooltip="Clear"></span>
-                          <img id="userPropertiesFormCleard" 
-                            style="width: 40px; height: 40px;"
-                            src="public\symbols\Clear-Filled.svg" />
-                        </div>
-    
-                        <div id="userPropertiesFormClearTextd" class="userPropertiesFormClearText">Clear</div>
-                      </td>
-                      <td class="userPropertiesGrid"  style="overflow: hidden;">
-                        <div id="userPropertiesGridd" style="height: 180px; overflow:hidden"> </div>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="userPropertiesFormBottomBard" class="userPropertiesFormBottomBar">
-                  <div class="userPropertiesPropogateBtn tooltipHov">
-                    <span class="tooltip" data-tooltip="Propagate"></span>
-                    <img id="userPropertiesPropogateBtnd" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
-                  </div>
-                  <div id="userPropertiesApplyBtnd" class="userPropertiesApplyBtn">Apply</div>                 
-                </div>
-              </div>
-
-              <!-- Edit User Properties Form -->
-              <div id="editUserPropertiesFormd" class="editUserPropertiesForm">
-                <div id="editUserPropertiesFormCaptionBard" class="editUserPropertiesFormCaptionBar">
-                  <div class="editUserPropertiesCaption">Edit User Properties</div>
-                  <img id="editUserPropertiesCloseBtnd" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-                </div>
-                <div class="editUserPropertiesFormGridArea">
-                  <div id="editUserPropertiesGridd" style="height: 500px; overflow:hidden"> </div>
-                </div>
-                <div id="editUserPropertiesFormBottomBard" class="editUserPropertiesFormBottomBar">
-                  <div id="editUserPropertiesClearBtnd" class="editUserPropertiesClearBtn tooltipHov">Clear
-                    <span class="tooltip" data-tooltip="Clear"></span>
-                  </div>
-                  <div id="editUserPropertiesApplyBtnd" class="editUserPropertiesApplyBtn tooltipHov">Apply
-                    <span class="tooltip" data-tooltip="Apply"></span>
+                  <div class="commentInput">
+                    <div id="commentInputd">
+                    </div>
+                    <div id="addCommentBtnd" class="addCommentBtn">
+                      <img src="images\arrow.png" style="width: 25px; height: 25px;" />
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <!-- Clear User Properties Form -->
-              <div id="clearUserPropertiesFormd" class="clearUserPropertiesForm">
-                <div id="clearUserPropertiesFormCaptionBard" class="clearUserPropertiesFormCaptionBar">
-                  <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
-                  <img id="clearUserPropertiesCloseBtnd" class="clearUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+            </div>
+            <!-- Hovering menus -->
+            <div id="displayMenud" class="displayMenu"> </div>
+            <div id="markupMenud" class="markupMenu"> </div>
+            <div id="shapesMenud" class="shapesMenu"> </div>
+            <div id="bookmarkMenud" class="bookmarkMenu"> </div>
+            <div id="tagsMenud" class="tagsMenu"> </div>
+            <div id="modelViewsMenud" class="modelViewsMenu"> </div>
+            <div id="displayStylesMenud" class="displayStylesMenu"> </div>
+            <div id="sectioningMenud" class="sectioningMenu"> </div>
+            <div id="measureMenud" class="measureMenu"> </div>
+            <div id="dataDefinitionMenud" class="dataDefinitionMenu"> </div>
+            <div id="menuTooltipd" style="z-index:1;"> </div>
+        
+            <!-- Markup views overlay -->
+            <div id="markupViewsContainerd" class="markupViewsContainer">
+              <div id="markupViewsCaptionBard" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Views</div>
+                <img id="markupViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                  style="width: 25px; height: 25px;" />
+              </div>
+              <div id="markupViewTabsd" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="bookmarksGridd"></div>
                 </div>
-                <div class="clearUserPropertiesFormArea">
-                  <div class="dx-field" style="height: 50%; width: 100%;">
-                    <div id="clearUserPropertiesCBd" class="dx-field-label"> </div>
-                    <div id="clearUserPropertiesTagBoxd" class="dx-field-value"> </div>
-                  </div>
-                  <div class="dx-field" style="height: 50%; width: 100%;">
-                    <div id="clearUserPropertiesValuesCBd" class="dx-field-label"> </div>
-                    <div class="dx-field-value" style="position: relative; top: 10px;">Clear Values</div>
-                  </div>
+                <div data-options="dxTemplate : { name: 'tab2' } ">
+                  <div id="markupsGridd"></div>
                 </div>
-                <div class="clearUserPropertiesFormBottomBar">
-                  <div id="clearUserPropertiesApplyBtnd" class="clearUserPropertiesApplyBtn tooltipHov">Apply
-                    <span class="tooltip" data-tooltip="Apply"></span>
-                  </div>
+                <div data-options="dxTemplate : { name: 'tab3' } ">
+                  <div id="annotationsGridd" style="height: 250px;"></div>
                 </div>
               </div>
-              
-              <div id="visualizerD" class="tempContainer"> </div>
+              <div class="markupViewsBottomStrip">
+                <img id="markupViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
               </div>
+            </div>
+        
+            <!-- Measure views overlay -->
+            <div id="measureViewsContainerd" class="measureViewsContainer">
+              <div id="measureViewsCaptionBard" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Measure Views</div>
+                <img id="measureViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
+                  style="width: 25px; height: 25px;" />
               </div>
+              <div id="measureViewTabsd" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="measuresGridd" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="measureViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
+            </div>
+        
+            <div id="userPropertiesFormd" class="userPropertiesForm">
+              <div id="userPropertiesFormCaptionBard" class="userPropertiesFormCaptionBar">
+                <div class="userPropertiesCaption">User Properties</div>
+                <img id="userPropertiesCloseBtnd" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="userPropertiesFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="userPropertiesFormControlColumn" style="overflow: hidden;">
+        
+                      <div class="userPropertiesFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="userPropertiesFormAddd" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
+                      </div>
+                      <div id="userPropertiesFormAddTextd" class="userPropertiesFormAddText">Add</div>
+        
+                      <div class="userPropertiesFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="userPropertiesFormCleard" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
+                      </div>
+        
+                      <div id="userPropertiesFormClearTextd" class="userPropertiesFormClearText">Clear</div>
+                    </td>
+                    <td class="userPropertiesGrid" style="overflow: hidden;">
+                      <div id="userPropertiesGridd" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="userPropertiesFormBottomBard" class="userPropertiesFormBottomBar">
+                <div class="userPropertiesPropogateBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Propagate"></span>
+                  <img id="userPropertiesPropogateBtnd" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
+                </div>
+                <div id="userPropertiesApplyBtnd" class="userPropertiesApplyBtn">Apply</div>
+              </div>
+            </div>
+        
+            <!-- Edit User Properties Form -->
+            <div id="editUserPropertiesFormd" class="editUserPropertiesForm">
+              <div id="editUserPropertiesFormCaptionBard" class="editUserPropertiesFormCaptionBar">
+                <div class="editUserPropertiesCaption">Edit User Properties</div>
+                <img id="editUserPropertiesCloseBtnd" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="editUserPropertiesFormGridArea">
+                <div id="editUserPropertiesGridd" style="height: 500px; overflow:hidden"> </div>
+              </div>
+              <div id="editUserPropertiesFormBottomBard" class="editUserPropertiesFormBottomBar">
+                <div id="editUserPropertiesClearBtnd" class="editUserPropertiesClearBtn tooltipHov">Clear
+                  <span class="tooltip" data-tooltip="Clear"></span>
+                </div>
+                <div id="editUserPropertiesApplyBtnd" class="editUserPropertiesApplyBtn tooltipHov">Apply
+                  <span class="tooltip" data-tooltip="Apply"></span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Clear User Properties Form -->
+            <div id="clearUserPropertiesFormd" class="clearUserPropertiesForm">
+              <div id="clearUserPropertiesFormCaptionBard" class="clearUserPropertiesFormCaptionBar">
+                <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
+                <img id="clearUserPropertiesCloseBtnd" class="clearUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="clearUserPropertiesFormArea">
+                <div class="dx-field" style="height: 50%; width: 100%;">
+                  <div id="clearUserPropertiesCBd" class="dx-field-label"> </div>
+                  <div id="clearUserPropertiesTagBoxd" class="dx-field-value"> </div>
+                </div>
+                <div class="dx-field" style="height: 50%; width: 100%;">
+                  <div id="clearUserPropertiesValuesCBd" class="dx-field-label"> </div>
+                  <div class="dx-field-value" style="position: relative; top: 10px;">Clear Values</div>
+                </div>
+              </div>
+              <div class="clearUserPropertiesFormBottomBar">
+                <div id="clearUserPropertiesApplyBtnd" class="clearUserPropertiesApplyBtn tooltipHov">Apply
+                  <span class="tooltip" data-tooltip="Apply"></span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Define Data Groups Form -->
+            <div id="defineGroupsFormd" class="defineGroupsForm">
+              <div id="defineGroupsFormCaptionBard" class="defineGroupsFormCaptionBar">
+                <div class="defineGroupsFormCaption">Define Groups</div>
+                <img id="defineGroupsFormCloseBtnd" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="defineGroupsFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
+        
+                      <div class="defineGroupsFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="defineGroupsFormAddd" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                      </div>
+                      <div id="defineGroupsFormAddTextd" class="defineGroupsFormAddText">Add</div>
+        
+                      <div class="defineGroupsFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="defineGroupsFormCleard" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
+                      </div>
+        
+                      <div id="defineGroupsFormClearTextd" class="defineGroupsFormClearText">Clear</div>
+                    </td>
+                    <td class="defineGroupsGrid" style="overflow: hidden;">
+                      <div id="defineGroupsGridd" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="defineGroupsFormBottomBard" class="defineGroupsFormBottomBar">
+                <div id="defineGroupsFormTypeDLd" class="defineGroupsFormTypeDL"></div>
+                <div id="defineGroupsFormNameBoxd" class="defineGroupsFormNameBox"></div>
+        
+                <div class="deleteGroupBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Delete Group"></span>
+                  <img id="deleteGroupBtnd" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                </div>
+        
+                <div id="defineGroupsFormApplyBtnd" class="defineGroupsFormApplyBtn">Apply</div>
+              </div>
+            </div>
+        
+            <div id="visualizerD" class="tempContainer"> </div>
+          </div>
+        </div>
               
               <div class="checkTogglesContainer">
                 <label class="toggleContainer" style="grid-area:compliance">Compliance
@@ -2342,6 +2527,7 @@
   <script type="text/javascript" src="Javascripts/xCheckStudio/DBModelBrowser.js"></script>
   <script type="text/javascript" src="Javascripts/xCheckStudio/VisioModelBrowser.js"></script>  
   <script type="text/javascript" src="Javascripts/xCheckStudio/ListView.js"></script>
+  <script type="text/javascript" src="Javascripts/xCheckStudio/GroupView.js"></script>
   
   <script type="text/javascript" src="Javascripts\xCheckStudio\SelectionManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\SCSelectionManager.js"></script>
@@ -2413,6 +2599,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\DataDefinitionsMenu.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\UserPropertiesForm.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\EditUserPropertiesForm.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DefineGroupsForm.js"></script>
   <link rel="stylesheet" href="CSS/CheckPageMenus.css" type="text/css" />
 
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationMarkup.js"></script>  
