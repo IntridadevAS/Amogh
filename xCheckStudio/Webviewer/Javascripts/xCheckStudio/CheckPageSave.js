@@ -98,6 +98,9 @@ var CheckModule = {
             // get all property groups
             var propertyGroups = this.getPropertyGroups();
 
+            // get all highlight by property templates
+            var highlightPropertyTemplates = this.getHighlightPropertyTemplates();
+
             $.ajax({
                 url: 'PHP/ProjectManager.php',
                 type: "POST",
@@ -119,6 +122,7 @@ var CheckModule = {
                     'annotations': JSON.stringify(annotations),
                     "allComponents": JSON.stringify(allComponents),
                     "propertyGroups": JSON.stringify(propertyGroups),
+                    "highlightPropertyTemplates": JSON.stringify(highlightPropertyTemplates)
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
@@ -131,13 +135,18 @@ var CheckModule = {
         });
     },
 
-    getPropertyGroups : function(){
+    getPropertyGroups: function () {
         var propertyGroups = {};
-        for (var srcId in SourceManagers) {
-            propertyGroups[srcId] = model.views[srcId].propertyGroups;
-        }
+        propertyGroups = model.propertyGroups;
 
         return propertyGroups;
+    },
+
+    getHighlightPropertyTemplates: function () {
+        var propertyHighlightTemplates = {};
+        propertyHighlightTemplates = model.propertyHighlightTemplates;
+
+        return propertyHighlightTemplates;
     },
 
     getAllComponents: function () {

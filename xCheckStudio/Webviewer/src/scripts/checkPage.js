@@ -9,6 +9,8 @@ let model = {
   loadSavedCheckspace: false,
   datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
   checkcaseSupportedTypes: undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
+  propertyGroups : {},
+  propertyHighlightTemplates : {},
   views: {
     a: {
       id: "a",
@@ -35,9 +37,9 @@ let model = {
       userPropertiesForm : null,
       activeMenu : null,
       editUserPropertiesForm :null,
-      defineGroupsForm : null,
-      propertyGroups : {},
-      isolateManager : null
+      defineGroupsForm : null,      
+      isolateManager : null,
+      definePropertyHighlightsForm : null,      
     },
     b: {
       id: "b",
@@ -65,8 +67,8 @@ let model = {
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {},
-      isolateManager : null
+      isolateManager : null,
+      definePropertyHighlightsForm : null
     },
     c: {
       id: "c",
@@ -94,8 +96,8 @@ let model = {
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {},
-      isolateManager : null
+      isolateManager : null,
+      definePropertyHighlightsForm : null
     },
     d: {
       id: "d",
@@ -123,8 +125,8 @@ let model = {
       activeMenu : null,
       editUserPropertiesForm :null,
       defineGroupsForm : null,
-      propertyGroups : {},
-      isolateManager : null
+      isolateManager : null,
+      definePropertyHighlightsForm : null
     }
   },
   onDataSourceTabChanged: function (tabID) {

@@ -306,30 +306,41 @@ SCManager.prototype.InitListViewSwitches = function () {
 SCManager.prototype.InitGroupViewControls = function(){
     var _this = this;
 
-    // var groups = ["New"];
+    var groups = ["Clear"];    
+    groups = groups.concat(Object.keys(model.propertyGroups));
     this.GroupTemplateSelect = $("#groupTemplateSelect" + this.Id).dxSelectBox({
-        items: Object.keys(model.views[_this.Id].propertyGroups),
-        value: "New",
+        items: groups,
+        value: "Clear",
         visible: false,
         onValueChanged: function (data) {
-            model.views[_this.Id].groupView.OnGroupChanged(data.value);
+            model.views[_this.Id].groupView.OnGroupTemplateChanged(data.value);
         }
 
     }).dxSelectBox("instance");
 
     this.GroupHighlightSwitch = $("#groupHighlightSwitch" + this.Id).dxSwitch({
-        value: false,        
+        value: false,
         visible: false,
         switchedOffText: "Group",
         switchedOnText: "Highlight",
         onValueChanged: function (e) {
-            // if (model.views[_this.Id].listView.ListViewTableInstance) {
-            //     model.views[_this.Id].listView.ListViewTableInstance.option("selection.recursive", e.value);
-            // }
+
+            model.views[_this.Id].groupView.IsHighlightByPropertyActive = e.value;
+            if (e.value === false) {
+                _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
+            }
+            else {
+                _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));
+            }
+
+            model.views[_this.Id].groupView.Clear();
         }
     }).dxSwitch("instance");
 
     this.HighlightSelectionBtn = document.getElementById("highlightSelectionBtn" + this.Id);
+    this.HighlightSelectionBtn.onclick = function(){
+        model.views[_this.Id].groupView.ApplyPropertyHighlightColor();
+    }
 }
 
 SCManager.prototype.ShowGroupViewControls = function (show) {

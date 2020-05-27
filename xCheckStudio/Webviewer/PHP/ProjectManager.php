@@ -451,6 +451,9 @@ function SaveAll()
 
             // save property goups
             SavePropertyGroups($dbh);
+
+            // save highlight property templates
+            SaveHighlightPropertyTemplates($dbh);
             
         } else {
             // save check module control state from temp check space db to main checkspace db
@@ -493,6 +496,9 @@ function SaveAll()
             SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsd");  
 
             SavePropertyGroupsFromTemp($tempDbh, $dbh);  
+
+             // save highlight property templates
+             SaveHighlightPropertyTemplatesFromTemp($tempDbh, $dbh); 
         }
 
         // comparison result tables table                               
@@ -1632,6 +1638,33 @@ function SaveAllComponentsFromTemp($tempDbh, $dbh, $table)
     return false;
 }
 
+function SaveHighlightPropertyTemplatesFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM highlightPropertyTemplates");
+    if ($selectResults) {
+        $command = 'DROP TABLE IF EXISTS highlightPropertyTemplates;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE highlightPropertyTemplates(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO highlightPropertyTemplates(id, value) VALUES(?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+
+
+        return true;
+    }
+    return false;
+}  
+
 function SavePropertyGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM propertyGroups");
@@ -2321,6 +2354,35 @@ function SaveSelectedComponentsFromTemp($tempDbh, $dbh, $tableName)
             ));
         }
     }
+}
+
+function SaveHighlightPropertyTemplates($dbh)
+{
+    if (!isset($_POST['highlightPropertyTemplates'])) {
+        return false;
+    }
+
+    try {
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS highlightPropertyTemplates;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE highlightPropertyTemplates(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertQuery = 'INSERT INTO highlightPropertyTemplates(value) VALUES(?) ';
+        $values = array($_POST['highlightPropertyTemplates']);
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
 }
 
 function SavePropertyGroups($dbh)
