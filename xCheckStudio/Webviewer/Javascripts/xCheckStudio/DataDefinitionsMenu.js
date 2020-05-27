@@ -7,6 +7,7 @@ function DataDefinitionMenu(id) {
     model.views[this.Id].userPropertiesForm = new UserPropertiesForm(this.Id);
     model.views[this.Id].editUserPropertiesForm = new EditUserPropertiesForm(this.Id);
     model.views[this.Id].defineGroupsForm = new DefineGroupsForm(this.Id);
+    model.views[this.Id].definePropertyHighlightsForm = new DefinePropertyHighlightsForm(this.Id);
 }
 
 DataDefinitionMenu.prototype.GetHtmlElementId = function () {
@@ -113,7 +114,7 @@ DataDefinitionMenu.prototype.GetControls = function () {
             Title: "Property Highlight",
             ImageSrc: "public/symbols/Property Highlight.svg",
             click: function (e, menu) {
-                menu.Close();
+                menu.OnDefinePropertyHighlights();
             }
         },
         {
@@ -159,5 +160,14 @@ DataDefinitionMenu.prototype.OnDefineGroups= function () {
     }
     else {
         model.views[this.Id].defineGroupsForm.Open();
+    }     
+}
+
+DataDefinitionMenu.prototype.OnDefinePropertyHighlights= function () {
+    if (model.views[this.Id].definePropertyHighlightsForm.Active) {
+        model.views[this.Id].definePropertyHighlightsForm.Close();
+    }
+    else {
+        model.views[this.Id].definePropertyHighlightsForm.Open();
     }     
 }

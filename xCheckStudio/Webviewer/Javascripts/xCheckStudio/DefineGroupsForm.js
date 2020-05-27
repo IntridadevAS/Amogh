@@ -35,7 +35,7 @@ DefineGroupsForm.prototype.Close = function () {
 DefineGroupsForm.prototype.Init = function () {
     var _this = this;
 
-    this.LoadData();
+    this.PopulateTemplateGrid();
 
     this.PopulateGroups();
 
@@ -85,12 +85,12 @@ DefineGroupsForm.prototype.Init = function () {
                 return;
             }
 
-            var propertyGroups = model.views[_this.Id].propertyGroups;
+            var propertyGroups = model.propertyGroups;
             if (selectedGroup in propertyGroups) {
                 delete propertyGroups[selectedGroup];                
                 
                 _this.PopulateGroups();
-                _this.LoadData();
+                _this.PopulateTemplateGrid();
 
                 DevExpress.ui.notify("Group '" + selectedGroup + "'" + " deleted.");
             }
@@ -104,7 +104,7 @@ DefineGroupsForm.prototype.PopulateGroups = function () {
         "New"
     ];
 
-    var propertyGroups = model.views[this.Id].propertyGroups;
+    var propertyGroups = model.propertyGroups;
     for (var groupName in propertyGroups) {
         groups.push(groupName);
     }
@@ -123,13 +123,13 @@ DefineGroupsForm.prototype.PopulateGroups = function () {
                 // return;
             }
             
-            _this.LoadData();
+            _this.PopulateTemplateGrid();
         }
 
     }).dxSelectBox("instance");
 }
 
-DefineGroupsForm.prototype.LoadData = function () {    
+DefineGroupsForm.prototype.PopulateTemplateGrid = function () {    
     var _this = this;
 
     var allProperties = this.GetAllSourceProperties();
@@ -137,7 +137,7 @@ DefineGroupsForm.prototype.LoadData = function () {
     var rowsData = [];
     if (_this.GroupSelect) {
         var selectedGroup = _this.GroupSelect.option("value");
-        var propertyGroups = model.views[this.Id].propertyGroups;
+        var propertyGroups = model.propertyGroups;
         if (selectedGroup in propertyGroups) {
             var properties = propertyGroups[selectedGroup].properties;
             for (var i = 0; i < properties.length; i++) {
@@ -170,8 +170,7 @@ DefineGroupsForm.prototype.LoadData = function () {
     column["alignment"] = "center";
     columns.push(column);
 
-    var loadingBrowser = true;
-    this.AlreadyRowsData = {};
+    var loadingBrowser = true;   
 
     this.DefineGroupsGrid = $("#defineGroupsGrid" + this.Id).dxDataGrid({
         columns: columns,
@@ -203,20 +202,7 @@ DefineGroupsForm.prototype.LoadData = function () {
             if (!loadingBrowser) {
                 return;
             }
-            loadingBrowser = false;
-
-            // if (e.component.getDataSource().totalCount() === 0) {
-            //     return;
-            // }
-
-            // var items = e.component.getDataSource().items();
-            // for (var i = 0; i < items.length; i++) {
-            //     var item = items[i];
-            //     _this.AlreadyRowsData[item.Name] = {
-            //         "property": item.Name,
-            //         "value": item.DefaultValue ? item.DefaultValue : "",
-            //     };
-            // }                             
+            loadingBrowser = false;      
         },
         onSelectionChanged: function (e) {
 
@@ -258,14 +244,17 @@ DefineGroupsForm.prototype.OnApply = function () {
         "properties": groupingProperties
     };
 
-    model.views[this.Id].propertyGroups[groupName] = group;
+    model.propertyGroups[groupName] = group;
 
-    SourceManagers[this.Id].GroupTemplateSelect.option("items", Object.keys(model.views[this.Id].propertyGroups));
+    var sourceManager = SourceManagers[this.Id];
+    if (sourceManager.GroupHighlightSwitch.option("value") === false) {
+        SourceManagers[this.Id].GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
+    }
     
     // Reset controls
     this.NameTextBox.option("value", "");     
     this.PopulateGroups();
-    this.LoadData();
+    this.PopulateTemplateGrid();
 
     DevExpress.ui.notify("Group '" + groupName + "' created successfully.");
 }

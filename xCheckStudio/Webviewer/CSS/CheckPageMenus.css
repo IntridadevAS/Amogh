@@ -110,7 +110,8 @@
   
   .markupViewsCaption, .userPropertiesCaption, 
   .editUserPropertiesCaption, .clearUserPropertiesCaption,
-  .defineGroupsFormCaption{
+  .defineGroupsFormCaption, .definePropertyHighlightFormCaption
+  {
   color: black;
   top: 5px;
   left: 4px;
@@ -271,6 +272,17 @@
   border: 1px solid black;
 }
 
+.definePropertyHighlightForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 1;
+  width: 550px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
 .editUserPropertiesForm
 {
   position: absolute; 
@@ -293,14 +305,16 @@
 }
 
 .userPropertiesFormCaptionBar, .editUserPropertiesFormCaptionBar,
-.clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar
+.clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar,
+.definePropertyHighlightFormCaptionBar
 {
   height: 30px;
   width: 100%;
   border-bottom: 1px solid rgb(25.5, 25.5, 25.5);
 }
 
-.userPropertiesFormGridArea, .defineGroupsFormGridArea
+.userPropertiesFormGridArea, .defineGroupsFormGridArea,
+.definePropertyHighlightFormGridArea
 {
   height: 180px;
   width: 100%;  
@@ -331,7 +345,8 @@
   width: 90% !important;
 }
 
-.userPropertiesFormControlColumn, .defineGroupsFormControlColumn
+.userPropertiesFormControlColumn, .defineGroupsFormControlColumn,
+.definePropertyHighlightFormControlColumn
 {
   /* position: absolute; */
   left:0px;
@@ -339,7 +354,8 @@
   height : 100%; 
 }
 
-.userPropertiesGrid, .defineGroupsGrid
+.userPropertiesGrid, .defineGroupsGrid,
+.definePropertyHighlightGrid
 {
   /* position: absolute; */
   right:0px;
@@ -347,7 +363,8 @@
   height : 100%;
 }
 
-.userPropertiesFormAdd, .defineGroupsFormAdd
+.userPropertiesFormAdd, .defineGroupsFormAdd,
+.definePropertyHighlightFormAdd
 {
   position: absolute;
   width: 40px;
@@ -358,7 +375,8 @@
   cursor: pointer;
 }
 
-.userPropertiesFormClear, .defineGroupsFormClear
+.userPropertiesFormClear, .defineGroupsFormClear,
+.definePropertyHighlightFormClear
 {
   position: absolute;
   width: 40px;
@@ -377,7 +395,7 @@
   padding: 2px;
 }
 
-.defineGroupsFormBottomBar
+.defineGroupsFormBottomBar, .definePropertyHighlightFormBottomBar
 {
   height: 70px;
   width: 100%;
@@ -400,7 +418,8 @@
 }
 
 .userPropertiesApplyBtn, .editUserPropertiesApplyBtn,
-.clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn
+.clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn,
+.definePropertyHighlightFormApplyBtn
 {  
   position: absolute;
   right: 2px;
@@ -440,13 +459,16 @@
 .editUserPropertiesClearBtn:hover, .editUserPropertiesApplyBtn:hover,
 .clearUserPropertiesCloseBtn:hover, .clearUserPropertiesApplyBtn:hover,
 .defineGroupsFormCloseBtn:hover, .defineGroupsFormAdd:hover,
-.defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover
+.defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover,
+.definePropertyHighlightFormCloseBtn:hover, .definePropertyHighlightFormAdd:hover,
+.definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover
 {
   opacity: 1;
 }
 
 .userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
-.clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn
+.clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn,
+.definePropertyHighlightFormCloseBtn
 { 
   font-size: 12px;
   position: absolute;
@@ -457,7 +479,8 @@
   cursor: pointer;
 }
 
-.userPropertiesFormAddText, .defineGroupsFormAddText
+.userPropertiesFormAddText, .defineGroupsFormAddText,
+.definePropertyHighlightFormAddText
 {
   color: black;
   position: absolute;
@@ -465,7 +488,8 @@
   left: 15px;
 }
 
-.userPropertiesFormClearText, .defineGroupsFormClearText
+.userPropertiesFormClearText, .defineGroupsFormClearText,
+.definePropertyHighlightFormClearText
 {
   color: black;
   position: absolute;
@@ -473,20 +497,23 @@
   left: 13px;
 }
 
-.defineGroupsFormNameBox{
+.defineGroupsFormNameBox, .definePropertyHighlightFormNameBox
+{
   height: 30px;
   width: 200px;
   top: 4px;
   position: relative;
 }
 
-.defineGroupsFormTypeDL{
+.defineGroupsFormTypeDL, .definePropertyHighlightFormTypeDL
+{
   width: 200px;
   font-size: 10px;
   height: 30px;
 }
 
-.deleteGroupBtn{
+.deleteGroupBtn, .deletePropertyHighlightBtn
+{
   top: 214px;
   position: absolute;
   left: 200px;

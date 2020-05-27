@@ -341,6 +341,29 @@ function CopyAnnotations($fromDbh, $toDbh)
     }
 }
 
+function CopyHighlightPropertyTemplates($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM highlightPropertyTemplates;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS highlightPropertyTemplates;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS highlightPropertyTemplates(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT NOT NULL     
+          )';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO highlightPropertyTemplates(id, value) VALUES(?,?)");
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+    }
+}
+
 function CopyPropertyGroups($fromDbh, $toDbh)
 {
     $results = $fromDbh->query("SELECT * FROM propertyGroups;");
@@ -569,6 +592,9 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
             $propertyGroups =  ReadPropertyGroups($dbh);
             $results["propertyGroups"] = $propertyGroups;
+
+            $highlightPropertyTemplates =  ReadHighlightPropertyTemplates($dbh);
+            $results["highlightPropertyTemplates"] = $highlightPropertyTemplates;
         } else if (strtolower($context) === 'review') {
             // read datasource info
             $datasourceInfo = readDataSourceInfo($tempDbh);
@@ -1951,6 +1977,22 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
         return NULL;        
     }
+
+function ReadHighlightPropertyTemplates($tempDbh)
+{
+    try {
+        $results = $tempDbh->query("SELECT *FROM highlightPropertyTemplates;");
+
+        if ($results) {
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                return  $record['value'];
+            }
+        }
+    } catch (Exception $e) {
+    }
+
+    return NULL;
+}
 
 function ReadPropertyGroups($tempDbh)
 {

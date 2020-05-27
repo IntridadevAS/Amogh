@@ -83,10 +83,11 @@ function loadCheckSpaceForCheck(data) {
 
     // restore property groups
     var propertyGroups = JSON.parse(data.propertyGroups);
-    for(var srcId in propertyGroups)
-    {
-        model.views[srcId].propertyGroups = propertyGroups[srcId];
-    }
+    model.propertyGroups = propertyGroups;
+
+    // restore highlight property templates 
+    var highlightPropertyTemplates = JSON.parse(data.highlightPropertyTemplates);
+    model.propertyHighlightTemplates = highlightPropertyTemplates;
 }
 
 function loadDataSets(data) {
