@@ -2,7 +2,8 @@
     require_once '../PHP/Utility.php';
 
     if(!isset($_POST['CheckName']) || 
-       !isset($_POST['ProjectName']))
+       !isset($_POST['ProjectName']) ||
+       !isset($_POST['isDataVault']))
     {
         echo 'fail';
         return; 
@@ -10,6 +11,7 @@
     
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
+    $isDataVault = $_POST['isDataVault'];
 
     // check if sourceA and sourceB paths are in session data
     if(!isset( $_POST["ConvertToSCS"]) ||
@@ -51,20 +53,48 @@
     $uploadDirectory = NULL;
 
     $Source = $_POST['Source'];
-    switch($Source){
-        case "a":
-        $uploadDirectory =  getCheckSourceAPath($projectName, $checkName);
-        break;
-        case "b":
-        $uploadDirectory =  getCheckSourceBPath($projectName, $checkName);
-        break;
-        case "c":
-        $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);
-        break;
-        case "d":
-        $uploadDirectory =  getCheckSourceDPath($projectName, $checkName);
-        break;
-    }
+    if (strtolower($isDataVault) === "true") {
+        $tempVaultPath = getDataVaultDirectoryPath($projectName) . "/temp";
+        if (!file_exists($tempVaultPath)) {
+            mkdir($tempVaultPath, 0777, true);
+        }
+
+        switch ($Source) {
+            case "a":
+                $uploadDirectory =  getVaultSourceAPath($projectName);
+                break;
+            case "b":
+                $uploadDirectory =  getVaultSourceBPath($projectName);
+                break;
+            case "c":
+                $uploadDirectory =  getVaultSourceCPath($projectName);
+                break;
+            case "d":
+                $uploadDirectory =  getVaultSourceDPath($projectName);
+                break;
+        }
+
+         // delete old dir
+         deleteDirectory($uploadDirectory);
+         // create new 
+         mkdir($uploadDirectory, 0777, true);
+    } 
+    else if ($checkName !== null) {
+        switch ($Source) {
+            case "a":
+                $uploadDirectory =  getCheckSourceAPath($projectName, $checkName);
+                break;
+            case "b":
+                $uploadDirectory =  getCheckSourceBPath($projectName, $checkName);
+                break;
+            case "c":
+                $uploadDirectory =  getCheckSourceCPath($projectName, $checkName);
+                break;
+            case "d":
+                $uploadDirectory =  getCheckSourceDPath($projectName, $checkName);
+                break;
+        }
+    }   
 
     if($uploadDirectory === NULL)
     {

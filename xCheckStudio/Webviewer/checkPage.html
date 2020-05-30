@@ -17,7 +17,7 @@
   <link href="CSS/Check_Complete.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>  
+<body>
 
   <!-- UI blocking overlay -->
   <div id="uiBlockingOverlay" class="overlay" style="display: block"></div>
@@ -42,8 +42,8 @@
     <div id="Save_and_Exit">
       <svg class="Rectangle_1204">
         <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-          y="0" width="581" height="155">
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
         </rect>
       </svg>
       <svg class="Rectangle_1215">
@@ -82,12 +82,58 @@
       <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
         <svg class="Rectangle_1242_A61_Rectangle_4">
           <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-            rx="5" ry="5" x="0" y="0" width="90" height="30">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
           </rect>
         </svg>
         <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnHome()">
           <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Return to project center overlay -->
+  <div id="returnHomeFromVaultPopup" class="popup">
+    <div id="Return_to_Home_Page">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Info" style="left: 10px;">
+        <span>Save Data</span>
+      </div>
+      <div id="Return_to_Home_Page_" class="promptMessageDiv">
+        <span></span><span id="returnToProjectMessage" style="font-style:normal;font-weight:normal;">Ensure your
+          dataset(s) have been saved before returning to the Home.</span>
+      </div>
+      <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelReturnHome()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="CANCEL">
+          <span>Cancel</span>
+        </div>
+      </div>
+  
+      <div id="symYesButton___10" style="cursor: pointer;" onclick="returnHomeFromVault(CheckPageCleanUp.onLeavingVault)">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="OK">
+          <span>OK</span>
         </div>
       </div>
     </div>
@@ -143,6 +189,153 @@
           </rect>
         </svg>
         <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnProjectCenter()">
+          <span>Cancel</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+    <!-- Return to project center overlay -->
+    <div id="returnToProjectCenterFromVaultPopup" class="popup">
+      <div id="Return_to_Home_Page">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Info" style="left: 10px;">
+          <span>Save Data</span>
+        </div>
+        <div id="Return_to_Home_Page_" class="promptMessageDiv">
+          <span></span><span id="returnToProjectMessage" style="font-style:normal;font-weight:normal;">Ensure your
+            dataset(s) have been saved before returning to the Project Center?</span>
+        </div>
+        <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelReturnProjectCenter()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="CANCEL">
+            <span>Cancel</span>
+          </div>
+        </div>
+    
+        <div id="symYesButton___10" style="cursor: pointer;" onclick="returnProjectCenter(CheckPageCleanUp.onLeavingVault)">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="OK">
+            <span>OK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Return to project center overlay -->   
+    <div id="returnToProjectFromVaultPopup" class="popup">
+      <div id="Return_to_Home_Page">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Info" style="left: 10px;">
+          <span>Save Data</span>
+        </div>
+        <div id="Return_to_Home_Page_" class="promptMessageDiv">
+          <span></span><span id="returnToProjectMessage" style="font-style:normal;font-weight:normal;">Ensure your dataset(s) have been saved before returning to the Project.</span>
+        </div>
+        <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelReturnToProjectFromVault()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="CANCEL">
+            <span>Cancel</span>
+          </div>
+        </div>
+    
+        <div id="symYesButton___10" style="cursor: pointer;" onclick="returnToProjectFromVault(CheckPageCleanUp.onLeavingVault)">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="OK">
+            <span>OK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div id="returnToProjectPopup" class="popup">
+    <div id="Save_and_Exit">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+          y="0" width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Save_and_Exit_">
+        <span>Info</span>
+      </div>
+      <div id="Save_data_and_Exit_XcheckStudi">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save before Returning to the
+          Project?</span><span></span>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="NO" style="cursor: pointer;" onclick="returnToProject(CheckPageCleanUp.onLeavingPage)">
+          <span>No</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="YES" style="cursor: pointer;" onclick="returnToProject(CheckPageCleanUp.onSaveAndLeavePage)">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+        <svg class="Rectangle_1242_A61_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+            rx="5" ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnToProject()">
           <span>Cancel</span>
         </div>
       </div>
@@ -292,8 +485,8 @@
     <div id="Save_and_Exit">
       <svg class="Rectangle_1204">
         <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-          y="0" width="581" height="155">
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
         </rect>
       </svg>
       <svg class="Rectangle_1215">
@@ -332,8 +525,8 @@
       <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
         <svg class="Rectangle_1242_A61_Rectangle_4">
           <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
-            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
-            rx="5" ry="5" x="0" y="0" width="90" height="30">
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
           </rect>
         </svg>
         <div id="CANCEL" style="cursor: pointer;" onclick="cancelSignOut()">
@@ -342,6 +535,54 @@
       </div>
     </div>
   </div>
+  
+  <!--Sign out overlay -->
+  <div id="signOutFromVaultPopup" class="popup">
+    <div id="Return_to_Home_Page">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Info" style="left: 10px;">
+        <span>Save Data</span>
+      </div>
+      <div id="Return_to_Home_Page_" class="promptMessageDiv">
+        <span></span><span id="returnToProjectMessage" style="font-style:normal;font-weight:normal;">Ensure your
+          dataset(s) have been saved before Signing Out of your
+          session?</span>
+      </div>
+      <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelSignOut()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="CANCEL">
+          <span>Cancel</span>
+        </div>
+      </div>
+  
+      <div id="symYesButton___10" style="cursor: pointer;" onclick="signOut(CheckPageCleanUp.onLeavingVault)">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="OK">
+          <span>OK</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!--Sign out All users overlay -->
   <div id="signOutAllUsersPopup" class="popup">
@@ -360,7 +601,8 @@
         <span>Sign Out</span>
       </div>
       <div class="promptMessageDiv">
-        <span></span><span style="font-style:normal;font-weight:normal;">Are you sure you want to sign out all users forcefully?</span>
+        <span></span><span style="font-style:normal;font-weight:normal;">Are you sure you want to sign out all users
+          forcefully?</span>
       </div>
       <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelSignOutAllUsers()">
         <svg class="Path_310" viewBox="0 0 90 30">
@@ -511,8 +753,8 @@
         <span>Save before Exit</span>
       </div>
       <div id="Save_data_and_Exit_XcheckStudi">
-        <span>Save data before Exiting </span><span
-          style="font-style:normal;font-weight:bold;">XcheckStudio</span><span style="font-style:normal;font-weight:normal;">?</span>
+        <span>Save data before Exiting </span><span style="font-style:normal;font-weight:bold;">XcheckStudio</span><span
+          style="font-style:normal;font-weight:normal;">?</span>
       </div>
       <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
         <svg class="Path_310" viewBox="0 0 90 30">
@@ -548,8 +790,53 @@
         </div>
       </div>
     </div>
-
   </div>
+
+    <!-- Return to project center overlay -->   
+    <div id="exitFromVaultPopup" class="popup">
+      <div id="Return_to_Home_Page">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+            width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Info" style="left: 10px;">
+          <span>Save Data</span>
+        </div>
+        <div id="Return_to_Home_Page_" class="promptMessageDiv">
+          <span></span><span id="returnToProjectMessage" style="font-style:normal;font-weight:normal;">Ensure your dataset(s) have been saved before exiting</span><span style="font-style:normal;font-weight:bold;"> XcheckStudio</span><span
+          style="font-style:normal;font-weight:normal;">?</span>
+        </div>
+        <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelExit()">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="CANCEL">
+            <span>Cancel</span>
+          </div>
+        </div>
+    
+        <div id="symYesButton___10" style="cursor: pointer;" onclick="exit(CheckPageCleanUp.onLeavingVault)">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="OK">
+            <span>OK</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- reset data overlay -->
   <div id="resetDataPopup" class="popup">
@@ -601,13 +888,13 @@
     </div>
   </div>
 
-  <!-- reset data overlay -->
+  <!-- save data overlay -->
   <div id="saveDataPopup" class="popup">
     <div id="Return_to_Home_Page">
       <svg class="Rectangle_1204">
         <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
-          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
-          y="0" width="581" height="155">
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
         </rect>
       </svg>
       <svg class="Rectangle_1215">
@@ -632,8 +919,54 @@
           <span>Cancel</span>
         </div>
       </div>
-
+  
       <div id="symYesButton___10" style="cursor: pointer;" onclick="saveData()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="OK">
+          <span>Save</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- save vault overlay -->
+  <div id="saveVaultPopup" class="popup">
+    <div id="Return_to_Home_Page">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="155">
+        </rect>
+      </svg>
+      <svg class="Rectangle_1215">
+        <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+        </rect>
+      </svg>
+      <div id="Info" style="left: 10px;">
+        <span>Save Data</span>
+      </div>
+      <div id="Return_to_Home_Page_" class="promptMessageDiv">
+        <span></span><span style="font-style:normal;font-weight:normal;">Save the Data Vault with the loaded
+          data?</span>
+      </div>
+      <div id="symNoButton___10" style="cursor: pointer;" onclick="cancelSaveVault()">
+        <svg class="Path_310" viewBox="0 0 90 30">
+          <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+            d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+          </path>
+        </svg>
+        <div id="CANCEL">
+          <span>Cancel</span>
+        </div>
+      </div>
+  
+      <div id="symYesButton___10" style="cursor: pointer;" onclick="saveVault()">
         <svg class="Path_310" viewBox="0 0 90 30">
           <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
             stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -1036,9 +1369,14 @@
       <input type="color" id="topColor" value="#000000"><br>
       <label>Bottom color:</label>
       <input type="color" id="bottomColor" value="#F8F9F9"><br><br>
-      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGDefaultButton"> Default </button>
-      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGOkButton"> OK </button>
-      <button type="button" class="ignoreDefault" style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGCancelButton" >Cancel</button>
+      <button type="button" class="ignoreDefault"
+        style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGDefaultButton"> Default
+      </button>
+      <button type="button" class="ignoreDefault"
+        style="width: 60px; height: 25px; padding: 2px; background: lightgrey;" id="changeBGOkButton"> OK </button>
+      <button type="button" class="ignoreDefault"
+        style="width: 60px; height: 25px; padding: 2px; background: lightgrey;"
+        id="changeBGCancelButton">Cancel</button>
     </div>
   </div>
 
@@ -1059,7 +1397,8 @@
         <span>Save Before Going To Review</span>
       </div>
       <div id="Save_data_and_Exit_XcheckStudi">
-        <span></span><span style="font-style:normal;font-weight:normal;">Save data before going to Review?</span><span></span>
+        <span></span><span style="font-style:normal;font-weight:normal;">Save data before going to
+          Review?</span><span></span>
       </div>
       <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
         <svg class="Path_310" viewBox="0 0 90 30">
@@ -1095,6 +1434,24 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- save to vault Form -->
+  <div id="saveToVaultPrompt" class="saveToVaultPrompt">
+    <div id="saveToVaultCaptionBar" class="saveToVaultCaptionBar">
+     <p>Save Data</p>
+    </div>
+
+    <div id="saveToVaultDatasetName" class="saveToVaultDatasetName"></div>
+
+    <div class="saveToVaultDescLabel">Description</div>
+    <div id="vaultDataDescription"  class="vaultDataDescription"></div>
+    
+    <div class="saveToVaultVerLabel">Version</div>
+    <div id="vaultDataVersion" class="vaultDataVersion"></div>
+
+    <div id="saveToVaultCanceBtn" class="saveToVaultCanceBtn"><p>Cancel</p></div>
+    <div id="saveToVaultOkBtn" class="saveToVaultOkBtn"><p>OK</p></div>
   </div>
 
   <header>
@@ -1190,39 +1547,37 @@
 
           </div>
         </div>
-      </div>      
+      </div>
 
       <div class="viewsContainer" id="viewsContainer">
-      
+
         <!-- Comments Callout -->
         <div id="commentsCalloutBtn" class="commentsCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
           onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-        
+
         <!-- Name Bar -->
         <div id="commentsCalloutNameBar" class="commentsCalloutNameBar"
-          onmouseover="viewPanels.onMouseOverCommentsCallout()" 
-          onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" onmouseout="viewPanels.onMouseOutCommentsCallout()">
           <span> </span>
         </div>
-        
+
         <!-- Comments Callout Container -->
         <div id="commentsCalloutContainer" class="commentsCalloutContainer"
-          onmouseover="viewPanels.onMouseOverCommentsCallout()" 
-          onmouseout="viewPanels.onMouseOutCommentsCallout()">
+          onmouseover="viewPanels.onMouseOverCommentsCallout()" onmouseout="viewPanels.onMouseOutCommentsCallout()">
           <div data-options="dxTemplate : { name: 'tab1' } ">
             <div class="commentsTabPage">
-              
+
               <!-- Search control -->
               <div id="commentsCalloutSearchBox" class="searchBox">
-               <div id="commentsCalloutSearchText"> </div>
-               <div id="commentsCalloutSearchBtn" class="searchButton"> 
-                <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
-               </div>
-              </div>     
+                <div id="commentsCalloutSearchText"> </div>
+                <div id="commentsCalloutSearchBtn" class="searchButton">
+                  <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
+                </div>
+              </div>
 
               <!-- Comments Area -->
               <div id="commentsCalloutCommentsArea" class="commentsArea">
-        
+
               </div>
               <div class="commentInput">
                 <div id="commentsCalloutCommentInput">
@@ -1266,8 +1621,9 @@
                 <div id="listTypeSwitcha" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelecta" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitcha" class="groupHighlightSwitch"> </div>               
-                <img id="highlightSelectionBtna" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
+                <div id="groupHighlightSwitcha" class="groupHighlightSwitch"> </div>
+                <img id="highlightSelectionBtna" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection.svg" />
 
               </div>
             </div>
@@ -1275,7 +1631,7 @@
               <div id="tableDataA" style="position: relative;"></div>
             </div>
             <div id="itemCountA" class="itemCountClass"></div>
-        
+
             <div id="tableViewActiona" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
             </div>
@@ -1291,19 +1647,19 @@
               <span class="tooltip" data-tooltip="Groups"></span>
               <img src="public/symbols/GroupsView-Black.svg" style="width: 20px; height: 30px;" />
             </div>
-        
+
           </div>
           <div id="center" class="grabBar"></div>
-        
+
           <!-- viewer -->
           <div class="visualizerContainer">
             <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-        
+
             <!-- Properties Callout Button -->
             <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
               onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
-        
+
             <!-- explode slider -->
             <div id="explodeOverlay1" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1311,7 +1667,7 @@
                 <p> <span id="explodeValue1"></span></p>
               </div>
             </div>
-        
+
             <!-- Translucency slider -->
             <div id="translucencyOverlay1" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -1319,14 +1675,16 @@
                 <p> <span id="translucencyValue1" style="color: grey"></span></p>
               </div>
             </div>
-        
+
             <!-- Property callout container-->
             <div id="propertyCalloutNameBara" class="propertyCalloutNameBar"
-              onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
+              onmouseover="viewPanels.onMouseOverPropertyCallout('a')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
               <span> </span>
             </div>
             <div id="propertyCalloutContainera" class="propertyCalloutContainer" style="opacity: 0.6;"
-              onmouseover="viewPanels.onMouseOverPropertyCallout('a')" onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
+              onmouseover="viewPanels.onMouseOverPropertyCallout('a')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('a')">
               <div data-options="dxTemplate : { name: 'tab1' } ">
                 <div id="propertyCalloutPropGrida"></div>
               </div>
@@ -1335,7 +1693,7 @@
               </div>
               <div data-options="dxTemplate : { name: 'tab3' } ">
                 <div class="commentsTabPage">
-        
+
                   <!-- Search control -->
                   <div id="propertyCalloutSearchBoxa" class="searchBox">
                     <div id="propertyCalloutSearchTexta"> </div>
@@ -1343,10 +1701,10 @@
                       <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
-        
+
                   <!-- Comments Area -->
                   <div id="commentsAreaa" class="commentsArea">
-        
+
                   </div>
                   <div class="commentInput">
                     <div id="commentInputa">
@@ -1358,7 +1716,7 @@
                 </div>
               </div>
             </div>
-        
+
             <!-- Hovering menus -->
             <div id="displayMenua" class="displayMenu"> </div>
             <div id="markupMenua" class="markupMenu"> </div>
@@ -1371,13 +1729,13 @@
             <div id="measureMenua" class="measureMenu"> </div>
             <div id="dataDefinitionMenua" class="dataDefinitionMenu"> </div>
             <div id="menuTooltipa" style="z-index:1;"> </div>
-        
+
             <!-- Markup views overlay -->
             <div id="markupViewsContainera" class="markupViewsContainer">
               <div id="markupViewsCaptionBara" class="markupViewsCaptionBar">
                 <div class="markupViewsCaption">Views</div>
-                <img id="markupViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                  style="width: 25px; height: 25px;" />
+                <img id="markupViewsContainerClosea" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
               <div id="markupViewTabsa" class="markupViewsTabs">
                 <div data-options="dxTemplate : { name: 'tab1' } ">
@@ -1394,13 +1752,13 @@
                 <img id="markupViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
               </div>
             </div>
-        
+
             <!-- Measure views overlay -->
             <div id="measureViewsContainera" class="measureViewsContainer">
               <div id="measureViewsCaptionBara" class="markupViewsCaptionBar">
                 <div class="markupViewsCaption">Measure Views</div>
-                <img id="measureViewsContainerClosea" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                  style="width: 25px; height: 25px;" />
+                <img id="measureViewsContainerClosea" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
               <div id="measureViewTabsa" class="markupViewsTabs">
                 <div data-options="dxTemplate : { name: 'tab1' } ">
@@ -1408,10 +1766,11 @@
                 </div>
               </div>
               <div class="markupViewsBottomStrip">
-                <img id="measureViewsClearBtna" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+                <img id="measureViewsClearBtna" class="markupViewsClearBtn"
+                  src="public\symbols\MarkupDeleteBlack.svg" />
               </div>
             </div>
-        
+
             <!-- Add User Properties Form -->
             <div id="userPropertiesForma" class="userPropertiesForm">
               <div id="userPropertiesFormCaptionBara" class="userPropertiesFormCaptionBar">
@@ -1422,20 +1781,20 @@
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="userPropertiesFormControlColumn" style="overflow: hidden;">
-        
+
                       <div class="userPropertiesFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
                         <img id="userPropertiesFormAdda" src="public\symbols\Add-Filled.svg"
                           style="width: 40px; height: 40px;" />
                       </div>
                       <div id="userPropertiesFormAddTexta" class="userPropertiesFormAddText">Add</div>
-        
+
                       <div class="userPropertiesFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
                         <img id="userPropertiesFormCleara" style="width: 40px; height: 40px;"
                           src="public\symbols\Clear-Filled.svg" />
                       </div>
-        
+
                       <div id="userPropertiesFormClearTexta" class="userPropertiesFormClearText">Clear</div>
                     </td>
                     <td class="userPropertiesGrid" style="overflow: hidden;">
@@ -1447,17 +1806,19 @@
               <div id="userPropertiesFormBottomBara" class="userPropertiesFormBottomBar">
                 <div class="userPropertiesPropogateBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Propagate"></span>
-                  <img id="userPropertiesPropogateBtna" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
+                  <img id="userPropertiesPropogateBtna" style="width: 25px; height: 25px;"
+                    src="public\symbols\Propagate.svg" />
                 </div>
                 <div id="userPropertiesApplyBtna" class="userPropertiesApplyBtn">Apply</div>
               </div>
             </div>
-        
+
             <!-- Edit User Properties Form -->
             <div id="editUserPropertiesForma" class="editUserPropertiesForm">
               <div id="editUserPropertiesFormCaptionBara" class="editUserPropertiesFormCaptionBar">
                 <div class="editUserPropertiesCaption">Edit User Properties</div>
-                <img id="editUserPropertiesCloseBtna" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="editUserPropertiesCloseBtna" class="editUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="editUserPropertiesFormGridArea">
                 <div id="editUserPropertiesGrida" style="height: 500px; overflow:hidden"> </div>
@@ -1471,12 +1832,13 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Clear User Properties Form -->
             <div id="clearUserPropertiesForma" class="clearUserPropertiesForm">
               <div id="clearUserPropertiesFormCaptionBara" class="clearUserPropertiesFormCaptionBar">
                 <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
-                <img id="clearUserPropertiesCloseBtna" class="clearUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="clearUserPropertiesCloseBtna" class="clearUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="clearUserPropertiesFormArea">
                 <div class="dx-field" style="height: 50%; width: 100%;">
@@ -1494,29 +1856,32 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsForma" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBara" class="defineGroupsFormCaptionBar">
                 <div class="defineGroupsFormCaption">Define Groups</div>
-                <img id="defineGroupsFormCloseBtna" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="defineGroupsFormCloseBtna" class="defineGroupsFormCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="defineGroupsFormGridArea">
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="defineGroupsFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
-                        <img id="defineGroupsFormAdda" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                        <img id="defineGroupsFormAdda" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
                       </div>
                       <div id="defineGroupsFormAddTexta" class="defineGroupsFormAddText">Add</div>
-            
+
                       <div class="defineGroupsFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
-                        <img id="defineGroupsFormCleara" style="width: 40px; height: 40px;" src="public\symbols\Clear-Filled.svg" />
+                        <img id="defineGroupsFormCleara" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div id="defineGroupsFormClearTexta" class="defineGroupsFormClearText">Clear</div>
                     </td>
                     <td class="defineGroupsGrid" style="overflow: hidden;">
@@ -1528,16 +1893,17 @@
               <div id="defineGroupsFormBottomBara" class="defineGroupsFormBottomBar">
                 <div id="defineGroupsFormTypeDLa" class="defineGroupsFormTypeDL"></div>
                 <div id="defineGroupsFormNameBoxa" class="defineGroupsFormNameBox"></div>
-            
+
                 <div class="deleteGroupBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Group"></span>
-                  <img id="deleteGroupBtna" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                  <img id="deleteGroupBtna" src="public\symbols\MarkupDeleteBlack.svg"
+                    style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="defineGroupsFormApplyBtna" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightForma" class="definePropertyHighlightForm">
               <div id="definePropertyHighlightFormCaptionBara" class="definePropertyHighlightFormCaptionBar">
@@ -1549,20 +1915,20 @@
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="definePropertyHighlightFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="definePropertyHighlightFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
                         <img id="definePropertyHighlightFormAdda" src="public\symbols\Add-Filled.svg"
                           style="width: 40px; height: 40px;" />
                       </div>
                       <div class="definePropertyHighlightFormAddText">Add</div>
-            
+
                       <div class="definePropertyHighlightFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
                         <img id="definePropertyHighlightFormCleara" style="width: 40px; height: 40px;"
                           src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div class="definePropertyHighlightFormClearText">Clear</div>
                     </td>
                     <td class="definePropertyHighlightGrid" style="overflow: hidden;">
@@ -1574,20 +1940,20 @@
               <div class="definePropertyHighlightFormBottomBar">
                 <div id="definePropertyHighlightFormTypeDLa" class="definePropertyHighlightFormTypeDL"></div>
                 <div id="definePropertyHighlightFormNameBoxa" class="definePropertyHighlightFormNameBox"></div>
-            
+
                 <div class="deletePropertyHighlightBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Property Highlight Template"></span>
                   <img id="deletePropertyHighlightBtna" src="public\symbols\MarkupDeleteBlack.svg"
                     style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="definePropertyHighlightFormApplyBtna" class="definePropertyHighlightFormApplyBtn">Apply</div>
               </div>
             </div>
 
             <!-- visualizerA -->
             <div id="visualizerA" class="tempContainer"> </div>
-        
+
           </div>
         </div>
         <div id="viewPanelB" class="viewPanel hide">
@@ -1595,22 +1961,23 @@
             <!-- tableB -->
             <div class="tableHeaderArea">
               <div id="tableHeaderNameb" class="tableHeaderNameRow"> </div>
-              <div  id="tableHeaderControlb" class="tableHeaderControlRow">
-                <div id="includeMemberItemsSwitchb"  class="includeMemberItemsSwitch"> </div>
-                <div id="listTypeSwitchb"  class="listTypeSwitch"> </div>  
+              <div id="tableHeaderControlb" class="tableHeaderControlRow">
+                <div id="includeMemberItemsSwitchb" class="includeMemberItemsSwitch"> </div>
+                <div id="listTypeSwitchb" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelectb" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitchb" class="groupHighlightSwitch"> </div>               
-                <img id="highlightSelectionBtnb" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
+                <div id="groupHighlightSwitchb" class="groupHighlightSwitch"> </div>
+                <img id="highlightSelectionBtnb" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection.svg" />
 
               </div>
-           </div>
+            </div>
 
             <div class="tableArea">
               <div id="tableDataB" style="position: relative"> </div>
             </div>
             <div id="itemCountB" class="itemCountClass"></div>
-            
+
             <div id="tableViewActionb" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
             </div>
@@ -1651,146 +2018,147 @@
               </div>
             </div>
 
-             <!-- Property callout container-->
-             <div id="propertyCalloutNameBarb" class="propertyCalloutNameBar" 
-             onmouseover="viewPanels.onMouseOverPropertyCallout('b')" 
-             onmouseout="viewPanels.onMouseOutPropertyCallout('b')"> 
+            <!-- Property callout container-->
+            <div id="propertyCalloutNameBarb" class="propertyCalloutNameBar"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('b')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('b')">
               <span> </span>
             </div>
-             <div id="propertyCalloutContainerb" class="propertyCalloutContainer" 
-             style="opacity: 0.6;" 
-             onmouseover="viewPanels.onMouseOverPropertyCallout('b')" onmouseout="viewPanels.onMouseOutPropertyCallout('b')" >                              
-              <div data-options="dxTemplate : { name: 'tab1' } ">                
-                  <div id="propertyCalloutPropGridb"></div>
+            <div id="propertyCalloutContainerb" class="propertyCalloutContainer" style="opacity: 0.6;"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('b')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('b')">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="propertyCalloutPropGridb"></div>
               </div>
               <div data-options="dxTemplate : { name: 'tab2' } ">
                 <div id="propertyCalloutRefGridb"></div>
-              </div>    
+              </div>
               <div data-options="dxTemplate : { name: 'tab3' } ">
                 <div class="commentsTabPage">
-                   <!-- Search control -->
-                   <div id="propertyCalloutSearchBoxb" class="searchBox">
+                  <!-- Search control -->
+                  <div id="propertyCalloutSearchBoxb" class="searchBox">
                     <div id="propertyCalloutSearchTextb"> </div>
                     <div id="propertyCalloutSearchBtnb" class="searchButton">
                       <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
-                
-                  <!-- Comments Area -->                  
+
+                  <!-- Comments Area -->
                   <div id="commentsAreab" class="commentsArea">
-               
+
                   </div>
                   <div class="commentInput">
-                    <div id="commentInputb">                        
+                    <div id="commentInputb">
                     </div>
                     <div id="addCommentBtnb" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 25px; height: 25px;"/>
+                      <img src="images\arrow.png" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
                 </div>
-              </div>         
-          </div>         
+              </div>
+            </div>
 
-         <!-- Hovering menus -->
-          <div id="displayMenub" class="displayMenu"> </div>
-          <div id="markupMenub" class="markupMenu"> </div>
-          <div id="shapesMenub" class="shapesMenu"> </div>
-          <div id="bookmarkMenub" class="bookmarkMenu"> </div>
-          <div id="tagsMenub" class="tagsMenu"> </div>
-          <div id="modelViewsMenub" class="modelViewsMenu"> </div>
-          <div id="displayStylesMenub" class="displayStylesMenu"> </div>
-          <div id="sectioningMenub" class="sectioningMenu"> </div>
-          <div id="measureMenub" class="measureMenu"> </div>
-          <div id="dataDefinitionMenub" class="dataDefinitionMenu"> </div>
-          <div id="menuTooltipb" style="z-index:1;"> </div>
+            <!-- Hovering menus -->
+            <div id="displayMenub" class="displayMenu"> </div>
+            <div id="markupMenub" class="markupMenu"> </div>
+            <div id="shapesMenub" class="shapesMenu"> </div>
+            <div id="bookmarkMenub" class="bookmarkMenu"> </div>
+            <div id="tagsMenub" class="tagsMenu"> </div>
+            <div id="modelViewsMenub" class="modelViewsMenu"> </div>
+            <div id="displayStylesMenub" class="displayStylesMenu"> </div>
+            <div id="sectioningMenub" class="sectioningMenu"> </div>
+            <div id="measureMenub" class="measureMenu"> </div>
+            <div id="dataDefinitionMenub" class="dataDefinitionMenu"> </div>
+            <div id="menuTooltipb" style="z-index:1;"> </div>
 
-          <!-- Markup views overlay -->
-          <div id="markupViewsContainerb" class="markupViewsContainer">
-            <div id="markupViewsCaptionBarb" class="markupViewsCaptionBar">
-              <div class="markupViewsCaption">Views</div>
-              <img id="markupViewsContainerCloseb" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                style="width: 25px; height: 25px;" />
-            </div>
-            <div id="markupViewTabsb" class="markupViewsTabs">
-              <div data-options="dxTemplate : { name: 'tab1' } ">
-                <div id="bookmarksGridb"></div>
+            <!-- Markup views overlay -->
+            <div id="markupViewsContainerb" class="markupViewsContainer">
+              <div id="markupViewsCaptionBarb" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Views</div>
+                <img id="markupViewsContainerCloseb" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
-              <div data-options="dxTemplate : { name: 'tab2' } ">
-                <div id="markupsGridb"></div>
+              <div id="markupViewTabsb" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="bookmarksGridb"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab2' } ">
+                  <div id="markupsGridb"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab3' } ">
+                  <div id="annotationsGridb" style="height: 250px;"></div>
+                </div>
               </div>
-              <div data-options="dxTemplate : { name: 'tab3' } ">
-                <div id="annotationsGridb" style="height: 250px;"></div>
-              </div>
-            </div>
-            <div class="markupViewsBottomStrip">
-              <img id="markupViewsClearBtnb" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-            </div>
-          </div>
-          
-          <!-- Measure views overlay -->
-          <div id="measureViewsContainerb" class="measureViewsContainer">
-            <div id="measureViewsCaptionBarb" class="markupViewsCaptionBar">
-              <div class="markupViewsCaption">Measure Views</div>
-              <img id="measureViewsContainerCloseb" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                style="width: 25px; height: 25px;" />
-            </div>
-            <div id="measureViewTabsb" class="markupViewsTabs">
-              <div data-options="dxTemplate : { name: 'tab1' } ">
-                <div id="measuresGridb" style="height: 250px;"></div>
+              <div class="markupViewsBottomStrip">
+                <img id="markupViewsClearBtnb" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
               </div>
             </div>
-            <div class="markupViewsBottomStrip">
-              <img id="measureViewsClearBtnb" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-            </div>
-          </div>
-          
-          <div id="userPropertiesFormb" class="userPropertiesForm">
-            <div id="userPropertiesFormCaptionBarb" class="userPropertiesFormCaptionBar">
-              <div class="userPropertiesCaption">User Properties</div>
-              <img id="userPropertiesCloseBtnb" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-            </div>
-            <div class="userPropertiesFormGridArea">
-              <table style="width: 100%; height: 180px; overflow: hidden;">
-                <tr   style="overflow: hidden;">
-                  <td class="userPropertiesFormControlColumn"  style="overflow: hidden;">
-                    
-                    <div class="userPropertiesFormAdd tooltipHov">
-                      <span class="tooltip" data-tooltip="Add"></span>
-                      <img id="userPropertiesFormAddb" 
-                      src="public\symbols\Add-Filled.svg" 
-                      style="width: 40px; height: 40px;"/>
-                    </div>
-                    <div id="userPropertiesFormAddTextb" class="userPropertiesFormAddText">Add</div>
-                   
-                    <div class="userPropertiesFormClear tooltipHov">
-                      <span class="tooltip" data-tooltip="Clear"></span>
-                      <img id="userPropertiesFormClearb" 
-                        style="width: 40px; height: 40px;"
-                        src="public\symbols\Clear-Filled.svg" />
-                    </div>
 
-                    <div id="userPropertiesFormClearTextb" class="userPropertiesFormClearText">Clear</div>
-                  </td>
-                  <td class="userPropertiesGrid"  style="overflow: hidden;">
-                    <div id="userPropertiesGridb" style="height: 180px; overflow:hidden"> </div>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div id="userPropertiesFormBottomBarb" class="userPropertiesFormBottomBar">
-              <div class="userPropertiesPropogateBtn tooltipHov">
-                <span class="tooltip" data-tooltip="Propagate"></span>
-                <img id="userPropertiesPropogateBtnb" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
+            <!-- Measure views overlay -->
+            <div id="measureViewsContainerb" class="measureViewsContainer">
+              <div id="measureViewsCaptionBarb" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Measure Views</div>
+                <img id="measureViewsContainerCloseb" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
-              <div id="userPropertiesApplyBtnb" class="userPropertiesApplyBtn">Apply</div>
+              <div id="measureViewTabsb" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="measuresGridb" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="measureViewsClearBtnb" class="markupViewsClearBtn"
+                  src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
             </div>
+
+            <div id="userPropertiesFormb" class="userPropertiesForm">
+              <div id="userPropertiesFormCaptionBarb" class="userPropertiesFormCaptionBar">
+                <div class="userPropertiesCaption">User Properties</div>
+                <img id="userPropertiesCloseBtnb" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="userPropertiesFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="userPropertiesFormControlColumn" style="overflow: hidden;">
+
+                      <div class="userPropertiesFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="userPropertiesFormAddb" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
+                      </div>
+                      <div id="userPropertiesFormAddTextb" class="userPropertiesFormAddText">Add</div>
+
+                      <div class="userPropertiesFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="userPropertiesFormClearb" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
+                      </div>
+
+                      <div id="userPropertiesFormClearTextb" class="userPropertiesFormClearText">Clear</div>
+                    </td>
+                    <td class="userPropertiesGrid" style="overflow: hidden;">
+                      <div id="userPropertiesGridb" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="userPropertiesFormBottomBarb" class="userPropertiesFormBottomBar">
+                <div class="userPropertiesPropogateBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Propagate"></span>
+                  <img id="userPropertiesPropogateBtnb" style="width: 25px; height: 25px;"
+                    src="public\symbols\Propagate.svg" />
+                </div>
+                <div id="userPropertiesApplyBtnb" class="userPropertiesApplyBtn">Apply</div>
+              </div>
             </div>
-            
+
             <!-- Edit User Properties Form -->
             <div id="editUserPropertiesFormb" class="editUserPropertiesForm">
               <div id="editUserPropertiesFormCaptionBarb" class="editUserPropertiesFormCaptionBar">
                 <div class="editUserPropertiesCaption">Edit User Properties</div>
-                <img id="editUserPropertiesCloseBtnb" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="editUserPropertiesCloseBtnb" class="editUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="editUserPropertiesFormGridArea">
                 <div id="editUserPropertiesGridb" style="height: 500px; overflow:hidden"> </div>
@@ -1804,12 +2172,13 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Clear User Properties Form -->
             <div id="clearUserPropertiesFormb" class="clearUserPropertiesForm">
               <div id="clearUserPropertiesFormCaptionBarb" class="clearUserPropertiesFormCaptionBar">
                 <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
-                <img id="clearUserPropertiesCloseBtnb" class="clearUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="clearUserPropertiesCloseBtnb" class="clearUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="clearUserPropertiesFormArea">
                 <div class="dx-field" style="height: 50%; width: 100%;">
@@ -1827,29 +2196,32 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsFormb" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBarb" class="defineGroupsFormCaptionBar">
                 <div class="defineGroupsFormCaption">Define Groups</div>
-                <img id="defineGroupsFormCloseBtnb" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="defineGroupsFormCloseBtnb" class="defineGroupsFormCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="defineGroupsFormGridArea">
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="defineGroupsFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
-                        <img id="defineGroupsFormAddb" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                        <img id="defineGroupsFormAddb" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
                       </div>
                       <div id="defineGroupsFormAddTextb" class="defineGroupsFormAddText">Add</div>
-            
+
                       <div class="defineGroupsFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
-                        <img id="defineGroupsFormClearb" style="width: 40px; height: 40px;" src="public\symbols\Clear-Filled.svg" />
+                        <img id="defineGroupsFormClearb" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div id="defineGroupsFormClearTextb" class="defineGroupsFormClearText">Clear</div>
                     </td>
                     <td class="defineGroupsGrid" style="overflow: hidden;">
@@ -1861,16 +2233,17 @@
               <div id="defineGroupsFormBottomBarb" class="defineGroupsFormBottomBar">
                 <div id="defineGroupsFormTypeDLb" class="defineGroupsFormTypeDL"></div>
                 <div id="defineGroupsFormNameBoxb" class="defineGroupsFormNameBox"></div>
-            
+
                 <div class="deleteGroupBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Group"></span>
-                  <img id="deleteGroupBtnb" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                  <img id="deleteGroupBtnb" src="public\symbols\MarkupDeleteBlack.svg"
+                    style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="defineGroupsFormApplyBtnb" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightFormb" class="definePropertyHighlightForm">
               <div id="definePropertyHighlightFormCaptionBarb" class="definePropertyHighlightFormCaptionBar">
@@ -1882,20 +2255,20 @@
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="definePropertyHighlightFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="definePropertyHighlightFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
                         <img id="definePropertyHighlightFormAddb" src="public\symbols\Add-Filled.svg"
                           style="width: 40px; height: 40px;" />
                       </div>
                       <div class="definePropertyHighlightFormAddText">Add</div>
-            
+
                       <div class="definePropertyHighlightFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
                         <img id="definePropertyHighlightFormClearb" style="width: 40px; height: 40px;"
                           src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div class="definePropertyHighlightFormClearText">Clear</div>
                     </td>
                     <td class="definePropertyHighlightGrid" style="overflow: hidden;">
@@ -1907,20 +2280,20 @@
               <div class="definePropertyHighlightFormBottomBar">
                 <div id="definePropertyHighlightFormTypeDLb" class="definePropertyHighlightFormTypeDL"></div>
                 <div id="definePropertyHighlightFormNameBoxb" class="definePropertyHighlightFormNameBox"></div>
-            
+
                 <div class="deletePropertyHighlightBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Property Highlight Template"></span>
                   <img id="deletePropertyHighlightBtnb" src="public\symbols\MarkupDeleteBlack.svg"
                     style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="definePropertyHighlightFormApplyBtnb" class="definePropertyHighlightFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <!-- visualizerB -->
             <div id="visualizerB" class="tempContainer"> </div>
-            </div>
+          </div>
 
         </div>
         <div id="viewPanelC" class="viewPanel hide">
@@ -1928,13 +2301,14 @@
             <!-- tableC -->
             <div class="tableHeaderArea">
               <div id="tableHeaderNamec" class="tableHeaderNameRow"> </div>
-              <div  id="tableHeaderControlc" class="tableHeaderControlRow"> 
-                <div id="includeMemberItemsSwitchc"  class="includeMemberItemsSwitch"> </div>
-                <div id="listTypeSwitchc"  class="listTypeSwitch"> </div>
+              <div id="tableHeaderControlc" class="tableHeaderControlRow">
+                <div id="includeMemberItemsSwitchc" class="includeMemberItemsSwitch"> </div>
+                <div id="listTypeSwitchc" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelectc" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitchc" class="groupHighlightSwitch"> </div>               
-                <img id="highlightSelectionBtnc" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
+                <div id="groupHighlightSwitchc" class="groupHighlightSwitch"> </div>
+                <img id="highlightSelectionBtnc" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection.svg" />
               </div>
             </div>
 
@@ -1942,7 +2316,7 @@
               <div id="tableDataC" style="position: relative"> </div>
             </div>
             <div id="itemCountC" class="itemCountClass"></div>
-            
+
             <div id="tableViewActionc" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
             </div>
@@ -1983,146 +2357,147 @@
               </div>
             </div>
 
-             <!-- Property callout container-->
-             <div id="propertyCalloutNameBarc" class="propertyCalloutNameBar"
-             onmouseover="viewPanels.onMouseOverPropertyCallout('c')" 
-             onmouseout="viewPanels.onMouseOutPropertyCallout('c')"> 
+            <!-- Property callout container-->
+            <div id="propertyCalloutNameBarc" class="propertyCalloutNameBar"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('c')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('c')">
               <span> </span>
             </div>
-             <div id="propertyCalloutContainerc" class="propertyCalloutContainer"
-             style="opacity: 0.6;" 
-             onmouseover="viewPanels.onMouseOverPropertyCallout('c')" onmouseout="viewPanels.onMouseOutPropertyCallout('c')" >                              
-              <div data-options="dxTemplate : { name: 'tab1' } ">                
-                  <div id="propertyCalloutPropGridc"></div>
+            <div id="propertyCalloutContainerc" class="propertyCalloutContainer" style="opacity: 0.6;"
+              onmouseover="viewPanels.onMouseOverPropertyCallout('c')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('c')">
+              <div data-options="dxTemplate : { name: 'tab1' } ">
+                <div id="propertyCalloutPropGridc"></div>
               </div>
               <div data-options="dxTemplate : { name: 'tab2' } ">
                 <div id="propertyCalloutRefGridc"></div>
-              </div>        
+              </div>
               <div data-options="dxTemplate : { name: 'tab3' } ">
                 <div class="commentsTabPage">
-                   <!-- Search control -->
-                   <div id="propertyCalloutSearchBoxc" class="searchBox">
+                  <!-- Search control -->
+                  <div id="propertyCalloutSearchBoxc" class="searchBox">
                     <div id="propertyCalloutSearchTextc"> </div>
                     <div id="propertyCalloutSearchBtnc" class="searchButton">
                       <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
-                
-                  <!-- Comments Area -->         
+
+                  <!-- Comments Area -->
                   <div id="commentsAreac" class="commentsArea">
-               
+
                   </div>
                   <div class="commentInput">
-                    <div id="commentInputc">                        
+                    <div id="commentInputc">
                     </div>
                     <div id="addCommentBtnc" class="addCommentBtn">
-                        <img src="images\arrow.png" style="width: 25px; height: 25px;"/>
+                      <img src="images\arrow.png" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
                 </div>
-              </div>    
-          </div>
-       
-          <!-- Hovering menus -->
-          <div id="displayMenuc" class="displayMenu"> </div>
-          <div id="markupMenuc" class="markupMenu"> </div>
-          <div id="shapesMenuc" class="shapesMenu"> </div>
-          <div id="bookmarkMenuc" class="bookmarkMenu"> </div>
-          <div id="tagsMenuc" class="tagsMenu"> </div>
-          <div id="modelViewsMenuc" class="modelViewsMenu"> </div>
-          <div id="displayStylesMenuc" class="displayStylesMenu"> </div>
-          <div id="sectioningMenuc" class="sectioningMenu"> </div>
-          <div id="measureMenuc" class="measureMenu"> </div>
-          <div id="dataDefinitionMenuc" class="dataDefinitionMenu"> </div>          
-          <div id="menuTooltipc" style="z-index:1;"> </div>
-          
-          <!-- Markup views overlay -->
-          <div id="markupViewsContainerc" class="markupViewsContainer">
-            <div id="markupViewsCaptionBarc" class="markupViewsCaptionBar">
-              <div class="markupViewsCaption">Views</div>
-              <img id="markupViewsContainerClosec" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                style="width: 25px; height: 25px;" />
-            </div>
-            <div id="markupViewTabsc" class="markupViewsTabs">
-              <div data-options="dxTemplate : { name: 'tab1' } ">
-                <div id="bookmarksGridc"></div>
-              </div>
-              <div data-options="dxTemplate : { name: 'tab2' } ">
-                <div id="markupsGridc"></div>
-              </div>
-              <div data-options="dxTemplate : { name: 'tab3' } ">
-                <div id="annotationsGridc" style="height: 250px;"></div>
               </div>
             </div>
-            <div class="markupViewsBottomStrip">
-              <img id="markupViewsClearBtnc" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-            </div>
-          </div>
-          
-          <!-- Measure views overlay -->
-          <div id="measureViewsContainerc" class="measureViewsContainer">
-            <div id="measureViewsCaptionBarc" class="markupViewsCaptionBar">
-              <div class="markupViewsCaption">Measure Views</div>
-              <img id="measureViewsContainerClosec" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                style="width: 25px; height: 25px;" />
-            </div>
-            <div id="measureViewTabsc" class="markupViewsTabs">
-              <div data-options="dxTemplate : { name: 'tab1' } ">
-                <div id="measuresGridc" style="height: 250px;"></div>
-              </div>
-            </div>
-            <div class="markupViewsBottomStrip">
-              <img id="measureViewsClearBtnc" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
-            </div>
-          </div>
-          
-          <div id="userPropertiesFormc" class="userPropertiesForm">
-            <div id="userPropertiesFormCaptionBarc" class="userPropertiesFormCaptionBar">
-              <div class="userPropertiesCaption">User Properties</div>
-              <img id="userPropertiesCloseBtnc" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
-            </div>
-            <div class="userPropertiesFormGridArea">
-              <table style="width: 100%; height: 180px; overflow: hidden;">
-                <tr   style="overflow: hidden;">
-                  <td class="userPropertiesFormControlColumn"  style="overflow: hidden;">
-                    
-                    <div class="userPropertiesFormAdd tooltipHov">
-                      <span class="tooltip" data-tooltip="Add"></span>
-                      <img id="userPropertiesFormAddc" 
-                      src="public\symbols\Add-Filled.svg" 
-                      style="width: 40px; height: 40px;"/>
-                    </div>
-                    <div id="userPropertiesFormAddTextc" class="userPropertiesFormAddText">Add</div>
-                   
-                    <div class="userPropertiesFormClear tooltipHov">
-                      <span class="tooltip" data-tooltip="Clear"></span>
-                      <img id="userPropertiesFormClearc" 
-                        style="width: 40px; height: 40px;"
-                        src="public\symbols\Clear-Filled.svg" />
-                    </div>
 
-                    <div id="userPropertiesFormClearTextc" class="userPropertiesFormClearText">Clear</div>
-                  </td>
-                  <td class="userPropertiesGrid"  style="overflow: hidden;">
-                    <div id="userPropertiesGridc" style="height: 180px; overflow:hidden"> </div>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div id="userPropertiesFormBottomBarc" class="userPropertiesFormBottomBar">
-              <div class="userPropertiesPropogateBtn tooltipHov">
-                <span class="tooltip" data-tooltip="Propagate"></span>
-                <img id="userPropertiesPropogateBtnc" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
+            <!-- Hovering menus -->
+            <div id="displayMenuc" class="displayMenu"> </div>
+            <div id="markupMenuc" class="markupMenu"> </div>
+            <div id="shapesMenuc" class="shapesMenu"> </div>
+            <div id="bookmarkMenuc" class="bookmarkMenu"> </div>
+            <div id="tagsMenuc" class="tagsMenu"> </div>
+            <div id="modelViewsMenuc" class="modelViewsMenu"> </div>
+            <div id="displayStylesMenuc" class="displayStylesMenu"> </div>
+            <div id="sectioningMenuc" class="sectioningMenu"> </div>
+            <div id="measureMenuc" class="measureMenu"> </div>
+            <div id="dataDefinitionMenuc" class="dataDefinitionMenu"> </div>
+            <div id="menuTooltipc" style="z-index:1;"> </div>
+
+            <!-- Markup views overlay -->
+            <div id="markupViewsContainerc" class="markupViewsContainer">
+              <div id="markupViewsCaptionBarc" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Views</div>
+                <img id="markupViewsContainerClosec" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
-              <div id="userPropertiesApplyBtnc" class="userPropertiesApplyBtn">Apply</div>
+              <div id="markupViewTabsc" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="bookmarksGridc"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab2' } ">
+                  <div id="markupsGridc"></div>
+                </div>
+                <div data-options="dxTemplate : { name: 'tab3' } ">
+                  <div id="annotationsGridc" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="markupViewsClearBtnc" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
             </div>
+
+            <!-- Measure views overlay -->
+            <div id="measureViewsContainerc" class="measureViewsContainer">
+              <div id="measureViewsCaptionBarc" class="markupViewsCaptionBar">
+                <div class="markupViewsCaption">Measure Views</div>
+                <img id="measureViewsContainerClosec" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
+              </div>
+              <div id="measureViewTabsc" class="markupViewsTabs">
+                <div data-options="dxTemplate : { name: 'tab1' } ">
+                  <div id="measuresGridc" style="height: 250px;"></div>
+                </div>
+              </div>
+              <div class="markupViewsBottomStrip">
+                <img id="measureViewsClearBtnc" class="markupViewsClearBtn"
+                  src="public\symbols\MarkupDeleteBlack.svg" />
+              </div>
             </div>
-            
+
+            <div id="userPropertiesFormc" class="userPropertiesForm">
+              <div id="userPropertiesFormCaptionBarc" class="userPropertiesFormCaptionBar">
+                <div class="userPropertiesCaption">User Properties</div>
+                <img id="userPropertiesCloseBtnc" class="userPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="userPropertiesFormGridArea">
+                <table style="width: 100%; height: 180px; overflow: hidden;">
+                  <tr style="overflow: hidden;">
+                    <td class="userPropertiesFormControlColumn" style="overflow: hidden;">
+
+                      <div class="userPropertiesFormAdd tooltipHov">
+                        <span class="tooltip" data-tooltip="Add"></span>
+                        <img id="userPropertiesFormAddc" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
+                      </div>
+                      <div id="userPropertiesFormAddTextc" class="userPropertiesFormAddText">Add</div>
+
+                      <div class="userPropertiesFormClear tooltipHov">
+                        <span class="tooltip" data-tooltip="Clear"></span>
+                        <img id="userPropertiesFormClearc" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
+                      </div>
+
+                      <div id="userPropertiesFormClearTextc" class="userPropertiesFormClearText">Clear</div>
+                    </td>
+                    <td class="userPropertiesGrid" style="overflow: hidden;">
+                      <div id="userPropertiesGridc" style="height: 180px; overflow:hidden"> </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="userPropertiesFormBottomBarc" class="userPropertiesFormBottomBar">
+                <div class="userPropertiesPropogateBtn tooltipHov">
+                  <span class="tooltip" data-tooltip="Propagate"></span>
+                  <img id="userPropertiesPropogateBtnc" style="width: 25px; height: 25px;"
+                    src="public\symbols\Propagate.svg" />
+                </div>
+                <div id="userPropertiesApplyBtnc" class="userPropertiesApplyBtn">Apply</div>
+              </div>
+            </div>
+
             <!-- Edit User Properties Form -->
             <div id="editUserPropertiesFormc" class="editUserPropertiesForm">
               <div id="editUserPropertiesFormCaptionBarc" class="editUserPropertiesFormCaptionBar">
                 <div class="editUserPropertiesCaption">Edit User Properties</div>
-                <img id="editUserPropertiesCloseBtnc" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="editUserPropertiesCloseBtnc" class="editUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="editUserPropertiesFormGridArea">
                 <div id="editUserPropertiesGridc" style="height: 500px; overflow:hidden"> </div>
@@ -2136,12 +2511,13 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Clear User Properties Form -->
             <div id="clearUserPropertiesFormc" class="clearUserPropertiesForm">
               <div id="clearUserPropertiesFormCaptionBarc" class="clearUserPropertiesFormCaptionBar">
                 <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
-                <img id="clearUserPropertiesCloseBtnc" class="clearUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="clearUserPropertiesCloseBtnc" class="clearUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="clearUserPropertiesFormArea">
                 <div class="dx-field" style="height: 50%; width: 100%;">
@@ -2159,29 +2535,32 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsFormc" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBarc" class="defineGroupsFormCaptionBar">
                 <div class="defineGroupsFormCaption">Define Groups</div>
-                <img id="defineGroupsFormCloseBtnc" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="defineGroupsFormCloseBtnc" class="defineGroupsFormCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="defineGroupsFormGridArea">
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="defineGroupsFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
-                        <img id="defineGroupsFormAddc" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                        <img id="defineGroupsFormAddc" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
                       </div>
                       <div id="defineGroupsFormAddTextc" class="defineGroupsFormAddText">Add</div>
-            
+
                       <div class="defineGroupsFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
-                        <img id="defineGroupsFormClearc" style="width: 40px; height: 40px;" src="public\symbols\Clear-Filled.svg" />
+                        <img id="defineGroupsFormClearc" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div id="defineGroupsFormClearTextc" class="defineGroupsFormClearText">Clear</div>
                     </td>
                     <td class="defineGroupsGrid" style="overflow: hidden;">
@@ -2193,16 +2572,17 @@
               <div id="defineGroupsFormBottomBarc" class="defineGroupsFormBottomBar">
                 <div id="defineGroupsFormTypeDLc" class="defineGroupsFormTypeDL"></div>
                 <div id="defineGroupsFormNameBoxc" class="defineGroupsFormNameBox"></div>
-            
+
                 <div class="deleteGroupBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Group"></span>
-                  <img id="deleteGroupBtnc" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                  <img id="deleteGroupBtnc" src="public\symbols\MarkupDeleteBlack.svg"
+                    style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="defineGroupsFormApplyBtnc" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightFormc" class="definePropertyHighlightForm">
               <div id="definePropertyHighlightFormCaptionBarc" class="definePropertyHighlightFormCaptionBar">
@@ -2214,20 +2594,20 @@
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="definePropertyHighlightFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="definePropertyHighlightFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
                         <img id="definePropertyHighlightFormAddc" src="public\symbols\Add-Filled.svg"
                           style="width: 40px; height: 40px;" />
                       </div>
                       <div class="definePropertyHighlightFormAddText">Add</div>
-            
+
                       <div class="definePropertyHighlightFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
                         <img id="definePropertyHighlightFormClearc" style="width: 40px; height: 40px;"
                           src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div class="definePropertyHighlightFormClearText">Clear</div>
                     </td>
                     <td class="definePropertyHighlightGrid" style="overflow: hidden;">
@@ -2239,20 +2619,20 @@
               <div class="definePropertyHighlightFormBottomBar">
                 <div id="definePropertyHighlightFormTypeDLc" class="definePropertyHighlightFormTypeDL"></div>
                 <div id="definePropertyHighlightFormNameBoxc" class="definePropertyHighlightFormNameBox"></div>
-            
+
                 <div class="deletePropertyHighlightBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Property Highlight Template"></span>
                   <img id="deletePropertyHighlightBtnc" src="public\symbols\MarkupDeleteBlack.svg"
                     style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="definePropertyHighlightFormApplyBtnc" class="definePropertyHighlightFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <div id="visualizerC" class="tempContainer"> </div>
-            
-            </div>
+
+          </div>
         </div>
         <div id="viewPanelD" class="viewPanel hide">
           <div id="tableContainerd" class="tableContainer">
@@ -2264,16 +2644,17 @@
                 <div id="listTypeSwitchd" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelectd" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitchd" class="groupHighlightSwitch"> </div>               
-                <img id="highlightSelectionBtnd" class="highlightSelectionBtn" src="public\symbols\Highlight Selection.svg" />
+                <div id="groupHighlightSwitchd" class="groupHighlightSwitch"> </div>
+                <img id="highlightSelectionBtnd" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection.svg" />
               </div>
             </div>
-        
+
             <div class="tableArea">
               <div id="tableDataD" style="position: relative"> </div>
             </div>
             <div id="itemCountD" class="itemCountClass"></div>
-        
+
             <div id="tableViewActiond" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
             </div>
@@ -2289,7 +2670,7 @@
               <span class="tooltip" data-tooltip="Groups"></span>
               <img src="public/symbols/GroupsView-Black.svg" style="width: 20px; height: 30px;" />
             </div>
-        
+
           </div>
           <div class="grabBar"></div>
           <div class="visualizerContainer">
@@ -2305,7 +2686,7 @@
                 <p> <span id="explodeValue4"></span></p>
               </div>
             </div>
-        
+
             <!-- Translucency slider -->
             <div id="translucencyOverlay4" class="sliderOverlay" style="display: none">
               <div class="slidecontainer" style="color:rgba(0, 0, 0, 1)">
@@ -2313,14 +2694,16 @@
                 <p> <span id="translucencyValue4" style="color: grey"></span></p>
               </div>
             </div>
-        
+
             <!-- Property callout container-->
             <div id="propertyCalloutNameBard" class="propertyCalloutNameBar"
-              onmouseover="viewPanels.onMouseOverPropertyCallout('d')" onmouseout="viewPanels.onMouseOutPropertyCallout('d')">
+              onmouseover="viewPanels.onMouseOverPropertyCallout('d')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('d')">
               <span> </span>
             </div>
             <div id="propertyCalloutContainerd" class="propertyCalloutContainer" style="opacity: 0.6;"
-              onmouseover="viewPanels.onMouseOverPropertyCallout('d')" onmouseout="viewPanels.onMouseOutPropertyCallout('d')">
+              onmouseover="viewPanels.onMouseOverPropertyCallout('d')"
+              onmouseout="viewPanels.onMouseOutPropertyCallout('d')">
               <div data-options="dxTemplate : { name: 'tab1' } ">
                 <div id="propertyCalloutPropGridd"></div>
               </div>
@@ -2336,7 +2719,7 @@
                       <img src="public\symbols\Search.svg" style="width: 25px; height: 25px;" />
                     </div>
                   </div>
-        
+
                   <!-- Comments Area -->
                   <div id="commentsAread" class="commentsArea">
                   </div>
@@ -2362,13 +2745,13 @@
             <div id="measureMenud" class="measureMenu"> </div>
             <div id="dataDefinitionMenud" class="dataDefinitionMenu"> </div>
             <div id="menuTooltipd" style="z-index:1;"> </div>
-        
+
             <!-- Markup views overlay -->
             <div id="markupViewsContainerd" class="markupViewsContainer">
               <div id="markupViewsCaptionBard" class="markupViewsCaptionBar">
                 <div class="markupViewsCaption">Views</div>
-                <img id="markupViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                  style="width: 25px; height: 25px;" />
+                <img id="markupViewsContainerClosed" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
               <div id="markupViewTabsd" class="markupViewsTabs">
                 <div data-options="dxTemplate : { name: 'tab1' } ">
@@ -2385,13 +2768,13 @@
                 <img id="markupViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
               </div>
             </div>
-        
+
             <!-- Measure views overlay -->
             <div id="measureViewsContainerd" class="measureViewsContainer">
               <div id="measureViewsCaptionBard" class="markupViewsCaptionBar">
                 <div class="markupViewsCaption">Measure Views</div>
-                <img id="measureViewsContainerClosed" class="markupViewsContainerClose" src="public\symbols\CloseBlack.svg"
-                  style="width: 25px; height: 25px;" />
+                <img id="measureViewsContainerClosed" class="markupViewsContainerClose"
+                  src="public\symbols\CloseBlack.svg" style="width: 25px; height: 25px;" />
               </div>
               <div id="measureViewTabsd" class="markupViewsTabs">
                 <div data-options="dxTemplate : { name: 'tab1' } ">
@@ -2399,10 +2782,11 @@
                 </div>
               </div>
               <div class="markupViewsBottomStrip">
-                <img id="measureViewsClearBtnd" class="markupViewsClearBtn" src="public\symbols\MarkupDeleteBlack.svg" />
+                <img id="measureViewsClearBtnd" class="markupViewsClearBtn"
+                  src="public\symbols\MarkupDeleteBlack.svg" />
               </div>
             </div>
-        
+
             <div id="userPropertiesFormd" class="userPropertiesForm">
               <div id="userPropertiesFormCaptionBard" class="userPropertiesFormCaptionBar">
                 <div class="userPropertiesCaption">User Properties</div>
@@ -2412,20 +2796,20 @@
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="userPropertiesFormControlColumn" style="overflow: hidden;">
-        
+
                       <div class="userPropertiesFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
                         <img id="userPropertiesFormAddd" src="public\symbols\Add-Filled.svg"
                           style="width: 40px; height: 40px;" />
                       </div>
                       <div id="userPropertiesFormAddTextd" class="userPropertiesFormAddText">Add</div>
-        
+
                       <div class="userPropertiesFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
                         <img id="userPropertiesFormCleard" style="width: 40px; height: 40px;"
                           src="public\symbols\Clear-Filled.svg" />
                       </div>
-        
+
                       <div id="userPropertiesFormClearTextd" class="userPropertiesFormClearText">Clear</div>
                     </td>
                     <td class="userPropertiesGrid" style="overflow: hidden;">
@@ -2437,17 +2821,19 @@
               <div id="userPropertiesFormBottomBard" class="userPropertiesFormBottomBar">
                 <div class="userPropertiesPropogateBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Propagate"></span>
-                  <img id="userPropertiesPropogateBtnd" style="width: 25px; height: 25px;" src="public\symbols\Propagate.svg" />
+                  <img id="userPropertiesPropogateBtnd" style="width: 25px; height: 25px;"
+                    src="public\symbols\Propagate.svg" />
                 </div>
                 <div id="userPropertiesApplyBtnd" class="userPropertiesApplyBtn">Apply</div>
               </div>
             </div>
-        
+
             <!-- Edit User Properties Form -->
             <div id="editUserPropertiesFormd" class="editUserPropertiesForm">
               <div id="editUserPropertiesFormCaptionBard" class="editUserPropertiesFormCaptionBar">
                 <div class="editUserPropertiesCaption">Edit User Properties</div>
-                <img id="editUserPropertiesCloseBtnd" class="editUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="editUserPropertiesCloseBtnd" class="editUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="editUserPropertiesFormGridArea">
                 <div id="editUserPropertiesGridd" style="height: 500px; overflow:hidden"> </div>
@@ -2461,12 +2847,13 @@
                 </div>
               </div>
             </div>
-        
+
             <!-- Clear User Properties Form -->
             <div id="clearUserPropertiesFormd" class="clearUserPropertiesForm">
               <div id="clearUserPropertiesFormCaptionBard" class="clearUserPropertiesFormCaptionBar">
                 <div class="clearUserPropertiesCaption">Clear Properties and Values</div>
-                <img id="clearUserPropertiesCloseBtnd" class="clearUserPropertiesCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="clearUserPropertiesCloseBtnd" class="clearUserPropertiesCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="clearUserPropertiesFormArea">
                 <div class="dx-field" style="height: 50%; width: 100%;">
@@ -2484,29 +2871,32 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsFormd" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBard" class="defineGroupsFormCaptionBar">
                 <div class="defineGroupsFormCaption">Define Groups</div>
-                <img id="defineGroupsFormCloseBtnd" class="defineGroupsFormCloseBtn" src="public\symbols\CloseBlack.svg" />
+                <img id="defineGroupsFormCloseBtnd" class="defineGroupsFormCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
               </div>
               <div class="defineGroupsFormGridArea">
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="defineGroupsFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="defineGroupsFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
-                        <img id="defineGroupsFormAddd" src="public\symbols\Add-Filled.svg" style="width: 40px; height: 40px;" />
+                        <img id="defineGroupsFormAddd" src="public\symbols\Add-Filled.svg"
+                          style="width: 40px; height: 40px;" />
                       </div>
                       <div id="defineGroupsFormAddTextd" class="defineGroupsFormAddText">Add</div>
-            
+
                       <div class="defineGroupsFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
-                        <img id="defineGroupsFormCleard" style="width: 40px; height: 40px;" src="public\symbols\Clear-Filled.svg" />
+                        <img id="defineGroupsFormCleard" style="width: 40px; height: 40px;"
+                          src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div id="defineGroupsFormClearTextd" class="defineGroupsFormClearText">Clear</div>
                     </td>
                     <td class="defineGroupsGrid" style="overflow: hidden;">
@@ -2518,16 +2908,17 @@
               <div id="defineGroupsFormBottomBard" class="defineGroupsFormBottomBar">
                 <div id="defineGroupsFormTypeDLd" class="defineGroupsFormTypeDL"></div>
                 <div id="defineGroupsFormNameBoxd" class="defineGroupsFormNameBox"></div>
-            
+
                 <div class="deleteGroupBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Group"></span>
-                  <img id="deleteGroupBtnd" src="public\symbols\MarkupDeleteBlack.svg" style="width: 25px; height: 25px;" />
+                  <img id="deleteGroupBtnd" src="public\symbols\MarkupDeleteBlack.svg"
+                    style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="defineGroupsFormApplyBtnd" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightFormd" class="definePropertyHighlightForm">
               <div id="definePropertyHighlightFormCaptionBard" class="definePropertyHighlightFormCaptionBar">
@@ -2539,20 +2930,20 @@
                 <table style="width: 100%; height: 180px; overflow: hidden;">
                   <tr style="overflow: hidden;">
                     <td class="definePropertyHighlightFormControlColumn" style="overflow: hidden;">
-            
+
                       <div class="definePropertyHighlightFormAdd tooltipHov">
                         <span class="tooltip" data-tooltip="Add"></span>
                         <img id="definePropertyHighlightFormAddd" src="public\symbols\Add-Filled.svg"
                           style="width: 40px; height: 40px;" />
                       </div>
                       <div class="definePropertyHighlightFormAddText">Add</div>
-            
+
                       <div class="definePropertyHighlightFormClear tooltipHov">
                         <span class="tooltip" data-tooltip="Clear"></span>
                         <img id="definePropertyHighlightFormCleard" style="width: 40px; height: 40px;"
                           src="public\symbols\Clear-Filled.svg" />
                       </div>
-            
+
                       <div class="definePropertyHighlightFormClearText">Clear</div>
                     </td>
                     <td class="definePropertyHighlightGrid" style="overflow: hidden;">
@@ -2564,32 +2955,33 @@
               <div class="definePropertyHighlightFormBottomBar">
                 <div id="definePropertyHighlightFormTypeDLd" class="definePropertyHighlightFormTypeDL"></div>
                 <div id="definePropertyHighlightFormNameBoxd" class="definePropertyHighlightFormNameBox"></div>
-            
+
                 <div class="deletePropertyHighlightBtn tooltipHov">
                   <span class="tooltip" data-tooltip="Delete Property Highlight Template"></span>
                   <img id="deletePropertyHighlightBtnd" src="public\symbols\MarkupDeleteBlack.svg"
                     style="width: 25px; height: 25px;" />
                 </div>
-            
+
                 <div id="definePropertyHighlightFormApplyBtnd" class="definePropertyHighlightFormApplyBtn">Apply</div>
               </div>
             </div>
-            
+
             <div id="visualizerD" class="tempContainer"> </div>
           </div>
         </div>
-              
-              <div class="checkTogglesContainer">
-                <label class="toggleContainer" style="grid-area:compliance">Compliance
-                  <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance"
-                    onchange="onComplianceSwitchStateChanged(this)">
-                  <span class="toggleSlider"></span>
-                </label>
+
+        <div class="checkTogglesContainer">
+          <label class="toggleContainer" style="grid-area:compliance">Compliance
+            <input id="complianceSwitch" type="checkbox" class="toggleCheckBox" name="compliance"
+              onchange="onComplianceSwitchStateChanged(this)">
+            <span class="toggleSlider"></span>
+          </label>
           <label class="toggleContainer" style="grid-area:comparison">Comparison
             <input id="comparisonSwitch" type="checkbox" class="toggleCheckBox" name="comparison">
             <span class="toggleSlider"></span>
           </label>
-          <button id="checkButton" type="submit" name="button" style="cursor: pointer; position: absolute; bottom: 22px; right: 35px;"><img
+          <button id="checkButton" type="submit" name="button"
+            style="cursor: pointer; position: absolute; bottom: 22px; right: 35px;"><img
               src="public/symbols/CheckButton.svg" style="width: 50px; height: 50px;"></button>
         </div>
         <div class="checkName">
@@ -2598,11 +2990,11 @@
       </div>
     </div>
   </div>
- 
 
-  <style>  
+
+  <style>
     .itemCountClass {
-      position: absolute; 
+      position: absolute;
       height: 40px;
       top: calc(100% - 40px);
       padding: 10px;
@@ -2612,13 +3004,13 @@
       width: 6px;
     }
 
-    .tempContainer {      
+    .tempContainer {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      overflow: auto;      
+      overflow: auto;
     }
 
     .dx-fileuploader-button {
@@ -2660,9 +3052,9 @@
       color: white !important;
     }
 
-    .ignoreDefault { 
-            all: unset; 
-        }   
+    .ignoreDefault {
+      all: unset;
+    }
   </style>
   <!-- JQuery dependencies -->
   <script src="Javascripts/jquery/jquery-3.4.1.min.js" onload="window.jQuery = window.$ = module.exports;"></script>
@@ -2709,10 +3101,10 @@
   <script type="text/javascript" src="Javascripts/xCheckStudio/SCModelBrowser.js"></script>
   <script type="text/javascript" src="Javascripts/xCheckStudio/ExcelModelBrowser.js"></script>
   <script type="text/javascript" src="Javascripts/xCheckStudio/DBModelBrowser.js"></script>
-  <script type="text/javascript" src="Javascripts/xCheckStudio/VisioModelBrowser.js"></script>  
+  <script type="text/javascript" src="Javascripts/xCheckStudio/VisioModelBrowser.js"></script>
   <script type="text/javascript" src="Javascripts/xCheckStudio/ListView.js"></script>
   <script type="text/javascript" src="Javascripts/xCheckStudio/GroupView.js"></script>
-  
+
   <script type="text/javascript" src="Javascripts\xCheckStudio\SelectionManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\SCSelectionManager.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\ExcelSelectionManager.js"></script>
@@ -2766,12 +3158,12 @@
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\LoadProjectInCheckPage.js"></script>
 
-  <link rel="stylesheet" href="src\prompts\Save_and_Exit.css" type="text/css" />  
+  <link rel="stylesheet" href="src\prompts\Save_and_Exit.css" type="text/css" />
   <link rel="stylesheet" href="src\prompts\There_is_no_valid_checkcase.css" type="text/css" />
 
-  <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script> 
+  <script type="text/javascript" src="Javascripts\svg-pan-zoom\svg-pan-zoom.js"></script>
 
-  <script type="text/javascript" src="Javascripts\xCheckStudio\PropertyCallout.js"></script>   
+  <script type="text/javascript" src="Javascripts\xCheckStudio\PropertyCallout.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\CommentsCallout.js"></script>
   <link rel="stylesheet" href="CSS/commentCards.css" type="text/css" />
 
@@ -2787,10 +3179,10 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\DefinePropertyHighlightsForm.js"></script>
   <link rel="stylesheet" href="CSS/CheckPageMenus.css" type="text/css" />
 
-  <script type="text/javascript" src="Javascripts\Annotations\AnnotationMarkup.js"></script>  
+  <script type="text/javascript" src="Javascripts\Annotations\AnnotationMarkup.js"></script>
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperatorBase.js"></script>
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperator.js"></script>
- 
+
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
@@ -2799,49 +3191,135 @@
       "message": ""
     });
 
-    window.onload = function () {
+    var vaultDataDescription = null;
+    var vaultDataVersion = null;
+    // var replaceVaultDataSetDialog = null;
+    function isDataVault() {
+      var isVault = localStorage.getItem("isDataVault");
+      if (isVault.toLowerCase() === "true") {
+        return true;
+      }
 
-        setPageTitle();
-        setUserName();
+      return false;
+    }
+
+    window.onload = function () {
+      var hiddenItems = ["check", "output"];
+      var disabledItems = [];
+
+      var isVault = isDataVault();
+      if (isVault) {
+        setCheckSpaceName("check", true);
+
+        // set title
+        document.title = "Data Vault";
+
+        // hide check case select
+        document.getElementById("checkCaseSelect").style.display = "none"
+
+        // disable menu items
+        disabledItems.push("Studio Modes");
+        disabledItems.push("review");
+        disabledItems.push("Comments");
+        disabledItems.push("Data Definitions");
+        disabledItems.push("Reports");
+        disabledItems.push("Output");
+
+        // enable menu options
+        var disabledBtns = [
+        MenuBar.RevisionBtn,
+        MenuBar.DisplayBtn];
+
+        enableMenuOptions(disabledBtns);
+
+        // hide loading overlay
+        document.getElementById("uiBlockingOverlay").style.display = "none";
+
+        // hide compliance, comparison and check controls
+        document.getElementsByClassName("checkTogglesContainer")[0].style.display = "none";
+
+        vaultDataDescription = $("#vaultDataDescription").dxTextBox({         
+        }).dxTextBox("instance");
+
+        vaultDataVersion = $("#vaultDataVersion").dxTextBox({        
+          onChange:function(e){
+
+          }  
+        }).dxTextBox("instance");
+
+        document.getElementById("saveToVaultOkBtn").onclick = function () {
+          var description = vaultDataDescription.option("value");
+          var version = vaultDataVersion.option("value");
+          if (!version ||
+            version === "") {
+            alert("Version can't be empty.");
+            return;
+          }         
+        
+          if (model.currentTabId in SourceManagers) {
+            var sourceManager = SourceManagers[model.currentTabId];
+            CheckModule.onSaveVault(sourceManager, version, description).then(function (result) {             
+              if (result.length > 1 && result[1] === false) {
+                // don;t close the prompt
+                 return;
+              }
+
+              vaultDataVersion.option("value", "");
+              vaultDataDescription.option("value", "");
+
+              document.getElementById("uiBlockingOverlay").style.display = "none";
+              document.getElementById("saveToVaultPrompt").style.display = "none";
+            });
+          }         
+        }
+
+        document.getElementById("saveToVaultCanceBtn").onclick = function () {
+          document.getElementById("uiBlockingOverlay").style.display = "none";
+          document.getElementById("saveToVaultPrompt").style.display = "none";
+        }
+
+        // InitReplaceVaultDataSetDialog();
+      }
+      else {
         setCheckSpaceName("check");
 
         var checkButton = document.getElementById("checkButton");
         checkButton.onclick = function () {
-
           // show busy loader
           onCheckButtonClick();
         };
 
         // enable menu options
-        enableMenuOptions();
+        enableMenuOptions([]);
 
-        //Create file uploader using devExtreme
-        UploadManager.createFileUploader();
+        // create drawer menu     
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        if (checkinfo.review != 1) {
+          disabledItems.push("review");
+        }
 
-        // create drawer menu
-      var hiddenItems = ["check", "output"];
-      var disabledItems = [];
-      var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-      if (checkinfo.review != 1) {
-        disabledItems.push("review");
-      }
-      DrawerMenu.create(hiddenItems, disabledItems);
-
-      //Init comments callout
-      commentsCallout = new CommentsCallout();
-      commentsCallout.Init();
+        //Init comments callout
+        commentsCallout = new CommentsCallout();
+        commentsCallout.Init();
 
         loadCheckCases().then(function (result) {
 
           //load data from saved check space
           loadCheckSpaceInCheckPage();
 
-          // // hide busy indicator
-          // hideBusyIndicator();
           // hide loading overlay
           document.getElementById("uiBlockingOverlay").style.display = "none";
-        }); 
+        });
       }
+
+      DrawerMenu.create(hiddenItems, disabledItems);
+
+      //Create file uploader using devExtreme
+      UploadManager.createFileUploader();
+
+      setPageTitle();
+      setUserName();
+    }
 
     function showBusyIndicator() {
       // hide busy indicator
@@ -2897,7 +3375,15 @@
 
     function onExitClicked() {
       var overlay = document.getElementById("uiBlockingOverlay");
-      var popup = document.getElementById("exitPopup");
+      
+      // var popup = document.getElementById("exitPopup");
+      var popup;
+      if (isDataVault()) {
+        popup = document.getElementById("exitFromVaultPopup");
+      }
+      else {
+        popup = document.getElementById("exitPopup");
+      }
 
       overlay.style.display = 'block';
       popup.style.display = 'block';
@@ -2912,7 +3398,13 @@
 
     function cancelExit() {
       var overlay = document.getElementById("uiBlockingOverlay");
-      var popup = document.getElementById("exitPopup");
+      var popup;
+      if (isDataVault()) {
+        popup = document.getElementById("exitFromVaultPopup");
+      }
+      else {
+        popup = document.getElementById("exitPopup");
+      }
 
       overlay.style.display = 'none';
       popup.style.display = 'none';
@@ -2920,8 +3412,47 @@
 
     function exit(callbackFuntion) {
       onclosewindow(callbackFuntion);
-    }
+    } 
 
+      function returnToProject(callbackFunction) {
+        // if (isDataVault()) {
+        //   returnProjectCenter();
+        // }
+        // else {
+          returnProjectCenter(callbackFunction);
+        // }
+      }
+
+      function cancelReturnToProject() {
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("returnToProjectPopup");
+
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+      }
+
+      function returnToProjectFromVault(callbackFunction){
+        returnProjectCenter(callbackFunction);
+      }
+
+      function cancelReturnToProjectFromVault() {
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("returnToProjectFromVaultPopup");
+
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+      }        
+
+      function returnHomeFromVault(callbackFunction) {
+          if (callbackFunction) {
+            callbackFunction().then(function (result) {
+              window.location = "landingPage.html";
+            });
+          }
+          else {
+            window.location = "landingPage.html";
+          }
+        }
   </script>
 </body>
 

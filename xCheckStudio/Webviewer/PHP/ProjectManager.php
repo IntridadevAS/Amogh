@@ -9,9 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CreateProject":
             CreateProject();
             break;
-        case "AddProjectToMainDB":
-            AddProjectToMainDB();
-            break;
+        // case "AddProjectToMainDB":
+        //     AddProjectToMainDB();
+        //     break;
         case "AddNewProjectToMainDB":
             AddNewProjectToMainDB();
             break;
@@ -27,12 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetProjects":
             GetProjects();
             break;
-            // case "IsLoadProject":
-            //     IsLoadProject();
-            //     break;
-            // case "CreateProjectSession":
-            //     CreateProjectSession();
-            //     break;
         case "ReadSelectedComponents":
             ReadSelectedComponents();
             break;
@@ -57,24 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveCheckCaseData":
             SaveCheckCaseData();
             break;
-            // case "SaveCheckModuleControlsState":
-            //     SaveCheckModuleControlsState();
-            //     break;
-            // case "SaveDatasourceInfo":
-            //     SaveDatasourceInfo();
-            //     break;  
-            // case "SaveSelectedComponents":
-            //     SaveSelectedComponents();         
-            //     break;  
-            // case "SaveCheckResults":
-            //     SaveCheckResults();         
-            //     break;
-            // case "SaveNotSelectedComponents":
-            //     SaveNotSelectedComponents();         
-            //     break;
-            // case "SaveComponents":
-            //     SaveComponents();         
-            //     break;
         case "CreateCheckSpaceDBonSave":
             CreateCheckSpaceDBonSave();
             break;
@@ -93,12 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CopyProject":
             CopyProject();
             break;
-            // case  "SaveHiddenItems":
-            //     SaveHiddenItems();
-            //     break;
-            // case "SaveReferences":
-            //     SaveReferences();         
-            //     break;
         case "SaveAll":
             SaveAll();
             break;
@@ -737,28 +707,28 @@ function ClearTemporaryCheckSpaceDB()
     }
 }
 
-function deleteDirectory($dir)
-{
-    if (!file_exists($dir)) {
-        return true;
-    }
+// function deleteDirectory($dir)
+// {
+//     if (!file_exists($dir)) {
+//         return true;
+//     }
 
-    if (!is_dir($dir)) {
-        return unlink($dir);
-    }
+//     if (!is_dir($dir)) {
+//         return unlink($dir);
+//     }
 
-    foreach (scandir($dir) as $item) {
-        if ($item == '.' || $item == '..') {
-            continue;
-        }
+//     foreach (scandir($dir) as $item) {
+//         if ($item == '.' || $item == '..') {
+//             continue;
+//         }
 
-        if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-            return false;
-        }
-    }
+//         if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+//             return false;
+//         }
+//     }
 
-    return rmdir($dir);
-}
+//     return rmdir($dir);
+// }
 
 function CreateCheckSpaceDBonSave()
 {
@@ -3573,41 +3543,6 @@ function ReadSelectedComponentsFromDB($dbh, $table)
     return $selectedComponents;
 }
 
-// function CreateProjectSession()
-// {
-//     if(!isset($_POST['projectName']) || 
-//        !isset($_POST['loadProject']) ||
-//        !isset($_POST['sourceAPath']) ||
-//        !isset($_POST['sourceBPath']) ||
-//        !isset($_POST['projectId']))
-//        {
-//            echo "fail";
-//            return;
-//        }
-
-//     session_start();
-
-//     $_SESSION['ProjectName'] = $_POST['projectName'];
-//     $_SESSION['LoadProject'] = $_POST['loadProject'];
-//     $_SESSION['ProjectId'] =  $_POST['projectId'];
-//     $_SESSION['SourceAPath'] =  $_POST['sourceAPath'];
-//     $_SESSION['SourceBPath'] =  $_POST['sourceBPath'];
-
-//     echo 'success';
-// }
-
-// function IsLoadProject()
-// {
-//     session_start();
-//     if(isset($_SESSION['LoadProject'] ))
-//     {
-//         echo $_SESSION['LoadProject'];
-//         return;
-//     }
-
-//     echo 'false';    
-// }
-
 function CopyProject()
 {
 
@@ -3802,6 +3737,7 @@ function CreateProject()
         return;
     }
 
+    // Create project directory
     $path = "../Projects/" . $projectName;
     if (!file_exists($path)) {
 
@@ -3811,6 +3747,13 @@ function CreateProject()
             $database = new SQLite3($path . "/Project.db");
         }
     }
+
+    // create data vault directory
+    $vaultPath = "../Projects/" . $projectName."/DataVault";
+    if (!file_exists($vaultPath)) {
+        mkdir($vaultPath, 0777, true);        
+    }
+
     echo "success";
 }
 

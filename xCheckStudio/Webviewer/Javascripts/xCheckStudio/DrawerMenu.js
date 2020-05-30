@@ -226,7 +226,17 @@ let menu = {
         swapIcon();
         DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
-        var popup = document.getElementById("returnHomePopup");
+
+        var popup;
+
+        if( (typeof isDataVault) !== "undefined"  && isDataVault() === true)
+        {
+            popup = document.getElementById("returnHomeFromVaultPopup");
+        }
+        else
+        {
+            popup = document.getElementById("returnHomePopup");
+        }        
 
         overlay.style.display = 'block';
         popup.style.display = 'block';
@@ -243,7 +253,14 @@ let menu = {
         swapIcon();
         // DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
-        var popup = document.getElementById("returnProjectCenterPopup");
+
+        var popup;
+        if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+            popup = document.getElementById("returnToProjectCenterFromVaultPopup");
+        }
+        else {
+            popup = document.getElementById("returnProjectCenterPopup");
+        }         
 
         overlay.style.display = 'block';
         popup.style.display = 'block';
@@ -322,7 +339,14 @@ let menu = {
         swapIcon();
         DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
-        var popup = document.getElementById("signOutPopup");
+
+        var popup;
+        if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+            popup = document.getElementById("signOutFromVaultPopup");
+        }
+        else {
+            popup = document.getElementById("signOutPopup");
+        }                   
 
         overlay.style.display = 'block';
         popup.style.display = 'block';
@@ -355,7 +379,13 @@ let menu = {
 
 function cancelReturnHome() {
     var overlay = document.getElementById("uiBlockingOverlay");
-    var popup = document.getElementById("returnHomePopup");
+    var popup;
+    if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+        popup = document.getElementById("returnHomeFromVaultPopup");
+    }
+    else {
+        popup = document.getElementById("returnHomePopup");
+    }
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
@@ -374,7 +404,13 @@ function returnHome(callbackFunction) {
 
 function cancelReturnProjectCenter() {
     var overlay = document.getElementById("uiBlockingOverlay");
-    var popup = document.getElementById("returnProjectCenterPopup");
+    var popup;
+    if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+        popup = document.getElementById("returnToProjectCenterFromVaultPopup");
+    }
+    else {
+        popup = document.getElementById("returnProjectCenterPopup");
+    }     
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
@@ -412,7 +448,13 @@ function returnToPREP(callbackFunction) {
 
 function cancelSignOut() {
     var overlay = document.getElementById("uiBlockingOverlay");
-    var popup = document.getElementById("signOutPopup");
+    var popup;
+    if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+        popup = document.getElementById("signOutFromVaultPopup");
+    }
+    else {
+        popup = document.getElementById("signOutPopup");
+    } 
 
     overlay.style.display = 'none';
     popup.style.display = 'none';

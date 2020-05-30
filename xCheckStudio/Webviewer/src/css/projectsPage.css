@@ -772,3 +772,132 @@ input[type=checkbox] + label {
 }
 
 /* END DELETE ITEM WARNING BAR */
+
+.dataVaultBtn
+{
+  width: 120px;
+  height: 30px; 
+  position: absolute;  
+  text-align: center;  
+  left: 240px;
+  border: 2px solid var(--xCheckRed);
+  background-color: var(--xCheckBlack);
+  border-radius: var(--borderRadiusVal); 
+  line-height: 25px;
+  font-size: 16px;
+}
+
+.dataVaultBtn:hover
+{
+  font-size: 18px;
+  border: 2px solid white;
+}
+
+.dataVaultOverlay
+{
+  position: absolute; 
+  display: none;
+  z-index: 2;
+  height: 500px;
+  width: 700px;
+  /* height: 80vh;
+  width: 80vw; */
+  background: gray;
+  right: 0px;
+  border: 1px solid black;
+  /* top: calc(100vh - 90vh);
+  left: calc(100vw - 90vw); */
+  top: calc(50vh - 250px);
+  left:  calc(50vw - 350px);
+}
+
+.dataVaultOverlayCaptionBar
+{
+  height: 30px;
+  width: 100%;
+  border-bottom: 1px solid rgb(25.5, 25.5, 25.5);
+  background: white;
+}
+
+.dataVaultOverlayCaption{
+  color: black;
+  top: 5px;
+  left: 4px;
+  position: absolute;
+}
+
+.dataVaultOverlayCloseBtn
+{
+  font-size: 12px;
+  position: absolute;
+  right : 2px;
+  width : 25px;
+  height : 25px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.dataVaultOverlayCloseBtn:hover,
+.dataVaultOverlayDelete:hover
+{
+  opacity: 1;
+}
+
+.dataVaultOverlayArea
+{
+  height: calc(100% - 30px);
+  width: 100%;  
+}
+
+.dataVaultOverlayControlColumn
+{
+  position: relative;
+  left:0px;
+  width: 154px;
+  height : 100%; 
+  /* text-align: center;   */
+  /* padding: 2px;  */
+}
+
+.enableVaultSwitch
+{
+  position: absolute;
+  width: 80px !important;
+  top: 190px;
+  left: calc( (100% / 2) - 40px);
+}
+
+.enableVaultSwitchText
+{
+  top: 220px;
+  position: absolute;
+  width: calc( 100% - 4px);
+  text-align: center;
+}
+
+
+.dataVaultOverlayDelete
+{
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 260px;
+  left: 45px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.dataVaultOverlayDeleteText
+{
+  position: absolute;
+    top: 320px;
+    width: calc( 100% - 4px);
+    text-align: center;
+}
+
+.dataVaultOverlayGrid
+{
+  width: calc(100% - 154px);
+  height: 100%;
+  /* overflow: hidden; */
+}

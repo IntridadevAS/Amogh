@@ -5,7 +5,8 @@
            !isset($_POST['ProjectName']) || 
            !isset($_POST['fileName']) || 
            !isset($_POST['Source']) || 
-           !isset($_POST['dataSourceType']))
+           !isset($_POST['dataSourceType']) ||
+           !isset($_POST['isDataVault']))
         {
             echo 'Input argument not found';
             return; 
@@ -15,21 +16,45 @@
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
         $source = $_POST['Source'];
-        $sourceDirectory = NULL;
+        $isDataVault = $_POST['isDataVault'];
 
-        switch($source) {
-            case "a":
-                $sourceDirectory = getCheckSourceAPath($projectName, $checkName);
-                break;
-            case "b":
-                $sourceDirectory = getCheckSourceBPath($projectName, $checkName);
-                break;
-            case "c":
-                $sourceDirectory = getCheckSourceCPath($projectName, $checkName);
-              break;
-            case "d":
-                $sourceDirectory = getCheckSourceDPath($projectName, $checkName);
-              break;
+        $sourceDirectory = NULL;
+        if (strtolower($isDataVault) === "true") {
+            switch ($source) {
+                case "a":
+                    $sourceDirectory =  getVaultSourceAPath($projectName);
+                    break;
+                case "b":
+                    $sourceDirectory =  getVaultSourceBPath($projectName);
+                    break;
+                case "c":
+                    $sourceDirectory =  getVaultSourceCPath($projectName);
+                    break;
+                case "d":
+                    $sourceDirectory =  getVaultSourceDPath($projectName);
+                    break;
+            }
+        } 
+        else if ($checkName !== null) {
+            switch ($source) {
+                case "a":
+                    $sourceDirectory = getCheckSourceAPath($projectName, $checkName);
+                    break;
+                case "b":
+                    $sourceDirectory = getCheckSourceBPath($projectName, $checkName);
+                    break;
+                case "c":
+                    $sourceDirectory = getCheckSourceCPath($projectName, $checkName);
+                    break;
+                case "d":
+                    $sourceDirectory = getCheckSourceDPath($projectName, $checkName);
+                    break;
+            }
+        }
+        if($sourceDirectory === NULL)
+        {
+            echo "fail";
+            return;
         }
 
         if($_POST['dataSourceType'] == "3D")

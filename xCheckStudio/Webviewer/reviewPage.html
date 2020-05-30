@@ -685,6 +685,63 @@
     </div>
   </div>
 
+    <!-- Return to project center overlay -->
+    <div id="returnToProjectPopup" class="popup">
+      <div id="Save_and_Exit">
+        <svg class="Rectangle_1204">
+          <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0"
+            y="0" width="581" height="155">
+          </rect>
+        </svg>
+        <svg class="Rectangle_1215">
+          <rect fill="rgba(71,71,71,1)" id="Rectangle_1215" rx="0" ry="0" x="0" y="0" width="575" height="55">
+          </rect>
+        </svg>
+        <div id="Save_and_Exit_">
+          <span>Info</span>
+        </div>
+        <div id="Save_data_and_Exit_XcheckStudi">
+          <span></span><span style="font-style:normal;font-weight:normal;">Save before Returning to
+            Project?</span><span></span>
+        </div>
+        <div style="position:absolute;width:90px;height:30px;left:478px;top:112px;overflow:visible;" id="Component_20">
+          <svg class="Path_310" viewBox="0 0 90 30">
+            <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
+              d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
+            </path>
+          </svg>
+          <div id="NO" style="cursor: pointer;" onclick="returnToProject(CheckPageCleanUp.onLeavingPage)">
+            <span>No</span>
+          </div>
+        </div>
+        <div style="position:absolute;width:90px;height:30px;left:383px;top:112px;overflow:visible;" id="Component_34">
+          <svg class="Rectangle_1242">
+            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+              y="0" width="90" height="30">
+            </rect>
+          </svg>
+          <div id="YES" style="cursor: pointer;" onclick="returnToProject(CheckPageCleanUp.onSaveAndLeavePage)">
+            <span>Yes</span>
+          </div>
+        </div>
+        <div style="position:absolute;width:90px;height:30px;left:288px;top:112px;overflow:visible;" id="Component_35">
+          <svg class="Rectangle_1242_A61_Rectangle_4">
+            <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+              stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A61_Rectangle_4"
+              rx="5" ry="5" x="0" y="0" width="90" height="30">
+            </rect>
+          </svg>
+          <div id="CANCEL" style="cursor: pointer;" onclick="cancelReturnToProject()">
+            <span>Cancel</span>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+
 
   <!-- exit app overlay -->
   <div id="exitPopup" class="popup">
@@ -1978,6 +2035,17 @@
       VersioningManager.deleteVersion(versionId);
     }
 
+      function returnToProject(callbackFunction) {
+        returnProjectCenter(callbackFunction);
+      }
+
+      function cancelReturnToProject() {
+        var overlay = document.getElementById("uiBlockingOverlay");
+        var popup = document.getElementById("returnToProjectPopup");
+
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+      }
 
   </script>
 </body>

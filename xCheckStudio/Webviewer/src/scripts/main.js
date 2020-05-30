@@ -15,76 +15,72 @@ function setUserName() {
     document.getElementById("userName").innerHTML = userinfo.alias;
 }
 
-function setCheckSpaceName(moduleName) {
+function setCheckSpaceName(moduleName, isVault = false) {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    if(projectinfo !== null){
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        
-        // var projectNameSpan = document.createElement("span");
-        // projectNameSpan.innerText = projectinfo.projectname;
-        // projectNameSpan.onclick = function () {
-        //     // localStorage.removeItem("checkinfo");
+    if (projectinfo === null) {
+        return;
+    }
 
-        //     var fromInfo = {
-        //         "proj": projectinfo,
-        //         "fromModule": moduleName
-        //     };
-        //     localStorage.setItem("fromInfo", JSON.stringify(fromInfo));
+    if (isVault) {
+        document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / Vault"; 
 
-        //     var overlay = document.getElementById("uiBlockingOverlay");
-        //     var popup = document.getElementById("returnProjectCenterPopup");
+        // document.getElementById("returnToProjectMessage").innerText = "Ensure your dataset(s) have been saved before returning to the Project.";
 
-        //     overlay.style.display = 'block';
-        //     popup.style.display = 'block';
-
-        //     popup.style.width = "581px";
-        //     popup.style.height = "155px";
-        //     popup.style.overflow = "hidden";
-
-        //     popup.style.top = ((window.innerHeight / 2) - 139) + "px";
-        //     popup.style.left = ((window.innerWidth / 2) - 290) + "px";
-        // }
-        // projectNameSpan.onmouseover = function () {
-        //     this.style.color = "gray";
-        // }
-        // projectNameSpan.onmouseout = function () {
-        //     this.style.color = "white";
-        // }
-
-        // var checkspaceNameSpan = document.createElement("span");
-        // checkspaceNameSpan.innerText = " / " + checkinfo.checkname;
-        
-        // var span = document.createElement('span');
-        // span.appendChild(projectNameSpan);
-        // span.appendChild(checkspaceNameSpan);
-        // document.getElementById("checkSpaceName").appendChild(span);
-        document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / " + checkinfo.checkname;
         document.getElementById("checkSpaceName").onclick = function () {
-            // localStorage.removeItem("checkinfo");
 
             var fromInfo = {
                 "proj": projectinfo,
                 "fromModule": moduleName
             };
             localStorage.setItem("fromInfo", JSON.stringify(fromInfo));
-
+    
             var overlay = document.getElementById("uiBlockingOverlay");
-            var popup = document.getElementById("returnProjectCenterPopup");
-
+            var popup = document.getElementById("returnToProjectFromVaultPopup");
+    
             overlay.style.display = 'block';
             popup.style.display = 'block';
-
+    
             popup.style.width = "581px";
             popup.style.height = "155px";
             popup.style.overflow = "hidden";
-
+    
             popup.style.top = ((window.innerHeight / 2) - 139) + "px";
             popup.style.left = ((window.innerWidth / 2) - 290) + "px";
         }
     }
+    else {
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        document.getElementById("checkSpaceName").innerHTML = projectinfo.projectname + " / " + checkinfo.checkname;
+       
+        // document.getElementById("returnToProjectMessage").innerText = "Save before Returning to the Project?";
+
+        document.getElementById("checkSpaceName").onclick = function () {
+
+            var fromInfo = {
+                "proj": projectinfo,
+                "fromModule": moduleName
+            };
+            localStorage.setItem("fromInfo", JSON.stringify(fromInfo));
+    
+            var overlay = document.getElementById("uiBlockingOverlay");
+            var popup = document.getElementById("returnToProjectPopup");
+    
+            overlay.style.display = 'block';
+            popup.style.display = 'block';
+    
+            popup.style.width = "581px";
+            popup.style.height = "155px";
+            popup.style.overflow = "hidden";
+    
+            popup.style.top = ((window.innerHeight / 2) - 139) + "px";
+            popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+        }
+    }
+
+  
 }
 
-function setPageTitle(){
+function setPageTitle() {
     let pageName = document.getElementById("pageName");
     pageName.innerHTML = document.title;
 }

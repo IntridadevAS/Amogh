@@ -903,6 +903,8 @@ let checkView = {
     controller.setCurrentCheck(subject.id);
     var check = model.currentCheck;
     localStorage.setItem('checkinfo', JSON.stringify(check));
+
+    localStorage.setItem('isDataVault', "false");
     //window.location.href = "checkModule.html";
     // var fromCheckClick = localStorage.getItem('FromCheckClick')
     // // localStorage.clear();
