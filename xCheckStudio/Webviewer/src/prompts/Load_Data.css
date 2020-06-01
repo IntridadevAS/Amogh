@@ -84,6 +84,7 @@
 }
 #Load_Data_Path_259 {
 	filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.749));
+	cursor: pointer;
 }
 .Load_Data_Path_259 {
 	overflow: visible;
@@ -157,6 +158,7 @@
 	left: 220px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Load_Data_Rectangle_1242 {
 	position: absolute;
@@ -187,6 +189,7 @@
 	left: 325px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Load_Data_Rectangle_1242_A52_Rectangle_3 {
 	position: absolute;
@@ -217,6 +220,7 @@
 	left: 447px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Load_Data_Rectangle_1242_A52_Rectangle_4 {
 	position: absolute;
@@ -239,4 +243,21 @@
 	font-weight: bold;
 	font-size: 20px;
 	color: rgba(242,243,244,1);
+}
+
+.loadFromVaultBtn{
+	position: absolute;
+    width: 125px;
+    height: 30px;
+    left: 317px;
+    top: 204px;
+    border: 1px solid var(--intridaBlue);
+    text-align: center;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.loadFromVaultBtn p{
+	font-weight: bold;
+    font-size: 20px;
 }

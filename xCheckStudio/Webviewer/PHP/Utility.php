@@ -15,6 +15,11 @@
         return $checkDirPath;
     }
 
+    function getDataVaultDirectoryPath($projectName){
+        $vaultDirPath = getProjectDirectoryPath($projectName)."/DataVault";
+        return $vaultDirPath;
+    }
+
     function getCheckDatabasePath($projectName, $checkName){
         $dbPath = getCheckDirectoryPath($projectName, $checkName)."/".$checkName."_temp.db";
         return $dbPath;
@@ -28,6 +33,31 @@
     function getSavedCheckDatabasePath($projectName, $checkName) {
         $dbPath = getCheckDirectoryPath($projectName, $checkName)."/".$checkName.".db";
         return $dbPath;
+    }
+
+    function getVaultSourceAPath($projectName)
+    {
+        $tempVaultPath = getDataVaultDirectoryPath($projectName) . "/temp";
+        $path = $tempVaultPath . "/a";
+        return $path;
+    }
+
+    function getVaultSourceBPath($projectName){
+        $tempVaultPath = getDataVaultDirectoryPath($projectName) . "/temp";       
+        $path = $tempVaultPath . "/b";       
+        return $path;
+    }
+
+    function getVaultSourceCPath($projectName) {
+        $tempVaultPath = getDataVaultDirectoryPath($projectName) . "/temp";
+        $path = $tempVaultPath . "/c";  
+        return $path;
+    }
+
+    function getVaultSourceDPath($projectName){
+        $tempVaultPath = getDataVaultDirectoryPath($projectName) . "/temp";
+        $path = $tempVaultPath . "/d";      
+        return $path;
     }
 
     function getCheckSourceAPath($projectName, $checkName) {
@@ -113,5 +143,28 @@
         // Clean up 
         $dir->close(); 
         return true; 
+    }
+
+    function deleteDirectory($dir)
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+
+        return rmdir($dir);
     }
 ?>

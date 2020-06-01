@@ -470,9 +470,7 @@ function cancelCheckResults() {
     document.getElementById("Check_Complete").style.display = "none";
 }
 
-function reviewResults(callbackFunction) {
-    //saveData();
-
+function reviewResults(callbackFunction) { 
     SetCheckSpaceReviewStatus().then(function (res) {
         CheckModule.onSaveProgress(true).then(function (result) {
             if (callbackFunction) {

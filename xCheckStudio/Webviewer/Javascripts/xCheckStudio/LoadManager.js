@@ -24,8 +24,18 @@ let LoadManager = {
                 fileNameWithoutExt = "source";
             }
 
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));           
+            var checkName = null;
+            var isVault = null;
+            if (isDataVault()) {
+                isVault = "true";
+                checkName = null;
+            }
+            else {
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+                checkName = checkinfo.checkname;
+                isVault = "false";
+            }
 
             $.ajax({
                 data:
@@ -34,7 +44,8 @@ let LoadManager = {
                     'fileName': fileNameWithoutExt,
                     'dataSourceType': '3D',
                     'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
+                    'CheckName': checkName,
+                    "isDataVault" : isVault
                 },
                 type: "POST",
                 url: "PHP/GetSourceFilePath.php"

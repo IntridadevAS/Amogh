@@ -4,15 +4,15 @@ let UploadManager = {
         $("#file-uploader").dxFileUploader({
             multiple: true,
             accept: ".xml,.XML,.rvm,.RVM,.att,.ATT,.xls,.XLS,.SLDASM,.sldasm," +
-             ".DWG,.dwg,.DXF,.dxf,.DWF,.dwf,.DWFX,.dwfx,.sldprt,.SLDPRT,"+
-             ".rvt,.rfa,.RVT,.RFA,.IFC,.STEP,.stp,.ste,.json,.igs,.IGS,"+
-             ".VSD,.vsd,.VSDX,.vsdx," +
-             ".JT,.jt,.PRT,.prt,.MF1,.mf1,.ARC,.arc,.UNV,.unv,.PKG,.pkg," +
-             ".MODEL,.model,.SESSION,.session,.DLV,.dlv,.EXP,.exp," +
-             ".CATDrawing, .catdrawing, .CATPart, .catpart, .CATProduct, .catproduct, .CATShape, .catshape, .CGR, .cgr"+
-             ".3DXML, .3dxml, .OBJ, .obj, .NEU, .neu, .PRT, .prt, .XAS, .xas, .XPR, .xpr" +
-             ".IPT, .ipt, .IAM, .iam, .ASM, .asm, .PAR, .par, .PWD, .pwd, .PSM, .psm" + 
-             ".3DS, .3ds, .U3D, .u3d, .SAT, .sat, .SAB, .sab",
+                ".DWG,.dwg,.DXF,.dxf,.DWF,.dwf,.DWFX,.dwfx,.sldprt,.SLDPRT," +
+                ".rvt,.rfa,.RVT,.RFA,.IFC,.STEP,.stp,.ste,.json,.igs,.IGS," +
+                ".VSD,.vsd,.VSDX,.vsdx," +
+                ".JT,.jt,.PRT,.prt,.MF1,.mf1,.ARC,.arc,.UNV,.unv,.PKG,.pkg," +
+                ".MODEL,.model,.SESSION,.session,.DLV,.dlv,.EXP,.exp," +
+                ".CATDrawing, .catdrawing, .CATPart, .catpart, .CATProduct, .catproduct, .CATShape, .catshape, .CGR, .cgr" +
+                ".3DXML, .3dxml, .OBJ, .obj, .NEU, .neu, .PRT, .prt, .XAS, .xas, .XPR, .xpr" +
+                ".IPT, .ipt, .IAM, .iam, .ASM, .asm, .PAR, .par, .PWD, .pwd, .PSM, .psm" +
+                ".3DS, .3ds, .U3D, .u3d, .SAT, .sat, .SAB, .sab",
             width: "100%",
             height: "100%",
             value: [],
@@ -59,26 +59,7 @@ let UploadManager = {
 
                 var item = input;
                 UploadManager.getFilesInDirectory(item).then(function (fileEntries) {
-
-                    // // validate dataset, if checkspace is loaded from saved data
-                    // if (model.loadSavedCheckspace) {
-                    //     if (!UploadManager.validateSourceFromDirDragDrop(fileEntries, item.name)) {                            
-                    //         showNotValidDatasourcePrompt();
-
-                    //         //hide busy spinner
-                    //         hideBusyIndicator();
-
-                    //         // delete tabdata
-                    //         model.activeTabs--;
-                    //         controller.deleteTabData(addedSource.id);
-                    //         viewTabs.showAddTab();
-                    //         viewPanels.showAddPanel();
-
-                    //         return;
-                    //     }
-                    // }
-                    // else
-                    // {   
+     
                     // validate dataset for selected checkspace                     
                     if (checkCaseManager && checkCaseManager.CheckCase) {
                         if (!UploadManager.validateSourceFromDirDragDropForSelectedCheckspace(fileEntries, item.name)) {
@@ -96,8 +77,7 @@ let UploadManager = {
                             return;
                         }
                     }
-                    //}
-
+                   
                     UploadManager.createFormDataAndUpload(formData, fileEntries, addedSource, item)
                 });
             }
@@ -112,28 +92,6 @@ let UploadManager = {
             }
         }
     },
-
-    // validateSourceFromDirDragDrop: function (allFiles, dirName) {
-    //     // get the main source file name
-    //     var mainFileName = undefined;
-    //     for (var i = 0; i < allFiles.length; i++) {
-    //         var fileEntry = allFiles[i];
-    //         var name = xCheckStudio.Util.getFileNameWithoutExtension(fileEntry.name);
-    //         if (dirName === name) {
-    //             mainFileName = fileEntry.name;
-    //             break;
-    //         }
-    //     }
-    //     if (!mainFileName) {
-    //         return false;
-    //     }
-
-    //     if (!UploadManager.validateDataSetForSavedCheckSpace(mainFileName)) {            
-    //         return false;
-    //     }
-
-    //     return true;
-    // },
 
     validateSourceFromDirDragDropForSelectedCheckspace: function (allFiles, dirName) {
         // get the main source file name
@@ -371,24 +329,6 @@ let UploadManager = {
                 return;
             }
             else {
-                // // if checkspace is loaded from saved data, then validate the data set types                        
-                // if (model.loadSavedCheckspace) {
-                //     if (!UploadManager.validateDataSetForSavedCheckSpace(sourceArray[0])) {
-                //         showNotValidDatasourcePrompt();
-
-                //         //hide busy spinner
-                //         hideBusyIndicator();
-
-                //         // delete tabdata
-                //         model.activeTabs--;
-                //         controller.deleteTabData(addedSource.id);
-                //         viewTabs.showAddTab();  
-                //         viewPanels.showAddPanel();                      
-
-                //         return;
-                //     }
-                // }
-                // else {
                 // validate datset for selected checkcase
                 if (checkCaseManager && checkCaseManager.CheckCase) {
                     if (!UploadManager.validateDataSetForSelectedCheckSpace(sourceArray[0])) {
@@ -406,9 +346,7 @@ let UploadManager = {
                         return;
                     }
                 }
-                //}
-
-                //var fileName = sourceArray[0];
+               
                 var fileName = "";
                 for (var i = 0; i < sourceArray.length; i++) {
 
@@ -421,7 +359,24 @@ let UploadManager = {
                 }
 
                 addedSource.fileName = fileName;
-                addedSource.type = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();;
+                addedSource.type = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
+
+                // Data vault supports loading of only 3D datasets for now
+                if (isDataVault() &&
+                    !xCheckStudio.Util.isSource3D(addedSource.type)) {
+
+                    alert("Data vault supports only 2D/3D datasets.")    
+                    //hide busy spinner
+                    hideBusyIndicator();
+
+                    // delete tabdata
+                    model.activeTabs--;
+                    controller.deleteTabData(addedSource.id);
+                    viewTabs.showAddTab();
+                    viewPanels.showAddPanel();
+
+                    return;
+                }
 
                 //Create tab header and Show panel for selected tab
                 viewTabs.createTab(addedSource);
@@ -481,44 +436,6 @@ let UploadManager = {
         return true;
     },
 
-    // validateDataSetForSavedCheckSpace: function (currentSource) {
-    //     var allLoadedTypes = [];
-    //     var currentSourceType = xCheckStudio.Util.getFileExtension(currentSource).toLowerCase();
-    //     allLoadedTypes.push(currentSourceType);
-
-    //     for (var id in model.views) {
-    //         var view = model.views[id];
-    //         if (!view.used ||
-    //             !view.type ||
-    //             view.type === "") {
-    //             continue;
-    //         }
-
-    //         allLoadedTypes.push(view.type.toLowerCase());
-    //     }
-
-    //     // get type wise count for loaded datasets
-    //     var loadedTypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(allLoadedTypes);
-
-    //     // get type wise count for supported datasets
-    //     var supportedypeOccuCounts = xCheckStudio.Util.getArrayElementOccCount(model.datasetTypes);
-
-    //     for (var type in loadedTypeOccuCounts) {
-    //         if (!(type in supportedypeOccuCounts)) {
-    //             return false;
-    //         }
-
-
-    //         var loadCnt = loadedTypeOccuCounts[type];
-    //         var allowedCnt = supportedypeOccuCounts[type];
-    //         if (loadCnt > allowedCnt) {
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // },
-
     upload: function (fileNames,
         formData,
         addedSource,
@@ -539,8 +456,10 @@ let UploadManager = {
                         addedSource.visualizer.id,
                         addedSource.tableData.id,
                         UploadManager.formId).then(function () {
-                            // filter check case
-                            filterCheckCases(false);
+                            if (!isDataVault()) {
+                                // filter check case
+                                filterCheckCases(false);
+                            }
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -612,16 +531,24 @@ let UploadManager = {
             // var formData = new FormData(document.getElementById(formId));
             formData.append('Source', sourceId);
 
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));           
             formData.append('ProjectName', projectinfo.projectname);
-            formData.append('CheckName', checkinfo.checkname);
+
+            if (isDataVault()) {
+                formData.append('CheckName', null);
+                formData.append('isDataVault', "true");
+            }
+            else {
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+                formData.append('CheckName', checkinfo.checkname);
+                formData.append('isDataVault', "false");
+            }          
 
             var convertToScs = "false";
             var convertToSVG = "false";
             if (xCheckStudio.Util.isSource3D(fileExtension)) {
                 convertToScs = "true";
-            }            
+            }
             else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
                 convertToSVG = "true";
             }

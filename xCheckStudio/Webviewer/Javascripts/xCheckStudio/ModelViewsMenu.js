@@ -234,7 +234,10 @@ ModelViewsMenu.prototype.GetControls = function () {
             ImageSrc: "public/symbols/MenuReturn.svg",
             click: function (e, menu) {
                 menu.Close();
-                model.views[menu.Id].displayMenu.Open();
+
+                if (!isDataVault()) {
+                    model.views[menu.Id].displayMenu.Open();
+                }
             }
         },
         {

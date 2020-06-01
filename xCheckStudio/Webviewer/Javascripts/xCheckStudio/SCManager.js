@@ -137,7 +137,9 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
 
                                 _this.ModelTree.AddComponentTable(_this.SourceProperties);
 
-                                _this.AddComponentsToDB();
+                                if (!isDataVault()) {
+                                    _this.AddComponentsToDB();
+                                }
                             }
                             else {
 
@@ -152,24 +154,25 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                                 _this.ViewerOptions.modelTree,
                                 _this.AllComponents,
                                 viewer);
+                            // init list view switches
+                            _this.InitListViewSwitches();
 
-                            // Init group view
-                            model.views[_this.Id].groupView = new GroupView(
-                                _this.Id,
-                                _this.ViewerOptions.modelTree,
-                                _this.AllComponents,
-                                viewer);
+                            if (!isDataVault()) {
+                                // Init group view
+                                model.views[_this.Id].groupView = new GroupView(
+                                    _this.Id,
+                                    _this.ViewerOptions.modelTree,
+                                    _this.AllComponents,
+                                    viewer);
+                                // init group view controls
+                                _this.InitGroupViewControls();
+                            }
 
                             // Init isolatemanager
                             model.views[_this.Id].isolateManager = new IsolateManager(viewer);
 
                             // Init table views action menu
-                            _this.InitViewActionMenu();
-
-                            // init list view switches
-                            _this.InitListViewSwitches();
-                            // init group view controls
-                            _this.InitGroupViewControls();
+                            _this.InitViewActionMenu();   
                         }
 
                         // create property callout
@@ -212,8 +215,10 @@ SCManager.prototype.OpenTableViewsMenu = function () {
 
             _this.CloseTableViewsMenu();
 
-            // hide group view controls
-            _this.ShowGroupViewControls(false);
+            if (!isDataVault()) {
+                // hide group view controls
+                _this.ShowGroupViewControls(false);
+            }
         }
     }
 
@@ -225,23 +230,28 @@ SCManager.prototype.OpenTableViewsMenu = function () {
 
             _this.CloseTableViewsMenu();
 
-            // hide group view controls
-            _this.ShowGroupViewControls(false);
+            
+            if (!isDataVault()) {
+                // hide group view controls
+                _this.ShowGroupViewControls(false);
+            }
         }
     }
 
     var groupsSDA = document.getElementById("groupsAction" + _this.Id);
-    groupsSDA.classList.add("showSDA");
-    groupsSDA.onclick = function () {
-        if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {
-            model.views[_this.Id].groupView.Show();
+    if (!isDataVault()) {
+        groupsSDA.classList.add("showSDA");
+        groupsSDA.onclick = function () {
+            if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {
+                model.views[_this.Id].groupView.Show();
 
-            model.views[_this.Id].activeTableView = GlobalConstants.TableView.Group;
+                model.views[_this.Id].activeTableView = GlobalConstants.TableView.Group;
 
-            _this.CloseTableViewsMenu();
+                _this.CloseTableViewsMenu();
 
-            // show group view controls
-            _this.ShowGroupViewControls(true);
+                // show group view controls
+                _this.ShowGroupViewControls(true);
+            }
         }
     }
 }
@@ -801,58 +811,69 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
 
         // references
         var componentId = this.NodeIdvsComponentIdList[nodeId];
-        ReferenceManager.getReferences([componentId]).then(function (references) {
-            var referencesData = [];
-            var commentsData = [];
-            // var index = 0;
-            if (references && _this.Id in references) {
-                if ("webAddress" in references[_this.Id]) {
-                    for (var i = 0; i < references[_this.Id]["webAddress"].length; i++) {
-                        // index++;
 
-                        var referenceData = {};
-                        // referenceData["id"] = index;
-                        referenceData["Value"] = references[_this.Id]["webAddress"][i];
-                        referenceData["Type"] = "Web Address";
-
-                        referencesData.push(referenceData);
-                    }
-                }
-
-                if ("image" in references[_this.Id]) {
-                    for (var i = 0; i < references[_this.Id]["image"].length; i++) {
-                        // index++;
-
-                        var referenceData = {};
-                        // referenceData["id"] = index;
-                        referenceData["Value"] = references[_this.Id]["image"][i];
-                        referenceData["Type"] = "Image";
-
-                        referencesData.push(referenceData);
-                    }
-                }
-
-                if ("document" in references[_this.Id]) {
-                    for (var i = 0; i < references[_this.Id]["document"].length; i++) {
-                        // index++;
-
-                        var referenceData = {};
-                        // referenceData["id"] = index;
-                        referenceData["Value"] = references[_this.Id]["document"][i];
-                        referenceData["Type"] = "Document";
-
-                        referencesData.push(referenceData);
-                    }
-                }
-
-                if ("comment" in references[_this.Id]) {
-                    for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
-                        commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
-                    }
-                }
+        if (isDataVault()) {
+            if (!componentName) {
+                componentName = _this.SourceProperties[nodeId].Name;
             }
 
-            // if (properties.length > 0) {
+            _this.PropertyCallout.Update(componentName,
+                componentId,
+                properties,
+                [],
+                []);
+        }
+        else {
+            ReferenceManager.getReferences([componentId]).then(function (references) {
+                var referencesData = [];
+                var commentsData = [];
+                // var index = 0;
+                if (references && _this.Id in references) {
+                    if ("webAddress" in references[_this.Id]) {
+                        for (var i = 0; i < references[_this.Id]["webAddress"].length; i++) {
+                            // index++;
+
+                            var referenceData = {};
+                            // referenceData["id"] = index;
+                            referenceData["Value"] = references[_this.Id]["webAddress"][i];
+                            referenceData["Type"] = "Web Address";
+
+                            referencesData.push(referenceData);
+                        }
+                    }
+
+                    if ("image" in references[_this.Id]) {
+                        for (var i = 0; i < references[_this.Id]["image"].length; i++) {
+                            // index++;
+
+                            var referenceData = {};
+                            // referenceData["id"] = index;
+                            referenceData["Value"] = references[_this.Id]["image"][i];
+                            referenceData["Type"] = "Image";
+
+                            referencesData.push(referenceData);
+                        }
+                    }
+
+                    if ("document" in references[_this.Id]) {
+                        for (var i = 0; i < references[_this.Id]["document"].length; i++) {
+                            // index++;
+
+                            var referenceData = {};
+                            // referenceData["id"] = index;
+                            referenceData["Value"] = references[_this.Id]["document"][i];
+                            referenceData["Type"] = "Document";
+
+                            referencesData.push(referenceData);
+                        }
+                    }
+
+                    if ("comment" in references[_this.Id]) {
+                        for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
+                            commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+                        }
+                    }
+                }
 
                 if (!componentName) {
                     componentName = _this.SourceProperties[nodeId].Name;
@@ -863,8 +884,8 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
                     properties,
                     referencesData,
                     commentsData);
-            // }
-        });
+            });
+        }
     }
     else if (nodeId in this.Properties) {
         // properties
@@ -1057,12 +1078,18 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
         _this.AllComponents,
         _this.Webviewer);
 
-    // Init group view
-    model.views[_this.Id].groupView = new GroupView(
-        _this.Id,
-        _this.ViewerOptions.modelTree,
-        _this.AllComponents,
-        _this.Webviewer);
+    if (!isDataVault()) {
+
+        // Init group view
+        model.views[_this.Id].groupView = new GroupView(
+            _this.Id,
+            _this.ViewerOptions.modelTree,
+            _this.AllComponents,
+            _this.Webviewer);
+
+        // init group view controls
+        _this.InitGroupViewControls();
+    }
 
     // Init isolatemanager
     model.views[_this.Id].isolateManager = new IsolateManager(_this.Webviewer);
@@ -1072,9 +1099,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
 
     // init list view switches
     _this.InitListViewSwitches();
-    // }
-    // init group view controls
-    _this.InitGroupViewControls();
+    // }   
 
     // create property callout
     _this.PropertyCallout = new PropertyCallout(_this.Id);

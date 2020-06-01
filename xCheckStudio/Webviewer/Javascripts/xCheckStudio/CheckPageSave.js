@@ -14,41 +14,41 @@ var CheckModule = {
 
                 // create project DB
                 // this.createCheckSpaceDBonSave().then(function (result) {
-                    // if (result) {
+                // if (result) {
 
-                        // save all
-                        CheckModule.saveAll().then(function (res) {
-                            if (res) {
-                                if (!silent) {
-                                    //showSavedDataPrompt();
-                                }
+                // save all
+                CheckModule.saveAll().then(function (res) {
+                    if (res) {
+                        if (!silent) {
+                            //showSavedDataPrompt();
+                        }
 
-                                // remove busy spinner        
-                                hideBusyIndicator();
+                        // remove busy spinner        
+                        hideBusyIndicator();
 
-                                return resolve(true);
-                            }
+                        return resolve(true);
+                    }
 
-                            if (!silent) {
-                                showFailedToSavePrompt();
-                            }
+                    if (!silent) {
+                        showFailedToSavePrompt();
+                    }
 
-                            // remove busy spinner        
-                            hideBusyIndicator();
+                    // remove busy spinner        
+                    hideBusyIndicator();
 
-                            return resolve(false);
-                        });
-                    // }
-                    // else {
+                    return resolve(false);
+                });
+                // }
+                // else {
 
-                    //     if (!silent) {
-                    //         showFailedToSavePrompt();
-                    //     }
-                    //     // remove busy spinner        
-                    //     hideBusyIndicator();
+                //     if (!silent) {
+                //         showFailedToSavePrompt();
+                //     }
+                //     // remove busy spinner        
+                //     hideBusyIndicator();
 
-                    //     return resolve(false);
-                    // }
+                //     return resolve(false);
+                // }
                 // });
             }
             catch (error) {
@@ -135,6 +135,82 @@ var CheckModule = {
         });
     },
 
+    onSaveVault: function (sourceManager, version, description) {
+        return new Promise((resolve) => {
+
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+
+            this.datasetAlreadyExistInVault(projectinfo.projectname, sourceManager.SourceName, version).then(function (result) {
+                if (result.MsgCode === -1) {
+
+                    showReplaceVaultDataSetDialog().then(function (result) {
+                        if (result.buttonText.toLowerCase() === "cancel") {
+                            return resolve([false]);
+                        }
+                        else if (result.buttonText.toLowerCase() === "version") {
+                            //second false is to whether close the description-version prompts
+                            return resolve([false, false]);
+                        }
+                        else if (result.buttonText.toLowerCase() === "replace") {
+
+                            showMergeDataDialog().then(function(res){
+
+                                var mergeData = "false";
+                                if (res.buttonText.toLowerCase() === "yes") {
+                                    mergeData = "true";
+                                }
+                                DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "true", mergeData).then(function (res) {
+                                    return resolve([res]);
+                                });
+                            });                            
+                        }
+                        else {
+                            return resolve([false]);
+                        }
+                    });
+                }
+                else if (result.MsgCode !== 1) {
+                    return resolve([false]);
+                }
+                else if (result.MsgCode === 1) {
+                    DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "false", "false").then(function (res) {
+                        return resolve([res]);
+                    });
+                }
+            });
+        });
+    },    
+
+    datasetAlreadyExistInVault(projectname, sourceName, version) {
+        return new Promise((resolve) => {
+            $.ajax({
+                url: 'PHP/DataVault.php',
+                type: "POST",
+                async: false,
+                data:
+                {
+                    'InvokeFunction': "CheckIfDataSetAlreadyExists",
+                    'ProjectName': projectname,
+                    'fileName': sourceName,
+                    'version': version
+                },
+                success: function (msg) {
+                    var message = JSON.parse(msg);
+                    // if (message.MsgCode === -1) {
+                    //     alert(message.Msg);
+                    //     return resolve(false);
+                    // }
+                    // else if (message.MsgCode !== 1) {
+                    //     return resolve(false);
+                    // }
+
+                    return resolve(message);
+                }
+            });
+        });
+    },
+
     getPropertyGroups: function () {
         var propertyGroups = {};
         propertyGroups = model.propertyGroups;
@@ -212,7 +288,6 @@ var CheckModule = {
         return views;
     },
 
-    
     getBookmarkViews: function () {
         var views = {};
         for (var srcId in SourceManagers) {
@@ -225,9 +300,9 @@ var CheckModule = {
         }
 
         return views;
-    },    
+    },
 
-    getAnnotations: function(){
+    getAnnotations: function () {
         var annotations = {};
         for (var srcId in SourceManagers) {
             var sourceManager = SourceManagers[srcId];
@@ -236,7 +311,7 @@ var CheckModule = {
             }
 
             annotations[srcId] = sourceManager.SerializeAnnotations();
-        }       
+        }
 
         return annotations;
     },
@@ -363,12 +438,12 @@ var CheckModule = {
                 viewerOptions.push(sourceManager.Webviewer._params.endpointUri);
             }
             else if (sourceManager.IsSVGSource()) {
-                viewerOptions.push(sourceManager.ViewerOptions.endpointUri);                
+                viewerOptions.push(sourceManager.ViewerOptions.endpointUri);
             }
             else {
                 continue;
-            }          
-            
+            }
+
             var tableName;
             if (srcId === GlobalConstants.SourceAId) {
                 tableName = GlobalConstants.SourceAViewerOptionsTable;
@@ -386,7 +461,7 @@ var CheckModule = {
                 continue;
             }
 
-            viewerOptionsObject[tableName] = viewerOptions;            
+            viewerOptionsObject[tableName] = viewerOptions;
         }
 
         return viewerOptionsObject;
@@ -492,29 +567,6 @@ function showNoDataToSavePrompt() {
     popup.style.left = ((window.innerWidth / 2) - 290) + "px";
 }
 
-// function onSavedDataOk() {
-//     var overlay = document.getElementById("savedDataOverlay");
-//     var popup = document.getElementById("savedDataPopup");
-
-//     overlay.style.display = 'none';
-//     popup.style.display = 'none';
-// }
-
-// function showSavedDataPrompt() {
-//     var overlay = document.getElementById("savedDataOverlay");
-//     var popup = document.getElementById("savedDataPopup");
-
-//     overlay.style.display = 'block';
-//     popup.style.display = 'block';
-
-//     popup.style.width = "581px";
-//     popup.style.height = "155px";
-//     popup.style.overflow = "hidden";
-
-//     popup.style.top = ((window.innerHeight / 2) - 139) + "px";
-//     popup.style.left = ((window.innerWidth / 2) - 290) + "px";
-// }
-
 function onFailedToSaveOk() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("failedToSavePopup");
@@ -536,4 +588,70 @@ function showFailedToSavePrompt() {
 
     popup.style.top = ((window.innerHeight / 2) - 139) + "px";
     popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+}
+
+function showReplaceVaultDataSetDialog() {
+
+    return new Promise((resolve) => {
+
+        $(function () {
+            var replaceVaultDataSetDialog = DevExpress.ui.dialog.custom({
+                title: "Save Data",
+                messageHtml: "Dataset already exists in vault<br>Replace the existing or Rename the identifier.",
+                buttons: [{
+                    text: "Cancel",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                },
+                {
+                    text: "Version",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                },
+                {
+                    text: "Replace",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                },
+                ]
+            });
+
+            replaceVaultDataSetDialog.show().done(function (dialogResult) {
+                return resolve(dialogResult);
+            });
+        })
+    });
+}
+
+function showMergeDataDialog() {
+
+    return new Promise((resolve) => {
+
+        $(function () {
+            var mergeDataDialog = DevExpress.ui.dialog.custom({
+                title: "Merge Data",
+                messageHtml: "Merge database?",
+                buttons: [{
+                    text: "Yes",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                },
+                {
+                    text: "No",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                }
+                ]
+            });
+
+            mergeDataDialog.show().done(function (dialogResult) {
+                return resolve(dialogResult);
+            });
+        })
+    });
 }

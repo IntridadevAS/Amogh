@@ -22,6 +22,8 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\Utility.js"></script>
   <link rel="stylesheet" href="src/prompts/menubarleft.css" type="text/css" />
   <link rel="stylesheet" href="src\prompts\There_is_no_valid_checkcase.css" type="text/css" />
+
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DataVault.js"></script>
 </head>
 
 <body>
@@ -770,6 +772,10 @@
           <div class="checkSpaceHeader">
             <button id="checkReviewToggle" class="chkRevToggle" onclick="controller.setModule();" type="button"
               name="button"></button>
+            <div id="dataVaultBtn" class="dataVaultBtn">
+              Data Vault
+            </div>
+
             <h1 id=checkSpaceProjectName></h1>
             <div class="checkSpaceButtons">
               <div class="sortBy">
@@ -1075,6 +1081,49 @@
       </section>
       <!-- END EDIT REVIEW OVERLAY -->
 
+      <!-- Data Vault Overlay -->
+      <div id="dataVaultOverlay" class="dataVaultOverlay">
+        <div id="dataVaultOverlayCaptionBar" class="dataVaultOverlayCaptionBar">
+          <div class="dataVaultOverlayCaption">Data Vault</div>
+          <img id="dataVaultOverlayCloseBtn" class="dataVaultOverlayCloseBtn"
+            src="public\symbols\CloseBlack.svg" />
+        </div>
+         <div class="dataVaultOverlayArea">
+          <table style="width: 100%; height: 100%; overflow: hidden; ">
+            <tr style="overflow: hidden;">
+              <td class="dataVaultOverlayControlColumn" align="left" valign="top" style="overflow: hidden;">
+                <!-- <div style="position: relative;width: 150px;height: 100%;"> -->
+                <div class="checkSpaceCard newCheckCardFlag" 
+                  style="position: absolute; width: 140px;" 
+                  onclick="DataVault.onEnterVault()">
+                  <div class="checkCardInfo checkCardInfoNew">
+                    <div class="plusBtn"></div>
+                  </div>
+                  <div class="checkCardTitle checkCardTitleNew">
+                    <h2>Enter Vault</h2>
+                  </div>
+                </div>
+
+                <div id="enableVaultSwitch" class="enableVaultSwitch"> </div>
+                <div class="enableVaultSwitchText">Enable Vault</div> 
+             
+                <div class="dataVaultOverlayDelete" onclick="DataVault.onDeleteData()">                  
+                  <img style="width: 60px; height: 60px;" src="public\symbols\MarkupDeleteBlack.svg" />
+                </div>
+      
+                <div class="dataVaultOverlayDeleteText">Delete Data</div> 
+              <!-- </div> -->
+              </td>
+
+              <td class="dataVaultOverlayGrid">
+                <!-- <div style="position: relative; width: 100%; height: 100%; overflow:auto;"> -->
+                <div id="dataVaultOverlayGrid"> </div>
+               <!-- </div> -->
+              </td>
+            </tr>
+          </table>
+        </div>      
+      </div>
     </div>
   </div>
 
@@ -1095,48 +1144,53 @@
   <script>
 
       window.onload = function () {
-        setPageTitle();
-        setUserName();
+          setPageTitle();
+          setUserName();
 
-        // create drawer menu
-        var userinfo = JSON.parse(localStorage.getItem('userinfo'));        
-        var disabledMenuItem = ["search",
-          "Studio Modes",
-          "projects",
-          "check",
-          "review",
-          "comments",
-          "Data Definitions",
-          "reports",
-          "output",
-          "preferences"];
-        if (userinfo.type.toLowerCase() !== 'admin') {
-          disabledMenuItem.push("prep");
-        }
-
-        DrawerMenu.create(disabledMenuItem, []);
-        ContextMenu.init();
-
-        
-        controller.init().then(function () {
-          var fromInfoStr = localStorage.getItem('fromInfo');
-          if (fromInfoStr) {
-            localStorage.removeItem('fromInfo');
-            var fromInfo = JSON.parse(fromInfoStr);
-
-            model.currentModule = fromInfo.fromModule;
-
-            if (fromInfo.proj.type.toLowerCase() === "public") {
-              controller.setPublicCurrentProj(fromInfo.proj.projectid);
-              controller.fetchProjectInfo(fromInfo.proj.projectid);
-            }
-            else if (fromInfo.proj.type.toLowerCase() === "private") {
-              controller.setMyCurrentProj(fromInfo.proj.projectid);
-              controller.fetchProjectInfo(fromInfo.proj.projectid);
-            }
+          // create drawer menu
+          var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+          var disabledMenuItem = ["search",
+            "Studio Modes",
+            "projects",
+            "check",
+            "review",
+            "comments",
+            "Data Definitions",
+            "reports",
+            "output",
+            "preferences"];
+          if (userinfo.type.toLowerCase() !== 'admin') {
+            disabledMenuItem.push("prep");
           }
-        });
-      }
+
+          DrawerMenu.create(disabledMenuItem, []);
+          ContextMenu.init();
+
+
+          controller.init().then(function () {
+            var fromInfoStr = localStorage.getItem('fromInfo');
+            if (fromInfoStr) {
+              localStorage.removeItem('fromInfo');
+              var fromInfo = JSON.parse(fromInfoStr);
+
+              model.currentModule = fromInfo.fromModule;
+
+              if (fromInfo.proj.type.toLowerCase() === "public") {
+                controller.setPublicCurrentProj(fromInfo.proj.projectid);
+                controller.fetchProjectInfo(fromInfo.proj.projectid);
+              }
+              else if (fromInfo.proj.type.toLowerCase() === "private") {
+                controller.setMyCurrentProj(fromInfo.proj.projectid);
+                controller.fetchProjectInfo(fromInfo.proj.projectid);
+              }
+            }
+          });
+
+          // init data vault btn
+          document.getElementById("dataVaultBtn").onclick = function () {
+            DataVault.toggle();
+          }
+        }
 
     function OnCreateProject() {
       var projectname = document.getElementById("inputprojectname").value;
@@ -1184,26 +1238,6 @@
       //});
 
     }
-
-    // function setProjectSessionData(projectName) {
-    //   return new Promise((resolve) => {
-    //     $.ajax({
-    //       data: {
-    //         'InvokeFunction': 'CreateProjectSession',
-    //         'projectName': projectName,
-    //         'projectId': "",   // for now send the empty project ID, 
-    //         // later in  AddProjectToMainDB() overwrite it                       
-    //         'loadProject': 'FALSE',
-    //         'sourceAPath': "Projects/" + projectName + "/SourceA",
-    //         'sourceBPath': "Projects/" + projectName + "/SourceB"
-    //       },
-    //       type: "POST",
-    //       url: "PHP/ProjectManager.php"
-    //     }).done(function (msg) {
-    //       return resolve(true);
-    //     });
-    //   });
-    // }
 
     function OnCreateNewCheckCase() {
       var queryString = $('#checkCaseform').serializeArray();
