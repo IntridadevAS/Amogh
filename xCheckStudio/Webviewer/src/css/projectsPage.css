@@ -800,13 +800,10 @@ input[type=checkbox] + label {
   z-index: 2;
   height: 500px;
   width: 700px;
-  /* height: 80vh;
-  width: 80vw; */
+
   background: gray;
   right: 0px;
-  border: 1px solid black;
-  /* top: calc(100vh - 90vh);
-  left: calc(100vw - 90vw); */
+  border: 1px solid black; 
   top: calc(50vh - 250px);
   left:  calc(50vw - 350px);
 }
@@ -900,4 +897,8 @@ input[type=checkbox] + label {
   width: calc(100% - 154px);
   height: 100%;
   /* overflow: hidden; */
+}
+
+.dx-datagrid {
+  font-size: 11px !important;
 }

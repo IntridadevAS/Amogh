@@ -115,6 +115,7 @@
 	left: 250px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242 {
 	position: absolute;
@@ -145,6 +146,7 @@
 	left: 355px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_3 {
 	position: absolute;
@@ -175,6 +177,7 @@
 	left: 477px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_4 {
 	position: absolute;
@@ -205,6 +208,7 @@
 	left: 15px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_5 {
 	position: absolute;
@@ -235,6 +239,7 @@
 	left: 133px;
 	top: 154px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_6 {
 	position: absolute;
@@ -306,6 +311,7 @@
 	left: 15px;
 	top: 224px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_7 {
 	position: absolute;
@@ -336,6 +342,7 @@
 	left: 133px;
 	top: 224px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_8 {
 	position: absolute;
@@ -366,6 +373,7 @@
 	left: 58px;
 	top: 294px;
 	overflow: visible;
+	cursor: pointer;
 }
 .Rectangle_1242_A55_Rectangle_9 {
 	position: absolute;
@@ -388,4 +396,21 @@
 	font-weight: bold;
 	font-size: 20px;
 	color: rgba(242,243,244,1);
+}
+
+.outputToVaultBtn{
+	position: absolute;
+    width: 125px;
+    height: 30px;
+    left: 345px;
+    top: 224px;
+    border: 1px solid var(--intridaBlue);
+    text-align: center;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.outputToVaultBtn p{
+	font-weight: bold;
+    font-size: 20px;
 }

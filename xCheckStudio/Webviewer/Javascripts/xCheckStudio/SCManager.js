@@ -1078,12 +1078,18 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
         _this.AllComponents,
         _this.Webviewer);
 
-    // Init group view
-    model.views[_this.Id].groupView = new GroupView(
-        _this.Id,
-        _this.ViewerOptions.modelTree,
-        _this.AllComponents,
-        _this.Webviewer);
+    if (!isDataVault()) {
+
+        // Init group view
+        model.views[_this.Id].groupView = new GroupView(
+            _this.Id,
+            _this.ViewerOptions.modelTree,
+            _this.AllComponents,
+            _this.Webviewer);
+
+        // init group view controls
+        _this.InitGroupViewControls();
+    }
 
     // Init isolatemanager
     model.views[_this.Id].isolateManager = new IsolateManager(_this.Webviewer);
@@ -1093,9 +1099,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
 
     // init list view switches
     _this.InitListViewSwitches();
-    // }
-    // init group view controls
-    _this.InitGroupViewControls();
+    // }   
 
     // create property callout
     _this.PropertyCallout = new PropertyCallout(_this.Id);

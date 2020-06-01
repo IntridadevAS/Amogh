@@ -153,7 +153,7 @@ var CheckModule = {
                             return resolve([false, false]);
                         }
                         else if (result.buttonText.toLowerCase() === "replace") {
-                            CheckModule.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "true").then(function (res) {
+                            DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "true").then(function (res) {
                                 return resolve([res]);
                             });
                         }
@@ -166,47 +166,13 @@ var CheckModule = {
                     return resolve([false]);
                 }
                 else if (result.MsgCode === 1) {
-                    CheckModule.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "false").then(function (res) {
+                    DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "false").then(function (res) {
                         return resolve([res]);
                     });
                 }
             });
         });
-    },
-
-    saveDataToVault: function (projectinfo, userinfo, sourceManager, version, description, replace) {
-        return new Promise((resolve) => {
-
-            $.ajax({
-                url: 'PHP/DataVault.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "SaveData",
-                    'ProjectName': projectinfo.projectname,
-                    'srcId': sourceManager.Id,
-                    'fileName': sourceManager.SourceName,
-                    'fileType': sourceManager.SourceType,
-                    'userName': userinfo.username,
-                    'version': version,
-                    'description': description,
-                    'sourceComponents': JSON.stringify(sourceManager.AllComponents),
-                    'allComponents': JSON.stringify(sourceManager.SourceProperties),
-                    'replace': replace
-                },
-                success: function (msg) {
-                    var message = JSON.parse(msg);
-
-                    if (message.MsgCode !== 1) {
-                        return resolve(false);
-                    }
-
-                    return resolve(true);
-                }
-            });
-        });
-    },
+    },    
 
     datasetAlreadyExistInVault(projectname, sourceName, version) {
         return new Promise((resolve) => {

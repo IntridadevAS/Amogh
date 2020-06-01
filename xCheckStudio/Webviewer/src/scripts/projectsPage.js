@@ -905,6 +905,14 @@ let checkView = {
     localStorage.setItem('checkinfo', JSON.stringify(check));
 
     localStorage.setItem('isDataVault', "false");
+
+    if (vaultEnable === true) {
+      localStorage.setItem('dataVaultEnable', "true");
+    }
+    else {
+      localStorage.setItem('dataVaultEnable', "false");
+    }
+    
     //window.location.href = "checkModule.html";
     // var fromCheckClick = localStorage.getItem('FromCheckClick')
     // // localStorage.clear();

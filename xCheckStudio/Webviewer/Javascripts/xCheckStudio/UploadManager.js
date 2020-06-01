@@ -359,7 +359,7 @@ let UploadManager = {
                 }
 
                 addedSource.fileName = fileName;
-                addedSource.type = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();;
+                addedSource.type = xCheckStudio.Util.getFileExtension(fileName).toLowerCase();
 
                 // Data vault supports loading of only 3D datasets for now
                 if (isDataVault() &&

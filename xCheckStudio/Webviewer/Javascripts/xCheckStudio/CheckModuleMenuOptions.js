@@ -228,21 +228,6 @@ function cancelSaveVault() {
     hideSaveVaultForm();
 }
 
-function saveVault() {
-    hideSaveVaultForm();
-
-    if(model.currentTabId in SourceManagers) {
-        var prompt = document.getElementById("saveToVaultPrompt");
-        document.getElementById("uiBlockingOverlay").style.display = "block";
-        prompt.style.display = "block";
-        
-        prompt.style.top = ((window.innerHeight / 2) - 60) + "px";
-        prompt.style.left = ((window.innerWidth / 2) - 150) + "px";
-
-        document.getElementById("saveToVaultDatasetName").innerText = SourceManagers[model.currentTabId].SourceName;
-    }
-}
-
 function hideSaveVaultForm() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("saveVaultPopup");

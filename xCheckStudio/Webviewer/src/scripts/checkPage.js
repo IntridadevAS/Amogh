@@ -9,8 +9,8 @@ let model = {
   loadSavedCheckspace: false,
   datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
   checkcaseSupportedTypes: undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
-  propertyGroups : {},
-  propertyHighlightTemplates : {},
+  propertyGroups: {},
+  propertyHighlightTemplates: {},
   views: {
     a: {
       id: "a",
@@ -34,12 +34,12 @@ let model = {
       tableViewInstance: null,
       tableViewWidget: null,
       dataDefinitionMenu: null,
-      userPropertiesForm : null,
-      activeMenu : null,
-      editUserPropertiesForm :null,
-      defineGroupsForm : null,      
-      isolateManager : null,
-      definePropertyHighlightsForm : null,      
+      userPropertiesForm: null,
+      activeMenu: null,
+      editUserPropertiesForm: null,
+      defineGroupsForm: null,
+      isolateManager: null,
+      definePropertyHighlightsForm: null,
     },
     b: {
       id: "b",
@@ -63,12 +63,12 @@ let model = {
       tableViewInstance: null,
       tableViewWidget: null,
       dataDefinitionMenu: null,
-      userPropertiesForm : null,
-      activeMenu : null,
-      editUserPropertiesForm :null,
-      defineGroupsForm : null,
-      isolateManager : null,
-      definePropertyHighlightsForm : null
+      userPropertiesForm: null,
+      activeMenu: null,
+      editUserPropertiesForm: null,
+      defineGroupsForm: null,
+      isolateManager: null,
+      definePropertyHighlightsForm: null
     },
     c: {
       id: "c",
@@ -92,12 +92,12 @@ let model = {
       tableViewInstance: null,
       tableViewWidget: null,
       dataDefinitionMenu: null,
-      userPropertiesForm : null,
-      activeMenu : null,
-      editUserPropertiesForm :null,
-      defineGroupsForm : null,
-      isolateManager : null,
-      definePropertyHighlightsForm : null
+      userPropertiesForm: null,
+      activeMenu: null,
+      editUserPropertiesForm: null,
+      defineGroupsForm: null,
+      isolateManager: null,
+      definePropertyHighlightsForm: null
     },
     d: {
       id: "d",
@@ -121,12 +121,12 @@ let model = {
       tableViewInstance: null,
       tableViewWidget: null,
       dataDefinitionMenu: null,
-      userPropertiesForm : null,
-      activeMenu : null,
-      editUserPropertiesForm :null,
-      defineGroupsForm : null,
-      isolateManager : null,
-      definePropertyHighlightsForm : null
+      userPropertiesForm: null,
+      activeMenu: null,
+      editUserPropertiesForm: null,
+      defineGroupsForm: null,
+      isolateManager: null,
+      definePropertyHighlightsForm: null
     }
   },
   onDataSourceTabChanged: function (tabID) {
@@ -228,7 +228,7 @@ let controller = {
 }
 
 let viewTabs = {
-  tabToDelete : undefined,
+  tabToDelete: undefined,
   init: function () {
     this.container = document.getElementById("tabContainer");
     this.addTab = document.getElementById("addTab");
@@ -247,7 +247,7 @@ let viewTabs = {
       }
       else {
         model.currentTabId = null;
-      
+
         // hide all list view speed dial action menus
         for (var srcId in SourceManagers) {
           if (!SourceManagers[srcId].Is3DSource()) {
@@ -444,7 +444,7 @@ let viewPanels = {
   onMouseOutMaxMin: function (selected) {
     selected.style.opacity = 0.2;
   },
-  
+
   onMouseOverCalloutBtn: function (selected) {
     selected.style.opacity = 1;
   },
@@ -453,7 +453,7 @@ let viewPanels = {
     selected.style.opacity = 0.2;
   },
 
-  onMouseOverPropertyCallout: function (id) {    
+  onMouseOverPropertyCallout: function (id) {
     document.getElementById("propertyCalloutContainer" + id).style.opacity = 1;
     document.getElementById("propertyCalloutNameBar" + id).style.opacity = 1;
   },
@@ -462,12 +462,12 @@ let viewPanels = {
     document.getElementById("propertyCalloutContainer" + id).style.opacity = 0.6;
     document.getElementById("propertyCalloutNameBar" + id).style.opacity = 0.6;
   },
-  
-  onMouseOverCommentsCallout: function () {    
+
+  onMouseOverCommentsCallout: function () {
     document.getElementById("commentsCalloutContainer").style.opacity = 1;
     document.getElementById("commentsCalloutNameBar").style.opacity = 1;
   },
-  
+
   onMouseOutCommentsCallout: function () {
     document.getElementById("commentsCalloutContainer").style.opacity = 0.6;
     document.getElementById("commentsCalloutNameBar").style.opacity = 0.6;
@@ -611,7 +611,7 @@ function hideClearDataSourceForm() {
   var popup = document.getElementById("clearDataSourcePopup");
 
   overlay.style.display = 'none';
-  popup.style.display = 'none';  
+  popup.style.display = 'none';
 }
 
 function removeDataSourceFromDB() {
@@ -638,4 +638,10 @@ function removeDataSourceFromDB() {
       }
     });
   });
+}
+
+function browseInVault() {
+  DataVault.show();
+
+  closeLoadDataForm();
 }

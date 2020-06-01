@@ -15,6 +15,7 @@
 
   <link href="CSS/OverlayStyles.css" rel="stylesheet" type="text/css" />
   <link href="CSS/Check_Complete.css" rel="stylesheet" type="text/css" />
+  <link href="src/prompts/Output_Data.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -476,6 +477,10 @@
         <div id="Load_Data_Oracle">
           <span>Oracle</span>
         </div>
+      </div>
+
+      <div id="loadFromVaultBtn" class="loadFromVaultBtn">
+        <p>Data Vault</p>
       </div>
     </div>
   </div>
@@ -966,7 +971,7 @@
         </div>
       </div>
   
-      <div id="symYesButton___10" style="cursor: pointer;" onclick="saveVault()">
+      <div id="symYesButton___10" style="cursor: pointer;" onclick="DataVault.onSaveToVaultClicked()">
         <svg class="Path_310" viewBox="0 0 90 30">
           <path fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
             stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_310"
@@ -1439,19 +1444,151 @@
   <!-- save to vault Form -->
   <div id="saveToVaultPrompt" class="saveToVaultPrompt">
     <div id="saveToVaultCaptionBar" class="saveToVaultCaptionBar">
-     <p>Save Data</p>
+      <p>Save Data</p>
     </div>
-
+  
     <div id="saveToVaultDatasetName" class="saveToVaultDatasetName"></div>
-
+  
     <div class="saveToVaultDescLabel">Description</div>
-    <div id="vaultDataDescription"  class="vaultDataDescription"></div>
-    
+    <div id="vaultDataDescription" class="vaultDataDescription"></div>
+  
     <div class="saveToVaultVerLabel">Version</div>
     <div id="vaultDataVersion" class="vaultDataVersion"></div>
-
-    <div id="saveToVaultCanceBtn" class="saveToVaultCanceBtn"><p>Cancel</p></div>
-    <div id="saveToVaultOkBtn" class="saveToVaultOkBtn"><p>OK</p></div>
+  
+    <div id="saveToVaultCanceBtn" class="saveToVaultCanceBtn">
+      <p>Cancel</p>
+    </div>
+    <div id="saveToVaultOkBtn" class="saveToVaultOkBtn">
+      <p>OK</p>
+    </div>
+  </div>
+  
+  <!-- On Output click overlay -->
+  <div id="outputPopup" style="width: 581px; height: 350px; overflow: hidden; top: 40%; left: 30%;" class="popup">
+    <div id="Output_Data">
+      <svg class="Rectangle_1204">
+        <rect fill="rgba(50,49,50,1)" stroke="rgba(242,243,244,1)" stroke-width="3px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1204" rx="5" ry="5" x="0" y="0"
+          width="581" height="349">
+        </rect>
+      </svg>
+      <svg class="Path_350" viewBox="0 0 575 55">
+        <path fill="rgba(71,71,71,1)" id="Path_350" d="M 0 0 L 575 0 L 575 55 L 0 55 L 0 0 Z">
+        </path>
+      </svg>
+      <div id="Output">
+        <span>Output</span>
+      </div>
+      <div id="Save_As">
+        <span>Output To</span>
+      </div>
+      <svg class="Line_39">
+        <path fill="transparent" stroke="rgba(242,243,244,1)" stroke-width="1px" stroke-linejoin="miter"
+          stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Line_39" d="M 0 0 L 0 230">
+        </path>
+      </svg>
+      <div onclick="closeOutpuToOverlay()" style="cursor: pointer;">
+        <svg class="Path_259" viewBox="7432.354 -8028.479 18 18">
+          <path fill="rgba(255,255,255,1)" id="Path_259"
+            d="M 7432.35400390625 -8028.4794921875 L 7436.39453125 -8028.4794921875 L 7441.2626953125 -8022.275390625 L 7446.13037109375 -8028.4794921875 L 7450.35400390625 -8028.4794921875 L 7443.61181640625 -8019.80859375 L 7450.35400390625 -8010.4794921875 L 7446.13037109375 -8010.4794921875 L 7441.2626953125 -8017.255859375 L 7436.39453125 -8010.4794921875 L 7432.35400390625 -8010.4794921875 L 7438.74853515625 -8019.80859375 L 7432.35400390625 -8028.4794921875 Z">
+          </path>
+        </svg>
+      </div>
+      <div id="Publish_To">
+        <span>Publish To</span>
+      </div>
+      <div id="Component_24">
+        <svg class="Rectangle_1242">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242" rx="5" ry="5" x="0"
+            y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="SQL">
+          <span>SQL</span>
+        </div>
+      </div>
+      <div id="Component_25">
+        <svg class="Rectangle_1242_A55_Rectangle_3">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_3" rx="5"
+            ry="5" x="0" y="0" width="106.505" height="30">
+          </rect>
+        </svg>
+        <div id="DropBox">
+          <span>DropBox</span>
+        </div>
+      </div>
+      <div id="Component_26">
+        <svg class="Rectangle_1242_A55_Rectangle_4">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_4" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="Link">
+          <span>Link</span>
+        </div>
+      </div>
+      <div class="outputToVaultBtn" onclick="DataVault.onOutputToVaultClicked()">
+        <p>Data Vault</p>
+      </div>
+      <div id="Component_27">
+        <svg class="Rectangle_1242_A55_Rectangle_5">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_5" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="Excel">
+          <span>Excel</span>
+        </div>
+      </div>
+      <div id="Component_28">
+        <svg class="Rectangle_1242_A55_Rectangle_6">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_6" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="PDF">
+          <span>PDF</span>
+        </div>
+      </div>
+      <div id="symCancelButton___1">
+        <svg class="Rectangle_1242_A55_Rectangle_7">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_7" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="XML">
+          <span>XML</span>
+        </div>
+      </div>
+      <div id="symCancelButton___2">
+        <svg class="Rectangle_1242_A55_Rectangle_8">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_8" rx="5"
+            ry="5" x="0" y="0" width="90" height="30">
+          </rect>
+        </svg>
+        <div id="ID3D_PDF">
+          <span>3D PDF</span>
+        </div>
+      </div>
+      <div id="symCancelButton___4">
+        <svg class="Rectangle_1242_A55_Rectangle_9">
+          <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
+            stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_9" rx="5"
+            ry="5" x="0" y="0" width="117.505" height="30">
+          </rect>
+        </svg>
+        <div id="JPG___PNG">
+          <span>JPG / PNG</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <header>
@@ -1611,6 +1748,25 @@
           </div>
         </div>
 
+          <!-- Data Vault Overlay -->
+          <div id="dataVaultOverlay" class="dataVaultOverlay">
+            <div id="dataVaultOverlayCaptionBar" class="dataVaultOverlayCaptionBar">
+              <div class="dataVaultOverlayCaption">Data Vault</div>
+              <!-- <img id="dataVaultOverlayCloseBtn" class="dataVaultOverlayCloseBtn" src="public\symbols\CloseBlack.svg" /> -->
+            </div>
+            <div class="dataVaultOverlayArea">
+              <div id="dataVaultOverlayGrid"> </div>
+            </div>
+            <div class="dataVaultOverlayBottomBar">
+              <div id="dataVaultCancelBtn" class="dataVaultCancelBtn">
+                <p>Cancel</p>
+              </div>
+              <div id="dataVaultOKBtn" class="dataVaultOKBtn">
+                <p>OK</p>
+              </div>
+            </div>
+          </div>
+  
         <div id="viewPanelA" class="viewPanel">
           <div id="tableContainera" class="tableContainer">
             <!-- tableA           -->
@@ -3183,6 +3339,8 @@
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperatorBase.js"></script>
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperator.js"></script>
 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageDataVault.js"></script>
+
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
@@ -3193,7 +3351,7 @@
 
     var vaultDataDescription = null;
     var vaultDataVersion = null;
-    // var replaceVaultDataSetDialog = null;
+    var vaultEnable = false;
     function isDataVault() {
       var isVault = localStorage.getItem("isDataVault");
       if (isVault.toLowerCase() === "true") {
@@ -3204,122 +3362,136 @@
     }
 
     window.onload = function () {
-      var hiddenItems = ["check", "output"];
-      var disabledItems = [];
+        var hiddenItems = ["check"];
+        var disabledItems = [];
 
-      var isVault = isDataVault();
-      if (isVault) {
-        setCheckSpaceName("check", true);
+        // get enable vault 
+        if (localStorage.getItem('dataVaultEnable') === "true") {
+          vaultEnable = true;
+        }
 
-        // set title
-        document.title = "Data Vault";
+        document.getElementById("loadFromVaultBtn").onclick = function () {
+          if (vaultEnable === true) {
+            browseInVault();
+          }
+          else {
+            alert("Data Vault is disabled. Please enable the Vault to proceed.");
+          }
+        }
 
-        // hide check case select
-        document.getElementById("checkCaseSelect").style.display = "none"
+        localStorage.removeItem('dataVaultEnable');
 
-        // disable menu items
-        disabledItems.push("Studio Modes");
-        disabledItems.push("review");
-        disabledItems.push("Comments");
-        disabledItems.push("Data Definitions");
-        disabledItems.push("Reports");
-        disabledItems.push("Output");
+        var isVault = isDataVault();
+        if (isVault) {
+          setCheckSpaceName("check", true);
 
-        // enable menu options
-        var disabledBtns = [
-        MenuBar.RevisionBtn,
-        MenuBar.DisplayBtn];
+          // set title
+          document.title = "Data Vault";
 
-        enableMenuOptions(disabledBtns);
+          // hide check case select
+          document.getElementById("checkCaseSelect").style.display = "none"
 
-        // hide loading overlay
-        document.getElementById("uiBlockingOverlay").style.display = "none";
+          // disable menu items
+          disabledItems.push("Studio Modes");
+          disabledItems.push("review");
+          disabledItems.push("Comments");
+          disabledItems.push("Data Definitions");
+          disabledItems.push("Reports");
 
-        // hide compliance, comparison and check controls
-        document.getElementsByClassName("checkTogglesContainer")[0].style.display = "none";
+          // enable menu options
+          var disabledBtns = [
+            MenuBar.RevisionBtn,
+            MenuBar.DisplayBtn];
 
-        vaultDataDescription = $("#vaultDataDescription").dxTextBox({         
+          enableMenuOptions(disabledBtns);
+
+          // hide loading overlay
+          document.getElementById("uiBlockingOverlay").style.display = "none";
+
+          // hide compliance, comparison and check controls
+          document.getElementsByClassName("checkTogglesContainer")[0].style.display = "none";
+        }
+        else {
+          setCheckSpaceName("check");
+
+          var checkButton = document.getElementById("checkButton");
+          checkButton.onclick = function () {
+            // show busy loader
+            onCheckButtonClick();
+          };
+
+          // enable menu options
+          enableMenuOptions([]);
+
+          // create drawer menu     
+          var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+          if (checkinfo.review != 1) {
+            disabledItems.push("review");
+          }
+
+          //Init comments callout
+          commentsCallout = new CommentsCallout();
+          commentsCallout.Init();
+
+          loadCheckCases().then(function (result) {
+
+            //load data from saved check space
+            loadCheckSpaceInCheckPage();
+
+            // hide loading overlay
+            document.getElementById("uiBlockingOverlay").style.display = "none";
+          });
+        }
+
+        DrawerMenu.create(hiddenItems, disabledItems);
+
+        //Create file uploader using devExtreme
+        UploadManager.createFileUploader();
+
+        setPageTitle();
+        setUserName();
+
+        vaultDataDescription = $("#vaultDataDescription").dxTextBox({
         }).dxTextBox("instance");
 
-        vaultDataVersion = $("#vaultDataVersion").dxTextBox({        
-          onChange:function(e){
+        vaultDataVersion = $("#vaultDataVersion").dxTextBox({
+          onChange: function (e) {
 
-          }  
+          }
         }).dxTextBox("instance");
 
         document.getElementById("saveToVaultOkBtn").onclick = function () {
-          var description = vaultDataDescription.option("value");
-          var version = vaultDataVersion.option("value");
-          if (!version ||
-            version === "") {
-            alert("Version can't be empty.");
-            return;
-          }         
-        
-          if (model.currentTabId in SourceManagers) {
-            var sourceManager = SourceManagers[model.currentTabId];
-            CheckModule.onSaveVault(sourceManager, version, description).then(function (result) {             
-              if (result.length > 1 && result[1] === false) {
-                // don;t close the prompt
-                 return;
-              }
+          DataVault.onSaveToVaultOKClicked();
+          // var description = vaultDataDescription.option("value");
+          // var version = vaultDataVersion.option("value");
+          // if (!version ||
+          //   version === "") {
+          //   alert("Version can't be empty.");
+          //   return;
+          // }         
 
-              vaultDataVersion.option("value", "");
-              vaultDataDescription.option("value", "");
+          // if (model.currentTabId in SourceManagers) {
+          //   var sourceManager = SourceManagers[model.currentTabId];
+          //   CheckModule.onSaveVault(sourceManager, version, description).then(function (result) {             
+          //     if (result.length > 1 && result[1] === false) {
+          //       // don;t close the prompt
+          //        return;
+          //     }
 
-              document.getElementById("uiBlockingOverlay").style.display = "none";
-              document.getElementById("saveToVaultPrompt").style.display = "none";
-            });
-          }         
+          //     vaultDataVersion.option("value", "");
+          //     vaultDataDescription.option("value", "");
+
+          //     document.getElementById("uiBlockingOverlay").style.display = "none";
+          //     document.getElementById("saveToVaultPrompt").style.display = "none";
+          //   });
+          // }         
         }
 
         document.getElementById("saveToVaultCanceBtn").onclick = function () {
           document.getElementById("uiBlockingOverlay").style.display = "none";
           document.getElementById("saveToVaultPrompt").style.display = "none";
         }
-
-        // InitReplaceVaultDataSetDialog();
       }
-      else {
-        setCheckSpaceName("check");
-
-        var checkButton = document.getElementById("checkButton");
-        checkButton.onclick = function () {
-          // show busy loader
-          onCheckButtonClick();
-        };
-
-        // enable menu options
-        enableMenuOptions([]);
-
-        // create drawer menu     
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-        if (checkinfo.review != 1) {
-          disabledItems.push("review");
-        }
-
-        //Init comments callout
-        commentsCallout = new CommentsCallout();
-        commentsCallout.Init();
-
-        loadCheckCases().then(function (result) {
-
-          //load data from saved check space
-          loadCheckSpaceInCheckPage();
-
-          // hide loading overlay
-          document.getElementById("uiBlockingOverlay").style.display = "none";
-        });
-      }
-
-      DrawerMenu.create(hiddenItems, disabledItems);
-
-      //Create file uploader using devExtreme
-      UploadManager.createFileUploader();
-
-      setPageTitle();
-      setUserName();
-    }
 
     function showBusyIndicator() {
       // hide busy indicator
