@@ -18,6 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SetProjectAsFavourite":
             SetProjectAsFavourite();
             break;
+        case "SetVaultEnable":
+            SetVaultEnable();
+            break;            
         case "UpdateProject":
             UpdateProject();
             break;
@@ -3620,6 +3623,7 @@ function CopyProjectToMainDB()
         $projectStatus = trim($_POST["projectStatus"], " ");
         $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
         $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
+        $vaultEnable = trim($_POST["vaultEnable"], " ");
 
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
 
@@ -3649,7 +3653,8 @@ function CopyProjectToMainDB()
                                         path,
                                         status,
                                         createddate,
-                                        modifieddate) VALUES (?,?,?,?,?,?,?,?,?,?)';
+                                        modifieddate,
+                                        vaultEnable) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
 
         $stmt->execute(array(
@@ -3662,7 +3667,8 @@ function CopyProjectToMainDB()
             $projectPath,
             $projectStatus,
             $projectCreatedDate,
-            $projectModifiedDate
+            $projectModifiedDate,
+            $vaultEnable
         ));
 
         $insertedId = $dbh->lastInsertId();
@@ -3679,7 +3685,8 @@ function CopyProjectToMainDB()
                 "description" => $projectDescription,
                 "path" => $projectPath,
                 "status" => $projectStatus,
-                "createddate" => $projectCreatedDate
+                "createddate" => $projectCreatedDate,
+                "vaultEnable" => $vaultEnable
             );
 
             $dbh = null;
@@ -3798,6 +3805,7 @@ function AddNewProjectToMainDB()
     $projectIsFavorite = trim($_POST["projectIsFavorite"], " ");
     $projectCreatedDate = trim($_POST["projectCreatedDate"], " ");
     $projectModifiedDate = trim($_POST["projectModifiedDate"], " ");
+    $vaultEnable = trim($_POST["vaultEnable"], " ");
 
     try {
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
@@ -3813,10 +3821,22 @@ function AddNewProjectToMainDB()
         path,
         status,
         createddate,
-        modifieddate) VALUES (?,?,?,?,?,?,?,?,?,?)';
+        modifieddate,
+        vaultEnable) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
         $stmt = $dbh->prepare($query);
 
-        $stmt->execute(array($userid, $projectName, $projectType, $projectComments, $projectIsFavorite, $projectDescription, $path, $projectStatus, $projectCreatedDate, $projectModifiedDate));
+        $stmt->execute(array(
+            $userid, 
+            $projectName, 
+            $projectType, 
+            $projectComments, 
+            $projectIsFavorite, 
+            $projectDescription, 
+            $path, 
+            $projectStatus, 
+            $projectCreatedDate, 
+            $projectModifiedDate,
+            $vaultEnable));
         // $_SESSION['ProjectId'] = $dbh->lastInsertId();
         $insertedId = $dbh->lastInsertId();
         if ($insertedId != 0 && $insertedId != -1) {
@@ -3831,6 +3851,7 @@ function AddNewProjectToMainDB()
                 "status" => $projectStatus,
                 "createddate" => $projectCreatedDate,
                 "modifieddate" => $projectModifiedDate,
+                "vaultEnable" => $vaultEnable
             );
             echo json_encode($array);
         } else {
@@ -3931,6 +3952,29 @@ function SetProjectAsFavourite()
         echo 'fail';
         return;
     }
+}
+
+function SetVaultEnable()
+{
+    // $userid = trim($_POST["userid"], " ");
+    $projectid = trim($_POST["ProjectId"], " ");
+    $vaultEnable = trim($_POST["vaultEnable"], " ");
+    if ($projectid === -1) {
+        echo 'fail';
+        return;
+    }
+    try {
+        $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+        $query = "UPDATE Projects SET vaultEnable=? WHERE projectid=?";
+        $dbh->prepare($query)->execute([$vaultEnable, $projectid]);
+        $dbh = null;
+    } catch (Exception $e) {
+        echo 'fail';
+        return;
+    }
+
+    echo 'success';
+    return;
 }
 
 function UpdateProject()

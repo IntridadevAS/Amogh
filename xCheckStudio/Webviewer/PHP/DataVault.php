@@ -287,26 +287,34 @@ function addDatasetToDB(
             )';
     $projectDbh->exec($command);
 
-    if (strtolower($replace) === "true") {
-        $query = "Delete from DataVault where name='" . $fileName . "' and version='" . $version . "';";
+    if (strtolower($replace) === "true") {      
+        $query = "UPDATE DataVault SET description=?, modifiedBy=?, dateModified=? WHERE name=? AND version=?;";
         $stmt = $projectDbh->prepare($query);
-        $stmt->execute();
-    }
-    
-    $qry = 'INSERT INTO DataVault(name, type, description, version, addedBy, dateAdded, scsFile) VALUES(?,?,?,?,?,?,?) ';
-    $stmt = $projectDbh->prepare($qry);
-    $stmt->execute(
-        array(
-            $fileName,
-            $fileType,
-            $description,
-            $version,
+        $stmt->execute(array(
+            $description,          
             $userName,
             date("Y-m-d h:i:sa"),
-            $scsFile
-        )
-    );
-
+            $fileName,
+            $version
+        ));
+    }
+    else
+    {
+        $qry = 'INSERT INTO DataVault(name, type, description, version, addedBy, dateAdded, scsFile) VALUES(?,?,?,?,?,?,?) ';
+        $stmt = $projectDbh->prepare($qry);
+        $stmt->execute(
+            array(
+                $fileName,
+                $fileType,
+                $description,
+                $version,
+                $userName,
+                date("Y-m-d h:i:sa"),
+                $scsFile
+            )
+        );
+    }      
+    
     $projectDbh->commit();
     $projectDbh = null; //This is how you close a PDO connection        
 }

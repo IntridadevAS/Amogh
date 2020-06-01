@@ -1,4 +1,3 @@
-var vaultEnable = false;
 const DataVault = {
     active: false,
     grid: null,
@@ -25,21 +24,47 @@ const DataVault = {
         this.populateDataVaultGrid();
 
         // Enable vault switch
-        $("#enableVaultSwitch").dxSwitch({
-            value: vaultEnable,
+        var loadingSwitch = true;
+
+        var enableVaultSwitchElement = document.getElementById("enableVaultSwitchElement");
+        if (enableVaultSwitchElement !== null) {
+            $("#enableVaultSwitchElement").dxSwitch("dispose");
+            $("#enableVaultSwitchElement").remove();
+        }
+
+        let container = document.getElementById("enableVaultSwitch");
+        enableVaultSwitchElement = document.createElement("div");
+        enableVaultSwitchElement.id = "enableVaultSwitchElement"
+        container.appendChild(enableVaultSwitchElement);
+
+        $("#enableVaultSwitchElement").dxSwitch({
+            value: model.currentProject.vaultEnable.toLowerCase() == "true" ? true : false,            
             switchedOffText: "Disabled",
             switchedOnText: "Enabled",
+            width: "100%",
+            onContentReady: function (e) {
+                loadingSwitch = false;
+            },
             onValueChanged: function (e) {
-                
-                vaultEnable = e.value;
-                if(e.value === true)
-                {
-                    showEnableVaultConfirm().then(function(result){
+                if (loadingSwitch === true) {
+                    return;
+                }
+
+                if (e.value === true) {
+                    showEnableVaultConfirm().then(function (result) {
                         if (result.buttonText.toLowerCase() === "cancel") {
                             e.component.option("value", false);
-                        }                        
+                        }
+                        else {
+                            controller.setVaultEnable(model.currentProject.projectid, "true");
+                            model.currentProject.vaultEnable = "true";
+                        }
                     });
-                }                
+                }
+                else {
+                    controller.setVaultEnable(model.currentProject.projectid, "false");
+                    model.currentProject.vaultEnable = "false";
+                }
             }
         }).dxSwitch("instance");
 
@@ -62,12 +87,7 @@ const DataVault = {
 
         localStorage.setItem('isDataVault', "true");
 
-        if (vaultEnable === true) {
-            localStorage.setItem('dataVaultEnable', "true");
-        }
-        else {
-            localStorage.setItem('dataVaultEnable', "false");
-        }
+        localStorage.setItem('dataVaultEnable', proj.vaultEnable);
 
         window.location.href = "checkPage.html";
     },

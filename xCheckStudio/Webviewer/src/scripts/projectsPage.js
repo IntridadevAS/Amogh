@@ -353,7 +353,8 @@ let controller = {
             "projectComments": projectComments,
             "projectIsFavorite": projectIsFavorite,
             "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime(),
-            "projectModifiedDate": xCheckStudio.Util.getCurrentDateTime()
+            "projectModifiedDate": xCheckStudio.Util.getCurrentDateTime(),
+            "vaultEnable" : "false"
           },
           type: "POST",
           url: "PHP/ProjectManager.php"
@@ -520,6 +521,39 @@ let controller = {
     });
   },
 
+  setVaultEnable: function (projID, vaultEnable) {
+    // var obj = model.myProjects.find(obj => obj.projectid == projID);
+    // if (obj === undefined) {
+    //   obj = model.publicProjects.find(obj => obj.projectid == projID);
+    // }
+    // if (obj === undefined) {
+    //   console.log("No project found to mark as favourite");
+    //   return;
+    // }
+    // var newFav = 0;
+    // if (obj.IsFavourite === "0") {
+    //   newFav = 1;
+    // }
+    // else {
+    //   newFav = 0;
+    // }
+    // var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    $.ajax({
+      data: {
+        'InvokeFunction': 'SetVaultEnable',
+        // 'userid': userinfo.userid,
+        'ProjectId': projID,
+        'vaultEnable': vaultEnable,
+      },
+      type: "POST",
+      url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+      if (msg === "success") {
+        controller.fetchProjects();
+      }
+    });
+  },
+
   setFavoriteCheck: function (checkID) {
     event.stopPropagation();
     var obj = model.projectChecks.find(obj => obj.checkid == checkID);
@@ -625,7 +659,8 @@ let controller = {
     projectStatus,
     projectComments,
     projectIsFavorite,
-    source) {
+    source,
+    vaultEnable) {
 
     var path = "Projects/" + projectname + "/Project.db";
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
@@ -644,7 +679,8 @@ let controller = {
         "projectIsFavorite": projectIsFavorite,
         "projectCreatedDate": xCheckStudio.Util.getCurrentDateTime(),
         "projectModifiedDate": xCheckStudio.Util.getCurrentDateTime(),
-        "source": source
+        "source": source,
+        "vaultEnable": vaultEnable
       },
       type: "POST",
       url: "PHP/ProjectManager.php"
@@ -906,23 +942,9 @@ let checkView = {
 
     localStorage.setItem('isDataVault', "false");
 
-    if (vaultEnable === true) {
-      localStorage.setItem('dataVaultEnable', "true");
-    }
-    else {
-      localStorage.setItem('dataVaultEnable', "false");
-    }
-    
-    //window.location.href = "checkModule.html";
-    // var fromCheckClick = localStorage.getItem('FromCheckClick')
-    // // localStorage.clear();
-    // if (fromCheckClick.toLowerCase() === 'true') {
-    window.location.href = "checkPage.html";
-    // }
-    // else if (fromCheckClick.toLowerCase() === 'false') {
-    // window.location.href = "reviewPage.html";
-    // }
-    //localStorage.setItem("loadSavedProject",true);
+    localStorage.setItem('dataVaultEnable', proj.vaultEnable);
+   
+    window.location.href = "checkPage.html";   
   },
 
   leaveCheck: function (subject) {
@@ -1828,7 +1850,8 @@ function duplicateProject() {
     obj.status,
     obj.comments,
     obj.IsFavourite,
-    obj.projectname);
+    obj.projectname,
+    obj.vaultEnable);
 
   controller.projectToCopy = undefined;
   document.getElementById("duplicateName").value = "";
