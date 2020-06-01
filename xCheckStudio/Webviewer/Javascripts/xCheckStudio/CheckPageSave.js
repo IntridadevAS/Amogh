@@ -153,9 +153,17 @@ var CheckModule = {
                             return resolve([false, false]);
                         }
                         else if (result.buttonText.toLowerCase() === "replace") {
-                            DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "true").then(function (res) {
-                                return resolve([res]);
-                            });
+
+                            showMergeDataDialog().then(function(res){
+
+                                var mergeData = "false";
+                                if (res.buttonText.toLowerCase() === "yes") {
+                                    mergeData = "true";
+                                }
+                                DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "true", mergeData).then(function (res) {
+                                    return resolve([res]);
+                                });
+                            });                            
                         }
                         else {
                             return resolve([false]);
@@ -166,7 +174,7 @@ var CheckModule = {
                     return resolve([false]);
                 }
                 else if (result.MsgCode === 1) {
-                    DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "false").then(function (res) {
+                    DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "false", "false").then(function (res) {
                         return resolve([res]);
                     });
                 }
@@ -612,6 +620,36 @@ function showReplaceVaultDataSetDialog() {
             });
 
             replaceVaultDataSetDialog.show().done(function (dialogResult) {
+                return resolve(dialogResult);
+            });
+        })
+    });
+}
+
+function showMergeDataDialog() {
+
+    return new Promise((resolve) => {
+
+        $(function () {
+            var mergeDataDialog = DevExpress.ui.dialog.custom({
+                title: "Merge Data",
+                messageHtml: "Merge database?",
+                buttons: [{
+                    text: "Yes",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                },
+                {
+                    text: "No",
+                    onClick: function (e) {
+                        return { buttonText: e.component.option("text") }
+                    }
+                }
+                ]
+            });
+
+            mergeDataDialog.show().done(function (dialogResult) {
                 return resolve(dialogResult);
             });
         })

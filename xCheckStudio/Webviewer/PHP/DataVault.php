@@ -45,7 +45,8 @@ function SaveData()
         !isset($_POST['replace']) ||
         !isset($_POST['checkName']) ||
         !isset($_POST['fromVault']) ||
-        !isset($_POST['scsPath'])
+        !isset($_POST['scsPath']) ||
+        !isset($_POST['mergeData'])        
     ) {
         echo json_encode(array(
             "Msg" =>  "Invalid input.",
@@ -214,21 +215,23 @@ function addComponentsToVaultDB(
 ) {
     $sourceComponents = $_POST['sourceComponents'];
     $allComponents = $_POST['allComponents'];
+    $mergeData = $_POST['mergeData'];
 
     $datasetDir = getDataVaultDirectoryPath($projectName) . "/" . $fileName . "_" . $version;
 
     $dbFile = $datasetDir . "/Data.db";
-    if (file_exists($dbFile)) {
+    if (file_exists($dbFile) &&
+        strtolower($mergeData) !== "true") {
         unlink($dbFile);
-    }
-
-    // create data database           
-    $database = new SQLite3($dbFile);
+    } else {
+        // create data database           
+        $database = new SQLite3($dbFile);
+    }      
 
     // write source components to DB
     $dbh = new PDO("sqlite:$dbFile") or die("cannot open the database");
 
-    $command = 'CREATE TABLE sourceComponents(
+    $command = 'CREATE TABLE IF NOT EXISTS sourceComponents(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     value TEXT NOT NULL)';
     $dbh->exec($command);
@@ -240,7 +243,7 @@ function addComponentsToVaultDB(
     $stmt->execute($values);
 
     // write all components to DB                
-    $command = 'CREATE TABLE allComponents(
+    $command = 'CREATE TABLE IF NOT EXISTS allComponents(
                     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                     value TEXT NOT NULL)';
     $dbh->exec($command);
@@ -622,7 +625,7 @@ function readAllComponents($dataDir)
     if ($results) {
         while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
             $allComponentsStr = $record['value'];
-            break;
+            // break;
         }
     }
 

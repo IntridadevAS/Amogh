@@ -358,7 +358,15 @@ const DataVault = {
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
-    saveDataToVault: function (projectinfo, userinfo, sourceManager, version, description, replace) {
+    saveDataToVault: function (
+        projectinfo,
+        userinfo,
+        sourceManager,
+        version,
+        description,
+        replace,
+        mergeData
+    ) {
         return new Promise((resolve) => {
           
             var fromVault = "true";
@@ -388,7 +396,8 @@ const DataVault = {
                     'replace': replace,
                     'checkName' : checkName,
                     'fromVault' : fromVault,
-                    'scsPath' : sourceManager.Webviewer._params.endpointUri
+                    'scsPath' : sourceManager.Webviewer._params.endpointUri,
+                    'mergeData' : mergeData
                 },
                 success: function (msg) {
                     var message = JSON.parse(msg);
