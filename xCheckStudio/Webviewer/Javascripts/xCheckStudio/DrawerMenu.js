@@ -11,14 +11,7 @@ var DrawerMenu = {
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
                 hideMenuItems(hiddenItems);
-                disableMenuItems(disableItems);
-
-                // $list.mouseover(function () {
-                //     this.style.opacity = 0.7;
-                // });
-                // $list.mouseout(function () {
-                //     this.style.opacity = 0.7;
-                // });
+                disableMenuItems(disableItems);               
                   
                 return $list.dxList({
                     dataSource: menuItems,

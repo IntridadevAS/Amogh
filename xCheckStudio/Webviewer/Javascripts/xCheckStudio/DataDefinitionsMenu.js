@@ -31,6 +31,9 @@ DataDefinitionMenu.prototype.Close = function () {
     model.views[this.Id].activeMenu = null;
 
     this.Hide();
+
+    // close other open forms
+    this.CloseOpenForm(null);
 }
 
 
@@ -141,6 +144,9 @@ DataDefinitionMenu.prototype.OnUserProperties = function () {
         model.views[this.Id].userPropertiesForm.Close();
     }
     else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].userPropertiesForm);
+
         model.views[this.Id].userPropertiesForm.Open();
     }      
 }
@@ -150,6 +156,9 @@ DataDefinitionMenu.prototype.OnEditUserProperties = function () {
         model.views[this.Id].editUserPropertiesForm.Close();
     }
     else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].editUserPropertiesForm);
+      
         model.views[this.Id].editUserPropertiesForm.Open();
     }      
 }
@@ -159,15 +168,40 @@ DataDefinitionMenu.prototype.OnDefineGroups= function () {
         model.views[this.Id].defineGroupsForm.Close();
     }
     else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].defineGroupsForm);
+        
         model.views[this.Id].defineGroupsForm.Open();
     }     
 }
 
-DataDefinitionMenu.prototype.OnDefinePropertyHighlights= function () {
+DataDefinitionMenu.prototype.OnDefinePropertyHighlights = function () {
     if (model.views[this.Id].definePropertyHighlightsForm.Active) {
         model.views[this.Id].definePropertyHighlightsForm.Close();
     }
     else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].definePropertyHighlightsForm);
+        
         model.views[this.Id].definePropertyHighlightsForm.Open();
-    }     
+    }
+}
+
+DataDefinitionMenu.prototype.CloseOpenForm = function (currentForm) {
+    if (currentForm !== model.views[this.Id].userPropertiesForm &&
+        model.views[this.Id].userPropertiesForm.Active) {
+        model.views[this.Id].userPropertiesForm.Close();
+    }
+    else if (currentForm !== model.views[this.Id].editUserPropertiesForm &&
+        model.views[this.Id].editUserPropertiesForm.Active) {
+        model.views[this.Id].editUserPropertiesForm.Close();
+    }
+    else if (currentForm !== model.views[this.Id].defineGroupsForm &&
+        model.views[this.Id].defineGroupsForm.Active) {
+        model.views[this.Id].defineGroupsForm.Close();
+    }
+    else if (currentForm !== model.views[this.Id].definePropertyHighlightsForm &&
+        model.views[this.Id].definePropertyHighlightsForm.Active) {
+        model.views[this.Id].definePropertyHighlightsForm.Close();
+    }
 }

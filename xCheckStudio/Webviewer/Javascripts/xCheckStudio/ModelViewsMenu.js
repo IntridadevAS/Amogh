@@ -49,6 +49,8 @@ ModelViewsMenu.prototype.Close = function () {
     if (this.MeasureMenu.Active) {
         this.MeasureMenu.Close();
     }
+
+    this.MeasureMenu.HideViews();
 }
 
 ModelViewsMenu.prototype.LoadMenu = function () {

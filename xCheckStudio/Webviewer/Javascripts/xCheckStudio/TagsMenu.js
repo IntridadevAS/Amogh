@@ -36,6 +36,8 @@ TagsMenu.prototype.Close = function () {
 
     var element = document.getElementById("tagsMenu" + this.Id);
     element.setAttribute('style', 'display:none');
+
+    this.HideViews();
 }
 
 TagsMenu.prototype.ShowMenu = function () {

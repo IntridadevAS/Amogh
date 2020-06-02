@@ -57,6 +57,8 @@ BookmarkMenu.prototype.Close = function () {
     var element = document.getElementById("bookmarkMenu" + this.Id);
     element.setAttribute('style', 'display:none');
 
+    this.HideViews();
+
     this.TerminateEvents();
 }
 
@@ -219,8 +221,8 @@ BookmarkMenu.prototype.GetControls = function () {
     {
         Title: "Close",
         ImageSrc: "public/symbols/Close.svg",
-        click: function (e, menu) {
-            menu.Close();
+        click: function (e, menu) {            
+            menu.Close();            
         }
     }
     ];

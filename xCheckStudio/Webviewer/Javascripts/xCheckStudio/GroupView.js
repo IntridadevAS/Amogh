@@ -16,7 +16,7 @@ function GroupView(
     this.GroupedData = {};
 
     this.GroupViewTableInstance;
-    this.GroupViewGrid;
+    this.GroupViewGrid = null;
 
     this.SelectedRows = {};
     this.HighlightedRow = {};
@@ -123,7 +123,7 @@ GroupView.prototype.GenerateTableDataForGroupByProperty = function () {
 
         var rowData = {};
         rowData["componentName"] = component.Name;
-        rowData["NodeId"] = component.NodeId;
+        rowData["NodeId"] = Number(component.NodeId);
         for (var i = 0; i < component.properties.length; i++) {
             var property = component.properties[i];
             rowData[property.Name] = property.Value;
@@ -197,7 +197,8 @@ GroupView.prototype.LoadTable = function () {
                 column["groupIndex"] = currentGroupIndex;
                 this.Headers.push(column);
 
-                if (groupProperty.Operator.toLowerCase() === "and") {
+                if (!groupProperty.Operator || 
+                    groupProperty.Operator.toLowerCase() === "and") {
                     currentGroupIndex = 1;
                 }
                 else {
@@ -347,15 +348,21 @@ GroupView.prototype.LoadTable = function () {
 
             if (Object.keys(_this.HighlightedRow).length > 0) {
 
-                // var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
-                var oldRowKey = Object.keys(_this.HighlightedRow)[0];
+                var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                // var oldRowKey = Object.keys(_this.HighlightedRow)[0];
                 var rowIndex = e.component.getRowIndexByKey(oldRowKey);
                 var rowElement = e.component.getRowElement(rowIndex)[0];
                 if (oldRowKey in _this.SelectedRows) {
                     _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
                 }
                 else {
-                    _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+                    if (_this.HighlightActive &&
+                        (oldRowKey in _this.RowWiseColors)) {
+                        _this.SetRowColor(rowElement, _this.RowWiseColors[oldRowKey]);
+                    }
+                    else {
+                        _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+                    }                    
                 }
                 delete _this.HighlightedRow[oldRowKey];
             }
@@ -554,100 +561,38 @@ GroupView.prototype.LoadTable = function () {
                             {
                                 text: "Sum",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
 
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "sum",
-                                        displayFormat: "Total: {0}",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "sum", "Total: {0}");
+                                    _this.AddGlobalSummary(e, "sum", "Total: {0}"); 
                                 }
                             },
                             {
                                 text: "Count",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "count",
-                                        displayFormat: "Count: {0}",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "count", "Count: {0}");
+                                    _this.AddGlobalSummary(e, "count", "Count: {0}");
                                 }
                             },
                             {
                                 text: "Max",
                                 disabled: true,
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "max",
-                                        displayFormat: "Max: {0}",
-                                        valueFormat: "decimal",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "max", "Max: {0}");
+                                    _this.AddGlobalSummary(e, "max", "Max: {0}"); 
                                 }
                             },
                             {
                                 text: "Min",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "min",
-                                        displayFormat: "Min: {0}",
-                                        valueFormat: "decimal",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "min", "Min: {0}");
+                                    _this.AddGlobalSummary(e, "min", "Min: {0}"); 
                                 }
                             },
                             {
                                 text: "Avg",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "avg",
-                                        displayFormat: "Avg: {0}",
-                                        valueFormat: "decimal",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "avg", "Avg: {0}");
+                                    _this.AddGlobalSummary(e, "avg", "Avg: {0}"); 
                                 }
                             }
                         ],
@@ -658,6 +603,64 @@ GroupView.prototype.LoadTable = function () {
             }
         }
     }).dxDataGrid("instance");
+}
+
+GroupView.prototype.AddGlobalSummary = function (e, summaryType, displayFormat) {  
+    var globalSummaryItems = e.component.option("summary.totalItems");
+   
+    var found = false;
+    for (var i = 0; i < globalSummaryItems.length; i++) {
+        var globalSummaryItem = globalSummaryItems[i];
+        if (globalSummaryItem.column === e.column.dataField &&
+            globalSummaryItem.summaryType === summaryType) {
+            globalSummaryItems.splice(i, 1);
+            found = true;
+            break;
+        }
+    }
+
+    if (found === false) {
+        var summaryDefinition = {
+            column: e.column.dataField,
+            summaryType: summaryType,
+            displayFormat: displayFormat,
+            showInGroupFooter: true,
+            alignByColumn: true
+        };
+        globalSummaryItems.push(summaryDefinition);
+    }
+
+    e.component.option("summary.totalItems", globalSummaryItems);
+}
+
+GroupView.prototype.AddGroupSummary = function(e, summaryType, displayFormat){
+    var groupSummaryItems = e.component.option("summary.groupItems");  
+
+    // check if summary already exists for column
+    var found = false;
+    for (var i = 0; i < groupSummaryItems.length; i++) {
+        var groupSummaryItem = groupSummaryItems[i];
+        if (groupSummaryItem.column === e.column.dataField &&
+            groupSummaryItem.summaryType === summaryType) {
+            groupSummaryItems.splice(i, 1);
+            found = true;
+            break;
+        }
+    }
+   
+    if (found === false) {
+        var summaryDefinition = {
+            column: e.column.dataField,
+            summaryType: summaryType,
+            displayFormat: displayFormat,
+            showInGroupFooter: true,
+            alignByColumn: true
+        };
+
+        groupSummaryItems.push(summaryDefinition);
+    }
+
+    e.component.option("summary.groupItems", groupSummaryItems);    
 }
 
 GroupView.prototype.CacheItems = function (rows) {
@@ -733,7 +736,8 @@ GroupView.prototype.GetFilter = function () {
         var filterCondition = [groupProperty.Name, "=", groupProperty.Value];
         filter[filter.length - 1].push(filterCondition);
 
-        if (groupProperty.Operator.toLowerCase() === "and") {
+        if (!groupProperty.Operator ||
+            groupProperty.Operator.toLowerCase() === "and") {
             filter.push("or", []);
         }
         else {
@@ -1368,6 +1372,7 @@ GroupView.prototype.GetGroupColor = function (groupKey) {
 
         if (groupKeyArray[index] === groupProperty.Value) {
             if (index === groupKeyArray.length - 1 ||
+                !groupProperty.Operator ||
                 groupProperty.Operator.toLowerCase() === "and") {
                 color.color = groupProperty.Color;
                 break;
@@ -1411,9 +1416,7 @@ GroupView.prototype.Highlight = function(){
             var rgbColor = xCheckStudio.Util.hexToRgb(color);
             var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
             this.Webviewer.model.setNodesFaceColor([nodeId], communicatorColor);
-            this.Webviewer.model.setNodesLineColor([nodeId], communicatorColor);
-
-            this.HighlightActive = true;
+            this.Webviewer.model.setNodesLineColor([nodeId], communicatorColor);            
         }
     }
 }
@@ -1436,6 +1439,10 @@ GroupView.prototype.UnHighlight = function () {
 }
 
 GroupView.prototype.ApplyPropertyHighlightColor = function () {
+    if (this.GroupViewGrid === null) {
+        return;
+    }
+
     if (this.IsHighlightByPropertyActive) {
 
         if (this.HighlightActive) {            
@@ -1445,6 +1452,8 @@ GroupView.prototype.ApplyPropertyHighlightColor = function () {
             this.UnHighlight();
         }
         else {
+            this.HighlightActive = true;
+
             // set one color to entire model
             var rootNode = this.Webviewer.model.getAbsoluteRootNode();
             var communicatorColor = new Communicator.Color(255, 255, 255);
