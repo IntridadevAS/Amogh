@@ -555,100 +555,38 @@ GroupView.prototype.LoadTable = function () {
                             {
                                 text: "Sum",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
 
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "sum",
-                                        displayFormat: "Total: {0}",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "sum", "Total: {0}");
+                                    _this.AddGlobalSummary(e, "sum", "Total: {0}"); 
                                 }
                             },
                             {
                                 text: "Count",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "count",
-                                        displayFormat: "Count: {0}",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "count", "Count: {0}");
+                                    _this.AddGlobalSummary(e, "count", "Count: {0}");
                                 }
                             },
                             {
                                 text: "Max",
                                 disabled: true,
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "max",
-                                        displayFormat: "Max: {0}",
-                                        valueFormat: "decimal",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "max", "Max: {0}");
+                                    _this.AddGlobalSummary(e, "max", "Max: {0}"); 
                                 }
                             },
                             {
                                 text: "Min",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "min",
-                                        displayFormat: "Min: {0}",
-                                        valueFormat: "decimal",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "min", "Min: {0}");
+                                    _this.AddGlobalSummary(e, "min", "Min: {0}"); 
                                 }
                             },
                             {
                                 text: "Avg",
                                 onItemClick: function () {
-                                    var groupSummaryItems = e.component.option("summary.groupItems");
-                                    var globalSummaryItems = e.component.option("summary.totalItems");
-
-                                    var summaryDefinition = {
-                                        column: e.column.dataField,
-                                        summaryType: "avg",
-                                        displayFormat: "Avg: {0}",
-                                        valueFormat: "decimal",
-                                        showInGroupFooter: true,
-                                        alignByColumn: true
-                                    };
-                                    groupSummaryItems.push(summaryDefinition);
-                                    globalSummaryItems.push(summaryDefinition);
-                                    e.component.option("summary.groupItems", groupSummaryItems);
-                                    e.component.option("summary.totalItems", globalSummaryItems);
+                                    _this.AddGroupSummary(e, "avg", "Avg: {0}");
+                                    _this.AddGlobalSummary(e, "avg", "Avg: {0}"); 
                                 }
                             }
                         ],
@@ -659,6 +597,64 @@ GroupView.prototype.LoadTable = function () {
             }
         }
     }).dxDataGrid("instance");
+}
+
+GroupView.prototype.AddGlobalSummary = function (e, summaryType, displayFormat) {  
+    var globalSummaryItems = e.component.option("summary.totalItems");
+   
+    var found = false;
+    for (var i = 0; i < globalSummaryItems.length; i++) {
+        var globalSummaryItem = globalSummaryItems[i];
+        if (globalSummaryItem.column === e.column.dataField &&
+            globalSummaryItem.summaryType === summaryType) {
+            globalSummaryItems.splice(i, 1);
+            found = true;
+            break;
+        }
+    }
+
+    if (found === false) {
+        var summaryDefinition = {
+            column: e.column.dataField,
+            summaryType: summaryType,
+            displayFormat: displayFormat,
+            showInGroupFooter: true,
+            alignByColumn: true
+        };
+        globalSummaryItems.push(summaryDefinition);
+    }
+
+    e.component.option("summary.totalItems", globalSummaryItems);
+}
+
+GroupView.prototype.AddGroupSummary = function(e, summaryType, displayFormat){
+    var groupSummaryItems = e.component.option("summary.groupItems");  
+
+    // check if summary already exists for column
+    var found = false;
+    for (var i = 0; i < groupSummaryItems.length; i++) {
+        var groupSummaryItem = groupSummaryItems[i];
+        if (groupSummaryItem.column === e.column.dataField &&
+            groupSummaryItem.summaryType === summaryType) {
+            groupSummaryItems.splice(i, 1);
+            found = true;
+            break;
+        }
+    }
+   
+    if (found === false) {
+        var summaryDefinition = {
+            column: e.column.dataField,
+            summaryType: summaryType,
+            displayFormat: displayFormat,
+            showInGroupFooter: true,
+            alignByColumn: true
+        };
+
+        groupSummaryItems.push(summaryDefinition);
+    }
+
+    e.component.option("summary.groupItems", groupSummaryItems);    
 }
 
 GroupView.prototype.CacheItems = function (rows) {
