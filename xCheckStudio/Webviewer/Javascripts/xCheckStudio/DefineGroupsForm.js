@@ -92,6 +92,11 @@ DefineGroupsForm.prototype.Init = function () {
                 _this.PopulateGroups();
                 _this.PopulateTemplateGrid();
 
+                var sourceManager = SourceManagers[_this.Id];
+                if (sourceManager.GroupHighlightSwitch.option("value") === false) {
+                    sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
+                }
+
                 DevExpress.ui.notify("Group '" + selectedGroup + "'" + " deleted.");
             }
         }

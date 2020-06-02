@@ -92,6 +92,11 @@ DefinePropertyHighlightsForm.prototype.Init = function () {
                 _this.PopulatePropertyHighlightTemplates();
                 _this.PopulateTemplateGrid();
 
+                var sourceManager = SourceManagers[_this.Id];
+                if (sourceManager.GroupHighlightSwitch.option("value") === true) {
+                    sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));
+                }
+
                 DevExpress.ui.notify("Property highlight template '" + selectedTemplate + "'" + " deleted.");
             }
         }
