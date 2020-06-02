@@ -123,7 +123,7 @@ GroupView.prototype.GenerateTableDataForGroupByProperty = function () {
 
         var rowData = {};
         rowData["componentName"] = component.Name;
-        rowData["NodeId"] = component.NodeId;
+        rowData["NodeId"] = Number(component.NodeId);
         for (var i = 0; i < component.properties.length; i++) {
             var property = component.properties[i];
             rowData[property.Name] = property.Value;
@@ -348,15 +348,21 @@ GroupView.prototype.LoadTable = function () {
 
             if (Object.keys(_this.HighlightedRow).length > 0) {
 
-                // var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
-                var oldRowKey = Object.keys(_this.HighlightedRow)[0];
+                var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                // var oldRowKey = Object.keys(_this.HighlightedRow)[0];
                 var rowIndex = e.component.getRowIndexByKey(oldRowKey);
                 var rowElement = e.component.getRowElement(rowIndex)[0];
                 if (oldRowKey in _this.SelectedRows) {
                     _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
                 }
                 else {
-                    _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+                    if (_this.HighlightActive &&
+                        (oldRowKey in _this.RowWiseColors)) {
+                        _this.SetRowColor(rowElement, _this.RowWiseColors[oldRowKey]);
+                    }
+                    else {
+                        _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+                    }                    
                 }
                 delete _this.HighlightedRow[oldRowKey];
             }
