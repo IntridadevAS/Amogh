@@ -116,7 +116,8 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
                     "Name": property.Name,
                     "Value": property.Value,
                     "Operator": property.Operator,
-                    "Color": property.Color
+                    "Color": property.Color,
+                    "id": rowsData.length + 1
                 });
             }
         }
@@ -175,6 +176,12 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
     column["cellTemplate"] = colorPickerCellTemplate,
     columns.push(column);
 
+    column = {};
+    column["caption"] = "id";
+    column["dataField"] = "id";    
+    column["visible"] = false;   
+    columns.push(column);
+
     var loadingBrowser = true;
     this.PropertyHighlightTemplateGrid = $("#definePropertyHighlightGrid" + this.Id).dxDataGrid({
         columns: columns,
@@ -212,7 +219,7 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
 
         },
         onRowInserted: function (e) {
-            // e.component.cellValue(e.component.getRowIndexByKey(e.key), "Operator", "+")
+            e.component.cellValue(e.component.getRowIndexByKey(e.key), "id", e.component.getRowIndexByKey(e.key) + 1);
         },
         onRowRemoved: function (e) {
 
