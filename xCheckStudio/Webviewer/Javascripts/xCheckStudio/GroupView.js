@@ -197,7 +197,8 @@ GroupView.prototype.LoadTable = function () {
                 column["groupIndex"] = currentGroupIndex;
                 this.Headers.push(column);
 
-                if (groupProperty.Operator.toLowerCase() === "and") {
+                if (!groupProperty.Operator || 
+                    groupProperty.Operator.toLowerCase() === "and") {
                     currentGroupIndex = 1;
                 }
                 else {
@@ -733,7 +734,8 @@ GroupView.prototype.GetFilter = function () {
         var filterCondition = [groupProperty.Name, "=", groupProperty.Value];
         filter[filter.length - 1].push(filterCondition);
 
-        if (groupProperty.Operator.toLowerCase() === "and") {
+        if (!groupProperty.Operator ||
+            groupProperty.Operator.toLowerCase() === "and") {
             filter.push("or", []);
         }
         else {
@@ -1368,6 +1370,7 @@ GroupView.prototype.GetGroupColor = function (groupKey) {
 
         if (groupKeyArray[index] === groupProperty.Value) {
             if (index === groupKeyArray.length - 1 ||
+                !groupProperty.Operator ||
                 groupProperty.Operator.toLowerCase() === "and") {
                 color.color = groupProperty.Color;
                 break;
@@ -1411,9 +1414,7 @@ GroupView.prototype.Highlight = function(){
             var rgbColor = xCheckStudio.Util.hexToRgb(color);
             var communicatorColor = new Communicator.Color(rgbColor.r, rgbColor.g, rgbColor.b);
             this.Webviewer.model.setNodesFaceColor([nodeId], communicatorColor);
-            this.Webviewer.model.setNodesLineColor([nodeId], communicatorColor);
-
-            this.HighlightActive = true;
+            this.Webviewer.model.setNodesLineColor([nodeId], communicatorColor);            
         }
     }
 }
@@ -1436,8 +1437,7 @@ GroupView.prototype.UnHighlight = function () {
 }
 
 GroupView.prototype.ApplyPropertyHighlightColor = function () {
-    if (this.IsHighlightByPropertyActive !== true ||
-        this.GroupViewGrid === null) {
+    if (this.GroupViewGrid === null) {
         return;
     }
 
@@ -1450,6 +1450,8 @@ GroupView.prototype.ApplyPropertyHighlightColor = function () {
             this.UnHighlight();
         }
         else {
+            this.HighlightActive = true;
+
             // set one color to entire model
             var rootNode = this.Webviewer.model.getAbsoluteRootNode();
             var communicatorColor = new Communicator.Color(255, 255, 255);
