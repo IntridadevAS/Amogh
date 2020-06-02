@@ -1804,9 +1804,9 @@
 
       // enable menu options
       enableMenuOptions();
-      var disableItems = ["review"];
+      var hiddenItems = ["review", "data definitions"];
       // create drawer menu
-      DrawerMenu.create(disableItems, []);
+      DrawerMenu.create(hiddenItems, []);
 
       commentsCallout = new CommentsCallout();
       commentsCallout.Init();
