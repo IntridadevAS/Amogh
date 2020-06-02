@@ -16,7 +16,7 @@ function GroupView(
     this.GroupedData = {};
 
     this.GroupViewTableInstance;
-    this.GroupViewGrid;
+    this.GroupViewGrid = null;
 
     this.SelectedRows = {};
     this.HighlightedRow = {};
@@ -1436,6 +1436,11 @@ GroupView.prototype.UnHighlight = function () {
 }
 
 GroupView.prototype.ApplyPropertyHighlightColor = function () {
+    if (this.IsHighlightByPropertyActive !== true ||
+        this.GroupViewGrid === null) {
+        return;
+    }
+
     if (this.IsHighlightByPropertyActive) {
 
         if (this.HighlightActive) {            
