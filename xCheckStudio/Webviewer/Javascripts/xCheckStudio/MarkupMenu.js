@@ -67,6 +67,8 @@ MarkupMenu.prototype.Close = function () {
         this.ShapesMenu.Close();
     }
 
+    this.HideViews();
+    
     this.TerminateEvents();    
 }
 
@@ -257,7 +259,7 @@ MarkupMenu.prototype.GetControls = function () {
             id: 10,
             Title: "Close",
             ImageSrc: "public/symbols/Close.svg",
-            click: function (e, menu) {
+            click: function (e, menu) {                
                 menu.Close();
             }
         }
@@ -487,7 +489,7 @@ ShapesMenu.prototype.Close = function () {
     this.Active = false;
 
     var element = document.getElementById("shapesMenu" + this.Id);
-    element.setAttribute('style', 'display:none');
+    element.setAttribute('style', 'display:none');   
 }
 
 ShapesMenu.prototype.ShowMenu = function () {
