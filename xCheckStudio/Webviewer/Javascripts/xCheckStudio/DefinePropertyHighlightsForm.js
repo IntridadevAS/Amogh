@@ -114,7 +114,7 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
     var _this = this;
 
     var allData = this.GetAllSourceProperties();
-
+    
     var rowsData = [];
     if (_this.PropertyHighlightTemplateSelect) {
         var selectedTemplate = _this.PropertyHighlightTemplateSelect.option("value");
@@ -124,6 +124,23 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
             for (var i = 0; i < properties.length; i++) {
 
                 var property = properties[i];
+
+                // if property from group template is not found in current dataset, 
+                // the add that to properties to see in drop down list.
+                // This may happen bcoz of the template is defined for another dataset with different set of properties
+                var propObj = { "Name": property.Name };
+                if (!(JSON.stringify(propObj) in allData.properties)) {
+                    allData.properties[JSON.stringify(propObj)] = propObj;
+                }
+
+                // if property+ value pair from group template is not found in current dataset, 
+                // the add that to values to see in drop down list.
+                // This may happen bcoz of the template is defined for another dataset with different set of properties
+                var propValueObj = { "Name": property.Name, "Value": property.Value };
+                if (!(JSON.stringify(propValueObj) in allData.properties)) {
+                    allData.values[JSON.stringify(propValueObj)] = propValueObj;
+                }
+
                 rowsData.push({
                     "Name": property.Name,
                     "Value": property.Value,
@@ -145,7 +162,7 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
     column["visible"] = true;
     column["validationRules"] = [{ type: "required" }]
     column["lookup"] = {
-        "dataSource": allData["properties"],
+        "dataSource": Object.values(allData["properties"]),
         valueExpr: "Name",
         displayExpr: "Name"
     };
@@ -160,7 +177,7 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
     column["lookup"] = {
         dataSource: function (options) {
             return {
-                store: allData["values"],
+                store: Object.values(allData.values),
                 filter: options.data ? ["Name", "=", options.data.Name] : null
             };
         },
@@ -336,10 +353,9 @@ DefinePropertyHighlightsForm.prototype.GetAllSourceProperties = function () {
     var sourceManager = SourceManagers[this.Id];
 
     var traversedProperties = [];
-    var traversedValues = {};
-
-    var allProperties = [];
-    var allvalues = [];
+  
+    var allProperties = {};
+    var allvalues = {};
     if (sourceManager.Is3DSource()) {
         var allComponents = sourceManager.AllComponents;
 
@@ -352,24 +368,19 @@ DefinePropertyHighlightsForm.prototype.GetAllSourceProperties = function () {
                     if (traversedProperties.indexOf(property.Name) === -1) {
                         traversedProperties.push(property.Name);
 
-                        allProperties.push({
-                            "Name": property.Name
-                        });
+                        allProperties[JSON.stringify({ "Name": property.Name })] = { "Name": property.Name };
                     }
 
-                    if (!(property.Name in allvalues)) {
-                        allvalues[property.Name] = [];
-                        traversedValues[property.Name] = [];
-                    }
-
-                    if (traversedValues[property.Name].indexOf(property.Value) === -1) {
-                        allvalues[property.Name].push({
-                            "Name": property.Name,
-                            "Value": property.Value
-                        });
-
-                        traversedValues[property.Name].push(property.Value);
-                    }
+                    var valueObj = {
+                        "Name": property.Name,
+                        "Value": property.Value
+                    };
+                    
+                    var valueObjStr = JSON.stringify(valueObj);
+                    
+                    if (!(valueObjStr in allvalues)) {
+                        allvalues[valueObjStr] = valueObj;
+                    }                   
                 }
             }
         }
@@ -377,8 +388,8 @@ DefinePropertyHighlightsForm.prototype.GetAllSourceProperties = function () {
 
     traversedProperties = [];
     return {
-        properties: allProperties,
-        values: [].concat.apply([], Object.values(allvalues))        
+        properties: allProperties,           
+        values: allvalues       
     };
 }
 
