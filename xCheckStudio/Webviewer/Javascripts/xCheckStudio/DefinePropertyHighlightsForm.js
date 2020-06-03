@@ -45,7 +45,14 @@ DefinePropertyHighlightsForm.prototype.Init = function () {
 
     // Create btns    
     document.getElementById("definePropertyHighlightFormApplyBtn" + this.Id).onclick = function () {
-        _this.OnApply();
+        if (_this.PropertyHighlightTemplateGrid.hasEditData()) {
+            _this.PropertyHighlightTemplateGrid.saveEditData().then(function () {
+                _this.OnApply();
+            });
+        }
+        else {
+            _this.OnApply();
+        }
     }
 
     document.getElementById("definePropertyHighlightFormCloseBtn" + this.Id).onclick = function () {
