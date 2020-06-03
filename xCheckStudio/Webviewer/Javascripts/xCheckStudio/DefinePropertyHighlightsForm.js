@@ -263,10 +263,45 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
                 e.type === "selection") {
                 return;
             }
-            // if ((e.dataField && e.dataField.toLowerCase() === "operator")) {
-            //     e.editorOptions.disabled = true;
-            // }
+            if (e.dataField) {
+                if (e.dataField.toLowerCase() === "name") {
+                    e.editorOptions.itemTemplate = function (itemData, itemIndex, itemElement) {
+                        $('<div>')
+                            .appendTo(itemElement)
+                            .text(itemData['Name'])
+                            .attr('title', itemData['Name']);
+                    }
+                }
+                else if (e.dataField.toLowerCase() === "value") {
+                    e.editorOptions.itemTemplate = function (itemData, itemIndex, itemElement) {
+                        $('<div>')
+                            .appendTo(itemElement)
+                            .text(itemData['Value'])
+                            .attr('title', itemData['Value']);
+                    }
+                }
+            }
         },
+        onCellPrepared: function (e) {
+            if (e.rowType !== "data") {
+                return;
+            }
+
+            if (e.columnIndex == 1) {
+                e.cellElement.mousemove(function () {
+                    if ("Name" in e.data) {
+                        e.cellElement.attr('title', e.data["Name"]);
+                    }
+                });
+            }
+            if (e.columnIndex == 2) {
+                e.cellElement.mousemove(function () {
+                    if ("Value" in e.data) {
+                        e.cellElement.attr('title', e.data["Value"]);
+                    }
+                });
+            }
+        }, 
         onContextMenuPreparing: function (e) {
             if (e.row.rowType === "data") {
                 e.items = [
