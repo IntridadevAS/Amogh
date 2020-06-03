@@ -187,6 +187,8 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
     column["visible"] = false;   
     columns.push(column);
 
+    var colorColumnIndex = 4;
+
     var loadingBrowser = true;
     this.PropertyHighlightTemplateGrid = $("#definePropertyHighlightGrid" + this.Id).dxDataGrid({
         columns: columns,
@@ -241,6 +243,19 @@ DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
             //     e.editorOptions.disabled = true;
             // }
         },
+        onContextMenuPreparing: function (e) {
+            if (e.row.rowType === "data") {
+                e.items = [
+                    {
+                        text: "Remove Color",
+                        onItemClick: function () {
+                            e.row.data["Color"] = null; 
+                            e.row.cells[colorColumnIndex].cellElement[0].style.backgroundColor = "#FFFFFF";
+                        }
+                    }
+                ]
+            }
+        }
     }).dxDataGrid("instance");
 }
 
