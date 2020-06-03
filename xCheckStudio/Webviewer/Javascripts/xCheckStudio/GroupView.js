@@ -915,6 +915,10 @@ GroupView.prototype.GoToRow = function (rowKey) {
             var prop = this.GroupProperties[i]
             if (prop in rowData) {
                 var propValue = rowData[prop];
+                if (!propValue) {
+                    propValue = "";
+                }
+
                 if (i === 0 && (propValue in _this.KeyVsTableItems)) {
                     groupKeys.push(_this.KeyVsTableItems[propValue].values);
                 }
@@ -943,6 +947,7 @@ GroupView.prototype.SelectRow = function (rowKey) {
     if (!_this.GroupViewGrid.isRowSelected(rowKey)) {
         _this.AvoidTableEvents = true;
         _this.GroupViewGrid.selectRows([rowKey], true).then(function () {
+            _this.GroupViewGrid.navigateToRow(rowKey);
             _this.AvoidTableEvents = false;
         });
 
@@ -950,7 +955,7 @@ GroupView.prototype.SelectRow = function (rowKey) {
         _this.SelectedRows[rowKey] = rowData.nodeId;
     }
 
-    _this.GroupViewGrid.navigateToRow(rowKey);
+    // _this.GroupViewGrid.navigateToRow(rowKey);
 }
 
 GroupView.prototype.GetSelectedNodes = function () {
