@@ -126,22 +126,19 @@ GroupView.prototype.GenerateTableDataForGroupByProperty = function () {
         rowData["NodeId"] = Number(component.NodeId);
         for (var i = 0; i < component.properties.length; i++) {
             var property = component.properties[i];
-            rowData[property.Name] = property.Value;
 
-            // if (this.IsHighlightByPropertyActive) {
-
-            // }
-            // else {
+            var columnDataField = property.Name.replace(/\s/g, '');
+            rowData[columnDataField] = property.Value;
+           
             if (this.ExistingColumnNames.indexOf(property.Name) === -1 &&
                 !this.IsPropertyInGroupProperties(property.Name)) {
                 var column = {};
                 column["caption"] = property.Name;
-                column["dataField"] = property.Name.replace(/\s/g, '');
+                column["dataField"] = columnDataField;
                 column["visible"] = false;
                 this.Headers.push(column);
                 this.ExistingColumnNames.push(property.Name)
-            }
-            // }
+            }            
         }
 
         this.TableData.push(rowData);
@@ -420,6 +417,8 @@ GroupView.prototype.LoadTable = function () {
                 _this.ResetViewerColors();
             }
             _this.HighlightActive = false;
+
+            _this.ExistingColumnNames = [];
         },
         onRowPrepared: function (e) {
             if (e.rowType == "group") {
@@ -687,18 +686,19 @@ GroupView.prototype.CacheItems = function (rows) {
                 var groupKey = [];
                 for (var j = 0; j < this.GroupProperties.length; j++) {
                     var groupProperty = this.GroupProperties[j];
+                    
+                    var groupPropertyField = groupProperty.Name.replace(/\s/g, '');
+                    if (traversedGroupProperties.indexOf(groupPropertyField) === -1) {
+                        traversedGroupProperties.push(groupPropertyField);
 
-                    if (traversedGroupProperties.indexOf(groupProperty.Name) === -1) {
-                        traversedGroupProperties.push(groupProperty.Name);
-
-                        if (groupProperty.Name in row.data) {
-                            groupKey.push(row.data[groupProperty.Name]);
+                        if (groupPropertyField in row.data) {
+                            groupKey.push(row.data[groupPropertyField]);
                         }
                         else {
                             groupKey.push("");
                         }
 
-                        this.KeyVsTableItems[row.key][groupProperty.Name] = groupKey[groupKey.length - 1];
+                        this.KeyVsTableItems[row.key][groupPropertyField] = groupKey[groupKey.length - 1];
                     }
                 }
 
@@ -710,8 +710,9 @@ GroupView.prototype.CacheItems = function (rows) {
             else {
                 var groupKey = [];
                 for (var j = 0; j < this.GroupProperties.length; j++) {
-                    this.KeyVsTableItems[row.key][this.GroupProperties[j]] = row.data[this.GroupProperties[j]];
-                    groupKey.push(row.data[this.GroupProperties[j]]);
+                    var groupPropertyField = this.GroupProperties[j].replace(/\s/g, '');
+                    this.KeyVsTableItems[row.key][groupPropertyField] = row.data[this.GroupProperties[j]];
+                    groupKey.push(row.data[groupPropertyField]);
                 }
 
                 if (!(groupKey in this.GroupKeysVsDataItems)) {
@@ -733,7 +734,7 @@ GroupView.prototype.GetFilter = function () {
     for (var i = 0; i < this.GroupProperties.length; i++) {
         var groupProperty = this.GroupProperties[i];
 
-        var filterCondition = [groupProperty.Name, "=", groupProperty.Value];
+        var filterCondition = [groupProperty.Name.replace(/\s/g, ''), "=", groupProperty.Value];
         filter[filter.length - 1].push(filterCondition);
 
         if (!groupProperty.Operator ||
