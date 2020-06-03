@@ -177,14 +177,10 @@ ModelBrowserContextMenu.prototype.OnIsolateClicked = function () {
             }
 
             //Grey out the text of hidden element rows
-            sourceManager.ModelTree.HighlightHiddenRowsFromNodeIds(true, sourceManager.HiddenNodeIds);
-            // var selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(sourceManager.HiddenNodeIds);
-            // sourceManager.ModelTree.HighlightHiddenRows(true, selectedRows);
-
+            this.ModelBrowser.HighlightHiddenRowsFromNodeIds(true, sourceManager.HiddenNodeIds);
+          
             // unhighlight the hidden rows made visible
-            sourceManager.ModelTree.HighlightHiddenRowsFromNodeIds(false, nodeIds);
-            // selectedRows = sourceManager.ModelTree.GetSelectedRowsFromNodeIds(nodeIds);
-            // sourceManager.ModelTree.HighlightHiddenRows(false, selectedRows);
+            this.ModelBrowser.HighlightHiddenRowsFromNodeIds(false, nodeIds);            
       }
 }
 
