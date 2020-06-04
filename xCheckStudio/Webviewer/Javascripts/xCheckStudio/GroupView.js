@@ -313,34 +313,47 @@ GroupView.prototype.LoadTable = function () {
             _this.AvoidViewerEvents = true;
 
             if (e.currentSelectedRowKeys.length > 0) {
-                for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                    // var rowKey = Number(e.currentSelectedRowKeys[i]);
-                    var rowKey = e.currentSelectedRowKeys[i];
-                    var rowIndex = e.component.getRowIndexByKey(rowKey);
-                    var visibleRows = e.component.getVisibleRows();
-                    var nodeId = Number(visibleRows[rowIndex].data.NodeId);
+                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                        // var rowKey = Number(e.currentSelectedRowKeys[i]);
+                        var rowKey = e.currentSelectedRowKeys[i];
+                        var rowIndex = e.component.getRowIndexByKey(rowKey);
+                        if (rowIndex === -1) {
+                            e.component.byKey(rowKey).done(function (dataObject) {
+                                var nodeId = Number(dataObject.NodeId);
+                                _this.SelectedRows[rowKey] = nodeId;
+                                _this.Webviewer.selectionManager.selectNode(nodeId, Communicator.SelectionMode.Add);
+                            });
+                        }
+                        else {
+                            var visibleRows = e.component.getVisibleRows();
+                            var nodeId = Number(visibleRows[rowIndex].data.NodeId);
 
-                    _this.SelectedRows[rowKey] = nodeId;
+                            _this.SelectedRows[rowKey] = nodeId;
 
-                    _this.Webviewer.selectionManager.selectNode(nodeId, Communicator.SelectionMode.Add);
-                }
+                            _this.Webviewer.selectionManager.selectNode(nodeId, Communicator.SelectionMode.Add);
+                        }
+                    }               
             }
             else if (e.currentDeselectedRowKeys.length > 0) {
+                // if (e.currentDeselectedRowKeys.length === e.component.getDataSource().totalCount()) {
+                //     // expand all
+                //     e.component.expandAll();
+
                 for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
                     // var rowKey = Number(e.currentDeselectedRowKeys[i]);
                     var rowKey = e.currentDeselectedRowKeys[i];
 
                     if (rowKey in _this.SelectedRows) {
                         delete _this.SelectedRows[rowKey];
-
-                        //now manage selection in viewer
-                        _this.Webviewer.selectionManager.clear();
-                        for (var rowKey in _this.SelectedRows) {
-                            _this.Webviewer.selectionManager.selectNode(Number(_this.SelectedRows[rowKey]),
-                                Communicator.SelectionMode.Add);
-                        }
                     }
                 }
+                //now manage selection in viewer
+                _this.Webviewer.selectionManager.clear();
+                for (var rowKey in _this.SelectedRows) {
+                    _this.Webviewer.selectionManager.selectNode(Number(_this.SelectedRows[rowKey]),
+                        Communicator.SelectionMode.Add);
+                }
+                // }
             }
 
             // enable events

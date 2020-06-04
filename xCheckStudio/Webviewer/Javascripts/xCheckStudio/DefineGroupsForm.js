@@ -208,28 +208,40 @@ DefineGroupsForm.prototype.PopulateTemplateGrid = function () {
                 return;
             }
             loadingBrowser = false;      
-        },
-        onSelectionChanged: function (e) {
-
-        },
+        },      
         onRowInserted: function (e) {
             e.component.cellValue(e.component.getRowIndexByKey(e.key), "Operator", "+")
-        },
-        onRowRemoved: function (e) {
-
-        },
-        onRowUpdating(e) {
-
-        },
+        },       
         onEditorPreparing: function (e) {
             if (e.parentType !== "dataRow" ||
                 e.type === "selection") {
                 return;
             }
-            if ((e.dataField && e.dataField.toLowerCase() === "operator")) {
+            if (e.dataField && e.dataField.toLowerCase() === "operator") {
                 e.editorOptions.disabled = true;
             }
+            else if (e.dataField && e.dataField.toLowerCase() === "name") {
+                e.editorOptions.itemTemplate = function (itemData, itemIndex, itemElement) {
+                    $('<div>')
+                        .appendTo(itemElement)
+                        .text(itemData)
+                        .attr('title', itemData);
+                }
+            }
         },
+        onCellPrepared: function (e) {
+            if (e.rowType !== "data") {
+                return;
+            }
+
+            if (e.columnIndex == 1) {
+                e.cellElement.mousemove(function () {
+                    if ("Name" in e.data) {
+                        e.cellElement.attr('title', e.data["Name"]);
+                    }
+                });
+            }
+        }
     }).dxDataGrid("instance");
 }
 
