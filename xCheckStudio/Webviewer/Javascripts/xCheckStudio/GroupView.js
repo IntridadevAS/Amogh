@@ -178,11 +178,7 @@ GroupView.prototype.LoadTable = function () {
     if (this.IsHighlightByPropertyActive) {
 
         filter = this.GetFilter();
-        // filter = [];
-        // filter.push(["MainComponentClass", "=", "Equipment"])
-        // filter.push("and")
-        // filter.push([["SubComponentClass", "=", "Pump"], "or", ["SubComponentClass", "=", "Column"]])
-
+       
         var currentGroupIndex = 0;
         for (var i = 0; i < this.GroupProperties.length; i++) {
             var groupProperty = this.GroupProperties[i];
@@ -221,6 +217,18 @@ GroupView.prototype.LoadTable = function () {
                 this.Headers.push(column);
 
                 this.ExistingColumnNames.push(groupProperty);
+            }
+        }
+    }
+
+    // set value NULL to properties which donot belong to component
+    for (var i = 0; i < this.TableData.length; i++) {
+        var rowData = this.TableData[i];
+
+        for (var j = 0; j < this.ExistingColumnNames.length; j++) {
+            var columnField = this.ExistingColumnNames[j].replace(/\s/g, '');
+            if (!(columnField in rowData)) {
+                rowData[columnField] = "NULL";
             }
         }
     }
