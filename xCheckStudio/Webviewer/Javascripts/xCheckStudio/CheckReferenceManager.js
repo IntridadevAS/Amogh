@@ -83,41 +83,9 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
-        // if (!webAddressList) {
-        //     return;
-        // }
-
         for (var i = 0; i < webAddresses.length; i++) {
             var webAddress = webAddresses[i];
-            ReferenceManager.showWebAddress(webAddress);
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // listItem.innerText = webAddress;
-            // webAddressList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-
-            //     // select this list item
-            //     ReferenceManager.select(this);
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-            //     win.loadURL(this.innerText);
-            //     win.show();
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
+            ReferenceManager.showWebAddress(webAddress);          
         }
     },
 
@@ -126,47 +94,9 @@ let ReferenceManager = {
             return;
         }
 
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var documentList = referenceIFrame.contentDocument.getElementById("documentList");
-        // if (!documentList) {
-        //     return;
-        // }
-
         for (var i = 0; i < documents.length; i++) {
             var doc = documents[i];
             ReferenceManager.showDocument(doc);
-            // var listItem = referenceIFrame.contentDocument.createElement('li');
-            // listItem.innerText = doc;
-            // documentList.appendChild(listItem);
-
-            // listItem.onclick = function () {
-            //     // select this list item
-            //     ReferenceManager.select(this);              
-
-
-            //     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            //     const BrowserWindow = require('electron').remote.BrowserWindow;
-            //     const path = require("path");
-
-            //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-
-            //     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
-            //     win.loadURL(docUrl);
-            // }
-
-            // listItem.onmouseover = function () {
-            //     ReferenceManager.Highlight(this);
-            // }
-
-            // listItem.onmouseout = function () {
-            //     ReferenceManager.UnHighlight(this);
-            // }
         }
     },
 
@@ -174,17 +104,6 @@ let ReferenceManager = {
         if (images.length === 0) {
             return;
         }
-
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var imageList = referenceIFrame.contentDocument.getElementById("imageList");
-        // if (!imageList) {
-        //     return;
-        // }
-
 
         for (var i = 0; i < images.length; i++) {
             var image = images[i];
@@ -283,39 +202,6 @@ let ReferenceManager = {
             success: function (msg) {
                 if (msg != 'fail') {
                     ReferenceManager.showWebAddress(msg);
-
-                    // var referenceIFrame = document.getElementById("referenceIFrame");
-                    // if (!referenceIFrame) {
-                    //     return;
-                    // }
-
-                    // var webAddressList = referenceIFrame.contentDocument.getElementById("webAddressList");
-                    // if (!webAddressList) {
-                    //     return;
-                    // }
-
-                    // var listItem = referenceIFrame.contentDocument.createElement('li');
-                    // listItem.innerText = msg;
-                    // webAddressList.appendChild(listItem);
-
-                    // listItem.onclick = function () {
-
-                    //     // select this list item
-                    //     ReferenceManager.select(this);
-
-                    //     const BrowserWindow = require('electron').remote.BrowserWindow;
-                    //     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-                    //     win.loadURL(this.innerText);
-                    //     win.show();
-                    // }
-
-                    // listItem.onmouseover = function () {
-                    //     ReferenceManager.Highlight(this);
-                    // }
-
-                    // listItem.onmouseout = function () {
-                    //     ReferenceManager.UnHighlight(this);
-                    // }
                 }
             }
         });
@@ -657,6 +543,8 @@ let ReferenceManager = {
         listItem.ondblclick = function () {           
             const BrowserWindow = require('electron').remote.BrowserWindow;
             win = new BrowserWindow({ title: 'xCheckStudio', frame: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+            // const PDFWindow = require('electron-pdf-window');
+            // PDFWindow.addSupport(win);
             win.loadURL(this.innerText);
             win.show();
         }
@@ -699,6 +587,8 @@ let ReferenceManager = {
             const path = require("path");
 
             win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+            const PDFWindow = require('electron-pdf-window');
+            PDFWindow.addSupport(win);
 
             var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
             win.loadURL(docUrl);

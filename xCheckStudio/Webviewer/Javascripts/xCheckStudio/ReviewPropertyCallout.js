@@ -311,8 +311,9 @@ PropertyCallout.prototype.LoadReferences = function (references) {
             .text(options.data.Value)
             .on('dxclick', function () {
                 // open reference
-                const BrowserWindow = require('electron').remote.BrowserWindow;
+                const BrowserWindow = require('electron').remote.BrowserWindow;              
                 win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+               
                 if (type.toLowerCase() === "web address") {
                     win.loadURL(value);
                 }
@@ -320,6 +321,12 @@ PropertyCallout.prototype.LoadReferences = function (references) {
                     type.toLowerCase() === "document") {
                     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
                     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+                
+                    if (type.toLowerCase() === "document" &&
+                        xCheckStudio.Util.getFileExtension(value).toLowerCase() === "pdf") {
+                        const PDFWindow = require('electron-pdf-window');
+                        PDFWindow.addSupport(win);
+                    }
 
                     const path = require("path");
                     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
