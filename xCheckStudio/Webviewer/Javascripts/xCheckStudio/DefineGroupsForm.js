@@ -234,7 +234,18 @@ DefineGroupsForm.prototype.PopulateTemplateGrid = function () {
 }
 
 DefineGroupsForm.prototype.OnApply = function () {
+    var templateName = this.NameTextBox.option("value");
+    if (!templateName ||
+        templateName === "") {
+        alert("Please enter name for template to save.");
+        return;
+    }
+
     var rows = this.DefineGroupsGrid.getVisibleRows();
+    if (rows.length === 0) {
+        alert("No data to save.");
+        return;
+    }
 
     var groupingProperties = [];
     for (var i = 0; i < rows.length; i++) {
@@ -242,14 +253,14 @@ DefineGroupsForm.prototype.OnApply = function () {
         groupingProperties.push(row.data.Name);
     }
 
-    groupName = this.NameTextBox.option("value");
+    // templateName = this.NameTextBox.option("value");
 
     var group = {
-        "name": groupName,
+        "name": templateName,
         "properties": groupingProperties
     };
 
-    model.propertyGroups[groupName] = group;
+    model.propertyGroups[templateName] = group;
 
     var sourceManager = SourceManagers[this.Id];
     if (sourceManager.GroupHighlightSwitch.option("value") === false) {
@@ -261,7 +272,7 @@ DefineGroupsForm.prototype.OnApply = function () {
     this.PopulateGroups();
     this.PopulateTemplateGrid();
 
-    DevExpress.ui.notify("Group '" + groupName + "' created successfully.");
+    DevExpress.ui.notify("Group '" + templateName + "' created successfully.");
 }
 
 DefineGroupsForm.prototype.GetAllSourceProperties = function () {

@@ -349,8 +349,19 @@ DefinePropertyHighlightsForm.prototype.PopulatePropertyHighlightTemplates = func
 }
 
 DefinePropertyHighlightsForm.prototype.OnApply = function () {
-    var rows = this.PropertyHighlightTemplateGrid.getVisibleRows();
+    var templateName = this.NameTextBox.option("value");
+    if (!templateName ||
+        templateName === "") {
+        alert("Please enter name for template to save.");
+        return;
+    }
 
+    var rows = this.PropertyHighlightTemplateGrid.getVisibleRows();
+    if (rows.length === 0) {
+        alert("No data to save.");
+        return;
+    }
+    
     var templateProperties = [];
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
@@ -362,7 +373,7 @@ DefinePropertyHighlightsForm.prototype.OnApply = function () {
         });
     }
 
-    var templateName = this.NameTextBox.option("value");
+    // var templateName = this.NameTextBox.option("value");
 
     var template = {
         "name": templateName,
