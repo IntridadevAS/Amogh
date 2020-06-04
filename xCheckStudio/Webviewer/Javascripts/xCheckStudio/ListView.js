@@ -113,11 +113,7 @@ ListView.prototype.UpdateComponents = function (componentsData) {
                         }
                         needsUpdate = true;
                     }                
-
-                    component.removeProperty(prop.oldProperty);
-                   
-                    var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
-                    component.addProperty(genericPropertyObject);
+                    component.updateProperty(prop.oldProperty, prop.property, prop.value)                   
                 }
             }
         }

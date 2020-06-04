@@ -36,6 +36,18 @@ function GenericComponent(name,
         return undefined;
     }
 
+    GenericComponent.prototype.updateProperty = function (oldPropertyName, newPropertyName, newPropertyValue) {
+        for (var i = 0; i < this.properties.length; i++) {
+            if (this.properties[i].Name.toLowerCase() === oldPropertyName.toLowerCase() &&
+                this.properties[i].UserDefined) {
+                  this.properties[i].Name = newPropertyName;
+                  this.properties[i].Value = newPropertyValue;
+                break;
+            }
+        }      
+        return undefined;
+    }
+
     GenericComponent.prototype.propertyExists = function (propertyName) {
         for (var i = 0; i < this.properties.length; i++) {
             if (this.properties[i].Name.toLowerCase() === propertyName.toLowerCase()) {
