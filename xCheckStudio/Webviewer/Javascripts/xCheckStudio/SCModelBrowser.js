@@ -95,7 +95,7 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
     tableRowContent[ModelBrowserColumnNames3D.Component] = nodeData.Name;
     tableRowContent[ModelBrowserColumnNames3D.MainClass] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
     tableRowContent[ModelBrowserColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+    tableRowContent[ModelBrowserColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? Number(nodeData.NodeId) : "");
     tableRowContent["parent"] = parentNode;
 
     this.modelTreeRowData.push(tableRowContent);
