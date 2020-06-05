@@ -37,6 +37,8 @@ function ListView(
     this.UpdateRequiredRows = {};
 
     this.CurrentRowId = 0;
+
+    this.Flat = false;
 }
 // assign ModelBrowser's method to this class
 ListView.prototype = Object.create(ModelBrowser.prototype);
@@ -150,10 +152,10 @@ ListView.prototype.Show = function () {
     this.Headers = [];
     this.TableData = [];
 
-    var flat = false;
+    this.Flat = false;
     if (SourceManagers[this.Id].ListTypeSwitch &&
         SourceManagers[this.Id].ListTypeSwitch.option("value")) {
-        flat = true;
+        this.Flat = true;
     }
 
     // Create Headers
@@ -163,8 +165,8 @@ ListView.prototype.Show = function () {
     var rootNode = this.Webviewer.model.getAbsoluteRootNode();
     
     this.CurrentRowId = 1;
-    var tableData = this.CreateTableData(rootNode, -1, flat);
-    if (!flat) {
+    var tableData = this.CreateTableData(rootNode, -1, this.Flat);
+    if (!this.Flat) {
         this.TableData = [tableData];
     }
     this.CurrentRowId = 1;
@@ -181,6 +183,57 @@ ListView.prototype.Show = function () {
 
     // set active table view type
     model.views[this.Id].activeTableView = GlobalConstants.TableView.List;
+}
+
+ListView.prototype.CreateTableData = function (nodeId, parentNode, flat) {
+
+    if (nodeId === null) {
+        return null;
+    }
+
+    var rowData = this.GetRowData(nodeId, parentNode);
+    if (!rowData) {
+        return null;
+    }
+
+    if (!flat) {
+        rowData["items"] = [];
+    }
+    else {
+        this.TableData.push(rowData);
+    }
+
+    var children = this.Webviewer.model.getNodeChildren(nodeId);
+    for (var i = 0; i < children.length; i++) {
+        var childRowData = this.CreateTableData(children[i], nodeId, flat);
+        if (!flat && childRowData) {
+            rowData["items"].push(childRowData);
+        }        
+    }
+
+    return rowData;
+};
+
+ListView.prototype.GetRowData = function (nodeId, parentNode) {
+    //var _this = this;
+    if (!(nodeId in this.Components)) {
+        return null;
+    }
+
+    //add node properties to model browser table
+    var nodeData = this.Components[nodeId];
+
+    tableRowContent = {};
+
+    tableRowContent[ListViewColumnNames3D.Component] = nodeData.Name;
+    tableRowContent[ListViewColumnNames3D.MainClass] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
+    tableRowContent[ListViewColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
+    tableRowContent[ListViewColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+    // tableRowContent[ListViewColumnNames3D.Parent] = parentNode;
+    tableRowContent["rowId"] = this.CurrentRowId;
+    this.CurrentRowId++;
+    
+    return tableRowContent;
 }
 
 ListView.prototype.CreateHeaders = function () {
@@ -209,10 +262,10 @@ ListView.prototype.CreateHeaders = function () {
                 visible = false;
                 caption = ListViewColumnNames3D.NodeId;
                 break;
-            case ListViewColumns3D.Parent:
-                visible = false;
-                caption = ListViewColumnNames3D.Parent;
-                break;
+            // case ListViewColumns3D.Parent:
+            //     visible = false;
+            //     caption = ListViewColumnNames3D.Parent;
+            //     break;
         }
         columnHeader["caption"] = caption;
         columnHeader["dataField"] = caption.replace(/\s/g, '');;
@@ -245,6 +298,7 @@ ListView.prototype.LoadTable = function () {
     }
 
     $(function () {
+        var loadingBrowser = true;
         _this.ListViewTableInstance = $(containerDiv).dxTreeList({
             columns: _this.Headers,
             // dataSource: _this.TableData,
@@ -265,7 +319,7 @@ ListView.prototype.LoadTable = function () {
             dataStructure: "tree",
             keyExpr: "rowId",
             itemsExpr: "items",
-            parentIdExpr: "Parent_ID",
+            // parentIdExpr: ListViewColumnNames3D.Parent,
             columnAutoWidth: true,
             columnResizingMode: 'widget',
             wordWrapEnabled: false,
@@ -286,6 +340,11 @@ ListView.prototype.LoadTable = function () {
             },
             selection: selectionAttribute,
             onContentReady: function (e) {
+                if (!loadingBrowser) {
+                    return;
+                }
+                loadingBrowser = false;
+
                 _this.CacheItems(e.component.getDataSource().items());
 
                 // initialize the context menu
@@ -459,7 +518,7 @@ ListView.prototype.IterateDataSourceRecursively = function (item) {
         "class": item.data.Class,
         "item": item.data.Item,
         "nodeId": item.data.NodeId,
-        "parentKey": item.data.parentId,
+        "parentKey": item.parent.key,
         "hasChildren": item.hasChildren
     };
 
@@ -523,25 +582,34 @@ ListView.prototype.GoToRow = function (rowKey) {
 
     _this.AvoidTableEvents = true;
 
-    var itemHierarchy = [];
-    _this.GetItemHierarchy(rowKey, itemHierarchy);
-    itemHierarchy.reverse();
+    if (_this.Flat) {
+        _this.ListViewTableInstance.navigateToRow(rowKey);
+    }
+    else {
+        var itemHierarchy = [];
+        _this.GetItemHierarchy(rowKey, itemHierarchy);
+        itemHierarchy.reverse();
 
-    var allPromises = [];
-    for (var i = 0; i < itemHierarchy.length; i++) {
-        var key = itemHierarchy[i];
-        if (!_this.ListViewTableInstance.isRowExpanded(key)) {
-            allPromises.push(_this.ListViewTableInstance.expandRow(key));
+        // var allPromises = [];
+        for (var i = 0; i < itemHierarchy.length; i++) {
+            var key = itemHierarchy[i];
+            if (!_this.ListViewTableInstance.isRowExpanded(key)) {
+                // allPromises.push(_this.ListViewTableInstance.expandRow(key));
+                _this.ListViewTableInstance.expandRow(key).done(function () {
+                    _this.ListViewTableInstance.navigateToRow(key);
+                });
+            }
+            else {
+                _this.ListViewTableInstance.navigateToRow(key);
+            }
         }
     }
 
-    Communicator.Util.waitForAll(allPromises);
+    // Communicator.Util.waitForAll(allPromises);
     if (!_this.ListViewTableInstance.isRowSelected(rowKey)) {
         _this.ListViewTableInstance.selectRows([rowKey], true);
         _this.SelectedRows[rowKey] = _this.KeyVsTableItems[rowKey].nodeId;
     }
-
-    _this.ListViewTableInstance.navigateToRow(rowKey);
 
     _this.AvoidTableEvents = false;
 }
@@ -571,57 +639,6 @@ ListView.prototype.SelectValidNode = function (nodeId) {
     }
 
     return null;
-}
-
-ListView.prototype.CreateTableData = function (nodeId, parentNode, flat) {
-
-    if (nodeId === null) {
-        return null;
-    }
-
-    var rowData = this.GetRowData(nodeId, parentNode);
-    if (!rowData) {
-        return null;
-    }
-
-    if (!flat) {
-        rowData["items"] = [];
-    }
-    else {
-        this.TableData.push(rowData);
-    }
-
-    var children = this.Webviewer.model.getNodeChildren(nodeId);
-    for (var i = 0; i < children.length; i++) {
-        var childRowData = this.CreateTableData(children[i], nodeId, flat);
-        if (!flat && childRowData) {
-            rowData["items"].push(childRowData);
-        }        
-    }
-
-    return rowData;
-};
-
-ListView.prototype.GetRowData = function (nodeId, parentNode) {
-    //var _this = this;
-    if (!(nodeId in this.Components)) {
-        return null;
-    }
-
-    //add node properties to model browser table
-    var nodeData = this.Components[nodeId];
-
-    tableRowContent = {};
-
-    tableRowContent[ModelBrowserColumnNames3D.Component] = nodeData.Name;
-    tableRowContent[ModelBrowserColumnNames3D.MainClass] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[ModelBrowserColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
-    tableRowContent["parent"] = parentNode;
-    tableRowContent["rowId"] = this.CurrentRowId;
-    this.CurrentRowId++;
-    
-    return tableRowContent;
 }
 
 ListView.prototype.GetSelectedNodeIds = function () {

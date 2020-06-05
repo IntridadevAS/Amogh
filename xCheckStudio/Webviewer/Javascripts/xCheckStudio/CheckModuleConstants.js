@@ -72,7 +72,7 @@ const ListViewColumnNames3D ={
     MainClass: "Category",
     SubClass: "Class",
     NodeId: "NodeId",
-    Parent: "parent"
+    Parent: "Parent"
 }
 
 // 1D Model browser
