@@ -316,6 +316,8 @@ ListView.prototype.LoadTable = function () {
                 if (_this.AvoidTableEvents) {
                     return;
                 }
+                
+                _this.AvoidViewerEvents = true;
 
                 if (e.currentSelectedRowKeys.length > 0) {
                     for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
@@ -335,16 +337,17 @@ ListView.prototype.LoadTable = function () {
 
                         if (rowKey in _this.SelectedRows) {
                             delete _this.SelectedRows[rowKey];
-
-                            //now manage selection in viewer
-                            _this.Webviewer.selectionManager.clear();
-                            for (var rowKey in _this.SelectedRows) {
-                                _this.Webviewer.selectionManager.selectNode(_this.SelectedRows[rowKey],
-                                    Communicator.SelectionMode.Add);
-                            }
                         }
                     }
+
+                    //now manage selection in viewer
+                    _this.Webviewer.selectionManager.clear();
+                    for (var rowKey in _this.SelectedRows) {
+                        _this.Webviewer.selectionManager.selectNode(_this.SelectedRows[rowKey],
+                            Communicator.SelectionMode.Add);
+                    }
                 }
+                _this.AvoidViewerEvents = false;
 
                 if (model.views[_this.Id].userPropertiesForm.Active) {
                     model.views[_this.Id].userPropertiesForm.LoadData();
