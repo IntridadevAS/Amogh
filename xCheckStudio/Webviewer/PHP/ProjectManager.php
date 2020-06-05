@@ -75,6 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "SaveAll":
             SaveAll();
             break;
+        case "GetNodeIdVsComponentId":
+            GetNodeIdVsComponentId();
+            break;
         default:
             echo "No Function Found!";
     }
@@ -4016,4 +4019,76 @@ function UpdateProject()
         echo "failed";
         return;
     }
+}
+
+function GetNodeIdVsComponentId()
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['SourceId'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
+
+        return;
+    }
+
+    $nodeIdvsComponentIdList = array();
+    try {
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
+        $source = $_POST['SourceId'];
+
+        // open database
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
+        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+        $componentsTableName = null;
+        if (strtolower($source) == "a") {
+            $componentsTableName = "SourceAComponents";
+        } else if (strtolower($source) == "b") {
+            $componentsTableName = "SourceBComponents";
+        } else if (strtolower($source) == "c") {
+            $componentsTableName = "SourceCComponents";
+        } else if (strtolower($source) == "d") {
+            $componentsTableName = "SourceDComponents";
+        } else {
+            echo json_encode(array(
+                "Msg" =>  "Failed",
+                "MsgCode" => 0
+            ));
+            return;
+        }
+
+        // begin the transaction
+        $dbh->beginTransaction();
+
+        $selectResults = $dbh->query("SELECT * FROM " . $componentsTableName . ";");
+
+        if ($selectResults) {
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+                $nodeIdvsComponentIdList[$row['nodeid']] = $row['id'];
+            }
+        }
+
+        // commit update
+        $dbh->commit();
+        $dbh = null; //This is how you close a PDO connection                   
+
+    } catch (Exception $e) {
+        echo json_encode(array(
+            "Msg" =>  "Failed",
+            "MsgCode" => 0
+        ));
+        return;
+    }
+
+    echo json_encode(array(
+        "Msg" =>  "Success",
+        "Data" => $nodeIdvsComponentIdList,
+        "MsgCode" => 1
+    ));
 }

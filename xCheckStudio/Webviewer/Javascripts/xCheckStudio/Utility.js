@@ -296,6 +296,11 @@ var xCheckStudio;
         }
         Util.isSourceVisio = isSourceVisio;
 
+        function getKeyByValue(object, value) {
+            return Object.keys(object).find(key => object[key] === value);
+        }
+        Util.getKeyByValue = getKeyByValue;
+
         function dragElement(elmnt, draggableArea) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             if (draggableArea) {

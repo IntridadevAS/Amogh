@@ -142,19 +142,19 @@ let model = {
       SourceManagers[this.currentTabId].ResizeViewer();
     }
 
-    // manage list view speed dial action menus
-    for (var srcId in SourceManagers) {
-      if (!SourceManagers[srcId].Is3DSource()) {
-        continue;
-      }
+    // // manage list view speed dial action menus
+    // for (var srcId in SourceManagers) {
+    //   if (!SourceManagers[srcId].Is3DSource()) {
+    //     continue;
+    //   }
 
-      if (srcId === this.currentTabId) {
-        SourceManagers[srcId].ShowListViewFloatingMenu(true);
-      }
-      else {
-        SourceManagers[srcId].ShowListViewFloatingMenu(false);
-      }
-    }
+    //   if (srcId === this.currentTabId) {
+    //     SourceManagers[srcId].ShowListViewFloatingMenu(true);
+    //   }
+    //   else {
+    //     SourceManagers[srcId].ShowListViewFloatingMenu(false);
+    //   }
+    // }
   }
 }
 
@@ -248,13 +248,13 @@ let viewTabs = {
       else {
         model.currentTabId = null;
 
-        // hide all list view speed dial action menus
-        for (var srcId in SourceManagers) {
-          if (!SourceManagers[srcId].Is3DSource()) {
-            continue;
-          }
-          SourceManagers[srcId].ShowListViewFloatingMenu(false);
-        }
+        // // hide all list view speed dial action menus
+        // for (var srcId in SourceManagers) {
+        //   if (!SourceManagers[srcId].Is3DSource()) {
+        //     continue;
+        //   }
+        //   SourceManagers[srcId].ShowListViewFloatingMenu(false);
+        // }
 
         return
       };

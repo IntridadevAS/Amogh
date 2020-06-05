@@ -10,8 +10,6 @@ function SCManager(id,
     this.NodeIdArray = [];
     this.SelectedNodeId = null;
 
-    // we need to handle this, as NodeIdvsComponentIdList is not 
-    // being properly restored from saved data
     this.NodeIdvsComponentIdList = {};
     this.HiddenNodeIds = [];
 
@@ -57,7 +55,6 @@ SCManager.prototype.GetCurrentTable = function () {
 
     return null;
 };
-
 
 SCManager.prototype.GetViewerContainerID = function () {
     return this.ViewerOptions.containerId;
@@ -181,8 +178,12 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
 
                         return resolve(true);
                     });
-                };
-
+                }
+                else
+                {
+                    // restore the node id vs component list when saved data is loaded.
+                    _this.RestoreNodeIdVsCompList();
+                }
                 //activate context menu            
                 var ids = _this.GetControlIds();
 
@@ -199,6 +200,47 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
         });
     });
 };
+
+SCManager.prototype.RestoreNodeIdVsCompList = function () {
+    var _this = this;
+
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    $.ajax({
+        data: {
+            "InvokeFunction": "GetNodeIdVsComponentId",
+            'SourceId': _this.Id,
+            'ProjectName': projectinfo.projectname,
+            'CheckName': checkinfo.checkname
+        },
+        type: "POST",
+        url: "PHP/ProjectManager.php"
+    }).done(function (msg) {
+        var result = JSON.parse(msg);
+        if (result.MsgCode !== 1) {
+            return;
+        }
+
+        _this.NodeIdvsComponentIdList = result.Data;
+    });
+}
+
+SCManager.prototype.GetNodeIdByCompId = function (compId) {
+    var nodeId = xCheckStudio.Util.getKeyByValue(this.NodeIdvsComponentIdList, compId);
+    if (!nodeId) {
+        return null;
+    }
+
+    return Number(nodeId);
+}
+
+SCManager.prototype.GetCompIdByNodeId = function (nodeId) {    
+    if (nodeId in this.NodeIdvsComponentIdList) {
+        return Number(this.NodeIdvsComponentIdList[nodeId]);
+    }
+
+    return null;
+}
 
 SCManager.prototype.OpenTableViewsMenu = function () {
     var _this = this;
@@ -366,17 +408,17 @@ SCManager.prototype.ShowGroupViewControls = function (show) {
     this.GroupTemplateSelect.option("value", null);
 }
 
-SCManager.prototype.ShowListViewFloatingMenu = function (show) {
-    // if (this.DataBrowserSDA) {
-    //     this.DataBrowserSDA.option("visible", show);
-    // }
-    // if (this.ListViewSDA) {
-    //     this.ListViewSDA.option("visible", show);
-    // }
-    // if (this.GroupsSDA) {
-    //     this.GroupsSDA.option("visible", show);
-    // }
-}
+// SCManager.prototype.ShowListViewFloatingMenu = function (show) {
+//     // if (this.DataBrowserSDA) {
+//     //     this.DataBrowserSDA.option("visible", show);
+//     // }
+//     // if (this.ListViewSDA) {
+//     //     this.ListViewSDA.option("visible", show);
+//     // }
+//     // if (this.GroupsSDA) {
+//     //     this.GroupsSDA.option("visible", show);
+//     // }
+// }
 
 SCManager.prototype.GetControlIds = function () {
     var ids = {};
@@ -793,6 +835,15 @@ SCManager.prototype.ResizeViewer = function () {
     this.Webviewer.resizeCanvas();
 }
 
+SCManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {    
+    var nodeId = this.GetNodeIdByCompId(componentId);
+
+    if (nodeId in this.AllComponents) {
+        var compData = this.AllComponents[nodeId];
+        this.OpenPropertyCallout(compData.Name, nodeId);
+    }
+}
+
 SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
     var _this = this;
 
@@ -809,8 +860,8 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
 
         }
 
-        // references
-        var componentId = this.NodeIdvsComponentIdList[nodeId];
+        // references        
+        var componentId = this.GetCompIdByNodeId(nodeId);
 
         if (isDataVault()) {
             if (!componentName) {

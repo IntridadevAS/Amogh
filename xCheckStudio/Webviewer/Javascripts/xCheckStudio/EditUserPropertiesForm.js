@@ -98,7 +98,7 @@ EditUserPropertiesForm.prototype.OnApply = function () {
 
         data[nodeId] = {};
         data[nodeId]["properties"] = [];
-        data[nodeId]["component"] = sourceManager.NodeIdvsComponentIdList[nodeId];
+        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
 
         var name = null;
         var category = null;
@@ -315,7 +315,7 @@ EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex,
 
         data[nodeId] = {};
         data[nodeId]["properties"] = [];
-        data[nodeId]["component"] = sourceManager.NodeIdvsComponentIdList[nodeId];
+        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
 
         var name = null;
         var category = null;
@@ -558,7 +558,7 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
 
             data[nodeId] = {};
             data[nodeId]["properties"] = [];
-            data[nodeId]["component"] = sourceManager.NodeIdvsComponentIdList[nodeId];
+            data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
 
             var name = null;
             var category = null;
@@ -645,7 +645,7 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
 
             data[nodeId] = {};
             data[nodeId]["properties"] = [];
-            data[nodeId]["component"] = sourceManager.NodeIdvsComponentIdList[nodeId];
+            data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
 
             var name = null;
             var category = null;

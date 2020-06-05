@@ -202,6 +202,12 @@ let ReferenceManager = {
             success: function (msg) {
                 if (msg != 'fail') {
                     ReferenceManager.showWebAddress(msg);
+
+                    // update property callout                    
+                    if (model.currentTabId in SourceManagers) {
+                        var sourceManager = SourceManagers[model.currentTabId];
+                        sourceManager.OpenPropertyCalloutByCompId(componentIds[0]);
+                    }
                 }
             }
         });
@@ -269,6 +275,12 @@ let ReferenceManager = {
             }
 
             ReferenceManager.showDocument(event.target.response);
+
+             // update property callout                    
+             if (model.currentTabId in SourceManagers) {
+                var sourceManager = SourceManagers[model.currentTabId];
+                sourceManager.OpenPropertyCalloutByCompId(componentIds[0]);
+            }
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -317,6 +329,12 @@ let ReferenceManager = {
             }
 
             ReferenceManager.showImage(event.target.response);
+
+            // update property callout                    
+            if (model.currentTabId in SourceManagers) {
+                var sourceManager = SourceManagers[model.currentTabId];
+                sourceManager.OpenPropertyCalloutByCompId(componentIds[0]);
+            }
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
