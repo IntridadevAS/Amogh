@@ -34,7 +34,7 @@
 }
 
 .check {
-  border-color: var(--xCheckOrange);
+  border-color: gray;
   background-size: contain;
   cursor: pointer;
 }
@@ -53,15 +53,19 @@
 
 
 .review {
-  border-color: var(--xCheckRed);
+  border-color: gray;
   background-size: contain;
   cursor: pointer;
 }
 
 .prep {
-  border-color: var(--intridaBlue);
+  border-color: gray;
   background-size: contain;
   cursor: pointer;
+}
+
+.check:hover, .review:hover, .prep:hover{
+  border-color: darkgray;
 }
 
 .disabled {

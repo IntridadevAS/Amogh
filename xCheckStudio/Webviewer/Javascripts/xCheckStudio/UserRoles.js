@@ -11,6 +11,12 @@ window.onload = function () {
     userRolesTab.onclick = function () {
         onUserRolesTabClicked();
     }
+
+    var closeBtn = document.getElementById("closeBtn");
+    closeBtn.onclick = function () {
+        const remote = require('electron').remote;
+        remote.getCurrentWindow().close();
+    }
 }
 
 function onUserRolesTabClicked() {
@@ -531,3 +537,4 @@ function openTabContentPage(inputElement, contentPage) {
     document.getElementById(contentPage).style.display = "block";
     inputElement.className += " active";
 }
+

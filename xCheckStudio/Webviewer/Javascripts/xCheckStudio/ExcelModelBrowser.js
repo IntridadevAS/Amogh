@@ -218,6 +218,9 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                     e.component.selectRows(Object.keys(_this.SelectionManager.ComponentIdvsSelectedComponents));
                 }
                 loadingBrower = false;
+
+                // show table view action button
+                document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },  
             onInitialized: function (e) {
                 model.views[_this.Id].tableViewInstance = e.component;

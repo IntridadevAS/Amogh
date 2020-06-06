@@ -178,6 +178,9 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     e.component.selectRows(Object.keys(_this.SelectionManager.NodeIdvsSelectedComponents));
                 }
                 loadingBrower = false;
+
+                // show table view action button
+                document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },
             onInitialized: function (e) {                
                 model.views[_this.Id].tableViewInstance = e.component;  
@@ -471,6 +474,7 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
     var containerDiv = "#" + _this.ModelBrowserContainer;
     this.Clear();
     $(function () {
+        var loadingBrowser = true;
         $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
             keyExpr: "NodeId",
@@ -500,6 +504,13 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                 recursive: true,
             },
             onContentReady: function (e) {
+                if (loadingBrowser === false) {
+                    return;
+                }
+                loadingBrowser = false;
+
+                // show table view action button
+                document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },
             onInitialized: function (e) {
                 model.views[_this.Id].tableViewInstance = e.component;  
