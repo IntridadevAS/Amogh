@@ -9,7 +9,7 @@ let win;
 function createWindow()
 {
     win = new BrowserWindow({title:'xCheckStudio', frame:false,  show: false, icon: 'public/symbols/XcheckLogoIcon.png'});
-    win.setMinimumSize(810,750);
+    win.setMinimumSize(1124,750);
     win.maximize();
     win.show();
     
