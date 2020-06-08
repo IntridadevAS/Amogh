@@ -209,7 +209,7 @@ input[type=checkbox] + label {
   background-color: #47474733;
 }
 
-.newProjectCard .tooltiptext {
+/*.newProjectCard .tooltiptext {
   visibility: hidden;
   width: 180px;
   background-color:var(--xCheckWhite);;
@@ -218,7 +218,7 @@ input[type=checkbox] + label {
   border-radius: 6px;
   padding: 5px 0;
 
-  /* Position the tooltip */
+   Position the tooltip 
   position: absolute;
   margin-top: 150px;
   z-index: 1;
@@ -226,7 +226,7 @@ input[type=checkbox] + label {
 
 .newProjectCard:hover .tooltiptext {
   visibility: visible;
-}
+}*/
 
 .newCardCenter {
   justify-content: center;

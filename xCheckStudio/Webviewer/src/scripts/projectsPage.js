@@ -793,12 +793,12 @@ let projectView = {
     if (controller.permissions()) {
       newPrivateProjectCard += `
         <div class="card newProjectCard">\
-            <div class="plusBtn"></div><div class="tooltiptext">Create a new private project</div>
+            <div class="plusBtn"></div>
         </div>`;
 
       newPublicProjectCard += `
         <div class="card newProjectCard">\
-            <div class="plusBtn"></div><div class="tooltiptext">Create a new public project</div>
+            <div class="plusBtn"></div>
         </div>`;
     }
 
