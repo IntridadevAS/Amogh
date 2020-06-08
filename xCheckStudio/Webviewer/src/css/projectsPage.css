@@ -290,16 +290,20 @@ input[type=checkbox] + label {
   border-radius: var(--borderRadiusVal);
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  z-index: 1;  
 }
 
 .checkSpaceBody {
-  flex-grow: 1;
+  position: relative; 
+  top: 2px; 
+  height: 100%; 
+  /*flex-grow: 1;*/ 
   display: grid;
   grid-template-columns: 220px auto;
   grid-template-areas:
   "projectDescription checkSpace";
   grid-gap: 10px;
+overflow-y: scroll;
 }
 
 .checkInfoContainer {
@@ -329,16 +333,17 @@ input[type=checkbox] + label {
   grid-area: projectDescription;
 }
 
-.checkSpaceHeader {
-  height: 40px;
+/* .checkSpaceHeader {
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
 .checkSpaceButtons{
   position: absolute;
   right: 5px;
+  top: 20px;
   display: grid;
   grid-template-columns: auto auto auto auto;
   grid-column-gap: 5px;
@@ -398,7 +403,7 @@ input[type=checkbox] + label {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   grid-template-rows: repeat(auto-fill, 180px);
   grid-gap: 10px;
-  overflow-y: scroll;
+  /*overflow-y: scroll;*/
 }
 
 .checkSpaceCard {
@@ -413,7 +418,8 @@ input[type=checkbox] + label {
 .chkRevToggle {
   position: absolute;
   left: 10px;
-  box-sizing: border-box;
+  top: 21px;
+  /*box-sizing: border-box;*/
   height: 30px;
   width: 220px;
   border: 2px solid;
@@ -772,6 +778,17 @@ input[type=checkbox] + label {
 }
 
 /* END DELETE ITEM WARNING BAR */
+.module .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
 
 .dataVaultBtn
 {
@@ -780,6 +797,7 @@ input[type=checkbox] + label {
   position: absolute;  
   text-align: center;  
   left: 240px;
+  top: 21px;
   border: 2px solid var(--xCheckRed);
   background-color: var(--xCheckBlack);
   border-radius: var(--borderRadiusVal); 

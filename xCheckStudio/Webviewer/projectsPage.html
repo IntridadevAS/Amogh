@@ -769,14 +769,17 @@
       <!-- PROJECT OVERLAY -->
       <section id="checkSpaceOverlay" class="overlayBackground">
         <div id="checkSpace" class="projectOverlay">
-          <div class="checkSpaceHeader">
+          <!-- <div class="checkSpaceHeader"> -->
             <button id="checkReviewToggle" class="chkRevToggle" onclick="controller.setModule();" type="button"
               name="button"></button>
             <div id="dataVaultBtn" class="dataVaultBtn">
               Data Vault
             </div>
 
-            <h1 id=checkSpaceProjectName></h1>
+          <h4 id=checkSpaceProjectName onmouseover="OnDisplayToolTip('checktooltiptext')"
+            onmouseout="OnHideToolTip('checktooltiptext')"></h4>
+          <div id="checktooltiptext" class="checktooltiptext"
+            style="text-align: center; visibility: hidden; font-size: 15px; color: white; padding-top: 20px;"></div>
             <div class="checkSpaceButtons">
               <div class="sortBy">
                 <label for="sortChecks">Sort By:</label>
@@ -800,7 +803,7 @@
                 <img src="public/symbols/closeWin.svg" alt="">
               </button>
             </div>
-          </div>
+           <!-- </div> -->
           <div class="checkSpaceBody">
             <div id="projectOverlayProjectDescription" class="projectInfoBoxes projectDescription">
               <p>Project Description:<p>
@@ -1192,16 +1195,26 @@
           }
         }
 
-    function OnCreateProject() {
-      var projectname = document.getElementById("inputprojectname").value;
-      if (projectname === undefined || projectname === "") {
-        //Do something if user does not enter project name
-      }
+        function OnDisplayToolTip(text) {
+          var ele = document.getElementById(text);
+          ele.style.visibility = "visible";
+          ele.textContent = event.target.textContent;
+        }
 
-      if (!xCheckStudio.Util.isProjectorCheckSpaceNameValid(projectname)) {
-        showAlertForm("Project name cannot contain special characters (\ / : * ? \"< > |)");
-        return;
-      }
+        function OnHideToolTip(text) {
+          document.getElementById(text).style.visibility = "hidden";
+        }
+
+        function OnCreateProject() {
+          var projectname = document.getElementById("inputprojectname").value;
+          if (projectname === undefined || projectname === "") {
+            //Do something if user does not enter project name
+          }
+
+          if (!xCheckStudio.Util.isProjectorCheckSpaceNameValid(projectname)) {
+            showAlertForm("Project name cannot contain special characters (\ / : * ? \"< > |)");
+            return;
+          }
 
       var projectDescription = document.getElementById("inputprojectdescription").value;
       if (projectDescription === undefined || projectDescription === "") {

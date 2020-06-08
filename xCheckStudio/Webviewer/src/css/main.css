@@ -37,6 +37,19 @@ h2 {
   font-weight: normal;
 }
 
+#checkSpaceProjectName{ 
+  position: relative;  
+  height:40px;
+  top: 19px;
+  max-width: 350px;
+  left: calc(50% - 230px); 
+  font-size: 25px;
+  font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 p, input, select, option, textarea {
   font-size: 15px;
   margin: 2px;
