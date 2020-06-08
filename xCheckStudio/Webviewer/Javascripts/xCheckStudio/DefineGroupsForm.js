@@ -137,7 +137,7 @@ DefineGroupsForm.prototype.PopulateGroups = function () {
 DefineGroupsForm.prototype.PopulateTemplateGrid = function () {    
     var _this = this;
 
-    var allProperties = this.GetAllSourceProperties();
+    var allProperties = SourceManagers[this.Id].GetAllSourceProperties();
 
     var rowsData = [];
     if (_this.GroupSelect) {
@@ -287,25 +287,25 @@ DefineGroupsForm.prototype.OnApply = function () {
     DevExpress.ui.notify("Group '" + templateName + "' created successfully.");
 }
 
-DefineGroupsForm.prototype.GetAllSourceProperties = function () {
-    var sourceManager = SourceManagers[this.Id];
+// DefineGroupsForm.prototype.GetAllSourceProperties = function () {
+//     var sourceManager = SourceManagers[this.Id];
 
-    var allProperties = [];
-    if (sourceManager.Is3DSource()) {
-        var allComponents = sourceManager.AllComponents;
+//     var allProperties = [];
+//     if (sourceManager.Is3DSource()) {
+//         var allComponents = sourceManager.AllComponents;
 
-        for (var nodeId in allComponents) {
-            var component = allComponents[nodeId];
-            if (component.properties.length > 0) {
-                for (var i = 0; i < component.properties.length; i++) {
-                    var property = component.properties[i];
-                    if (allProperties.indexOf(property.Name) === -1) {
-                        allProperties.push(property.Name);
-                    }
-                }
-            }
-        }
-    }
+//         for (var nodeId in allComponents) {
+//             var component = allComponents[nodeId];
+//             if (component.properties.length > 0) {
+//                 for (var i = 0; i < component.properties.length; i++) {
+//                     var property = component.properties[i];
+//                     if (allProperties.indexOf(property.Name) === -1) {
+//                         allProperties.push(property.Name);
+//                     }
+//                 }
+//             }
+//         }
+//     }
 
-    return allProperties;
-}
+//     return allProperties;
+// }

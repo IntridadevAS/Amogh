@@ -8,6 +8,7 @@ function EditUserPropertiesForm(id) {
     this.UpdatedRowsData = {};
 
     this.ClearUserPropertiesForm = new ClearUserPropertiesForm(id);
+    this.editUserPropertyNameForm = new EditUserPropertyNameForm(id);
 }
 
 EditUserPropertiesForm.prototype.GetHtmlElementId = function () {
@@ -133,28 +134,65 @@ EditUserPropertiesForm.prototype.OnApply = function () {
     // Update components in tables
     model.views[_this.Id].listView.UpdateComponents(data);
 
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    $.ajax({
-        data: {
-            'PropertyData': JSON.stringify(data),
-            'ComponentTable': sourceManager.GetComponentsTableName(),
-            'PropertyTable': sourceManager.GetPropertiesTableName(),
-            'InvokeFunction': 'Update',
-            'ProjectName': projectinfo.projectname,
-            'CheckName': checkinfo.checkname
-        },
-        type: "POST",
-        url: "PHP/UserProperties.php"
-    }).done(function (msg) {
-        var object = JSON.parse(msg);
-        if (object.MsgCode !== 1) {
-            // failed
-            return;
-        }
+    this.UpdatePropertiesInDB(data).then(function (result) {
+        if (result === true) {
+            _this.UpdatedRowsData = {};
+            DevExpress.ui.notify("Properties updated successfully.");
+        }       
+    });
 
-        _this.UpdatedRowsData = {};
-        DevExpress.ui.notify("Properties updated successfully.");
+    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // $.ajax({
+    //     data: {
+    //         'PropertyData': JSON.stringify(data),
+    //         'ComponentTable': sourceManager.GetComponentsTableName(),
+    //         'PropertyTable': sourceManager.GetPropertiesTableName(),
+    //         'InvokeFunction': 'Update',
+    //         'ProjectName': projectinfo.projectname,
+    //         'CheckName': checkinfo.checkname
+    //     },
+    //     type: "POST",
+    //     url: "PHP/UserProperties.php"
+    // }).done(function (msg) {
+    //     var object = JSON.parse(msg);
+    //     if (object.MsgCode !== 1) {
+    //         // failed
+    //         return;
+    //     }
+
+    //     _this.UpdatedRowsData = {};
+    //     DevExpress.ui.notify("Properties updated successfully.");
+    // });
+}
+
+EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data) {
+    var _this = this;
+    return new Promise((resolve) => {
+        var sourceManager = SourceManagers[_this.Id];
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            data: {
+                'PropertyData': JSON.stringify(data),
+                'ComponentTable': sourceManager.GetComponentsTableName(),
+                'PropertyTable': sourceManager.GetPropertiesTableName(),
+                'InvokeFunction': 'Update',
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
+            },
+            type: "POST",
+            url: "PHP/UserProperties.php"
+        }).done(function (msg) {
+            var object = JSON.parse(msg);
+            if (object.MsgCode !== 1) {              
+                return resolve(false);
+            }
+                       
+            DevExpress.ui.notify("Properties updated successfully.");
+            return resolve(true);
+        });
     });
 }
 
@@ -287,15 +325,128 @@ EditUserPropertiesForm.prototype.LoadData = function () {
         },
         onContextMenuPreparing: function (e) {
             if (e.row.rowType === "header") {
-                e.items = [{
-                    text: "Remove",
-                    onItemClick: function () {                        
-                        _this.OnRemovePropertyForAll(e.columnIndex, e.column.caption);
+                e.items = [
+                    {
+                        text: "Edit",
+                        onItemClick: function () {
+                            _this.OnEditPropertyForAll(e.columnIndex, e.column.caption);
+                        }
+                    },
+                    {
+                        text: "Remove",
+                        onItemClick: function () {
+                            _this.OnRemovePropertyForAll(e.columnIndex, e.column.caption);
+                        }
                     }
-                }];
+                ];
             }
         }
     }).dxDataGrid("instance");
+}
+
+EditUserPropertiesForm.prototype.OnEditPropertyForAll = function (columnIndex, propertyName) {
+    var _this = this;
+    function callbackFunc(columnIndex, oldPropertyName, newPropertyName){
+        _this.EditPropertyForAll(columnIndex, oldPropertyName, newPropertyName)
+    }
+
+    this.editUserPropertyNameForm.Open(columnIndex, propertyName, callbackFunc);
+}
+
+EditUserPropertiesForm.prototype.EditPropertyForAll = function (columnIndex, oldPropertyName, newPropertyName) {
+    var _this = this;
+    var items = _this.PropertiesGrid.getDataSource().items();
+
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+
+    var data = {};
+    var alreadyExistingProps = [];    
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var nodeId = item.NodeId;
+
+        data[nodeId] = {};
+        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
+
+        data[nodeId]["properties"] = [];
+       
+        // check if property already exists with component or not
+        var componentObj = sourceManager.AllComponents[nodeId];    
+        if (componentObj.propertyExists(newPropertyName)) {
+            alreadyExistingProps.push(componentObj.Name);            
+        }
+        else {
+            data[nodeId]["properties"].push({
+                "property": newPropertyName,
+                "oldProperty": oldPropertyName,
+                "value": item[oldPropertyName] ? item[oldPropertyName] : "",
+                "action": "update"
+            });
+        }     
+        if (data[nodeId]["properties"].length === 0) {
+            delete data[nodeId];
+            continue;
+        }       
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+
+        // if old property was component identifier propertyy
+        if (oldPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = SourceManagers[this.Id].GetNodeName(nodeId);
+        }
+        if (oldPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = "";
+        }
+        if (oldPropertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = "";
+        }
+
+        // if new property is component identifier propertyy
+        if (newPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = item[oldPropertyName];
+        }
+        if (newPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = item[oldPropertyName];
+        }
+        if (newPropertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = item[oldPropertyName]
+        }
+
+        data[nodeId]["name"] = name;
+        data[nodeId]["category"] = category;
+        data[nodeId]["componentClass"] = componentClass;
+        data[nodeId]["parent"] = null;
+    }
+
+    // if property already exists
+    if (alreadyExistingProps.length > 0) {
+        var msg = "Property '" + newPropertyName + "' already exists for following components and will not be considered for same.\n\n";
+        for (var i = 0; i < alreadyExistingProps.length; i++) {
+            msg += "\t" + alreadyExistingProps[i] + "\n";
+        }
+
+        alert(msg);
+    }
+    if (Object.keys(data).length === 0) {
+        return;
+    }
+
+    // Update components in tables
+    model.views[_this.Id].listView.UpdateComponents(data);
+
+    this.UpdatePropertiesInDB(data).then(function (result) {
+        if (result === true) {
+            DevExpress.ui.notify("Property updated successfully.");
+            _this.LoadData();
+        }
+    });
 }
 
 EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex, propertyName) {
@@ -352,27 +503,33 @@ EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex,
     // Update components in editUserProperties table
     model.views[this.Id].editUserPropertiesForm.DeletePropertyColumn(propertyName);
 
-    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    $.ajax({
-        data: {
-            'PropertyData': JSON.stringify(data),
-            'ComponentTable': sourceManager.GetComponentsTableName(),
-            'PropertyTable': sourceManager.GetPropertiesTableName(),
-            'InvokeFunction': 'Update',
-            'ProjectName': projectinfo.projectname,
-            'CheckName': checkinfo.checkname
-        },
-        type: "POST",
-        url: "PHP/UserProperties.php"
-    }).done(function (msg) {
-        var object = JSON.parse(msg);
-        if (object.MsgCode !== 1) {            
-            return;
-        }           
-        
-        DevExpress.ui.notify("Properties updated successfully.");
+    this.UpdatePropertiesInDB(data).then(function (result) {
+        if (result === true) {
+            DevExpress.ui.notify("Properties updated successfully.");
+            _this.LoadData();
+        }
     });
+    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // $.ajax({
+    //     data: {
+    //         'PropertyData': JSON.stringify(data),
+    //         'ComponentTable': sourceManager.GetComponentsTableName(),
+    //         'PropertyTable': sourceManager.GetPropertiesTableName(),
+    //         'InvokeFunction': 'Update',
+    //         'ProjectName': projectinfo.projectname,
+    //         'CheckName': checkinfo.checkname
+    //     },
+    //     type: "POST",
+    //     url: "PHP/UserProperties.php"
+    // }).done(function (msg) {
+    //     var object = JSON.parse(msg);
+    //     if (object.MsgCode !== 1) {            
+    //         return;
+    //     }           
+        
+    //     DevExpress.ui.notify("Properties updated successfully.");
+    // });
 }
 
 EditUserPropertiesForm.prototype.GetSelectedComponents = function () {
@@ -387,8 +544,8 @@ EditUserPropertiesForm.prototype.GetSelectedComponents = function () {
     return selectedNodeIds;
 }
 
-EditUserPropertiesForm.prototype.DeletePropertyColumn = function (property) {     
-        this.PropertiesGrid.deleteColumn(property);
+EditUserPropertiesForm.prototype.DeletePropertyColumn = function (property) {
+    this.PropertiesGrid.deleteColumn(property);
 }
 
 EditUserPropertiesForm.prototype.UpdateComponents = function (properties, clearValues = false) {
@@ -708,4 +865,85 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
 
     this.PropertiesTagBox.reset();
     this.LoadData();
+}
+
+
+// Edit property name form
+// Clear User Properties Form
+function EditUserPropertyNameForm(id) {
+    this.Id = id;
+
+    this.Active = false;
+
+    this.NameBox;
+
+    this.ColumnIndex = -1;
+    this.PropertyName;
+    // this.OKCallbackFunc;
+}
+
+EditUserPropertyNameForm.prototype.GetHtmlElementId = function () {
+    return "editUserPropertyNamePrompt" + this.Id;
+}
+
+EditUserPropertyNameForm.prototype.Open = function (columnIndex, propertyName, callbackFunc) {
+    this.Active = true;
+
+    this.ColumnIndex = columnIndex;
+    this.PropertyName = propertyName;
+    // this.OKCallbackFunc = callbackFunc;
+
+    var editUserPropertyNameForm = document.getElementById(this.GetHtmlElementId());    
+    editUserPropertyNameForm.style.display = "block";    
+
+    // editUserPropertyNameForm.style.top = ((window.innerHeight / 2) - 50) + "px";
+    // editUserPropertyNameForm.style.left = ((window.innerWidth / 2) - 175) + "px";
+
+    // Make the DIV element draggable:
+    xCheckStudio.Util.dragElement(editUserPropertyNameForm,
+        document.getElementById("editUserPropertyNameCaptionBar" + this.Id));
+
+    this.Init(propertyName, callbackFunc);
+}
+
+EditUserPropertyNameForm.prototype.Close = function () {
+    this.Active = false;
+
+    var editUserPropertyNameForm = document.getElementById(this.GetHtmlElementId());
+    editUserPropertyNameForm.style.display = "none";   
+}
+
+EditUserPropertyNameForm.prototype.Init = function (propertyName, callbackFunc) {
+    var _this = this;
+
+    this.NameBox = $("#editUserPropertyProp" + this.Id).dxTextBox({
+        value: propertyName
+    }).dxTextBox("instance");
+
+    // Handle btns   
+    document.getElementById("editUserPropertyOkBtn" + this.Id).onclick = function () {
+        _this.OnOK(callbackFunc);
+        // _this.Close();
+    }
+
+    document.getElementById("editUserPropertyCancelBtn" + this.Id).onclick = function () {
+        _this.Close();
+    };
+}
+
+EditUserPropertyNameForm.prototype.OnOK = function (callbackFunc) {
+    var newName = this.NameBox.option("value");
+    if (!newName || newName === "") {
+        alert("invalid name.");
+        return;
+    }
+    if (newName === this.PropertyName) {
+        alert("Please enter different name.");
+        return;
+    }
+
+    if (callbackFunc) {
+        callbackFunc(this.ColumnIndex, this.PropertyName, newName);
+        this.Close();
+    }
 }

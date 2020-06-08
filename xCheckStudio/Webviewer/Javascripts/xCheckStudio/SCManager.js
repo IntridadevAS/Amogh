@@ -1167,6 +1167,29 @@ SCManager.prototype.GetNodeParent = function (nodeId) {
     return this.Webviewer.model.getNodeParent(nodeId)
 }
 
+SCManager.prototype.GetAllSourceProperties = function () {
+    // var sourceManager = SourceManagers[this.Id];
+
+    var allProperties = [];
+    // if (sourceManager.Is3DSource()) {
+    var allComponents = this.AllComponents;
+
+    for (var nodeId in allComponents) {
+        var component = allComponents[nodeId];
+        if (component.properties.length > 0) {
+            for (var i = 0; i < component.properties.length; i++) {
+                var property = component.properties[i];
+                if (allProperties.indexOf(property.Name) === -1) {
+                    allProperties.push(property.Name);
+                }
+            }
+        }
+    }
+    // }
+
+    return allProperties;
+}
+
 function XMLSourceManager(id, sourceName, sourceType, viewerOptions) {
     // call super constructor
     SCManager.call(this, id,  sourceName, sourceType, viewerOptions);

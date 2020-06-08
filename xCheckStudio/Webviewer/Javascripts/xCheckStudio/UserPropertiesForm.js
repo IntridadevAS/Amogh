@@ -7,7 +7,10 @@ function UserPropertiesForm(id) {
     this.RowInserting = false;
 
     this.UpdatedRowsData = {};
-    this.AlreadyRowsData = {};
+    // this.AlreadyRowsData = {};
+
+    // this.AllProperties = null;
+    this.AvoidTableEvents = false;
 }
 
 UserPropertiesForm.prototype.GetHtmlElementId = function () {
@@ -26,45 +29,69 @@ UserPropertiesForm.prototype.Open = function () {
     this.Init();
 }
 
+UserPropertiesForm.prototype.Clear = function () {
+    var gridContainer = document.getElementById("userPropertiesGrid" + this.Id);
+    var parent = gridContainer.parentElement;
+
+    //remove html element which holds grid
+    //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
+    $("#userPropertiesGrid" + this.Id).dxDataGrid("dispose");
+    $("#userPropertiesGrid" + this.Id).remove();
+
+    //Create and add div with same id to add grid again
+    var gridContainerDiv = document.createElement("div")
+    gridContainerDiv.id = "userPropertiesGrid" + this.Id;
+    var styleRule = ""
+    styleRule = "height: 180px; overflow:hidden";
+    gridContainerDiv.setAttribute("style", styleRule);
+    parent.appendChild(gridContainerDiv);
+}
+
 UserPropertiesForm.prototype.LoadData = function ()
 {
     this.UpdatedRowsData = {};
 
-    var _this = this;
+    var _this = this;   
+    
+    // var selected = model.views[this.Id].listView.GetSelectedComponents();
+    // var selectedCompProps = [];
+    // for (var nodeId in selected) {       
 
-    var selected = model.views[this.Id].listView.GetSelectedComponents();
-    var selectedCompProps = [];
-    for (var nodeId in selected) {       
+    //     var props = {};
+    //     for (var i = 0; i < selected[nodeId].properties.length; i++) {
+    //         var property = selected[nodeId].properties[i];
+    //         if (!property.UserDefined) {
+    //             continue;
+    //         }
 
-        var props = {};
-        for (var i = 0; i < selected[nodeId].properties.length; i++) {
-            var property = selected[nodeId].properties[i];
-            if (!property.UserDefined) {
-                continue;
-            }
+    //         props[property["Name"]] = property["Value"];            
+    //     }
+    //     selectedCompProps.push(props);
+    // }
 
-            props[property["Name"]] = property["Value"];            
-        }
-        selectedCompProps.push(props);
-    }
-
-    var commonUncommon = commonDifferentProperties(selectedCompProps);
+    // var commonUncommon = commonDifferentProperties(selectedCompProps);
     var rowsData = [];
-    if (commonUncommon != null) {
-        for (var prop in commonUncommon.common) {
-            var value = commonUncommon.common[prop];
+    // if (commonUncommon != null) {
+    //     for (var prop in commonUncommon.common) {
+    //         var value = commonUncommon.common[prop];
 
-            rowsData.push({
-                "Name": prop,
-                "DefaultValue": value
-            });
-        }
-    }
+    //         rowsData.push({
+    //             "Name": prop,
+    //             "DefaultValue": value
+    //         });
+    //     }
+    // }
 
     // Create grid        
     var columns = [];
 
     var column = {};
+    column["caption"] = "Id";
+    column["dataField"] = "Id";    
+    column["visible"] = false;    
+    columns.push(column);
+
+    column = {};
     column["caption"] = "Name";
     column["dataField"] = "Name";
     column["width"] = "50%";
@@ -80,8 +107,12 @@ UserPropertiesForm.prototype.LoadData = function ()
     columns.push(column);
 
     var loadingBrowser = true;
-    this.AlreadyRowsData = {};
+    this.AvoidTableEvents = false;
+    // this.AlreadyRowsData = {};
 
+    var allProperties = SourceManagers[this.Id].GetAllSourceProperties();
+    var allPropertiesU = allProperties.map(function (value) { return value.toUpperCase(); });
+   
     this.PropertiesGrid = $("#userPropertiesGrid" + this.Id).dxDataGrid({
         columns: columns,
         dataSource: rowsData,
@@ -114,41 +145,101 @@ UserPropertiesForm.prototype.LoadData = function ()
             }
             loadingBrowser = false;
 
-            if (e.component.getDataSource().totalCount() === 0) {
-                return;
+            // if (e.component.getDataSource().totalCount() === 0) {
+            //     return;
+            // }
+
+            // var items = e.component.getDataSource().items();
+            // for (var i = 0; i < items.length; i++) {
+            //     var item = items[i];
+            //     _this.AlreadyRowsData[item.Name] = {
+            //         "property": item.Name,
+            //         "value": item.DefaultValue ? item.DefaultValue : "",
+            //     };
+            // }                             
+        },      
+        onRowInserting: function(e){
+            _this.AvoidTableEvents = true;
+
+            // check if property with same already exists in data set but with
+            // with different case. If yes, then restrict user to have property name
+            // in same case
+            var eleIndex = allPropertiesU.indexOf(e.data.Name.toUpperCase())
+            if (eleIndex !== -1) {
+                e.data.Name = allProperties[eleIndex];
             }
 
-            var items = e.component.getDataSource().items();
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                _this.AlreadyRowsData[item.Name] = {
-                    "property": item.Name,
-                    "value": item.DefaultValue ? item.DefaultValue : "",
-                };
-            }                             
+            // if(e.data.Name in  _this.UpdatedRowsData ||
+            //    e.data.Name in  _this.AlreadyRowsData)
+            // {
+            //     alert("Duplicate Property.");
+            //     e.data.Name = null;
+            //     e.cancel = true;
+            // }
+            if(e.data.Name in  _this.UpdatedRowsData)
+             {
+                 alert("Duplicate Property.");
+                 e.data.Name = null;
+                 e.cancel = true;
+             } 
+
+            e.component.refresh();
+
+            _this.AvoidTableEvents = false;
         },
-        onSelectionChanged: function(e) {
-            var selectedRowIndex = e.component.getRowIndexByKey(e.selectedRowKeys[0]);           
-        },
-        onRowInserted : function(e){
+        onRowInserted: function (e) {
+            _this.AvoidTableEvents = true;
+
             _this.UpdatedRowsData[e.data.Name] = {
                 "property": e.data.Name,
                 "value": e.data.DefaultValue ? e.data.DefaultValue : "",
                 "action": "add"
-            };           
+            };
+
+            _this.AvoidTableEvents = false;
         },
-        onRowRemoved : function(e){
-            _this.UpdatedRowsData[e.data.Name] = {
-                "property": e.data.Name,
-                "value": e.data.DefaultValue ? e.data.DefaultValue : "",
-                "action": "remove"
-            };   
+        onRowRemoved: function (e) {
+            if (e.data.Name in _this.UpdatedRowsData) {
+                delete _this.UpdatedRowsData[e.data.Name];
+            }
+
+            // _this.UpdatedRowsData[e.data.Name] = {
+            //     "property": e.data.Name,
+            //     "value": e.data.DefaultValue ? e.data.DefaultValue : "",
+            //     "action": "remove"
+            // };   
         },       
         onRowUpdating(e) {
-            var s = _this.UpdatedRowsData;
+            _this.AvoidTableEvents = true;
 
             if (e.oldData.Name in _this.UpdatedRowsData) {
                 if ("Name" in e.newData) {
+                    // check if property with same already exists in data set but with
+                    // with different case. If yes, then restrict user to have property name
+                    // in same case
+                    var eleIndex = allPropertiesU.indexOf(e.newData.Name.toUpperCase())
+                    if (eleIndex !== -1) {
+                        e.newData.Name = allProperties[eleIndex];
+                        e.component.refresh();
+                    }
+                    // if ((e.newData.Name in _this.UpdatedRowsData ||
+                    //     e.newData.Name in _this.AlreadyRowsData) &&
+                    //     e.newData.Name !== e.oldData.Name )  {
+                    //     alert("Duplicate Property.");
+                    //     e.newData.Name = e.oldData.Name;
+                    //     e.cancel = true;
+                    //     e.component.refresh();
+                    //     return;
+                    // }
+                    if ((e.newData.Name in _this.UpdatedRowsData) &&
+                        e.newData.Name !== e.oldData.Name )  {
+                        alert("Duplicate Property.");
+                        e.newData.Name = e.oldData.Name;
+                        e.cancel = true;
+                        e.component.refresh();
+                        return;
+                    }
+
                     _this.UpdatedRowsData[e.newData.Name] = {
                         "property": e.newData.Name,
                         "value": e.oldData.DefaultValue ? e.oldData.DefaultValue : "",
@@ -160,25 +251,51 @@ UserPropertiesForm.prototype.LoadData = function ()
                     _this.UpdatedRowsData[e.oldData.Name]["value"] = e.newData.DefaultValue ? e.newData.DefaultValue : "";
                 }
             }
-            else if (e.oldData.Name in _this.AlreadyRowsData) {
-                if ("Name" in e.newData) {
-                    _this.UpdatedRowsData[e.newData.Name] = {
-                        "oldProperty": e.oldData.Name,
-                        "property": e.newData.Name,
-                        "value": e.oldData.DefaultValue ? e.oldData.DefaultValue : "",
-                        "action": "update"
-                    };
-                }
-                else if ("DefaultValue" in e.newData) {
-                    _this.UpdatedRowsData[e.oldData.Name] = {
-                        "oldProperty": e.oldData.Name,
-                        "property": e.oldData.Name,
-                        "value": e.newData.DefaultValue ? e.newData.DefaultValue : "",
-                        "action": "update"
-                    };
-                }
-            }
-        }       
+            // else if (e.oldData.Name in _this.AlreadyRowsData) {
+            //     if ("Name" in e.newData) {
+            //         // check if property with same already exists in data set but with
+            //         // with different case. If yes, then restrict user to have property name
+            //         // in same case
+            //         var eleIndex = allPropertiesU.indexOf(e.newData.Name.toUpperCase())
+            //         if (eleIndex !== -1) {
+            //             e.newData.Name = allProperties[eleIndex];
+            //             e.component.refresh();
+            //         }
+            //         if ((e.newData.Name in _this.UpdatedRowsData ||
+            //             e.newData.Name in _this.AlreadyRowsData) &&
+            //             e.newData.Name !== e.oldData.Name )  {
+            //             alert("Duplicate Property.");
+            //             e.newData.Name = e.oldData.Name;
+            //             e.cancel = true;
+            //             e.component.refresh();
+            //             return;
+            //         }
+
+            //         _this.UpdatedRowsData[e.newData.Name] = {
+            //             "oldProperty": e.oldData.Name,
+            //             "property": e.newData.Name,
+            //             "value": e.oldData.DefaultValue ? e.oldData.DefaultValue : "",
+            //             "action": "update"
+            //         };
+            //     }
+            //     else if ("DefaultValue" in e.newData) {
+            //         _this.UpdatedRowsData[e.oldData.Name] = {
+            //             "oldProperty": e.oldData.Name,
+            //             "property": e.oldData.Name,
+            //             "value": e.newData.DefaultValue ? e.newData.DefaultValue : "",
+            //             "action": "update"
+            //         };
+            //     }
+            // }
+
+            _this.AvoidTableEvents = false;
+        },
+        // onRowValidating: function (e) {
+        //     // if (e.isValid && e.newData.Login === "Administrator") {
+        //     //     e.isValid = false;
+        //     //     e.errorText = "Your cannot log in as Administrator";
+        //     // }           
+        // }       
     }).dxDataGrid("instance");
 }
 
@@ -246,60 +363,88 @@ UserPropertiesForm.prototype.OnApply =  function(){
         var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
         var classProperty =  identifierProperties.subClass.replace("Intrida Data/", "");
        
-        var data = {};     
+        var data = {};
+        var alreadyExistingProps = {};     
         for (var i = 0; i < selectedNodeIds.length; i++) {
             var nodeId = selectedNodeIds[i];
 
             data[nodeId] = {};
-            data[nodeId]["properties"] = properties;
-            if (sourceManager.NodeIdvsComponentIdList[nodeId]) {
+            
+            // add properties against nodeid data
+            //before check if any one of the properties already exists
+            //data[nodeId]["properties"] = properties;            
+            data[nodeId]["properties"] = [];
+            
+            var componentObj = sourceManager.AllComponents[nodeId];            
+            for (var propIndex = 0; propIndex < properties.length; propIndex++) {
+                var prop = properties[propIndex];
+                if (componentObj.propertyExists(prop.property)) {
+                    if (!(componentObj.Name in alreadyExistingProps)) {
+                        alreadyExistingProps[componentObj.Name] = [];
+                    }
 
+                    alreadyExistingProps[componentObj.Name].push(prop.property);
+                }
+                else {
+                    data[nodeId]["properties"].push(prop);
+                }
+            }
+            if (data[nodeId]["properties"].length === 0) {
+                delete data[nodeId];
+                continue;
+            }
+                   
+            if (sourceManager.NodeIdvsComponentIdList[nodeId]) {
                 // Properties to already existing component
-                data[nodeId]["component"] = sourceManager.NodeIdvsComponentIdList[nodeId];
+                data[nodeId]["component"] = sourceManager.GetCompIdByNodeId[nodeId];
             }
             
             // Properties to new component
             var name = null;
             var category = null;
             var componentClass = null;
-            for (var j = 0; j < properties.length; j++) {
-                var propData = properties[j];
-                if (propData.action.toLowerCase() === "add" ||
-                    propData.action.toLowerCase() === "update") {
+            for (var j = 0; j < data[nodeId]["properties"].length; j++) {
+                var propData = data[nodeId]["properties"][j];               
+                
+                // if (propData.action.toLowerCase() === "add" ||
+                //     propData.action.toLowerCase() === "update") {
+                if (propData.action.toLowerCase() === "add") {
+
+                    // add new or update property
                     if (propData.property.toLowerCase() === nameProperty.toLowerCase()) {
                         name = propData.value;
                     }
-                    else if (("oldProperty") in propData &&
-                        propData.oldProperty.toLowerCase() === nameProperty.toLowerCase()) {
-                        name = SourceManagers[this.Id].GetNodeName(nodeId);
-                    }
+                    // else if (("oldProperty") in propData &&
+                    //     propData.oldProperty.toLowerCase() === nameProperty.toLowerCase()) {
+                    //     name = SourceManagers[this.Id].GetNodeName(nodeId);
+                    // }
 
                     if (propData.property.toLowerCase() === categoryProperty.toLowerCase()) {
                         category = propData.value;
                     }
-                    else if (("oldProperty") in propData &&
-                        propData.oldProperty.toLowerCase() === categoryProperty.toLowerCase()) {
-                        category = "";
-                    }
+                    // else if (("oldProperty") in propData &&
+                    //     propData.oldProperty.toLowerCase() === categoryProperty.toLowerCase()) {
+                    //     category = "";
+                    // }
                     if (propData.property.toLowerCase() === classProperty.toLowerCase()) {
                         componentClass = propData.value;
                     }
-                    else if (("oldProperty") in propData &&
-                        propData.oldProperty.toLowerCase() === classProperty.toLowerCase()) {
-                        componentClass = "";
-                    }
+                    // else if (("oldProperty") in propData &&
+                    //     propData.oldProperty.toLowerCase() === classProperty.toLowerCase()) {
+                    //     componentClass = "";
+                    // }
                 }
-                else if (propData.action.toLowerCase() === "remove") {
-                    if (propData.property.toLowerCase() === nameProperty.toLowerCase()) {
-                        name = sourceManager.GetNodeName(nodeId);
-                    }
-                    if (propData.property.toLowerCase() === categoryProperty.toLowerCase()) {
-                        category = "";
-                    }
-                    if (propData.property.toLowerCase() === classProperty.toLowerCase()) {
-                        componentClass = "";
-                    }
-                }
+                // else if (propData.action.toLowerCase() === "remove") {
+                //     if (propData.property.toLowerCase() === nameProperty.toLowerCase()) {
+                //         name = sourceManager.GetNodeName(nodeId);
+                //     }
+                //     if (propData.property.toLowerCase() === categoryProperty.toLowerCase()) {
+                //         category = "";
+                //     }
+                //     if (propData.property.toLowerCase() === classProperty.toLowerCase()) {
+                //         componentClass = "";
+                //     }
+                // }
             }
 
             if ((!name || name == "") &&
@@ -311,7 +456,24 @@ UserPropertiesForm.prototype.OnApply =  function(){
             data[nodeId]["componentClass"] = componentClass;
             data[nodeId]["parent"] = sourceManager.GetNodeParent(nodeId);            
         }
-      
+
+        // if alreadyExistingProps
+        if (Object.keys(alreadyExistingProps).length > 0) {
+            var msg = "Duplicate properties found. Will not be considered for corresponding components.\n\n";
+            for (var key in alreadyExistingProps) {
+                for (var i = 0; i < alreadyExistingProps[key].length; i++) {
+                    msg += "\t" + key + " : " + alreadyExistingProps[key][i] + "\n";
+                }
+            }
+
+            alert(msg);
+        }
+        if (Object.keys(data).length === 0) {
+            _this.Clear();
+            _this.LoadData();
+            return;
+        }
+
         // Update components in tables
         model.views[_this.Id].listView.UpdateComponents(data);
 
@@ -339,23 +501,26 @@ UserPropertiesForm.prototype.OnApply =  function(){
                 var nodeId = object.Data.newComponentIds[compId];
                 sourceManager.NodeIdvsComponentIdList[nodeId] = compId;
 
-            }            
-
-            for (var propName in _this.UpdatedRowsData) {
-                var propData = _this.UpdatedRowsData[propName];
-                if (propData.action.toLowerCase() !== "add") {
-                    continue;
-                }
-
-                var propData = _this.UpdatedRowsData[propName];
-                _this.AlreadyRowsData[propData.property] = {
-                    "property": propData.property,
-                    "value": propData.value ? propData.value : "",
-                };
             }
-           
+
+            // for (var propName in _this.UpdatedRowsData) {
+            //     var propData = _this.UpdatedRowsData[propName];
+            //     if (propData.action.toLowerCase() !== "add") {
+            //         continue;
+            //     }
+
+            //     var propData = _this.UpdatedRowsData[propName];
+            //     _this.AlreadyRowsData[propData.property] = {
+            //         "property": propData.property,
+            //         "value": propData.value ? propData.value : "",
+            //     };
+            // }           
             _this.UpdatedRowsData = {};
-            DevExpress.ui.notify("Properties updated successfully.");    
+
+            _this.Clear();
+            _this.LoadData();
+
+            DevExpress.ui.notify("Properties updated successfully.");
         });
     }
 }
@@ -367,36 +532,60 @@ UserPropertiesForm.prototype.Close = function () {
     userPropertiesForm.style.display = "none";
 
     this.UpdatedRowsData = {};
+
+    this.Clear();
 }
 
+// UserPropertiesForm.prototype.GetAllSourceProperties = function () {
+//     var sourceManager = SourceManagers[this.Id];
 
-function commonDifferentProperties(objects) {
-    if (objects.length === 0) {
-        return null;
-    }
+//     var allProperties = [];
+//     if (sourceManager.Is3DSource()) {
+//         var allComponents = sourceManager.AllComponents;
 
-    var common = JSON.parse(JSON.stringify(objects[0]));
-    var unmatchedProps = {};
-    for (var i = 1; i < objects.length; i++) {
-        for (var prop in objects[i]) {
-            checkProps(objects[i], common, prop);
-        }
-        for (var commProp in common) {
-            checkProps(common, objects[i], commProp);
-        }
-    }
-    return {
-        "common": common,
-        "notCommon": unmatchedProps
-    };
+//         for (var nodeId in allComponents) {
+//             var component = allComponents[nodeId];
+//             if (component.properties.length > 0) {
+//                 for (var i = 0; i < component.properties.length; i++) {
+//                     var property = component.properties[i];
+//                     if (allProperties.indexOf(property.Name) === -1) {
+//                         allProperties.push(property.Name);
+//                     }
+//                 }
+//             }
+//         }
+//     }
 
-    function checkProps(source, target, prop) {
-        if (source.hasOwnProperty(prop)) {
-            var val = source[prop];
-            if (!target.hasOwnProperty(prop) || target[prop] !== val) {
-                unmatchedProps[prop] = true;
-                delete common[prop];
-            }
-        }
-    }
-}
+//     return allProperties;
+// }
+
+// function commonDifferentProperties(objects) {
+//     if (objects.length === 0) {
+//         return null;
+//     }
+
+//     var common = JSON.parse(JSON.stringify(objects[0]));
+//     var unmatchedProps = {};
+//     for (var i = 1; i < objects.length; i++) {
+//         for (var prop in objects[i]) {
+//             checkProps(objects[i], common, prop);
+//         }
+//         for (var commProp in common) {
+//             checkProps(common, objects[i], commProp);
+//         }
+//     }
+//     return {
+//         "common": common,
+//         "notCommon": unmatchedProps
+//     };
+
+//     function checkProps(source, target, prop) {
+//         if (source.hasOwnProperty(prop)) {
+//             var val = source[prop];
+//             if (!target.hasOwnProperty(prop) || target[prop] !== val) {
+//                 unmatchedProps[prop] = true;
+//                 delete common[prop];
+//             }
+//         }
+//     }
+// }

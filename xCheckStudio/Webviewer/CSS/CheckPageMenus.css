@@ -606,7 +606,7 @@
   overflow: hidden;
 }
 
-.saveToVaultCaptionBar{
+.saveToVaultCaptionBar, .editUserPropertyNameCaptionBar{
   position: absolute;
   width: 100%;  
   height: 30px;;
@@ -615,9 +615,71 @@
   border-bottom: 1px solid black;
 }
 
-.saveToVaultCaptionBar p {
+.saveToVaultCaptionBar p, .editUserPropertyNameCaptionBar p {
   line-height: 1.7;
   display: inline-block;
   vertical-align: middle;
   color: black;
+}
+
+.editUserPropertyNamePrompt{
+  position: absolute;
+  width: 350px;
+  height: 110px;
+  display: none;
+  z-index: 201;
+  background: white;
+  /* border-radius: 4px; */
+  border: 2px solid black;
+  right: 0px;
+  top:0px;
+}
+
+.editUserPropertyPropLabel{
+  position: absolute;
+  width: 100px;  
+  top: 38px;
+  left: 4px;  
+  color: black;
+}
+
+.editUserPropertyProp
+{
+  position: absolute;
+  width: 230px;
+  height: 30px;
+  top: 34px;
+  left: 115px;
+}
+
+.editUserPropertyOkBtn{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  bottom: 4px;
+  right: 4px;
+  background: rgb(25.5, 25.5, 25.5);
+  opacity: 0.8;
+    color: white;
+    text-align: center;
+    border-radius: 6px;    
+}
+
+.editUserPropertyCancelBtn{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  bottom: 4px;
+  right: 88px;
+  background: rgb(25.5, 25.5, 25.5);
+  opacity: 0.8;
+    color: white;
+    text-align: center;
+    border-radius: 6px; 
+}
+
+.saveToVaultOkBtn p, .saveToVaultCanceBtn p {
+  line-height: 1.7;
+  display: inline-block;
+  vertical-align: middle;
 }

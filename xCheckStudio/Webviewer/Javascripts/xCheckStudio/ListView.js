@@ -228,7 +228,7 @@ ListView.prototype.GetRowData = function (nodeId, parentNode) {
     tableRowContent[ListViewColumnNames3D.Component] = nodeData.Name;
     tableRowContent[ListViewColumnNames3D.MainClass] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
     tableRowContent[ListViewColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[ListViewColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? nodeData.NodeId : "");
+    tableRowContent[ListViewColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? Number(nodeData.NodeId) : "");
     // tableRowContent[ListViewColumnNames3D.Parent] = parentNode;
     tableRowContent["rowId"] = this.CurrentRowId;
     this.CurrentRowId++;
