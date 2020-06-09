@@ -408,9 +408,9 @@ ListView.prototype.LoadTable = function () {
                 }
                 _this.AvoidViewerEvents = false;
 
-                if (model.views[_this.Id].userPropertiesForm.Active) {
-                    model.views[_this.Id].userPropertiesForm.LoadData();
-                }
+                // if (model.views[_this.Id].userPropertiesForm.Active) {
+                //     model.views[_this.Id].userPropertiesForm.LoadData();
+                // }
 
                 if(model.views[_this.Id].editUserPropertiesForm.Active)
                 {

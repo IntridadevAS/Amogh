@@ -52,6 +52,90 @@ function GroupView(
 GroupView.prototype = Object.create(ModelBrowser.prototype);
 GroupView.prototype.constructor = GroupView;
 
+GroupView.prototype.UpdateComponents = function (componentsData) {
+    var needsUpdate = false;
+
+    var sourceManager = SourceManagers[this.Id];
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    for (var nodeId in componentsData) {
+        var componentData = componentsData[nodeId];
+
+        // Update all components from this class
+        if (nodeId in this.Components) {
+            var component = this.Components[nodeId];
+            if (componentData.name &&
+                component.Name !== componentData.name) {
+                component.Name = componentData.name;
+
+                needsUpdate = true;
+            }
+            if (componentData.category) {
+                component.MainComponentClass = componentData.category;
+
+                needsUpdate = true;
+            }
+            if (componentData.componentClass) {
+                component.SubComponentClass = componentData.componentClass;
+
+                needsUpdate = true;
+            }
+
+            // add properties to components
+            for (var i = 0; i < componentData.properties.length; i++) {
+                var prop = componentData.properties[i];
+               
+                if (prop.action.toLowerCase() === "add") {
+                    var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
+                    component.addProperty(genericPropertyObject);
+                }
+                else if (prop.action.toLowerCase() === "remove") {
+                    if (prop.property.toLowerCase() === categoryProperty.toLowerCase()) {
+                        component.MainComponentClass = null;
+                        needsUpdate = true;
+                    }
+                    if (prop.property.toLowerCase() === classProperty.toLowerCase()) {
+                        component.SubComponentClass = null;
+                        needsUpdate = true;
+                    }
+
+                    component.removeProperty(prop.property);
+                }
+                else if (prop.action.toLowerCase() === "update") {
+                    if (prop.oldProperty.toLowerCase() === categoryProperty.toLowerCase()) {
+                        if (prop.property.toLowerCase() !== categoryProperty.toLowerCase()) {
+                            component.MainComponentClass = null;
+                        }
+                        else {
+                            component.MainComponentClass = prop.value;
+                        }
+
+                        needsUpdate = true;
+                    }
+                    if (prop.oldProperty.toLowerCase() === classProperty.toLowerCase()) {
+                        if (prop.property.toLowerCase() !== classProperty.toLowerCase()) {
+                            component.SubComponentClass = null;
+                        }
+                        else {
+                            component.SubComponentClass = prop.value;
+                        }
+                        needsUpdate = true;
+                    }                
+                    component.updateProperty(prop.oldProperty, prop.property, prop.value)                   
+                }
+            }
+        }
+
+        // Update SourceProperty components from SCManager which are shown in modelbrowser        
+        sourceManager.SourceProperties[nodeId] = this.Components[nodeId];
+    }
+
+    // Sourcemanagers all components as well
+    sourceManager.AllComponents = this.Components;
+}
+
 GroupView.prototype.Show = function () {
     this.Clear();
 
@@ -354,6 +438,10 @@ GroupView.prototype.LoadTable = function () {
                         Communicator.SelectionMode.Add);
                 }
                 // }
+            }
+
+            if (model.views[_this.Id].editUserPropertiesForm.Active) {
+                model.views[_this.Id].editUserPropertiesForm.LoadData();
             }
 
             // enable events
@@ -852,6 +940,18 @@ GroupView.prototype.GetAllSelectedRowNodeIds = function () {
     }
 
     return selectedNodeIds;
+}
+
+GroupView.prototype.GetSelectedComponents = function () {
+    var selectedNodeIds = this.GetSelectedNodes();
+
+    var selected = {};
+    for (var i = 0; i < selectedNodeIds.length; i++) {
+        var nodeId = selectedNodeIds[i];
+        selected[nodeId] = this.Components[nodeId];
+    }
+
+    return selected;
 }
 
 GroupView.prototype.SetRowColor = function (row, color) {

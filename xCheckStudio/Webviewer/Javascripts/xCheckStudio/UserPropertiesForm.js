@@ -18,6 +18,11 @@ UserPropertiesForm.prototype.GetHtmlElementId = function () {
 }
 
 UserPropertiesForm.prototype.Open = function () {
+    if (model.views[this.Id].activeTableView.toLowerCase() !== "list view" &&
+        model.views[this.Id].activeTableView.toLowerCase() !== "group view") {
+        return;
+    }
+
     this.Active = true;
 
     var userPropertiesForm = document.getElementById(this.GetHtmlElementId());
@@ -351,9 +356,15 @@ UserPropertiesForm.prototype.OnApply =  function(){
         if (properties.count === 0) {
             return;
         }        
-
-        var selectedNodeIds = model.views[_this.Id].listView.GetAllSelectedRowNodeIds();
-        if (selectedNodeIds.length === 0) {
+       
+        var selectedNodeIds = [];
+        if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+            selectedNodeIds = model.views[_this.Id].listView.GetAllSelectedRowNodeIds();
+        }
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+            selectedNodeIds = model.views[_this.Id].groupView.GetAllSelectedRowNodeIds();
+        }
+        if (!selectedNodeIds || selectedNodeIds.length === 0) {
             return;
         }
 
@@ -404,47 +415,22 @@ UserPropertiesForm.prototype.OnApply =  function(){
             var category = null;
             var componentClass = null;
             for (var j = 0; j < data[nodeId]["properties"].length; j++) {
-                var propData = data[nodeId]["properties"][j];               
-                
-                // if (propData.action.toLowerCase() === "add" ||
-                //     propData.action.toLowerCase() === "update") {
+                var propData = data[nodeId]["properties"][j];              
+               
                 if (propData.action.toLowerCase() === "add") {
-
-                    // add new or update property
+                  
                     if (propData.property.toLowerCase() === nameProperty.toLowerCase()) {
                         name = propData.value;
                     }
-                    // else if (("oldProperty") in propData &&
-                    //     propData.oldProperty.toLowerCase() === nameProperty.toLowerCase()) {
-                    //     name = SourceManagers[this.Id].GetNodeName(nodeId);
-                    // }
 
                     if (propData.property.toLowerCase() === categoryProperty.toLowerCase()) {
                         category = propData.value;
                     }
-                    // else if (("oldProperty") in propData &&
-                    //     propData.oldProperty.toLowerCase() === categoryProperty.toLowerCase()) {
-                    //     category = "";
-                    // }
+
                     if (propData.property.toLowerCase() === classProperty.toLowerCase()) {
                         componentClass = propData.value;
                     }
-                    // else if (("oldProperty") in propData &&
-                    //     propData.oldProperty.toLowerCase() === classProperty.toLowerCase()) {
-                    //     componentClass = "";
-                    // }
                 }
-                // else if (propData.action.toLowerCase() === "remove") {
-                //     if (propData.property.toLowerCase() === nameProperty.toLowerCase()) {
-                //         name = sourceManager.GetNodeName(nodeId);
-                //     }
-                //     if (propData.property.toLowerCase() === categoryProperty.toLowerCase()) {
-                //         category = "";
-                //     }
-                //     if (propData.property.toLowerCase() === classProperty.toLowerCase()) {
-                //         componentClass = "";
-                //     }
-                // }
             }
 
             if ((!name || name == "") &&
@@ -475,7 +461,12 @@ UserPropertiesForm.prototype.OnApply =  function(){
         }
 
         // Update components in tables
-        model.views[_this.Id].listView.UpdateComponents(data);
+        if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+            model.views[_this.Id].listView.UpdateComponents(data);
+        }
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+            model.views[_this.Id].groupView.UpdateComponents(data);
+        }        
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -500,21 +491,8 @@ UserPropertiesForm.prototype.OnApply =  function(){
             for (var compId in object.Data.newComponentIds) {
                 var nodeId = object.Data.newComponentIds[compId];
                 sourceManager.NodeIdvsComponentIdList[nodeId] = compId;
-
             }
-
-            // for (var propName in _this.UpdatedRowsData) {
-            //     var propData = _this.UpdatedRowsData[propName];
-            //     if (propData.action.toLowerCase() !== "add") {
-            //         continue;
-            //     }
-
-            //     var propData = _this.UpdatedRowsData[propName];
-            //     _this.AlreadyRowsData[propData.property] = {
-            //         "property": propData.property,
-            //         "value": propData.value ? propData.value : "",
-            //     };
-            // }           
+        
             _this.UpdatedRowsData = {};
 
             _this.Clear();

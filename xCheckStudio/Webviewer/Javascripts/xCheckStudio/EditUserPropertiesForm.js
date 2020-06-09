@@ -132,7 +132,12 @@ EditUserPropertiesForm.prototype.OnApply = function () {
     }
 
     // Update components in tables
-    model.views[_this.Id].listView.UpdateComponents(data);
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
 
     this.UpdatePropertiesInDB(data).then(function (result) {
         if (result === true) {
@@ -218,8 +223,14 @@ EditUserPropertiesForm.prototype.LoadData = function () {
     column["visible"] = false;
     columns.push(column);
 
+    var selected;
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        selected = model.views[this.Id].listView.GetSelectedComponents();
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        selected = model.views[this.Id].groupView.GetSelectedComponents();
+    }
 
-    var selected = model.views[this.Id].listView.GetSelectedComponents();
     for (var nodeId in selected) {
         var selectedComp = selected[nodeId];
 
@@ -439,7 +450,12 @@ EditUserPropertiesForm.prototype.EditPropertyForAll = function (columnIndex, old
     }
 
     // Update components in tables
-    model.views[_this.Id].listView.UpdateComponents(data);
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
 
     this.UpdatePropertiesInDB(data).then(function (result) {
         if (result === true) {
@@ -497,9 +513,13 @@ EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex,
         data[nodeId]["parent"] = null;
     }
 
-    // Update components in list view table
-    model.views[_this.Id].listView.UpdateComponents(data);
-
+    // Update components in list view table    
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
     // Update components in editUserProperties table
     model.views[this.Id].editUserPropertiesForm.DeletePropertyColumn(propertyName);
 
@@ -747,7 +767,12 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
         }
 
         // Update components in list view table
-        model.views[_this.Id].listView.UpdateComponents(data);
+        if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+            model.views[_this.Id].listView.UpdateComponents(data);
+        }
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+            model.views[_this.Id].groupView.UpdateComponents(data);
+        }
 
         // Update components in editUserProperties table
         model.views[this.Id].editUserPropertiesForm.UpdateComponents(selectedProperties);
@@ -835,7 +860,12 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
         }
 
         // Update components in list view table
-        model.views[_this.Id].listView.UpdateComponents(data);
+        if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+            model.views[_this.Id].listView.UpdateComponents(data);
+        }
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+            model.views[_this.Id].groupView.UpdateComponents(data);
+        }
 
         // Update components in editUserProperties table
         model.views[this.Id].editUserPropertiesForm.UpdateComponents(allProperties, true);   
