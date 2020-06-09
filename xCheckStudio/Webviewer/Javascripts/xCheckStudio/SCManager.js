@@ -938,15 +938,24 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
             });
         }
     }
-    else if (nodeId in this.Properties) {
+    else if (nodeId in this.Properties ||
+        nodeId in this.AllComponents) {
+
+        var propertyCollection = [];
+        if (nodeId in this.Properties) {
+            propertyCollection = this.Properties[nodeId].properties;
+        }
+        else if (nodeId in this.AllComponents) {
+            propertyCollection = this.AllComponents[nodeId].properties;
+        }
+
         // properties
         var properties = []
-        for (var i = 0; i < this.Properties[nodeId].properties.length; i++) {
+        for (var i = 0; i < propertyCollection.length; i++) {
             var property = {};
-            property["Name"] = this.Properties[nodeId].properties[i].Name;
-            property["Value"] = this.Properties[nodeId].properties[i].Value;
+            property["Name"] = propertyCollection[i].Name;
+            property["Value"] = propertyCollection[i].Value;
             properties.push(property);
-
         }
 
         this.PropertyCallout.Update(componentName,

@@ -380,7 +380,7 @@ GroupView.prototype.LoadTable = function () {
                     }
                     else {
                         _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
-                    }                    
+                    }
                 }
                 delete _this.HighlightedRow[oldRowKey];
             }
@@ -409,6 +409,11 @@ GroupView.prototype.LoadTable = function () {
                     Communicator.SelectionMode.Add);
             }
             _this.Webviewer.view.fitNodes([Number(e.data.NodeId)]);
+
+            // property callout                
+            if (e.data.NodeId in _this.Components) {
+                SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
+            }
 
             // enable events
             _this.AvoidViewerEvents = false;
@@ -1401,7 +1406,7 @@ GroupView.prototype.GetGroupColor = function (groupKey) {
             if (index === groupKeyArray.length - 1 ||
                 !groupProperty.Operator ||
                 groupProperty.Operator.toLowerCase() === "and") {
-                color.color = groupProperty.Color;
+                color.color = groupProperty.Color ? groupProperty.Color : null;
                 break;
             }
             else {

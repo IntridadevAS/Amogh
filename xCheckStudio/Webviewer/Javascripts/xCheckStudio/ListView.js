@@ -452,6 +452,11 @@ ListView.prototype.LoadTable = function () {
                         Communicator.SelectionMode.Add);
                 }
                 _this.Webviewer.view.fitNodes([e.data.NodeId]);
+
+                // property callout                
+                if (e.data.NodeId in _this.Components) {
+                    SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
+                }
             },
             onRowPrepared: function (e) {                
                 if (_this.AvoidTableEvents ||

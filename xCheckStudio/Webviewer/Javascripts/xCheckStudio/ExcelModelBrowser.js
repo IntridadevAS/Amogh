@@ -257,7 +257,7 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
                 _this.ShowSelectedSheetData(e.rowElement[0]);
 
                 //property call out
-                SourceManagers[_this.Id].OpenPropertyCallout(e.data.ComponentId);
+                SourceManagers[_this.Id].OpenPropertyCalloutByCompId(e.data.ComponentId);
             }
         });
     });

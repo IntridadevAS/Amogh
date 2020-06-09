@@ -226,16 +226,16 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
                modelBrowserDataGrid.getScrollable().scrollToElement(row[0])
 
                if (viewerContainer.toLowerCase() === "visualizera") {
-                    SourceManagers["a"].OpenPropertyCallout(rowData.ComponentId);
+                    SourceManagers["a"].OpenPropertyCalloutByCompId(rowData.ComponentId);
                }
                else if (viewerContainer.toLowerCase() === "visualizerb") {
-                    SourceManagers["b"].OpenPropertyCallout(rowData.ComponentId);
+                    SourceManagers["b"].OpenPropertyCalloutByCompId(rowData.ComponentId);
                }
                else if (viewerContainer.toLowerCase() === "visualizerc") {
-                    SourceManagers["c"].OpenPropertyCallout(rowData.ComponentId);
+                    SourceManagers["c"].OpenPropertyCalloutByCompId(rowData.ComponentId);
                }
                else if (viewerContainer.toLowerCase() === "visualizerd") {
-                    SourceManagers["d"].OpenPropertyCallout(rowData.ComponentId);
+                    SourceManagers["d"].OpenPropertyCalloutByCompId(rowData.ComponentId);
                }
 
                break;

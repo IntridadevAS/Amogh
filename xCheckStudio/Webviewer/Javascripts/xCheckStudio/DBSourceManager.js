@@ -126,7 +126,7 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
 
 }
 
-DBSourceManager.prototype.OpenPropertyCallout = function (componentId) {
+DBSourceManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {
   var _this = this;
 
   var component = _this.SourceProperties[componentId];

@@ -285,7 +285,7 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                 _this.ShowSelectedDBData(e.rowElement[0]);
 
                 //property call out
-                SourceManagers[_this.Id].OpenPropertyCallout(e.data.ComponentId);                
+                SourceManagers[_this.Id].OpenPropertyCalloutByCompId(e.data.ComponentId);                
             },
         });
     });
