@@ -333,10 +333,10 @@ ListView.prototype.LoadTable = function () {
             scrolling: {
                 mode: "standard"
             },
-            // paging: {
-            //     pageSize: 50
-            // },
             selection: selectionAttribute,
+            headerFilter: {
+                visible: true
+            },
             onContentReady: function (e) {
                 if (!loadingBrowser) {
                     return;
