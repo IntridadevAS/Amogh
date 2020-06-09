@@ -10,7 +10,7 @@ function MarkupMenu(id) {
         "annotations": null
     };
 
-    this.Webviewer = SourceManagers[model.currentTabId].Webviewer;
+    this.Webviewer = SourceManagers[id].Webviewer;
 
     this.ShapesMenu = new ShapesMenu(this.Id, this.Webviewer, this);
 

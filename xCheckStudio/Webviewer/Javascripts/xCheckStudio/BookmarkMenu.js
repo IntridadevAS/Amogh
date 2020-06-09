@@ -1,7 +1,7 @@
 // Bookmark Menu
 function BookmarkMenu(id) {
     this.Id = id;
-    this.Webviewer = SourceManagers[model.currentTabId].Webviewer;
+    this.Webviewer = SourceManagers[id].Webviewer;
         
     this.SelectedRowKey = {
         "bookmark": null,

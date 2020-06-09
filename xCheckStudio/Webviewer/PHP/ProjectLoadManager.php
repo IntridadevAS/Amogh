@@ -2160,38 +2160,46 @@ function ReadAllComponents($tempDbh, $table)
     { 
         $ClasswiseComponents = array();   
 
-        $srcA = ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, "SourceA");
-        $srcB = ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, "SourceB");
+        $srcA = ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, "SourceAComponents", "SourceAProperties");
+        $srcB = ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, "SourceBComponents", "SourceBProperties");
+        $srcC = ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, "SourceCComponents", "SourceCProperties");
+        $srcD = ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, "SourceDComponents", "SourceDProperties");
 
         $ClasswiseComponents["SourceA"] = $srcA;
         $ClasswiseComponents["SourceB"] = $srcB;
+        $ClasswiseComponents["SourceC"] = $srcC;
+        $ClasswiseComponents["SourceD"] = $srcD;
 
         return $ClasswiseComponents;
     }
 
-    function ReadClassWiseComponentsForSource($tempDbh, $mainClassProperty, $source)
+    function ReadClassWiseComponentsForSource(
+        $tempDbh, 
+        $mainClassProperty, 
+        $componentsTableName,
+        $propertiesTableName)
     { 
         $ClasswiseComponents = array();   
         try
         {  
             // Components table
             // $source = $_POST['Source'];   
-            $componentsTableName;
-            $propertiesTableName;         
-            if(strtolower($source) == "sourcea")
-            {
-                $componentsTableName = "SourceAComponents";
-                $propertiesTableName = "SourceAProperties";
-            }
-            else if(strtolower($source) == "sourceb")
-            {
-                $componentsTableName = "SourceBComponents";
-                $propertiesTableName = "SourceBProperties";
-            }
-            else
-            {                
-                return NULL;
-            }  
+            // $componentsTableName;
+            // $propertiesTableName;         
+            // if(strtolower($source) == "sourcea")
+            // {
+            //     $componentsTableName = "SourceAComponents";
+            //     $propertiesTableName = "SourceAProperties";
+            // }
+            // else if(strtolower($source) == "sourceb")
+            // {
+            //     $componentsTableName = "SourceBComponents";
+            //     $propertiesTableName = "SourceBProperties";
+            // }
+            // else
+            // {                
+            //     return NULL;
+            // }  
 
             $mainClasses = $tempDbh->query("SELECT DISTINCT $mainClassProperty FROM  $componentsTableName;");
             if($mainClasses) 

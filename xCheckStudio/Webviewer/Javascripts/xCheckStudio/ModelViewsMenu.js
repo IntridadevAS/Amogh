@@ -1,7 +1,7 @@
 function ModelViewsMenu(id) {
     this.Id = id;
 
-    this.Webviewer = SourceManagers[model.currentTabId].Webviewer;
+    this.Webviewer = SourceManagers[id].Webviewer;
 
     this.Active = false;
 
@@ -9,7 +9,7 @@ function ModelViewsMenu(id) {
     this.SectioningMenu = new SectioningMenu(id, this.Webviewer);
     this.MeasureMenu = new MeasureMenu(id, this.Webviewer);
 
-    this.Controls = SourceManagers[model.currentTabId].GetControlIds();
+    this.Controls = SourceManagers[id].GetControlIds();
     this.ExplodeManager;
     this.TranslucencyManager;
 
