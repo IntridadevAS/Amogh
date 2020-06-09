@@ -313,9 +313,7 @@ ListView.prototype.LoadTable = function () {
                         Object.assign(item, values);
                     }
                 }
-            },
-            // itemsExpr: "items",
-            // dataStructure: "tree",
+            },         
             dataStructure: "tree",
             keyExpr: "rowId",
             itemsExpr: "items",
@@ -335,9 +333,9 @@ ListView.prototype.LoadTable = function () {
             scrolling: {
                 mode: "standard"
             },
-            paging: {
-                pageSize: 50
-            },
+            // paging: {
+            //     pageSize: 50
+            // },
             selection: selectionAttribute,
             onContentReady: function (e) {
                 if (!loadingBrowser) {
@@ -431,6 +429,8 @@ ListView.prototype.LoadTable = function () {
                 _this.AvoidViewerEvents = false;
             },
             onRowClick: function (e) {
+                _this.AvoidViewerEvents = true;
+
                 if (Object.keys(_this.HighlightedRow).length > 0) {
 
                     var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
@@ -470,6 +470,8 @@ ListView.prototype.LoadTable = function () {
                 if (e.data.NodeId in _this.Components) {
                     SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
                 }
+
+                _this.AvoidViewerEvents = false;
             },
             onRowPrepared: function (e) {                
                 if (_this.AvoidTableEvents ||

@@ -165,10 +165,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             },
             scrolling: {
                 mode: "standard"
-            },
-            // paging: {
-            //     pageSize: 50
-            // },
+            },           
             selection: {
                 mode: "multiple",
                 recursive: true,
