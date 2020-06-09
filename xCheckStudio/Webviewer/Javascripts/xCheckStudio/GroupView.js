@@ -930,16 +930,9 @@ GroupView.prototype.ShowAllHiddenRows = function () {
     sourceManager.HiddenNodeIds = [];
 }
 
-GroupView.prototype.GetAllSelectedRowNodeIds = function () {
-    var selectedNodeIds = [];
-    if (this.GroupViewGrid) {
-        var selectedRowsData = this.GroupViewGrid.getSelectedRowsData()
-        for (var i = 0; i < selectedRowsData.length; i++) {
-            selectedNodeIds.push(selectedRowsData[i].NodeId);
-        }
-    }
 
-    return selectedNodeIds;
+GroupView.prototype.GetSelectedNodeIds = function () {
+    return Object.values(this.SelectedRows);
 }
 
 GroupView.prototype.GetSelectedComponents = function () {

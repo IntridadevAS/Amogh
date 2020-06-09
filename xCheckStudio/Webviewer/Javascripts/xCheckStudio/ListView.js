@@ -378,44 +378,57 @@ ListView.prototype.LoadTable = function () {
                 
                 _this.AvoidViewerEvents = true;
 
+                var includeMember = SourceManagers[_this.Id].GetIncludeMember();
+                // if (includeMember === true) {
+                var selected;
+                var rowKeys;
                 if (e.currentSelectedRowKeys.length > 0) {
-                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        var rowKey = Number(e.currentSelectedRowKeys[i]);
-                        var rowIndex = e.component.getRowIndexByKey(rowKey);
-                        var visibleRows = e.component.getVisibleRows();
-                        var nodeId = visibleRows[rowIndex].data.NodeId;
-
-                        _this.SelectedRows[rowKey] = nodeId;
-
-                        _this.Webviewer.selectionManager.selectNode(nodeId, Communicator.SelectionMode.Add);
-                    }
+                    selected = true;
+                    rowKeys = e.currentSelectedRowKeys;
                 }
-                else if (e.currentDeselectedRowKeys.length > 0) {
-                    for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        var rowKey = Number(e.currentDeselectedRowKeys[i]);
-
-                        if (rowKey in _this.SelectedRows) {
-                            delete _this.SelectedRows[rowKey];
-                        }
-                    }
-
-                    //now manage selection in viewer
-                    _this.Webviewer.selectionManager.clear();
-                    for (var rowKey in _this.SelectedRows) {
-                        _this.Webviewer.selectionManager.selectNode(_this.SelectedRows[rowKey],
-                            Communicator.SelectionMode.Add);
-                    }
+                else {
+                    selected = false;
+                    rowKeys = e.currentDeselectedRowKeys;
                 }
-                _this.AvoidViewerEvents = false;
 
-                // if (model.views[_this.Id].userPropertiesForm.Active) {
-                //     model.views[_this.Id].userPropertiesForm.LoadData();
+                _this.OnSelectRecurcively(rowKeys, selected, includeMember);
+                // }
+                // else {
+                //     if (e.currentSelectedRowKeys.length > 0) {
+                //         for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                //             var rowKey = Number(e.currentSelectedRowKeys[i]);
+                //             var rowIndex = e.component.getRowIndexByKey(rowKey);
+                //             var visibleRows = e.component.getVisibleRows();
+                //             var nodeId = visibleRows[rowIndex].data.NodeId;
+
+                //             _this.SelectedRows[rowKey] = nodeId;
+
+                //             _this.Webviewer.selectionManager.selectNode(nodeId, Communicator.SelectionMode.Add);
+                //         }
+                //     }
+                //     else if (e.currentDeselectedRowKeys.length > 0) {
+                //         for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                //             var rowKey = Number(e.currentDeselectedRowKeys[i]);
+
+                //             if (rowKey in _this.SelectedRows) {
+                //                 delete _this.SelectedRows[rowKey];
+                //             }
+                //         }
+
+                //         //now manage selection in viewer
+                //         _this.Webviewer.selectionManager.clear();
+                //         for (var rowKey in _this.SelectedRows) {
+                //             _this.Webviewer.selectionManager.selectNode(_this.SelectedRows[rowKey],
+                //                 Communicator.SelectionMode.Add);
+                //         }
+                //     }
                 // }
 
-                if(model.views[_this.Id].editUserPropertiesForm.Active)
-                {
+                if (model.views[_this.Id].editUserPropertiesForm.Active) {
                     model.views[_this.Id].editUserPropertiesForm.LoadData();
                 }
+
+                _this.AvoidViewerEvents = false;
             },
             onRowClick: function (e) {
                 if (Object.keys(_this.HighlightedRow).length > 0) {
@@ -507,6 +520,63 @@ ListView.prototype.LoadTable = function () {
             }
         }).dxTreeList("instance");
     });
+}
+
+ListView.prototype.OnIncludeMembers = function (include) {
+    var rowKeys = this.ListViewTableInstance.getSelectedRowKeys();
+
+    this.SelectedRows = {};    
+   
+    this.OnSelectRecurcively(rowKeys, true, include);     
+}
+
+ListView.prototype.OnSelectRecurcively = function (rowKeys,
+    selected,
+    recursive) {
+    if (!this.ListViewTableInstance) {
+        return;
+    }
+    
+    this.AvoidViewerEvents = true;
+    this.AvoidTableEvents = true;
+
+    for (var i = 0; i < rowKeys.length; i++) {
+        var rowKey = Number(rowKeys[i]);
+        this.SelectRecurcively(rowKey, selected, recursive);       
+    }
+
+    // manage GA selection, if components are deselected from table
+    if (selected === false) {
+        this.Webviewer.selectionManager.clear();
+        for (var rowKey in this.SelectedRows) {
+            this.Webviewer.selectionManager.selectNode(this.SelectedRows[rowKey],
+                Communicator.SelectionMode.Add);
+        }
+    }
+
+    this.AvoidViewerEvents = false;  
+    this.AvoidTableEvents = false;
+}
+
+ListView.prototype.SelectRecurcively = function (rowKey, selected, recursive) {
+    var node = this.ListViewTableInstance.getNodeByKey(rowKey);
+    if (selected) {
+        this.SelectedRows[rowKey] = node.data.NodeId;
+        
+        this.Webviewer.selectionManager.selectNode(node.data.NodeId, Communicator.SelectionMode.Add);
+    }
+    else {
+        if (rowKey in this.SelectedRows) {
+            delete this.SelectedRows[rowKey];
+        }
+    }
+
+    if (recursive === true && node.hasChildren === true) {
+        for (var i = 0; i < node.children.length; i++) {
+            // this.ListViewTableInstance.selectRows([node.children[i].key], true);
+            this.SelectRecurcively(node.children[i].key, selected, recursive);            
+        }
+    }
 }
 
 ListView.prototype.CacheItems = function (items) {
@@ -698,17 +768,17 @@ ListView.prototype.ShowAllHiddenRows = function () {
     sourceManager.HiddenNodeIds = [];
 }
 
-ListView.prototype.GetAllSelectedRowNodeIds = function () {
-    var selectedNodeIds = [];
-    if (this.ListViewTableInstance) {
-        var selectedRowsData = this.ListViewTableInstance.getSelectedRowsData()
-        for (var i = 0; i < selectedRowsData.length; i++) {
-            selectedNodeIds.push(selectedRowsData[i].NodeId);
-        }
-    }
+// ListView.prototype.GetAllSelectedRowNodeIds = function () {
+//     var selectedNodeIds = [];
+//     if (this.ListViewTableInstance) {
+//         var selectedRowsData = this.ListViewTableInstance.getSelectedRowsData()
+//         for (var i = 0; i < selectedRowsData.length; i++) {
+//             selectedNodeIds.push(selectedRowsData[i].NodeId);
+//         }
+//     }
 
-    return selectedNodeIds;
-}
+//     return selectedNodeIds;
+// }
 
 ListView.prototype.GetSelectedComponents = function () {
     var selectedNodeIds = this.GetSelectedNodeIds();

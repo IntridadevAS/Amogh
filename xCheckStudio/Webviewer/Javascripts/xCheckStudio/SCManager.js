@@ -339,6 +339,7 @@ SCManager.prototype.InitListViewSwitches = function () {
         onValueChanged: function (e) {
             if (model.views[_this.Id].listView.ListViewTableInstance) {
                 model.views[_this.Id].listView.ListViewTableInstance.option("selection.recursive", e.value);
+                model.views[_this.Id].listView.OnIncludeMembers(e.value);
             }
         }
     }).dxSwitch("instance");
@@ -1197,6 +1198,14 @@ SCManager.prototype.GetAllSourceProperties = function () {
     // }
 
     return allProperties;
+}
+
+SCManager.prototype.GetIncludeMember = function () {
+    if (this.IncludeMemberItemsSwitch) {
+        return this.IncludeMemberItemsSwitch.option("value");
+    }
+
+    return false;
 }
 
 function XMLSourceManager(id, sourceName, sourceType, viewerOptions) {

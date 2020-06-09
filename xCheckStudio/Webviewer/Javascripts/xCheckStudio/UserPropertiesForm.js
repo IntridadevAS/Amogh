@@ -359,10 +359,10 @@ UserPropertiesForm.prototype.OnApply =  function(){
        
         var selectedNodeIds = [];
         if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
-            selectedNodeIds = model.views[_this.Id].listView.GetAllSelectedRowNodeIds();
+            selectedNodeIds = model.views[_this.Id].listView.GetSelectedNodeIds();
         }
         else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
-            selectedNodeIds = model.views[_this.Id].groupView.GetAllSelectedRowNodeIds();
+            selectedNodeIds = model.views[_this.Id].groupView.GetSelectedNodeIds();
         }
         if (!selectedNodeIds || selectedNodeIds.length === 0) {
             return;
