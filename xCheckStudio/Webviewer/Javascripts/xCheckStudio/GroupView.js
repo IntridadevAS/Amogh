@@ -40,7 +40,8 @@ function GroupView(
         }
     };
 
-    this.GroupProperties;
+    // this.GroupProperties;
+    this.GroupTemplate;
 
     this.UndefinedHidden = false;
 
@@ -142,6 +143,15 @@ GroupView.prototype.Show = function () {
     document.getElementById("tableHeaderName" + this.Id).innerText = GlobalConstants.TableView.Group;
 }
 
+GroupView.prototype.GetGroupTemplateProperties = function () {
+    if (this.GroupTemplate &&
+        ("properties" in this.GroupTemplate)) {
+        return this.GroupTemplate.properties;
+    }
+
+    return null;
+}
+
 GroupView.prototype.OnGroupTemplateChanged = function (groupName) {
     if (!groupName) {
         return;
@@ -156,13 +166,15 @@ GroupView.prototype.OnGroupTemplateChanged = function (groupName) {
         if (!(groupName in model.propertyHighlightTemplates)) {
             return;
         }
-        this.GroupProperties = model.propertyHighlightTemplates[groupName].properties;
+        // this.GroupProperties = model.propertyHighlightTemplates[groupName].properties;
+        this.GroupTemplate = model.propertyHighlightTemplates[groupName];
     }
     else {
         if (!(groupName in model.propertyGroups)) {
             return;
         }
-        this.GroupProperties = model.propertyGroups[groupName].properties;
+        // this.GroupProperties = model.propertyGroups[groupName].properties;
+        this.GroupTemplate = model.propertyGroups[groupName];
     }
 
     this.ExistingColumnNames = [];
@@ -219,7 +231,13 @@ GroupView.prototype.GenerateTableDataForGroupByProperty = function () {
                 var column = {};
                 column["caption"] = property.Name;
                 column["dataField"] = columnDataField;
+
                 column["visible"] = false;
+                if (("visibleColumns" in this.GroupTemplate) &&
+                    this.GroupTemplate.visibleColumns.indexOf(columnDataField) !== -1) {
+                    column["visible"] = true;
+                }  
+                
                 this.Headers.push(column);
                 this.ExistingColumnNames.push(property.Name)
             }            
@@ -230,16 +248,21 @@ GroupView.prototype.GenerateTableDataForGroupByProperty = function () {
 }
 
 GroupView.prototype.IsPropertyInGroupProperties = function (property) {
+    var groupProperties = this.GetGroupTemplateProperties();
+    if (groupProperties === null) {
+        return false;
+    }
+
     if (this.IsHighlightByPropertyActive) {
-        for (var i = 0; i < this.GroupProperties.length; i++) {
-            var groupProperty = this.GroupProperties[i];
+        for (var i = 0; i < groupProperties.length; i++) {
+            var groupProperty = groupProperties[i];
             if (groupProperty.Name == property) {
                 return true;
             }
         }
     }
     else {
-        if (this.GroupProperties.indexOf(property) !== -1) {
+        if (groupProperties.indexOf(property) !== -1) {
             return true;
         }
     }
@@ -252,9 +275,10 @@ GroupView.prototype.LoadTable = function () {
     var containerDiv = "#" + _this.ModelBrowserContainer;
 
     this.Clear();
-
-    if (!this.GroupProperties ||
-        this.GroupProperties.length === 0) {
+    
+    var groupProperties = this.GetGroupTemplateProperties();   
+    if (!groupProperties ||
+        groupProperties.length === 0) {
         return;
     }
 
@@ -264,13 +288,21 @@ GroupView.prototype.LoadTable = function () {
         filter = this.GetFilter();
        
         var currentGroupIndex = 0;
-        for (var i = 0; i < this.GroupProperties.length; i++) {
-            var groupProperty = this.GroupProperties[i];
+        for (var i = 0; i < groupProperties.length; i++) {
+            var groupProperty = groupProperties[i];
             if (this.ExistingColumnNames.indexOf(groupProperty.Name) === -1) {
                 column = {};
                 column["caption"] = groupProperty.Name;
-                column["dataField"] = groupProperty.Name.replace(/\s/g, '');
+
+                var dataField = groupProperty.Name.replace(/\s/g, '');
+                column["dataField"] = dataField;
+
                 column["visible"] = false;
+                if (("visibleColumns" in this.GroupTemplate) &&
+                    this.GroupTemplate.visibleColumns.indexOf(dataField) !== -1) {
+                    column["visible"] = true;
+                }               
+                
                 column["groupIndex"] = currentGroupIndex;
                 this.Headers.push(column);
 
@@ -288,15 +320,23 @@ GroupView.prototype.LoadTable = function () {
     }
     else {
 
-        for (var i = 0; i < this.GroupProperties.length; i++) {
-            var groupProperty = this.GroupProperties[i];
+        for (var i = 0; i < groupProperties.length; i++) {
+            var groupProperty = groupProperties[i];
 
             if (this.ExistingColumnNames.indexOf(groupProperty) === -1) {
 
                 column = {};
                 column["caption"] = groupProperty;
-                column["dataField"] = groupProperty.replace(/\s/g, '');
+
+                var dataField = groupProperty.replace(/\s/g, '');
+                column["dataField"] = dataField;
+
                 column["visible"] = false;
+                if (("visibleColumns" in this.GroupTemplate) &&
+                    this.GroupTemplate.visibleColumns.indexOf(dataField) !== -1) {
+                    column["visible"] = true;
+                } 
+
                 column["groupIndex"] = i;
                 this.Headers.push(column);
 
@@ -366,7 +406,7 @@ GroupView.prototype.LoadTable = function () {
         headerFilter: {
             visible: true
         },
-        filterValue: filter,
+        filterValue: filter,       
         onContentReady: function (e) {
             if (!loadingBrowser) {
                 return;
@@ -377,9 +417,7 @@ GroupView.prototype.LoadTable = function () {
 
             _this.ShowItemCount(e.component.getDataSource().totalCount());
 
-            e.component.option("grouping.autoExpandAll", false);
-            // e.component.option("scrolling.mode", "virtual");
-            // e.component.option("scrolling.rowRenderingMode", "virtual");            
+            e.component.option("grouping.autoExpandAll", false);          
         },
         onInitialized: function (e) {
             model.views[_this.Id].tableViewInstance = e.component;
@@ -507,6 +545,9 @@ GroupView.prototype.LoadTable = function () {
             _this.AvoidViewerEvents = false;
         },
         onDisposing: function (e) {
+            // save table view
+            _this.SaveTableView();
+
             // disable events
             _this.TerminateEvents();
 
@@ -718,6 +759,26 @@ GroupView.prototype.LoadTable = function () {
     }).dxDataGrid("instance");
 }
 
+GroupView.prototype.SaveTableView = function () {
+    if (!this.GroupViewGrid ||
+        !this.GroupTemplate) {
+        return;
+    }
+
+    this.GroupTemplate['visibleColumns'] = [];
+    var columns = this.GroupViewGrid.getVisibleColumns();
+    for (var i = 0; i < columns.length; i++) {
+        var column = columns[i];
+        if (column.type === "selection" ||
+            column.type === "groupExpand" ||
+            (("dataField" in column) && column.dataField.toLowerCase() === "componentname")) {
+            continue;
+        }
+
+        this.GroupTemplate['visibleColumns'].push(column.dataField);
+    }
+}
+
 GroupView.prototype.AddGlobalSummary = function (e, summaryType, displayFormat) {  
     var globalSummaryItems = e.component.option("summary.totalItems");
    
@@ -794,12 +855,16 @@ GroupView.prototype.CacheItems = function (rows) {
                 "nodeId": row.data.NodeId
             };
 
+            var groupProperties = this.GetGroupTemplateProperties();
+            if (groupProperties === null) {
+                continue;
+            }
             if (this.IsHighlightByPropertyActive) {
 
                 var traversedGroupProperties = [];
                 var groupKey = [];
-                for (var j = 0; j < this.GroupProperties.length; j++) {
-                    var groupProperty = this.GroupProperties[j];
+                for (var j = 0; j < groupProperties.length; j++) {
+                    var groupProperty = groupProperties[j];
                     
                     var groupPropertyField = groupProperty.Name.replace(/\s/g, '');
                     if (traversedGroupProperties.indexOf(groupPropertyField) === -1) {
@@ -823,9 +888,9 @@ GroupView.prototype.CacheItems = function (rows) {
             }
             else {
                 var groupKey = [];
-                for (var j = 0; j < this.GroupProperties.length; j++) {
-                    var groupPropertyField = this.GroupProperties[j].replace(/\s/g, '');
-                    this.KeyVsTableItems[row.key][groupPropertyField] = row.data[this.GroupProperties[j]];
+                for (var j = 0; j < groupProperties.length; j++) {
+                    var groupPropertyField = groupProperties[j].replace(/\s/g, '');
+                    this.KeyVsTableItems[row.key][groupPropertyField] = row.data[groupProperties[j]];
                     groupKey.push(row.data[groupPropertyField]);
                 }
 
@@ -839,14 +904,19 @@ GroupView.prototype.CacheItems = function (rows) {
 }
 
 GroupView.prototype.GetFilter = function () {
+    var groupProperties = this.GetGroupTemplateProperties();
+    if (groupProperties === null) {
+        return null;
+    }
 
     var filter = [];
-    if (this.GroupProperties.length > 0) {
+    if (groupProperties === null || 
+        groupProperties.length > 0) {
         filter[0] = [];
     }
 
-    for (var i = 0; i < this.GroupProperties.length; i++) {
-        var groupProperty = this.GroupProperties[i];
+    for (var i = 0; i < groupProperties.length; i++) {
+        var groupProperty = groupProperties[i];
 
         var filterCondition = [groupProperty.Name.replace(/\s/g, ''), "=", groupProperty.Value];
         filter[filter.length - 1].push(filterCondition);
@@ -861,15 +931,6 @@ GroupView.prototype.GetFilter = function () {
     }
 
     return filter;
-    filter = [
-        ["Product_Current_Inventory", "<>", 0],
-        "or",
-        [
-            ["Product_Name", "contains", "HD"],
-            "and",
-            ["Product_Cost", "<", 200]
-        ]
-    ];
 }
 
 GroupView.prototype.InitEvents = function () {
@@ -1029,9 +1090,14 @@ GroupView.prototype.GoToRow = function (rowKey) {
         }
     }
     else {
+        var groupProperties = _this.GetGroupTemplateProperties();
+        if (groupProperties === null) {
+            return;
+        }
+
         var groupKeys = [];
-        for (var i = 0; i < this.GroupProperties.length; i++) {
-            var prop = this.GroupProperties[i]
+        for (var i = 0; i < groupProperties.length; i++) {
+            var prop = groupProperties[i]
             if (prop in rowData) {
                 var propValue = rowData[prop];
                 if (!propValue) {
@@ -1232,7 +1298,12 @@ GroupView.prototype.OnGroupSelectClicked = function (rowKey, select) {
     this.GroupViewGrid.expandRow(rowKey).then(function (refa) {
         var parentRowKey = rowKey;
 
-        if (parentRowKey.length === _this.GroupProperties.length) {
+        var groupProperties = _this.GetGroupTemplateProperties(); 
+        if (groupProperties === null) {
+            return;
+        }
+
+        if (parentRowKey.length === groupProperties.length) {
             if (parentRowKey in _this.GroupKeysVsDataItems) {
                 if (select) {
                     _this.GroupViewGrid.selectRows(_this.GroupKeysVsDataItems[parentRowKey], true);
@@ -1282,8 +1353,12 @@ GroupView.prototype.OnGroupShowClicked = function (rowKey, show) {
 
     this.GroupViewGrid.expandRow(rowKey).then(function (refa) {
         var parentRowKey = rowKey;
-
-        if (parentRowKey.length === _this.GroupProperties.length) {
+       
+        var groupProperties = _this.GetGroupTemplateProperties();
+        if (groupProperties === null) {
+            return;
+        }
+        if (parentRowKey.length === groupProperties.length) {
             if (parentRowKey in _this.GroupKeysVsDataItems) {
 
                 var dataRowKeys = _this.GroupKeysVsDataItems[parentRowKey];
@@ -1338,7 +1413,11 @@ GroupView.prototype.OnGroupIsolateClicked = function (rowKey) {
     this.GroupViewGrid.expandRow(rowKey).then(function (refa) {
         var parentRowKey = rowKey;
 
-        if (parentRowKey.length === _this.GroupProperties.length) {
+        var groupProperties = _this.GetGroupTemplateProperties();
+        if (groupProperties === null) {
+            return;
+        }
+        if (parentRowKey.length === groupProperties.length) {
             if (parentRowKey in _this.GroupKeysVsDataItems) {
 
                 var dataRowKeys = _this.GroupKeysVsDataItems[parentRowKey];
@@ -1475,10 +1554,13 @@ GroupView.prototype.GetGroupColor = function (groupKey) {
         parentColor: null,
         color: null
     };
-
+    var groupProperties = this.GetGroupTemplateProperties();
+    if (groupProperties === null) {
+        return;
+    }
     var groupPropertiesOrder = [];
-    for (var j = 0; j < this.GroupProperties.length; j++) {
-        var groupProperty = this.GroupProperties[j];
+    for (var j = 0; j < groupProperties.length; j++) {
+        var groupProperty = groupProperties[j];
         if (groupPropertiesOrder.indexOf(groupProperty.Name) === -1) {
             groupPropertiesOrder.push(groupProperty.Name);
         }
@@ -1487,8 +1569,8 @@ GroupView.prototype.GetGroupColor = function (groupKey) {
     var groupKeyArray = groupKey.split(",");
     // for(var i = 0; i < groupKeyArray.length; i++)
     // {
-    for (var j = 0; j < this.GroupProperties.length; j++) {
-        var groupProperty = this.GroupProperties[j];
+    for (var j = 0; j < groupProperties.length; j++) {
+        var groupProperty = groupProperties[j];
 
         var index = groupPropertiesOrder.indexOf(groupProperty.Name);
         if (index === -1) {

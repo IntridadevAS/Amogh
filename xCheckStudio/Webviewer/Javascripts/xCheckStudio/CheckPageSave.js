@@ -95,9 +95,16 @@ var CheckModule = {
             // get all components
             var allComponents = this.getAllComponents();
 
+            // Save group templates
+            // before you save group templates, update the group template 
+            // with visible columns, if  current table view is group view
+            for (var srcId in SourceManagers) {
+                if (model.views[srcId].activeTableView === GlobalConstants.TableView.Group) {
+                    model.views[srcId].groupView.SaveTableView();
+                }
+            }
             // get all property groups
             var propertyGroups = this.getPropertyGroups();
-
             // get all highlight by property templates
             var highlightPropertyTemplates = this.getHighlightPropertyTemplates();
 
