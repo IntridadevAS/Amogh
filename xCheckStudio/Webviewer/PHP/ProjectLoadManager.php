@@ -177,8 +177,9 @@
             CopyAllComponents($dbh, $tempDbh, "AllComponentsc");
             CopyAllComponents($dbh, $tempDbh, "AllComponentsd");
 
-            // copy property groups
+            // copy group templates
             CopyPropertyGroups($dbh, $tempDbh);
+            CopyPropertyHighlightGroups($dbh, $tempDbh);
 
             // Copy markup views
             CopyMarkupViews($dbh, $tempDbh);
@@ -342,6 +343,29 @@ function CopyAnnotations($fromDbh, $toDbh)
 }
 
 function CopyHighlightPropertyTemplates($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM highlightPropertyTemplates;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS highlightPropertyTemplates;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS highlightPropertyTemplates(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT NOT NULL     
+          )';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO highlightPropertyTemplates(id, value) VALUES(?,?)");
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+    }
+}
+
+function CopyPropertyHighlightGroups($fromDbh, $toDbh)
 {
     $results = $fromDbh->query("SELECT * FROM highlightPropertyTemplates;");
     if ($results) {
