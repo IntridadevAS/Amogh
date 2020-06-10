@@ -49,7 +49,7 @@ const CheckPageCleanUp = {
                 async: false,
                 data:
                 {
-                    'InvokeFunction': "ClearTempVaultData",
+                    'InvokeFunction': "ClearTempVaultAllData",
                     'ProjectName': projectinfo.projectname
                 },
                 success: function (msg) {

@@ -9,9 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CheckIfDataSetAlreadyExists":
             CheckIfDataSetAlreadyExists();
             break;
+        case "ClearTempVaultAllData":
+            ClearTempVaultAllData();
+            break;
         case "ClearTempVaultData":
             ClearTempVaultData();
-            break;
+            break;            
         case "ReadVaultData":
             ReadVaultData();
             break;
@@ -376,7 +379,7 @@ function CheckIfDataSetAlreadyExists()
     return;
 }
 
-function ClearTempVaultData()
+function ClearTempVaultAllData()
 {
     if (
         !isset($_POST['ProjectName'])
@@ -391,6 +394,53 @@ function ClearTempVaultData()
     $tempVaultPath = getDataVaultDirectoryPath($projectName) . "/temp";
     
     deleteDirectory($tempVaultPath);
+
+    echo json_encode(array(
+        "Msg" =>  "success",
+        "MsgCode" => 1
+    ));
+}
+
+function ClearTempVaultData()
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['SrcId'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
+        return;
+    }
+    $projectName = $_POST['ProjectName'];
+    $SrcId = $_POST['SrcId'];
+
+    $tempDirectory = null;
+    switch ($SrcId) {
+        case "a":
+            $tempDirectory =  getVaultSourceAPath($projectName);
+            break;
+        case "b":
+            $tempDirectory =  getVaultSourceBPath($projectName);
+            break;
+        case "c":
+            $tempDirectory =  getVaultSourceCPath($projectName);
+            break;
+        case "d":
+            $tempDirectory =  getVaultSourceDPath($projectName);
+            break;
+    }    
+    if($tempDirectory === null)
+    {
+        echo json_encode(array(
+            "Msg" =>  "Failed",
+            "MsgCode" => 0
+        ));
+        return;
+    }
+
+    deleteDirectory($tempDirectory);
 
     echo json_encode(array(
         "Msg" =>  "success",

@@ -564,17 +564,47 @@ function clearDataSource() {
     return;
   }
 
-  removeDataSourceFromDB().then(function (result) {
-    removeSourceFilesFromDirectory().then(function (result) {
-      //var tabToDelete = document.getElementById("tab_" + model.currentTabId)
-      viewTabs.deleteTab(viewTabs.tabToDelete);
+  if (isDataVault()) {
+    removeTempDataFromVault().then(function(status){
+       viewTabs.deleteTab(viewTabs.tabToDelete);
+       hideClearDataSourceForm();
+    });
+  }
+  else {
+    removeDataSourceFromDB().then(function (result) {
+      removeSourceFilesFromDirectory().then(function (result) {
+        //var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+        viewTabs.deleteTab(viewTabs.tabToDelete);
 
-      // filter checkcases again
-      checkCaseFilesData.FilteredCheckCaseDataList = [];
-      filterCheckCases(false);
+        // filter checkcases again
+        checkCaseFilesData.FilteredCheckCaseDataList = [];
+        filterCheckCases(false);
 
-      hideClearDataSourceForm();
-    })
+        hideClearDataSourceForm();
+      })
+    });
+  }
+}
+
+function removeTempDataFromVault() {
+  return new Promise((resolve) => {
+    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+
+    $.ajax({
+      url: 'PHP/DataVault.php',
+      type: "POST",
+      async: false,
+      data:
+      {
+        'InvokeFunction': "ClearTempVaultData",
+        'ProjectName': projectinfo.projectname,
+        'SrcId': model.currentTabId
+      },
+      success: function (msg) {
+        return resolve(true);
+      }
+    });
+
   });
 }
 
