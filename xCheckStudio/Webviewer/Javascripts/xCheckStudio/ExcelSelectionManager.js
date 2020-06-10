@@ -34,8 +34,8 @@ ExcelSelectionManager.prototype.SelectComponent = function (currentRow,
           this.ApplyHighlightColor(currentRow);
 
           // maintain selected rows
-          if (!this.SelectedComponentNodeIds.includes(componentData.ComponentId)) {
-               this.SelectedComponentNodeIds.push(componentData.ComponentId);
+          if (!this.SelectedComponentIds.includes(componentData.ComponentId)) {
+               this.SelectedComponentIds.push(componentData.ComponentId);
           }
      }
      else if (checkBoxState === "off" && this.SelectedCompoentExists(componentData)) {
@@ -45,10 +45,10 @@ ExcelSelectionManager.prototype.SelectComponent = function (currentRow,
           this.RemoveHighlightColor(currentRow);
 
           // maintain selected rows
-          if (this.SelectedComponentNodeIds.includes(componentData.ComponentId)) {
-               var index = this.SelectedComponentNodeIds.indexOf(componentData.ComponentId);
+          if (this.SelectedComponentIds.includes(componentData.ComponentId)) {
+               var index = this.SelectedComponentIds.indexOf(componentData.ComponentId);
                if (index !== -1) {
-                    this.SelectedComponentNodeIds.splice(index, 1);
+                    this.SelectedComponentIds.splice(index, 1);
                }
           }
      }

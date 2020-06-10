@@ -1,7 +1,7 @@
 function SelectionManager()
 {
     // maintain selected and highlighted component rows
-    this.SelectedComponentNodeIds = [];
+    this.SelectedComponentIds = [];
     this.HighlightedComponentRow;     
     this.HighlightedComponentRowKey;   
 }

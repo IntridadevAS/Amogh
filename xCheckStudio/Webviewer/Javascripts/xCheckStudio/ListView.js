@@ -148,7 +148,7 @@ ListView.prototype.UpdateComponents = function (componentsData) {
     }
 }
 
-ListView.prototype.Show = function () {
+ListView.prototype.Show = function (selectedComps) {
     this.Headers = [];
     this.TableData = [];
 
@@ -179,7 +179,7 @@ ListView.prototype.Show = function () {
     }
 
     // Load table
-    this.LoadTable();
+    this.LoadTable(selectedComps);
 
     // set active table view type
     model.views[this.Id].activeTableView = GlobalConstants.TableView.List;
@@ -275,7 +275,7 @@ ListView.prototype.CreateHeaders = function () {
     }
 }
 
-ListView.prototype.LoadTable = function () {
+ListView.prototype.LoadTable = function (selectedComps) {
 
     // var loadingBrower = true;
     var _this = this;
@@ -342,6 +342,9 @@ ListView.prototype.LoadTable = function () {
                     return;
                 }
                 loadingBrowser = false;
+                
+                _this.AvoidViewerEvents = true;
+                _this.AvoidTableEvents = true;
 
                 _this.CacheItems(e.component.getDataSource().items());
 
@@ -349,6 +352,19 @@ ListView.prototype.LoadTable = function () {
                 var modelBrowserContextMenu = new ModelBrowserContextMenu(true);
                 modelBrowserContextMenu.Init(_this);
                 _this.ShowItemCount(e.component.getDataSource().totalCount());
+
+                // restore selected components
+                if (selectedComps && selectedComps.length > 0) {
+                    // var includeMember = SourceManagers[_this.Id].GetIncludeMember();
+                    var selectedNodes = [];
+                    for (var i = 0; i < selectedComps.length; i++) {
+                        selectedNodes.push(Number(selectedComps[i].NodeId));
+                    }
+                    _this.RestoreSelectionFromComponents(selectedNodes);
+                }
+
+                _this.AvoidViewerEvents = false;
+                _this.AvoidTableEvents = false;
             },
             onInitialized: function (e) {
                 model.views[_this.Id].tableViewInstance = e.component;
@@ -358,11 +374,9 @@ ListView.prototype.LoadTable = function () {
 
                 // enable list view switches
                 if (SourceManagers[_this.Id].IncludeMemberItemsSwitch) {
-                    // SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("disabled", false);
                     SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("visible", true);
                 }
                 if (SourceManagers[_this.Id].ListTypeSwitch) {
-                    // SourceManagers[_this.Id].ListTypeSwitch.option("disabled", false);
                     SourceManagers[_this.Id].ListTypeSwitch.option("visible", true);
                 }
 
@@ -522,6 +536,37 @@ ListView.prototype.LoadTable = function () {
             }
         }).dxTreeList("instance");
     });
+}
+
+ListView.prototype.RestoreSelectionFromComponents = function (selectedNodes) {
+    var rootNode = this.ListViewTableInstance.getRootNode();
+    
+    this.Webviewer.selectionManager.clear();
+
+    if (rootNode.hasChildren === true) {
+        for (var i = 0; i < rootNode.children.length; i++) {
+            this.RestoreSelectionRecurcively(selectedNodes, rootNode.children[i]);
+        }
+    }
+}
+
+ListView.prototype.RestoreSelectionRecurcively = function (selectedNodes, rowNode) {
+    if (("data" in rowNode) &&
+        ("NodeId" in rowNode.data)) {
+        var index = selectedNodes.indexOf(rowNode.data.NodeId);
+        if (index !== -1) {
+            this.SelectedRows[rowNode.key] = rowNode.data.NodeId;
+
+            this.ListViewTableInstance.selectRows([rowNode.key], true);
+            this.Webviewer.selectionManager.selectNode(rowNode.data.NodeId, Communicator.SelectionMode.Add);
+        }
+    }
+
+    if (rowNode.hasChildren) {
+        for (var i = 0; i < rowNode.children.length; i++) {
+            this.RestoreSelectionRecurcively(selectedNodes, rowNode.children[i]);
+        }
+    }
 }
 
 ListView.prototype.OnIncludeMembers = function (include) {

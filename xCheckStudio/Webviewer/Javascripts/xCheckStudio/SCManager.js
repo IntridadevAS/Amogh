@@ -253,7 +253,9 @@ SCManager.prototype.OpenTableViewsMenu = function () {
     dataBrowserSDA.classList.add("showSDA");
     dataBrowserSDA.onclick = function () {
         if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.DataBrowser) {
-            _this.ModelTree.AddComponentTable(_this.SourceProperties);
+            var selectedNodeIds = _this.GetCurrentTable().GetSelectedNodeIds();
+
+            _this.ModelTree.AddComponentTable(_this.SourceProperties, selectedNodeIds);
 
             _this.CloseTableViewsMenu();
 
@@ -268,10 +270,14 @@ SCManager.prototype.OpenTableViewsMenu = function () {
     listViewSDA.classList.add("showSDA");
     listViewSDA.onclick = function () {
         if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
-            model.views[_this.Id].listView.Show();
+            var selectedComps = _this.GetCurrentTable().GetSelectedComponents();
+            if (selectedComps.constructor === Object) {
+                selectedComps = Object.values(selectedComps);
+            }
+
+            model.views[_this.Id].listView.Show(selectedComps);
 
             _this.CloseTableViewsMenu();
-
             
             if (!isDataVault()) {
                 // hide group view controls
@@ -284,7 +290,7 @@ SCManager.prototype.OpenTableViewsMenu = function () {
     if (!isDataVault()) {
         groupsSDA.classList.add("showSDA");
         groupsSDA.onclick = function () {
-            if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {
+            if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {             
                 model.views[_this.Id].groupView.Show();
 
                 model.views[_this.Id].activeTableView = GlobalConstants.TableView.Group;

@@ -105,7 +105,7 @@ SCModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
     //return this.SelectionManager.SelectedCompoentExists(componentRow);
 }
 
-SCModelBrowser.prototype.AddComponentTable = function (components) {
+SCModelBrowser.prototype.AddComponentTable = function (components, selectedNodeIds = []) {
     if (!components) {
         return;
     }
@@ -122,7 +122,7 @@ SCModelBrowser.prototype.AddComponentTable = function (components) {
         return;
     }
 
-    this.loadModelBrowserTable(headers);
+    this.loadModelBrowserTable(headers, selectedNodeIds);
 };
 
 SCModelBrowser.prototype.AddComponentTableComponent = function (nodeId, parentNode) {
@@ -138,7 +138,7 @@ SCModelBrowser.prototype.AddComponentTableComponent = function (nodeId, parentNo
     }
 }
 
-SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
+SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, selectedNodeIds) {
 
     var loadingBrower = true;
     var _this = this;
@@ -171,11 +171,26 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 recursive: true,
             },
             onContentReady: function (e) {
-                if (loadingBrower && _this.SelectionManager.NodeIdvsSelectedComponents) {
-                    e.component.selectRows(Object.keys(_this.SelectionManager.NodeIdvsSelectedComponents));
+                if (loadingBrower === false) {
+                    return;
                 }
                 loadingBrower = false;
 
+                // Restore selections
+
+                // if from saved data
+                if (_this.SelectionManager.NodeIdvsSelectedComponents) {
+                    e.component.selectRows(Object.keys(_this.SelectionManager.NodeIdvsSelectedComponents));
+
+                    // clear as this is required only first time when data is being loaded from saved checkspace db
+                    _this.SelectionManager.NodeIdvsSelectedComponents = {};
+                }
+
+                // if from other table views
+                if (selectedNodeIds && selectedNodeIds.length > 0) {
+                    e.component.selectRows(selectedNodeIds);
+                }               
+                
                 // show table view action button
                 document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },
@@ -231,6 +246,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 }
             },
             onDisposing: function (e) {
+                _this.SelectionManager.SelectedComponentIds = [];
+                _this.SelectionManager.SelectedCompoents = [];
+                _this.SelectionManager.HighlightedComponentRow = null;
+                _this.SelectionManager.HighlightedComponentRowKey = null;
             }
         });
     });
@@ -373,7 +392,7 @@ SCModelBrowser.prototype.ClearSelectedComponent = function () {
 }
 
 SCModelBrowser.prototype.GetSelectedNodeIds = function () {
-    return this.SelectionManager.SelectedComponentNodeIds;
+    return this.SelectionManager.SelectedComponentIds;
 }
 
 SCModelBrowser.prototype.OpenHighlightedRow = function (path, selectedNodeId) {
@@ -548,6 +567,10 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
             onRowPrepared: function (e) {
             },
             onDisposing: function (e) {
+                _this.SelectionManager.SelectedComponentIds = [];
+                _this.SelectionManager.SelectedCompoents = [];
+                _this.SelectionManager.HighlightedComponentRow = null;
+                _this.SelectionManager.HighlightedComponentRowKey = null;
             }
         });
     });

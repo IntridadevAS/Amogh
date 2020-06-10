@@ -143,8 +143,8 @@ VisioSelectionManager.prototype.SelectComponent = function (currentRow,
         this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
-        if (!this.SelectedComponentNodeIds.includes(componentData.Name)) {
-            this.SelectedComponentNodeIds.push(componentData.Name);
+        if (!this.SelectedComponentIds.includes(componentData.Name)) {
+            this.SelectedComponentIds.push(componentData.Name);
         }
     }
     else if (checkBoxState === "off" &&
@@ -155,10 +155,10 @@ VisioSelectionManager.prototype.SelectComponent = function (currentRow,
         this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
-        if (this.SelectedComponentNodeIds.includes(componentData.Name)) {
-            var index = this.SelectedComponentNodeIds.indexOf(componentData.Name);
+        if (this.SelectedComponentIds.includes(componentData.Name)) {
+            var index = this.SelectedComponentIds.indexOf(componentData.Name);
             if (index !== -1) {
-                this.SelectedComponentNodeIds.splice(index, 1);
+                this.SelectedComponentIds.splice(index, 1);
             }
         }
     }

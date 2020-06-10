@@ -56,37 +56,9 @@ UserPropertiesForm.prototype.LoadData = function ()
 {
     this.UpdatedRowsData = {};
 
-    var _this = this;   
-    
-    // var selected = model.views[this.Id].listView.GetSelectedComponents();
-    // var selectedCompProps = [];
-    // for (var nodeId in selected) {       
-
-    //     var props = {};
-    //     for (var i = 0; i < selected[nodeId].properties.length; i++) {
-    //         var property = selected[nodeId].properties[i];
-    //         if (!property.UserDefined) {
-    //             continue;
-    //         }
-
-    //         props[property["Name"]] = property["Value"];            
-    //     }
-    //     selectedCompProps.push(props);
-    // }
-
-    // var commonUncommon = commonDifferentProperties(selectedCompProps);
+    var _this = this;    
     var rowsData = [];
-    // if (commonUncommon != null) {
-    //     for (var prop in commonUncommon.common) {
-    //         var value = commonUncommon.common[prop];
-
-    //         rowsData.push({
-    //             "Name": prop,
-    //             "DefaultValue": value
-    //         });
-    //     }
-    // }
-
+  
     // Create grid        
     var columns = [];
 

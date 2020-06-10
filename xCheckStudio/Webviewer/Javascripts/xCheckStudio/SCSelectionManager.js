@@ -35,8 +35,8 @@ SCSelectionManager.prototype.SelectComponent = function (currentRow,
         this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
-        if (!this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
-            this.SelectedComponentNodeIds.push(componentData.NodeId);
+        if (!this.SelectedComponentIds.includes(componentData.NodeId)) {
+            this.SelectedComponentIds.push(componentData.NodeId);
         }
     }
     else if (checkBoxState === "off" && 
@@ -47,10 +47,10 @@ SCSelectionManager.prototype.SelectComponent = function (currentRow,
         this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
-        if (this.SelectedComponentNodeIds.includes(componentData.NodeId)) {
-            var index = this.SelectedComponentNodeIds.indexOf(componentData.NodeId);
+        if (this.SelectedComponentIds.includes(componentData.NodeId)) {
+            var index = this.SelectedComponentIds.indexOf(componentData.NodeId);
             if (index !== -1) {
-                this.SelectedComponentNodeIds.splice(index, 1);
+                this.SelectedComponentIds.splice(index, 1);
             }
         }
     }
@@ -75,8 +75,8 @@ SCSelectionManager.prototype.SelectBrowserItem = function (currentRow,
         this.ApplyHighlightColor(currentRow);
 
         // maintain selected rows
-        if (!this.SelectedComponentNodeIds.includes(itemData.NodeId)) {
-            this.SelectedComponentNodeIds.push(itemData.NodeId);
+        if (!this.SelectedComponentIds.includes(itemData.NodeId)) {
+            this.SelectedComponentIds.push(itemData.NodeId);
         }
     }
     else if (checkBoxState === "off" &&
@@ -87,10 +87,10 @@ SCSelectionManager.prototype.SelectBrowserItem = function (currentRow,
         this.RemoveHighlightColor(currentRow);
 
         // maintain selected rows
-        if (this.SelectedComponentNodeIds.includes(itemData.NodeId)) {
-            var index = this.SelectedComponentNodeIds.indexOf(itemData.NodeId);
+        if (this.SelectedComponentIds.includes(itemData.NodeId)) {
+            var index = this.SelectedComponentIds.indexOf(itemData.NodeId);
             if (index !== -1) {
-                this.SelectedComponentNodeIds.splice(index, 1);
+                this.SelectedComponentIds.splice(index, 1);
             }
         }
     }
