@@ -34,7 +34,8 @@ let controller = {
 
   permissions: function () {
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if (userinfo.permission === ("check" || "prep" || "Admin")) {
+    if (userinfo.permission.toLowerCase() === "checker" ||
+      userinfo.permission.toLowerCase() === "admin") {
       return true;
     } else {
       return false;
