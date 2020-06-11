@@ -358,6 +358,13 @@ SCManager.prototype.InitListViewSwitches = function () {
         switchedOnText: "Flat",
         onValueChanged: function (e) {
             model.views[_this.Id].listView.Show();
+
+            if (e.value === true) {
+                _this.IncludeMemberItemsSwitch.option("disabled", true);
+            }
+            else {
+                _this.IncludeMemberItemsSwitch.option("disabled", false);
+            }
         }
     }).dxSwitch("instance");
 }

@@ -236,11 +236,11 @@ let viewTabs = {
   init: function () {
     this.container = document.getElementById("tabContainer");
     this.addTab = document.getElementById("addTab");
-    this.tabs = document.getElementsByClassName("tab");
-
+    this.tabs = document.getElementsByClassName("tab");   
     this.container.addEventListener("click", function () {
       let deleteTab = event.target.closest('.deleteTab');
       let changeTab = event.target.closest('.tab');
+      let addTab = event.target.closest('.addTab');
       if (deleteTab) {
         viewTabs.tabToDelete = deleteTab.parentNode;
         viewTabs.onClearDataSource();
@@ -249,7 +249,7 @@ let viewTabs = {
         controller.selectView(changeTab.dataset.id);
         viewTabs.selectTab(changeTab);
       }
-      else {
+      else if(addTab){
         model.currentTabId = null;
 
         // // hide all list view speed dial action menus
