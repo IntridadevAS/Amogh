@@ -5,7 +5,7 @@
             $query =  "select * from LoginInfo where userid=".$userid;
             foreach ($dbh->query($query) as $row)
             {
-                $permission = $row[5];
+                $permission = $row["permission"];
                 $db = null;
                 return $permission;
             }

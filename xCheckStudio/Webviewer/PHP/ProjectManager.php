@@ -3920,7 +3920,8 @@ function GetProjects()
     try {
         $privateprojects = array();
         $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
-        if (strcasecmp($permission, "check") == 0) {
+        if (strcasecmp($permission, "checker") == 0 ||
+            strcasecmp($permission, "admin") == 0) {
             $query = "select project.*, logininfo.alias from Projects as project INNER JOIN LoginInfo AS logininfo ON project.userid=logininfo.userid AND project.userid=" . $userid . " AND project.type= 'Private' COLLATE NOCASE";
             $stmt = $dbh->query($query);
             $privateprojects = $stmt->fetchAll(PDO::FETCH_ASSOC);

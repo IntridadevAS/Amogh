@@ -219,8 +219,8 @@ function GetCheckSpaces()
     // get project name
     $userid = trim($_POST["userid"], " ");
     $projectName = $_POST['ProjectName'];
-    $ProjectId = trim($_POST["ProjectId"], " ");
-    $permission = GetUserPermission($userid);
+    // $ProjectId = trim($_POST["ProjectId"], " ");
+    // $permission = GetUserPermission($userid);
     try
     {
         $dbPath = getProjectDatabasePath($projectName);
