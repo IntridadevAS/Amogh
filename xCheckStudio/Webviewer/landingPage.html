@@ -415,7 +415,7 @@
     <div class="userInfo">
       <p id="userName" class="userName"> </p>
       <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
-      <img id="userImg" src="public/symbols/Max.png" alt="">
+      <img id="userImg" src="" alt="">
       <div class="programCntrls">
         <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
             onclick="onminimizewindow()"></button>
@@ -444,7 +444,8 @@
 
     window.onload = function () {
       setUserName();
-
+      setProfileImage();
+      
       // create drawer menu
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
       var disabledMenuItem = ["search",
@@ -467,6 +468,11 @@
     function setUserName() {
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
       document.getElementById("userName").innerHTML = userinfo.alias;
+    }
+
+    function setProfileImage(){
+      var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+      document.getElementById("userImg").src = userinfo.profileImage;      
     }
 
     function OnPrepClick() {

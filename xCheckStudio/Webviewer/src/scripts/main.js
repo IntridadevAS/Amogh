@@ -15,6 +15,11 @@ function setUserName() {
     document.getElementById("userName").innerHTML = userinfo.alias;
 }
 
+function setProfileImage(){
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    document.getElementById("userImg").src = userinfo.profileImage;      
+  }
+
 function setCheckSpaceName(moduleName, isVault = false) {
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
     if (projectinfo === null) {

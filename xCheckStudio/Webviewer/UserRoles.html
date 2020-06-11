@@ -117,6 +117,7 @@
 
     <hr>
 
+    <!-- <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" style="display: none" capture> -->
     <div style="height:600px; width:100%;">
         <table style="height:100%; width:100%;">
             <tr>
@@ -133,8 +134,10 @@
                     <div id="userRolesContent" class="tabcontent" style="height:600px ;display: none">
                         <h3>User Credentials</h3>
                         <input id="addUserButton" class="addUserButton" type="button" value="New" />
-                        <div id="usersInfoDiv">
-                        </div>
+                        <form id="uploadImageForm" method="post" action="" enctype="multipart/form-data">
+                            <div id="usersInfoDiv">
+                            </div>
+                        </form>
                     </div>
                 </td>
             </tr>

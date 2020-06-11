@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     "alias"   => $row["alias"],
                     "type"  => $row["type"],
                     "permission"  => $row["permission"],
+                    "profileImage"  => $row["profileImage"],
                 );
                 InsertLock($dbh, $row["userid"]);
                 echo json_encode($array);

@@ -127,7 +127,8 @@ function addUser(userDetails) {    // var usersInfo;
                 'userName': userDetails["userName"],
                 'password': userDetails["password"],
                 'alias': userDetails["alias"],
-                'permission': userDetails["permission"]
+                'permission': userDetails["permission"],
+                'profileImage': "Data/UserData/default.png"
             },
             success: function (msg) {
                 if (msg === 'success') {
@@ -168,14 +169,14 @@ function populateUserInfo() {
         columnHeader["title"] = "User Name";
         columnHeader["name"] = "userName";
         columnHeader["type"] = "text";
-        columnHeader["width"] = "25%";
+        columnHeader["width"] = "20%";
         headers.push(columnHeader);
 
         columnHeader = {};
         columnHeader["title"] = "Password";
         columnHeader["name"] = "password";
         columnHeader["type"] = "text";
-        columnHeader["width"] = "25%";
+        columnHeader["width"] = "20%";
         headers.push(columnHeader);
 
         columnHeader = {};
@@ -190,6 +191,26 @@ function populateUserInfo() {
         columnHeader["name"] = "permission";
         columnHeader["type"] = "text";
         columnHeader["width"] = "10%";
+        headers.push(columnHeader);
+
+        columnHeader = {};
+        columnHeader["title"] = "Profile Image";
+        columnHeader["name"] = "profileImage";
+        // columnHeader["type"] = "text";
+        columnHeader["width"] = "10%";
+        columnHeader["itemTemplate"] = function (val, item) {
+            var image = $("<img>").attr("src", val).css({ height: 50, width: 50 }).on("click", function () {
+                this.nextElementSibling.click();
+            });
+
+            var imageUpload = $("<input>").attr({"type" : "file", "accept" : "image/*"}).css({ "display": "none" }).on("change", function (image) {
+                this.previousElementSibling.setAttribute('src', window.URL.createObjectURL(this.files[0]));
+                enableUpdateButton(this.parentElement.parentElement.parentElement);
+            });
+
+            return $("<div>").append(image).append(imageUpload);
+        }        
+
         headers.push(columnHeader);
 
         columnHeader = {};
@@ -312,6 +333,9 @@ function populateUserInfo() {
             }
             tableRowContent[headers[5].name] = permissionSelect;
 
+            // profile image
+            tableRowContent["profileImage"] = userDetails.profileImage;
+
             // update field
             var updateBtn = document.createElement("button");
             updateBtn.innerText = "Update";
@@ -324,7 +348,7 @@ function populateUserInfo() {
                 });
             }
             updateBtn.disabled = true;
-            tableRowContent[headers[6].name] = updateBtn;
+            tableRowContent[headers[7].name] = updateBtn;
 
 
             // delete field
@@ -333,7 +357,7 @@ function populateUserInfo() {
             deleteBtn.onclick = function () {
                 onDeleteUserDetails(this);
             }
-            tableRowContent[headers[7].name] = deleteBtn;
+            tableRowContent[headers[8].name] = deleteBtn;
 
             tableData.push(tableRowContent);
         }
@@ -367,7 +391,7 @@ function populateUserInfo() {
 }
 
 function enableUpdateButton(userRow) {
-    userRow.children[6].children[0].disabled = false;
+    userRow.children[7].children[0].disabled = false;
 }
 
 function onUpdateUserDetails(inputItem) {
@@ -403,6 +427,13 @@ function onUpdateUserDetails(inputItem) {
         var permissionCell = inputItem.parentElement.parentElement.children[5]
         var permission = permissionCell.children[0].value;
 
+        // profile image
+        if(inputItem.parentElement.parentElement.children[6].children[0].children[1].files.length > 0)
+        {
+            uploadProfileImage(userName, inputItem.parentElement.parentElement.children[6].children[0].children[1].files[0]).then(function(result){
+
+            });
+        }
 
         var userDetails = {
             'enable': enable,
@@ -426,6 +457,23 @@ function onUpdateUserDetails(inputItem) {
                 return resolve(false);
             }
         });
+    });
+}
+
+function uploadProfileImage(userName, file) {
+    return new Promise((resolve) => {         
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "PHP/UserManager.php", false);
+        xhr.onload = function (event) {
+            return resolve(true);
+        }
+
+        var formData = new FormData();
+        formData.append('InvokeFunction', "UploadProfileImage");        
+        formData.append('files[]', file);
+        formData.append('userName', userName);      
+        xhr.send(formData);
     });
 }
 
@@ -537,4 +585,3 @@ function openTabContentPage(inputElement, contentPage) {
     document.getElementById(contentPage).style.display = "block";
     inputElement.className += " active";
 }
-
