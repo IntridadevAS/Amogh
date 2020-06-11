@@ -695,12 +695,21 @@ GroupView.prototype.LoadTable = function () {
                         }
                     },
                     {
-                        text: _this.UndefinedHidden ? "Show Undefined" : "Hide Undefined",
-                        disabled: true,
+                        text: _this.UndefinedHidden ? "Show Undefined" : "Hide Undefined",  
+                        disabled: _this.IsHighlightByPropertyActive,                     
                         onItemClick: function () {
 
                             if (!_this.UndefinedHidden) {
-                                e.component.filter(["!", ["key", "=", undefined]]);
+                                var filterValue = [];
+                                for (var i = 0; i < _this.GroupTemplate.properties.length; i++) {
+                                    filterValue.push(["!", [_this.GroupTemplate.properties[i], "=", "NULL"]]);
+                                    if (i < (_this.GroupTemplate.properties.length - 1)) {
+                                        filterValue.push("and");
+                                    }
+                                }
+                                if (filterValue.length > 0) {
+                                    e.component.filter(filterValue);
+                                }
                             }
                             else {
                                 e.component.clearFilter();
