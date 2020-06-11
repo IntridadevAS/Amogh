@@ -26,9 +26,9 @@ ViewerContextMenu.prototype.GetControls = function () {
                 menu.OnIsolateClicked();
             }
         },
-        {
-            text: this.active ? "Single Select" : "Box Select",
-            icon: this.active ? "public/symbols/Single Select.svg" : "public/symbols/Box Select.svg",
+        {           
+            text: model.views[model.currentTabId].activeSelection === "Single Select" ? "Box Select" : "Single Select",
+            icon: model.views[model.currentTabId].activeSelection === "Single Select" ? "public/symbols/Box Select.svg" : "public/symbols/Single Select.svg",
             active: false,         
             disabled : (model.views[model.currentTabId].activeTableView !== GlobalConstants.TableView.List),
             click: function (e, menu) {
@@ -75,15 +75,15 @@ ViewerContextMenu.prototype.GetControls = function () {
 }
 
 ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
-    if (!itemData.active) {
+    if (model.views[model.currentTabId].activeSelection === "Single Select" ) {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.AreaSelect, 1);
-        itemData.text = "Single Select";
-        itemData.icon = "public/symbols/Single Select.svg";
+       
+        model.views[model.currentTabId].activeSelection = "Box Select";
     }
     else {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.Select, 1);
-        itemData.text = "Box Select";
-        itemData.icon = "public/symbols/Box Select.svg";
+      
+        model.views[model.currentTabId].activeSelection = "Single Select";
     }
 
     itemData.active = !itemData.active;

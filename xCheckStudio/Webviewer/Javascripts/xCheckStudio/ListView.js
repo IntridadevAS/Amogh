@@ -533,6 +533,12 @@ ListView.prototype.LoadTable = function (selectedComps) {
 
                 SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("visible", false);
                 SourceManagers[_this.Id].ListTypeSwitch.option("visible", false);
+
+                // if active selection is not single select
+                if (model.views[_this.Id].activeSelection !== "Single Select") {
+                    _this.Webviewer.operatorManager.set(Communicator.OperatorId.Select, 1);
+                    model.views[_this.Id].activeSelection = "Single Select";
+                }
             }
         }).dxTreeList("instance");
     });

@@ -40,6 +40,7 @@ let model = {
       defineGroupsForm: null,
       isolateManager: null,
       definePropertyHighlightsForm: null,
+      activeSelection: "Single Select"
     },
     b: {
       id: "b",
@@ -68,7 +69,8 @@ let model = {
       editUserPropertiesForm: null,
       defineGroupsForm: null,
       isolateManager: null,
-      definePropertyHighlightsForm: null
+      definePropertyHighlightsForm: null,
+      activeSelection: "Single Select"
     },
     c: {
       id: "c",
@@ -97,7 +99,8 @@ let model = {
       editUserPropertiesForm: null,
       defineGroupsForm: null,
       isolateManager: null,
-      definePropertyHighlightsForm: null
+      definePropertyHighlightsForm: null,
+      activeSelection: "Single Select"
     },
     d: {
       id: "d",
@@ -126,7 +129,8 @@ let model = {
       editUserPropertiesForm: null,
       defineGroupsForm: null,
       isolateManager: null,
-      definePropertyHighlightsForm: null
+      definePropertyHighlightsForm: null,
+      activeSelection: "Single Select"
     }
   },
   onDataSourceTabChanged: function (tabID) {
