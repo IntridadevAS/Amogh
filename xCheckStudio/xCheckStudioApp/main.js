@@ -5,6 +5,9 @@ const path = require("path");
 //const url = require("url");
 let host = null;
 
+const ipcMain = electron.ipcMain;
+const {download} = require("electron-dl");
+
 let win;
 function createWindow()
 {
@@ -16,7 +19,18 @@ function createWindow()
     var serverDetailsPageUrl = path.join(__dirname, 'index.html');
     win.loadURL(serverDetailsPageUrl);
 
-    //win.setMenu(null);    
+    ipcMain.on("download", (event, info) => {
+        // info.properties.onProgress = status => window.webContents.send("download progress", status);
+        console.log("startind download");
+        download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+            .then(
+                dl => {
+                    console.log("downloaded..1");
+                    win.webContents.send("download complete", dl.getSavePath());
+                    console.log("downloaded..2 " + dl.getSavePath());
+                }
+            );
+    });
    
     win.on('closed', ()=>{
         win = null;
