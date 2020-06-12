@@ -47,8 +47,8 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
 
         objectElement.addEventListener('load', function () {
             _this.SvgPanZoomControl = svgPanZoom("#svgViewerObject" + _this.Id, {
-                zoomEnabled: true,
-                controlIconsEnabled: true
+                // zoomEnabled: true,
+                // controlIconsEnabled: true
             });
         });
 

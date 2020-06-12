@@ -203,12 +203,25 @@ let LoadManager = {
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
             var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
+            // var checkName
+            // var isVault = null;
+            // if (isDataVault()) {
+            //     isVault = "true";
+            //     checkName = null;
+            // }
+            // else {
+            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+            //     checkName = checkinfo.checkname;
+            //     isVault = "false";
+            // }
+
             $.ajax({
                 data: {'Source': sourceId,
                     'fileName': fileNameWithoutExt,
                     'dataSourceType': 'Visio',
                     'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname},
+                    'CheckName': checkinfo.checkname,
+                    "isDataVault" : "false" },
                 type: "POST",
                 url: "PHP/GetSourceFilePath.php"
             }).done(function (uri) {
