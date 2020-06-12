@@ -12,7 +12,42 @@
   
     $projectName = $_POST['projectName'];
     $checkName = $_POST['checkName'];
-    $supportedFiles = array("pdf","PDF","txt","TXT", "xml", "XML","jpg", "JPG", "jpeg", "JPEG", "jpe", "JPE", "bmp", "BMP", "gif", "GIF", "tif", "TIF", "png", "PNG");
+    $supportedFiles = array(
+        "pdf",
+        "PDF",
+        "txt",
+        "TXT",
+        "xml",
+        "XML",
+        "jpg",
+        "JPG",
+        "jpeg",
+        "JPEG",
+        "jpe",
+        "JPE",
+        "bmp",
+        "BMP",
+        "gif",
+        "GIF",
+        "tif",
+        "TIF",
+        "png",
+        "PNG",
+        "xls",
+        "XLS",
+        "xlsx",
+        "XLSX",
+        "doc",
+        "DOC",
+        "docx",
+        "DOCX",
+        "xlsm",
+        "XLSM",
+        "csv",
+        "CSV",
+        "svg",
+        "SVG"
+       );
 
     $ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
     if(in_array($ext, $supportedFiles) == false)

@@ -595,6 +595,7 @@ button[type="submit"] {
   height: 25px;
   top: 0px;
   display: none;
+  cursor: pointer;
 }
 
 .groupTemplateSelect .dx-texteditor-container{

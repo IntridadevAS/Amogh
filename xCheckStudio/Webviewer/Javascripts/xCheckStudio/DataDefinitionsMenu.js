@@ -122,8 +122,8 @@ DataDefinitionMenu.prototype.GetControls = function () {
         },
         {
             id: 5,
-            Title: "Highlight Selection",
-            ImageSrc: "public/symbols/Highlight Selection.svg",
+            Title: "Data Change Highlight",
+            ImageSrc: "public/symbols/Data Change Highlight.svg",
             click: function (e, menu) {
                 menu.Close();
             }

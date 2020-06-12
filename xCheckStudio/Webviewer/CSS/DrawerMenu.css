@@ -15,7 +15,7 @@
       font-family: Montserrat;
       font-size: 11px;
       text-align: center;
-      opacity: 0.8;
+      opacity: 0.95;
     }
 
     .dx-drawer-expand.dx-drawer-right .panel-list {
@@ -24,7 +24,8 @@
 
     .panel-list .dx-list-item {
       color: #fff;
-      border-top: 1px solid rgba(221, 221, 221, .2);
+      border-top: none;
+      /* border-top: 1px solid rgba(221, 221, 221, .2); */
     }
 
     .panel-list .dx-list-item .dx-icon {

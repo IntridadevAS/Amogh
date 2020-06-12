@@ -491,23 +491,25 @@ GroupView.prototype.LoadTable = function () {
             }
 
             if (Object.keys(_this.HighlightedRow).length > 0) {
-
                 var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                if (oldRowKey === e.key) {
+                    return;
+                }
+
                 // var oldRowKey = Object.keys(_this.HighlightedRow)[0];
                 var rowIndex = e.component.getRowIndexByKey(oldRowKey);
                 var rowElement = e.component.getRowElement(rowIndex)[0];
-                if (oldRowKey in _this.SelectedRows) {
-                    _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
-                }
-                else {
+                // if (oldRowKey in _this.SelectedRows) {
+                //     // _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
+                // }
+                // else {
+                    _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+
                     if (_this.HighlightActive &&
                         (oldRowKey in _this.RowWiseColors)) {
-                        _this.SetRowColor(rowElement, _this.RowWiseColors[oldRowKey]);
+                        rowElement.cells[0].style.backgroundColor = _this.RowWiseColors[oldRowKey];
                     }
-                    else {
-                        _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
-                    }
-                }
+                // }
                 delete _this.HighlightedRow[oldRowKey];
             }
 
@@ -583,9 +585,22 @@ GroupView.prototype.LoadTable = function () {
                     var childElement = e.rowElement[0].children[i];
                     if (childElement.classList.contains("dx-group-cell")) {
                         var resultArray = childElement.innerText.split(":");
-                        if (resultArray.length === 2) {
-                            if (resultArray[1].trim() === "") {
-                                childElement.innerText = "Undefined";
+                        if (resultArray.length >= 2) {
+                            
+                            var resArray = resultArray[1].split("(");                          
+                            
+                            var displayText = null;
+                            if (resArray[0].trim() === "") {
+                                var displayText = resultArray[0] + ": UNASSIGNED";
+                            }
+                            else if (resArray[0].trim() === "NULL") {
+                                var displayText = resultArray[0] + ": UNDEFINED";
+                            }
+                            if (displayText !== null) {
+                                if (resultArray.length >= 3) {
+                                    displayText += "(Count:" + resultArray[2];
+                                }
+                                childElement.innerText = displayText;
                             }
                         }
                     }
@@ -599,8 +614,9 @@ GroupView.prototype.LoadTable = function () {
 
                 // set row colors
                 if (e.key in _this.RowWiseColors) {
-                    _this.SetRowColor(e.rowElement[0], _this.RowWiseColors[e.key]);
-                    e.rowElement[0].style.color = "white";
+                    e.rowElement[0].cells[0].style.backgroundColor = _this.RowWiseColors[e.key];
+                    // _this.SetRowColor(e.rowElement[0], _this.RowWiseColors[e.key]);                    
+                    // e.rowElement[0].style.color = "white";
                 }
             }
         },
@@ -1622,7 +1638,8 @@ GroupView.prototype.Highlight = function(){
             var rowKey = this.GroupKeysVsDataItems[groupKey][i];
             var rowIndex = this.GroupViewGrid.getRowIndexByKey(rowKey);
             var rowElement = this.GroupViewGrid.getRowElement(rowIndex)[0];
-            this.SetRowColor(rowElement, color);
+            // this.SetRowColor(rowElement, color);
+            rowElement.cells[0].style.backgroundColor = color;
 
             this.RowWiseColors[rowKey] = color;
 
@@ -1645,10 +1662,12 @@ GroupView.prototype.UnHighlight = function () {
         var rowElement = this.GroupViewGrid.getRowElement(rowIndex)[0];
 
         if (rowKey in this.SelectedRows) {
-            this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
+            // this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
+            rowElement.cells[0].style.backgroundColor = GlobalConstants.TableRowSelectedColor;
         }
         else {
-            this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+            // this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+            rowElement.cells[0].style.backgroundColor = GlobalConstants.TableRowNormalColor;
         }       
     }
     this.RowWiseColors = {};
@@ -1666,6 +1685,9 @@ GroupView.prototype.ApplyPropertyHighlightColor = function () {
 
             this.ResetViewerColors();
             this.UnHighlight();
+
+            // change icon of btn
+            document.getElementById("highlightSelectionBtn" + this.Id).src ="public/symbols/Highlight Selection-Off.svg";
         }
         else {
             this.HighlightActive = true;
@@ -1677,6 +1699,9 @@ GroupView.prototype.ApplyPropertyHighlightColor = function () {
             this.Webviewer.model.setNodesLineColor([rootNode], communicatorColor);
 
             this.Highlight();
+
+            // change icon of btn
+            document.getElementById("highlightSelectionBtn" + this.Id).src ="public/symbols/Highlight Selection-On.svg";
         }
     }
 }

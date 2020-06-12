@@ -4,8 +4,8 @@ function onClose() {
     document.getElementById("webAddressList").innerHTML = "";
     document.getElementById("documentList").innerHTML = "";
     document.getElementById("imageList").innerHTML = "";
-    document.getElementById("commentsList").innerHTML = "";
-    $('#commentInput').dxTextArea('instance').reset();
+    // document.getElementById("commentsList").innerHTML = "";
+    // $('#commentInput').dxTextArea('instance').reset();
     
     window.parent.closeReference();
 }
@@ -23,25 +23,25 @@ function onDeleteReference() {
 }
 
 window.onload = function () {
-    $("#commentInput").dxTextArea({
-        onChange: function (e) {
-            // localStorage.setItem("referenceType", "comment");
-            // window.parent.addReference(e.component.option('value'));
-            // e.component.reset();
-        }
-    });
+    // $("#commentInput").dxTextArea({
+    //     onChange: function (e) {
+    //         // localStorage.setItem("referenceType", "comment");
+    //         // window.parent.addReference(e.component.option('value'));
+    //         // e.component.reset();
+    //     }
+    // });
 
 
-    document.getElementById("addComment").onclick = function () {
-        localStorage.setItem("referenceType", "comment");
-        var commentInput =  $('#commentInput').dxTextArea('instance');
-        var value = commentInput.option('value');
-        if(!value || value === "")
-        {
-            return;
-        }
+    // document.getElementById("addComment").onclick = function () {
+    //     localStorage.setItem("referenceType", "comment");
+    //     var commentInput =  $('#commentInput').dxTextArea('instance');
+    //     var value = commentInput.option('value');
+    //     if(!value || value === "")
+    //     {
+    //         return;
+    //     }
 
-        window.parent.addReference(value);
-        commentInput.reset();
-    }
+    //     window.parent.addReference(value);
+    //     commentInput.reset();
+    // }
 }

@@ -496,19 +496,19 @@ let ReferenceManager = {
         else if (ReferenceManager.selectedReference.offsetParent.id === "imageList") {
             typeofReference = "Image";
         }
-        else if (ReferenceManager.selectedReference.offsetParent.id === "commentsList") {
-            typeofReference = "Comment";
+        // else if (ReferenceManager.selectedReference.offsetParent.id === "commentsList") {
+        //     typeofReference = "Comment";
 
-            var comment = ReferenceManager.selectedReference.getElementsByTagName("h3")[0].textContent;
-            var user = ReferenceManager.selectedReference.getElementsByTagName("p")[0].textContent;
-            var date = ReferenceManager.selectedReference.getElementsByTagName("p")[1].textContent;
+        //     var comment = ReferenceManager.selectedReference.getElementsByTagName("h3")[0].textContent;
+        //     var user = ReferenceManager.selectedReference.getElementsByTagName("p")[0].textContent;
+        //     var date = ReferenceManager.selectedReference.getElementsByTagName("p")[1].textContent;
 
-            referenceData = JSON.stringify({
-                "value": comment,
-                "user": user,
-                "date": date
-            });
-        }
+        //     referenceData = JSON.stringify({
+        //         "value": comment,
+        //         "user": user,
+        //         "date": date
+        //     });
+        // }
         else {
             return;
         }
@@ -668,50 +668,50 @@ let ReferenceManager = {
             return;
         }
 
-        var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
-        if (!commentsList) {
-            return;
-        }
+        // var commentsList = referenceIFrame.contentDocument.getElementById("commentsList");
+        // if (!commentsList) {
+        //     return;
+        // }
 
-        var card = document.createElement("Div");
-        card.className = "commentCard";
+        // var card = document.createElement("Div");
+        // card.className = "commentCard";
 
-        var dataContainer = document.createElement("Div");
-        dataContainer.className = "commentContainer";
+        // var dataContainer = document.createElement("Div");
+        // dataContainer.className = "commentContainer";
 
-        var commentValue = document.createElement("h3");
-        var bold = document.createElement("b");
-        bold.textContent = commentData.value;
-        commentValue.appendChild(bold);
-        dataContainer.appendChild(commentValue);
+        // var commentValue = document.createElement("h3");
+        // var bold = document.createElement("b");
+        // bold.textContent = commentData.value;
+        // commentValue.appendChild(bold);
+        // dataContainer.appendChild(commentValue);
 
-        var userValue = document.createElement("p");
-        userValue.textContent = commentData.user;
-        dataContainer.appendChild(userValue);
+        // var userValue = document.createElement("p");
+        // userValue.textContent = commentData.user;
+        // dataContainer.appendChild(userValue);
 
-        var timeValue = document.createElement("p");
-        timeValue.textContent = commentData.date;
-        dataContainer.appendChild(timeValue);
+        // var timeValue = document.createElement("p");
+        // timeValue.textContent = commentData.date;
+        // dataContainer.appendChild(timeValue);
 
-        card.appendChild(dataContainer);
+        // card.appendChild(dataContainer);
 
-        commentsList.appendChild(card);
+        // commentsList.appendChild(card);
 
-        card.onclick = function () {
-            // select this list item
-            ReferenceManager.select(this);
-        }
+        // card.onclick = function () {
+        //     // select this list item
+        //     ReferenceManager.select(this);
+        // }
 
-        card.ondblclick = function () {           
-        }
+        // card.ondblclick = function () {           
+        // }
 
-        card.onmouseover = function () {
-            ReferenceManager.Highlight(this);
-        }
+        // card.onmouseover = function () {
+        //     ReferenceManager.Highlight(this);
+        // }
 
-        card.onmouseout = function () {
-            ReferenceManager.UnHighlight(this);
-        }
+        // card.onmouseout = function () {
+        //     ReferenceManager.UnHighlight(this);
+        // }
     },
 
     getCurrentDate : function()

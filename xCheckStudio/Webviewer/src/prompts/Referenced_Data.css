@@ -201,7 +201,7 @@
 #Group_223 {
 	position: absolute;
 	width: 384.517px;
-	height: 85px;
+	height: 135px;
 	left: 180.5px;
 	top: 74px;
 	overflow: visible;
@@ -209,7 +209,7 @@
 #Group_210 {
 	position: absolute;
 	width: 384.517px;
-	height: 85px;
+	height: 135px;
 	left: 0px;
 	top: 0px;
 	overflow: visible;
@@ -247,15 +247,15 @@
 #Group_340 {
 	position: absolute;
 	width: 384.517px;
-	height: 85px;
+	height: 135px;
 	left: 180.5px;
-	top: 174px;
+	top: 220px;
 	overflow: visible;
 }
 #Group_210_A53_Group_7 {
 	position: absolute;
 	width: 384.517px;
-	height: 85px;
+	height: 135px;
 	left: 0px;
 	top: 0px;
 	overflow: visible;
@@ -293,15 +293,15 @@
 #Group_341 {
 	position: absolute;
 	width: 384.517px;
-	height: 85px;
+	height: 135px;
 	left: 180.5px;
-	top: 276px;
+	top: 365px;
 	overflow: visible;
 }
 #Group_210_A53_Group_10 {
 	position: absolute;
 	width: 384.517px;
-	height: 85px;
+	height: 135px;
 	left: 0px;
 	top: 0px;
 	overflow: visible;
@@ -336,14 +336,14 @@
 	font-size: 15px;
 	color: rgba(242,243,244,1);
 }
-#Group_342 {
+/* #Group_342 {
 	position: absolute;
 	width: 384.517px;
 	height: 120px;
 	left: 180.5px;
 	top: 379px;
 	overflow: visible;
-}
+} */
 #Group_210_A53_Group_13 {
 	position: absolute;
 	width: 384.517px;
@@ -427,7 +427,7 @@
 	overflow: visible;
 	width: 16px;
 	height: 2px;
-	left: 0px;
+	left: 15px;
 	top: 0px;
 	transform: rotate(90deg);
 	transform-origin: left;
