@@ -1,7 +1,7 @@
 <License>
   <Data>
     <LicensedTo>Intrida</LicensedTo>
-    <EmailTo>intrida_dev@intrida.com</EmailTo>
+    <EmailTo>henry@intrida.com</EmailTo>
     <LicenseType>Developer Small Business</LicenseType>
     <LicenseNote>Limited to one developer, limited to one physical location</LicenseNote>
     <OrderID>200330035314</OrderID>
@@ -11,12 +11,10 @@
       <Product>Aspose.Diagram for .NET</Product>
     </Products>
     <EditionType>Enterprise</EditionType>
-    <SerialNumber>9ccc03f9-2aba-4a7b-a3ec-e14cac117e56</SerialNumber>
-    <SubscriptionExpiry>20210330</SubscriptionExpiry>
-    <LicenseExpiry>20200429</LicenseExpiry>
-    <ExpiryNote>This is a temporary license for non-commercial use only and it will expire on 2020-04-29.</ExpiryNote>
+    <SerialNumber>1bf2c864-1235-4bc9-bea4-f61341deb823</SerialNumber>
+    <SubscriptionExpiry>20210605</SubscriptionExpiry>
     <LicenseVersion>3.0</LicenseVersion>
     <LicenseInstructions>https://purchase.aspose.com/policies/use-license</LicenseInstructions>
   </Data>
-  <Signature>tw15W4YX0D+OanwqKhX1CJ+Eey2n4ZVmhoJBkGF/lOsG03h8pRwfagEGHcTrm+A/5o6224wqgWdOACH7NalCaZxl5iGzQnf/NY5p/h055sxTsWqk+Q8EIS1P4W1DIW5/djLMAFxnrlWjUBd3IxY6e4LToEMB/hkTXORZqquiK1I=</Signature>
+  <Signature>l0jL7CICJUVXLequ34sV086HKaK1hYVb5ym1VfJiVbgVq8TFySdRDyYLieyVMWrkiNd08U2J2Qt6y0yYLe7785jeVmvspbLALlZvSEBbViKFouxnQMltHIrabeunphUHxGOL+6T6HNzJcwhqJIeJxDypWFcjL+p/8ydP8xGd5+o=</Signature>
 </License>
