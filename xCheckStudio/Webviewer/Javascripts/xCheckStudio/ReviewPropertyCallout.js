@@ -311,10 +311,10 @@ PropertyCallout.prototype.LoadReferences = function (references) {
             .text(options.data.Value)
             .on('dxclick', function () {
                 // open reference
-                const BrowserWindow = require('electron').remote.BrowserWindow;              
-                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                const BrowserWindow = require('electron').remote.BrowserWindow;                            
                
                 if (type.toLowerCase() === "web address") {
+                    win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
                     win.loadURL(value);
                 }
                 else if (type.toLowerCase() === "image" ||
@@ -322,14 +322,43 @@ PropertyCallout.prototype.LoadReferences = function (references) {
                     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
                     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
                 
-                    if (type.toLowerCase() === "document" &&
-                        xCheckStudio.Util.getFileExtension(value).toLowerCase() === "pdf") {
-                        const PDFWindow = require('electron-pdf-window');
-                        PDFWindow.addSupport(win);
-                    }
-
                     const path = require("path");
                     var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
+                    if (type.toLowerCase() === "document") {
+                        var fileExtension = xCheckStudio.Util.getFileExtension(value);                    
+                        if (fileExtension.toLowerCase() === "doc" ||
+                            fileExtension.toLowerCase() === "docx" ||
+                            fileExtension.toLowerCase() === "xls" ||
+                            fileExtension.toLowerCase() === "xlsx" ||
+                            fileExtension.toLowerCase() === "ppt" ||
+                            fileExtension.toLowerCase() === "pptx" ||
+                            fileExtension.toLowerCase() === "csv" ||
+                            fileExtension.toLowerCase() === "txt") {
+
+                            const { shell } = require('electron');
+                            const { ipcRenderer } = require("electron");
+
+                            var executed = false;
+                            ipcRenderer.on("download complete", (event, file) => {
+                                if (executed === true) {
+                                    // this is to avoid issue when "download complete" gets called multiple times    
+                                    return;
+                                }
+
+                                shell.openExternal(file);
+                                executed = true;
+                            });
+                            ipcRenderer.send("download", {
+                                url: docUrl
+                            });
+
+                            return;
+                        }
+                    }
+                   
+                    win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                    const PDFWindow = require('electron-pdf-window');
+                    PDFWindow.addSupport(win);
                     win.loadURL(docUrl);
                 }
             })
