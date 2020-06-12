@@ -46,7 +46,11 @@
         "csv",
         "CSV",
         "svg",
-        "SVG"
+        "SVG",
+        "ppt",
+        "PPT",
+        "pptx",
+        "PPTX"
        );
 
     $ext = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);

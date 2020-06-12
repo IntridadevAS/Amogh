@@ -280,7 +280,7 @@ let ReferenceManager = {
              if (model.currentTabId in SourceManagers) {
                 var sourceManager = SourceManagers[model.currentTabId];
                 sourceManager.OpenPropertyCalloutByCompId(componentIds[0]);
-            }
+            }            
         };
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
@@ -607,17 +607,49 @@ let ReferenceManager = {
         listItem.ondblclick = function () {           
 
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            const BrowserWindow = require('electron').remote.BrowserWindow;
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));            
+           
             const path = require("path");
+            const BrowserWindow = require('electron').remote.BrowserWindow;
 
-            win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-            const PDFWindow = require('electron-pdf-window');
-            PDFWindow.addSupport(win);
+            var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);           
+            
+            var fileExtension = xCheckStudio.Util.getFileExtension(this.innerText);
+            if (fileExtension.toLowerCase() === "doc" ||
+                fileExtension.toLowerCase() === "docx" ||
+                fileExtension.toLowerCase() === "xls" ||
+                fileExtension.toLowerCase() === "xlsx" ||
+                fileExtension.toLowerCase() === "ppt" ||
+                fileExtension.toLowerCase() === "pptx" ||
+                fileExtension.toLowerCase() === "csv" ||
+                fileExtension.toLowerCase() === "txt") {
+               
+                const { shell } = require('electron');
+                const { ipcRenderer } = require("electron");
 
-            var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, this.innerText);
-            win.loadURL(docUrl);
+                var executed = false;
+                ipcRenderer.on("download complete", (event, file) => {
+                    if (executed === true) {
+                        // this is to avoid issue when "download complete" gets called multiple times    
+                        return;
+                    }
+
+                    shell.openExternal(file);
+                    executed = true;
+                });
+                ipcRenderer.send("download", {
+                    url: docUrl
+                }); 
+
+            }
+            else
+            { 
+                win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
+                const PDFWindow = require('electron-pdf-window');
+                PDFWindow.addSupport(win);
+    
+                win.loadURL(docUrl);
+            }            
         }
 
         listItem.onmouseover = function () {
