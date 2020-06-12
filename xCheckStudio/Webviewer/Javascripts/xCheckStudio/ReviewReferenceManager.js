@@ -240,7 +240,7 @@ let ReferenceManager = {
         $.ajax({
             url: 'PHP/AddReference.php',
             type: "POST",
-            async: true,
+            async: false,
             data: {
                 'currentSource': currentSource,
                 'typeofReference': "WebAddress",
@@ -311,7 +311,7 @@ let ReferenceManager = {
     uploadRefernceDocument: function (currentSource, ids) {
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
+        xhr.open("POST", "PHP/UploadReferenceDoc.php", false);
         xhr.onload = function (event) {
 
             if (event.target.response === "fail") {
@@ -362,7 +362,7 @@ let ReferenceManager = {
     uploadRefernceImage: function (currentSource, ids) {
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "PHP/UploadReferenceDoc.php", true);
+        xhr.open("POST", "PHP/UploadReferenceDoc.php", false);
         xhr.onload = function (event) {
 
             if (event.target.response === "fail") {
@@ -433,7 +433,7 @@ let ReferenceManager = {
         $.ajax({
             url: 'PHP/AddReference.php',
             type: "POST",
-            async: true,
+            async: false,
             data: {
                 'currentSource': currentSource,
                 'typeofReference': "Comment",
@@ -472,7 +472,7 @@ let ReferenceManager = {
             $.ajax({
                 url: 'PHP/AddReference.php',
                 type: "POST",
-                async: true,
+                async: false,
                 data: {
                     'currentSource': currentSource,
                     'typeofReference': "Comment",
@@ -571,7 +571,7 @@ let ReferenceManager = {
         $.ajax({
             url: 'PHP/RemoveReference.php',
             type: "POST",
-            async: true,
+            async: false,
             data: {
                 'currentSource': currentSource,
                 'typeofReference': typeofReference,
