@@ -297,7 +297,7 @@ var xCheckStudio;
         Util.isSourceVisio = isSourceVisio;
 
         function getKeyByValue(object, value) {
-            return Object.keys(object).find(key => object[key] === value);
+            return Object.keys(object).find(key => object[key] == value);
         }
         Util.getKeyByValue = getKeyByValue;
 

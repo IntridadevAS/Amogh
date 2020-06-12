@@ -360,11 +360,19 @@ let ReferenceManager = {
         var componentIds = [];
         if (model.currentTabId in SourceManagers) {
             var sourceManager = SourceManagers[model.currentTabId];
-            var selectionManager = sourceManager.ModelTree.SelectionManager;
-            if (!selectionManager) {
-                return;
+
+            if (model.views[model.currentTabId].activeTableView === GlobalConstants.TableView.DataBrowser) {
+                var selectionManager = sourceManager.ModelTree.SelectionManager;
+                if (selectionManager) {
+                    componentIds = selectionManager.GetSelectedComponentIds();
+                }
             }
-            componentIds = selectionManager.GetSelectedComponentIds();
+            else if (model.views[model.currentTabId].activeTableView === GlobalConstants.TableView.List) {
+                componentIds = model.views[model.currentTabId].listView.GetSelectedComponentIds();
+            }
+            else if (model.views[model.currentTabId].activeTableView === GlobalConstants.TableView.Group) {
+                componentIds = model.views[model.currentTabId].groupView.GetSelectedComponentIds();
+            }
         }
 
         return componentIds;

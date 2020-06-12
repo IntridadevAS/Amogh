@@ -769,10 +769,6 @@ ListView.prototype.SelectValidNode = function (nodeId) {
     return null;
 }
 
-ListView.prototype.GetSelectedNodeIds = function () {
-    return Object.values(this.SelectedRows);
-}
-
 ListView.prototype.GetSelectedRowsFromNodeIds = function (selectedNodeIds) {
     var selectedRows = [];
     var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
@@ -843,6 +839,24 @@ ListView.prototype.GetSelectedComponents = function () {
     }
 
     return selected;
+}
+
+ListView.prototype.GetSelectedNodeIds = function () {
+    return Object.values(this.SelectedRows);
+}
+
+ListView.prototype.GetSelectedComponentIds = function () {
+    var nodeIds = this.GetSelectedNodeIds();
+    var selectedCompIds = [];
+
+    var sourceManager = SourceManagers[this.Id];
+    for (var i = 0; i < nodeIds.length; i++) {
+        var nodeId = nodeIds[i];
+
+        selectedCompIds.push(sourceManager.GetCompIdByNodeId(nodeId));
+    }
+
+    return selectedCompIds;
 }
 
 function findItem(items, key, withIndex) {

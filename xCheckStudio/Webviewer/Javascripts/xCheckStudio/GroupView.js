@@ -641,6 +641,12 @@ GroupView.prototype.LoadTable = function () {
                             _this.OnShowClicked();
                         }
                     },
+                    {
+                        text: "Reference",
+                        onItemClick: function () {
+                            _this.OnReferenceClicked();
+                        }
+                    },
                 ]
             }
             else if (e.row.rowType === "group") {
@@ -782,6 +788,11 @@ GroupView.prototype.LoadTable = function () {
             }
         }
     }).dxDataGrid("instance");
+}
+
+GroupView.prototype.OnReferenceClicked = function () {
+    var title = model.views[this.Id].fileName;
+    ReferenceManager.showReferenceDiv(title);
 }
 
 GroupView.prototype.SaveTableView = function () {
@@ -1031,6 +1042,20 @@ GroupView.prototype.GetSelectedComponents = function () {
     }
 
     return selected;
+}
+
+GroupView.prototype.GetSelectedComponentIds = function () {
+    var nodeIds = this.GetSelectedNodeIds();
+    var selectedCompIds = [];
+
+    var sourceManager = SourceManagers[this.Id];
+    for (var i = 0; i < nodeIds.length; i++) {
+        var nodeId = nodeIds[i];
+
+        selectedCompIds.push(sourceManager.GetCompIdByNodeId(nodeId));
+    }
+
+    return selectedCompIds;
 }
 
 GroupView.prototype.SetRowColor = function (row, color) {
