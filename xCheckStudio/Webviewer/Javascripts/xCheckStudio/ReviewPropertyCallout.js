@@ -312,19 +312,20 @@ PropertyCallout.prototype.LoadReferences = function (references) {
             .on('dxclick', function () {
                 // open reference
                 const BrowserWindow = require('electron').remote.BrowserWindow;                            
-               
+                const path = require("path");
+                
+                // document url
+                var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+                var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+                var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
+
                 if (type.toLowerCase() === "web address") {
                     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
                     win.loadURL(value);
                 }
-                else if (type.toLowerCase() === "image" ||
-                    type.toLowerCase() === "document") {
-                    var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-                    var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-                
-                    const path = require("path");
-                    var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
-                    if (type.toLowerCase() === "document") {
+                else if (type.toLowerCase() === "document") {               
+                  
+                    // if (type.toLowerCase() === "document") {
                         var fileExtension = xCheckStudio.Util.getFileExtension(value);                    
                         if (fileExtension.toLowerCase() === "doc" ||
                             fileExtension.toLowerCase() === "docx" ||
@@ -354,11 +355,19 @@ PropertyCallout.prototype.LoadReferences = function (references) {
 
                             return;
                         }
-                    }
+                    // }
                    
                     win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-                    const PDFWindow = require('electron-pdf-window');
-                    PDFWindow.addSupport(win);
+                    if (fileExtension.toLowerCase() === "pdf") {
+                        const PDFWindow = require('electron-pdf-window');
+                        PDFWindow.addSupport(win);
+                    }
+                    win.loadURL(docUrl);
+                }
+                else if(type.toLowerCase() === "image"){
+                    // var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
+
+                    let win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });                   
                     win.loadURL(docUrl);
                 }
             })

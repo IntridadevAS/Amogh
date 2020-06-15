@@ -645,8 +645,10 @@ let ReferenceManager = {
             else
             { 
                 win = new BrowserWindow({ title: 'xCheckStudio', frame: true, show: true, icon: 'public/symbols/XcheckLogoIcon.png' });
-                const PDFWindow = require('electron-pdf-window');
-                PDFWindow.addSupport(win);
+                if (fileExtension.toLowerCase() === "pdf") {
+                    const PDFWindow = require('electron-pdf-window');
+                    PDFWindow.addSupport(win);
+                }
     
                 win.loadURL(docUrl);
             }            
