@@ -37,16 +37,11 @@ h2 {
   font-weight: normal;
 }
 
-#checkSpaceProjectName{ 
-  position: relative;  
+#checkSpaceProjectName{
   height:40px;
-  top: 19px;
-  max-width: 350px;
-  left: calc(50% - 230px); 
-  font-size: 25px;
   font-weight: 600;
   text-align: center;
-  overflow: hidden;
+  overflow: hidden; 
   text-overflow: ellipsis;
 }
 
@@ -58,6 +53,7 @@ p, input, select, option, textarea {
 
 .smallScript {
   font-size: 12px;
+  overflow-wrap: break-word;
 }
 
 .symbol {
@@ -363,33 +359,28 @@ input:checked + .slider:before {
 /* Start tooltips */
 .tooltip {
   padding: 0px 5px;
-  position: absolute;
+  position: relative;
   background: #FFBB99;
   display: none;
   cursor: pointer;
   left: 50%;
-  margin-left: -5px;
-  max-width: 40px; 
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  top: 15px;
-  white-space: nowrap;
+  margin-left: -5px;  
+  white-space: pre-wrap;
+  z-index: 200;
 }
 
 .tooltip::before {
   content: attr(data-tooltip);
-  position: absolute;
-  top: 1.5em;
-  right: 0px;
+  position: absolute; 
   font-size: 1em;
   padding: 1px 5px;
   color: white;
   background: rgba(0, 0, 0, 0.75);
   border-radius: 4px;
-  transition: opacity 0.1s ease-out;
-  z-index: 99;
+  transition: opacity 0.1s ease-out; 
   text-align: left;
+  max-width: 230px;
+  overflow-wrap: break-word;
 }
 
 .tooltipHov:hover .tooltip{
@@ -398,6 +389,30 @@ input:checked + .slider:before {
 
 .tooltipHov {
   position: relative;
+}
+
+#checkSpaceName {
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.projectNameDiv {
+  position: relative;
+  max-width: 350px;
+  height: 40px; 
+  top: 19px;
+  left: calc(50% - 230px);
+  font-size: 25px; 
+  font-weight: 600; 
+  text-align: center; 
+}
+
+.checkSpaceProjectNametooltip {
+  font-size: 0.6em;
+  font-weight: 35; 
+  text-align: center; 
+  left: calc(50% - 115px);
 }
 
 

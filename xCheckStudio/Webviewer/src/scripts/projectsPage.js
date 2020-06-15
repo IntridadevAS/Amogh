@@ -911,6 +911,7 @@ let checkView = {
 
   renderProject: function () {
     this.checkSpaceProjectName.innerHTML = `${this.cProject.projectname} - ${this.cProject.status}`;
+    document.getElementById("checkSpaceProjectNameTooltip").setAttribute("data-tooltip", `${this.cProject.projectname} - ${this.cProject.status}`);
     this.checkSpaceProjectDescription.innerHTML = `${this.cProject.description}`;
   },
 
@@ -983,7 +984,10 @@ let checkView = {
         htmlInner += `<li>${li}</li>`
       }*/
       htmlInner += "</ul></div>"
-      htmlInner += `<div class='checkCardTitle'><h2>${check.checkname}<h2>`;
+      htmlInner += `<div  class="tooltipHov">
+                    <h2 id="checkCardTitle">${check.checkname} </h2>
+                    <div class="tooltip" data-tooltip=${check.checkname}></div >
+                    </div>`;
       htmlInner += `<p>${check.checkstatus}</p></div>`
       htmlInner += `<div class="projectButtons">`;
       htmlInner += `<div class="star" onclick="controller.setFavoriteCheck(${check.checkid})"></div>`;

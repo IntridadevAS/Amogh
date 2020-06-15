@@ -39,7 +39,8 @@ h1 {
 
 h2 {
   margin: 0 5px;
-
+  overflow: hidden;
+  text-overflow:ellipsis;
 }
 
 .starCheckBox {
@@ -295,15 +296,15 @@ input[type=checkbox] + label {
 
 .checkSpaceBody {
   position: relative; 
-  top: 2px; 
-  height: 100%; 
+  top: 25px; 
+  height: calc(100% - 65px); 
   /*flex-grow: 1;*/ 
   display: grid;
   grid-template-columns: 220px auto;
   grid-template-areas:
   "projectDescription checkSpace";
   grid-gap: 10px;
-overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 .checkInfoContainer {
@@ -410,6 +411,7 @@ overflow-y: scroll;
   border: solid var(--borderWidth) var(--xCheckMedGrey);
   border-radius: var(--borderRadiusVal);
   display: flex;
+  min-height: 175px;
   flex-direction: column;
   text-decoration: none;
   position: relative;

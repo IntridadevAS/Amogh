@@ -776,10 +776,12 @@
               Data Vault
             </div>
 
-          <h4 id=checkSpaceProjectName onmouseover="OnDisplayToolTip('checktooltiptext')"
-            onmouseout="OnHideToolTip('checktooltiptext')"></h4>
-          <div id="checktooltiptext" class="checktooltiptext"
-            style="text-align: center; visibility: hidden; font-size: 15px; color: white; padding-top: 20px;"></div>
+          <div class="tooltipHov projectNameDiv">
+            <!-- used for printing the name on screen-->
+            <div id="checkSpaceProjectName" class="checkSpaceProjectName " ></div> 
+            <span class="tooltip checkSpaceProjectNametooltip" id="checkSpaceProjectNameTooltip" data-tooltip=""></span><!-- used for tooltip-->
+          </div>         
+
             <div class="checkSpaceButtons">
               <div class="sortBy">
                 <label for="sortChecks">Sort By:</label>
@@ -1196,15 +1198,15 @@
           }
         }
 
-        function OnDisplayToolTip(text) {
-          var ele = document.getElementById(text);
-          ele.style.visibility = "visible";
-          ele.textContent = event.target.textContent;
-        }
+     //   function OnDisplayToolTip(text) {
+     //     var ele = document.getElementById(text);
+     //     ele.style.visibility = "visible";
+     //     ele.textContent = event.target.textContent;
+     //   }
 
-        function OnHideToolTip(text) {
-          document.getElementById(text).style.visibility = "hidden";
-        }
+     //   function OnHideToolTip(text) {
+     //    document.getElementById(text).style.visibility = "hidden";
+      //  }
 
         function OnCreateProject() {
           var projectname = document.getElementById("inputprojectname").value;
