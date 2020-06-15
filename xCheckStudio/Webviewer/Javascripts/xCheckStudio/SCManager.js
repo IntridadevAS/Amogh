@@ -13,7 +13,7 @@ function SCManager(id,
     this.NodeIdvsComponentIdList = {};
     this.HiddenNodeIds = [];
 
-    this.CheckViewerContextMenu;
+    // this.CheckViewerContextMenu;
 
     this.HasProperties = false;
 
@@ -187,8 +187,10 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                 //activate context menu            
                 var ids = _this.GetControlIds();
 
-                _this.CheckViewerContextMenu = new ViewerContextMenu(viewer, ids);
-                _this.CheckViewerContextMenu.Init();
+                model.views[_this.Id].viewerContextMenu = new ViewerContextMenu(viewer, ids);
+                model.views[_this.Id].viewerContextMenu.Init();
+                // _this.CheckViewerContextMenu = new ViewerContextMenu(viewer, ids);
+                // _this.CheckViewerContextMenu.Init();
 
                 if (loadFromSaved) {
                     return resolve(true);

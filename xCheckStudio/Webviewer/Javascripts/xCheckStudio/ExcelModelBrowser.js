@@ -258,6 +258,10 @@ ExcelModeBrowser.prototype.LoadModelBrowserTable = function (_this, columnHeader
 
                 //property call out
                 SourceManagers[_this.Id].OpenPropertyCalloutByCompId(e.data.ComponentId);
+            },
+            onDisposing:function(e){
+                model.views[_this.Id].tableViewInstance = null;  
+                model.views[_this.Id].tableViewWidget = null;
             }
         });
     });

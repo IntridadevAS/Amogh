@@ -50,12 +50,18 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
                 // zoomEnabled: true,
                 // controlIconsEnabled: true
             });
+
+            model.views[_this.Id].viewerContextMenu = new VisioViewerContextMenu(_this.Id);
+            model.views[_this.Id].viewerContextMenu.Init(true);
         });
 
         _this.ModelTree = new VisioModelBrowser(_this.Id,
             _this.ViewerOptions.modelTree,
             _this.SourceType,
             selectedComponents);
+
+        // model.views[_this.Id].viewerContextMenu = new VisioViewerContextMenu(_this.Id);
+        // model.views[_this.Id].viewerContextMenu.Init();
 
         // create property callout
         _this.PropertyCallout = new PropertyCallout(_this.Id);

@@ -307,10 +307,16 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 //     }
                 // }
             },
-            onDisposing: function(e){
+            onDisposing: function (e) {
                 _this.TreeInstance = null;
                 _this.CompIdVsKey = {};
                 _this.ChildParentKeyList = {};
+
+                model.views[_this.Id].viewerContextMenu.Init(false);
+                model.views[_this.Id].viewerContextMenu = null;
+                
+                model.views[_this.Id].tableViewInstance = null;
+                model.views[_this.Id].tableViewWidget = null;
             }
         }).dxTreeList("instance");
     });

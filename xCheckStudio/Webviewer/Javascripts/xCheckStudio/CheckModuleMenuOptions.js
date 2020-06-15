@@ -3,13 +3,8 @@ function enableMenuOptions(disabledItems) {
     if (disabledItems.indexOf(MenuBar.ShowAllBtn) === -1) {
         // on show All
         document.getElementById(MenuBar.ShowAllBtn).onclick = function () {
-            if (model.currentTabId in SourceManagers) {
-                var sourceManager = SourceManagers[model.currentTabId];
-                if (!sourceManager.CheckViewerContextMenu) {
-                    return;
-                }
-
-                sourceManager.CheckViewerContextMenu.OnShowAllClicked();
+            if (model.views[model.currentTabId] !== null) {
+                model.views[model.currentTabId].viewerContextMenu.OnShowAllClicked();
             }
         }
     }

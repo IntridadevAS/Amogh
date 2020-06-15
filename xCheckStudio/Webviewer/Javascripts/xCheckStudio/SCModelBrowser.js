@@ -250,6 +250,9 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                 _this.SelectionManager.SelectedCompoents = [];
                 _this.SelectionManager.HighlightedComponentRow = null;
                 _this.SelectionManager.HighlightedComponentRowKey = null;
+
+                model.views[_this.Id].tableViewInstance = null;  
+                model.views[_this.Id].tableViewWidget = null;
             }
         });
     });

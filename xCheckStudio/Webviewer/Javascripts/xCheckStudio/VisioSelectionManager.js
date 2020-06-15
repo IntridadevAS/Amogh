@@ -219,12 +219,11 @@ VisioSelectionManager.prototype.SelectFromGA = function (key, svgElement) {
    This function 
 */
 VisioSelectionManager.prototype.ZoomOnElement = function (selected, svgDoc) {
-    var svgPanZoomControl = SourceManagers[model.currentTabId].SvgPanZoomControl;
-   
+    var svgPanZoomControl = SourceManagers[model.currentTabId].SvgPanZoomControl;   
     svgPanZoomControl.fit();
     svgPanZoomControl.center();
     svgPanZoomControl.zoom(1);
-
+    
     // var bb = selected.getBBox();
     // // var vbb = svgPanZoomControl.getSizes().viewBox;
     // // var x = vbb.width / 2 - bb.x - bb.width / 2;
