@@ -15,6 +15,10 @@ function VisioModelBrowser(id,
     this.NodeParentList = {};
 
     this.SelectionManager = new VisioSelectionManager(nodeIdvsSelectedComponents);
+
+    this.TreeInstance = null;
+    this.CompIdVsKey = {};
+    this.ChildParentKeyList = {};
 }
 
 // assign ModelBrowser's method to this class
@@ -86,8 +90,7 @@ VisioModelBrowser.prototype.CreateHeaders = function () {
     return columnHeaders;
 }
 
-VisioModelBrowser.prototype.AddComponentTableComponent = function (component, parentid) {
-    
+VisioModelBrowser.prototype.AddComponentTableComponent = function (component, parentid) {    
     this.addComponentRow(component, parentid);   
 };
 
@@ -118,16 +121,19 @@ VisioModelBrowser.prototype.addComponentRow = function (component, parentid) {
     }
 
     this.modelTreeRowData.push(tableRowContent);
+
+    this.CompIdVsKey[component.NodeId] = component.Name;
+    this.ChildParentKeyList[component.Name] = parentid;
 }
 
 VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
-    
+    var _this = this;
     var loadingBrower = true;
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
     
     $(function () {
-        $(containerDiv).dxTreeList({
+        _this.TreeInstance = $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
             keyExpr: ModelBrowserColumnNamesVisio.Component,
             parentIdExpr: "parent",
@@ -198,9 +204,10 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     e.component);
             },
             onRowClick: function (e) {
-                _this.SelectionManager.OnComponentRowClicked(e,
+                _this.SelectionManager.OnComponentRowClicked(e.rowElement[0],
                     _this.Id,
                     e.data.ID,
+                    e.data.Item,                    
                     _this.ModelBrowserContainer);
 
                 // property call out               
@@ -299,9 +306,52 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 //         _this.HighlightHiddenRows(true, selectedRows);
                 //     }
                 // }
+            },
+            onDisposing: function(e){
+                _this.TreeInstance = null;
+                _this.CompIdVsKey = {};
+                _this.ChildParentKeyList = {};
             }
-        });
+        }).dxTreeList("instance");
     });
+}
+
+VisioModelBrowser.prototype.OpenRow = function (rowKey) {
+    return new Promise((resolve) => {
+
+        var hierarchy = { path: [rowKey] }
+        this.getNodeHierarchy(rowKey, hierarchy);
+
+        var allPromises = [];
+        for (var i = 0; i < hierarchy.path.length; i++) {
+            if (!this.TreeInstance.isRowExpanded(hierarchy.path[i])) {
+                allPromises.push(this.TreeInstance.expandRow(hierarchy.path[i]));
+            }
+        }
+
+        if (allPromises.length > 0) {
+            for (var i = 0; i < allPromises.length; i++) {
+                allPromises[i].catch(e => { return e; });
+            }
+
+            Promise.all(allPromises)
+                .then(result => {
+                    return resolve(result);
+                })
+                .catch(err => {
+                    return resolve(err);
+                });
+        }
+        else {
+            return resolve(true)
+        }
+    });
+}
+
+VisioModelBrowser.prototype.getNodeHierarchy = function (rowKey, hierarchy) {
+    if (rowKey in this.ChildParentKeyList) {
+        hierarchy["path"].push(this.ChildParentKeyList[rowKey]);
+    }
 }
 
 VisioModelBrowser.prototype.UpdateSelectionComponentFromCheckBox = function (clickedCheckBoxRowKeys,

@@ -66,6 +66,8 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
                 _this.ModelTree.AddComponentTable(_this.SourceProperties);
 
                 _this.AddComponentsToDB();
+
+                _this.BindEvents();
             }
 
             return resolve(true);
@@ -275,14 +277,38 @@ VisioManager.prototype.SetViewerBackgroundColor = function (color) {
 }
 
 VisioManager.prototype.BindEvents = function (viewer) {
+    var _this = this;
+
+    // GA selection    
+    var objectElement = document.getElementById("svgViewerObject" + this.Id);
+    var svgDoc = objectElement.contentDocument;
+
+    var tags = svgDoc.getElementsByTagName("title");
+    for (var i = 0; i < tags.length; i++) {
+        _this.BindSelection(tags[i]);
+    }
+};
+
+VisioManager.prototype.BindSelection = function (tag) {
+    var _this = this;
+    function onSelect() {
+        _this.OnSelection(tag.textContent, this);
+    }
+
+    tag.parentElement.onclick = onSelect;
+}
+
+VisioManager.prototype.OnSelection = function (id, svgElement) {
+    if (!(id in this.ModelTree.CompIdVsKey)) {
+        return;
+    }
+    var key = this.ModelTree.CompIdVsKey[id];
+    this.ModelTree.SelectionManager.SelectFromGA(key, svgElement);
 };
 
 VisioManager.prototype.menu = function (x, y) {
 
 }
-
-VisioManager.prototype.OnSelection = function (selectionEvent) {
-};
 
 VisioManager.prototype.HandleHiddenNodeIdsList = function (isHide, nodeList) {
 }
