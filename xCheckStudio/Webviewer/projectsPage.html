@@ -934,7 +934,7 @@
       <!-- BEGINNING EDIT PROJECT OVERLAY -->
       <section id="editProject" class="projectOverlays">
         <div class="projectHeader">
-          <h1 id="currentProjectName"></h1>
+          <h1 id="currentProjectName" class="currentCheckName"></h1>
           <button type="button" name="closeEditProject" onclick="editProjectView.openEditProjectOverlay();">
             <img src="public/symbols/closeWin.svg" alt="">
           </button>
@@ -991,7 +991,7 @@
       <!-- BEGINNING EDIT CHECK OVERLAY -->
       <section id="editCheck" class="projectOverlays">
         <div class="projectHeader">
-          <h1 id="currentCheckName"></h1>
+          <h1 id="currentCheckName" class="currentCheckName"></h1>
           <button type="button" name="closeEditCheck" onclick="editCheckView.closeEditCheck();">
             <img src="public/symbols/closeWin.svg" alt="">
           </button>
@@ -1038,7 +1038,7 @@
       <!-- BEGINNING EDIT REVIEW OVERLAY -->
       <section id="editReview" class="projectOverlays">
         <div class="projectHeader">
-          <h1 id="currentReviewName"></h1>
+          <h1 id="currentReviewName" class="currentCheckName"></h1>
           <button type="button" name="closeEditCheck" onclick="editReviewView.closeEditReview();">
             <img src="public/symbols/closeWin.svg" alt="">
           </button>
@@ -1046,7 +1046,7 @@
         <form id="editReviewForm" class="editProjectForm" action="index.html" method="post">
           <div class="projectInfo">
             <div class="projectCardAE">
-              <div class="checkCardInfo reviewCardInfo"></div>
+              <div class="reviewCardInfo"></div>
               <div class="projectName">
                 <input id="editReviewName" type="text" name="checkName" value="">
                 <select class="" name="status" id="reviewCheckStatus">

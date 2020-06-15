@@ -363,7 +363,7 @@ input:checked + .slider:before {
   background: #FFBB99;
   display: none;
   cursor: pointer;
-  left: 50%;
+  /*left: 50%;*/
   margin-left: -5px;  
   white-space: pre-wrap;
   z-index: 200;

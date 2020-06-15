@@ -461,6 +461,11 @@ input[type=checkbox] + label {
 
 .reviewCardInfo {
   background-image: var(--reviewSpaceGradient);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 120px;
+  position: relative;
 }
 
 
@@ -470,11 +475,12 @@ input[type=checkbox] + label {
   opacity: 0.5;
 }
 
-.checkCardInfo ul {
+.checkCardInfo ul, .reviewCardInfo ul {
   margin: 10px 0 0 0;
 }
 
-.checkCardInfo h3, .checkCardInfo p {
+.checkCardInfo h3, .checkCardInfo p, 
+.reviewCardInfo h3, .reviewCardInfo p {
   margin: 3px 0 0 0;
   padding-left: 5px;
 }

@@ -1037,12 +1037,19 @@ let checkView = {
         newDiv.classList.add('favorite');
       }
       let htmlInner;// = `<a href=${review.url}><div class="checkCardInfo reviewCardInfo">`
+      htmlInner = `<div class="reviewCardInfo">`;
       htmlInner += `<p>${review.checkdate}</p>`;
       htmlInner += `<ul>`;
 
       htmlInner += "</ul></div>"
-      htmlInner += `<div class='checkCardTitle'><h2>${review.checkname}<h2>`;
-      htmlInner += `<p>${review.checkstatus}</p></div></a>`
+      //htmlInner += `<div class='checkCardTitle'><h2>${review.checkname}<h2>`;
+      
+      htmlInner += `<div  class="tooltipHov">
+      <h2 id="checkCardTitle">${review.checkname} </h2>
+      <div class="tooltip" data-tooltip=${review.checkname}></div >
+      </div>`;
+
+      htmlInner += `<p>${review.checkstatus}</p></div>`
       htmlInner += `<div class="projectButtons">`;
       htmlInner += `<div class="star" onclick="controller.setFavoriteReview(${review.checkid})"></div>`;
       if (controller.permissions()) {
