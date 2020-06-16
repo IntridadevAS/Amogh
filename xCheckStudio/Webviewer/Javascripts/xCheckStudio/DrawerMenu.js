@@ -95,7 +95,12 @@ var menuItems = [
         Title: "Projects",
         ImageSrc: "public/symbols/projects.png",
         click: function () {
-            menu.onProjectsClicked();
+            if (window.location.pathname.includes("landingPage.html")) {
+                menu.onProjectsClickedDirectOpen();
+            }
+            else {
+                menu.onProjectsClicked();
+            }      
         }
     },
     {
@@ -174,7 +179,7 @@ var menuItems = [
 
 let menu = {
 
-    onSearchClick: function () {
+     onSearchClick: function () {
         console.log("Seacrh not implemented");
     },
 
@@ -240,6 +245,10 @@ let menu = {
 
         popup.style.top = ((window.innerHeight / 2) - 139) + "px";
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
+    },
+
+    onProjectsClickedDirectOpen: function() {
+        window.location = "projectsPage.html";
     },
 
     onProjectsClicked: function () {
