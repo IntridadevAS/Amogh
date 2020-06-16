@@ -10,7 +10,7 @@ function ViewerContextMenu(webViewer, ids) {
 }
 
 ViewerContextMenu.prototype.GetControls = function () {
-    // var _this = this;
+    var _this = this;
     return [
         {
             text: "Hide",
@@ -27,10 +27,9 @@ ViewerContextMenu.prototype.GetControls = function () {
             }
         },
         {           
-            text: model.views[model.currentTabId].activeSelection === "Single Select" ? "Box Select" : "Single Select",
-            icon: model.views[model.currentTabId].activeSelection === "Single Select" ? "public/symbols/Box Select.svg" : "public/symbols/Single Select.svg",
-            active: false,         
-            disabled : (model.views[model.currentTabId].activeTableView !== GlobalConstants.TableView.List),
+            text: _this.GetSelectItemText(),
+            icon: _this.GetSelectItemIcon(),            
+            disabled : _this.GetSelectItemDisabled(),
             click: function (e, menu) {
                 menu.OnAreaSelectClicked(this);
             }
@@ -74,6 +73,39 @@ ViewerContextMenu.prototype.GetControls = function () {
     ];    
 }
 
+ViewerContextMenu.prototype.GetSelectItemDisabled = function () {
+    if (this.IsCheckModule() === true) {
+        return model.views[model.currentTabId].activeTableView !== GlobalConstants.TableView.List;
+    }
+
+    return true;
+}
+
+ViewerContextMenu.prototype.GetSelectItemIcon = function () {
+    if (this.IsCheckModule() === true) {
+        return model.views[model.currentTabId].activeSelection === "Single Select" ? "public/symbols/Box Select.svg" : "public/symbols/Single Select.svg";
+    }
+
+    return "public/symbols/Box Select.svg";
+}
+
+ViewerContextMenu.prototype.GetSelectItemText = function () {
+    if (this.IsCheckModule() === true) {
+        return model.views[model.currentTabId].activeSelection === "Single Select" ? "Box Select" : "Single Select";
+    }
+
+    return "Box Select";
+}
+
+ViewerContextMenu.prototype.IsCheckModule = function () {
+    if(model.currentTabId && SourceManagers)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
     if (model.views[model.currentTabId].activeSelection === "Single Select" ) {
         this.WebViewer.operatorManager.set(Communicator.OperatorId.AreaSelect, 1);
@@ -90,7 +122,7 @@ ViewerContextMenu.prototype.OnAreaSelectClicked = function (itemData) {
 }
 
 ViewerContextMenu.prototype.OnModelViewsClicked = function () {
-    if (model.views) {
+    if (this.IsCheckModule()) {
         closeAnyOpenMenu();
         model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
     }
@@ -98,17 +130,7 @@ ViewerContextMenu.prototype.OnModelViewsClicked = function () {
         if (model.currentCheck === "comparison") {
             // Close other menus open
             closeAnyOpenMenu();
-            // for (var id in model.checks[model.currentCheck].menus) {
-            //     var menus = model.checks[model.currentCheck].menus[id];
-            //     for (var menuName in menus) {
-            //         var menu = menus[menuName];
-            //         if (menu.Active) {
-            //             menu.Close();
-            //             menu.HideAllOpenViewForms();
-            //         }
-            //     }
-            // }
-
+           
             var viewerId;
             switch (this.WebViewer._params.containerId) {
                 case "compare1":
@@ -281,7 +303,7 @@ ViewerContextMenu.prototype.OnHideClicked = function () {
 
         this.WebViewer.model.setNodesVisibilities(map);
 
-        if (model.currentTabId) {
+        if (this.IsCheckModule()) {
             this.HideInCheck(selectedItem._nodeId);
         }
         else {
@@ -349,7 +371,6 @@ ViewerContextMenu.prototype.GetViewerInterface = function () {
     else {
         return model.checks[model.currentCheck].viewer;
     }
-
 }
 
 ViewerContextMenu.prototype.OnIsolateClicked = function () {
@@ -373,7 +394,7 @@ ViewerContextMenu.prototype.OnIsolateClicked = function () {
     });
 
     // maintain hidden elements
-    if (model.currentTabId &&
+    if (this.IsCheckModule() &&
         model.currentTabId in SourceManagers) {
         var sourceManager = SourceManagers[model.currentTabId];
         sourceManager.HiddenNodeIds = [];
@@ -405,7 +426,7 @@ ViewerContextMenu.prototype.OnShowAllClicked = function () {
         _this.WebViewer.view.fitWorld();
     });
 
-    if (model.currentTabId) {
+    if (this.IsCheckModule()) {
         // Remove all nodeIds from list (Showing all) and show all rows
         var sourceManager = SourceManagers[model.currentTabId];
         sourceManager.GetCurrentTable().ShowAllHiddenRows();
