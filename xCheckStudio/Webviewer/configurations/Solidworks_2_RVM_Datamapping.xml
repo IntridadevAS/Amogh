@@ -1,0 +1,362 @@
+<CheckCase name="3D(.sldasm) - 3D(.rvm)" sourceA="SLDASM" sourceB="RVM">
+
+	<Check type="Comparison" sourceAType="SLDASM" sourceB="RVM">
+
+	    <ComponentGroup sourceAGroupName="Equipment"  sourceBGroupName="EQUI">
+
+			   <ComponentClass sourceAComponentClass="Equipment"  sourceBComponentClass="EQUI">
+			   <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="Name"/>
+			      <Property sourceAName="SW-File Name(File Name)" sourceBName="Name"  severity="Error"/>			  
+				  <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>	
+				  <Property sourceAName="Description" sourceBName="DESC"  severity="Error"/>
+				  <Property sourceAName="Duty" sourceBName="DUTY"  severity="Error"/>		
+				  <Property sourceAName="Location" sourceBName="LOCA"  severity="Error"/>	
+				  <Property sourceAName="Number of Nozzles" sourceBName="NOZZ#"  severity="Error"/>	
+				  <Property sourceAName="Temperature Class" sourceBName="TEMPCLS"  severity="Error"/>
+			      <Property sourceAName="Hazardous Area Class" sourceBName="HACLS"  severity="Error"/>				  
+				  <Property sourceAName="Gas Group" sourceBName="GASGRP"  severity="Error"/>
+				  <Property sourceAName="Status" sourceBName="STATUS"  severity="Error"/>		
+				  <Property sourceAName="System" sourceBName="SYSTEM"  severity="Error"/>
+			  </ComponentClass>
+			  
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Pipeline"  sourceBGroupName="PIPE">
+			  
+			  <ComponentClass sourceAComponentClass="Pipeline"  sourceBComponentClass="PIPE">	
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="NAME"/>
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="Name"  severity="Error"/>
+				  <Property sourceAName="Name" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>					 
+				  <Property sourceAName="Temperature" sourceBName="TEMP"  severity="Error"/>
+				  <Property sourceAName="Pressure" sourceBName="PRES"  severity="Error"/>
+				  <Property sourceAName="Fluid Code" sourceBName="FCODE"  severity="Error"/>
+				  <Property sourceAName="Discipline" sourceBName="DSPN"  severity="Error"/>					 
+				  <Property sourceAName="Duty" sourceBName="DUTY"  severity="Error"/>
+				  <Property sourceAName="Hazardous Area Class" sourceBName="HACLS"  severity="Error"/>	
+				  <Property sourceAName="Inquiry Number" sourceBName="INQY#"  severity="Error"/>
+			  </ComponentClass>
+			  
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Branch"  sourceBGroupName="BRAN">
+			  
+			  <ComponentClass sourceAComponentClass="Branch"  sourceBComponentClass="BRAN">	
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="NAME"/>			
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="PSPE"  severity="Error"/>					 
+				  <Property sourceAName="Temperature" sourceBName="TEMP"  severity="Error"/>
+				  <Property sourceAName="Pressure" sourceBName="PRES"  severity="Error"/>
+				  <Property sourceAName="Owner" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="Head Reference" sourceBName="HREF"  severity="Error"/>
+				  <Property sourceAName="Tail Reference" sourceBName="TREF"  severity="Error"/>					 
+				  <Property sourceAName="Head Bore Size" sourceBName="HBOR"  severity="Error"/>
+				  <Property sourceAName="Tail Bore Size" sourceBName="TBOR"  severity="Error"/>			  
+			  </ComponentClass>
+			  
+	    </ComponentGroup>
+		
+
+		
+		<ComponentGroup sourceAGroupName="Nozzle"  sourceBGroupName="NOZZ">
+			  
+			  <ComponentClass sourceAComponentClass="Nozzle"  sourceBComponentClass="NOZZ">
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="NAME"/>	
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="Name"  severity="Error"/>
+				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Warning"/>							 		 
+				  <Property sourceAName="Connection Reference" sourceBName="CREF"  severity="Warning"/>
+				  <Property sourceAName="Specification" sourceBName="CATR"  severity="Warning"/>	
+				  <Property sourceAName="Temperature" sourceBName="TEMP"  severity="Error"/>
+				  <Property sourceAName="Pressure" sourceBName="PRES"  severity="Error"/>
+			 </ComponentClass>
+			  
+			  
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Valve"  sourceBGroupName="VALV">
+			  
+			 <ComponentClass sourceAComponentClass="Valve"  sourceBComponentClass="VALV">
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="Name"/>
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="Name"  severity="Error"/>			  				 		 
+				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
+				  <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>
+			 </ComponentClass>
+			 
+	    </ComponentGroup>
+		
+		
+		<ComponentGroup sourceAGroupName="Reducer"  sourceBGroupName="REDU">
+			  
+			  <ComponentClass sourceAComponentClass="Reducer"  sourceBComponentClass="REDU">
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="TAGID"/>
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="TAGID"  severity="Error"/>			  				 		 
+				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
+				  <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>	
+				  <Property sourceAName="Bore Size" sourceBName="Size"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>			 
+			 </ComponentClass>
+			  
+	    </ComponentGroup>
+		
+		
+		<ComponentGroup sourceAGroupName="Flange"  sourceBGroupName="FLAN">
+			  
+			  <ComponentClass sourceAComponentClass="Flange"  sourceBComponentClass="FLAN">
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="TAGID"/>
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="TAGID"  severity="Error"/>			  				 		 
+				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
+				  <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>	
+				  <Property sourceAName="Bore Size" sourceBName="Size"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>					  
+			 </ComponentClass>					 
+			  
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Tee"  sourceBGroupName="TEE">
+			  
+			  <ComponentClass sourceAComponentClass="Tee"  sourceBComponentClass="TEE">
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="NAME"/>	
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
+				  <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>	
+				  <Property sourceAName="Connection Reference" sourceBName="CREF"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>					  
+			 </ComponentClass>					 
+			  
+	    </ComponentGroup>
+		
+		<ComponentGroup sourceAGroupName="Elbow"  sourceBGroupName="ELBO">
+			  
+			  <ComponentClass sourceAComponentClass="Elbow"  sourceBComponentClass="ELBO">
+		         <Matchwith sourceAPropertyname="SW-File Name(File Name)"  sourceBPropertyname ="TAGID"/>
+				  <Property sourceAName="SW-File Name(File Name)" sourceBName="TAGID"  severity="Error"/>		  				 		 
+				  <Property sourceAName="Owner" sourceBName="Owner"  severity="Error"/>							 		 
+				  <Property sourceAName="Number" sourceBName="Number"  severity="Error"/>
+				  <Property sourceAName="Specification" sourceBName="SPRE"  severity="Error"/>	
+			 </ComponentClass>
+		
+		</ComponentGroup>
+	
+		
+	</Check>
+	
+
+<Check type="ComplianceSourceA" sourceType="SLDASM">
+   <ComponentGroup name="Pipeline" >
+			<ComponentClass name="Pipeline">
+				  <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Temperature" rule="Should end with-degC" severity="Error" comment="Units should be in degC." />
+				  <Property name="Pressure" rule="Should end with-pascal" severity="Error" comment="Units should be in pascal." />
+				  <Property name="Fluid Code" rule="Must have value" severity="Error" comment="Property must have value." />					 
+				  <Property name="Discipline" rule="Must have value" severity="Error" comment="Property must have value." />	
+				  <Property name="Duty" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Hazardous Area Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Specification" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Inquiry Number" rule="Must have value" severity="Error" comment="Property must have value." />	
+				  <Property name="Pressure" rule="Must have value" severity="Error" comment="Property must have value." />
+			</ComponentClass>                           
+		</ComponentGroup>
+   
+		<ComponentGroup name="Branch">
+			<ComponentClass name="Branch">
+		          <Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Owner" rule="Should not start with-/" severity="Error" comment="Property must not start with /." />
+				  <Property name="Specification" rule="Should not start with-/" severity="Error" comment="Property must not start with /." />
+				  <Property name="Head Reference" rule="Must have value" severity="Error" comment="Property must have value." />					 
+				  <Property name="Tail Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Head Bore Size" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Tail Bore Size" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Temperature" rule="Should end with-degC" severity="Error" comment="Units should be in degC." />
+				  <Property name="Pressure" rule="Should end with-pascal" severity="Error" comment="Units should be in pascal." />
+			</ComponentClass>
+		</ComponentGroup>
+   
+		<ComponentGroup name="Equipment">
+
+			<ComponentClass name="Equipment">	
+			      <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Location" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Number of Nozzles" rule="Should be number" severity="Error" comment="Property should be number." />
+				  <Property name="Temperature Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Hazardous Area Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Gas Group" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Status" rule="Must have value" severity="Error" comment="Property must have value." />
+			</ComponentClass>	  
+		</ComponentGroup>
+
+
+		<ComponentGroup name="Valve">
+			<ComponentClass name="Valve">	
+			      <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Specification" rule="Should not start with-/" severity="Error" comment="Property must not begin with /." />
+				  <Property name="Temperature" rule="Should end with degC" severity="Error" comment="Units should be in degC" />
+				  <Property name="Pressure" rule="Should end with-pascal" severity="Error" comment="Units should be in pascal." />
+				  <Property name="Duty" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Location" rule="Must have value" severity="Error" comment="Property must have value." />
+			</ComponentClass>
+		</ComponentGroup>
+	
+		<ComponentGroup name="Reducer">
+			<ComponentClass name="Reducer">	
+			      <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Specification" rule="Must have value" severity="Error" comment="Property must have value." />		   
+			</ComponentClass>
+	   </ComponentGroup>
+	   
+	   <ComponentGroup name="Flange">
+			<ComponentClass name="Flange">
+				<Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Specification" rule="Must have value" severity="Error" comment="Property must have value." />			
+			</ComponentClass>  
+		</ComponentGroup>
+
+		<ComponentGroup name="Elbow">
+			<ComponentClass name="Elbow">
+				<Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Specification" rule="Must have value" severity="Error" comment="Property must have value." />			
+			</ComponentClass>  
+		</ComponentGroup>
+		
+		
+		<ComponentGroup name="Tee">
+			<ComponentClass name="Tee">
+				<Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Specification" rule="Must have value" severity="Error" comment="Property must have value." />	
+				<Property name="Connection Reference" rule="Must have value" severity="Error" comment="Property must have value." />	
+			</ComponentClass>  
+		</ComponentGroup>
+		
+		<ComponentGroup name="Nozzle">
+			<ComponentClass name="Nozzle">
+				<Property name="Name" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Owner" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Connection Reference" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Specification" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Temperature" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="Pressure" rule="Must have value" severity="Error" comment="Property must have value." />			
+			</ComponentClass>  
+		</ComponentGroup>
+   </Check>
+
+<Check type="ComplianceSourceB" sourceType="RVM" > 
+		<ComponentGroup name="PIPE" >
+			<ComponentClass name="PIPE">
+				  <Property name="Component Class" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="TEMP" rule="Should end with-degC" severity="Error" comment="Units should be in degC." />
+				  <Property name="PRES" rule="Should end with-pascal" severity="Error" comment="Units should be in pascal." />
+				  <Property name="FCODE" rule="Must have value" severity="Error" comment="Property must have value." />					 
+				  <Property name="DSPN" rule="Must have value" severity="Error" comment="Property must have value." />	
+				  <Property name="DUTY" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="HACLS" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPRE" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="INQY#" rule="Must have value" severity="Error" comment="Property must have value." />	
+				  <Property name="PRES" rule="Must have value" severity="Error" comment="Property must have value." />
+			</ComponentClass>                           
+		</ComponentGroup>
+   
+		<ComponentGroup name="BRAN">
+			<ComponentClass name="BRAN">
+		          <Property name="NAME" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="OWNER" rule="Should not start with-/" severity="Error" comment="Property must not start with /." />
+				  <Property name="SPRE" rule="Should not start with-/" severity="Error" comment="Property must not start with /." />
+				  <Property name="HREF" rule="Must have value" severity="Error" comment="Property must have value." />					 
+				  <Property name="TREF" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="HBOR" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="TBOR" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="TEMP" rule="Should end with-degC" severity="Error" comment="Units should be in degC." />
+				  <Property name="PRES" rule="Should end with-pascal" severity="Error" comment="Units should be in pascal." />
+			</ComponentClass>
+		</ComponentGroup>
+   
+		<ComponentGroup name="EQUI">
+
+			<ComponentClass name="EQUI">	
+			      <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="LOCA" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="DESC" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Type" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="NOZZ#" rule="Should be number" severity="Error" comment="Property should be number." />
+				  <Property name="TEMPCLS" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="HACLS" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="GASGRP" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="STATUS" rule="Must have value" severity="Error" comment="Property must have value." />
+			</ComponentClass>	  
+		</ComponentGroup>
+
+
+		<ComponentGroup name="VALV">
+			<ComponentClass name="VALV">	
+			      <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPRE" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="TEMP" rule="Should end with degC" severity="Error" comment="Units should be in degC" />
+				  <Property name="PRES" rule="Should end with-pascal" severity="Error" comment="Units should be in pascal." />
+			</ComponentClass>
+		</ComponentGroup>
+	
+		<ComponentGroup name="REDU">
+			<ComponentClass name="REDU">	
+			      <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPRE" rule="Must have value" severity="Error" comment="Property must have value." />		   
+			</ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup name="FLAN">
+			<ComponentClass name="FLAN">	
+			      <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPRE" rule="Must have value" severity="Error" comment="Property must have value." />		   
+			</ComponentClass>
+	    </ComponentGroup>
+	   
+	    <ComponentGroup name="ELBO">
+			<ComponentClass name="ELBO">	
+			      <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPRE" rule="Must have value" severity="Error" comment="Property must have value." />		   
+			</ComponentClass>
+	    </ComponentGroup>
+		
+		<ComponentGroup name="TEE">
+			<ComponentClass name="TEE">	
+			      <Property name="TYPE" rule="Must have value" severity="Error" comment="Property must have value." />			  
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPRE" rule="Must have value" severity="Error" comment="Property must have value." />		 
+				  <Property name="CREF" rule="Must have value" severity="Error" comment="Property must have value." />
+			</ComponentClass>
+	    </ComponentGroup>
+		
+		
+		<ComponentGroup name="NOZZ">
+			<ComponentClass name="NOZZ">
+				<Property name="NAME" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="CREF" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="CATR" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="TEMP" rule="Must have value" severity="Error" comment="Property must have value." />
+				<Property name="PRES" rule="Must have value" severity="Error" comment="Property must have value." />			
+			</ComponentClass>  
+		 </ComponentGroup>		   
+
+</Check> 
+
+
+</CheckCase>
