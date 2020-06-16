@@ -95,7 +95,7 @@ var menuItems = [
         Title: "Projects",
         ImageSrc: "public/symbols/projects.png",
         click: function () {
-            if (window.location.pathname.includes("landingPage.html")) {
+            if (window.location.pathname.toLowerCase().includes("landingpage.html")) {
                 menu.onProjectsClickedDirectOpen();
             }
             else {
