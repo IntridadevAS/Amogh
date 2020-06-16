@@ -1877,18 +1877,21 @@
       var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
       modal.style.display = "none";
 
+      var smallAnalyticsContainer;
       if (model.currentCheck == 'comparison') {
         var visualizer = document.getElementById("comparisonVisualizerA");
+        smallAnalyticsContainer = Comparison.SmallAnalyticsContainer;
       }
       else {
         var visualizer = document.getElementById("complianceVisualizerA");
+        smallAnalyticsContainer = Compliance.SmallAnalyticsContainer;
       }
 
       if (visualizer.classList.contains("maximize")) {
         visualizer.classList.remove("maximize");
       }
 
-      Analytics.ShowSmallAnalytics(visualizer, Comparison.SmallAnalyticsContainer);
+      Analytics.ShowSmallAnalytics(visualizer, smallAnalyticsContainer);
     }
 
     function GetActiveCategory() {
