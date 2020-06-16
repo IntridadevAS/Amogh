@@ -20,7 +20,7 @@ ReviewComparison1DModelBrowser.prototype.Is1D = function () {
 }
 
 ReviewComparison1DModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + Comparison.MainReviewContainer;
 }
 
 ReviewComparison1DModelBrowser.prototype.GetSelectionManager = function () {

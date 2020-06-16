@@ -21,7 +21,7 @@ ReviewCompliance1DModelBrowser.prototype.Is1D = function () {
 }
 
 ReviewCompliance1DModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '_') + "_" + Compliance.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + Compliance.MainReviewContainer;
 }
 
 ReviewCompliance1DModelBrowser.prototype.GetSelectionManager = function () {

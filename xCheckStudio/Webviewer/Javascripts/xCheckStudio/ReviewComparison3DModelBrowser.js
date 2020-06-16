@@ -24,7 +24,7 @@ ReviewComparison3DModelBrowser.prototype.Is3D = function () {
 }
 
 ReviewComparison3DModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + Comparison.MainReviewContainer;
 }
 
 ReviewComparison3DModelBrowser.prototype.GetSelectionManager = function () {

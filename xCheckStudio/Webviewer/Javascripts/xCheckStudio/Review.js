@@ -915,7 +915,7 @@ function populateComplianceModelBrowser(compliance) {
 
                 // create accordion
                 createModelBrowserAccordion([compliance.source], Compliance.MainReviewContainer);
-
+              
                 if (viewerOption['endPointUri'] !== undefined) {
 
                     if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOption["source"]))) {
@@ -1045,15 +1045,13 @@ function enableViewers(sources) {
 function createModelBrowserAccordion(sources, container) {
     var parentTable = document.getElementById(container);
 
-    var data = createAccordionData(sources);
+    var data = createAccordionData(sources);   
     for (var i = 0; i < data.length; i++) {
         var div = document.createElement("DIV");
-        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
-        div.id = data[i]["template"];
-        var datagridDiv = document.createElement("DIV");
-        // datagridDiv.id = data[i]["template"] + "_";
-        datagridDiv.id = data[i]["template"].replace(/\W/g, '_') + "_" + container;
-
+        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")        
+        div.id = data[i]["template"].replace(/\W/g, '');        
+        var datagridDiv = document.createElement("DIV");       
+        datagridDiv.id = data[i]["template"].replace(/\W/g, '') + "_" + container;      
         div.append(datagridDiv);
         parentTable.append(div);
     }
@@ -1107,7 +1105,7 @@ function createAccordionData(sources) {
         var source = sources[i];
 
         var dataObject = {};
-        dataObject["template"] = source;
+        dataObject["template"] = source.replace(/\W/g, '');
         dataObject["title"] = source;
 
         data.push(dataObject);

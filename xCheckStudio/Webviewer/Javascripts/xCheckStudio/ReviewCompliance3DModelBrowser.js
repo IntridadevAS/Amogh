@@ -25,7 +25,7 @@ ReviewCompliance3DModelBrowser.prototype.Is3D = function () {
 }
 
 ReviewCompliance3DModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '_') + "_" + Compliance.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + Compliance.MainReviewContainer;
 }
 
 ReviewCompliance3DModelBrowser.prototype.GetSelectionManager = function () {

@@ -24,7 +24,7 @@ ReviewComparisonVisioModelBrowser.prototype.IsVisio = function () {
 }
 
 ReviewComparisonVisioModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '_') + "_" + Comparison.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + Comparison.MainReviewContainer;
 }
 
 ReviewComparisonVisioModelBrowser.prototype.GetSelectionManager = function () {
