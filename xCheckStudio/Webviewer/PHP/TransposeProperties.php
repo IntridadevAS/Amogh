@@ -562,22 +562,22 @@ function transposePropertiesCategoryLevel() {
 function getWorstSeverityForComponent($properties) {
     $worstSeverity = "OK";
     for($j = 0; $j < count($properties); $j++) {
-        if($properties[$j]["severity"] !== "OK" && $properties[$j]["severity"] !== "No Value") {
-            if($properties[$j]["accepted"] == "true" || $properties[$j]["transpose"]  !== null) {
+        if ($properties[$j]["severity"] !== "OK" && $properties[$j]["severity"] !== "No Value") {
+            if ($properties[$j]["accepted"] == "true" || $properties[$j]["transpose"]  !== null) {
                 continue;
             }
-            else {
-                if(strtolower($properties[$j]["severity"]) == "error") {
-                    $worstSeverity = $properties[$j]["severity"];
-                }
-                else if(strtolower($properties[$j]["severity"]) == "warning" && strtolower($worstSeverity) !== "error") {
-                    $worstSeverity = $properties[$j]["severity"];
-                }
-                else if(strtolower($properties[$j]["severity"]) == "no match" && 
-                (strtolower($worstSeverity) !== "error" && strtolower($worstSeverity) !== "warning")) {
-                    $worstSeverity = $properties[$j]["severity"];
-                }
+            // else {
+            if (strtolower($properties[$j]["severity"]) == "error") {
+                $worstSeverity = $properties[$j]["severity"];
+            } else if (strtolower($properties[$j]["severity"]) == "warning" && strtolower($worstSeverity) !== "error") {
+                $worstSeverity = $properties[$j]["severity"];
+            } else if (
+                strtolower($properties[$j]["severity"]) == "no match" &&
+                (strtolower($worstSeverity) !== "error" && strtolower($worstSeverity) !== "warning")
+            ) {
+                $worstSeverity = $properties[$j]["severity"];
             }
+            // }
         }
     }
 

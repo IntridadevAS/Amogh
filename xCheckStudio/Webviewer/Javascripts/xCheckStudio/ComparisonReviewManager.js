@@ -853,7 +853,28 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedPro
 
                         if (orginalProperty.transpose !== null) {
 
-                            orginalProperty.severity = "OK(T)";
+                            // if empty value is transposed, then show status as "No Value(T)"
+                            var transposeFunc = orginalProperty.transpose.toLowerCase();
+                            if (transposeFunc === "fromdatasource1" &&
+                                (!orginalProperty.sourceAValue || orginalProperty.sourceAValue === "")) {
+                                orginalProperty.severity = "No Value(T)";
+                            }
+                            else if (transposeFunc === "fromdatasource2" &&
+                                (!orginalProperty.sourceBValue || orginalProperty.sourceBValue === "")) {
+                                orginalProperty.severity = "No Value(T)";
+                            }
+                            else if (transposeFunc === "fromdatasource3" &&
+                                (!orginalProperty.sourceCValue || orginalProperty.sourceCValue === "")) {
+                                orginalProperty.severity = "No Value(T)";
+                            }
+                            else if (transposeFunc === "fromdatasource4" &&
+                                (!orginalProperty.sourceDValue || orginalProperty.sourceDValue === "")) {
+                                orginalProperty.severity = "No Value(T)";
+                            }
+                            else {
+                                orginalProperty.severity = "OK(T)";
+                            }                            
+
                             model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), orginalProperty)
                         }
                     }

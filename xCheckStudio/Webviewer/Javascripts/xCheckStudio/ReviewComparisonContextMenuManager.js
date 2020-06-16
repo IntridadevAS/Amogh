@@ -406,7 +406,7 @@ ReviewComparisonContextMenuManager.prototype.GetTransposeSubMenu = function() {
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent = function (selectedRow) {
 
     var transpose = false;
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
+    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -432,7 +432,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent 
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent = function (selectedRow) {
 
     var accept = false;
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
+    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
     if (selectedGroupIdsVsResultIds == undefined) {
@@ -538,7 +538,7 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
 
 ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)', ' ', 'undefined'];
+    var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'Missing Property(s)', ' ', 'undefined'];
     var accepted = true;
 
     if (selectedPropertiesKey.length == 0) {
@@ -564,7 +564,7 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
     var transpose = false;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)'];
+    var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'Missing Property(s)'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {
@@ -596,7 +596,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
 ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
 
     var accept = false;
-    var ignore = ['OK', 'No Value', 'ACCEPTED', 'OK(T)', 'Missing Property(s)', ' '];
+    var ignore = ['OK', 'No Value', 'No Value(T)', 'ACCEPTED', 'OK(T)', 'Missing Property(s)', ' '];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {
@@ -623,7 +623,7 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
 
     var transpose = true;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'ACCEPTED', 'Missing Property(s)', 'undefined'];
+    var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'ACCEPTED', 'Missing Property(s)', 'undefined'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {
@@ -654,7 +654,7 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForPrope
 
 ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForProperty = function () {
     var restore = true;
-    var ignore = ['OK', 'No Value', 'OK(T)', 'Missing Property(s)','undefined'];
+    var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'Missing Property(s)','undefined'];
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
 
     if (selectedPropertiesKey.length == 0) {
@@ -837,7 +837,7 @@ ReviewComparisonContextMenuManager.prototype.OnModelViewsClicked = function () {
 }
 
 ReviewComparisonContextMenuManager.prototype.OnAcceptComponents = function () {
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
+    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
 
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
@@ -897,7 +897,7 @@ ReviewComparisonContextMenuManager.prototype.OnAcceptProperty = function () {
 
     // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
     // No match, OK, No Value components should not get accepted or transposed
-    var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Match', 'Missing Property(s)', ' '];
+    var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' '];
     var selectedProperties = []
     for (var key in selectedPropertiesKey) {
         var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
@@ -928,7 +928,7 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptComponents = function () 
         return;
     }
 
-    var ignore = ['OK', 'OK(T)', 'No Value', 'No Match'];
+    var ignore = ['OK', 'OK(T)', 'No Value', 'No Value(T)', 'No Match'];
     // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
     // No match, OK, No Value components should not get accepted or transposed
     var groupIdVsComponentId = {};
@@ -981,7 +981,7 @@ ReviewComparisonContextMenuManager.prototype.OnUnAcceptProperty = function (rowC
 
     // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
     // No match, OK, No Value components should not get accepted or transposed
-    var ignore = ['OK', 'OK(T)', 'No Value', 'No Match', 'Missing Property(s)', ' '];
+    var ignore = ['OK', 'OK(T)', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' '];
     var selectedProperties = []
     for (var key in selectedPropertiesKey) {
         var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
@@ -1013,7 +1013,7 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (acco
             return;
         }
 
-        var ignore = ['OK', 'OK(A)', 'No Value', 'No Match'];
+        var ignore = ['OK', 'OK(A)', 'No Value', 'No Value(T)', 'No Match'];
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
         var groupIdVsComponentId = {};
@@ -1064,7 +1064,7 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (acco
 
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
-        var ignore = ['OK', 'OK(A)', 'No Value', 'No Match', 'Missing Property(s)', ' ', 'ACCEPTED'];
+        var ignore = ['OK', 'OK(A)', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' ', 'ACCEPTED'];
         var selectedProperties = []
         for (var key in selectedPropertiesKey) {
             var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
@@ -1092,7 +1092,7 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, a
             return;
         }
 
-        var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'No Match'];
+        var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
         var groupIdVsComponentId = {};
@@ -1142,7 +1142,7 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, a
 
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
-        var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Match', 'Missing Property(s)', ' '];
+        var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' '];
         var selectedProperties = []
         for (var propertyKey in selectedPropertiesKey) {
             var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[propertyKey]));

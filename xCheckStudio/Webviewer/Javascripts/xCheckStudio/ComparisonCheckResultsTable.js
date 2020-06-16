@@ -1100,25 +1100,25 @@ ComparisonCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, prop
 
     if (property["severity"] !== "ACCEPTED") {
         if (property.transpose == 'FromDataSource1') {
-            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
             rowData[ComparisonPropertyColumnNames.SourceBValue] = property.sourceAValue;
             rowData[ComparisonPropertyColumnNames.SourceCValue] = property.sourceAValue;
             rowData[ComparisonPropertyColumnNames.SourceDValue] = property.sourceAValue;
         }
         else if (property.transpose == 'FromDataSource2') {
-            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
             rowData[ComparisonPropertyColumnNames.SourceAValue] = property.sourceBValue;
             rowData[ComparisonPropertyColumnNames.SourceCValue] = property.sourceBValue;
             rowData[ComparisonPropertyColumnNames.SourceDValue] = property.sourceBValue;
         }
         else if (property.transpose == 'FromDataSource3') {
-            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
             rowData[ComparisonPropertyColumnNames.SourceAValue] = property.sourceCValue;
             rowData[ComparisonPropertyColumnNames.SourceBValue] = property.sourceCValue;
             rowData[ComparisonPropertyColumnNames.SourceDValue] = property.sourceCValue;
         }
         else if (property.transpose == 'FromDataSource4') {
-            rowData[ComparisonPropertyColumnNames.Status] = 'OK(T)';
+            rowData[ComparisonPropertyColumnNames.Status] = property["severity"];
             rowData[ComparisonPropertyColumnNames.SourceAValue] = property.sourceDValue;
             rowData[ComparisonPropertyColumnNames.SourceBValue] = property.sourceDValue;
             rowData[ComparisonPropertyColumnNames.SourceCValue] = property.sourceDValue;
