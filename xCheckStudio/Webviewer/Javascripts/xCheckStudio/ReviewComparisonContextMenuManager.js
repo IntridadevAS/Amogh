@@ -323,10 +323,12 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
         visible: false,
         onItemClick: function(e) {
             _this.ExecuteContextMenuClicked(e.itemData["id"], e.itemData["text"], selectedGroupData.itemData, "group");
+        },
+        onHidden: function(e){
+            $("#contextMenu_" + selectedGroupData.itemElement[0].id).remove(); 
         }
     }); 
 }
-
 
 ReviewComparisonContextMenuManager.prototype.GetGroupContextMenuItems = function(groupId) {
     var acceptItem = this.ChooseActionForComparisonGroup(groupId);

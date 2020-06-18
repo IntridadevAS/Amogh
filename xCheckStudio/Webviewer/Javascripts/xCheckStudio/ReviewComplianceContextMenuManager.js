@@ -210,9 +210,6 @@ ReviewComplianceContextMenuManager.prototype.InitPropertyLevelContextMenu = func
 }
 
 ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = function (selectedGroupData) {
-
-    var _this = this;
-
     var _this = this;
 
     var divID;
@@ -230,8 +227,11 @@ ReviewComplianceContextMenuManager.prototype.InitGroupLevelContextMenu = functio
         "dataSource": contextMenuItems,
         width: 200,
         visible: false,
-        onItemClick: function(e) {
+        onItemClick: function (e) {
             _this.ExecuteContextMenuClicked(e.itemData["id"], e.itemData["text"], selectedGroupData.itemData);
+        },
+        onHidden: function (e) {
+            $("#contextMenu_" + selectedGroupData.itemElement[0].id).remove();
         }
     });
 }
