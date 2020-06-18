@@ -204,10 +204,14 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     e.component);
             },
             onRowClick: function (e) {
+                if (e.event.target.tagName.toLowerCase() === "span") {
+                    return;
+                }
+
                 _this.SelectionManager.OnComponentRowClicked(e.rowElement[0],
                     _this.Id,
                     e.data.ID,
-                    e.data.Item,                    
+                    e.data.Item,
                     _this.ModelBrowserContainer);
 
                 // property call out               
@@ -277,18 +281,18 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                             }
 
                             // if (properties.length > 0) {
-                                SourceManagers[_this.Id].PropertyCallout.Update(e.data.Item,
-                                    componentId,
-                                    properties, 
-                                    referencesData,
-                                    commentsData);
+                            SourceManagers[_this.Id].PropertyCallout.Update(e.data.Item,
+                                componentId,
+                                properties,
+                                referencesData,
+                                commentsData);
                             // }
                         });
                     }
                 }
                 // if (e.data.NodeId in sourceProperties) {
 
-                   
+
                 // }
             },
             onRowPrepared: function (e) {

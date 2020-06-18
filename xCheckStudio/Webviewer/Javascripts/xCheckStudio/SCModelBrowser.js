@@ -224,6 +224,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                     containerDiv);
             },
             onRowClick: function (e) {
+                if (e.event.target.tagName.toLowerCase() === "span") {
+                    return;
+                }
+
                 _this.SelectionManager.OnComponentRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
 
                 // property call out      
@@ -562,10 +566,14 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                     containerDiv);
             },
             onRowClick: function (e) {
+                if (e.event.target.tagName.toLowerCase() === "span") {
+                    return;
+                }
+
                 _this.SelectionManager.OnBrowserRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
 
-                 // property call out    
-                 SourceManagers[_this.Id].OpenPropertyCallout(e.data.Name, e.data.NodeId);
+                // property call out    
+                SourceManagers[_this.Id].OpenPropertyCallout(e.data.Name, e.data.NodeId);
             },
             onRowPrepared: function (e) {
             },

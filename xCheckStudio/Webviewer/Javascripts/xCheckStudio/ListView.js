@@ -443,6 +443,10 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 _this.AvoidViewerEvents = false;
             },
             onRowClick: function (e) {
+                if (e.event.target.tagName.toLowerCase() === "span") {
+                    return;
+                }  
+
                 _this.AvoidViewerEvents = true;
 
                 if (Object.keys(_this.HighlightedRow).length > 0) {
