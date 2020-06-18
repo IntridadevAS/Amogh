@@ -496,55 +496,57 @@ GroupView.prototype.LoadTable = function () {
                     return;
                 }
 
-                // var oldRowKey = Object.keys(_this.HighlightedRow)[0];
-                var rowIndex = e.component.getRowIndexByKey(oldRowKey);
-                var rowElement = e.component.getRowElement(rowIndex)[0];
-                // if (oldRowKey in _this.SelectedRows) {
-                //     // _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
-                // }
-                // else {
-                    _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+                _this.UnHighlightRow();
+                // // var oldRowKey = Object.keys(_this.HighlightedRow)[0];
+                // var rowIndex = e.component.getRowIndexByKey(oldRowKey);
+                // var rowElement = e.component.getRowElement(rowIndex)[0];
+                // // if (oldRowKey in _this.SelectedRows) {
+                // //     // _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
+                // // }
+                // // else {
+                //     _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
 
-                    if (_this.HighlightActive &&
-                        (oldRowKey in _this.RowWiseColors)) {
-                        rowElement.cells[0].style.backgroundColor = _this.RowWiseColors[oldRowKey];
-                    }
-                // }
-                delete _this.HighlightedRow[oldRowKey];
+                //     if (_this.HighlightActive &&
+                //         (oldRowKey in _this.RowWiseColors)) {
+                //         rowElement.cells[0].style.backgroundColor = _this.RowWiseColors[oldRowKey];
+                //     }
+                // // }
+                // delete _this.HighlightedRow[oldRowKey];
             }
 
-            _this.HighlightedRow[e.key] = Number(e.data.NodeId);
+            _this.HighlightRow(e.key, e.data.NodeId);
+            // _this.HighlightedRow[e.key] = Number(e.data.NodeId);
 
-            // var rowIndex = e.component.getRowIndexByKey(Number(e.key));
-            var rowIndex = e.component.getRowIndexByKey(e.key);
-            var rowElement = e.component.getRowElement(rowIndex)[0];
-            _this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
+            // // var rowIndex = e.component.getRowIndexByKey(Number(e.key));
+            // var rowIndex = e.component.getRowIndexByKey(e.key);
+            // var rowElement = e.component.getRowElement(rowIndex)[0];
+            // _this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
 
-            // disable events
-            _this.AvoidViewerEvents = true;
+            // // disable events
+            // _this.AvoidViewerEvents = true;
 
-            if (!(e.key in _this.SelectedRows)) {
-                //now manage selection in viewer
-                _this.Webviewer.selectionManager.clear();
-                for (var rowKey in _this.SelectedRows) {
-                    _this.Webviewer.selectionManager.selectNode(
-                        Number(_this.SelectedRows[rowKey]),
-                        Communicator.SelectionMode.Add);
-                }
+            // if (!(e.key in _this.SelectedRows)) {
+            //     //now manage selection in viewer
+            //     _this.Webviewer.selectionManager.clear();
+            //     for (var rowKey in _this.SelectedRows) {
+            //         _this.Webviewer.selectionManager.selectNode(
+            //             Number(_this.SelectedRows[rowKey]),
+            //             Communicator.SelectionMode.Add);
+            //     }
 
-                _this.Webviewer.selectionManager.selectNode(
-                    Number(e.data.NodeId),
-                    Communicator.SelectionMode.Add);
-            }
-            _this.Webviewer.view.fitNodes([Number(e.data.NodeId)]);
+            //     _this.Webviewer.selectionManager.selectNode(
+            //         Number(e.data.NodeId),
+            //         Communicator.SelectionMode.Add);
+            // }
+            // _this.Webviewer.view.fitNodes([Number(e.data.NodeId)]);
 
-            // property callout                
-            if (e.data.NodeId in _this.Components) {
-                SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
-            }
+            // // property callout                
+            // if (e.data.NodeId in _this.Components) {
+            //     SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
+            // }
 
-            // enable events
-            _this.AvoidViewerEvents = false;
+            // // enable events
+            // _this.AvoidViewerEvents = false;
         },
         onDisposing: function (e) {
             // save table view
@@ -788,6 +790,58 @@ GroupView.prototype.LoadTable = function () {
             }
         }
     }).dxDataGrid("instance");
+}
+
+GroupView.prototype.HighlightRow = function (rowKey, nodeId) {
+
+    this.HighlightedRow[rowKey] = Number(nodeId);
+   
+    var rowIndex = this.GroupViewGrid.getRowIndexByKey(rowKey);
+    var rowElement = this.GroupViewGrid.getRowElement(rowIndex)[0];
+    this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
+
+    // disable events
+    this.AvoidViewerEvents = true;
+
+    if (!(rowKey in this.SelectedRows)) {
+       
+        //now manage selection in viewer
+        this.Webviewer.selectionManager.clear();
+        for (var rowKey in this.SelectedRows) {
+            this.Webviewer.selectionManager.selectNode(
+                Number(this.SelectedRows[rowKey]),
+                Communicator.SelectionMode.Add);
+        }
+
+        this.Webviewer.selectionManager.selectNode(
+            Number(nodeId),
+            Communicator.SelectionMode.Add);
+    }
+    this.Webviewer.view.fitNodes([Number(nodeId)]);
+
+    // property callout                
+    if (nodeId in this.Components) {
+        SourceManagers[this.Id].OpenPropertyCallout(this.Components[nodeId].Name, nodeId);
+    }
+
+    // enable events
+    this.AvoidViewerEvents = false;
+}
+
+GroupView.prototype.UnHighlightRow = function () {
+    var oldRowKey = Number(Object.keys(this.HighlightedRow)[0]);   
+ 
+    var rowIndex = this.GroupViewGrid.getRowIndexByKey(oldRowKey);
+    var rowElement = this.GroupViewGrid.getRowElement(rowIndex)[0];
+    
+    this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+
+    if (this.HighlightActive &&
+        (oldRowKey in this.RowWiseColors)) {
+        rowElement.cells[0].style.backgroundColor = this.RowWiseColors[oldRowKey];
+    }
+    
+    delete this.HighlightedRow[oldRowKey];
 }
 
 GroupView.prototype.OnReferenceClicked = function () {
@@ -1094,7 +1148,7 @@ GroupView.prototype.OnSelectionFromViewer = function (selections) {
 
         var rowKey = this.NodeIdVsTableItems[selectedNodeId];
 
-        this.GoToRow(rowKey);
+        this.GoToRow(rowKey, selectedNodeId);
     }
 }
 
@@ -1122,7 +1176,7 @@ GroupView.prototype.SelectValidNode = function (nodeId) {
     // return null;
 }
 
-GroupView.prototype.GoToRow = function (rowKey) {
+GroupView.prototype.GoToRow = function (rowKey, nodeId) {
     var _this = this;
 
     var rowData = _this.KeyVsTableItems[rowKey];
@@ -1133,8 +1187,18 @@ GroupView.prototype.GoToRow = function (rowKey) {
             if (this.GroupKeysVsDataItems[key].indexOf(rowKey) !== -1) {
                 this.OpenGroup(key.split(",")).then(function (result) {
 
-                    // select row
-                    _this.SelectRow(rowKey);
+                    // highlight row                   
+                    if (Object.keys(_this.HighlightedRow).length > 0) {
+                        var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                        if (oldRowKey === rowKey) {
+                            return;
+                        }
+
+                        _this.UnHighlightRow();
+                    }
+
+                    _this.HighlightRow(rowKey, nodeId);
+                    _this.GroupViewGrid.navigateToRow(rowKey);
                 });
             }
         }
@@ -1162,17 +1226,59 @@ GroupView.prototype.GoToRow = function (rowKey) {
                 }
             }
         }
-
+ 
         for (var i = 0; i < groupKeys.length; i++) {
             var key = groupKeys[i];
 
             if (!_this.GroupViewGrid.isRowExpanded(key)) {
-                _this.GroupViewGrid.expandRow(key);
-            }
-        }
+              _this.GroupViewGrid.expandRow(key).then(function (res) {
+                    // highlight row                   
+                    if (Object.keys(_this.HighlightedRow).length > 0) {
+                        var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                        if (oldRowKey === rowKey) {
+                            return;
+                        }
 
-        // select row
-        _this.SelectRow(rowKey);
+                        _this.UnHighlightRow();
+                    }
+
+                    _this.HighlightRow(rowKey, nodeId);
+                    _this.GroupViewGrid.navigateToRow(rowKey);
+                });
+            }
+            else {
+                if (i === groupKeys.length - 1) {
+                    // highlight row                   
+                    if (Object.keys(_this.HighlightedRow).length > 0) {
+                        var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                        if (oldRowKey === rowKey) {
+                            return;
+                        }
+
+                        _this.UnHighlightRow();
+                    }
+
+                    _this.HighlightRow(rowKey, nodeId);
+                    _this.GroupViewGrid.navigateToRow(rowKey);
+                }
+            }
+        }    
+        
+        // xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
+        //     // select row
+        //     // highlight row                   
+        //     if (Object.keys(_this.HighlightedRow).length > 0) {
+        //         var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+        //         if (oldRowKey === rowKey) {
+        //             return;
+        //         }
+
+        //         _this.UnHighlightRow();
+        //     }
+
+        //     _this.HighlightRow(rowKey, nodeId);
+        //     _this.GroupViewGrid.navigateToRow(rowKey);
+        // });
     }
 }
 

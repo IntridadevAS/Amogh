@@ -301,6 +301,30 @@ var xCheckStudio;
         }
         Util.getKeyByValue = getKeyByValue;
 
+        // this doesn't work properly, needs to update
+        function waitUntilAllPromises(allPromises) {
+            return new Promise(function (resolve, reject) {
+
+                if (allPromises.length > 0) {
+                    for (var i = 0; i < allPromises.length; i++) {
+                        allPromises[i].catch(e => { return e; });
+                    }
+
+                    Promise.all(allPromises)
+                        .then(result => {
+                            return resolve(result);
+                        })
+                        .catch(err => {
+                            return resolve(err);
+                        });
+                }
+                else {
+                    return resolve(true)
+                }
+            });
+        }
+        Util.waitUntilAllPromises = waitUntilAllPromises;
+
         function dragElement(elmnt, draggableArea) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             if (draggableArea) {

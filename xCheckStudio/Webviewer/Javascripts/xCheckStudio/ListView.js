@@ -449,45 +449,47 @@ ListView.prototype.LoadTable = function (selectedComps) {
 
                 _this.AvoidViewerEvents = true;
 
-                if (Object.keys(_this.HighlightedRow).length > 0) {
+                _this.UnHighlightRow();                
+                // if (Object.keys(_this.HighlightedRow).length > 0) {
 
-                    var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
-                    var rowIndex = e.component.getRowIndexByKey(oldRowKey);
-                    var rowElement = e.component.getRowElement(rowIndex)[0];
-                    if (oldRowKey in _this.SelectedRows) {
-                        _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
-                    }
-                    else {
-                        _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
-                    }
-                    delete _this.HighlightedRow[oldRowKey];
-                }
+                //     var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+                //     var rowIndex = e.component.getRowIndexByKey(oldRowKey);
+                //     var rowElement = e.component.getRowElement(rowIndex)[0];
+                //     if (oldRowKey in _this.SelectedRows) {
+                //         _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
+                //     }
+                //     else {
+                //         _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+                //     }
+                //     delete _this.HighlightedRow[oldRowKey];
+                // }
 
-                _this.HighlightedRow[e.key] = e.data.NodeId;
+                _this.HighlightRow(e.key, e.data.NodeId);
+                // _this.HighlightedRow[e.key] = e.data.NodeId;
 
-                var rowIndex = e.component.getRowIndexByKey(Number(e.key));
-                var rowElement = e.component.getRowElement(rowIndex)[0];
-                _this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
+                // var rowIndex = e.component.getRowIndexByKey(Number(e.key));
+                // var rowElement = e.component.getRowElement(rowIndex)[0];
+                // _this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
 
-                if (!(e.key in _this.SelectedRows)) {
-                    //now manage selection in viewer
-                    _this.Webviewer.selectionManager.clear();
-                    for (var rowKey in _this.SelectedRows) {
-                        _this.Webviewer.selectionManager.selectNode(
-                            _this.SelectedRows[rowKey],
-                            Communicator.SelectionMode.Add);
-                    }
+                // if (!(e.key in _this.SelectedRows)) {
+                //     //now manage selection in viewer
+                //     _this.Webviewer.selectionManager.clear();
+                //     for (var rowKey in _this.SelectedRows) {
+                //         _this.Webviewer.selectionManager.selectNode(
+                //             _this.SelectedRows[rowKey],
+                //             Communicator.SelectionMode.Add);
+                //     }
 
-                    _this.Webviewer.selectionManager.selectNode(
-                        e.data.NodeId,
-                        Communicator.SelectionMode.Add);
-                }
-                _this.Webviewer.view.fitNodes([e.data.NodeId]);
+                //     _this.Webviewer.selectionManager.selectNode(
+                //         e.data.NodeId,
+                //         Communicator.SelectionMode.Add);
+                // }
+                // _this.Webviewer.view.fitNodes([e.data.NodeId]);
 
-                // property callout                
-                if (e.data.NodeId in _this.Components) {
-                    SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
-                }
+                // // property callout                
+                // if (e.data.NodeId in _this.Components) {
+                //     SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
+                // }
 
                 _this.AvoidViewerEvents = false;
             },
@@ -514,9 +516,9 @@ ListView.prototype.LoadTable = function (selectedComps) {
 
                     delete _this.UpdateRequiredRows[e.key];
                     e.component.saveEditData();
-                }
-                _this.AvoidTableEvents = false;
-                
+                }              
+               
+                _this.AvoidTableEvents = false;                
             },
             onDisposing: function (e) {
                  // disable events
@@ -546,6 +548,54 @@ ListView.prototype.LoadTable = function (selectedComps) {
             }
         }).dxTreeList("instance");
     });
+}
+
+ListView.prototype.HighlightRow = function (rowKey, nodeId) {
+    var _this = this;
+   
+    _this.HighlightedRow[rowKey] = nodeId;
+
+    var rowIndex = this.ListViewTableInstance.getRowIndexByKey(Number(rowKey));
+    var rowElement = this.ListViewTableInstance.getRowElement(rowIndex)[0];
+    _this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
+
+    if (!(rowKey in _this.SelectedRows)) {
+        //now manage selection in viewer
+        _this.Webviewer.selectionManager.clear();
+        for (var rowKey in _this.SelectedRows) {
+            _this.Webviewer.selectionManager.selectNode(
+                _this.SelectedRows[rowKey],
+                Communicator.SelectionMode.Add);
+        }
+
+        _this.Webviewer.selectionManager.selectNode(
+            nodeId,
+            Communicator.SelectionMode.Add);
+    }
+    _this.Webviewer.view.fitNodes([nodeId]);
+
+    // property callout                
+    if (nodeId in _this.Components) {
+        SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[nodeId].Name, nodeId);
+    }
+}
+
+ListView.prototype.UnHighlightRow = function () {
+    var _this = this;
+
+    if (Object.keys(_this.HighlightedRow).length > 0) {
+
+        var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
+        var rowIndex = this.ListViewTableInstance.getRowIndexByKey(oldRowKey);
+        var rowElement = this.ListViewTableInstance.getRowElement(rowIndex)[0];
+        if (oldRowKey in _this.SelectedRows) {
+            _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
+        }
+        else {
+            _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
+        }
+        delete _this.HighlightedRow[oldRowKey];
+    }
 }
 
 ListView.prototype.RestoreSelectionFromComponents = function (selectedNodes) {
@@ -713,8 +763,12 @@ ListView.prototype.GoToRow = function (rowKey) {
     var _this = this;
 
     _this.AvoidTableEvents = true;
+    _this.AvoidViewerEvents = true;
 
     if (_this.Flat) {
+        _this.UnHighlightRow();
+        _this.HighlightRow(rowKey, _this.KeyVsTableItems[rowKey].nodeId);
+        
         _this.ListViewTableInstance.navigateToRow(rowKey);
     }
     else {
@@ -727,23 +781,34 @@ ListView.prototype.GoToRow = function (rowKey) {
             var key = itemHierarchy[i];
             if (!_this.ListViewTableInstance.isRowExpanded(key)) {
                 // allPromises.push(_this.ListViewTableInstance.expandRow(key));
-                _this.ListViewTableInstance.expandRow(key).done(function () {
+                _this.ListViewTableInstance.expandRow(key).done(function (res) {
+                    _this.UnHighlightRow();
+                    _this.HighlightRow(rowKey, _this.KeyVsTableItems[rowKey].nodeId);
+
                     _this.ListViewTableInstance.navigateToRow(key);
+
                 });
             }
             else {
+                if (key === rowKey) {
+                    _this.UnHighlightRow();
+                    _this.HighlightRow(rowKey, _this.KeyVsTableItems[rowKey].nodeId);
+                }
                 _this.ListViewTableInstance.navigateToRow(key);
             }
         }
     }
 
-    // Communicator.Util.waitForAll(allPromises);
-    if (!_this.ListViewTableInstance.isRowSelected(rowKey)) {
-        _this.ListViewTableInstance.selectRows([rowKey], true);
-        _this.SelectedRows[rowKey] = _this.KeyVsTableItems[rowKey].nodeId;
-    }
+
+    // _this.UnHighlightRow();
+    // _this.HighlightRow(rowKey, _this.KeyVsTableItems[rowKey].nodeId);
+    // if (!_this.ListViewTableInstance.isRowSelected(rowKey)) {
+    //     _this.ListViewTableInstance.selectRows([rowKey], true);
+    //     _this.SelectedRows[rowKey] = _this.KeyVsTableItems[rowKey].nodeId;
+    // }
 
     _this.AvoidTableEvents = false;
+    _this.AvoidViewerEvents = false;
 }
 
 ListView.prototype.GetItemHierarchy = function (rowKey, itemHierarchy) {
