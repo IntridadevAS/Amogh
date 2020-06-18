@@ -19,7 +19,7 @@ UserPropertiesForm.prototype.GetHtmlElementId = function () {
 
 UserPropertiesForm.prototype.Open = function () {
     if (model.views[this.Id].activeTableView.toLowerCase() !== "list view" &&
-        model.views[this.Id].activeTableView.toLowerCase() !== "group view") {
+        model.views[this.Id].activeTableView.toLowerCase() !== "groups view") {
         return;
     }
 
@@ -333,7 +333,7 @@ UserPropertiesForm.prototype.OnApply =  function(){
         if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
             selectedNodeIds = model.views[_this.Id].listView.GetSelectedNodeIds();
         }
-        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
             selectedNodeIds = model.views[_this.Id].groupView.GetSelectedNodeIds();
         }
         if (!selectedNodeIds || selectedNodeIds.length === 0) {
@@ -436,7 +436,7 @@ UserPropertiesForm.prototype.OnApply =  function(){
         if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
             model.views[_this.Id].listView.UpdateComponents(data);
         }
-        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
             model.views[_this.Id].groupView.UpdateComponents(data);
         }        
 

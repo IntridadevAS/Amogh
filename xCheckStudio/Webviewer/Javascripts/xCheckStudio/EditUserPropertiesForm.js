@@ -135,7 +135,7 @@ EditUserPropertiesForm.prototype.OnApply = function () {
     if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
         model.views[_this.Id].listView.UpdateComponents(data);
     }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
         model.views[_this.Id].groupView.UpdateComponents(data);
     }
 
@@ -227,7 +227,7 @@ EditUserPropertiesForm.prototype.LoadData = function () {
     if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
         selected = model.views[this.Id].listView.GetSelectedComponents();
     }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
         selected = model.views[this.Id].groupView.GetSelectedComponents();
     }
 
@@ -453,7 +453,7 @@ EditUserPropertiesForm.prototype.EditPropertyForAll = function (columnIndex, old
     if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
         model.views[_this.Id].listView.UpdateComponents(data);
     }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
         model.views[_this.Id].groupView.UpdateComponents(data);
     }
 
@@ -517,7 +517,7 @@ EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex,
     if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
         model.views[_this.Id].listView.UpdateComponents(data);
     }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
         model.views[_this.Id].groupView.UpdateComponents(data);
     }
     // Update components in editUserProperties table
@@ -770,7 +770,7 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
         if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
             model.views[_this.Id].listView.UpdateComponents(data);
         }
-        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
             model.views[_this.Id].groupView.UpdateComponents(data);
         }
 
@@ -863,7 +863,7 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
         if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
             model.views[_this.Id].listView.UpdateComponents(data);
         }
-        else if (model.views[_this.Id].activeTableView.toLowerCase() === "group view") {
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
             model.views[_this.Id].groupView.UpdateComponents(data);
         }
 

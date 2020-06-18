@@ -151,7 +151,7 @@ const GlobalConstants = {
     TableView : {
         "DataBrowser" : "Data Browser",
         "List" : "List View",
-        "Group" : "Group View"
+        "Group" : "Groups View"
     },
 
     TableRowSelectedColor : "#e6e6e6",
