@@ -359,13 +359,12 @@ input:checked + .slider:before {
 /* Start tooltips */
 .tooltip {
   padding: 0px 5px;
-  position: relative;
+  position: absolute;
   background: #FFBB99;
   display: none;
   cursor: pointer;
-  /*left: 50%;*/
-  margin-left: -5px;  
-  white-space: pre-wrap;
+  /* margin-left: -5px;  
+  white-space: pre-wrap; */
   z-index: 200;
 }
 
@@ -379,8 +378,9 @@ input:checked + .slider:before {
   border-radius: 4px;
   transition: opacity 0.1s ease-out; 
   text-align: left;
-  max-width: 230px;
-  overflow-wrap: break-word;
+  /* max-width: 230px;
+  overflow-wrap: break-word; */
+  top:20px;
 }
 
 .tooltipHov:hover .tooltip{
