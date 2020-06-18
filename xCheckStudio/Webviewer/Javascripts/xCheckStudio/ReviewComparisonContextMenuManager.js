@@ -317,7 +317,6 @@ ReviewComparisonContextMenuManager.prototype.InitGroupLevelContextMenu = functio
 
     var contextMenuItems = this.GetGroupContextMenuItems(selectedGroupData.itemData["groupId"]);
 
-
     new DevExpress.ui.dxContextMenu(document.getElementById(divID), {
         "dataSource": contextMenuItems,
         width: 200,
@@ -361,7 +360,38 @@ ReviewComparisonContextMenuManager.prototype.GetGroupContextMenuItems = function
             "id": "transposeItem"
         }
     }
-    
+
+    // select all
+    // dataSource[dataSource.length] = {
+    //     "text": "Select All",
+    //     "id": "selectAll"
+    // }
+
+    // // deselect all
+    // dataSource[dataSource.length] = {
+    //     "text": "DeSelect All",
+    //     "id": "deSelectAll"
+    // }
+
+    if (this.HaveSCOperations()) {
+        // hide
+        dataSource[dataSource.length] = {
+            "text": "Hide",
+            "id": "hideGroup"
+        }
+
+        // isolate
+        dataSource[dataSource.length] = {
+            "text": "Isolate",
+            "id": "isolateGroup"
+        }
+
+        // show
+        dataSource[dataSource.length] = {
+            "text": "Show",
+            "id": "showGroup"
+        }
+    }    
 
     return dataSource;
 
@@ -799,6 +829,159 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key.toLowerCase() === "modelviews") {
         this.OnModelViewsClicked();
     }
+    else if(key.toLowerCase() === "hidegroup"){
+        this.OnHideGroup(accordionData);
+    }
+    else if(key.toLowerCase() === "isolategroup"){
+        this.OnIsolateGroup(accordionData);
+    }
+    else if(key.toLowerCase() === "showgroup"){
+        this.OnShowGroup(accordionData);
+    }
+}
+
+ReviewComparisonContextMenuManager.prototype.OnHideGroup = function (accordionData) {
+    var _this = this;
+
+    var groupId = accordionData["groupId"];
+    comparisonReviewManager.SelectAllGroupItems(groupId).then(function (rows) {
+
+        var sourceANodeIds = [];
+        var sourceBNodeIds = [];
+        var sourceCNodeIds = [];
+        var sourceDNodeIds = [];
+        var selectedComponentRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var rowData = row.data;
+
+            //node ids
+            // source A        
+            if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) {
+                sourceANodeIds.push(Number(rowData.SourceANodeId));
+            }
+            // source B        
+            if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {
+                sourceBNodeIds.push(Number(rowData.SourceBNodeId));
+            }
+            // source C        
+            if (rowData.SourceCNodeId !== "" && rowData.SourceCNodeId !== null) {
+                sourceCNodeIds.push(Number(rowData.SourceCNodeId));
+            }
+            // source D        
+            if (rowData.SourceDNodeId !== "" && rowData.SourceDNodeId !== null) {
+                sourceDNodeIds.push(Number(rowData.SourceDNodeId));
+            }
+
+            // rowkeys
+            selectedComponentRows.push({
+                "rowKey": row.key,
+                "tableId": _this.ComponentTableContainer
+            });
+        }
+        var nodes = {
+            "SourceA": sourceANodeIds,
+            "SourceB": sourceBNodeIds,
+            "SourceC": sourceCNodeIds,
+            "SourceD": sourceDNodeIds
+        };
+
+        _this.HideItems(nodes, selectedComponentRows);
+    });
+}
+
+ReviewComparisonContextMenuManager.prototype.OnIsolateGroup = function (accordionData) {
+    var _this = this;
+
+    var groupId = accordionData["groupId"];
+    comparisonReviewManager.SelectAllGroupItems(groupId).then(function (rows) {
+        var tableId = "#" + accordionData.template + "_" + this.MainReviewTableContainer;
+
+        var sourceANodeIds = [];
+        var sourceBNodeIds = [];
+        var sourceCNodeIds = [];
+        var sourceDNodeIds = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var rowData = row.data;
+
+            //node ids
+            // source A        
+            if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) {
+                sourceANodeIds.push(Number(rowData.SourceANodeId));
+            }
+            // source B        
+            if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {
+                sourceBNodeIds.push(Number(rowData.SourceBNodeId));
+            }
+            // source C        
+            if (rowData.SourceCNodeId !== "" && rowData.SourceCNodeId !== null) {
+                sourceCNodeIds.push(Number(rowData.SourceCNodeId));
+            }
+            // source D        
+            if (rowData.SourceDNodeId !== "" && rowData.SourceDNodeId !== null) {
+                sourceDNodeIds.push(Number(rowData.SourceDNodeId));
+            }
+        }
+        var nodes = {
+            "SourceA": sourceANodeIds,
+            "SourceB": sourceBNodeIds,
+            "SourceC": sourceCNodeIds,
+            "SourceD": sourceDNodeIds
+        };
+
+        _this.IsolateItems(nodes);
+    });
+}
+
+ReviewComparisonContextMenuManager.prototype.OnShowGroup = function (accordionData) {
+    var _this = this;
+
+    var groupId = accordionData["groupId"];
+    comparisonReviewManager.SelectAllGroupItems(groupId).then(function(rows){       
+      
+        var sourceANodeIds = [];
+        var sourceBNodeIds = [];
+        var sourceCNodeIds = [];
+        var sourceDNodeIds = [];
+        var selectedComponentRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var rowData = row.data;
+
+            //node ids
+            // source A        
+            if (rowData.SourceANodeId !== "" && rowData.SourceANodeId !== null) {
+                sourceANodeIds.push(Number(rowData.SourceANodeId));
+            }
+            // source B        
+            if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {
+                sourceBNodeIds.push(Number(rowData.SourceBNodeId));
+            }
+            // source C        
+            if (rowData.SourceCNodeId !== "" && rowData.SourceCNodeId !== null) {
+                sourceCNodeIds.push(Number(rowData.SourceCNodeId));
+            }
+            // source D        
+            if (rowData.SourceDNodeId !== "" && rowData.SourceDNodeId !== null) {
+                sourceDNodeIds.push(Number(rowData.SourceDNodeId));
+            }
+
+            // rowkeys
+            selectedComponentRows.push({
+                "rowKey": row.key,
+                "tableId": _this.ComponentTableContainer
+            });
+        }
+        var nodes = {
+            "SourceA": sourceANodeIds,
+            "SourceB": sourceBNodeIds,
+            "SourceC": sourceCNodeIds,
+            "SourceD": sourceDNodeIds
+        };
+
+        _this.ShowItems(nodes, selectedComponentRows);
+    });    
 }
 
 ReviewComparisonContextMenuManager.prototype.OnModelViewsClicked = function () {
@@ -1175,6 +1358,10 @@ ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
         return;
     }
 
+    this.IsolateItems(nodes);
+}
+
+ReviewComparisonContextMenuManager.prototype.IsolateItems = function (nodes) {
     // source a isolate
     var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1203,6 +1390,32 @@ ReviewComparisonContextMenuManager.prototype.OnIsolateClick = function () {
 
         });
     }
+
+    // source c isolate
+    var sourceCNodeIds = nodes["SourceC"];
+    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+
+    if (sourceCNodeIds.length > 0 &&
+        sourceCViewerInterface) {
+        // perform isolate
+        var isolateManager = new IsolateManager(sourceCViewerInterface.Viewer);
+        isolateManager.Isolate(sourceCNodeIds).then(function (affectedNodes) {
+
+        });
+    }
+
+    // source d isolate
+    var sourceDNodeIds = nodes["SourceD"];
+    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+
+    if (sourceDNodeIds.length > 0 &&
+        sourceDViewerInterface) {
+        // perform isolate
+        var isolateManager = new IsolateManager(sourceDViewerInterface.Viewer);
+        isolateManager.Isolate(sourceDNodeIds).then(function (affectedNodes) {
+
+        });
+    }
 }
 
 ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
@@ -1214,41 +1427,71 @@ ReviewComparisonContextMenuManager.prototype.OnShowClick = function () {
 
     var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
 
-    // source A
-    var sourceANodeIds = nodes["SourceA"];
-    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
+    this.ShowItems(nodes, SelectedComponentRows);
+}
 
-    if (sourceANodeIds.length > 0 &&
-        sourceAViewerInterface) {
-        sourceAViewerInterface.Viewer.model.setNodesVisibility(sourceANodeIds, true).then(function () {
-            sourceAViewerInterface.Viewer.view.fitWorld();
-        });
-        //Remove resultId on show
-        sourceAViewerInterface.RemoveHiddenResultId(SelectedComponentRows);
-    }
+ReviewComparisonContextMenuManager.prototype.ShowItems = function(nodes, SelectedComponentRows){
+        // source A
+        var sourceANodeIds = nodes["SourceA"];
+        var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
+    
+        if (sourceANodeIds.length > 0 &&
+            sourceAViewerInterface) {
+            sourceAViewerInterface.Viewer.model.setNodesVisibility(sourceANodeIds, true).then(function () {
+                sourceAViewerInterface.Viewer.view.fitWorld();
+            });
+            //Remove resultId on show
+            sourceAViewerInterface.RemoveHiddenResultId(SelectedComponentRows);
+        }
+    
+        // source b
+        var sourceBNodeIds = nodes["SourceB"];
+        var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
+        if (sourceBNodeIds.length > 0 &&
+            sourceBViewerInterface) {
+            sourceBViewerInterface.Viewer.model.setNodesVisibility(sourceBNodeIds, true).then(function () {
+                sourceBViewerInterface.Viewer.view.fitWorld();
+            });
+    
+            //Remove resultId on show
+            sourceBViewerInterface.RemoveHiddenResultId(SelectedComponentRows);
+        }
 
-    // source b
-    var sourceBNodeIds = nodes["SourceB"];
-    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-    if (sourceBNodeIds.length > 0 &&
-        sourceBViewerInterface) {
-        sourceBViewerInterface.Viewer.model.setNodesVisibility(sourceBNodeIds, true).then(function () {
-            sourceBViewerInterface.Viewer.view.fitWorld();
-        });
+        // source c
+        var sourceCNodeIds = nodes["SourceC"];
+        var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+        if (sourceCNodeIds.length > 0 &&
+            sourceCViewerInterface) {
+            sourceCViewerInterface.Viewer.model.setNodesVisibility(sourceCNodeIds, true).then(function () {
+                sourceCViewerInterface.Viewer.view.fitWorld();
+            });
 
-        //Remove resultId on show
-        sourceBViewerInterface.RemoveHiddenResultId(SelectedComponentRows);
-    }
+            //Remove resultId on show
+            sourceCViewerInterface.RemoveHiddenResultId(SelectedComponentRows);
+        }
 
-    var rows = [];
-    for (var i = 0; i < SelectedComponentRows.length; i++) {
-        var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
-        var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
-        var row = dataGrid.getRowElement(rowIndex)[0];
-        rows.push(row);
-    }
+        // source d
+        var sourceDNodeIds = nodes["SourceD"];
+        var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+        if (sourceDNodeIds.length > 0 &&
+            sourceDViewerInterface) {
+            sourceDViewerInterface.Viewer.model.setNodesVisibility(sourceDNodeIds, true).then(function () {
+                sourceDViewerInterface.Viewer.view.fitWorld();
+            });
 
-    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
+            //Remove resultId on show
+            sourceDViewerInterface.RemoveHiddenResultId(SelectedComponentRows);
+        }
+    
+        var rows = [];
+        for (var i = 0; i < SelectedComponentRows.length; i++) {
+            var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+            var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
+            var row = dataGrid.getRowElement(rowIndex)[0];
+            rows.push(row);
+        }
+    
+        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
 }
 
 ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
@@ -1259,6 +1502,11 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
     }
 
     var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
+
+    this.HideItems(nodes, SelectedComponentRows);
+}
+
+ReviewComparisonContextMenuManager.prototype.HideItems = function(nodes, SelectedComponentRows){
     // source A
     var sourceANodeIds = nodes["SourceA"];
     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1284,6 +1532,32 @@ ReviewComparisonContextMenuManager.prototype.OnHideClick = function () {
         sourceBViewerInterface.StoreHiddenResultId(SelectedComponentRows);
     }
 
+    // source C
+    var sourceCNodeIds = nodes["SourceC"];
+    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+
+    if (sourceCNodeIds.length > 0 &&
+        sourceCViewerInterface) {
+            sourceCViewerInterface.Viewer.model.setNodesVisibility(sourceCNodeIds, false).then(function () {
+                sourceCViewerInterface.Viewer.view.fitWorld();
+        });
+        //Store resultId of hidden elements
+        sourceCViewerInterface.StoreHiddenResultId(SelectedComponentRows);
+    }
+
+    // source D
+    var sourceDNodeIds = nodes["SourceD"];
+    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+
+    if (sourceDNodeIds.length > 0 &&
+        sourceDViewerInterface) {
+            sourceDViewerInterface.Viewer.model.setNodesVisibility(sourceDNodeIds, false).then(function () {
+                sourceDViewerInterface.Viewer.view.fitWorld();
+        });
+        //Store resultId of hidden elements
+        sourceDViewerInterface.StoreHiddenResultId(SelectedComponentRows);
+    }
+
     var rows = [];
     for (var i = 0; i < SelectedComponentRows.length; i++) {
         var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
@@ -1303,6 +1577,8 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
 
     var sourceANodeIds = [];
     var sourceBNodeIds = [];
+    var sourceCNodeIds = [];
+    var sourceDNodeIds = [];
     for (var i = 0; i < selectedComponents.length; i++) {
         var selectedRow = selectedComponents[i];
 
@@ -1320,11 +1596,23 @@ ReviewComparisonContextMenuManager.prototype.GetNodeIdsFormComponentRow = functi
         if (rowData.SourceBNodeId !== "" && rowData.SourceBNodeId !== null) {
             sourceBNodeIds.push(Number(rowData.SourceBNodeId));
         }
+
+         // source C        
+         if (rowData.SourceCNodeId !== "" && rowData.SourceCNodeId !== null) {
+            sourceCNodeIds.push(Number(rowData.SourceCNodeId));
+        }
+
+         // source D        
+         if (rowData.SourceDNodeId !== "" && rowData.SourceDNodeId !== null) {
+            sourceDNodeIds.push(Number(rowData.SourceDNodeId));
+        }
     }
 
     return {
         "SourceA": sourceANodeIds,
-        "SourceB": sourceBNodeIds
+        "SourceB": sourceBNodeIds,
+        "SourceC": sourceCNodeIds,
+        "SourceD": sourceDNodeIds
     };
 }
 

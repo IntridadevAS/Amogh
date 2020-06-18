@@ -1604,3 +1604,23 @@ ComparisonReviewManager.prototype.GetReferencesData = function (componentId, src
 
     return allData;
 }
+
+ComparisonReviewManager.prototype.SelectAllGroupItems = function (groupId) {
+    return new Promise((resolve) => {
+
+        var groupContainer = "#" + this.ComparisonCheckManager["results"][groupId]["componentClass"] + "_" + this.MainReviewTableContainer;
+        var dataGrid = $(groupContainer).dxDataGrid("instance");
+        var rows = dataGrid.getVisibleRows();
+
+        var rowKeys = [];
+        for (var i = 0; i < rows.length; i++) {
+            rowKeys.push(rows[i].key);
+        }
+
+        if (rowKeys.length > 0) {
+            dataGrid.selectRows(rowKeys).then(function (result) {
+                return resolve(rows);
+            });
+        }
+    });
+}

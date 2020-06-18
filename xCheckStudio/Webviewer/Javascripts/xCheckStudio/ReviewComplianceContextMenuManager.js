@@ -249,6 +249,26 @@ ReviewComplianceContextMenuManager.prototype.GetGroupContextMenuItems = function
         "id": "acceptGroup"
     }
 
+    if (this.HaveSCOperations()) {
+        // hide
+        dataSource[dataSource.length] = {
+            "text": "Hide",
+            "id": "hideGroup"
+        }
+
+        // isolate
+        dataSource[dataSource.length] = {
+            "text": "Isolate",
+            "id": "isolateGroup"
+        }
+
+        // show
+        dataSource[dataSource.length] = {
+            "text": "Show",
+            "id": "showGroup"
+        }
+    } 
+
     return dataSource;
 
 }
@@ -368,6 +388,89 @@ ReviewComplianceContextMenuManager.prototype.ExecuteContextMenuClicked = functio
     else if (key.toLowerCase() === "modelviews") {
         this.OnModelViewsClicked();
     }
+    else if(key.toLowerCase() === "hidegroup"){
+        this.OnHideGroup(accordionData);
+    }
+    else if(key.toLowerCase() === "isolategroup"){
+        this.OnIsolateGroup(accordionData);
+    }
+    else if(key.toLowerCase() === "showgroup"){
+        this.OnShowGroup(accordionData);
+    }
+}
+
+ReviewComplianceContextMenuManager.prototype.OnHideGroup = function (accordionData) {
+    var _this = this;
+
+    var groupId = accordionData["groupId"];
+    this.ComplianceReviewManager.SelectAllGroupItems(groupId).then(function (rows) {
+        var nodes = [];
+        var selectedComponentRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var rowData = row.data;
+
+            //node ids          
+            if (rowData.NodeId !== "" && rowData.NodeId !== null) {
+                nodes.push(Number(rowData.NodeId));
+            }
+
+            // rowkeys
+            selectedComponentRows.push({
+                "rowKey": row.key,
+                "tableId": _this.ComponentTableContainer
+            });
+        }
+
+        _this.HideItems(nodes, selectedComponentRows);
+    });
+}
+
+ReviewComplianceContextMenuManager.prototype.OnIsolateGroup = function (accordionData) {
+    var _this = this;
+
+    var groupId = accordionData["groupId"];
+    this.ComplianceReviewManager.SelectAllGroupItems(groupId).then(function (rows) {
+        var nodes = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var rowData = row.data;
+
+            //node ids          
+            if (rowData.NodeId !== "" && rowData.NodeId !== null) {
+                nodes.push(Number(rowData.NodeId));
+            }
+        }
+
+        _this.IsolateItems(nodes);
+    });
+}
+
+ReviewComplianceContextMenuManager.prototype.OnShowGroup = function (accordionData) {
+    var _this = this;
+
+    var groupId = accordionData["groupId"];
+    this.ComplianceReviewManager.SelectAllGroupItems(groupId).then(function (rows) {
+        var nodes = [];
+        var selectedComponentRows = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var rowData = row.data;
+
+            //node ids          
+            if (rowData.NodeId !== "" && rowData.NodeId !== null) {
+                nodes.push(Number(rowData.NodeId));
+            }
+
+            // rowkeys
+            selectedComponentRows.push({
+                "rowKey": row.key,
+                "tableId": _this.ComponentTableContainer
+            });
+        }
+
+        _this.ShowItems(nodes, selectedComponentRows);
+    });
 }
 
 ReviewComplianceContextMenuManager.prototype.OnModelViewsClicked = function () {
@@ -618,10 +721,12 @@ ReviewComplianceContextMenuManager.prototype.OnIsolateClick = function () {
     }
 
     // source isolate
+    this.IsolateItems(nodes);
+}
+
+ReviewComplianceContextMenuManager.prototype.IsolateItems = function (nodes) {
     var viewerInterface = model.checks["compliance"]["viewer"];
-
     if (viewerInterface) {
-
         // perform isolate
         var isolateManager = new IsolateManager(viewerInterface.Viewer);
         isolateManager.Isolate(nodes).then(function (affectedNodes) {
@@ -631,69 +736,80 @@ ReviewComplianceContextMenuManager.prototype.OnIsolateClick = function () {
 }
 
 ReviewComplianceContextMenuManager.prototype.OnShowClick = function () {
-    var viewerInterface = model.checks["compliance"]["viewer"];
-
-    if (viewerInterface) {
-
+    // var viewerInterface = model.checks["compliance"]["viewer"];
+    // if (viewerInterface) {
         var nodes = this.GetNodeIdsFormComponentRow();
         if (!nodes ||
             nodes.length === 0) {
             return;
         }
+        var selectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
 
-        viewerInterface.Viewer.model.setNodesVisibility(nodes, true).then(function () {
-            viewerInterface.Viewer.view.fitWorld();
-        });
-
-        var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
-        
-        //Remove resultId on show
-        viewerInterface.RemoveHiddenResultId(SelectedComponentRows);
-
-
-        var rows = [];
-        for (var i = 0; i < SelectedComponentRows.length; i++) {
-            var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
-            var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
-            var row = dataGrid.getRowElement(rowIndex)[0];
-            rows.push(row);
-        }
-
-        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
-    }
+        this.ShowItems(nodes, selectedComponentRows);
+    // }
 }
 
+ReviewComplianceContextMenuManager.prototype.ShowItems = function (nodes, selectedComponentRows) {
+    var viewerInterface = model.checks["compliance"]["viewer"];
+    if (!viewerInterface) {
+        return;
+    }
+
+    viewerInterface.Viewer.model.setNodesVisibility(nodes, true).then(function () {
+        viewerInterface.Viewer.view.fitWorld();
+    });      
+    
+    //Remove resultId on show
+    viewerInterface.RemoveHiddenResultId(selectedComponentRows);
+
+    var rows = [];
+    for (var i = 0; i < selectedComponentRows.length; i++) {
+        var dataGrid = $(selectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(selectedComponentRows[i]["rowKey"]);
+        var row = dataGrid.getRowElement(rowIndex)[0];
+        rows.push(row);
+    }
+
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(false, rows);
+}
 
 ReviewComplianceContextMenuManager.prototype.OnHideClick = function () {
-    var viewerInterface = model.checks["compliance"]["viewer"];
-
-    if (viewerInterface) {
-
-        var nodes = this.GetNodeIdsFormComponentRow();
-        if (!nodes ||
-            nodes.length === 0) {
-            return;
-        }
-
-        viewerInterface.Viewer.model.setNodesVisibility(nodes, false).then(function () {
-            viewerInterface.Viewer.view.fitWorld();
-        });
-
-        var SelectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
-       
-        viewerInterface.StoreHiddenResultId(SelectedComponentRows);
-        
-        var rows = [];
-        for (var i = 0; i < SelectedComponentRows.length; i++) {
-            var dataGrid = $(SelectedComponentRows[i]["tableId"]).dxDataGrid("instance");
-            var rowIndex = dataGrid.getRowIndexByKey(SelectedComponentRows[i]["rowKey"]);
-            var row = dataGrid.getRowElement(rowIndex)[0];
-            rows.push(row);
-        }
-
-        model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
+    // var viewerInterface = model.checks["compliance"]["viewer"];
+    // if (viewerInterface) {
+    var nodes = this.GetNodeIdsFormComponentRow();
+    if (!nodes ||
+        nodes.length === 0) {
+        return;
     }
+
+    var selectedComponentRows = model.getCurrentSelectionManager().GetSelectedComponents();
+
+    this.HideItems(nodes, selectedComponentRows);
+    // }
 }
+
+ReviewComplianceContextMenuManager.prototype.HideItems = function(nodes, selectedComponentRows){
+    var viewerInterface = model.checks["compliance"]["viewer"];
+    if (!viewerInterface) {
+        return;
+    }
+
+    viewerInterface.Viewer.model.setNodesVisibility(nodes, false).then(function () {
+        viewerInterface.Viewer.view.fitWorld();
+    });
+
+    viewerInterface.StoreHiddenResultId(selectedComponentRows);
+
+    var rows = [];
+    for (var i = 0; i < selectedComponentRows.length; i++) {
+        var dataGrid = $(selectedComponentRows[i]["tableId"]).dxDataGrid("instance");
+        var rowIndex = dataGrid.getRowIndexByKey(selectedComponentRows[i]["rowKey"]);
+        var row = dataGrid.getRowElement(rowIndex)[0];
+        rows.push(row);
+    }
+    model.checks[model.currentCheck]["reviewTable"].HighlightHiddenRows(true, rows);
+}
+
 
 ReviewComplianceContextMenuManager.prototype.GetNodeIdsFormComponentRow = function () {
     var selectedComponents = model.getCurrentSelectionManager().GetSelectedComponents();
