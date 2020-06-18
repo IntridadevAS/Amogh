@@ -301,11 +301,16 @@ TagsMenu.prototype.RemoveHighlightColor = function (row) {
 }
 
 TagsMenu.prototype.ActivateOperator = function () {
-    this.Webviewer.operatorManager.set(model.views[this.Id].annotationOperatorId, 1);
+    // this.Webviewer.operatorManager.set(model.views[this.Id].annotationOperatorId, 1);
+    this.Webviewer.operatorManager.push(model.views[this.Id].annotationOperatorId);
 }
 
 TagsMenu.prototype.DeActivateOperator = function () {
-    this.Webviewer.operatorManager.remove(model.views[this.Id].annotationOperatorId);
+    // this.Webviewer.operatorManager.remove(model.views[this.Id].annotationOperatorId);
+    var manager = this.Webviewer.operatorManager;
+    if (manager.peek() === model.views[this.Id].annotationOperatorId) {
+        manager.pop();
+    }
 }
 
 TagsMenu.prototype.InitEvents = function () {

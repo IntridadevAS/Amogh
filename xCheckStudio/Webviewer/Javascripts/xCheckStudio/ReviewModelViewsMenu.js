@@ -1309,13 +1309,19 @@ MeasureMenu.prototype.ActivateOperator = function (operator) {
     // this.DeActivateOperator();
 
     this.ActiveOperator = operator;
-    this.Webviewer.operatorManager.set(operator, 1);
+    // this.Webviewer.operatorManager.set(operator, 1);
+    this.Webviewer.operatorManager.push(operator);
 }
 
 MeasureMenu.prototype.DeActivateOperator = function () {
 
     if (this.ActiveOperator) {
-        this.Webviewer.operatorManager.remove(this.ActiveOperator);
-        this.ActiveOperator = null;
+        // this.Webviewer.operatorManager.remove(this.ActiveOperator);
+        // this.ActiveOperator = null;
+        var manager = this.Webviewer.operatorManager;
+        if (manager.peek() === this.ActiveOperator) {
+            manager.pop();
+            this.ActiveOperator = null;
+        }
     }
 }

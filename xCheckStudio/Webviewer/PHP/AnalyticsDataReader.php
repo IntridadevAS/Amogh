@@ -537,11 +537,11 @@
 
                             $SourceBClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceBnotSelectedCompsCount;
 
-                            $components = $mainDbh->query("SELECT * FROM  $SourceBClassWiseNotSelectedComps where mainClass='$mainClass';");
+                            $components = $mainDbh->query("SELECT * FROM  $sourceBnotSelectedCompsTable where mainClass='$mainClass';");
                             while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
                                 $subclass = $comp['subClass'];
 
-                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $SourceBClassWiseNotSelectedComps where subClass='$subclass';"); 
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceBnotSelectedCompsTable where subClass='$subclass';"); 
                                 if($results  && !array_key_exists($subclass, $SourceBClassWiseNotSelectedComps[$mainClass])) {
                                     $SourceBClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
                                 } 
@@ -570,11 +570,11 @@
                              $SourceCClassWiseNotSelectedComps[$mainClass] = array();
 
                              $SourceCClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceCnotSelectedCompsCount;
-                             $components = $mainDbh->query("SELECT * FROM  $SourceCClassWiseNotSelectedComps where mainClass='$mainClass';");
+                             $components = $mainDbh->query("SELECT * FROM  $sourceCnotSelectedCompsTable where mainClass='$mainClass';");
                              while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
                                 $subclass = $comp['subClass'];
 
-                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $SourceCClassWiseNotSelectedComps where subClass='$subclass';"); 
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceCnotSelectedCompsTable where subClass='$subclass';"); 
                                 if($results && !array_key_exists($subclass, $SourceCClassWiseNotSelectedComps[$mainClass])) {
                                     $SourceCClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
                                 } 
@@ -603,11 +603,11 @@
                             $SourceDClassWiseNotSelectedComps[$mainClass] = array();
 
                             $SourceDClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceDnotSelectedCompsCount;
-                            $components = $mainDbh->query("SELECT * FROM  $SourceDClassWiseNotSelectedComps where mainClass='$mainClass';");
+                            $components = $mainDbh->query("SELECT * FROM  $sourceDnotSelectedCompsTable where mainClass='$mainClass';");
                              while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
                                 $subclass = $comp['subClass'];
 
-                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $SourceDClassWiseNotSelectedComps where subClass='$subclass';"); 
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceDnotSelectedCompsTable where subClass='$subclass';"); 
                                 if($results && !array_key_exists($subclass, $SourceDClassWiseNotSelectedComps[$mainClass])) {
                                     $SourceDClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
                                 } 

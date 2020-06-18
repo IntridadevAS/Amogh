@@ -3417,7 +3417,7 @@
     var vaultEnable = false;
     function isDataVault() {
       var isVault = localStorage.getItem("isDataVault");
-      if (isVault.toLowerCase() === "true") {
+      if (isVault && isVault.toLowerCase() === "true") {
         return true;
       }
 

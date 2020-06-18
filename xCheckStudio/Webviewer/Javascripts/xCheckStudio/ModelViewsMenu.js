@@ -187,7 +187,7 @@ ModelViewsMenu.prototype.GetControls = function () {
                     event.target.src = this.ImageSrc;
 
                     menu.Webviewer.operatorManager.set(Communicator.OperatorId.Walk, 0);
-
+                    
                     // Chnaging to walk mode forces projection to be chnaged to
                     // perspective so to make projection menu item consistent
                     // update items and load menu
@@ -1288,13 +1288,16 @@ MeasureMenu.prototype.ActivateOperator = function (operator) {
     // this.DeActivateOperator();
 
     this.ActiveOperator = operator;
-    this.Webviewer.operatorManager.set(operator, 1);
+    this.Webviewer.operatorManager.push(operator);
 }
 
 MeasureMenu.prototype.DeActivateOperator = function () {
 
     if (this.ActiveOperator) {
-        this.Webviewer.operatorManager.remove(this.ActiveOperator);
-        this.ActiveOperator = null;
+        var manager = this.Webviewer.operatorManager;
+        if (manager.peek() === this.ActiveOperator) {
+            manager.pop();
+            this.ActiveOperator = null;
+        }
     }
 }
