@@ -454,7 +454,7 @@ LargeAnalyticsManager.prototype.drawComparisonInfoPieCharts = function(noMatchCo
     var colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("No Match",
         noMatchCount,
-        totalItemsLoaded,
+        (totalItemsLoaded - totalItemsNotChecked),
         '#warningPie',
         colorsArray,
         'ID30_');
@@ -465,7 +465,7 @@ LargeAnalyticsManager.prototype.drawComparisonInfoPieCharts = function(noMatchCo
     colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("Undefined",
         undefinedCount,
-        totalItemsLoaded,
+        (totalItemsLoaded - totalItemsNotChecked),
         '#okPie',
         colorsArray,
         'ID10_');
