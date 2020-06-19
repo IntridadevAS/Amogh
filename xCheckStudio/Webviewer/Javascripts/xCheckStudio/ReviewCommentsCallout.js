@@ -100,10 +100,30 @@ CommentsCallout.prototype.Open = function () {
 
     document.getElementById("commentsCalloutNameBar").style.display = "block";
 
+    var forceOpenVisualizer = false;
+    var visualizerId = null;
+    if (model.currentCheck === "comparison" &&
+        document.getElementById("comparisonVisualizerA").style.display === "none") {
+        forceOpenVisualizer = true;
+        document.getElementById("comparisonVisualizerA").style.display = "block";
+        visualizerId = "comparisonVisualizerA";
+    }
+    else if (model.currentCheck === "compliance" &&
+        document.getElementById("complianceVisualizerA").style.display === "none") {
+        forceOpenVisualizer = true;
+        document.getElementById("complianceVisualizerA").style.display = "block";
+        visualizerId = "complianceVisualizerA";
+    }
+
     var propertyCalloutContainera = document.getElementById("propertyCalloutContainer" + model.currentCheck);
     propertyCalloutContainera.setAttribute('style', 'display:block !important');
     var rect = propertyCalloutContainera.getBoundingClientRect();
     propertyCalloutContainera.setAttribute('style', 'display:none !important');
+
+    if (forceOpenVisualizer === true &&
+        visualizerId !== null) {
+        document.getElementById(visualizerId).style.display = "none";
+    }
 
     var height = rect.height;
     if (model.currentCheck === "comparison") {
