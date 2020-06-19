@@ -232,11 +232,11 @@ LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceT
 
     totalItemsChecked = sourceSelectedCount;
 
-    var sourceNotSelectedComps = sourceTotalComponentsCount - totalItemsChecked;
+    var totalItemsNotChecked = sourceTotalComponentsCount - totalItemsChecked;
     var OKATCount = Number(okACount) + Number(okTCount) + Number(OkATCount);
 
     this.AnalyticsData[complianceType]['TotalItemsChecked'] = totalItemsChecked;
-    this.AnalyticsData[complianceType]['TotalItemsNotChecked'] = sourceNotSelectedComps;
+    this.AnalyticsData[complianceType]['TotalItemsNotChecked'] = totalItemsNotChecked;
     this.AnalyticsData[complianceType]['TotalItemsLoaded'] = sourceTotalComponentsCount;
     this.AnalyticsData[complianceType]['OKATCount'] = OKATCount;
 
@@ -262,7 +262,7 @@ LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceT
             this.drawComparisonInfoPieCharts(noMatchCount,
                 undefinedCount,
                 totalItemsNotChecked,
-                totalItemsLoaded);
+                sourceTotalComponentsCount);
         }
     }
 
@@ -279,7 +279,6 @@ LargeAnalyticsManager.prototype.populateComplianceCharts = function (complianceT
 
     complianceData['Versioning']["CurrentCheck"] = {'OK' : totalOk, 'Error' : errorsCount, 'Warning' : warningsCount};
     this.drawLineChart(complianceData['Versioning']);
-
 }
 
 LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsInfo) {
