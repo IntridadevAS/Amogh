@@ -679,7 +679,7 @@
             }    
             
             
-            $versionInfo = getVersioningInfo($checkComponentTable);
+            $versionInfo = getVersioningInfo($checkComponentTable, $comparisonDataSources);
            
             // commit update
             $mainDbh->commit();           
@@ -862,7 +862,7 @@
         }
     }
 
-    function getVersioningInfo($checkComponentTable) {
+    function getVersioningInfo($checkComponentTable, $comparisonDataSources) {
         global $projectName;
         global $checkName;
         
@@ -960,6 +960,9 @@
                     $errors = $errorCount + $errorACount + $errorTCount + $errorATCount;
                     $warnings = $warningCount + $warningACount + $warningTCount + $warningATCount;
     
+                    $oks *= $comparisonDataSources;
+                    $errors *= $comparisonDataSources;
+                    $warnings *= $comparisonDataSources;
                     $versionInfo[$versionName] = array('OK'=>$oks, 'Error'=>$errors, 'Warning'=>$warnings);
     
                     $versionDbh->commit();           
@@ -1298,7 +1301,7 @@
                 }
             }               
            
-            $versionInfo = getVersioningInfo($checkComponentTable);
+            $versionInfo = getVersioningInfo($checkComponentTable, 1);
             // commit update
             $mainDbh->commit();           
             $mainDbh = null; //This is how you close a PDO connection    
