@@ -558,13 +558,13 @@ LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
     
     var Severitydata = [];
 
-    var dataObject = {}
-    dataObject["Version"] = 'Start';
-    dataObject["Error"] = 0;
-    dataObject["Warning"] = 0;
-    dataObject["OK"] = 0;
+    // var dataObject = {}
+    // dataObject["Version"] = 'Start';
+    // dataObject["Error"] = 0;
+    // dataObject["Warning"] = 0;
+    // dataObject["OK"] = 0;
 
-    Severitydata.push(dataObject);
+    // Severitydata.push(dataObject);
 
     for(key in checkGroupsInfo) {
         var dataObject = {}
