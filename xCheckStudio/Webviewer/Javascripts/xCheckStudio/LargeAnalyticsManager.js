@@ -25,8 +25,8 @@ LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
     var sourceDTotalComponentsCount = 0;
     var checkGroupsInfo = 0;
 
-    var sourceANotSelectedComponents;
-    var sourceBNotSelectedComponents;
+    // var sourceANotSelectedComponents;
+    // var sourceBNotSelectedComponents;
 
     if ("okCount" in comparisonData) {
         okCount = parseInt(comparisonData["okCount"]);
@@ -96,25 +96,31 @@ LargeAnalyticsManager.prototype.populateComparisonCharts = function () {
         checkGroupsInfo = comparisonData["CheckGroupsInfo"];
     }
 
-    if ("SourceANotSelectedComps" in comparisonData) {
-        sourceANotSelectedComponents = comparisonData["SourceANotSelectedComps"];
-    }
+    // if ("SourceANotSelectedComps" in comparisonData) {
+    //     sourceANotSelectedComponents = comparisonData["SourceANotSelectedComps"];
+    // }
 
-    if ("SourceBNotSelectedComps" in comparisonData) {
-        sourceBNotSelectedComponents = comparisonData["SourceBNotSelectedComps"];
-    }
+    // if ("SourceBNotSelectedComps" in comparisonData) {
+    //     sourceBNotSelectedComponents = comparisonData["SourceBNotSelectedComps"];
+    // }
 
-    if ("SourceCNotSelectedComps" in comparisonData) {
-        sourceCNotSelectedComponents = comparisonData["SourceCNotSelectedComps"];
-    }
+    // if ("SourceCNotSelectedComps" in comparisonData) {
+    //     sourceCNotSelectedComponents = comparisonData["SourceCNotSelectedComps"];
+    // }
 
-    if ("SourceDNotSelectedComps" in comparisonData) {
-        sourceDNotSelectedComponents = comparisonData["SourceDNotSelectedComps"];
-    }
-
-    totalItemsChecked = sourceASelectedCount + sourceBSelectedCount + sourceCSelectedCount + sourceDSelectedCount;
-    totalItemsLoaded = sourceATotalComponentsCount + sourceBTotalComponentsCount + sourceCTotalComponentsCount + sourceDTotalComponentsCount;
-    totalItemsNotChecked = totalItemsLoaded - totalItemsChecked;
+    // if ("SourceDNotSelectedComps" in comparisonData) {
+    //     sourceDNotSelectedComponents = comparisonData["SourceDNotSelectedComps"];
+    // }
+ 
+    totalItemsLoaded = sourceATotalComponentsCount + 
+    sourceBTotalComponentsCount + 
+    sourceCTotalComponentsCount + 
+    sourceDTotalComponentsCount;
+    totalItemsNotChecked = comparisonData["sourceANotChecked"] +
+        comparisonData["sourceBNotChecked"] +
+        comparisonData["sourceCNotChecked"] +
+        comparisonData["sourceDNotChecked"];
+    totalItemsChecked = totalItemsLoaded - totalItemsNotChecked;
 
     this.AnalyticsData[activeResultType]['TotalItemsChecked'] = totalItemsChecked;
     this.AnalyticsData[activeResultType]['TotalItemsLoaded'] = totalItemsLoaded;

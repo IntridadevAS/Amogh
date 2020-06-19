@@ -483,19 +483,16 @@
             }
 
             // read source a class wise not checked item count
-            $SourceAClassWiseNotSelectedComps = array();            
-            if($sourceAnotSelectedCompsTable)
-            {
-                $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceAnotSelectedCompsTable;");                
-                if($groups)
-                {
-                    while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) 
-                    {
+            $SourceAClassWiseNotSelectedComps = array();
+            $SourceANotSelectedCompsData = array();
+            if ($sourceAnotSelectedCompsTable) {
+                $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceAnotSelectedCompsTable;");
+                if ($groups) {
+                    while ($group = $groups->fetch(\PDO::FETCH_ASSOC)) {
                         $mainClass = $group['mainClass'];
-                      
-                        $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where mainClass='$mainClass';");     
-                        if($results)
-                        {
+
+                        $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where mainClass='$mainClass';");
+                        if ($results) {
                             $sourceAnotSelectedCompsCount = 0;
                             $sourceAnotSelectedCompsCount = $results->fetchColumn();
                             $SourceAClassWiseNotSelectedComps[$mainClass] = array();
@@ -503,15 +500,30 @@
                             $SourceAClassWiseNotSelectedComps[$mainClass]["TotalIemsNotSelected"] =  $sourceAnotSelectedCompsCount;
 
                             $components = $mainDbh->query("SELECT * FROM  $sourceAnotSelectedCompsTable where mainClass='$mainClass';");
-                            while($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                            while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
                                 $subclass = $comp['subClass'];
 
-                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where subClass='$subclass';"); 
-                                if($results  && !array_key_exists($subclass, $SourceAClassWiseNotSelectedComps[$mainClass])) {
+                                $results = $mainDbh->query("SELECT COUNT(*) FROM  $sourceAnotSelectedCompsTable where subClass='$subclass';");
+                                if ($results  && !array_key_exists($subclass, $SourceAClassWiseNotSelectedComps[$mainClass])) {
                                     $SourceAClassWiseNotSelectedComps[$mainClass][$subclass] = $results->fetchColumn();
-                                } 
+                                }
                             }
                         }
+                    }
+                }
+
+                // get not selected comps data
+                $components = $mainDbh->query("SELECT * FROM  $sourceAnotSelectedCompsTable");
+                if ($components) {
+                    while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                        $subclass = $comp['subClass'];
+
+                        $SourceANotSelectedCompsData[$comp['mainTableId']] = array(
+                            "name" => $comp['name'],
+                            "mainClass" => $comp['mainClass'],
+                            "subClass" => $comp['subClass'],
+                            "nodeId" => $comp['nodeId']
+                        );
                     }
                 }
             }               
@@ -519,6 +531,7 @@
 
             // read source b class wise not checked item count          
             $SourceBClassWiseNotSelectedComps = array();
+            $SourceBNotSelectedCompsData = array();
             if($sourceBnotSelectedCompsTable)
             {
                 $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceBnotSelectedCompsTable;");                
@@ -549,10 +562,26 @@
                         }
                     }
                 }
+
+                // get not selected comps data
+                $components = $mainDbh->query("SELECT * FROM  $sourceBnotSelectedCompsTable");
+                if ($components) {
+                    while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                        $subclass = $comp['subClass'];
+
+                        $SourceBNotSelectedCompsData[$comp['mainTableId']] = array(
+                            "name" => $comp['name'],
+                            "mainClass" => $comp['mainClass'],
+                            "subClass" => $comp['subClass'],
+                            "nodeId" => $comp['nodeId']
+                        );
+                    }
+                }
             }
                           
              // read source b class wise not checked item count          
              $SourceCClassWiseNotSelectedComps = array();
+             $SourceCNotSelectedCompsData = array();
              if($sourceCnotSelectedCompsTable)
              {
                  $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceCnotSelectedCompsTable;");                
@@ -582,10 +611,26 @@
                          }
                      }
                  }
+
+                  // get not selected comps data
+                $components = $mainDbh->query("SELECT * FROM  $sourceCnotSelectedCompsTable");
+                if ($components) {
+                    while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) {
+                        $subclass = $comp['subClass'];
+
+                        $SourceCNotSelectedCompsData[$comp['mainTableId']] = array(
+                            "name" => $comp['name'],
+                            "mainClass" => $comp['mainClass'],
+                            "subClass" => $comp['subClass'],
+                            "nodeId" => $comp['nodeId']
+                        );
+                    }
+                }
              }          
 
               // read source b class wise not checked item count          
             $SourceDClassWiseNotSelectedComps = array();
+            $SourceDNotSelectedCompsData = array();
             if($sourceDnotSelectedCompsTable)
             {
                 $groups = $mainDbh->query("SELECT DISTINCT mainClass FROM $sourceDnotSelectedCompsTable;");                
@@ -613,6 +658,22 @@
                                 } 
                              }
                         }
+                    }
+                }
+
+                // get not selected comps data
+                $components = $mainDbh->query("SELECT * FROM  $sourceDnotSelectedCompsTable");
+                if ($components) {
+                    while ($comp = $components->fetch(\PDO::FETCH_ASSOC)
+                    ) {
+                        $subclass = $comp['subClass'];
+
+                        $SourceDNotSelectedCompsData[$comp['mainTableId']] = array(
+                            "name" => $comp['name'],
+                            "mainClass" => $comp['mainClass'],
+                            "subClass" => $comp['subClass'],
+                            "nodeId" => $comp['nodeId']
+                        );
                     }
                 }
             }    
@@ -653,7 +714,13 @@
                         "SourceANotSelectedComps" =>$SourceAClassWiseNotSelectedComps,
                         "SourceBNotSelectedComps"=>$SourceBClassWiseNotSelectedComps,
                         "SourceCNotSelectedComps" =>$SourceCClassWiseNotSelectedComps,
-                        "SourceDNotSelectedComps" =>$SourceDClassWiseNotSelectedComps);
+                        "SourceDNotSelectedComps" =>$SourceDClassWiseNotSelectedComps,
+                        "NotSelectedCompsData" =>array(
+                            "a" => $SourceANotSelectedCompsData,
+                            "b" => $SourceBNotSelectedCompsData,
+                            "c" => $SourceCNotSelectedCompsData,
+                            "d" => $SourceDNotSelectedCompsData
+                        ));
         }
         catch(Exception $e) 
         {        

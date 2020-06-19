@@ -25,8 +25,8 @@ SmallAnalyticsManager.prototype.populateComparisonAnalytics = function () {
     var sourceDTotalComponentsCount = 0;
     var checkGroupsInfo = 0;
 
-    var sourceANotSelectedComponents;
-    var sourceBNotSelectedComponents;
+    // var sourceANotSelectedComponents;
+    // var sourceBNotSelectedComponents;
 
     if ("okCount" in comparisonData) {
         okCount = parseInt(comparisonData["okCount"]);
@@ -96,25 +96,29 @@ SmallAnalyticsManager.prototype.populateComparisonAnalytics = function () {
         checkGroupsInfo = comparisonData["CheckGroupsInfo"];
     }
 
-    if ("SourceANotSelectedComps" in comparisonData) {
-        sourceANotSelectedComponents = comparisonData["SourceANotSelectedComps"];
-    }
+    // if ("SourceANotSelectedComps" in comparisonData) {
+    //     sourceANotSelectedComponents = comparisonData["SourceANotSelectedComps"];
+    // }
 
-    if ("SourceBNotSelectedComps" in comparisonData) {
-        sourceBNotSelectedComponents = comparisonData["SourceBNotSelectedComps"];
-    }
+    // if ("SourceBNotSelectedComps" in comparisonData) {
+    //     sourceBNotSelectedComponents = comparisonData["SourceBNotSelectedComps"];
+    // }
 
-    if ("SourceCNotSelectedComps" in comparisonData) {
-        sourceCNotSelectedComponents = comparisonData["SourceCNotSelectedComps"];
-    }
+    // if ("SourceCNotSelectedComps" in comparisonData) {
+    //     sourceCNotSelectedComponents = comparisonData["SourceCNotSelectedComps"];
+    // }
 
-    if ("SourceDNotSelectedComps" in comparisonData) {
-        sourceDNotSelectedComponents = comparisonData["SourceDNotSelectedComps"];
-    }
-
-    totalItemsChecked = sourceASelectedCount + sourceBSelectedCount + sourceCSelectedCount + sourceDSelectedCount;
+    // if ("SourceDNotSelectedComps" in comparisonData) {
+    //     sourceDNotSelectedComponents = comparisonData["SourceDNotSelectedComps"];
+    // }
+    
     totalItemsLoaded = sourceATotalComponentsCount + sourceBTotalComponentsCount + sourceCTotalComponentsCount + sourceDTotalComponentsCount;
-    totalItemsNotChecked = totalItemsLoaded - totalItemsChecked;
+    totalItemsNotChecked = comparisonData["sourceANotChecked"] +
+        comparisonData["sourceBNotChecked"] +
+        comparisonData["sourceCNotChecked"] +
+        comparisonData["sourceDNotChecked"];
+    totalItemsChecked = totalItemsLoaded - totalItemsNotChecked;
+   
 
     this.AnalyticsData[activeResultType]['TotalItemsChecked'] = totalItemsChecked;
     this.AnalyticsData[activeResultType]['TotalItemsLoaded'] = totalItemsLoaded;
@@ -219,7 +223,6 @@ SmallAnalyticsManager.prototype.populateComparisonCategoryAnalytics = function()
             this.CreateInfoBarCharts(subClassInfo);
         }
     }
-
 }
 
 SmallAnalyticsManager.prototype.populateComparisonClassAnalytics = function(classMappingInfo) {
@@ -706,7 +709,7 @@ SmallAnalyticsManager.prototype.drawComparisonPieCharts = function (okCount,
     var colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("No Match",
         noMatchCount,
-        totalItemsLoaded,
+        totalItemsChecked,
         '#baseNoMatch',
         colorsArray,
         'noMatchPercentage');
@@ -715,7 +718,7 @@ SmallAnalyticsManager.prototype.drawComparisonPieCharts = function (okCount,
     colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("Undefined",
         undefinedCount,
-        totalItemsLoaded,
+        totalItemsChecked,
         '#baseUndefined',
         colorsArray,
         'undefinedPercentage');

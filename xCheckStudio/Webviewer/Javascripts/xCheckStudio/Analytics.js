@@ -48,6 +48,77 @@ let Analytics = {
                 },
                 success : function(msg) {
                     analyticsData = JSON.parse(msg);
+
+                    // update not checked comps
+                    if ("comparison" in analyticsData &&
+                        model.checks["comparison"] &&
+                        model.checks["comparison"].reviewManager) {
+
+                        var comparisonData = analyticsData["comparison"];
+                        var checkResults = model.checks["comparison"].reviewManager.ComparisonCheckManager.results;
+                        var sources = model.checks["comparison"].reviewManager.ComparisonCheckManager.sources;
+
+                        var sourceANotChecked = Number(comparisonData.sourceATotalComponentsCount) - Number(comparisonData.sourceASelectedCount);
+                        var sourceBNotChecked = Number(comparisonData.sourceBTotalComponentsCount) - Number(comparisonData.sourceBSelectedCount);
+                        var sourceCNotChecked = 0;
+                        var sourceDNotChecked = 0;
+                        if (sources.length > 2) {
+                            sourceCNotSelected = Number(comparisonData.sourceCTotalComponentsCount) - Number(comparisonData.sourceCSelectedCount);
+                        }
+                        if (sources.length > 3) {
+                            sourceDNotSelected = Number(comparisonData.sourceDTotalComponentsCount) - Number(comparisonData.sourceDSelectedCount);
+                        }
+
+                        var checkResults = model.checks["comparison"].reviewManager.ComparisonCheckManager.results;
+                        var sources = model.checks["comparison"].reviewManager.ComparisonCheckManager.sources;
+
+                        for (var groupId in checkResults) {
+                            var group = checkResults[groupId];
+                            for (var checkCompId in  group.components) {
+                                var checkComponent = group.components[checkCompId];
+
+                                // source a
+                                if (sourceANotChecked > 0 &&
+                                    checkComponent.sourceAName &&
+                                    checkComponent.sourceAName != "" &&
+                                    checkComponent.sourceAId in comparisonData.NotSelectedCompsData["a"]) {
+                                    sourceANotChecked -= 1;
+                                }
+
+                                // source b
+                                if (sourceBNotChecked > 0 &&
+                                    checkComponent.sourceBName &&
+                                    checkComponent.sourceBName != "" &&
+                                    checkComponent.sourceBId in comparisonData.NotSelectedCompsData["b"]) {
+                                    sourceBNotChecked -= 1;
+                                }
+
+                                // source c
+                                if (sources.length > 2 &&
+                                    sourceCNotChecked > 0 &&
+                                    checkComponent.sourceCName &&
+                                    checkComponent.sourceCName != "" &&
+                                    checkComponent.sourceCId in comparisonData.NotSelectedCompsData["c"]) {
+                                    sourceCNotChecked -= 1;
+                                }
+
+                                // source d
+                                if (sources.length > 3 &&
+                                    sourceDNotChecked > 0 &&
+                                    checkComponent.sourceDName &&
+                                    checkComponent.sourceDName != "" &&
+                                    checkComponent.sourceDId in comparisonData.NotSelectedCompsData["d"]) {
+                                    sourceDNotChecked -= 1;
+                                }
+                            }
+                        }
+
+                        analyticsData["comparison"]["sourceANotChecked"] = sourceANotChecked;
+                        analyticsData["comparison"]["sourceBNotChecked"] = sourceBNotChecked;
+                        analyticsData["comparison"]["sourceCNotChecked"] = sourceCNotChecked;
+                        analyticsData["comparison"]["sourceDNotChecked"] = sourceDNotChecked;
+                    }
+
                     _this.AnalyticsData = analyticsData;
                     return resolve(true);
                 }
