@@ -625,7 +625,7 @@ SmallAnalyticsManager.prototype.drawCompliancePieCharts = function (okCount,
     var colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("No Match",
         noMatchCount,
-        totalItemsLoaded,
+        totalItemsChecked,
         '#baseNoMatch',
         colorsArray,
         'noMatchPercentage');
@@ -652,7 +652,7 @@ SmallAnalyticsManager.prototype.drawCompliancePieCharts = function (okCount,
     colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("Undefined",
         undefinedCount,
-        totalItemsLoaded,
+        totalItemsChecked,
         '#baseUndefined',
         colorsArray,
         'undefinedPercentage');
