@@ -362,14 +362,11 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                         if (orginalProperty.accepted == "true") {
                             orginalProperty["severity"] = "ACCEPTED";
                             model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), orginalProperty)
-
-
                         }
                     }
                 }
 
                 checkResultComponent.status = results[componentId]["status"];
-
 
                 var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                 model.checks[model.currentCheck]["reviewTable"].UpdateGridData(componentId,
@@ -385,6 +382,9 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
                     sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
                 }
+
+                // call components accepted
+                _this.OnComponentsAccepted([checkResultComponent], "property");
             }
         });
     }
@@ -458,6 +458,9 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                         }
                     }
                 }
+
+                // call components accepted
+                _this.OnComponentsAccepted(Object.values(results), "component");
             }
         });
     }
@@ -551,6 +554,9 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
                             sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
                         }
                     }
+
+                    // call components accepted
+                   _this.OnComponentsAccepted(Object.values(acceptedComponents), "group");
                 }
             }
         });
@@ -558,6 +564,12 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
     catch (error) {
         console.log(error);
     }
+}
+
+ComparisonReviewManager.prototype.OnComponentsAccepted = function (components, source) {
+}
+
+ComparisonReviewManager.prototype.OnComponentsUnAccepted = function (components) {
 }
 
 ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupIdsVsResultsIds) {
