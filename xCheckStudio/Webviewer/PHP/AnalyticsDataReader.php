@@ -689,6 +689,9 @@
             $totalWarningCount =  $warningCount + $warningA + $warningT + $warningAT;
 
             $okCount *=$comparisonDataSources;
+            $okACount *=$comparisonDataSources;
+            $okTCount *=$comparisonDataSources;
+            $okATCount *=$comparisonDataSources;
             $totalErrorCount *= $comparisonDataSources;
             $warningCount *= $comparisonDataSources;
 

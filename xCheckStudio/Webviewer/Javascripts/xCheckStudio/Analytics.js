@@ -47,7 +47,7 @@ let Analytics = {
                     'CheckName': checkinfo.checkname
                 },
                 success : function(msg) {
-                    analyticsData = JSON.parse(msg);
+                    var analyticsData = JSON.parse(msg);
 
                     // update not checked comps
                     if ("comparison" in analyticsData &&
