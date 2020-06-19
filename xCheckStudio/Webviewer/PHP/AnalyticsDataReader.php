@@ -1004,6 +1004,39 @@
                 $okCount = $results->fetchColumn();
             }
 
+              // OK(A) components
+              $okACount = 0;
+              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)';");       
+              if( $results)
+              {
+                  $okACount = $results->fetchColumn();
+              }
+
+              // OK(T) components
+              $okTCount = 0;
+              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)';");       
+              if( $results)
+              {
+                  $okTCount = $results->fetchColumn();
+              }
+
+              // OK(T)(A) components
+              $okTACount = 0;
+              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)(A)';");       
+              if( $results)
+              {
+                  $okTACount = $results->fetchColumn();
+              }
+
+              // OK(A)(T) components
+              // OK(T) components
+              $okATCount = 0;
+              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)(T)';");       
+              if( $results)
+              {
+                  $okATCount = $results->fetchColumn();
+              }
+              
             // get error components count
             $errorCount = 0;
             $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error';");     
@@ -1269,14 +1302,14 @@
             // commit update
             $mainDbh->commit();           
             $mainDbh = null; //This is how you close a PDO connection    
-
+        
             return array("okCount" =>$okCount, 
                         "errorCount" =>$errorCount + $errorA,
                         "warningCount" =>$warningCount + $warningA,
                         "nomatchCount" =>$nomatchCount,
-                        "okACount" =>$okAs,
-                        "okTCount" =>$okTs,
-                        "okATCount" => $okATs + $okTAs,
+                        "okACount" =>$okACount,
+                        "okTCount" =>$okTCount,
+                        "okATCount" => $okTACount + $okATCount,
                         "undefinedCount" =>$undefinedCount,
                         "sourceSelectedCount" =>$sourceSelectedComp,
                         "sourceTotalComponentsCount" => $sourceTotalComponentsCount,

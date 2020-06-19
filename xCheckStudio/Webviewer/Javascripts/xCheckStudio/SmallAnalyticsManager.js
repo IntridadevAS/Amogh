@@ -423,7 +423,7 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
     // draw pie charts
     if (PieChartActive) {
         this.ShowPieChartDiv();
-        this.drawCompliancePieCharts(okCount,
+        this.drawCompliancePieCharts(okCount + OKATCount,
             warningsCount,
             errorsCount,
             noMatchCount,

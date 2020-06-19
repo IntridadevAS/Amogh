@@ -6,15 +6,15 @@ let Analytics = {
 
         parentContainer.style.display = "none";
         document.getElementById(analyticsContainerId).style.display = "block";
-        
-        if(Object.keys(this.AnalyticsData).length > 0) {
+
+        // if(Object.keys(this.AnalyticsData).length > 0) {
+        //     _this.LoadSmallAnalytics(analyticsContainerId);
+        // }
+        // else {
+        this.GetAnalyticsData().then(function () {
             _this.LoadSmallAnalytics(analyticsContainerId);
-        }
-        else {
-            this.GetAnalyticsData().then(function() {
-                _this.LoadSmallAnalytics(analyticsContainerId);
-            });
-        }
+        });
+        // }
     },
 
     ShowLargeAnalytics: function () {
@@ -22,14 +22,14 @@ let Analytics = {
         var modal = document.getElementById(Comparison.LargeAnalyticsContainer);
         modal.style.display = "block";
 
-        if(Object.keys(this.AnalyticsData).length > 0) {
+        // if(Object.keys(this.AnalyticsData).length > 0) {
+        //     _this.LoadLargeAnalytics();
+        // }
+        // else {
+        this.GetAnalyticsData().then(function () {
             _this.LoadLargeAnalytics();
-        }
-        else {
-            this.GetAnalyticsData().then(function() {
-                _this.LoadLargeAnalytics();
-            });
-        }
+        });
+        // }
     },
     
     GetAnalyticsData : function() {
