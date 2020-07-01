@@ -149,6 +149,8 @@ function CreateCheckSpace()
     $CheckIsFavourite = $obj['favoriteCheck'];
     $CheckCreateDate = $obj['checkdate'];
     $review = $obj['review'];
+
+    $returnData  = array();
     if (CheckIfCheckSpaceExists($projectName, $ProjectId, $CheckName) == false) {
         try
         {
@@ -158,7 +160,7 @@ function CreateCheckSpace()
                 $query = 'INSERT INTO CheckSpace (checkname,checkstatus,checkconfiguration,checkdescription,checkcomments,checkisfavourite,checkdate,projectid, userid, review) VALUES (?,?,?,?,?,?,?,?,?,?)';
                 $stmt = $dbh->prepare($query);
                 $stmt->execute(array($CheckName, $CheckStatus, $CheckConfiguration, $CheckDescription, $CheckComments, $CheckIsFavourite, $CheckCreateDate, $ProjectId, $UserId, $review));
-                $array = array(
+                $returnData = array(
                     "checkid" => $dbh->lastInsertId(),
                     "checkname" => $CheckName,
                     "checkstatus" => $CheckStatus,
@@ -171,7 +173,7 @@ function CreateCheckSpace()
                     "userid" => $UserId,
                     "review" => $review,
                 );
-                echo json_encode($array);
+                // echo json_encode($array);
 
                 $dbh = null; //This is how you close a PDO connection
                 mkdir(getCheckDirectoryPath($projectName, $CheckName), 0777, true);
@@ -182,19 +184,21 @@ function CreateCheckSpace()
                 $database = new SQLite3(getCheckDatabasePath($projectName, $CheckName));
             }
         } catch (Exception $e) {
-            $array = array(
+            $returnData = array(
                 "checkid" => -1,
             );
-            echo json_encode($array);
-            return;
+            // echo json_encode($array);
+            // return;
         }
     } else {
-        $array = array(
+        $returnData = array(
             "checkid" => 0,
         );
-        echo json_encode($array);
-        return;
+        // echo json_encode($array);
+        // return;
     }
+
+    echo json_encode($returnData);
 }
 
 function CheckIfCheckSpaceExists($projectName, $projectId, $checkName)

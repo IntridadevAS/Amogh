@@ -561,6 +561,12 @@ input[type=checkbox] + label {
   justify-content: space-between;
   align-items: center;
   height: 40px;
+  width: 560px;
+}
+
+.currentProjName, .currentCheckName{
+  width: 520px;
+  overflow: hidden;
 }
 
 .newProjectForm {
