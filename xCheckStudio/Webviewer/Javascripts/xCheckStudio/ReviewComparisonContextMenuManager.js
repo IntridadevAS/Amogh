@@ -1241,8 +1241,18 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (acco
         var componentId = rowData.ID;
         var groupId = rowData.groupId;
 
-        var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
+        // get component ids in datasets
+        let sourceCompIds = {};
+        sourceCompIds["a"] = Number(rowData.SourceAId);
+        sourceCompIds["b"] = Number(rowData.SourceBId);
+        if (rowData.SourceCId && rowData.SourceCId !== "") {
+            sourceCompIds["c"] = Number(rowData.SourceCId);
+        }
+        if (rowData.SourcDId && rowData.SourceDId !== "") {
+            sourceCompIds["d"] = Number(rowData.SourceDId);
+        }
 
+        var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
         if (selectedPropertiesKey.length == 0) {
             return;
         }
@@ -1251,18 +1261,44 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (acco
         // No match, OK, No Value components should not get accepted or transposed
         var ignore = ['OK', 'OK(A)', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' ', 'ACCEPTED'];
         var selectedProperties = []
+        let sourceProps = [];
         for (var key in selectedPropertiesKey) {
             var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[key]));
             var index = ignore.indexOf(property.severity);
             if (index !== -1) {
                 continue;
             }
-            else {
-                selectedProperties.push(Number(selectedPropertiesKey[key]));
+
+            selectedProperties.push(Number(selectedPropertiesKey[key]));
+
+            // get data set properties data
+            let sourceProp = {};               
+            if (property.sourceAName && property.sourceAName !== "") {
+                sourceProp["aName"] = property.sourceAName;
+                sourceProp["aValue"] = property.sourceAValue;
             }
+            if (property.sourceBName && property.sourceBName !== "") {
+                sourceProp["bName"] = property.sourceBName;
+                sourceProp["bValue"] = property.sourceBValue;
+            }
+            if (property.sourceCName && property.sourceCName !== "") {
+                sourceProp["cName"] = property.sourceCName;
+                sourceProp["cValue"] = property.sourceCValue;
+            }
+            if (property.sourceDName && property.sourceDName !== "") {
+                sourceProp["dName"] = property.sourceDName;
+                sourceProp["dValue"] = property.sourceDValue;
+            }
+
+            sourceProps.push(sourceProp);
         }
 
-        comparisonReviewManager.RestorePropertyTranspose(selectedProperties, componentId, groupId);
+        comparisonReviewManager.RestorePropertyTranspose(
+            selectedProperties, 
+            componentId, 
+            groupId, 
+            sourceCompIds,
+            sourceProps);
     }
     else if (source.toLowerCase() === "group") {
         comparisonReviewManager.RestoreCategoryTranspose(accordionData);
@@ -1280,7 +1316,7 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, a
         var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
-        var groupIdVsComponentId = {};
+        var groupIdVsComponentId = {};        
         for (var groupId in selectedGroupIdsVsResultIds) {
             for (var componentId in selectedGroupIdsVsResultIds[groupId]) {
                 var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, selectedGroupIdsVsResultIds[groupId][componentId]);
@@ -1288,18 +1324,16 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, a
                 if (index !== -1) {
                     continue;
                 }
+
+                if (groupId in groupIdVsComponentId) {
+                    groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
+                }
                 else {
-                    if (groupId in groupIdVsComponentId) {
-                        groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
-                    }
-                    else {
-                        groupIdVsComponentId[groupId] = [];
-                        groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
-                    }
+                    groupIdVsComponentId[groupId] = [];
+                    groupIdVsComponentId[groupId].push(Number(selectedGroupIdsVsResultIds[groupId][componentId]));
                 }
             }
         }
-
         if (Object.keys(groupIdVsComponentId).length == 0) {
             return;
         }
@@ -1320,6 +1354,17 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, a
         var componentId = rowData.ID;
         var groupId = rowData.groupId;
 
+        // get component ids in datasets
+        let sourceCompIds = {};
+        sourceCompIds["a"] = Number(rowData.SourceAId);
+        sourceCompIds["b"] = Number(rowData.SourceBId);
+        if (rowData.SourceCId && rowData.SourceCId !== "") {
+            sourceCompIds["c"] = Number(rowData.SourceCId);
+        }
+        if (rowData.SourcDId && rowData.SourceDId !== "") {
+            sourceCompIds["d"] = Number(rowData.SourceDId);
+        }
+
         var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
         if (selectedPropertiesKey.length == 0) {
             return;
@@ -1328,23 +1373,62 @@ ReviewComparisonContextMenuManager.prototype.OnTransposeClick = function (key, a
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
         var ignore = ['OK', 'OK(T)', 'ACCEPTED', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' '];
-        var selectedProperties = []
-        for (var propertyKey in selectedPropertiesKey) {
-            var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(selectedPropertiesKey[propertyKey]));
+        var selectedProperties = [];
+        let sourceProps = [];
+        for (var i = 0; i < selectedPropertiesKey.length; i++) {
+            // for (var propertyKey in selectedPropertiesKey) {
+            var checkPropId = selectedPropertiesKey[i];
+            var property = comparisonReviewManager.GetcheckProperty(componentId, groupId, Number(checkPropId));
             var index = ignore.indexOf(property.severity);
             if (index !== -1) {
                 continue;
             }
-            else {
-                selectedProperties.push(Number(selectedPropertiesKey[propertyKey]));
-            }
-        }
 
+            selectedProperties.push(Number(checkPropId));
+
+            // get data set properties data
+            let sourceProp = {};
+
+            // get transposed value           
+            if (key.toLowerCase() === "fromdatasource1") {
+                sourceProp["transposedValue"] = property.sourceAValue;
+            }
+            else if (key.toLowerCase() === "fromdatasource2") {
+                sourceProp["transposedValue"] = property.sourceBValue;
+            }
+            else if (key.toLowerCase() === "fromdatasource3") {
+                sourceProp["transposedValue"] = property.sourceCValue;
+            }
+            else if (key.toLowerCase() === "fromdatasource4") {
+                sourceProp["transposedValue"] = property.sourceDValue;
+            }
+
+            if (property.sourceAName && property.sourceAName !== "") {
+                sourceProp["a"] = property.sourceAName;
+            }
+            if (property.sourceBName && property.sourceBName !== "") {
+                sourceProp["b"] = property.sourceBName;
+            }
+            if (property.sourceCName && property.sourceCName !== "") {
+                sourceProp["c"] = property.sourceCName;
+            }
+            if (property.sourceDName && property.sourceDName !== "") {
+                sourceProp["d"] = property.sourceDName;
+            }
+
+            sourceProps.push(sourceProp);
+        }
         if (selectedProperties.length == 0) {
             return;
         }
 
-        comparisonReviewManager.TransposeProperty(key, selectedProperties, componentId, groupId);
+        comparisonReviewManager.TransposeProperty(
+            key, 
+            selectedProperties, 
+            componentId, 
+            groupId, 
+            sourceCompIds,
+            sourceProps);
     }
     else if (source.toLowerCase() === "group") {
         comparisonReviewManager.TransposeCategory(key, accordionData);

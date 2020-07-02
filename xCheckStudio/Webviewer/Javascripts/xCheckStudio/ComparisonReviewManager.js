@@ -825,7 +825,14 @@ ComparisonReviewManager.prototype.GetSourceComponentFromNodeId = function (sourc
     }
 }
 
-ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedPropertiesKey, componentId, groupId) {
+ComparisonReviewManager.prototype.TransposeProperty = function (
+    key, 
+    selectedPropertiesKey, 
+    componentId, 
+    groupId, 
+    sourceCompIds,
+    sourceProps) {
+
     var _this = this;
     var transposeType = key;
 
@@ -843,20 +850,17 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedPro
                 'propertyIds': JSON.stringify(selectedPropertiesKey),
                 'transposeLevel': 'propertyLevel',
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname,
+                "sourceCompIds" : JSON.stringify(sourceCompIds),
+                "sourceProps" : JSON.stringify(sourceProps),
             },
             success: function (msg) {
 
                 var results = JSON.parse(msg);
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
-
                 var properties = checkResultComponent["properties"];
-                var isPropertyAccepted = false;
-                var isPropertyTransposed = false;
-
                 for (var i = 0; i < properties.length; i++) {
-
                     var orginalProperty = properties[i];
 
                     orginalProperty.transpose = results[componentId]["properties"][i].transpose;
@@ -908,13 +912,104 @@ ComparisonReviewManager.prototype.TransposeProperty = function (key, selectedPro
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
                     sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
                 }
+
+                // Update original dataset properties               
+                if ("a" in sourceCompIds) {
+                    let compId = sourceCompIds['a'];
+                    for (let i = 0; i < checkResults.sourceAComponents.length; i++) {
+                        let comp = checkResults.sourceAComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["a"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["transposedValue"];
+                            }
+                        }
+                    }
+                }
+                if ("b" in sourceCompIds) {
+                    let compId = sourceCompIds['b'];
+                    for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
+                        var comp = checkResults.sourceBComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["b"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["transposedValue"];
+                            }
+                        }
+                    }
+                }
+                if ("c" in sourceCompIds) {
+                    let compId = sourceCompIds['c'];
+                    for (var i = 0; i < checkResults.sourceCComponents.length; i++) {
+                        var comp = checkResults.sourceCComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["c"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["transposedValue"];
+                            }
+                        }
+                    }
+                }
+                if ("d" in sourceCompIds) {
+                    let compId = sourceCompIds['d'];
+                    for (var i = 0; i < checkResults.sourceDComponents.length; i++) {
+                        var comp = checkResults.sourceDComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["d"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["transposedValue"];
+                            }
+                        }
+                    }
+                }
             }
         });
     }
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedPropertiesKey, componentId, groupId) {
+ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
+    selectedPropertiesKey, 
+    componentId, 
+    groupId, 
+    sourceCompIds,
+    sourceProps) {        
     var _this = this;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -931,7 +1026,9 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedP
                 'propertyIds': JSON.stringify(selectedPropertiesKey),
                 'transposeLevel': 'propertyLevel',
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname,
+                "sourceCompIds" : JSON.stringify(sourceCompIds),
+                "sourceProps" : JSON.stringify(sourceProps),
             },
             success: function (msg) {
 
@@ -940,8 +1037,8 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedP
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
                 var properties = checkResultComponent["properties"];
-                var isPropertyAccepted = false;
-                var isPropertyTransposed = false;
+                // var isPropertyAccepted = false;
+                // var isPropertyTransposed = false;
 
                 for (var i = 0; i < properties.length; i++) {
 
@@ -972,6 +1069,92 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (selectedP
                 if (results[componentId]["sourceBNodeId"] !== null) {
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
                     sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
+                }
+
+                 // Update original dataset properties               
+                 if ("a" in sourceCompIds) {
+                    let compId = sourceCompIds['a'];
+                    for (let i = 0; i < checkResults.sourceAComponents.length; i++) {
+                        let comp = checkResults.sourceAComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["aName"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["aValue"];
+                            }
+                        }
+                    }
+                }
+                if ("b" in sourceCompIds) {
+                    let compId = sourceCompIds['b'];
+                    for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
+                        var comp = checkResults.sourceBComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["bName"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["bValue"];
+                            }
+                        }
+                    }
+                }
+                if ("c" in sourceCompIds) {
+                    let compId = sourceCompIds['c'];
+                    for (var i = 0; i < checkResults.sourceCComponents.length; i++) {
+                        var comp = checkResults.sourceCComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["cName"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["cValue"];
+                            }
+                        }
+                    }
+                }
+                if ("d" in sourceCompIds) {
+                    let compId = sourceCompIds['d'];
+                    for (var i = 0; i < checkResults.sourceDComponents.length; i++) {
+                        var comp = checkResults.sourceDComponents[i];
+                        if (compId != comp.id) {
+                            continue;
+                        }
+
+                        for (let j = 0; j < comp.properties.length; j++) {
+                            let prop = comp.properties[j];
+                            for (let k = 0; k < sourceProps.length; k++) {
+                                let transposedProp = sourceProps[k];
+                                if (transposedProp["dName"] !== prop.name) {
+                                    continue;
+                                }
+
+                                prop.value = transposedProp["dValue"];
+                            }
+                        }
+                    }
                 }
             }
 
@@ -1015,8 +1198,8 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                         originalComponent.transpose = changedComponent["transpose"];
                         originalComponent.status = "OK";
 
-                        var isPropertyAccepted = false;
-                        var isPropertyTransposed = false;
+                        // var isPropertyAccepted = false;
+                        // var isPropertyTransposed = false;
 
                         for (var propertyId in originalComponent.properties) {
 
@@ -1044,6 +1227,16 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                             sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
                         }
 
+                        // Update original dataset properties 
+                        let affectedComponents = [];
+                        let resValues = Object.values(results);
+                        for (let i = 0; i < resValues.length; i++) {
+                            let resComps = Object.values(resValues[i]);
+                            for (j = 0; j < resComps.length; j++) {
+                                affectedComponents = affectedComponents.concat(Object.values(resComps[j]));
+                            }
+                        }                        
+                        _this.UpdateSourcePropertiesAfterTranspose(affectedComponents, false);
                     }
                 }
             }
@@ -1052,7 +1245,9 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
     catch (error) { }
 }
 
-ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedGroupIdsVsResultIds) {
+ComparisonReviewManager.prototype.TransposeComponent = function (
+    key,
+    selectedGroupIdsVsResultIds) {
     var _this = this;
 
     var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
@@ -1070,12 +1265,12 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedGr
                 'transposeType': transposeType,
                 'transposeLevel': 'componentLevel',
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname               
             },
             success: function (msg) {
 
                 var results = JSON.parse(msg);
-
+               
                 for (var groupId in results) {
 
                     var transpoedComponents = results[groupId];
@@ -1089,8 +1284,8 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedGr
                         originalComponent.transpose = changedComponent["transpose"];
                         originalComponent.status = "OK";
 
-                        var isPropertyAccepted = false;
-                        var isPropertyTransposed = false;
+                        // var isPropertyAccepted = false;
+                        // var isPropertyTransposed = false;
 
                         for (var propertyId in originalComponent.properties) {
 
@@ -1123,6 +1318,17 @@ ComparisonReviewManager.prototype.TransposeComponent = function (key, selectedGr
 
                     }
                 }
+
+                // Update original dataset properties 
+                let affectedComponents = [];
+                let resValues = Object.values(results);
+                for (let i = 0; i < resValues.length; i++) {
+                    let resComps = Object.values(resValues[i]);
+                    for (j = 0; j < resComps.length; j++) {
+                        affectedComponents = affectedComponents.concat(Object.values(resComps[j]));
+                    }
+                }
+                _this.UpdateSourcePropertiesAfterTranspose(affectedComponents, true);
             }
         });
     }
@@ -1194,6 +1400,16 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
                             sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
                         }
 
+                        // Update original dataset properties 
+                        let affectedComponents = [];
+                        let resValues = Object.values(results);
+                        for (let i = 0; i < resValues.length; i++) {
+                            let resComps = Object.values(resValues[i]);
+                            for (j = 0; j < resComps.length; j++) {
+                                affectedComponents = affectedComponents.concat(Object.values(resComps[j]));
+                            }
+                        }
+                        _this.UpdateSourcePropertiesAfterTranspose(affectedComponents, false);
                     }
                 }
             }
@@ -1221,7 +1437,13 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
             url: 'PHP/TransposeProperties.php',
             type: "POST",
             async: true,
-            data: { 'groupid': groupId, 'transposeType': transposeType, 'transposeLevel': 'categorylevel', 'ProjectName': projectinfo.projectname, 'CheckName': checkinfo.checkname },
+            data: {
+                'groupid': groupId,
+                'transposeType': transposeType,
+                'transposeLevel': 'categorylevel',
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname
+            },
             success: function (msg) {
 
                 var results = JSON.parse(msg);
@@ -1271,11 +1493,182 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
 
                     }
                 }
+
+                // Update original dataset properties 
+                let affectedComponents = [];
+                let resValues = Object.values(results);
+                for (let i = 0; i < resValues.length; i++) {
+                    let resComps = Object.values(resValues[i]);
+                    for (j = 0; j < resComps.length; j++) {
+                        affectedComponents = affectedComponents.concat(Object.values(resComps[j]));
+                    }
+                }
+                _this.UpdateSourcePropertiesAfterTranspose(affectedComponents, true);
             }
         });
     }
     catch (error) {
         console.log(error);
+    }
+}
+
+ComparisonReviewManager.prototype.UpdateSourcePropertiesAfterTranspose = function (affectedComponents, transpose = true) {
+    for (let ii = 0; ii < affectedComponents.length; ii++) {
+        let affectedComponent = affectedComponents[ii];
+
+        if (affectedComponent.sourceAId &&
+            affectedComponent.sourceAId !== "") {
+            for (let i = 0; i < checkResults.sourceAComponents.length; i++) {
+                let comp = checkResults.sourceAComponents[i];
+                if (affectedComponent.sourceAId != comp.id) {
+                    continue;
+                }
+
+                for (let j = 0; j < comp.properties.length; j++) {
+                    let prop = comp.properties[j];
+                    for (let k = 0; k < affectedComponent.properties.length; k++) {
+                        let transposedProp = affectedComponent.properties[k];
+                        if (transposedProp["sourceAName"] !== prop.name) {
+                            continue;
+                        }
+
+                        if (transpose === true) {
+                            if (!transposedProp["transpose"] ||
+                                transposedProp["transpose"] == "") {
+                                continue;
+                            }
+
+                            if (transposedProp["transpose"].toLowerCase() === "fromdatasource2") {
+                                prop.value = transposedProp["sourceBValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource3") {
+                                prop.value = transposedProp["sourceCValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource4") {
+                                prop.value = transposedProp["sourceDValue"];
+                            }
+                        }
+                        else {
+                            prop.value = transposedProp["sourceAValue"];
+                        }
+                    }
+                }
+            }
+        }
+        if (affectedComponent.sourceBId &&
+            affectedComponent.sourceBId !== "") {
+            for (let i = 0; i < checkResults.sourceBComponents.length; i++) {
+                let comp = checkResults.sourceBComponents[i];
+                if (affectedComponent.sourceBId != comp.id) {
+                    continue;
+                }
+
+                for (let j = 0; j < comp.properties.length; j++) {
+                    let prop = comp.properties[j];
+                    for (let k = 0; k < affectedComponent.properties.length; k++) {
+                        let transposedProp = affectedComponent.properties[k];
+                        if (transposedProp["sourceBName"] !== prop.name) {
+                            continue;
+                        }
+
+                        if (transpose === true) {
+                            if (!transposedProp["transpose"] ||
+                                transposedProp["transpose"] == "") {
+                                continue;
+                            }
+                            if (transposedProp["transpose"].toLowerCase() === "fromdatasource1") {
+                                prop.value = transposedProp["sourceAValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource3") {
+                                prop.value = transposedProp["sourceCValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource4") {
+                                prop.value = transposedProp["sourceDValue"];
+                            }
+                        }
+                        else {
+                            prop.value = transposedProp["sourceBValue"];
+                        }
+                    }
+                }
+            }
+        }
+        if (affectedComponent.sourceCId &&
+            affectedComponent.sourceCId !== "") {
+            for (let i = 0; i < checkResults.sourceCComponents.length; i++) {
+                let comp = checkResults.sourceCComponents[i];
+                if (affectedComponent.sourceCId != comp.id) {
+                    continue;
+                }
+
+                for (let j = 0; j < comp.properties.length; j++) {
+                    let prop = comp.properties[j];
+                    for (let k = 0; k < affectedComponent.properties.length; k++) {
+                        let transposedProp = affectedComponent.properties[k];
+                        if (transposedProp["sourceCName"] !== prop.name) {
+                            continue;
+                        }
+
+                        if (transpose === true) {
+                            if (!transposedProp["transpose"] ||
+                                transposedProp["transpose"] == "") {
+                                continue;
+                            }
+                            if (transposedProp["transpose"].toLowerCase() === "fromdatasource1") {
+                                prop.value = transposedProp["sourceAValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource2") {
+                                prop.value = transposedProp["sourceBValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource4") {
+                                prop.value = transposedProp["sourceDValue"];
+                            }
+                        }
+                        else {
+                            prop.value = transposedProp["sourceCValue"];
+                        }
+                    }
+                }
+            }
+        }
+        if (affectedComponent.sourceDId &&
+            affectedComponent.sourceDId !== "") {
+            for (let i = 0; i < checkResults.sourceDComponents.length; i++) {
+                let comp = checkResults.sourceDComponents[i];
+                if (affectedComponent.sourceDId != comp.id) {
+                    continue;
+                }
+
+                for (let j = 0; j < comp.properties.length; j++) {
+                    let prop = comp.properties[j];
+                    for (let k = 0; k < affectedComponent.properties.length; k++) {
+                        let transposedProp = affectedComponent.properties[k];
+                        if (transposedProp["sourceDName"] !== prop.name) {
+                            continue;
+                        }
+
+                        if (transpose === true) {
+                            if (!transposedProp["transpose"] ||
+                                transposedProp["transpose"] == "") {
+                                continue;
+                            }
+                            if (transposedProp["transpose"].toLowerCase() === "fromdatasource1") {
+                                prop.value = transposedProp["sourceAValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource2") {
+                                prop.value = transposedProp["sourceBValue"];
+                            }
+                            else if (transposedProp["transpose"].toLowerCase() === "fromdatasource3") {
+                                prop.value = transposedProp["sourceCValue"];
+                            }
+                        }
+                        else {
+                            prop.value = transposedProp["sourceDValue"];
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

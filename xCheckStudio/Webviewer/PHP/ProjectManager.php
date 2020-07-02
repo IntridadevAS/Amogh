@@ -553,25 +553,95 @@ function SaveComparisonPropertiesFromTemp($tempDbh, $dbh)
 
         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONPROPERTIESWITHID_TABLE);
 
+        $context = strtolower($_POST['Context']);        
 
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+
+            $sourceAName = $row['sourceAName'];
+            $sourceBName = $row['sourceBName'];
+            $sourceCName = $row['sourceCName'];
+            $sourceDName = $row['sourceDName'];
+           
+            $sourceAValue = $row['sourceAValue'];
+            $sourceBValue = $row['sourceBValue'];
+            $sourceCValue = $row['sourceCValue'];
+            $sourceDValue = $row['sourceDValue'];
+
+            $severity = $row['severity'];
+
+            // if property is transposed, then save transposed 
+            // values against the property
+            if (
+                $context === "review" &&
+                $row['transpose'] !== null
+            ) {
+                // get transposed value
+                $transposeFrom = strtolower($row['transpose']);
+                $transposedValue = null;               
+                if ($transposeFrom === "fromdatasource1") {
+                    $transposedValue = $sourceAValue;
+                }
+                else if ($transposeFrom === "fromdatasource2") {
+                    $transposedValue = $sourceBValue;
+                } 
+                else if ($transposeFrom === "fromdatasource3") {
+                    $transposedValue = $sourceCValue;
+                } 
+                else if ($transposeFrom === "fromdatasource4") 
+                {
+                    $transposedValue = $sourceDValue;
+                }
+               
+                // Change property values for other datasets
+                if ($transposedValue !== null) {
+                    if (
+                        $sourceAName !== null &&
+                        $sourceAName !== ""
+                    ) {
+                        $sourceAValue = $transposedValue;
+                    } 
+                    
+                    if (
+                        $sourceBName !== null &&
+                        $sourceBName !== ""
+                    ) {
+                        $sourceBValue = $transposedValue;
+                    } 
+                    if (
+                        $sourceCName !== null &&
+                        $sourceCName !== ""
+                    ) {
+                        $sourceCValue = $transposedValue;
+                    } 
+                    if (
+                        $sourceDName !== null &&
+                        $sourceDName !== ""
+                    ) {
+                        $sourceDValue = $transposedValue;
+                    }
+
+                    // change severity       
+                    $severity = "OK";
+                }
+            }
+
             $insertStmt->execute(array(
                 $row['id'],
-                $row['sourceAName'],
-                $row['sourceBName'],
-                $row['sourceCName'],
-                $row['sourceDName'],
-                $row['sourceAValue'],
-                $row['sourceBValue'],
-                $row['sourceCValue'],
-                $row['sourceDValue'],
+                $sourceAName,
+                $sourceBName,
+                $sourceCName,
+                $sourceDName,
+                $sourceAValue,
+                $sourceBValue,
+                $sourceCValue,
+                $sourceDValue,
                 $row['result'],
-                $row['severity'],
+                $severity,
                 $row['accepted'],
                 $row['performCheck'],
                 $row['description'],
                 $row['ownerComponent'],
-                $row['transpose']
+                null
             ));
         }
     }
@@ -599,13 +669,19 @@ function SaveComparisonGroupsFromTemp($tempDbh, $dbh)
          componentCount, 
          categoryStatus) VALUES(?,?,?,?)");
 
+        $context = strtolower($_POST['Context']); 
 
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $status = $row['categoryStatus'];
+            if ($context === "review") {               
+                $status = str_replace("(T)", "", $status);
+            }
+
             $insertStmt->execute(array(
                 $row['id'],
                 $row['componentClass'],
                 $row['componentCount'],
-                $row['categoryStatus']
+                $status
             ));
         }
     }
@@ -653,7 +729,15 @@ function SaveComparisonComponentsFromTemp($tempDbh, $dbh)
         $insertStmt = $dbh->prepare(INSERT_ALLCOMPARISONCOMPONETSWITHID_TABLE);
 
 
+        $context = strtolower($_POST['Context']);   
+        
         while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+
+            $status = $row['status'];
+            if ($context === "review") {               
+                $status = str_replace("(T)", "", $status);
+            }
+
             $insertStmt->execute(array(
                 $row['id'],
                 $row['sourceAName'],
@@ -668,7 +752,7 @@ function SaveComparisonComponentsFromTemp($tempDbh, $dbh)
                 $row['sourceBSubComponentClass'],
                 $row['sourceCSubComponentClass'],
                 $row['sourceDSubComponentClass'],
-                $row['status'],
+                $status,
                 $row['accepted'],
                 $row['sourceANodeId'],
                 $row['sourceBNodeId'],
@@ -679,7 +763,7 @@ function SaveComparisonComponentsFromTemp($tempDbh, $dbh)
                 $row['sourceCId'],
                 $row['sourceDId'],
                 $row['ownerGroup'],
-                $row['transpose'],
+                null,
                 $row['classMappingInfo']
             ));
         }
