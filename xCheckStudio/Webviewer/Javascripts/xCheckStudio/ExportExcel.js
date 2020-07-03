@@ -233,15 +233,15 @@ function ComparisonData() {
     this.ComparisonExportComplete = false;
 }
 
-ComparisonData.prototype.CreateTableData = function (selectedTables, exportProperties) {
+ComparisonData.prototype.CreateTableData = function (selectedTables, exportProperties, checkData) {
 
     var tablesData = [];
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
-
+      
         var sources = checkResults["Comparisons"][0]["sources"];
 
-        var checkComponents = this.GetCategoryComponents(tableName);
+        var checkComponents = this.GetCategoryComponents(tableName, checkData);
         var tableData = [];
         var propertyIndex = 1;
         var sourcePropertyNamesGroup = []
@@ -385,11 +385,37 @@ ComparisonData.prototype.CreateTableData = function (selectedTables, exportPrope
     return tablesData;
 }
 
-ComparisonData.prototype.CreateTableHeader = function (selectedTables, exportProperties) {
+ComparisonData.prototype.GetData = function () {
+    return new Promise((resolve) => {
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+        $.ajax({
+            data: {
+                'InvokeFunction': "ReadSavedComparisonCheckData",
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname,
+            },
+            async: true,
+            type: "POST",
+            url: "PHP/ProjectLoadManager.php"
+        }).done(function (msg) {
+            var message = JSON.parse(msg);
+
+            if (message.MsgCode === 1) {
+                return resolve(message.Data);
+            }
+
+            return resolve(null);
+        });
+    });
+}
+
+ComparisonData.prototype.CreateTableHeader = function (selectedTables, exportProperties, checkData) {
     var tablesHeaders = [];
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
-        var components = this.GetCategoryComponents(tableName);
+        var components = this.GetCategoryComponents(tableName, checkData);
         var headers = [];
 
         var sources = checkResults["Comparisons"][0]["sources"];
@@ -531,11 +557,11 @@ ComparisonData.prototype.CreateTableHeader = function (selectedTables, exportPro
     return tablesHeaders;
 }
 
-ComparisonData.prototype.GetCategoryComponents = function (tableName) {
-    var comparisonGroups = checkResults["Comparisons"][0]["results"];
-    for (var groupId in comparisonGroups) {
-        if (tableName == comparisonGroups[groupId].componentClass) {
-            return comparisonGroups[groupId].components;
+ComparisonData.prototype.GetCategoryComponents = function (tableName, data) {
+    // var comparisonGroups = checkResults["Comparisons"][0]["results"];
+    for (var groupId in data) {
+        if (tableName == data[groupId].componentClass) {
+            return data[groupId].components;
         }
     }
 }
@@ -552,28 +578,40 @@ ComparisonData.prototype.ExportComparisonComponents = function (selectedTables, 
 
 ComparisonData.prototype.CreateReviewExportDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
     var _this = this;
-    var headers;
-    var data;
-    var parentTable;
+    return new Promise((resolve) => {
+        // let checkData = this.GetData();
+        this.GetData().then(function (checkData) {
+            if (!checkData) {
+                return resolve(false);
+            }
 
-    headers = this.CreateTableHeader(selectedTables, exportProperties);
-    data = this.CreateTableData(selectedTables, exportProperties);
-    parentTable = document.getElementById("comparisonTables");
+            let headers = _this.CreateTableHeader(selectedTables, exportProperties, checkData);
+            let data = _this.CreateTableData(selectedTables, exportProperties, checkData);
+            let parentTable = document.getElementById("comparisonTables");
 
+            var allPromises = [];
+            for (var tableName in headers) {
+                var header = headers[tableName];
+                var tableData = data[tableName];
 
-    for (var tableName in headers) {
-        var header = headers[tableName];
-        var tableData = data[tableName];
+                var datagridDiv = document.createElement("DIV");
+                datagridDiv.id = tableName + "_tempTable";
+                datagridDiv.style.display = "none";
+                parentTable.append(datagridDiv);
 
-        var datagridDiv = document.createElement("DIV");
-        datagridDiv.id = tableName + "_tempTable";
-        datagridDiv.style.display = "none";
-        parentTable.append(datagridDiv);
+                allPromises.push(exportExcelInstance.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header));
+            }
 
-        await exportExcelInstance.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header);
-
-    }
-
+            if (allPromises.length > 0) {
+                xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
+                    return resolve(res);
+                });
+            }
+            else {
+                return resolve(true);
+            }
+        });
+    });
 }
 
 
@@ -588,7 +626,7 @@ ComplianceData.prototype.CreateTableData = function (selectedTables, exportPrope
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
 
-        var sources = checkResults["Comparisons"][0]["sources"];
+        // var sources = checkResults["Comparisons"][0]["sources"];
 
         var dataObj = this.GetCategoryComponentsAndSourceName(tableName);
         var tableData = [];

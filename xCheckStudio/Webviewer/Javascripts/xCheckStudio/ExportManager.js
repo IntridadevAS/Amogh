@@ -19,7 +19,7 @@ var ExportManager = {
     Datasets : {}
 }
 
-function ShowSelectBox() {
+function showExportExcelForm() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("ExcelOutputPopup");
 
@@ -28,15 +28,15 @@ function ShowSelectBox() {
     popup.style.display = 'block';
 
     if(!ExportManager.ExcelOutputFormInitialised) {
-        CreateDevExtremeWidgets();
+        createDevExtremeWidgets();
         ExportManager.ExcelOutputFormInitialised = true;
     }
     else {
-        ResetExportOptionsForm();
+        resetExportOptionsForm();
     }
 }
 
-function ResetExportOptionsForm() {
+function resetExportOptionsForm() {
     $("#comparisonOutputSwitch").dxSwitch("instance").reset();      
     $("#complianceOutputSwitch").dxSwitch("instance").reset();  
     $("#ExportComparisonPropertiesSwitch").dxSwitch("instance").reset();
@@ -181,13 +181,12 @@ function DisableModelBrowserExportForm() {
     }
 }
 
-function CreateDevExtremeWidgets() {
-
-    CreateReviewExportForm();
-    CreateDataSetExportForm();
+function createDevExtremeWidgets() {
+    createReviewExportForm();
+    createDataSetExportForm();
 }
 
-function CreateDataSetExportForm() {
+function createDataSetExportForm() {
     new DevExpress.ui.dxSwitch(document.getElementById("modelBrowserExportSwitch"), { 
         onValueChanged : function(e) {
             if(e.value) {
@@ -265,7 +264,7 @@ function GetCategoryWiseComponentList(components) {
     return categoryList;
 }
 
-function CreateReviewExportForm() {
+function createReviewExportForm() {
     new DevExpress.ui.dxSwitch(document.getElementById("reviewResultsExportSwitch"), { 
         onValueChanged : function(e) {
             if(e.value) {
@@ -324,33 +323,32 @@ function CreateReviewExportForm() {
     }
 }
 
-function OnExcelClick() {
-    ShowSelectBox();
+function onExcelClick() {
+    showExportExcelForm();
     var exportButton = document.getElementById("exportButton");
-    exportButton.onclick= function () {
-        ExportToExcel();
+    exportButton.onclick = function () {
+        exportExcel();
     };
 }
 
-function ExportToExcel() {
+function exportExcel() {
 
     showBusyIndicator();
     var reviewExoprtForm = $("#reviewResultsExportSwitch").dxSwitch("instance").option("disabled");
     var datasetSwitchForm = $("#modelBrowserExportSwitch").dxSwitch("instance").option("disabled");
 
-    if(!reviewExoprtForm) {
-        ExportReviewTableResults();
+    if (!reviewExoprtForm) {
+        exportReviewTableResults();
     }
-    else if(!datasetSwitchForm) {
-        ExportDatasets();
+    else if (!datasetSwitchForm) {
+        exportDatasets();
     }
     else {
         hideBusyIndicator();
-        return;
     }
 }
 
-function ExportReviewTableResults() {
+function exportReviewTableResults() {
     var exportToExcel = new ExportExcel();
     var selectedTables = {};
     var comparisonSwitch = $("#comparisonOutputSwitch").dxSwitch("instance");
@@ -359,33 +357,33 @@ function ExportReviewTableResults() {
     var complianceSwitch = $("#complianceOutputSwitch").dxSwitch("instance");
     var complianceValueswitch = complianceSwitch.option("value");
 
-    var exportPropertiesSwitch =  $("#ExportComparisonPropertiesSwitch").dxSwitch("instance");
-    var exportProperties = exportPropertiesSwitch.option("value");    
+    var exportPropertiesSwitch = $("#ExportComparisonPropertiesSwitch").dxSwitch("instance");
+    var exportProperties = exportPropertiesSwitch.option("value");
 
-    if(comparisonValueswitch && comparisonExportManager.SelectedTableIds.length > 0) {
+    if (comparisonValueswitch && comparisonExportManager.SelectedTableIds.length > 0) {
         selectedTables["Comparison"] = comparisonExportManager.SelectedTableIds;
-    } 
+    }
 
-    if(complianceValueswitch) {
-        if(complianceAExportManager.SelectedTableIds.length > 0) {
+    if (complianceValueswitch) {
+        if (complianceAExportManager.SelectedTableIds.length > 0) {
             selectedTables["ComplianceA"] = complianceAExportManager.SelectedTableIds;
         }
 
-        if(complianceBExportManager.SelectedTableIds.length > 0) {
+        if (complianceBExportManager.SelectedTableIds.length > 0) {
             selectedTables["ComplianceB"] = complianceBExportManager.SelectedTableIds;
         }
 
-        if(complianceCExportManager.SelectedTableIds.length > 0) {
+        if (complianceCExportManager.SelectedTableIds.length > 0) {
             selectedTables["ComplianceC"] = complianceCExportManager.SelectedTableIds;
         }
 
-        if(complianceDExportManager.SelectedTableIds.length > 0) {
+        if (complianceDExportManager.SelectedTableIds.length > 0) {
             selectedTables["ComplianceD"] = complianceDExportManager.SelectedTableIds;
         }
     }
 
-    if(Object.keys(selectedTables).length > 0) {
-        exportToExcel.ExportReviewTablesData(selectedTables, exportProperties).then(function() {
+    if (Object.keys(selectedTables).length > 0) {
+        exportToExcel.ExportReviewTablesData(selectedTables, exportProperties).then(function () {
             closeSaveAs();
             closeOutpuToOverlay();
         });
@@ -396,7 +394,7 @@ function ExportReviewTableResults() {
     }
 }
 
-function ExportDatasets() {
+function exportDatasets() {
     var exportToExcel = new ExportExcel();
 
     var datasetExportSwitch = $("#modelBrowserExportSwitch").dxSwitch("instance");

@@ -18,7 +18,10 @@
                 break;
             case "CreateTempCheckSpaceDBByCopy":
             CreateTempCheckSpaceDBByCopy();
-                break;     
+                break;
+            case "ReadSavedComparisonCheckData":
+                ReadSavedComparisonCheckData();
+            break;
             default:
                 echo "No Function Found!";
         }
@@ -627,7 +630,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
             }
 
             // read comparison results
-            $comparisonResult = readComparisonCheckData($tempDbh);
+            $comparisonResult = readComparisonCheckResults($tempDbh);
             if ($comparisonResult != NULL) {
                 $results['Comparisons'] = array();
                 $comparison = array();
@@ -1865,32 +1868,51 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
         return NULL;
     }
 
-    function readComparisonCheckData($tempDbh)
-    {       
-        try
-        {   
-            // // open database
-            // $dbPath = getCheckDatabasePath($projectName, $checkName);
-            // $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
-            // // begin the transaction
-            // $dbh->beginTransaction();
+    function ReadSavedComparisonCheckData()
+    {
+        if (
+            !isset($_POST['ProjectName']) ||
+            !isset($_POST['CheckName'])
+        ) {
+            echo json_encode(array(
+                "Msg" =>  "Invalid input.",
+                "MsgCode" => 0
+            ));
+            return;
+        }
+
+        try {
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+
+            // open database
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+            // begin the transaction
+            $dbh->beginTransaction();
 
             // get comparison check data
-            $result = readComparisonCheckResults($tempDbh);
-            
-            // // commit update
-            // $dbh->commit();
-            // $dbh = null; //This is how you close a PDO connection
+            $result = readComparisonCheckResults($dbh);
 
-            return $result;
-        }                
-        catch(Exception $e) 
-        {   
-            return NULL;
-        }   
-        
-        return NULL;
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+
+            echo json_encode(array(
+                "Msg" =>  "Success",
+                "Data" => $result,
+                "MsgCode" => 1
+            ));
+            return;
+        } catch (Exception $e) {
+        }
+
+        echo json_encode(array(
+            "Msg" =>  "Failed",
+            "MsgCode" => 0
+        ));
     }
 
     function readComparisonCheckResults($dbh)
