@@ -257,7 +257,12 @@ SCManager.prototype.OpenTableViewsMenu = function () {
         if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.DataBrowser) {
             var selectedNodeIds = _this.GetCurrentTable().GetSelectedNodeIds();
 
-            _this.ModelTree.AddComponentTable(_this.SourceProperties, selectedNodeIds);
+            if (_this.HasProperties === true) {
+                _this.ModelTree.AddComponentTable(_this.SourceProperties, selectedNodeIds);
+            }
+            else {
+                _this.ModelTree.AddModelBrowser();
+            }
 
             _this.CloseTableViewsMenu();
 
@@ -673,83 +678,90 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
 
             _this.Webviewer.model.getNodeProperties(nodeId).then(function (nodeProperties) {
 
-                if (nodeProperties != null &&
-                    // Object.keys(nodeProperties).length > 0 &&
-                    identifierProperties !== undefined) {
+                if (nodeProperties != null) {
 
-                    // get component name
-                    var name = _this.GetPropertyValue(nodeProperties, identifierProperties.name);
-                    if (name == undefined) {
-                        name = _this.Webviewer.model.getNodeName(nodeId)
-                    }
+                    let name;
+                    let mainComponentClass;
+                    let subComponentClass;
+                    if (identifierProperties) {
 
-                    // get main component class
-                    var mainComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.mainCategory);
-                    if (_this.SourceType.toLowerCase() == "rvt" &&
-                        mainComponentClass == undefined) {
-                        mainComponentClass = _this.Webviewer.model.getNodeName(parentNodeId);
-                    }
+                        // get component name
+                        name = _this.GetPropertyValue(nodeProperties, identifierProperties.name);
+                        if (name == undefined) {
+                            name = _this.Webviewer.model.getNodeName(nodeId)
+                        }
 
-                    // get sub component class
-                    var subComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.subClass);
-                    if (_this.SourceType.toLowerCase() == "rvt" &&
-                        subComponentClass == undefined) {
-                        subComponentClass = mainComponentClass
-                    }
+                        // get main component class
+                        mainComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.mainCategory);
+                        if (_this.SourceType.toLowerCase() == "rvt" &&
+                            mainComponentClass == undefined) {
+                            mainComponentClass = _this.Webviewer.model.getNodeName(parentNodeId);
+                        }
 
-                    if (mainComponentClass !== undefined &&
-                        name !== undefined &&
-                        subComponentClass !== undefined) {
+                        // get sub component class
+                        subComponentClass = _this.GetPropertyValue(nodeProperties, identifierProperties.subClass);
+                        if (_this.SourceType.toLowerCase() == "rvt" &&
+                            subComponentClass == undefined) {
+                            subComponentClass = mainComponentClass
+                        }
 
-                        // create generic properties object
-                        var genericPropertiesObject = new GenericComponent(name,
-                            mainComponentClass,
-                            subComponentClass,
-                            nodeId,
-                            parentNodeId);
+                        if (mainComponentClass !== undefined &&
+                            name !== undefined &&
+                            subComponentClass !== undefined) {
 
-                        // add component class as generic property
-                        var componentClassPropertyObject = new GenericProperty("ComponentClass",
-                            "String",
-                            subComponentClass,
-                            true);
+                            // create generic properties object
+                            var genericPropertiesObject = new GenericComponent(name,
+                                mainComponentClass,
+                                subComponentClass,
+                                nodeId,
+                                parentNodeId);
 
-                        genericPropertiesObject.addProperty(componentClassPropertyObject);
-
-
-                        if (_this.SourceType.toLowerCase() == "rvt") {
-                            var elementName = new GenericProperty("Name",
+                            // add component class as generic property
+                            var componentClassPropertyObject = new GenericProperty("ComponentClass",
                                 "String",
-                                name,
+                                subComponentClass,
                                 true);
 
-                            genericPropertiesObject.addProperty(elementName);
-                        }
+                            genericPropertiesObject.addProperty(componentClassPropertyObject);
 
-                        // iterate node properties and add to generic properties object
-                        for (var key in nodeProperties) {
-                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key], false);
-                            genericPropertiesObject.addProperty(genericPropertyObject);
-                        }
 
-                        // add genericProperties object to sourceproperties collection
-                        _this.SourceProperties[nodeId] = genericPropertiesObject;
-                    }
-                    else {
-                        // create generic properties object
-                        var genericPropertiesObject = new GenericComponent(name,
-                            undefined,
-                            undefined,
-                            nodeId,
-                            parentNodeId);
-                        for (var key in nodeProperties) {
-                            var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key], false);
-                            genericPropertiesObject.addProperty(genericPropertyObject);
+                            if (_this.SourceType.toLowerCase() == "rvt") {
+                                var elementName = new GenericProperty("Name",
+                                    "String",
+                                    name,
+                                    true);
+
+                                genericPropertiesObject.addProperty(elementName);
+                            }
+
+                            // iterate node properties and add to generic properties object
+                            for (var key in nodeProperties) {
+                                var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key], false);
+                                genericPropertiesObject.addProperty(genericPropertyObject);
+                            }
+
+                            // add genericProperties object to sourceproperties collection
+                            _this.SourceProperties[nodeId] = genericPropertiesObject;
                         }
-                        _this.Properties[nodeId] = genericPropertiesObject;
+                        else {
+                            // create generic properties object
+                                                       var genericPropertiesObject = new GenericComponent(name,
+                                undefined,
+                                undefined,
+                                nodeId,
+                                parentNodeId);
+                            for (var key in nodeProperties) {
+                                var genericPropertyObject = new GenericProperty(key, "String", nodeProperties[key], false);
+                                genericPropertiesObject.addProperty(genericPropertyObject);
+                            }
+                            _this.Properties[nodeId] = genericPropertiesObject;
+                        }
                     }
 
                     // all components
+                    if (name == undefined) {
+                        name = _this.Webviewer.model.getNodeName(nodeId)
+                    }
                     var dataComponentObject = new GenericComponent(name,
                         mainComponentClass,
                         subComponentClass,
@@ -759,6 +771,17 @@ SCManager.prototype.ReadProperties = function (nodeId, identifierProperties, par
                         var prop = new GenericProperty(key, "String", nodeProperties[key], false);
                         dataComponentObject.addProperty(prop);
                     }
+                    _this.AllComponents[nodeId] = dataComponentObject;
+                }
+                else {
+                    // if there are no properties with component
+                    // all components
+                    let name = _this.Webviewer.model.getNodeName(nodeId)
+                    var dataComponentObject = new GenericComponent(name,
+                        undefined,
+                        undefined,
+                        nodeId,
+                        parentNodeId);
                     _this.AllComponents[nodeId] = dataComponentObject;
                 }
 
