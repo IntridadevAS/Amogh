@@ -1,0 +1,109 @@
+{
+    "xml": {
+        "extensions": [
+            "xml"
+        ],
+        "name": "Intrida Data/Title",
+        "category": "Intrida Data/MainComponentClass",
+        "componentClass": "Intrida Data/SubComponentClass"
+    },
+    "rvm": {
+        "extensions": [
+            "rvm"
+        ],
+        "name": "Intrida Data/Name",
+        "category": "Intrida Data/Type",
+        "componentClass": "Intrida Data/Type"
+    },
+    "excel": {
+        "extensions": [
+            "xls",
+            "xlsx"
+        ],
+        "name": "Name",
+        "category": "MainComponentClass",
+        "componentClass": "ComponentClass"
+    },
+    "db": {
+        "extensions": [
+            "json"
+        ],
+        "name": "Name",
+        "category": "MainComponentClass",
+        "componentClass": "ComponentClass"
+    },
+    "solidworks assembly": {
+        "extensions": [
+            "sldasm"
+        ],
+        "name": "SW-File Name(File Name)",
+        "category": "Component Class",
+        "componentClass": "Component Class"
+    },
+    "solidworks part": {
+        "extensions": [
+            "sldprt"
+        ],
+        "name": "SW-File Name(File Name)",
+        "category": "Component Class",
+        "componentClass": "Component Class"
+    },
+    "revit": {
+        "extensions": [
+            "rvt"
+        ],
+        "name": "Name",
+        "category": "TYPE",
+        "componentClass": "TYPE"
+    },
+    "igs": {
+        "extensions": [
+            "igs"
+        ],
+        "name": "Name",
+        "category": "TYPE",
+        "componentClass": "TYPE"
+    },
+    "ifc": {
+        "extensions": [
+            "ifc"
+        ],
+        "name": "Name",
+        "category": "TYPE",
+        "componentClass": "TYPE"
+    },
+    "step": {
+        "extensions": [
+            "step"
+        ],
+        "name": "Name",
+        "category": "TYPE",
+        "componentClass": "TYPE"
+    },
+    "stp": {
+        "extensions": [
+            "stp"
+        ],
+        "name": "Name",
+        "category": "TYPE",
+        "componentClass": "TYPE"
+    },
+    "ste": {
+        "extensions": [
+            "ste"
+        ],
+        "name": "Name",
+        "category": "TYPE",
+        "componentClass": "TYPE"
+    },
+    "visio": {
+        "extensions": [
+            "vsd",
+            "vsdx"
+        ],
+        "name": "VMD_<*>_NAME",
+        "category": "VMD_<*>_ACTTYP",
+        "componentClass": "VMD_<*>_ACTTYP",
+        "owner": "VMD_<*>_OWNER"
+    }
+}

@@ -6,6 +6,5 @@ php-7.2.11-nts-Win32-VC15-x64/
 *.scs
 *.prc
 *.db
-*.json
 *.txt
 xCheckStudio/xCheckFileReader/x64/Release/bin/resource/
