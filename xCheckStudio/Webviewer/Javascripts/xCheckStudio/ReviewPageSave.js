@@ -35,6 +35,11 @@ var ReviewModule = {
 
     saveAll: function () {
         return new Promise((resolve) => {
+            let allComponents = {};
+            for (var srcId in checkResults.allComponents) {
+                allComponents["AllComponents" + srcId] = JSON.parse(checkResults.allComponents[srcId]);
+            }
+
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
             var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
@@ -47,7 +52,8 @@ var ReviewModule = {
                     'InvokeFunction': "SaveAll",
                     'Context': "review",
                     'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname
+                    'CheckName': checkinfo.checkname,
+                    "allComponents": JSON.stringify(allComponents),
                 },
                 success: function (msg) {
                     if (msg != 'fail') {

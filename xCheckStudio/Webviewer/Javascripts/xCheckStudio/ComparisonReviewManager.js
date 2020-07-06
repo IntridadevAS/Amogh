@@ -916,6 +916,13 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                 // Update original dataset properties               
                 if ("a" in sourceCompIds) {
                     let compId = sourceCompIds['a'];
+
+                    let allCompsA;
+                    if ("allComponents" in checkResults &&
+                        "a" in checkResults.allComponents) {
+                        allCompsA = JSON.parse(checkResults.allComponents["a"]);
+                    }
+
                     for (let i = 0; i < checkResults.sourceAComponents.length; i++) {
                         let comp = checkResults.sourceAComponents[i];
                         if (compId != comp.id) {
@@ -933,10 +940,37 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                                 prop.value = transposedProp["transposedValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsA &&
+                            comp.nodeid in allCompsA) {
+                            let props = allCompsA[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["a"]) {
+                                        props[propIndex].Value = transposedProp["transposedValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsA) {
+                        checkResults.allComponents["a"] = JSON.stringify(allCompsA);
                     }
                 }
                 if ("b" in sourceCompIds) {
                     let compId = sourceCompIds['b'];
+
+                    let allCompsB;
+                    if ("allComponents" in checkResults &&
+                        "b" in checkResults.allComponents) {
+                        allCompsB = JSON.parse(checkResults.allComponents["b"]);
+                    }
+
                     for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
                         var comp = checkResults.sourceBComponents[i];
                         if (compId != comp.id) {
@@ -954,10 +988,37 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                                 prop.value = transposedProp["transposedValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsB &&
+                            comp.nodeid in allCompsB) {
+                            let props = allCompsB[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["b"]) {
+                                        props[propIndex].Value = transposedProp["transposedValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsB) {
+                        checkResults.allComponents["b"] = JSON.stringify(allCompsB);
                     }
                 }
                 if ("c" in sourceCompIds) {
                     let compId = sourceCompIds['c'];
+
+                    let allCompsC;
+                    if ("allComponents" in checkResults &&
+                        "c" in checkResults.allComponents) {
+                        allCompsC = JSON.parse(checkResults.allComponents["c"]);
+                    }
+
                     for (var i = 0; i < checkResults.sourceCComponents.length; i++) {
                         var comp = checkResults.sourceCComponents[i];
                         if (compId != comp.id) {
@@ -975,10 +1036,37 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                                 prop.value = transposedProp["transposedValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsC &&
+                            comp.nodeid in allCompsC) {
+                            let props = allCompsC[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["c"]) {
+                                        props[propIndex].Value = transposedProp["transposedValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsC) {
+                        checkResults.allComponents["c"] = JSON.stringify(allCompsC);
                     }
                 }
                 if ("d" in sourceCompIds) {
                     let compId = sourceCompIds['d'];
+
+                    let allCompsD;
+                    if ("allComponents" in checkResults &&
+                        "d" in checkResults.allComponents) {
+                        allCompsD = JSON.parse(checkResults.allComponents["d"]);
+                    }
+
                     for (var i = 0; i < checkResults.sourceDComponents.length; i++) {
                         var comp = checkResults.sourceDComponents[i];
                         if (compId != comp.id) {
@@ -996,6 +1084,26 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                                 prop.value = transposedProp["transposedValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsD &&
+                            comp.nodeid in allCompsD) {
+                            let props = allCompsD[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["d"]) {
+                                        props[propIndex].Value = transposedProp["transposedValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsD) {
+                        checkResults.allComponents["d"] = JSON.stringify(allCompsD);
                     }
                 }
             }
@@ -1072,8 +1180,15 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                 }
 
                  // Update original dataset properties               
-                 if ("a" in sourceCompIds) {
+                if ("a" in sourceCompIds) {
                     let compId = sourceCompIds['a'];
+
+                    let allCompsA;
+                    if ("allComponents" in checkResults &&
+                        "a" in checkResults.allComponents) {
+                        allCompsA = JSON.parse(checkResults.allComponents["a"]);
+                    }
+
                     for (let i = 0; i < checkResults.sourceAComponents.length; i++) {
                         let comp = checkResults.sourceAComponents[i];
                         if (compId != comp.id) {
@@ -1091,10 +1206,37 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                                 prop.value = transposedProp["aValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsA &&
+                            comp.nodeid in allCompsA) {
+                            let props = allCompsA[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["aName"]) {
+                                        props[propIndex].Value = transposedProp["aValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsA) {
+                        checkResults.allComponents["a"] = JSON.stringify(allCompsA);
                     }
                 }
                 if ("b" in sourceCompIds) {
                     let compId = sourceCompIds['b'];
+
+                    let allCompsB;
+                    if ("allComponents" in checkResults &&
+                        "b" in checkResults.allComponents) {
+                        allCompsB = JSON.parse(checkResults.allComponents["b"]);
+                    }
+
                     for (var i = 0; i < checkResults.sourceBComponents.length; i++) {
                         var comp = checkResults.sourceBComponents[i];
                         if (compId != comp.id) {
@@ -1112,10 +1254,37 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                                 prop.value = transposedProp["bValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsB &&
+                            comp.nodeid in allCompsB) {
+                            let props = allCompsB[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["bName"]) {
+                                        props[propIndex].Value = transposedProp["bValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsB) {
+                        checkResults.allComponents["b"] = JSON.stringify(allCompsB);
                     }
                 }
                 if ("c" in sourceCompIds) {
                     let compId = sourceCompIds['c'];
+
+                    let allCompsC;
+                    if ("allComponents" in checkResults &&
+                        "c" in checkResults.allComponents) {
+                        allCompsC = JSON.parse(checkResults.allComponents["c"]);
+                    }
+
                     for (var i = 0; i < checkResults.sourceCComponents.length; i++) {
                         var comp = checkResults.sourceCComponents[i];
                         if (compId != comp.id) {
@@ -1133,10 +1302,37 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                                 prop.value = transposedProp["cValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsC &&
+                            comp.nodeid in allCompsC) {
+                            let props = allCompsC[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["cName"]) {
+                                        props[propIndex].Value = transposedProp["cValue"];
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // update all components
+                    if (allCompsC) {
+                        checkResults.allComponents["c"] = JSON.stringify(allCompsC);
                     }
                 }
                 if ("d" in sourceCompIds) {
                     let compId = sourceCompIds['d'];
+                    
+                    let allCompsD;
+                    if ("allComponents" in checkResults &&
+                        "d" in checkResults.allComponents) {
+                        allCompsD = JSON.parse(checkResults.allComponents["d"]);
+                    }
+
                     for (var i = 0; i < checkResults.sourceDComponents.length; i++) {
                         var comp = checkResults.sourceDComponents[i];
                         if (compId != comp.id) {
@@ -1154,6 +1350,26 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                                 prop.value = transposedProp["dValue"];
                             }
                         }
+
+                        // update all components                       
+                        if (allCompsD &&
+                            comp.nodeid in allCompsD) {
+                            let props = allCompsD[comp.nodeid].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+
+                                for (let k = 0; k < sourceProps.length; k++) {
+                                    let transposedProp = sourceProps[k];
+                                    if (props[propIndex].Name === transposedProp["dName"]) {
+                                        props[propIndex].Value = transposedProp["dValue"];
+                                    }
+                                }
+                            }
+                        }                        
+                    }
+
+                     // update all components
+                     if (allCompsD) {
+                        checkResults.allComponents["d"] = JSON.stringify(allCompsD);
                     }
                 }
             }
@@ -1513,8 +1729,27 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
 }
 
 ComparisonReviewManager.prototype.UpdateSourcePropertiesAfterTranspose = function (affectedComponents, transpose = true) {
+    let allCompsA
+    let allCompsB
+    let allCompsC
+    let allCompsD
+    if ("allComponents" in checkResults) {
+        if ("a" in checkResults.allComponents) {
+            allCompsA = JSON.parse(checkResults.allComponents["a"]);
+        }
+        if ("b" in checkResults.allComponents) {
+            allCompsB = JSON.parse(checkResults.allComponents["b"]);
+        }
+        if ("c" in checkResults.allComponents) {
+            allCompsC = JSON.parse(checkResults.allComponents["c"]);
+        }
+        if ("d" in checkResults.allComponents) {
+            allCompsD = JSON.parse(checkResults.allComponents["d"]);
+        }
+    }
+
     for (let ii = 0; ii < affectedComponents.length; ii++) {
-        let affectedComponent = affectedComponents[ii];
+        let affectedComponent = affectedComponents[ii];      
 
         if (affectedComponent.sourceAId &&
             affectedComponent.sourceAId !== "") {
@@ -1551,9 +1786,20 @@ ComparisonReviewManager.prototype.UpdateSourcePropertiesAfterTranspose = functio
                         else {
                             prop.value = transposedProp["sourceAValue"];
                         }
+
+                        // update all components                       
+                        if (allCompsA &&
+                            affectedComponent.sourceANodeId in allCompsA) {
+                            let props = allCompsA[affectedComponent.sourceANodeId].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+                                if (props[propIndex].Name === transposedProp["sourceAName"]) {
+                                    props[propIndex].Value = prop.value;
+                                }
+                            }
+                        }
                     }
                 }
-            }
+            }           
         }
         if (affectedComponent.sourceBId &&
             affectedComponent.sourceBId !== "") {
@@ -1589,9 +1835,21 @@ ComparisonReviewManager.prototype.UpdateSourcePropertiesAfterTranspose = functio
                         else {
                             prop.value = transposedProp["sourceBValue"];
                         }
+
+                        
+                        // update all components                    
+                        if (allCompsB &&
+                            affectedComponent.sourceBNodeId in allCompsB) {
+                            let props = allCompsB[affectedComponent.sourceBNodeId].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+                                if (props[propIndex].Name === transposedProp["sourceBName"]) {
+                                    props[propIndex].Value = prop.value;
+                                }
+                            }
+                        }
                     }
                 }
-            }
+            }            
         }
         if (affectedComponent.sourceCId &&
             affectedComponent.sourceCId !== "") {
@@ -1626,6 +1884,17 @@ ComparisonReviewManager.prototype.UpdateSourcePropertiesAfterTranspose = functio
                         }
                         else {
                             prop.value = transposedProp["sourceCValue"];
+                        }
+
+                        // update all components
+                        if (allCompsC &&
+                            affectedComponent.sourceCNodeId in allCompsC) {
+                            let props = allCompsC[affectedComponent.sourceCNodeId].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+                                if (props[propIndex].Name === transposedProp["sourceCName"]) {
+                                    props[propIndex].Value = prop.value;
+                                }
+                            }
                         }
                     }
                 }
@@ -1665,10 +1934,35 @@ ComparisonReviewManager.prototype.UpdateSourcePropertiesAfterTranspose = functio
                         else {
                             prop.value = transposedProp["sourceDValue"];
                         }
+
+                        // update all components
+                        if (allCompsD &&
+                            affectedComponent.sourceDNodeId in allCompsD) {
+                            let props = allCompsD[affectedComponent.sourceDNodeId].properties;
+                            for (let propIndex = 0; propIndex < props.length; propIndex++) {
+                                if (props[propIndex].Name === transposedProp["sourceDName"]) {
+                                    props[propIndex].Value = prop.value;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    // update all components
+    if (allCompsA) {
+        checkResults.allComponents["a"] = JSON.stringify(allCompsA);
+    }
+    if (allCompsB) {
+        checkResults.allComponents["b"] = JSON.stringify(allCompsB);
+    }
+    if (allCompsC) {
+        checkResults.allComponents["c"] = JSON.stringify(allCompsC);
+    }
+    if (allCompsD) {
+        checkResults.allComponents["d"] = JSON.stringify(allCompsD);
     }
 }
 

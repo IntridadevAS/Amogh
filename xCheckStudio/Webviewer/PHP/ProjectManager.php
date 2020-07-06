@@ -389,6 +389,9 @@ function SaveAll()
         SaveComponentsFromTemp($tempDbh, $dbh, "SourceCComponents", "SourceCProperties");
         SaveComponentsFromTemp($tempDbh, $dbh, "SourceDComponents", "SourceDProperties");
 
+        // Save all components
+        SaveAllComponents($dbh);
+
         // save check case info 
         SaveCheckCaseInfoFromTemp($tempDbh, $dbh);
 
@@ -420,10 +423,7 @@ function SaveAll()
               // save markup views
               SaveMarkupViews($dbh);
               SaveBookmarkViews($dbh);
-              SaveAnnotations($dbh);
-
-            // Save all components
-            SaveAllComponents($dbh);
+              SaveAnnotations($dbh);           
 
             // save property goups
             SavePropertyGroups($dbh);
@@ -466,10 +466,10 @@ function SaveAll()
             SaveBookmarkViewsFromTemp($tempDbh, $dbh);  
             SaveAnnotationsFromTemp($tempDbh, $dbh);  
 
-            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsa");  
-            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsb");  
-            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsc");  
-            SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsd");  
+            // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsa");  
+            // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsb");  
+            // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsc");  
+            // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsd");  
 
             SavePropertyGroupsFromTemp($tempDbh, $dbh);  
 
@@ -2478,12 +2478,13 @@ function SaveAllComponents($dbh)
 {
     if (!isset($_POST['allComponents'])) {
         return false;
-    }
+    }   
 
     try {
-        $allComponents = json_decode($_POST['allComponents'], true);
-        foreach ($allComponents as $table => $components) {
-
+        $allComponents = json_decode($_POST['allComponents'], true);      
+        
+        foreach ($allComponents as $table => $components) {            
+          
             // drop table if exists
             $command = 'DROP TABLE IF EXISTS ' . $table . ';';
             $dbh->exec($command);

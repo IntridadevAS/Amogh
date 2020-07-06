@@ -601,25 +601,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
             $hiddenComponents = ReadHiddenComponents($tempDbh);
             $results["hiddenComponents"] = $hiddenComponents;
-
-            $results["allComponents"] = array();
-            $allComponents = ReadAllComponents($tempDbh, "AllComponentsa");
-            if ($allComponents != NULL) {
-                $results["allComponents"]["a"] = $allComponents;
-            }
-            $allComponents = ReadAllComponents($tempDbh, "AllComponentsb");
-            if ($allComponents != NULL) {
-                $results["allComponents"]["b"] = $allComponents;
-            }
-            $allComponents = ReadAllComponents($tempDbh, "AllComponentsc");
-            if ($allComponents != NULL) {
-                $results["allComponents"]["c"] = $allComponents;
-            }
-            $allComponents = ReadAllComponents($tempDbh, "AllComponentsd");
-            if ($allComponents != NULL) {
-                $results["allComponents"]["d"] = $allComponents;
-            }
-
+           
             $propertyGroups =  ReadPropertyGroups($dbh);
             $results["propertyGroups"] = $propertyGroups;
 
@@ -822,6 +804,24 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
         $annotations = ReadAnnotations($dbh);
         $results["annotations"] = $annotations;
+
+        $results["allComponents"] = array();
+        $allComponents = ReadAllComponents($tempDbh, "AllComponentsa");
+        if ($allComponents != NULL) {
+            $results["allComponents"]["a"] = $allComponents;
+        }
+        $allComponents = ReadAllComponents($tempDbh, "AllComponentsb");
+        if ($allComponents != NULL) {
+            $results["allComponents"]["b"] = $allComponents;
+        }
+        $allComponents = ReadAllComponents($tempDbh, "AllComponentsc");
+        if ($allComponents != NULL) {
+            $results["allComponents"]["c"] = $allComponents;
+        }
+        $allComponents = ReadAllComponents($tempDbh, "AllComponentsd");
+        if ($allComponents != NULL) {
+            $results["allComponents"]["d"] = $allComponents;
+        }
     } catch (Exception $e) {
     }
 
