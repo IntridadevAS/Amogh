@@ -1198,7 +1198,7 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (acco
             return;
         }
 
-        var ignore = ['OK', 'OK(A)', 'No Value', 'No Value(T)', 'No Match'];
+        var ignore = ['OK', 'OK(A)', 'No Value', 'No Match'];
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
         var groupIdVsComponentId = {};
@@ -1259,7 +1259,7 @@ ReviewComparisonContextMenuManager.prototype.OnRestoreTranspose = function (acco
 
         // Filter elements to perform accept on. If component is already accepted or transposed dont perform anything on it.
         // No match, OK, No Value components should not get accepted or transposed
-        var ignore = ['OK', 'OK(A)', 'No Value', 'No Value(T)', 'No Match', 'Missing Property(s)', ' ', 'ACCEPTED'];
+        var ignore = ['OK', 'OK(A)', 'No Value', 'No Match', 'Missing Property(s)', ' ', 'ACCEPTED'];
         var selectedProperties = []
         let sourceProps = [];
         for (var key in selectedPropertiesKey) {
