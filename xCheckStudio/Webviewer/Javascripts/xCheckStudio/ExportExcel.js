@@ -355,7 +355,13 @@ ComparisonData.prototype.CreateTableData = function (selectedTables, exportPrope
                             tableRowContent[key] = propertyObj[a];
                         }
                         var statusKey = "Status_" + propertyIndex
-                        tableRowContent[statusKey] = property.severity;
+
+                        if (property.accepted === "true") {
+                            tableRowContent[statusKey] = "ACCEPTED";
+                        }
+                        else {
+                            tableRowContent[statusKey] = property.severity;
+                        }
 
                         propertyIndex++;
                     }
@@ -369,7 +375,12 @@ ComparisonData.prototype.CreateTableData = function (selectedTables, exportPrope
                                     tableRowContent[key] = propertyObj[a];
                                 }
                                 var statusKey = "Status_" + propIndex
-                                tableRowContent[statusKey] = property.severity;
+                                if (property.accepted === "true") {
+                                    tableRowContent[statusKey] = "ACCEPTED";
+                                }
+                                else {
+                                    tableRowContent[statusKey] = property.severity;
+                                }
                                 break;
                             }
                         }
@@ -568,7 +579,7 @@ ComparisonData.prototype.GetCategoryComponents = function (tableName, data) {
 
 ComparisonData.prototype.ExportComparisonComponents = function (selectedTables, exportProperties, save, worksheetName, workbookName, exportExcelInstance) {
     return new Promise((resolve) => {
-        this.CreateReviewExportDummyDataGrids(selectedTables, exportProperties, worksheetName, exportExcelInstance).then(function () {
+        this.CreatDummyDataGrids(selectedTables, exportProperties, worksheetName, exportExcelInstance).then(function () {
             exportExcelInstance.ExportGroups(selectedTables, save, worksheetName, workbookName, exportExcelInstance.reviewWorkbook).then(function () {
                 return resolve(true);
             });
@@ -576,7 +587,7 @@ ComparisonData.prototype.ExportComparisonComponents = function (selectedTables, 
     })
 }
 
-ComparisonData.prototype.CreateReviewExportDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
+ComparisonData.prototype.CreatDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
     var _this = this;
     return new Promise((resolve) => {
         // let checkData = this.GetData();
@@ -620,7 +631,7 @@ function ComplianceData(worksheetName) {
     this.WorkSheetName = worksheetName
 }
 
-ComplianceData.prototype.CreateTableData = function (selectedTables, exportProperties) {
+ComplianceData.prototype.CreateTableData = function (selectedTables, exportProperties, checkData) {
 
     var tablesData = [];
     for (var id = 0; id < selectedTables.length; id++) {
@@ -628,7 +639,7 @@ ComplianceData.prototype.CreateTableData = function (selectedTables, exportPrope
 
         // var sources = checkResults["Comparisons"][0]["sources"];
 
-        var dataObj = this.GetCategoryComponentsAndSourceName(tableName);
+        var dataObj = this.GetGroupComponents(tableName, checkData);
         var tableData = [];
         var propertyIndex = 1;
         var sourcePropertyNamesGroup = []
@@ -708,11 +719,55 @@ ComplianceData.prototype.CreateTableData = function (selectedTables, exportPrope
     return tablesData;
 }
 
-ComplianceData.prototype.CreateTableHeader = function (selectedTables, exportProperties) {
+ComplianceData.prototype.GetData = function (worksheetName) {
+    return new Promise((resolve) => {
+        var source = null;
+        if (worksheetName.toLowerCase() == "compliancea") {
+            source = "a";
+        }
+        else if (worksheetName.toLowerCase() == "complianceb") {
+            source = "b";
+        }
+        else if (worksheetName.toLowerCase() == "compliancec") {
+            source = "c";
+        }
+        else if (worksheetName.toLowerCase() == "complianced") {
+            source = "d";
+        }
+        else {
+            return resolve(null);
+        }
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+        $.ajax({
+            data: {
+                'InvokeFunction': "ReadComplianceSavedCheckData",
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname,
+                "Source": source
+            },
+            async: true,
+            type: "POST",
+            url: "PHP/ProjectLoadManager.php"
+        }).done(function (msg) {
+            var message = JSON.parse(msg);
+
+            if (message.MsgCode === 1) {
+                return resolve(message.Data);
+            }
+
+            return resolve(null);
+        });
+    });
+}
+
+ComplianceData.prototype.CreateTableHeader = function (selectedTables, exportProperties, checkData) {
     var tablesHeaders = [];
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
-        var dataObj = this.GetCategoryComponentsAndSourceName(tableName);
+        var dataObj = this.GetGroupComponents(tableName, checkData);
         var headers = [];
 
         var source = dataObj["source"];
@@ -798,40 +853,36 @@ ComplianceData.prototype.CreateTableHeader = function (selectedTables, exportPro
     return tablesHeaders;
 }
 
-ComplianceData.prototype.GetCategoryComponentsAndSourceName = function (tableName) {
-
+ComplianceData.prototype.GetGroupComponents = function (tableName, checkData) {
     var data = {};
     var Compliances = checkResults["Compliances"];
 
-    var complianceGroups;
     if (this.WorkSheetName == "ComplianceA") {
-        complianceGroups = Compliances[0]["results"];
         data["source"] = Compliances[0].source;
     }
     else if (this.WorkSheetName == "ComplianceB") {
-        complianceGroups = Compliances[1]["results"];
         data["source"] = Compliances[1].source;
     }
     else if (this.WorkSheetName == "ComplianceC") {
-        complianceGroups = Compliances[2]["results"];
         data["source"] = Compliances[2].source;
     }
     if (this.WorkSheetName == "ComplianceD") {
-        complianceGroups = Compliances[3]["results"];
         data["source"] = Compliances[3].source;
     }
 
-    for (var groupId in complianceGroups) {
-        if (tableName == complianceGroups[groupId].componentClass) {
-            data["Components"] = complianceGroups[groupId].components;
+    for (var groupId in checkData) {
+        if (tableName == checkData[groupId].componentClass) {
+            data["Components"] = checkData[groupId].components;
             return data;
         }
     }
+
+    return null;
 }
 
 ComplianceData.prototype.ExportComplianceComponents = function (selectedTables, exportProperties, save, worksheetName, workbookName, exportExcelInstance) {
     return new Promise((resolve) => {
-        this.CreateReviewExportDummyDataGrids(selectedTables, exportProperties, worksheetName, exportExcelInstance).then(function () {
+        this.CreatDummyDataGrids(selectedTables, exportProperties, worksheetName, exportExcelInstance).then(function () {
             exportExcelInstance.ExportGroups(selectedTables, save, worksheetName, workbookName, exportExcelInstance.reviewWorkbook).then(function () {
                 return resolve(true);
             });
@@ -839,42 +890,59 @@ ComplianceData.prototype.ExportComplianceComponents = function (selectedTables, 
     })
 }
 
-ComplianceData.prototype.CreateReviewExportDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
+ComplianceData.prototype.CreatDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
     var _this = this;
     var headers;
     var data;
     var parentTable;
 
+    return new Promise((resolve) => {
+        // let checkData = this.GetData();
+        _this.GetData(worksheetName).then(function (checkData) {
+            if (!checkData) {
+                return resolve(false);
+            }
 
-    this.WorkSheetName = worksheetName;
-    headers = this.CreateTableHeader(selectedTables, exportProperties);
-    data = this.CreateTableData(selectedTables, exportProperties);
-    if (worksheetName == "ComplianceA") {
-        parentTable = document.getElementById("complianceSource1tables");
-    }
-    else if (worksheetName == "ComplianceB") {
-        parentTable = document.getElementById("complianceSource2tables");
-    }
-    else if (worksheetName == "ComplianceC") {
-        parentTable = document.getElementById("complianceSource3tables");
-    }
-    else if (worksheetName == "ComplianceD") {
-        parentTable = document.getElementById("complianceSource4tables");
-    }
+            _this.WorkSheetName = worksheetName;
+            headers = _this.CreateTableHeader(selectedTables, exportProperties, checkData);
+            data = _this.CreateTableData(selectedTables, exportProperties, checkData);
+            if (worksheetName == "ComplianceA") {
+                parentTable = document.getElementById("complianceSource1tables");
+            }
+            else if (worksheetName == "ComplianceB") {
+                parentTable = document.getElementById("complianceSource2tables");
+            }
+            else if (worksheetName == "ComplianceC") {
+                parentTable = document.getElementById("complianceSource3tables");
+            }
+            else if (worksheetName == "ComplianceD") {
+                parentTable = document.getElementById("complianceSource4tables");
+            }
 
-    for (var tableName in headers) {
-        var header = headers[tableName];
-        var tableData = data[tableName];
+            var allPromises = [];
+            for (var tableName in headers) {
+                var header = headers[tableName];
+                var tableData = data[tableName];
 
-        var datagridDiv = document.createElement("DIV");
-        datagridDiv.id = tableName + "_tempTable";
-        datagridDiv.style.display = "none";
-        parentTable.append(datagridDiv);
+                var datagridDiv = document.createElement("DIV");
+                datagridDiv.id = tableName + "_tempTable";
+                datagridDiv.style.display = "none";
+                parentTable.append(datagridDiv);
 
-        await exportExcelInstance.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header);
+                allPromises.push(exportExcelInstance.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header));
 
-    }
+            }
 
+            if (allPromises.length > 0) {
+                xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
+                    return resolve(res);
+                });
+            }
+            else {
+                return resolve(true);
+            }
+        });
+    });
 }
 
 function DatasetData(worksheetName) {

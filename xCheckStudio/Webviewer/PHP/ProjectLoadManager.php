@@ -22,6 +22,9 @@
             case "ReadSavedComparisonCheckData":
                 ReadSavedComparisonCheckData();
             break;
+            case "ReadComplianceSavedCheckData":
+                ReadComplianceSavedCheckData();
+            break;            
             default:
                 echo "No Function Found!";
         }
@@ -659,7 +662,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
             }
 
             // read source a compliance results
-            $sourceAComplianceResult = readComplianceCheckData(
+            $sourceAComplianceResult = readComplianceCheckResults(
                 $tempDbh,
                 'SourceAComplianceCheckGroups',
                 'SourceAComplianceCheckComponents',
@@ -689,7 +692,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
             }
 
             // read source b compliance results
-            $sourceBComplianceResult = readComplianceCheckData(
+            $sourceBComplianceResult = readComplianceCheckResults(
                 $tempDbh,
                 'SourceBComplianceCheckGroups',
                 'SourceBComplianceCheckComponents',
@@ -720,7 +723,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
 
             // read source c compliance results
-            $sourceCComplianceResult = readComplianceCheckData(
+            $sourceCComplianceResult = readComplianceCheckResults(
                 $tempDbh,
                 'SourceCComplianceCheckGroups',
                 'SourceCComplianceCheckComponents',
@@ -750,7 +753,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
             }
 
             // read source d compliance results
-            $sourceDComplianceResult = readComplianceCheckData(
+            $sourceDComplianceResult = readComplianceCheckResults(
                 $tempDbh,
                 'SourceDComplianceCheckGroups',
                 'SourceDComplianceCheckComponents',
@@ -1210,26 +1213,82 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
         return $component;
     }
 
-    function readComplianceCheckData($dbh,
-                                     $checkGroupTable,
-                                     $CheckComponentsTable,
-                                     $CheckPropertiesTable)
-    {       
-        try
-        { 
+    function ReadComplianceSavedCheckData()
+    {   
+        if (
+            !isset($_POST['ProjectName']) ||
+            !isset($_POST['CheckName']) ||
+            !isset($_POST['Source'])
+        ) {
+            echo json_encode(array(
+                "Msg" =>  "Invalid input.",
+                "MsgCode" => 0
+            ));
+            return;
+        }
+
+        try {
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+            $source = $_POST['Source'];
+           
+            $checkGroupTable = null;
+            $CheckComponentsTable = null;
+            $CheckPropertiesTable = null;
+            if ($source === "a") {
+                $checkGroupTable = 'SourceAComplianceCheckGroups';
+                $CheckComponentsTable = 'SourceAComplianceCheckComponents';
+                $CheckPropertiesTable = 'SourceAComplianceCheckProperties';
+            } else if ($source === "b") {
+                $checkGroupTable = 'SourceBComplianceCheckGroups';
+                $CheckComponentsTable = 'SourceBComplianceCheckComponents';
+                $CheckPropertiesTable = 'SourceBComplianceCheckProperties';
+            } else if ($source === "c") {
+                $checkGroupTable = 'SourceCComplianceCheckGroups';
+                $CheckComponentsTable = 'SourceCComplianceCheckComponents';
+                $CheckPropertiesTable = 'SourceCComplianceCheckProperties';
+            } else if ($source === "d") {
+                $checkGroupTable = 'SourceDComplianceCheckGroups';
+                $CheckComponentsTable = 'SourceDComplianceCheckComponents';
+                $CheckPropertiesTable = 'SourceDComplianceCheckProperties';
+            } else {
+                echo json_encode(array(
+                    "Msg" =>  "Failed",
+                    "MsgCode" => 0
+                ));
+                return;
+            }
+
+            // open database            
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+            // begin the transaction
+            $dbh->beginTransaction();          
+
             // get comparison check data
             $result = readComplianceCheckResults($dbh, 
                                         $checkGroupTable,
                                         $CheckComponentsTable,
                                         $CheckPropertiesTable);
 
-            return $result;
-        }                
-        catch(Exception $e) 
-        {            
-        }    
-        
-        return NULL;
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection
+
+            echo json_encode(array(
+                "Msg" =>  "Success",
+                "Data" => $result,
+                "MsgCode" => 1
+            ));
+            return;
+        } catch (Exception $e) {
+        }
+
+        echo json_encode(array(
+            "Msg" =>  "Failed",
+            "MsgCode" => 0
+        ));       
     }
 
     function readComplianceCheckResults($dbh,
