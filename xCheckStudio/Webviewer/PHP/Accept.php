@@ -963,7 +963,7 @@ function unAcceptComplianceComponent() {
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
         $status = 'false';
-        $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
+        $dontChangeOk = array('OK', 'OK(T)', 'No Value', 'Missing Property(s)', ' ');
         $results = array();
 
         if($ActionToPerform == "unAcceptComplianceSourceAComponent") {
@@ -994,7 +994,7 @@ function unAcceptComplianceComponent() {
             for($i=0; $i < count($components); $i++){
                 $command = $dbh->prepare("UPDATE $CheckComponentsTable SET accepted=? WHERE id=? AND status NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
                 $command->execute(array($status, $components[$i]));
-
+               
                 $command = $dbh->prepare("SELECT * FROM $CheckComponentsTable WHERE id=?");
                 $command->execute(array($components[$i]));
                 $comp = $command->fetchAll(PDO::FETCH_ASSOC);
@@ -1012,8 +1012,8 @@ function unAcceptComplianceComponent() {
                 $worststatus = getWorstSeverityForComponent($resultProperties, $comp[0], false);
 
                 $command = $dbh->prepare("UPDATE $CheckComponentsTable SET status=? WHERE id=?");
-                $command->execute(array($worststatus, $components[$i])); 
-
+                $command->execute(array($worststatus, $components[$i]));  
+               
                 $command = $dbh->prepare("SELECT * FROM $CheckComponentsTable WHERE id=?");
                 $command->execute(array($components[$i]));
                 $comp = $command->fetchAll(PDO::FETCH_ASSOC);
