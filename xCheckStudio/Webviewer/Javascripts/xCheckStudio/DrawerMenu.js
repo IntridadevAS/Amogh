@@ -50,9 +50,13 @@ var DrawerMenu = {
                 }
                 return true;
             },
-            onOptionChanged:function (e) {
-                if(e.value === true) 
+            onOptionChanged: function (e) {
+                if (e.value === true) {
                     drawerOpened = !drawerOpened;
+                }
+                else {
+                    drawerOpened = false;
+                }
             },
         }).dxDrawer("instance");
 
