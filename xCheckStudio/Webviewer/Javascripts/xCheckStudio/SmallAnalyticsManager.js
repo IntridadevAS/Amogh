@@ -354,10 +354,10 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
     var warningsCount = 0;
     var okCount = 0;
     var undefinedCount = 0;
-    var noMatchCount = 0;
+    // var noMatchCount = 0;
     var okACount = 0;
-    var okTCount = 0;
-    var OkATCount = 0;
+    // var okTCount = 0;
+    // var OkATCount = 0;
     var sourceSelectedCount = 0;
     var sourceTotalComponentsCount = 0;
     var checkGroupsInfo = 0;
@@ -372,13 +372,13 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
         okACount = parseInt(complianceData["okACount"]);
     }
 
-    if ("okTCount" in complianceData) {
-        okTCount = parseInt(complianceData["okTCount"]);
-    }
+    // if ("okTCount" in complianceData) {
+    //     okTCount = parseInt(complianceData["okTCount"]);
+    // }
 
-    if ("okATCount" in complianceData) {
-        OkATCount = parseInt(complianceData["okATCount"]);
-    }
+    // if ("okATCount" in complianceData) {
+    //     OkATCount = parseInt(complianceData["okATCount"]);
+    // }
 
     if ("errorCount" in complianceData) {
         errorsCount = parseInt(complianceData["errorCount"]);
@@ -411,22 +411,22 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
     totalItemsChecked = sourceSelectedCount;
 
     var sourceNotSelectedComps = sourceTotalComponentsCount - totalItemsChecked;
-    var OKATCount = Number(okACount) + Number(okTCount) + Number(OkATCount);
+    // var OKATCount = Number(okACount) + Number(okTCount) + Number(OkATCount);
 
     this.AnalyticsData[complianceType]['TotalItemsChecked'] = totalItemsChecked;
     this.AnalyticsData[complianceType]['TotalItemsNotChecked'] = sourceNotSelectedComps;
     this.AnalyticsData[complianceType]['TotalItemsLoaded'] = sourceTotalComponentsCount;
-    this.AnalyticsData[complianceType]['OKATCount'] = OKATCount;
+    this.AnalyticsData[complianceType]['OKATCount'] = okACount;
 
 
 
     // draw pie charts
     if (PieChartActive) {
         this.ShowPieChartDiv();
-        this.drawCompliancePieCharts(okCount + OKATCount,
+        this.drawCompliancePieCharts(okCount + okACount,
             warningsCount,
             errorsCount,
-            noMatchCount,
+            // noMatchCount,
             undefinedCount,
             sourceNotSelectedComps,
             totalItemsChecked,
@@ -450,8 +450,10 @@ SmallAnalyticsManager.prototype.populateComplianceCategoryAnalytics = function (
     var categoryWiseData = this.AnalyticsData[complianceType].CheckGroupsInfo;
     var categoryData = categoryWiseData[ActiveCategory];
 
-    var totalItemsChecked = Number(categoryData["OK"]) + Number(categoryData["Warning"]) + Number(categoryData["Error"]) + 
-    Number(categoryData["No Match"]) + Number(categoryData["undefined Item"]);
+    var totalItemsChecked = Number(categoryData["OK"]) + 
+    Number(categoryData["Warning"]) + 
+    Number(categoryData["Error"])  + 
+    Number(categoryData["undefined Item"]);
 
     this.AnalyticsData[complianceType].CheckGroupsInfo[ActiveCategory]['TotalItemsChecked'] = totalItemsChecked;
 
@@ -470,7 +472,7 @@ SmallAnalyticsManager.prototype.populateComplianceCategoryAnalytics = function (
         this.drawCompliancePieCharts(categoryData["OK"],
             categoryData["Warning"],
             categoryData["Error"],
-            categoryData["No Match"],
+            // categoryData["No Match"],
             categoryData["undefined Item"],
             totalItemsNotChecked,
             totalItemsChecked,
@@ -496,10 +498,10 @@ SmallAnalyticsManager.prototype.populateComplianceClassAnalytics = function(clas
     var error =  classInfo['Error'];
     var ok = classInfo['OK'];
     var warning = classInfo['Warning'];
-    var noMatch = classInfo['No Match'];
+    // var noMatch = classInfo['No Match'];
     var undefinedItems = 0;
 
-    var totalItemsChecked = Number(ok) + Number(warning) + Number(error) + Number(noMatch) + Number(undefinedItems);
+    var totalItemsChecked = Number(ok) + Number(warning) + Number(error) + Number(undefinedItems);
     this.AnalyticsData[activeResultType].GroupWiseSubClassInfo[ActiveCategory][classMappingInfo]['TotalItemsChecked'] = totalItemsChecked;
 
     var sourceNotSelectedComponents = this.AnalyticsData[activeResultType]['SourceNotSelectedComps']; 
@@ -526,7 +528,7 @@ SmallAnalyticsManager.prototype.populateComplianceClassAnalytics = function(clas
         this.drawCompliancePieCharts(ok,
             warning,
             error,
-            noMatch,
+            // noMatch,
             undefinedItems,
             totalItemsNotChecked,
             totalItemsChecked,
@@ -551,10 +553,10 @@ SmallAnalyticsManager.prototype.populateCompliancePropertyAnalytics = function(P
     var error =  PropertyAnalyticsData['Error'];
     var ok = PropertyAnalyticsData['OK'];
     var warning = PropertyAnalyticsData['Warning'];
-    var noMatch = PropertyAnalyticsData['No Match'];
+    // var noMatch = PropertyAnalyticsData['No Match'];
     var undefinedItems = PropertyAnalyticsData['undefined Item'];
 
-    var totalItemsChecked = Number(ok) + Number(warning) + Number(error) + Number(noMatch) + Number(undefinedItems);
+    var totalItemsChecked = Number(ok) + Number(warning) + Number(error) + Number(undefinedItems);
     var totalItemsNotChecked = 0;
     var totalItemsLoaded = totalItemsChecked;
 
@@ -563,7 +565,7 @@ SmallAnalyticsManager.prototype.populateCompliancePropertyAnalytics = function(P
         this.drawCompliancePieCharts(ok,
             warning,
             error,
-            noMatch,
+            // noMatch,
             undefinedItems,
             totalItemsNotChecked,
             totalItemsChecked,
@@ -597,7 +599,7 @@ SmallAnalyticsManager.prototype.ShowBarChartDiv = function () {
 SmallAnalyticsManager.prototype.drawCompliancePieCharts = function (okCount,
     warningsCount,
     errorsCount,
-    noMatchCount,
+    // noMatchCount,
     undefinedCount,
     totalItemsNotChecked,
     totalItemsChecked,
@@ -621,14 +623,18 @@ SmallAnalyticsManager.prototype.drawCompliancePieCharts = function (okCount,
         colorsArray,
         'warningPercentage');
 
-    // draw pie chart for No Match
-    var colorsArray = ["#0febee", "#EDEDED"];
-    this.drawPieChart("No Match",
-        noMatchCount,
-        totalItemsChecked,
-        '#baseNoMatch',
-        colorsArray,
-        'noMatchPercentage');
+    
+    // hide no match for compliance
+    document.getElementById("baseNoMatch").style.display = "none";
+    document.getElementById("noMatchPercentage").style.display = "none";
+    document.getElementById("No_match").style.display = "none";
+    // var colorsArray = ["#0febee", "#EDEDED"];
+    // this.drawPieChart("No Match",
+    //     noMatchCount,
+    //     totalItemsChecked,
+    //     '#baseNoMatch',
+    //     colorsArray,
+    //     'noMatchPercentage');
 
     // draw pie chart for Oks
     colorsArray = ["#0FFF72", "#EDEDED"];
@@ -706,6 +712,12 @@ SmallAnalyticsManager.prototype.drawComparisonPieCharts = function (okCount,
         'notCheckedPercentage');
 
     // draw pie chart for No Match
+
+    // first ensure the UI elemnts are visible.
+    // they might be hidden due to compliance
+    document.getElementById("baseNoMatch").style.display = "block";
+    document.getElementById("noMatchPercentage").style.display = "block";
+    document.getElementById("No_match").style.display = "block";
     var colorsArray = ["#0febee", "#EDEDED"];
     this.drawPieChart("No Match",
         noMatchCount,
@@ -780,24 +792,33 @@ SmallAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
 
 SmallAnalyticsManager.prototype.getSeveritySummary = function () {
 
-    var TotalItemsChecked = 0;
-    var TotalItemsMatched = 0;
-    var ErrorsCount = 0;
-    var OKCount = 0;
-    var WarningsCount = 0;
-    var OkATCount = 0;
+    // var TotalItemsChecked = 0;
+    // var TotalItemsMatched = 0;
+    // var ErrorsCount = 0;
+    // var OKCount = 0;
+    // var WarningsCount = 0;
+    // var OkATCount = 0;
+    // var undefinedCount = 0;
 
-    TotalItemsChecked = this.AnalyticsData[activeResultType]['TotalItemsChecked'];
-    ErrorsCount = this.AnalyticsData[activeResultType]['errorCount'];
-    OKCount = this.AnalyticsData[activeResultType]["okCount"];
-    WarningsCount = this.AnalyticsData[activeResultType]["warningCount"];
-    TotalItemsMatched = Number(ErrorsCount) + Number(OKCount) + Number(WarningsCount);
-    OkATCount = this.AnalyticsData[activeResultType]['OKATCount'];
-
-    return {
-        "TotalItemsChecked": TotalItemsChecked, "ErrorsCount": ErrorsCount, "OKCount": OKCount,
-        "WarningCount": WarningsCount, "TotalItemsMatched": TotalItemsMatched, "oKATCount": OkATCount
+    var data = {};
+    data["TotalItemsChecked"] = this.AnalyticsData[activeResultType]['TotalItemsChecked'];
+    data["ErrorsCount"] = this.AnalyticsData[activeResultType]['errorCount'];
+    data["OKCount"] = this.AnalyticsData[activeResultType]["okCount"];
+    data["WarningCount"] = this.AnalyticsData[activeResultType]["warningCount"];
+    data["TotalItemsMatched"] = Number(data["ErrorsCount"]) + Number( data["OKCount"]) + Number(data["WarningCount"]);
+   
+    if (activeResultType.toLowerCase() === "comparison") {
+        data["oKATCount"] = this.AnalyticsData[activeResultType]['OKATCount'];
     }
+    {
+        data["UndefinedCount"] = this.AnalyticsData[activeResultType]['undefinedCount'];
+    }
+
+    return data;
+    // return {
+    //     "TotalItemsChecked": TotalItemsChecked, "ErrorsCount": ErrorsCount, "OKCount": OKCount,
+    //     "WarningCount": WarningsCount, "TotalItemsMatched": TotalItemsMatched, "oKATCount": OkATCount
+    // }
 }
 
 SmallAnalyticsManager.prototype.getSeveritySummaryForCategory = function () {

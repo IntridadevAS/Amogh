@@ -38,6 +38,13 @@ let Analytics = {
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
         return new Promise((resolve) => {
+            //get comparison results
+            let comparisonCheckData = null;
+            if ("Comparisons" in checkResults &&
+                checkResults["Comparisons"].length > 0) {
+                comparisonCheckData = checkResults["Comparisons"][0];
+            }
+
             $.ajax({
                 url: 'PHP/AnalyticsDataReader.php',
                 type: "POST",
@@ -51,12 +58,11 @@ let Analytics = {
 
                     // update not checked comps
                     if ("comparison" in analyticsData &&
-                        model.checks["comparison"] &&
-                        model.checks["comparison"].reviewManager) {
+                        comparisonCheckData !== null) {
 
                         var comparisonData = analyticsData["comparison"];
-                        var checkResults = model.checks["comparison"].reviewManager.ComparisonCheckManager.results;
-                        var sources = model.checks["comparison"].reviewManager.ComparisonCheckManager.sources;
+                        var checkResults = comparisonCheckData.results;
+                        var sources = comparisonCheckData.sources;
 
                         var sourceANotChecked = Number(comparisonData.sourceATotalComponentsCount) - Number(comparisonData.sourceASelectedCount);
                         var sourceBNotChecked = Number(comparisonData.sourceBTotalComponentsCount) - Number(comparisonData.sourceBSelectedCount);
@@ -69,8 +75,8 @@ let Analytics = {
                             sourceDNotSelected = Number(comparisonData.sourceDTotalComponentsCount) - Number(comparisonData.sourceDSelectedCount);
                         }
 
-                        var checkResults = model.checks["comparison"].reviewManager.ComparisonCheckManager.results;
-                        var sources = model.checks["comparison"].reviewManager.ComparisonCheckManager.sources;
+                        // var checkResults = model.checks["comparison"].reviewManager.ComparisonCheckManager.results;
+                        // var sources = model.checks["comparison"].reviewManager.ComparisonCheckManager.sources;
 
                         for (var groupId in checkResults) {
                             var group = checkResults[groupId];

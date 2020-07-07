@@ -43,18 +43,33 @@
         $analyticsResults = array();
         $comparisonResults = getComparisonAnalyticsDataCount();
 
-        $complianceAResults = getComplianceAnalyticsData('SourceAComplianceCheckComponents', "SourceAComplianceCheckGroups", 
-                            'SourceASelectedComponents', 'SourceAComponents', "SourceANotSelectedComponents");
+        $complianceAResults = getComplianceAnalyticsData(
+            'SourceAComplianceCheckComponents', 
+            "SourceAComplianceCheckGroups", 
+            'SourceASelectedComponents', 
+            'SourceAComponents', 
+            "SourceANotSelectedComponents");
 
-        $complianceBResults = getComplianceAnalyticsData('SourceBComplianceCheckComponents', "SourceBComplianceCheckGroups", 
-                            'SourceBSelectedComponents', 'SourceBComponents', "SourceBNotSelectedComponents");
+        $complianceBResults = getComplianceAnalyticsData(
+            'SourceBComplianceCheckComponents', 
+            "SourceBComplianceCheckGroups",
+            'SourceBSelectedComponents', 
+            'SourceBComponents', 
+            "SourceBNotSelectedComponents");
 
-        $complianceCResults = getComplianceAnalyticsData('SourceCComplianceCheckComponents', "SourceCComplianceCheckGroups", 
-                            'SourceCSelectedComponents', 'SourceCComponents', "SourceCNotSelectedComponents");
+        $complianceCResults = getComplianceAnalyticsData(
+            'SourceCComplianceCheckComponents', 
+            "SourceCComplianceCheckGroups", 
+            'SourceCSelectedComponents', 
+            'SourceCComponents', 
+            "SourceCNotSelectedComponents");
 
-        $complianceDResults = getComplianceAnalyticsData('SourceDComplianceCheckComponents', "SourceDComplianceCheckGroups", 
-                            'SourceDSelectedComponents', 'SourceDComponents', "SourceDNotSelectedComponents");
-
+        $complianceDResults = getComplianceAnalyticsData(
+            'SourceDComplianceCheckComponents', 
+            "SourceDComplianceCheckGroups", 
+            'SourceDSelectedComponents', 
+            'SourceDComponents', 
+            "SourceDNotSelectedComponents");
         
         if($comparisonResults) {
             $analyticsResults['comparison'] = $comparisonResults;
@@ -981,7 +996,14 @@
         }
     }
 
-    function getComplianceAnalyticsData($checkComponentTable, $checkGroupsTable, $sourceSelectedCompTable, $sourceComponentsTable, $sourcenotSelectedCompsTable) {
+    function getComplianceAnalyticsData(
+        $checkComponentTable, 
+        $checkGroupsTable, 
+        $sourceSelectedCompTable, 
+        $sourceComponentsTable, 
+        $sourcenotSelectedCompsTable
+        ) {
+
         global $projectName;
         global $checkName;
         //$dbh;
@@ -999,46 +1021,45 @@
             if($results === FALSE) {
                 return;
             }
+
             // get ok components count
             $okCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK';");                
-            if($results)
-            {
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK';");
+            if ($results) {
                 $okCount = $results->fetchColumn();
             }
 
-              // OK(A) components
-              $okACount = 0;
-              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)';");       
-              if( $results)
-              {
-                  $okACount = $results->fetchColumn();
-              }
+            // OK(A) components
+            $okACount = 0;
+            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)';");
+            if ($results) {
+                $okACount = $results->fetchColumn();
+            }
 
-              // OK(T) components
-              $okTCount = 0;
-              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)';");       
-              if( $results)
-              {
-                  $okTCount = $results->fetchColumn();
-              }
+            //   // OK(T) components
+            //   $okTCount = 0;
+            //   $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)';");       
+            //   if( $results)
+            //   {
+            //       $okTCount = $results->fetchColumn();
+            //   }
 
-              // OK(T)(A) components
-              $okTACount = 0;
-              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)(A)';");       
-              if( $results)
-              {
-                  $okTACount = $results->fetchColumn();
-              }
+            //   // OK(T)(A) components
+            //   $okTACount = 0;
+            //   $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)(A)';");       
+            //   if( $results)
+            //   {
+            //       $okTACount = $results->fetchColumn();
+            //   }
 
-              // OK(A)(T) components
-              // OK(T) components
-              $okATCount = 0;
-              $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)(T)';");       
-              if( $results)
-              {
-                  $okATCount = $results->fetchColumn();
-              }
+            //   // OK(A)(T) components
+            //   // OK(T) components
+            //   $okATCount = 0;
+            //   $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)(T)';");       
+            //   if( $results)
+            //   {
+            //       $okATCount = $results->fetchColumn();
+            //   }
               
             // get error components count
             $errorCount = 0;
@@ -1071,13 +1092,13 @@
                 $warningA = $results->fetchColumn();
             }
            
-            // get No Match components count
-            $nomatchCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='No Match';");     
-            if($results)
-            {
-                $nomatchCount = $results->fetchColumn();
-            }
+            // // get No Match components count
+            // $nomatchCount = 0;
+            // $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='No Match';");     
+            // if($results)
+            // {
+            //     $nomatchCount = $results->fetchColumn();
+            // }
 
             $undefinedCount = 0;
             $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='undefined';");     
@@ -1113,14 +1134,14 @@
             $groupWiseSubClassInfo = array();
             $oks = 0;
             $okAs = 0;
-            $okTs = 0;
-            $okTAs = 0;
-            $okATs = 0;
+            // $okTs = 0;
+            // $okTAs = 0;
+            // $okATs = 0;
             $errors = 0;
             $errorACount = 0;
             $warnings = 0;
             $warningACount = 0;
-            $noMatches = 0;
+            // $noMatches = 0;
             $undefinedItem = 0;
             $groups = $mainDbh->query("SELECT DISTINCT ownerGroup FROM $checkComponentTable;");                
             if($groups)
@@ -1129,10 +1150,10 @@
                 {
                     $ownerGroupId = $group['ownerGroup'];
 
-                    $groupNameResults = $mainDbh->query("SELECT componentClass FROM   $checkGroupsTable where id=$ownerGroupId;");     
+                    $groupNameResults = $mainDbh->query("SELECT componentClass FROM $checkGroupsTable where id=$ownerGroupId;");     
                     if($groupNameResults)
                     {
-                        $undefinedComponents = $mainDbh->query("SELECT * FROM $checkComponentTable where status='undefined';");
+                        // $undefinedComponents = $mainDbh->query("SELECT * FROM $checkComponentTable where status='undefined';");
 
                         $groupName= $groupNameResults->fetchColumn();
 
@@ -1150,27 +1171,27 @@
                             $okAs = $okAResults->fetchColumn();
                         }
 
-                        // OK(T) components
-                        $okTResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)';");       
-                        if( $okTResults)
-                        {
-                            $okTs = $okTResults->fetchColumn();
-                        }
+                        // // OK(T) components
+                        // $okTResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)';");       
+                        // if( $okTResults)
+                        // {
+                        //     $okTs = $okTResults->fetchColumn();
+                        // }
 
-                        // OK(T)(A) components
-                        $okTAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)(A)';");       
-                        if( $okTAResults)
-                        {
-                            $okTAs = $okTAResults->fetchColumn();
-                        }
+                        // // OK(T)(A) components
+                        // $okTAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)(A)';");       
+                        // if( $okTAResults)
+                        // {
+                        //     $okTAs = $okTAResults->fetchColumn();
+                        // }
 
-                        // OK(A)(T) components
-                        // OK(T) components
-                        $okATResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)(T)';");       
-                        if( $okATResults)
-                        {
-                            $okATs = $okATResults->fetchColumn();
-                        }
+                        // // OK(A)(T) components
+                        // // OK(T) components
+                        // $okATResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)(T)';");       
+                        // if( $okATResults)
+                        // {
+                        //     $okATs = $okATResults->fetchColumn();
+                        // }
 
  
                          // Error components
@@ -1201,31 +1222,27 @@
                             $warningACount = $warningResults->fetchColumn();
                         }
 
-                         // Warning components
-                         $nomatchResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='No Match';");       
-                         if( $nomatchResults)
-                         {
-                             $noMatches = $nomatchResults->fetchColumn();
-                         }    
+                        //  // Warning components
+                        //  $nomatchResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='No Match';");       
+                        //  if( $nomatchResults)
+                        //  {
+                        //      $noMatches = $nomatchResults->fetchColumn();
+                        //  }    
                          
 
                         $undefinedItem = 0;
                         $undefinedComponents = $mainDbh->query("SELECT * FROM $checkComponentTable where status='undefined';");
-
-                        if($undefinedComponents && $groupName !== 'Undefined') {
-                            while ($comp = $undefinedComponents->fetch(\PDO::FETCH_ASSOC)) 
-                            {
-                                if($comp['mainComponentClass'] == $groupName) {
+                        if ($undefinedComponents && $groupName !== 'Undefined') {
+                            while ($comp = $undefinedComponents->fetch(\PDO::FETCH_ASSOC)) {
+                                if ($comp['mainComponentClass'] == $groupName) {
                                     $undefinedItem++;
                                 }
                             }
-                        }
-                        else {
-                             $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='undefined';");     
-                             if($results)
-                             {
-                                 $undefinedItem = $results->fetchColumn();
-                             }
+                        } else {
+                            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='undefined';");
+                            if ($results) {
+                                $undefinedItem = $results->fetchColumn();
+                            }
                         }
 
                         $components = $mainDbh->query("SELECT * FROM   $checkComponentTable where ownerGroup=$ownerGroupId;");
@@ -1235,16 +1252,16 @@
                             $sourceSubClass = $comp['subComponentClass'];
 
                             if(!array_key_exists($sourceSubClass, $subClassStatistics)) {
-                                $subClassStatistics[$sourceSubClass] = array('OK'=>0, 'Error'=>0, 'Warning'=>0, 'No Match'=>0, 'OKAT'=>0);
+                                $subClassStatistics[$sourceSubClass] = array('OK'=>0, 'Error'=>0, 'Warning'=>0, 'OKA'=>0);
                             }
 
                             $status = strtolower($comp['status']);
 
                             $subClassOkCount = (int)$subClassStatistics[$sourceSubClass]['OK'];
-                            $subClassOkATCount = (int)$subClassStatistics[$sourceSubClass]['OKAT'];
+                            $subClassOkATCount = (int)$subClassStatistics[$sourceSubClass]['OKA'];
                             $subClassErrorCount = (int)$subClassStatistics[$sourceSubClass]['Error'];
                             $subClassWarningCount = (int)$subClassStatistics[$sourceSubClass]['Warning'];
-                            $subClassNoMatchCount = (int)$subClassStatistics[$sourceSubClass]['No Match'];
+                            // $subClassNoMatchCount = (int)$subClassStatistics[$sourceSubClass]['No Match'];
 
                             if(strpos($status, 'ok') !== false) {
                                 $subClassOkCount++;
@@ -1258,21 +1275,21 @@
                                 $subClassWarningCount++;
                                 $subClassStatistics[$sourceSubClass]['Warning'] = $subClassWarningCount;
                             }
-                            else if(strpos($status, 'no match') !== false || strpos($status, 'missing item(s)') !== false) {
-                                $subClassNoMatchCount++;
-                                $subClassStatistics[$sourceSubClass]['No Match'] = $subClassNoMatchCount;
-                            }
+                            // else if(strpos($status, 'no match') !== false || strpos($status, 'missing item(s)') !== false) {
+                            //     $subClassNoMatchCount++;
+                            //     $subClassStatistics[$sourceSubClass]['No Match'] = $subClassNoMatchCount;
+                            // }
 
-                            if($status == 'OK(A)' || $status == "OK(T)" || $status == 'OK(A)(T)') {
+                            if($status == 'OK(A)') {
                                 $subClassOkATCount++;
-                                $subClassStatistics[$sourceSubClass]['OKAT'] = $subClassOkATCount;
+                                $subClassStatistics[$sourceSubClass]['OKA'] = $subClassOkATCount;
                             }
                         }
                         
                         // $okAT = $okAs + $okTs +$okATs;
                         
                          // keep track of check groups and corresponding stastics
-                         $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$errors + $errorACount, 'Warning'=>$warnings + $warningACount, 'No Match'=>$noMatches, 'undefined Item'=>$undefinedItem);
+                         $checkGroups[$groupName] =   array('OK'=>$oks, 'OKA'=>$okAs, 'Error'=>$errors + $errorACount, 'Warning'=>$warnings + $warningACount, 'undefined Item'=>$undefinedItem);
                          $groupWiseSubClassInfo[$groupName] = $subClassStatistics;
                     }
                 }              
@@ -1306,16 +1323,16 @@
             $mainDbh->commit();           
             $mainDbh = null; //This is how you close a PDO connection    
         
-            return array("okCount" =>$okCount, 
+            return array("okCount" => (int)$okCount, 
                         "errorCount" =>$errorCount + $errorA,
                         "warningCount" =>$warningCount + $warningA,
-                        "nomatchCount" =>$nomatchCount,
-                        "okACount" =>$okACount,
-                        "okTCount" =>$okTCount,
-                        "okATCount" => $okTACount + $okATCount,
-                        "undefinedCount" =>$undefinedCount,
-                        "sourceSelectedCount" =>$sourceSelectedComp,
-                        "sourceTotalComponentsCount" => $sourceTotalComponentsCount,
+                        // "nomatchCount" =>$nomatchCount,
+                        "okACount" => (int)$okACount,
+                        // "okTCount" =>$okTCount,
+                        // "okATCount" => $okTACount + $okATCount,
+                        "undefinedCount" => (int)$undefinedCount,
+                        "sourceSelectedCount" => (int)$sourceSelectedComp,
+                        "sourceTotalComponentsCount" => (int)$sourceTotalComponentsCount,
                         "CheckGroupsInfo" => $checkGroups,
                         "GroupWiseSubClassInfo" => $groupWiseSubClassInfo,
                         "Versioning" => $versionInfo,

@@ -177,7 +177,16 @@ function ShowSeveritySummary() {
     Total_items_matched_div.innerHTML = summaryData.TotalItemsMatched;
 
     var ok_A_T_Count_div = document.getElementById("ID6");
-    ok_A_T_Count_div.innerHTML = summaryData.oKATCount;
+    if(activeResultType.toLowerCase() === "comparison")
+    {
+        document.getElementById("okATSeveritySummaryLabel").innerText = "Items ‘OK (T) / (A)’";
+        ok_A_T_Count_div.innerHTML = summaryData.oKATCount;
+    }
+    else
+    {
+        document.getElementById("okATSeveritySummaryLabel").innerText = "Items ‘Undefined’";
+        ok_A_T_Count_div.innerHTML = summaryData.UndefinedCount
+    }
 }
 
 function ShowInfoSummary() {

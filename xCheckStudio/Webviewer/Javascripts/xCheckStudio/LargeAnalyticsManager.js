@@ -522,19 +522,27 @@ LargeAnalyticsManager.prototype.drawPieChart = function (mainChartItem,
     errorDiv.innerHTML = fixedPercent + "%";
 }
 
-LargeAnalyticsManager.prototype.setSeveritySummary = function() {
+LargeAnalyticsManager.prototype.setSeveritySummary = function () {
     var totalItemsChecked = this.AnalyticsData[activeResultType]['TotalItemsChecked'];
     var ErrorsCount = this.AnalyticsData[activeResultType]['errorCount'];
     var OKCount = this.AnalyticsData[activeResultType]["okCount"];
     var WarningsCount = this.AnalyticsData[activeResultType]["warningCount"];
     var OKATCount = this.AnalyticsData[activeResultType]['OKATCount'];
 
-    document.getElementById("ID37").innerHTML =  totalItemsChecked;
-    document.getElementById("ID18").innerHTML =  ErrorsCount
+    document.getElementById("ID37").innerHTML = totalItemsChecked;
+    document.getElementById("ID18").innerHTML = ErrorsCount
     document.getElementById("ID6_A3_Text_49").innerHTML = OKCount;
-    document.getElementById("ID13").innerHTML =  WarningsCount;    
+    document.getElementById("ID13").innerHTML = WarningsCount;
     document.getElementById("ID37_A3_Text_50").innerHTML = Number(ErrorsCount) + Number(OKCount) + Number(WarningsCount);
-    document.getElementById("ID6").innerHTML = OKATCount;
+
+    // if (activeResultType.toLowerCase() === "comparison") {
+    //     document.getElementById("okATSeveritySummaryLabel").style.color = "white";
+        document.getElementById("ID6").innerHTML = OKATCount;
+    // }
+    // else {
+    //     document.getElementById("okATSeveritySummaryLabel").style.color = "grey";
+    //     document.getElementById("ID6").innerHTML = "";
+    // }
 }
 
 LargeAnalyticsManager.prototype.setInfoSummary = function(checkType) {
