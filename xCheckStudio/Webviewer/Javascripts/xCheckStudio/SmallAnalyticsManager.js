@@ -142,7 +142,18 @@ SmallAnalyticsManager.prototype.populateComparisonAnalytics = function () {
     if (BarChartActive) {
         this.ShowBarChartDiv();
         if (SeveritybuttonActive) {
-            this.createSeverityBarCharts(checkGroupsInfo);
+            
+            var Severitydata = [];
+            for (key in checkGroupsInfo) {
+                var dataObject = {}
+                dataObject["Category"] = key;
+                dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
+                dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
+                dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]) + parseInt(checkGroupsInfo[key]["okATCount"]);
+                Severitydata.push(dataObject);
+            }
+
+            this.createSeverityBarCharts(Severitydata);
         }
         else if (InfoButtonActive) {
             this.CreateInfoBarCharts(checkGroupsInfo);
@@ -217,7 +228,18 @@ SmallAnalyticsManager.prototype.populateComparisonCategoryAnalytics = function()
     if (BarChartActive) {
         this.ShowBarChartDiv();
         if (SeveritybuttonActive) {
-            this.createSeverityBarCharts(subClassInfo);
+           
+            var Severitydata = [];
+            for (key in subClassInfo) {
+                var dataObject = {}
+                dataObject["Category"] = key;
+                dataObject["Error"] = parseInt(subClassInfo[key]["Error"]);
+                dataObject["Warning"] = parseInt(subClassInfo[key]["Warning"]);
+                dataObject["OK"] = parseInt(subClassInfo[key]["OK"]);
+                Severitydata.push(dataObject);
+            }
+
+            this.createSeverityBarCharts(Severitydata);
         }
         else if (InfoButtonActive) {
             this.CreateInfoBarCharts(subClassInfo);
@@ -306,7 +328,18 @@ SmallAnalyticsManager.prototype.populateComparisonClassAnalytics = function(clas
     if (BarChartActive) {
         this.ShowBarChartDiv();
         if (SeveritybuttonActive) {
-            this.createSeverityBarCharts(ComponentAnalytics);
+
+            var Severitydata = [];
+            for (key in ComponentAnalytics) {
+                var dataObject = {}
+                dataObject["Category"] = key;
+                dataObject["Error"] = parseInt(ComponentAnalytics[key]["Error"]);
+                dataObject["Warning"] = parseInt(ComponentAnalytics[key]["Warning"]);
+                dataObject["OK"] = parseInt(ComponentAnalytics[key]["OK"]);
+                Severitydata.push(dataObject);
+            }
+
+            this.createSeverityBarCharts(Severitydata);
         }
         else if (InfoButtonActive) {
             this.CreateInfoBarCharts(ComponentAnalytics);
@@ -436,7 +469,17 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
     if (BarChartActive) {
         this.ShowBarChartDiv();
         if (SeveritybuttonActive) {
-            this.createSeverityBarCharts(checkGroupsInfo);
+            var Severitydata = [];
+            for (key in checkGroupsInfo) {
+                var dataObject = {}
+                dataObject["Category"] = key;
+                dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
+                dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
+                dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
+                Severitydata.push(dataObject);
+            }
+
+            this.createSeverityBarCharts(Severitydata);
         }
         else if (InfoButtonActive) {
             this.CreateInfoBarCharts(checkGroupsInfo);
@@ -485,7 +528,18 @@ SmallAnalyticsManager.prototype.populateComplianceCategoryAnalytics = function (
     if (BarChartActive) {
         this.ShowBarChartDiv();
         if (SeveritybuttonActive) {
-            this.createSeverityBarCharts(subClassInfo);
+          
+            var Severitydata = [];
+            for (key in subClassInfo) {
+                var dataObject = {}
+                dataObject["Category"] = key;
+                dataObject["Error"] = parseInt(subClassInfo[key]["Error"]);
+                dataObject["Warning"] = parseInt(subClassInfo[key]["Warning"]);
+                dataObject["OK"] = parseInt(subClassInfo[key]["OK"]);
+                Severitydata.push(dataObject);
+            }
+
+            this.createSeverityBarCharts(Severitydata);
         }
         else if (InfoButtonActive) {
             this.CreateInfoBarCharts(subClassInfo);
@@ -539,7 +593,17 @@ SmallAnalyticsManager.prototype.populateComplianceClassAnalytics = function(clas
     if (BarChartActive) {
         this.ShowBarChartDiv();
         if (SeveritybuttonActive) {
-            this.createSeverityBarCharts(ComponentAnalytics);
+            var Severitydata = [];
+            for (key in ComponentAnalytics) {
+                var dataObject = {}
+                dataObject["Category"] = key;
+                dataObject["Error"] = parseInt(ComponentAnalytics[key]["Error"]);
+                dataObject["Warning"] = parseInt(ComponentAnalytics[key]["Warning"]);
+                dataObject["OK"] = parseInt(ComponentAnalytics[key]["OK"]);
+                Severitydata.push(dataObject);
+            }
+
+            this.createSeverityBarCharts(Severitydata);
         }
         else if (InfoButtonActive) {
             this.CreateInfoBarCharts(ComponentAnalytics);
@@ -987,19 +1051,19 @@ SmallAnalyticsManager.prototype.getInfoSummaryForProperties = function (Property
 }
 
 
-SmallAnalyticsManager.prototype.createSeverityBarCharts = function (checkGroupsInfo) {
+SmallAnalyticsManager.prototype.createSeverityBarCharts = function (Severitydata) {
 
     var _this = this;
 
-    var Severitydata = [];
-    for (key in checkGroupsInfo) {
-        var dataObject = {}
-        dataObject["Category"] = key;
-        dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
-        dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
-        dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
-        Severitydata.push(dataObject);
-    }
+    // var Severitydata = [];
+    // for (key in checkGroupsInfo) {
+    //     var dataObject = {}
+    //     dataObject["Category"] = key;
+    //     dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
+    //     dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
+    //     dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
+    //     Severitydata.push(dataObject);
+    // }
 
     var colorsArray = ["#F43742", "#F8C13B", "#0FFF72"];
 
@@ -1036,7 +1100,7 @@ SmallAnalyticsManager.prototype.createSeverityBarCharts = function (checkGroupsI
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText
+                    text: arg.argumentText + " : " + arg.value
                 };
             }
         }
@@ -1088,7 +1152,7 @@ SmallAnalyticsManager.prototype.CreateInfoBarCharts = function (checkGroupsInfo)
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText
+                    text: arg.argumentText + " : " + arg.value
                 };
             }
         }
