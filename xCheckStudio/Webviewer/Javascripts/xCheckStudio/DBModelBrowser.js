@@ -257,9 +257,9 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                     e.component.selectRows(Object.keys(_this.SelectionManager.ComponentIdvsSelectedComponents));
                 }
                 loadingBrower = false;
-
-                 // show table view action button
-                 document.getElementById("tableViewAction" + _this.Id).style.display = "block";
+                
+                //  // show table view action button
+                //  document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },  
             onSelectionChanged: function (e) {
                 if(e.currentSelectedRowKeys.length > 0) {

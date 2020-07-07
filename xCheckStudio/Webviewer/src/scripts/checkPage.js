@@ -581,6 +581,8 @@ function clearDataSource() {
   else {
     removeDataSourceFromDB().then(function (result) {
       removeSourceFilesFromDirectory().then(function (result) {
+        var tabId = viewTabs.tabToDelete.getAttribute("data-id");  
+        
         //var tabToDelete = document.getElementById("tab_" + model.currentTabId)
         viewTabs.deleteTab(viewTabs.tabToDelete);
 
@@ -589,6 +591,9 @@ function clearDataSource() {
         filterCheckCases(false);
 
         hideClearDataSourceForm();
+
+        // hide table view action button             
+        document.getElementById("tableViewAction" + tabId).style.display = "none";
       })
     });
   }
