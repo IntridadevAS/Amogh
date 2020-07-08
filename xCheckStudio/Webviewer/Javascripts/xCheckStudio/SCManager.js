@@ -74,21 +74,39 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
         });
         viewer.start();
 
+        var onAbortLoad = function () {
+            // if (viewer) {
+            // viewer.shutdown();
+
+            console.log("Aborted load model");
+            console.log("Abort disabled for load model..");
+            enableAbortBusyIndicator(onAbortLoad, false);
+
+            viewer.unsetCallbacks(viewerCallbacks);
+
+            return resolve(false);
+            // }
+        }
+       
+        console.log("Abort enabled for load model..");
+        enableAbortBusyIndicator(onAbortLoad, true);
+
         _this.Webviewer = viewer;        
 
-        viewer.setCallbacks({
+        let viewerCallbacks = {
             firstModelLoaded: function () {
+
                 viewer.view.fitWorld();
                 viewer.resizeCanvas();
 
                 // init display menu class
                 var currentView = model.views[_this.Id];
-                currentView.displayMenu = new DisplayMenu(_this.Id);    
-                currentView.dataDefinitionMenu = new DataDefinitionMenu(_this.Id);              
+                currentView.displayMenu = new DisplayMenu(_this.Id);
+                currentView.dataDefinitionMenu = new DataDefinitionMenu(_this.Id);
                 currentView.annotationOperator = new Example.AnnotationOperator(
                     viewer);
-                currentView.annotationOperatorId = viewer.registerCustomOperator( currentView.annotationOperator);                       
-             
+                currentView.annotationOperatorId = viewer.registerCustomOperator(currentView.annotationOperator);
+
                 // set viewer's background color
                 _this.SetViewerBackgroundColor();
 
@@ -169,18 +187,19 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                             model.views[_this.Id].isolateManager = new IsolateManager(viewer);
 
                             // Init table views action menu
-                            _this.InitViewActionMenu();   
+                            _this.InitViewActionMenu();
                         }
 
                         // create property callout
                         _this.PropertyCallout = new PropertyCallout(_this.Id);
                         _this.PropertyCallout.Init();
 
+                        console.log("Abort disabled for load model..");
+                        enableAbortBusyIndicator(onAbortLoad, false);
                         return resolve(true);
                     });
                 }
-                else
-                {
+                else {
                     // restore the node id vs component list when saved data is loaded.
                     _this.RestoreNodeIdVsCompList();
                 }
@@ -193,13 +212,20 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                 // _this.CheckViewerContextMenu.Init();
 
                 if (loadFromSaved) {
+                    console.log("Abort disabled for load model..");
+                    enableAbortBusyIndicator(onAbortLoad, false);
+
                     return resolve(true);
                 }
-             },
+            },
             modelLoadFailure: function () {
+                console.log("Abort disabled for load model..");
+                enableAbortBusyIndicator(onAbortLoad, false);
+
                 return resolve(false);
             }
-        });
+        };
+        viewer.setCallbacks(viewerCallbacks);
     });
 };
 
@@ -503,7 +529,10 @@ SCManager.prototype.GetControlIds = function () {
 
 SCManager.prototype.ClearSource = function () {
 
-    this.ModelTree.Clear();
+    if(this.ModelTree)
+    {
+        this.ModelTree.Clear();
+    }
 
     // clear viewer
     document.getElementById(this.GetViewerContainerID()).innerHTML = "";

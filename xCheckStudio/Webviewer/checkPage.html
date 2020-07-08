@@ -22,6 +22,8 @@
 
   <!-- UI blocking overlay -->
   <div id="uiBlockingOverlay" class="overlay" style="display: block"></div>
+  
+  <div id="busyIndicatorCancel" class="busyIndicatorCancel">Cancel</div>
 
   <!-- reference selection overlay -->
   <div id="referenceSelectionPopup" class="popup" style="z-index: 201;">
@@ -1590,7 +1592,7 @@
       </div>
     </div>
   </div>
-
+  
   <header>
     <div id="mainMenu" class="dropDownMenu">
       <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
@@ -1611,12 +1613,11 @@
         <button><img class="symbol" src="public/symbols/closeWin.svg" alt="maximize program"
             onclick="onExitClicked()"></button>
       </div>
-    </div>
-
+    </div>    
   </header>
 
   <div id="drawer" class="drawerArea" style="position: fixed; top:50px; left: 0px">
-    <div id="loadIndicator"></div>
+    <div id="loadIndicator"></div>       
 
     <div class="background">
 
@@ -3408,6 +3409,7 @@
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
       "showPane": false,
+      "shading": false,
       "shadingColor": "rgba(0,0,0,0.4)",
       "message": ""
     });
@@ -3557,16 +3559,33 @@
         }
       }
 
-    function showBusyIndicator() {
-      // hide busy indicator
-      $("#loadIndicator").dxLoadPanel("show");
-    }
+      function showBusyIndicator() {
+        // hide busy indicator
+        $("#loadIndicator").dxLoadPanel("show");
+        document.getElementById("uiBlockingOverlay").style.display = "block";
+      }
 
-    function hideBusyIndicator() {
-      // hide busy indicator
-      $("#loadIndicator").dxLoadPanel("hide");
-    }
+      function hideBusyIndicator() {
+        // hide busy indicator
+        $("#loadIndicator").dxLoadPanel("hide");
+        document.getElementById("uiBlockingOverlay").style.display = "none";
+        document.getElementById("busyIndicatorCancel").style.display = "none";
+      }
 
+      function enableAbortBusyIndicator(callback, enable) {
+
+        let busyIndicatorCancel = document.getElementById("busyIndicatorCancel");
+
+        if (enable === true) {
+          busyIndicatorCancel.style.display = "block";
+          busyIndicatorCancel.addEventListener("click", callback);
+        }
+        else {
+          busyIndicatorCancel.style.display = "none";
+          busyIndicatorCancel.removeEventListener("click", callback);
+          busyIndicatorCancel.onclick = null;
+        }
+      }
 
     // reference related functions
     function closeReference() {

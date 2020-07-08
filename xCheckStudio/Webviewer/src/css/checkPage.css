@@ -713,3 +713,17 @@ button[type="submit"] {
 #checkButton:hover{
   background: url("../../public/symbols/CheckButtonHighlighted.svg");
 } */
+
+.busyIndicatorCancel{
+  position: absolute;
+  bottom: 70px;
+  right: 30px;
+  display: none;
+  color: lightgray;
+  z-index: 101;
+  cursor: pointer; 
+}
+
+.busyIndicatorCancel:hover{
+  color: white;
+}

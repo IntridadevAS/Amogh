@@ -37,7 +37,7 @@ let LoadManager = {
                 isVault = "false";
             }
 
-            $.ajax({
+            var xhr = $.ajax({
                 data:
                 {
                     'Source': sourceId,
@@ -45,11 +45,14 @@ let LoadManager = {
                     'dataSourceType': '3D',
                     'ProjectName': projectinfo.projectname,
                     'CheckName': checkName,
-                    "isDataVault" : isVault
+                    "isDataVault": isVault
                 },
                 type: "POST",
                 url: "PHP/GetSourceFilePath.php"
             }).done(function (uri) {
+                console.log("Abort disabled for load..");
+                enableAbortBusyIndicator(onAbortXHR, false);
+                
                 if (uri !== 'fail') {
 
                     // uri contains SCS file path, so load
@@ -75,8 +78,8 @@ let LoadManager = {
                                 uri);
                             SourceManagers[sourceId] = sourceManager;
                             sourceManager.LoadData().then(function (result) {
-                                return resolve(true);
-                            });                            
+                                return resolve(result);
+                            });
                         }
                         else {
                             if (formId) {
@@ -93,12 +96,25 @@ let LoadManager = {
                         document.getElementById(formId).reset();
                     }
 
+
                     return resolve(false);
                 }
 
-            });
+            }).fail(function () {
+                console.log("Aborted load");
+                console.log("Abort disabled for load..");
+                enableAbortBusyIndicator(onAbortXHR, false);
+                return resolve(false);
+            });           
 
-            //return resolve(true);
+            var onAbortXHR = function () {
+                if (xhr !== null) {
+                    xhr.abort();
+                }
+            }
+           
+            console.log("Abort enabled for load..");
+            enableAbortBusyIndicator(onAbortXHR, true);
         });
     },
 

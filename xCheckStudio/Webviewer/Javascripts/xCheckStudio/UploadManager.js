@@ -442,11 +442,28 @@ let UploadManager = {
         files) {
         var fileExtension = xCheckStudio.Util.getFileExtension(fileNames[0]).toLowerCase();
 
+        var removeCurrentSource = function(){           
+            var tabToDelete = document.getElementById("tab_" + addedSource.id)
+            viewTabs.deleteTab(tabToDelete);
+            viewTabs.showAddTab();
+            viewPanels.showAddPanel();
+        }
+
         if (xCheckStudio.Util.isSource3D(fileExtension) ||
             xCheckStudio.Util.isSourceDB(fileExtension) ||
             xCheckStudio.Util.isSourceVisio(fileExtension)) {
 
             UploadManager.uploadSource(fileExtension, formData, addedSource.id).then(function (result) {
+                if (result === false) {
+
+                    // delete tabdata
+                    removeCurrentSource();
+
+                    //hide busy spinner
+                    hideBusyIndicator();
+
+                    return;
+                }
 
                 if (xCheckStudio.Util.isSource3D(fileExtension)) {
 
@@ -455,11 +472,17 @@ let UploadManager = {
                         addedSource.id,
                         addedSource.visualizer.id,
                         addedSource.tableData.id,
-                        UploadManager.formId).then(function () {
-                            if (!isDataVault()) {
-                                // filter check case
-                                filterCheckCases(false);
+                        UploadManager.formId).then(function (success) {
+                            if (success) {
+                                if (!isDataVault()) {
+                                    // filter check case
+                                    filterCheckCases(false);
+                                }
                             }
+                            else {
+                                // delete tabdata
+                                removeCurrentSource();
+                            }                            
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -520,6 +543,8 @@ let UploadManager = {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "PHP/UploadSource.php", true);
             xhr.onload = function (event) {
+                console.log("Abort disabled for upload..");
+                enableAbortBusyIndicator(onAbortXHR, false);
                 if (event.target.response !== "fail") {
 
                     return resolve(true);
@@ -527,11 +552,21 @@ let UploadManager = {
 
                 return resolve(false);
             };
+            xhr.onabort = function (event) {
+                // if (event.target.response !== "fail") {
+
+                //     return resolve(true);
+                // }
+                console.log("Aborted upload");
+                console.log("Abort disabled for upload..");
+                enableAbortBusyIndicator(onAbortXHR, false);
+                return resolve(false);
+            };
 
             // var formData = new FormData(document.getElementById(formId));
             formData.append('Source', sourceId);
 
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));           
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
             formData.append('ProjectName', projectinfo.projectname);
 
             if (isDataVault()) {
@@ -556,7 +591,16 @@ let UploadManager = {
             formData.append('ConvertToSCS', convertToScs);
             formData.append('ConvertToSVG', convertToSVG);
 
+            var onAbortXHR = function () {
+                if (xhr !== null) {
+                    xhr.abort();
+                }
+            }
+
             xhr.send(formData);
+           
+            console.log("Abort Enabled for upload..");
+            enableAbortBusyIndicator(onAbortXHR, true);
         });
     }
 }

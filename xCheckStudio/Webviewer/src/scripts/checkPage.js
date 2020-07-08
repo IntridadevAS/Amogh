@@ -350,8 +350,10 @@ let viewTabs = {
     viewTabs.showAddTab();
 
     // remove source manager
-    SourceManagers[tabID].ClearSource();
-    delete SourceManagers[tabID];
+    if (tabID in SourceManagers) {
+      SourceManagers[tabID].ClearSource();
+      delete SourceManagers[tabID];
+    }
 
     model.activeTabs--;
   },
