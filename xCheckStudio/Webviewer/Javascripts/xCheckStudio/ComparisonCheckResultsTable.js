@@ -984,7 +984,8 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 recursive: true
             },
             scrolling: {
-                mode: "standard"
+                mode: "virtual",
+                rowRenderingMode : 'virtual'
             },
             paging: {
                 enabled: false
