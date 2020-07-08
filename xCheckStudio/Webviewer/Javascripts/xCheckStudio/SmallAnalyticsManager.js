@@ -475,7 +475,7 @@ SmallAnalyticsManager.prototype.populateComplianceAnalytics = function (complian
                 dataObject["Category"] = key;
                 dataObject["Error"] = parseInt(checkGroupsInfo[key]["Error"]);
                 dataObject["Warning"] = parseInt(checkGroupsInfo[key]["Warning"]);
-                dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]);
+                dataObject["OK"] = parseInt(checkGroupsInfo[key]["OK"]) + parseInt(checkGroupsInfo[key]["OKA"]);
                 Severitydata.push(dataObject);
             }
 
@@ -871,12 +871,12 @@ SmallAnalyticsManager.prototype.getSeveritySummary = function () {
     data["WarningCount"] = this.AnalyticsData[activeResultType]["warningCount"];
     data["TotalItemsMatched"] = Number(data["ErrorsCount"]) + Number( data["OKCount"]) + Number(data["WarningCount"]);
    
-    if (activeResultType.toLowerCase() === "comparison") {
+    // if (activeResultType.toLowerCase() === "comparison") {
         data["oKATCount"] = this.AnalyticsData[activeResultType]['OKATCount'];
-    }
-    {
-        data["UndefinedCount"] = this.AnalyticsData[activeResultType]['undefinedCount'];
-    }
+    // }
+    // {
+    //     data["okACount"] = this.AnalyticsData[activeResultType]['okACount'];
+    // }
 
     return data;
     // return {
@@ -902,7 +902,7 @@ SmallAnalyticsManager.prototype.getSeveritySummaryForCategory = function () {
     OKCount = categoryData["OK"];
     WarningsCount = categoryData["Warning"];
     TotalItemsMatched = Number(ErrorsCount) + Number(OKCount) + Number(WarningsCount);
-    OkATCount = this.AnalyticsData[activeResultType]['OKATCount'];
+    OkATCount = categoryWiseData[ActiveCategory]['okATCount'];
 
     return {
         "TotalItemsChecked": TotalItemsChecked, "ErrorsCount": ErrorsCount, "OKCount": OKCount,
@@ -1100,7 +1100,8 @@ SmallAnalyticsManager.prototype.createSeverityBarCharts = function (Severitydata
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText + " : " + arg.value
+                    // text: arg.argumentText + " : " + arg.value
+                    text: arg.argumentText+ "<br>" + arg.seriesName + " : " + arg.value
                 };
             }
         }
@@ -1152,7 +1153,8 @@ SmallAnalyticsManager.prototype.CreateInfoBarCharts = function (checkGroupsInfo)
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText + " : " + arg.value
+                    // text: arg.argumentText + " : " + arg.value
+                    text: arg.argumentText+ "<br>" + arg.seriesName + " : " + arg.value
                 };
             }
         }

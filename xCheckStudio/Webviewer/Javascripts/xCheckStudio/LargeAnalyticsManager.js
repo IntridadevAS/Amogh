@@ -330,7 +330,8 @@ LargeAnalyticsManager.prototype.createSeverityBarCharts = function(checkGroupsIn
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText + " : " + arg.value
+                    // text: arg.argumentText + " : " + arg.value
+                    text: arg.argumentText+ "<br>" + arg.seriesName + " : " + arg.value
                 };
             }
         }
@@ -382,7 +383,8 @@ LargeAnalyticsManager.prototype.createInfoBarCharts = function(checkGroupsInfo) 
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText + " : " + arg.value
+                    // text: arg.argumentText + " : " + arg.value
+                    text: arg.argumentText+ "<br>" + arg.seriesName + " : " + arg.value
                 };
             }
         }
@@ -619,7 +621,8 @@ LargeAnalyticsManager.prototype.drawLineChart =  function(checkGroupsInfo) {
             enabled: true,
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.argumentText + " : " + arg.value
+                    // text: arg.argumentText + " : " + arg.value
+                    text: arg.argumentText+ "<br>" + arg.seriesName + " : " + arg.value
                 };
             }
         }

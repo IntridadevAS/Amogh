@@ -490,8 +490,14 @@
                         $okAT = $okAs + $okTs +$okATs;
                         $totalErrors = $errors + $errorACount + $errorTCount + $errorATCount;
                         $totalWarnings = $warnings + $warningACount + $warningTCount + $warningATCount;
-                         // keep track of check groups and corresponding stastics
-                         $checkGroups[$groupName] =   array('OK'=>$oks, 'Error'=>$totalErrors, 'Warning'=>$totalWarnings, 'No Match'=>$noMatches, 'undefined Item'=>$undefinedItem, 'okATCount'=>$okAT);
+                         // keep track of check groups and corresponding stastics                         
+                         $checkGroups[$groupName] =   array(
+                             'OK'=> $oks * $comparisonDataSources, 
+                             'Error'=> $totalErrors * $comparisonDataSources, 
+                             'Warning'=>$totalWarnings * $comparisonDataSources, 
+                             'No Match'=>$noMatches, 
+                             'undefined Item'=>$undefinedItem, 
+                             'okATCount'=> $okAT * $comparisonDataSources);
                          $groupWiseSubClassInfo[$groupName] = $subClassStatistics;
                     }
                 }              
