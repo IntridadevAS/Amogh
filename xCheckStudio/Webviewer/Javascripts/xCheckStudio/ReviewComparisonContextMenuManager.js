@@ -25,15 +25,15 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
         selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
-            var accept = true;
-            var transpose = true;
+
+            let transposed = _this.AreSelectedComponentsTransposed();
+            let accepted = _this.AreSelecteComponentsAccepted();
+
             var transposeSubMenu = [];
-            // _this.ComponentTableContainer = componentTableContainer;
-            transpose = _this.ChooseRestoreTransposeForComponent(selectedRow[0]);
-            accept = _this.ChooseActionForComparisonComponent(selectedRow[0]);
-            transposeSubMenu = _this.TransposeSubMenuItems();
-            var conditionalName = (accept) ? 'Accept' : 'Unaccept';
-            var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
+            if (transposed === false) {
+                transposeSubMenu = _this.TransposeSubMenuItems();
+            }
+
             _this.HighlightSelectedRowOnRightClick(selectedRow, _this.ComponentTableContainer);
             return {
                 callback: function (key, options) {
@@ -46,30 +46,56 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                 items: {
                     "acceptComponent":
                     {
-                        name: conditionalName,
+                        name: accepted === false ? 'Accept' : 'Unaccept',
                         disabled: function () {
-                            var disable = false;
-                            disable = _this.DisableAcceptForComponent(this[0]);
-                            return disable;
+                            if (accepted === true) {
+                                return false
+                            }
+
+                            if (!_this.AreComponentsValidForAccept()) {
+                                return true;
+                            }
+
+                            return false;
                         }
                     },
                     "transposeItem": {
-                        name: transposeconditionalName,
+                        name: (transposed === false ? 'Transpose' : 'Restore'),
                         disabled: function () {
-                            var disable = false;
-                            disable = _this.DisableContextMenuTransposeForComponent(this[0]);
-                            return disable;
-                        },
-                        visible: function () {
-                            if (transposeconditionalName == 'Restore') {
+                            if (transposed === true) {
                                 return false;
-                            } else {
+                            }
+
+                            if (!_this.AreComponentsValidForTranspose()) {
                                 return true;
                             }
-                        },
-                        items: {
-                            "FromDataSource1": { name: transposeSubMenu[0] },
-                            "FromDataSource2": { name: transposeSubMenu[1] },
+
+                            return false;
+                        }, 
+                        items: transposed === true ? null : {
+                            "FromDataSource1":
+                            {
+                                name: transposeSubMenu.length >= 2 ? transposeSubMenu[0] : "",
+                                visible: function () {
+                                    if (transposeSubMenu.length >= 2) {
+                                        return true;
+                                    }
+
+                                    return false;
+
+                                }
+                            },
+                            "FromDataSource2":
+                            {
+                                name:  transposeSubMenu.length >= 2 ? transposeSubMenu[1] : "",
+                                visible: function () {
+                                    if (transposeSubMenu.length >= 2) {
+                                        return true;
+                                    }
+
+                                    return false;
+                                }
+                            },
                             "FromDataSource3":
                             {
                                 name: function () {
@@ -82,9 +108,8 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                                     if (transposeSubMenu.length > 2) {
                                         return true;
                                     }
-                                    else {
-                                        return false;
-                                    }
+
+                                    return false;
                                 }
                             },
                             "FromDataSource4":
@@ -92,36 +117,19 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
                                 name: function () {
                                     if (transposeSubMenu.length > 3)
                                         return transposeSubMenu[3];
-                                    else
-                                        return "";
+
+                                    return "";
                                 },
                                 visible: function () {
                                     if (transposeSubMenu.length > 3) {
                                         return true;
                                     }
-                                    else {
-                                        return false;
-                                    }
+
+                                    return false;
                                 }
                             },
                         }
-                    },
-                    "restoreItem": {
-                        name: transposeconditionalName,
-                        visible: function () {
-                            if (transposeconditionalName == 'Restore') {
-                                return true;
-                            }
-                            else {
-                                return false;
-                            }
-                        },
-                        disabled: function () {
-                            var disable = false;
-                            disable = _this.DisableContextMenuRestoreForComponent(this[0]);
-                            return disable;
-                        },
-                    },                   
+                    },                               
                     "hide": {
                         name: "Hide",
                         visible: function () {
@@ -209,15 +217,15 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
         className: 'contextMenu_style',
         selector: 'tr',
         build: function ($triggerElement, e) {
-            var selectedRow = $triggerElement;
-            var accept = true;
-            var transpose = true;
+           
+            let transposed = _this.AreSelectedPropertiesTransposed();
+            let accepted = _this.AreSelectedPropertiesAccepted();
+
             var transposeSubMenu = [];
-            transpose = _this.ChooseRestoreTransposeForProperty(selectedRow[0]);
-            accept = _this.ChooseActionForComparisonProperty(selectedRow[0]);
-            transposeSubMenu = _this.TransposeSubMenuItems();
-            var conditionalName = (accept) ? 'Accept' : 'Unaccept';
-            var transposeconditionalName = (transpose) ? 'Transpose' : 'Restore';
+            if (transposed === false) {
+                transposeSubMenu = _this.TransposeSubMenuItems();
+            }
+
             return {
                 callback: function (key, options) {
                     var optionName = ""
@@ -229,75 +237,91 @@ ReviewComparisonContextMenuManager.prototype.InitPropertyLevelContextMenu = func
                 items: {
                     "acceptProperty":
                     {
-                        name: conditionalName,
+                        name: (accepted === true ? 'Unaccept' : 'Accept'),
                         disabled: function () {
-                            var disable = false;
-                            disable = _this.DisableAcceptForProperty(this[0]);
-                            return disable;
+                            if (accepted === true) {
+                                return false
+                            }
+
+                            if (!_this.ArePropertiesValidForAccept()) {
+                                return true;
+                            }
+
+                            return false;
                         }
                     },
                     "transposeItem": {
-                        name: transposeconditionalName,
+                        name: (transposed === true ? 'Restore' : 'Transpose'),
                         disabled: function () {
-                            var disable = false;
-                            disable = _this.DisableContextMenuTransposeForProperty(this[0]);
-                            return disable;
-                        },
-                        visible: function () {
-                            if (transposeconditionalName == 'Restore') {
+                            if (transposed === true) {
                                 return false;
-                            } else {
+                            }
+
+                            if (!_this.ArePropertiesValidForTranspose()) {
                                 return true;
                             }
-                        },
-                        items: {
-                            "FromDataSource1": { name: transposeSubMenu[0] },
-                            "FromDataSource2": { name: transposeSubMenu[1] },
+
+                            return false;
+                        },                      
+                        items:  transposed === true ? null : {
+                            "FromDataSource1":
+                            {
+                                name: (transposeSubMenu.length >= 2 ? transposeSubMenu[0] : ""),
+                                visible: function () {
+                                    if (transposeSubMenu.length >= 2) {
+                                        return true;
+                                    }
+
+                                    return false;
+                                }
+                            },
+                            "FromDataSource2":
+                            {
+                                name: (transposeSubMenu.length >= 2 ? transposeSubMenu[1] : ""),
+                                visible: function () {
+                                    if (transposeSubMenu.length >= 2) {
+                                        return true;
+                                    }
+
+                                    return false;
+                                }
+                            },
                             "FromDataSource3":
                             {
                                 name: function () {
-                                    if (transposeSubMenu.length > 2)
+                                    if (transposeSubMenu.length > 2) {
                                         return transposeSubMenu[2];
-                                    else
-                                        return "";
+                                    }
+
+                                    return "";
                                 },
                                 visible: function () {
                                     if (transposeSubMenu.length > 2) {
                                         return true;
                                     }
-                                    else {
-                                        return false;
-                                    }
+
+                                    return false;
                                 }
                             },
                             "FromDataSource4":
                             {
                                 name: function () {
-                                    if (transposeSubMenu.length > 3)
+                                    if (transposeSubMenu.length > 3) {
                                         return transposeSubMenu[3];
-                                    else
-                                        return "";
+                                    }
+
+                                    return "";
                                 },
                                 visible: function () {
                                     if (transposeSubMenu.length > 3) {
                                         return true;
                                     }
-                                    else {
-                                        return false;
-                                    }
+
+                                    return false;
                                 }
                             },
                         }
-                    },
-                    "restoreItem": {
-                        name: transposeconditionalName,
-                        disabled: function () {
-                            var disable = false;
-                            disable = _this.DisableContextMenuRestoreForProperty(this[0]);
-                            return disable;
-                        },
-                        visible: function () { if (transposeconditionalName == 'Restore') { return true; } else { return false; } },
-                    }
+                    },                    
                 }
             };
         }
@@ -435,55 +459,47 @@ ReviewComparisonContextMenuManager.prototype.GetTransposeSubMenu = function() {
 
 }
 
-ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForComponent = function (selectedRow) {
-
-    var transpose = false;
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
+/* This function checks if selected check  components are transposed or not. 
+   It returns true, even if few components out of all selected are transposed and others are not */
+ReviewComparisonContextMenuManager.prototype.AreSelectedComponentsTransposed = function () {
+  
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
-
-    if (selectedGroupIdsVsResultIds == undefined) {
-        transpose = true;
-        return transpose;
+    if (selectedGroupIdsVsResultIds == undefined) {    
+        return false;
     }
 
     for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
         for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-            var index = ignore.indexOf(checkResultComponent.status);
-            if (index == -1 && checkResultComponent.transpose == null) {
-                transpose = true;
+            if (checkResultComponent.status.includes("(T)")) {
+                return true;
             }
         }
     }
 
-    return transpose;
+    return false;
 }
 
-ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonComponent = function (selectedRow) {
-
-    var accept = false;
-    var ignore = ['OK', 'OK(T)', 'OK(A)', 'No Value', 'No Value(T)', 'OK(A)(T)', 'No Match'];
+/* This function checks if selected check  components are accepted or not. 
+   It returns true, even if few components out of all selected are accepted and others are not */
+ReviewComparisonContextMenuManager.prototype.AreSelecteComponentsAccepted = function () {
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
-
-    if (selectedGroupIdsVsResultIds == undefined) {
-        accept = true;
-        return accept;
+    if (selectedGroupIdsVsResultIds == undefined) {        
+        return false;
     }
 
     for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
         for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-            var index = ignore.indexOf(checkResultComponent.status);
-            if (index == -1) {
-                accept = true;
+            if (checkResultComponent.status.includes("(A)")) {
+                return true;
             }
         }
     }
 
-    return accept;
+    return false;
 }
 
 ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function () {
@@ -497,61 +513,40 @@ ReviewComparisonContextMenuManager.prototype.TransposeSubMenuItems = function ()
     return transposeSubMenu;
 }
 
-ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForComponent = function (selectedRow) {
+/* This function checks if selected check component components are valid for accept or not. 
+   It returns true, even if few components out of all selected are valid for accept and others are not */
+ReviewComparisonContextMenuManager.prototype.AreComponentsValidForTranspose = function () {
 
-    var transpose = true;
     var ignore = ['OK', 'OK(A)', 'OK(A)(T)', 'No Match', 'undefined'];
     var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
-
     if (selectedGroupIdsVsResultIds == undefined) {
-        return transpose;
+        return false;
     }
 
     for (var groupId in selectedGroupIdsVsResultIds) {
         var componentIds = selectedGroupIdsVsResultIds[groupId];
         for (var componentId in componentIds) {
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var index = ignore.indexOf(checkResultComponent.status);
-            if (index == -1 && checkResultComponent.transpose == null) {
-                transpose = false;
+            if (index == -1 &&
+                checkResultComponent.transpose == null) {
+                return true;
             }
         }
     }
-    return transpose;
+
+    return false;
 }
 
-ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForComponent = function() {
-    var restore = true;
-    var ignore = ['OK', 'OK(T)', 'OK(A)(T)', 'No Match', 'undefined'];
-    var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
+/* This function checks if selected check components  are valid for accept or not. 
+   It returns true, even if few components out of all selected are valid for accept and others are not */
+ReviewComparisonContextMenuManager.prototype.AreComponentsValidForAccept = function () {
 
-    if (selectedGroupIdsVsResultIds == undefined) {
-        return restore;
-    }
-
-    for (var groupId in selectedGroupIdsVsResultIds) {
-        var componentIds = selectedGroupIdsVsResultIds[groupId];
-        for (var componentId in componentIds) {
-            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-            var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
-            var index = ignore.indexOf(checkResultComponent.status);
-            if (index > 0 && checkResultComponent.transpose !== null) {
-                restore = false;
-            }
-        }
-    }
-    return restore;
-}
-
-ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = function (selectedRow) {
-
-    var accept = true;
     var ignore = ['OK', 'OK(T)', 'No Match', 'undefined'];
-    var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
 
+    var selectedGroupIdsVsResultIds = this.GetSelectedGroupIdsVsResultsIds();
     if (selectedGroupIdsVsResultIds == undefined) {
-        return accept;
+        return false;
     }
 
     for (var groupId in selectedGroupIdsVsResultIds) {
@@ -560,48 +555,23 @@ ReviewComparisonContextMenuManager.prototype.DisableAcceptForComponent = functio
             var checkResultComponent = comparisonReviewManager.GetCheckComponent(groupId, componentIds[componentId]);
             var index = ignore.indexOf(checkResultComponent.status);
             if (index == -1) {
-                accept = false;
+                return true;
             }
         }
     }
 
-    return accept;
+    return false;
 }
 
-ReviewComparisonContextMenuManager.prototype.DisableAcceptForProperty = function (selectedRow) {
-    var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
+/* This function checks if selected check component properties are valid for accept or not. 
+   It returns true, even if few properties out of all selected are valid for accept and others are not */
+ReviewComparisonContextMenuManager.prototype.ArePropertiesValidForAccept = function () {
+
     var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'Missing Property(s)', ' ', 'undefined'];
-    var accepted = true;
-
-    if (selectedPropertiesKey.length == 0) {
-        accepted = true;
-        return accepted;
-    }
-
-    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
-    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items();
-
-    for (var i = 0; i < selectedPropertiesKey.length; i++) {
-        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
-        var rowData = data[rowIndex];
-        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
-        if (index == -1) {
-            accepted = false;
-        }
-    }
-
-    return accepted;
-}
-
-ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty = function (selectedRow) {
-    var transpose = false;
-    var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'Missing Property(s)'];
+    
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-
     if (selectedPropertiesKey.length == 0) {
-        transpose = true;
-        return transpose;
+        return false;
     }
 
     var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
@@ -611,29 +581,21 @@ ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForProperty =
     for (var i = 0; i < selectedPropertiesKey.length; i++) {
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
-        var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
-        var sourceBPropertyName = rowData[ComparisonPropertyColumnNames.SourceBName];
-
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
         if (index == -1) {
-            if ((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
-                transpose = true;
-            }
+            return true;
         }
     }
 
-    return transpose;
+    return false;
 }
 
-ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty = function (selectedRow) {
-
-    var accept = false;
-    var ignore = ['OK', 'No Value', 'No Value(T)', 'ACCEPTED', 'OK(T)', 'Missing Property(s)', ' '];
+/* This function checks if selected check component properties are transposed or not. 
+   It returns true, even if few properties out of all selected are transposed and others are not */
+ReviewComparisonContextMenuManager.prototype.AreSelectedPropertiesTransposed = function () {   
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-
     if (selectedPropertiesKey.length == 0) {
-        accept = true;
-        return accept;
+        return false;
     }
 
     var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
@@ -643,55 +605,47 @@ ReviewComparisonContextMenuManager.prototype.ChooseActionForComparisonProperty =
     for (var i = 0; i < selectedPropertiesKey.length; i++) {
         var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
         var rowData = data[rowIndex];
-        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
-        if (index == -1) {
-            accept = true;
+
+        if (rowData[ComparisonPropertyColumnNames.Status].includes("(T)")) {
+            return true;
         }
     }
 
-    return accept;
+    return false;
 }
 
-ReviewComparisonContextMenuManager.prototype.DisableContextMenuTransposeForProperty = function (selectedRow) {
+/* This function checks if selected check component properties are accepted or not. 
+   It returns true, even if few properties out of all selected are accepted and others are not */
+ReviewComparisonContextMenuManager.prototype.AreSelectedPropertiesAccepted = function () {
+    var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
+    if (selectedPropertiesKey.length == 0) {
+        return false;
+    }
 
-    var transpose = true;
+    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
+    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
+    var data = dataGrid.getDataSource().items();
+
+    for (var i = 0; i < selectedPropertiesKey.length; i++) {
+        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
+        var rowData = data[rowIndex];
+        
+        if (rowData[ComparisonPropertyColumnNames.Status].includes("ACCEPTED")) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/* This function checks if selected check component properties are valid for transposed or not. 
+   It returns true, even if few properties out of all selected are valid for transposed and others are not */
+ReviewComparisonContextMenuManager.prototype.ArePropertiesValidForTranspose = function () {  
     var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'ACCEPTED', 'Missing Property(s)', 'undefined'];
+
     var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-
     if (selectedPropertiesKey.length == 0) {
-        transpose = true;
-        return transpose;
-    }
-
-    var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
-    var dataGrid = $("#" + detailInfoContainer).dxDataGrid("instance");
-    var data = dataGrid.getDataSource().items();
-
-    for (var i = 0; i < selectedPropertiesKey.length; i++) {
-        var rowIndex = dataGrid.getRowIndexByKey(selectedPropertiesKey[i]);
-        var rowData = data[rowIndex];
-        var sourceAPropertyName = rowData[ComparisonPropertyColumnNames.SourceAName];
-        var sourceBPropertyName = rowData[ComparisonPropertyColumnNames.SourceBName];
-
-        var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
-        if (index == -1) {
-            if ((sourceAPropertyName !== "" && sourceBPropertyName !== "")) {
-                transpose = false;
-            }
-        }
-    }
-
-    return transpose;
-}
-
-ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForProperty = function () {
-    var restore = true;
-    var ignore = ['OK', 'No Value', 'No Value(T)', 'OK(T)', 'Missing Property(s)','undefined'];
-    var selectedPropertiesKey = model.checks["comparison"]["detailedInfoTable"].SelectedProperties;
-
-    if (selectedPropertiesKey.length == 0) {
-        restore = true;
-        return restore;
+        return false;
     }
 
     var detailInfoContainer = model.getCurrentDetailedInfoTable()["DetailedReviewTableContainer"];
@@ -703,12 +657,12 @@ ReviewComparisonContextMenuManager.prototype.DisableContextMenuRestoreForPropert
         var rowData = data[rowIndex];
 
         var index = ignore.indexOf(rowData[ComparisonPropertyColumnNames.Status]);
-        if (index > 0) {
-            restore = false;
+        if (index === -1) {
+            return true;
         }
     }
 
-    return restore;
+    return false;
 }
 
 ReviewComparisonContextMenuManager.prototype.ChooseRestoreTransposeForGroup = function (groupId) {
@@ -794,10 +748,8 @@ ReviewComparisonContextMenuManager.prototype.ExecuteContextMenuClicked = functio
             this.OnUnAcceptGroup(accordionData);
         }
     }
-    else if (key === "restoreItem") {
-        if (optionName == "Restore") {
-            this.OnRestoreTranspose(accordionData, source);
-        }
+    else if (optionName == "Restore") {
+        this.OnRestoreTranspose(accordionData, source);
     }
     else if (key === "FromDataSource1" ||
         key === "FromDataSource2" ||
