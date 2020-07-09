@@ -31,36 +31,36 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
             }
         },
         itemTitleTemplate: function (itemData, itemIndex, itemElement) {
-            var btn = $('<div>')
-            $(btn).data("index", itemIndex)
-                .dxButton({
-                    icon: "chevrondown",
-                    width: "38px",
-                    height: "30px",
-                    onClick: function (e) {
-                        e.event.stopPropagation();
-                        var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
-                        if (!isOpened) {
-                            $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));
-                        }
-                        else {
-                            $("#" + _this.MainReviewTableContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
-                        }
+            // var btn = $('<div>')
+            // $(btn).data("index", itemIndex)
+            //     .dxButton({
+            //         icon: "chevrondown",
+            //         width: "38px",
+            //         height: "30px",
+            //         onClick: function (e) {
+            //             e.event.stopPropagation();
+            //             var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
+            //             if (!isOpened) {
+            //                 $("#" + _this.MainReviewTableContainer).dxAccordion("instance").expandItem(e.element.data("index"));
+            //             }
+            //             else {
+            //                 $("#" + _this.MainReviewTableContainer).dxAccordion("instance").collapseItem(e.element.data("index"));
+            //             }
 
-                    }
-                }).css("float", "right").appendTo(itemElement);
+            //         }
+            //     }).css("float", "right").appendTo(itemElement);
 
-            btn[0].classList.add("accordionButton");
+            // btn[0].classList.add("accordionButton");
 
             itemElement.append("<h1 style = 'font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
 
         },
-        onItemTitleClick: function (e) {
-            e.event.stopPropagation();
-        },
-        onItemClick: function (e) {
-            e.event.stopPropagation();
-        },        
+        // onItemTitleClick: function (e) {
+        //     e.event.stopPropagation();
+        // },
+        // onItemClick: function (e) {
+        //     e.event.stopPropagation();
+        // },        
         onItemContextMenu: function(e) {
             var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
             if (!(containerDiv in _this.ContextMenus) && !e.itemData["template"].toLowerCase().includes("undefined")) {
