@@ -467,6 +467,11 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (componentId,
     }
 }
 
+ComplianceCheckResultsTable.prototype.Refresh = function (tableIds) {
+    for (var i = 0; i < tableIds.length; i++) {
+        $(tableIds[i]).dxDataGrid("instance").refresh();
+    }
+}
 
 ComplianceCheckResultsTable.prototype.GetComponentIds = function () {
 
@@ -609,7 +614,7 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
         tableRowContent[CompliancePropertyColumnNames.Status] = "ACCEPTED";
     }
 
-    tableRowContent[CompliancePropertyColumnNames.PropertyId] = propertyId
+    tableRowContent[CompliancePropertyColumnNames.PropertyId] = propertyId;
     tableRowContent[CompliancePropertyColumnNames.Rule] = property.rule;
     return tableRowContent;
 }
@@ -774,4 +779,8 @@ ComplianceCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, prop
     var rowData = data[rowIndex];
     rowData[CompliancePropertyColumnNames.Status] = property["severity"];
     dataGrid.repaintRows(rowIndex);
+}
+
+ComplianceCheckPropertiesTable.prototype.Refresh = function () {
+    $("#" + this.DetailedReviewTableContainer).dxDataGrid("instance").refresh();
 }

@@ -158,8 +158,8 @@ ComplianceReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
 
                 var results = JSON.parse(msg);
 
+                var tableIds = [];
                 for (var groupId in results) {
-
                     var acceptedComponents = results[groupId];
 
                     for (var componentId in acceptedComponents) {
@@ -186,11 +186,16 @@ ComplianceReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf() === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
                         sourceViewer.ChangeComponentColorOnStatusChange(changedComponent)
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -221,25 +226,20 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
                 var properties = checkResultComponent["properties"];
-
                 for (var i = 0; i < properties.length; i++) {
-
                     var property = properties[i];
                     if (property !== results[componentId]["properties"][i].accepted) {
-
                         property.accepted = results[componentId]["properties"][i].accepted;
 
                         if (property.accepted == "true") {
                             property["severity"] = "ACCEPTED";
-
                             model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property)
                             // model.getCurrentSelectionManager().ChangeBackgroundColor(selectedRow[0], "ACCEPTED");
                         }
-
                         continue;
                     }
-
                 }
+                model.getCurrentDetailedInfoTable().Refresh();
 
                 // if(results[componentId].accepted == "true") {
                 //     checkResultComponent.status = "OK(A)";
@@ -256,6 +256,7 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                     tableContainer,
                     checkResultComponent.status,
                     false);
+                model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 var sourceViewer = model.checks["compliance"]["viewer"];
                 sourceViewer.ChangeComponentColorOnStatusChange(checkResultComponent);
@@ -293,6 +294,7 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionDa
 
                 var results = JSON.parse(msg);
 
+                var tableIds = [];
                 for (var groupId in results) {
 
                     _this.ComplianceCheckManager["results"][groupId].categoryStatus = "ACCEPTED"
@@ -322,11 +324,16 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionDa
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf() === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
                         sourceViewer.ChangeComponentColorOnStatusChange(changedComponent);
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -405,6 +412,7 @@ ComplianceReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
 
                 var results = JSON.parse(msg);;
 
+                let tableIds = [];
                 for (var groupId in results) {
 
                     var acceptedComponents = results[groupId];
@@ -429,11 +437,16 @@ ComplianceReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf() === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
                         sourceViewer.ChangeComponentColorOnStatusChange(changedComponent);
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -471,25 +484,19 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 for (var i = 0; i < properties.length; i++) {
 
                     var property = properties[i];
-                    if (property !== results[componentId]["properties"][i].accepted) {
+                    // if (property !== results[componentId]["properties"][i].accepted) {
 
+                    if (property.accepted == "true") {
                         property.accepted = results[componentId]["properties"][i].accepted;
+                        property["severity"] = results[componentId]["properties"][i].severity;
 
-                        if (property.accepted == "false") {
-                            property["severity"] = results[componentId]["properties"][i].severity;
-                        }
-                        // else {
-                        //     if(!isPropertyAccepted) {
-                        //         isPropertyAccepted = true;
-                        //     }
-                        // }
-
-                        model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property)
-
-                        continue;
+                        model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property);
                     }
 
+                    // continue;
+                    // }
                 }
+                model.getCurrentDetailedInfoTable().Refresh();
 
                 // var worstSeverity = _this.GetWorstSeverityStatusOfComponent(properties);
                 // checkResultComponent.status = worstSeverity;
@@ -504,6 +511,7 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                     tableContainer,
                     checkResultComponent.status,
                     false);
+                model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 var sourceViewer = model.checks["compliance"]["viewer"];
                 sourceViewer.ChangeComponentColorOnStatusChange(checkResultComponent);
@@ -540,6 +548,7 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (accordionData, Ac
             success: function (msg) {
                 var results = JSON.parse(msg);;
 
+                let tableIds = [];
                 for (var groupId in results) {
                     _this.ComplianceCheckManager["results"][groupId].categoryStatus = "UNACCEPTED"
 
@@ -565,11 +574,16 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (accordionData, Ac
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf() === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
                         sourceViewer.ChangeComponentColorOnStatusChange(changedComponent);
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }

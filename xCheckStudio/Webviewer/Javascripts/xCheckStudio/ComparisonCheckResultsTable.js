@@ -585,11 +585,17 @@ ComparisonCheckResultsTable.prototype.UpdateGridData = function (componentId,
     var rowIndex = dataGrid.getRowIndexByKey(componentId);
     var rowData = data[rowIndex];
     rowData.Status = changedStatus;
-
+    
     dataGrid.repaintRows(rowIndex);
 
     if (populateDetailedTable) {
         model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
+    }
+}
+
+ComparisonCheckResultsTable.prototype.Refresh = function (tableIds) {
+    for (var i = 0; i < tableIds.length; i++) {
+        $(tableIds[i]).dxDataGrid("instance").refresh();
     }
 }
 
@@ -878,12 +884,11 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 }
 
 ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties) {
-
-    var property;
+   
     var tableData = [];
     for (var propertyId in properties) {
-        property = properties[propertyId];
-        tableRowContent = {};
+        let property = properties[propertyId];
+        let tableRowContent = {};
         tableRowContent[ComparisonPropertyColumnNames.SourceAName] = property.sourceAName;
         tableRowContent[ComparisonPropertyColumnNames.SourceAValue] = property.sourceAValue;
         tableRowContent[ComparisonPropertyColumnNames.SourceBValue] = property.sourceBValue;
@@ -922,7 +927,7 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
             tableRowContent[ComparisonPropertyColumnNames.SourceCValue] = property.sourceDValue;
         }
 
-        tableRowContent[ComparisonPropertyColumnNames.PropertyId] = propertyId
+        tableRowContent[ComparisonPropertyColumnNames.PropertyId] = propertyId;
 
         model.getCurrentReviewManager().detailedReviewRowComments[Object.keys(model.getCurrentReviewManager().detailedReviewRowComments).length] = property.description;
 
@@ -985,7 +990,7 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             },
             scrolling: {
                 mode: "virtual",
-                rowRenderingMode : 'virtual'
+                rowRenderingMode: 'virtual'
             },
             paging: {
                 enabled: false
@@ -1132,5 +1137,9 @@ ComparisonCheckPropertiesTable.prototype.UpdateGridData = function (rowKey, prop
         }
     }
 
-    dataGrid.repaintRows(rowIndex);
+    dataGrid.repaintRows(rowIndex);   
+}
+
+ComparisonCheckPropertiesTable.prototype.Refresh = function () {
+    $("#" + this.DetailedReviewTableContainer).dxDataGrid("instance").refresh();
 }

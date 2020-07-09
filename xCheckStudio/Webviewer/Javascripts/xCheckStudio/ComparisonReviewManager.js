@@ -365,6 +365,8 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                         }
                     }
                 }
+                // refresh detailed info table
+                model.getCurrentDetailedInfoTable().Refresh();
 
                 checkResultComponent.status = results[componentId]["status"];
 
@@ -373,6 +375,7 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                     tableContainer,
                     checkResultComponent.status,
                     false);
+                model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -415,6 +418,7 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
 
                 var results = JSON.parse(msg);
 
+                let tableIds = [];
                 for (var groupId in results) {
 
                     var acceptedComponents = results[groupId];
@@ -447,6 +451,9 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -458,6 +465,9 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                         }
                     }
                 }
+
+                // refresh comparison review tables
+                model.getCurrentReviewTable().Refresh(tableIds);                
 
                 // call components accepted
                 _this.OnComponentsAccepted(Object.values(results), "component");
@@ -521,6 +531,7 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
             },
             success: function (msg) {
                 var results = JSON.parse(msg);
+                let tableIds = [];
                 for (var groupId in results) {
                     _this.ComparisonCheckManager["results"][groupId].categoryStatus = "ACCEPTED"
 
@@ -544,6 +555,9 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -558,6 +572,9 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
                     // call components accepted
                    _this.OnComponentsAccepted(Object.values(acceptedComponents), "group");
                 }
+
+                // refresh comparison review tables
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -593,6 +610,7 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
 
                 var results = JSON.parse(msg);
 
+                let  tableIds = [];
                 for (var groupId in results) {
 
                     var acceptedComponents = results[groupId];
@@ -619,6 +637,9 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -630,6 +651,9 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
                         }
                     }
                 }
+
+                // refresh comparison review tables
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -662,22 +686,21 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 checkResultComponent.accepted = results[componentId].accepted;
 
                 var properties = checkResultComponent["properties"];
-                var isPropertyTransposed = false;
-                var isPropertyAccepted = false;
+                // var isPropertyTransposed = false;
+                // var isPropertyAccepted = false;
 
                 for (var i = 0; i < properties.length; i++) {
-
                     var property = properties[i];
-
-                    property.accepted = results[componentId]["properties"][i].accepted;
-
-                    if (property.accepted == "false" && property.transpose == null) {
+                   
+                    if (property.accepted == "true" && 
+                        property.transpose == null) {
+                        property.accepted = results[componentId]["properties"][i].accepted;
 
                         property["severity"] = results[componentId]["properties"][i].severity;
-                        model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property)
-
+                        model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property);
                     }
                 }
+                model.getCurrentDetailedInfoTable().Refresh();
 
                 checkResultComponent.status = results[componentId]["status"];
 
@@ -685,7 +708,8 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 model.checks[model.currentCheck]["reviewTable"].UpdateGridData(componentId,
                     tableContainer,
                     checkResultComponent.status,
-                    false);
+                    false);                    
+                model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -727,6 +751,7 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordionData) {
             success: function (msg) {
                 var results = JSON.parse(msg);;
 
+                let tableIds = [];
                 for (var groupId in results) {
 
                     _this.ComparisonCheckManager["results"][groupId].categoryStatus = "UNACCEPTED"
@@ -753,6 +778,9 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordionData) {
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -764,6 +792,8 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordionData) {
                         }
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -895,6 +925,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                         }
                     }
                 }
+                model.getCurrentDetailedInfoTable().Refresh();
 
                 checkResultComponent.status = results[componentId]["status"];
 
@@ -903,6 +934,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                     tableContainer,
                     checkResultComponent.status,
                     false);
+                model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1149,18 +1181,16 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                 // var isPropertyTransposed = false;
 
                 for (var i = 0; i < properties.length; i++) {
-
                     var orginalProperty = properties[i];
-                    var changedProperty = results[componentId]["properties"][i];
+                    var changedProperty = results[componentId]["properties"][i];                   
 
-                    orginalProperty.transpose = changedProperty.transpose;
-
-                    if (orginalProperty.severity !== "OK" && orginalProperty.severity !== "No Value" && orginalProperty.accepted == "false") {
+                    if (orginalProperty.transpose) {
+                        orginalProperty.transpose = changedProperty.transpose;
                         orginalProperty.severity = changedProperty.severity;
                         model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), orginalProperty);
                     }
-
                 }
+                model.getCurrentDetailedInfoTable().Refresh();
 
                 checkResultComponent.status = results[componentId]["status"];
 
@@ -1169,6 +1199,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                     tableContainer,
                     checkResultComponent.status,
                     false);
+                model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1401,6 +1432,7 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
 
                 var results = JSON.parse(msg);;
 
+                let tableIds = [];
                 for (var groupId in results) {
 
                     var transpoedComponents = results[groupId];
@@ -1428,11 +1460,13 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                             }
                         }
 
-
                         originalComponent.status = changedComponent.status;
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1455,6 +1489,8 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                         _this.UpdateSourcePropertiesAfterTranspose(affectedComponents, false);
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -1487,6 +1523,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (
 
                 var results = JSON.parse(msg);
                
+                var tableIds = [];
                 for (var groupId in results) {
 
                     var transpoedComponents = results[groupId];
@@ -1509,19 +1546,19 @@ ComparisonReviewManager.prototype.TransposeComponent = function (
                             var changedProperty = changedComponent["properties"][propertyId];
                             orginalProperty["transpose"] = changedProperty["transpose"];
                             if (orginalProperty.severity !== "OK" && orginalProperty.severity !== "No Value") {
-
                                 if (orginalProperty.transpose !== null) {
                                     orginalProperty.severity = "OK(T)";
-
                                 }
                             }
                         }
-
 
                         originalComponent.status = changedComponent["status"];
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1534,6 +1571,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (
 
                     }
                 }
+                model.getCurrentReviewTable().Refresh(tableIds);
 
                 // Update original dataset properties 
                 let affectedComponents = [];
@@ -1571,6 +1609,7 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
             success: function (msg) {
                 var results = JSON.parse(msg);;
 
+                let tableIds = [];
                 for (var groupId in results) {
 
                     _this.ComparisonCheckManager["results"][groupId].categoryStatus = "UNACCEPTED";
@@ -1606,6 +1645,9 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1628,6 +1670,8 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
                         _this.UpdateSourcePropertiesAfterTranspose(affectedComponents, false);
                     }
                 }
+
+                model.getCurrentReviewTable().Refresh(tableIds);
             }
         });
     }
@@ -1664,6 +1708,7 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
 
                 var results = JSON.parse(msg);
 
+                var tableIds = [];
                 for (var groupId in results) {
 
                     _this.ComparisonCheckManager["results"][groupId].categoryStatus = "OK(T)";
@@ -1697,6 +1742,9 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
 
                         var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                         model.getCurrentReviewTable().UpdateGridData(componentId, tableContainer, originalComponent.status, true);
+                        if (tableIds.indexOf(tableContainer) === -1) {
+                            tableIds.push(tableContainer);
+                        }
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
@@ -1709,6 +1757,7 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
 
                     }
                 }
+                model.getCurrentReviewTable().Refresh(tableIds);
 
                 // Update original dataset properties 
                 let affectedComponents = [];

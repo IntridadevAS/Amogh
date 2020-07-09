@@ -54,22 +54,19 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     var rowElement;
 
     if (highlightedRow) {
-        var dataGrid =  $(highlightedRow["tableId"]).dxDataGrid("instance");
+        var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
         var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
         rowElement = dataGrid.getRowElement(rowIndex)[0];
 
-        if(rowElement === currentReviewTableRow) {
-            return;
+        if (rowIndex !== -1) {
+            if (rowElement === currentReviewTableRow) {
+                return;
+            }
+
+            var data = dataGrid.getDataSource().items();
+            var rowData = data[rowIndex];
+            this.RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
         }
-    }
-
-
-    if (highlightedRow) {
-        var dataGrid = $(highlightedRow["tableId"]).dxDataGrid("instance");
-        var rowIndex = dataGrid.getRowIndexByKey(highlightedRow["rowKey"]);
-        var data = dataGrid.getDataSource().items();
-        var rowData = data[rowIndex];
-        this.RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
     }
 
     rowKey = this.GetSelectedRowKey(currentReviewTableRow.rowIndex, tableId);
