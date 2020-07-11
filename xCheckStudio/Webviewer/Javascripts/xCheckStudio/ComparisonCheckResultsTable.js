@@ -442,6 +442,10 @@ ComparisonCheckResultsTable.prototype.LoadReviewTableData = function (columnHead
             showCheckBoxesMode: "always",
         },
         paging: { enabled: false },
+        // scrolling: {
+        //     // mode: "standard",
+        //     rowRenderingMode: 'virtual'
+        // },
         onContentReady: function (e) {
             model.getCurrentReviewManager().AddTableContentCount(containerDiv.replace("#", ""));
         },
@@ -987,10 +991,6 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                 mode: "multiple",
                 showCheckBoxesMode: "always",
                 recursive: true
-            },
-            scrolling: {
-                mode: "virtual",
-                rowRenderingMode: 'virtual'
             },
             paging: {
                 enabled: false

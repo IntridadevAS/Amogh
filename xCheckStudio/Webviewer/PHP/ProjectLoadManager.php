@@ -194,6 +194,9 @@
             // Copy annotations
             CopyAnnotations($dbh, $tempDbh);
 
+            // Copy annotations
+            CopyReviewTagsAndViews($dbh, $tempDbh);
+
             $tempDbh->commit();
             $tempDbh->beginTransaction();     
             
@@ -343,6 +346,28 @@ function CopyAnnotations($fromDbh, $toDbh)
                 $row['b'],
                 $row['c'],
                 $row['d']
+            ));
+        }
+    }
+}
+
+function CopyReviewTagsAndViews($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM reviewViewsAndTags;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS reviewViewsAndTags;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE reviewViewsAndTags(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT)';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare('INSERT INTO reviewViewsAndTags(id, value) VALUES(?,?) ');
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
             ));
         }
     }
@@ -554,6 +579,26 @@ function ReadAnnotations($dbh)
     return $annotations;
 }
 
+    function readReviewTagsAndViews($dbh)
+    {
+        $tagsAndViews = NULL;
+        if ($dbh) {
+            try {
+                $results = $dbh->query("SELECT *FROM reviewViewsAndTags;");
+
+                if ($results) {
+                    while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                        $tagsAndViews = $record['value'];
+                    }
+                }
+            } catch (Exception $e) {
+                return NULL;
+            }
+        }
+
+        return $tagsAndViews;
+    }
+
     function  CopyHiddenComponents($fromDbh, $toDbh)
     {     
         $results = $fromDbh->query("SELECT * FROM hiddenComponents;");
@@ -607,7 +652,17 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
             $highlightPropertyTemplates =  ReadHighlightPropertyTemplates($dbh);
             $results["highlightPropertyTemplates"] = $highlightPropertyTemplates;
-        } else if (strtolower($context) === 'review') {
+
+            $markupViews = ReadMarkupViews($dbh);
+            $results["markupViews"] = $markupViews;
+    
+            $bookmarkViews = ReadBookmarkViews($dbh);
+            $results["bookmarkViews"] = $bookmarkViews;
+    
+            $annotations = ReadAnnotations($dbh);
+            $results["annotations"] = $annotations;
+        } 
+        else if (strtolower($context) === 'review') {
             // read datasource info
             $datasourceInfo = readDataSourceInfo($tempDbh);
             if ($datasourceInfo != NULL) {
@@ -791,19 +846,16 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
             // read checkcase info               
             $checkcaseInfo =  ReadCheckCaseInfo($tempDbh);
             $results['checkcaseInfo'] = $checkcaseInfo;
+
+            // read review tags and views
+            $reviewTagsAndViews = readReviewTagsAndViews($tempDbh);
+            if ($reviewTagsAndViews != NULL) {
+                $results['reviewTagsAndViews'] = $reviewTagsAndViews;
+            }
         }
 
         $checkspaceComments = ReadCheckspaceComments($tempDbh);
-        $results["checkspaceComments"] = $checkspaceComments;
-
-        $markupViews = ReadMarkupViews($dbh);
-        $results["markupViews"] = $markupViews;
-
-        $bookmarkViews = ReadBookmarkViews($dbh);
-        $results["bookmarkViews"] = $bookmarkViews;
-
-        $annotations = ReadAnnotations($dbh);
-        $results["annotations"] = $annotations;
+        $results["checkspaceComments"] = $checkspaceComments;      
 
         $results["allComponents"] = array();
         $allComponents = ReadAllComponents($tempDbh, "AllComponentsa");

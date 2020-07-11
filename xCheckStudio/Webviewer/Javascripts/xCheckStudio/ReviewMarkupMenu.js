@@ -1,11 +1,8 @@
 // Markup menu
-function MarkupMenu(id, viewerId) {
+function MarkupMenu(id, viewerId, menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
-
-    // this.Id = id;
-    // this.ViewerId = viewerId;
-
+    HoveringMenu.call(this, id, viewerId, menuId);
+ 
     this.ActiveOperator = null;
 
     this.SelectedRowKey = {
@@ -183,7 +180,7 @@ MarkupMenu.prototype.GetControls = function () {
             Title: "Backward",
             ImageSrc: "public/symbols/Backward.svg",
             click: function (e, menu) {
-                var views = model.checks[menu.Id].markupViews[menu.ViewerId];
+                var views = model.markupViews[menu.Id][menu.ViewerId];
                 var viewNames = Object.keys(views);
                 if (viewNames.length === 0) {
                     return;
@@ -212,7 +209,7 @@ MarkupMenu.prototype.GetControls = function () {
             Title: "Forward",
             ImageSrc: "public/symbols/Forward.svg",
             click: function (e, menu) {
-                var views = model.checks[menu.Id].markupViews[menu.ViewerId];
+                var views = model.markupViews[menu.Id][menu.ViewerId];
                 var viewNames = Object.keys(views);
                 if (viewNames.length === 0) {
                     return;
@@ -241,8 +238,8 @@ MarkupMenu.prototype.GetControls = function () {
             Title: "Clear Marks",
             ImageSrc: "public/symbols/MarkupDelete.svg",
             click: function (e, menu) {
-                var totalClearedMarkups = Object.keys(model.checks[menu.Id].markupViews[menu.ViewerId]).length;
-                model.checks[menu.Id].markupViews[menu.ViewerId] = {};
+                var totalClearedMarkups = Object.keys(model.markupViews[menu.Id][menu.ViewerId]).length;
+                model.markupViews[menu.Id][menu.ViewerId] = {};
 
                 // refresh grid
                 if (model.checks[menu.Id].isViewsOpen()) {
@@ -294,13 +291,13 @@ MarkupMenu.prototype.TerminateEvents = function () {
 }
 
 MarkupMenu.prototype.OnViewAdded = function (view) {
-    var index = Object.keys(model.checks[this.Id].markupViews[this.ViewerId]).length + 1;
+    var index = Object.keys(model.markupViews[this.Id][this.ViewerId]).length + 1;
     var name = "Markup-" + index;
     view.setName(name);
 
     // var name = view.getName();;
     var uniqueId = view.getUniqueId();
-    model.checks[this.Id].markupViews[this.ViewerId][name] = uniqueId;
+    model.markupViews[this.Id][this.ViewerId][name] = uniqueId;
 
     // refresh grid
     if (model.checks[this.Id].isViewsOpen()) {
@@ -312,7 +309,7 @@ MarkupMenu.prototype.OnViewAdded = function (view) {
 
 MarkupMenu.prototype.OnViewDeleted = function (view) {
     var name = view.getName();
-    delete model.checks[this.Id].markupViews[this.ViewerId][name];
+    delete model.markupViews[this.Id][this.ViewerId][name];
 }
 
 MarkupMenu.prototype.ActivateView = function (viewId) {
@@ -331,7 +328,7 @@ MarkupMenu.prototype.DeleteViews = function () {
 
     for (var i = 0; i < selectedRows.length; i++) {
         this.Webviewer.markupManager.deleteMarkupView(selectedRows[i].Id);
-        delete model.checks[this.Id].markupViews[this.ViewerId][selectedRows[i].View];
+        delete model.markupViews[this.Id][this.ViewerId][selectedRows[i].View];
     }
 
     // refresh grid
@@ -393,7 +390,7 @@ MarkupMenu.prototype.LoadMarkupViews = function (fromMarkupMenu = true) {
     markupColumns.push(column);
 
     var markupsData = [];
-    var views = model.checks[this.Id].markupViews[this.ViewerId];
+    var views = model.markupViews[this.Id][this.ViewerId];
     for (var view in views) {
         markupsData.push({
             "View": view,
@@ -479,9 +476,9 @@ MarkupMenu.prototype.DeActivateOperator = function () {
 }
 
 // Shapes Menu
-function ShapesMenu(id, viewerId) {
+function ShapesMenu(id, viewerId, menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.Active = false;
 }

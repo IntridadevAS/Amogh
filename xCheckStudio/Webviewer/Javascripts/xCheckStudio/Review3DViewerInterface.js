@@ -2,12 +2,16 @@
 function Review3DViewerInterface(viewerOptions,
     componentIdVsComponentData,
     nodeIdVsComponentData,
-    source) {
+    source,
+    dataSourceId) {
+
     // call super constructor
     ReviewViewerInterface.call(this, viewerOptions,
         componentIdVsComponentData,
         nodeIdVsComponentData,
         source);
+
+    this.DataSourceId = dataSourceId;
 }
 // assign SelectionManager's method to this class
 Review3DViewerInterface.prototype = Object.create(ReviewViewerInterface.prototype);
@@ -29,7 +33,7 @@ Review3DViewerInterface.prototype.setupViewer = function (width, height) {
     viewer.start();
     this.Viewer = viewer;
     this.bindEvents(viewer);
-    
+
     var viewerContainer = document.getElementById(this.ViewerOptions[0]);
     viewerContainer.style.width = width;//"550px"
     viewerContainer.style.height = height;//"250px"
@@ -50,7 +54,7 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
             // create nav cube
             showNavigationCube(viewer);
             showAxisTriad(viewer);
-            
+
             _this.highlightComponentsfromResult();
 
             //activate context menu            
@@ -58,6 +62,8 @@ Review3DViewerInterface.prototype.bindEvents = function (viewer) {
 
             _this.ReviewViewerContextMenu = new ViewerContextMenu(viewer, ids);
             _this.ReviewViewerContextMenu.Init();
+
+            model.checks[model.currentCheck]["reviewManager"].RestoreViewsAndTags(_this, _this.DataSourceId);
         },
         selectionArray: function (selections) {
             if (selections.length === 0
@@ -197,7 +203,7 @@ Review3DViewerInterface.prototype.unHighlightAll = function () {
     if (sourceDReviewViewerInterface) {
         sourceDReviewViewerInterface.unHighlightComponent();
     }
-    
+
     // restore highlightcolor of highlightedRow row in main review table
     var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
     if (!highlightedRow) {
@@ -538,3 +544,72 @@ Review3DViewerInterface.prototype.Destroy = function (viewerContainer) {
     document.getElementById(viewerContainer).innerHTML = "";
 }
 
+Review3DViewerInterface.prototype.SerializeViews = function (views) {
+    var allViews = [];
+    for (var viewName in views) {
+
+        var viewId = views[viewName];
+        var markupManager = this.Viewer.markupManager;
+        var markupView = markupManager.getMarkupView(viewId);
+
+        if (markupView) {
+            allViews.push(markupView.toJson());
+        }
+    }
+
+    return allViews;
+}
+
+Review3DViewerInterface.prototype.RestoreViews = function (viewsStr) {
+    var markupManager = this.Viewer.markupManager;
+    markupManager.loadMarkupData(JSON.parse(viewsStr)).then(function (result) {
+
+    });
+
+    return viewsStr;
+};
+
+Review3DViewerInterface.prototype.SerializeAnnotations = function (annotations) {
+    var allAnnotations = [];
+    for (var markupHandle in annotations) {
+        var annotation = annotations[markupHandle];
+        var leaderLineAnchor = annotation.getLeaderLineAnchor();
+        var textboxAnchor = annotation.getTextBoxAnchor();
+        var text = annotation.getLabel();
+
+        allAnnotations.push({
+            "text": text,
+            "leaderLineAnchor": [leaderLineAnchor.x, leaderLineAnchor.y, leaderLineAnchor.z],
+            "textboxAnchor": [textboxAnchor.x, textboxAnchor.y, textboxAnchor.z]
+        });
+    }
+
+    return allAnnotations;
+}
+
+Review3DViewerInterface.prototype.RestoreAnnotations = function (annotationsStr) {
+    var annotations = JSON.parse(annotationsStr);
+
+    var restoredAnnotations = [];
+    for (var i = 0; i < annotations.length; i++) {
+        var annotation = annotations[i];
+
+        var leaderLineAnchor = new Communicator.Point3(
+            Number(annotation.leaderLineAnchor[0]),
+            Number(annotation.leaderLineAnchor[1]),
+            Number(annotation.leaderLineAnchor[2])
+        );
+
+        var annotationMarkup = new Example.AnnotationMarkup(this.Viewer, leaderLineAnchor, annotation.text);
+        annotationMarkup.setTextBoxAnchor(new Communicator.Point3(
+            Number(annotation.textboxAnchor[0]),
+            Number(annotation.textboxAnchor[1]),
+            Number(annotation.textboxAnchor[2])
+        ));
+        annotationMarkup.draw();
+        var markupHandle = this.Viewer.markupManager.registerMarkup(annotationMarkup);
+
+        restoredAnnotations[markupHandle] = annotationMarkup;        
+    }
+    return restoredAnnotations;    
+}

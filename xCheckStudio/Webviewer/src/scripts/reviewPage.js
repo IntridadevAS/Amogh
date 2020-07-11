@@ -16,25 +16,7 @@ let model = {
       sourceCViewer: null,
       sourceDViewer: null,
       selectionManager: null,
-      modelBrowsers: {},
-      markupViews: {
-        a: {},
-        b: {},
-        c: {},
-        d: {}
-      },
-      bookmarks: {
-        a: {},
-        b: {},
-        c: {},
-        d: {}
-      },
-      annotations: {
-        a: {},
-        b: {},
-        c: {},
-        d: {}
-      },
+      modelBrowsers: {},    
       measures: {
         a: {},
         b: {},
@@ -86,9 +68,9 @@ let model = {
       viewer: null,
       selectionManager: null,
       modelBrowsers: {},
-      markupViews: { a: {} },
-      bookmarks: { a: {} },
-      annotations: { a: {} },
+      // markupViews: { a: {} },
+      // bookmarks: { a: {} },
+      // annotations: { a: {} },
       measures: { a: {} },
       annotationOperator : null,      
       annotationOperatorId : null,  
@@ -141,7 +123,48 @@ let model = {
     // }
     // for testing only, delete above after controller.populateFiles is complete
   },
-
+  markupViews: {
+    "comparison": {
+      a: {},
+      b: {},
+      c: {},
+      d: {}
+    },
+    "compliance": {
+      a: {},
+      b: {},
+      c: {},
+      d: {}
+    },
+  },
+  bookmarks: {
+    "comparison": {
+      a: {},
+      b: {},
+      c: {},
+      d: {}
+    },
+    "compliance": {
+      a: {},
+      b: {},
+      c: {},
+      d: {}
+    },
+  },
+  annotations: {
+    "comparison": {
+      a: {},
+      b: {},
+      c: {},
+      d: {}
+    },
+    "compliance": {
+      a: {},
+      b: {},
+      c: {},
+      d: {}
+    },
+  },
   getCurrentReviewManager: function () {
     return this.checks[this.currentCheck]["reviewManager"];
   },
@@ -471,7 +494,8 @@ let viewTabs = {
           undefined,
           undefined,
           undefined,
-          undefined);
+          undefined,
+          model.selectedCompliance.id);
 
         break;
       }
@@ -685,6 +709,10 @@ function clearData() {
     currentCheckData["detailedInfoTable"] = null;
   }
 
+  // serialize views and tags
+  if (currentCheckData["reviewManager"]) {    
+    currentCheckData["reviewManager"].SerializeViewsAndTags(true);
+  }
   currentCheckData["reviewManager"] = null;
 
   var modelBrowsers = model.getModelBrowsers();
@@ -716,7 +744,7 @@ function clearData() {
     }
   }
   else if (model.currentCheck === "compliance") {
-    if (currentCheckData["viewer"]) {
+    if (currentCheckData["viewer"]) {      
       currentCheckData["viewer"].Destroy(Compliance.ViewerContainer);
       currentCheckData["viewer"] = null;
     }

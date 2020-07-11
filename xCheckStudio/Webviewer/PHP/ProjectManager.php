@@ -420,10 +420,13 @@ function SaveAll()
                 SaveCheckStatisticsFromTemp($tempDbh, $dbh);
             }
 
-              // save markup views
-              SaveMarkupViews($dbh);
-              SaveBookmarkViews($dbh);
-              SaveAnnotations($dbh);           
+            // save markup views
+            SaveMarkupViews($dbh);
+            SaveBookmarkViews($dbh);
+            SaveAnnotations($dbh);           
+
+            // copy review views and tags
+            SaveReviewViewsAndTagsFromTemp($tempDbh, $dbh); 
 
             // save property goups
             SavePropertyGroups($dbh);
@@ -462,10 +465,11 @@ function SaveAll()
             // save check result statistics
             SaveCheckStatisticsFromTemp($tempDbh, $dbh);   
 
-            SavMarkupViewsFromTemp($tempDbh, $dbh);  
+            SaveMarkupViewsFromTemp($tempDbh, $dbh);  
             SaveBookmarkViewsFromTemp($tempDbh, $dbh);  
             SaveAnnotationsFromTemp($tempDbh, $dbh);  
 
+            SaveReviewViewsAndTags($dbh);  
             // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsa");  
             // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsb");  
             // SaveAllComponentsFromTemp($tempDbh, $dbh, "AllComponentsc");  
@@ -1566,8 +1570,62 @@ function   SaveNotMatchedComponentsFromTemp($tempDbh, $dbh, $tableName)
 //         } 
 //     }
 // }
+function SaveReviewViewsAndTags($dbh)
+{   
+    if (!isset($_POST["viewsAndTags"])) {      
+        return false;
+    }
 
-function SavMarkupViewsFromTemp($tempDbh, $dbh)
+    try {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS reviewViewsAndTags;';
+        $dbh->exec($command);
+       
+        $command = 'CREATE TABLE reviewViewsAndTags(
+             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+             value TEXT)';
+        $dbh->exec($command);
+      
+        $insertQuery = 'INSERT INTO reviewViewsAndTags(value) VALUES(?) ';
+        $values = array($_POST['viewsAndTags']);
+       
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);       
+    } catch (Exception $e) {        
+        return false;
+    }
+   
+    return true;
+}
+
+function SaveReviewViewsAndTagsFromTemp($tempDbh, $dbh){
+  
+    $selectResults = $tempDbh->query("SELECT * FROM reviewViewsAndTags");
+    if ($selectResults) {
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS reviewViewsAndTags;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE reviewViewsAndTags(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO reviewViewsAndTags(id, value) VALUES(?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+
+        return true;
+    }
+    return false;
+}
+
+function SaveMarkupViewsFromTemp($tempDbh, $dbh)
 {
 
     $selectResults = $tempDbh->query("SELECT * FROM markupViews");

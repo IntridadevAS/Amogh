@@ -1,7 +1,7 @@
-function HoveringMenu(id, viewerId) {
+function HoveringMenu(id, viewerId, menuId) {
     this.Id = id;
-    this.ViewerId = viewerId; 0
-
+    this.ViewerId = viewerId; 
+    this.MenuId = menuId;
     this.Webviewer = this.GetWebviewer();
 }
 
@@ -89,39 +89,39 @@ HoveringMenu.prototype.GetWebviewer = function () {
 }
 
 HoveringMenu.prototype.GetDisplayMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].DisplayMenu;
+    return model.checks[this.Id].menus[this.MenuId].DisplayMenu;
 }
 
 HoveringMenu.prototype.GetMarkupMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].MarkupMenu;
+    return model.checks[this.Id].menus[this.MenuId].MarkupMenu;
 }
 
 HoveringMenu.prototype.GetShapesMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].ShapesMenu;
+    return model.checks[this.Id].menus[this.MenuId].ShapesMenu;
 }
 
 HoveringMenu.prototype.GetBookmarkMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].BookmarkMenu;
+    return model.checks[this.Id].menus[this.MenuId].BookmarkMenu;
 }
 
 HoveringMenu.prototype.GetTagsMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].TagsMenu;
+    return model.checks[this.Id].menus[this.MenuId].TagsMenu;
 }
 
 HoveringMenu.prototype.GetModelViewsMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].ModelViewsMenu;
+    return model.checks[this.Id].menus[this.MenuId].ModelViewsMenu;
 }
 
 HoveringMenu.prototype.GetSectioningMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].SectioningMenu;
+    return model.checks[this.Id].menus[this.MenuId].SectioningMenu;
 }
 
 HoveringMenu.prototype.GetMeasureMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].MeasureMenu;
+    return model.checks[this.Id].menus[this.MenuId].MeasureMenu;
 }
 
 HoveringMenu.prototype.GetDisplayStylesMenu = function () {
-    return model.checks[this.Id].menus[this.ViewerId].DisplayStylesMenu;
+    return model.checks[this.Id].menus[this.MenuId].DisplayStylesMenu;
 }
 
 HoveringMenu.prototype.HideViews = function () {

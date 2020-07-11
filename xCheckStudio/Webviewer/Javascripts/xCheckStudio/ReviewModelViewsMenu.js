@@ -1,6 +1,6 @@
-function ModelViewsMenu(id, viewerId) {
+function ModelViewsMenu(id, viewerId, menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.Active = false;
 
@@ -322,9 +322,10 @@ ModelViewsMenu.prototype.StopTranslucency = function () {
 
 //  Display Styles Menu
 function DisplayStylesMenu(id,
-    viewerId) {
+    viewerId, 
+    menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.Active = false;
 }
@@ -449,9 +450,9 @@ DisplayStylesMenu.prototype.GetControls = function () {
 
 //  SectioningMenu Menu
 function SectioningMenu(id,
-    viewerId) {
+    viewerId, menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.Active = false;
 
@@ -952,9 +953,9 @@ SectioningMenu.prototype.DeactivateCuttingSections = function () {
 
 // Measure Menu
 function MeasureMenu(id,
-    viewerId) {
+    viewerId, menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.Active = false;
 

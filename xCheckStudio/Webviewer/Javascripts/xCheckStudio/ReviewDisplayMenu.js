@@ -1,10 +1,10 @@
 
-function DisplayMenu(id, viewerId) {
+function DisplayMenu(id, viewerId, menuId) {
     this.Id = id;
     this.ViewerId = viewerId;
 
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.Active = false;
     this.ViewsOpen = false;

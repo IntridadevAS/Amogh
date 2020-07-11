@@ -1,7 +1,7 @@
 // Bookmark Menu
-function BookmarkMenu(id, viewerId) {
+function BookmarkMenu(id, viewerId, menuId) {
      // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
 
     this.SelectedRowKey = {
         "bookmark": null,
@@ -146,7 +146,7 @@ BookmarkMenu.prototype.GetControls = function () {
         Title: "Backward",
         ImageSrc: "public/symbols/Backward.svg",
         click: function (e, menu) {
-            var views = model.checks[menu.Id].bookmarks[menu.ViewerId];
+            var views = model.bookmarks[menu.Id][menu.ViewerId];
             var viewNames = Object.keys(views);
             if (viewNames.length === 0) {
                 return;
@@ -174,7 +174,7 @@ BookmarkMenu.prototype.GetControls = function () {
         Title: "Forward",
         ImageSrc: "public/symbols/Forward.svg",
         click: function (e, menu) {
-            var views = model.checks[menu.Id].bookmarks[menu.ViewerId];
+            var views = model.bookmarks[menu.Id][menu.ViewerId];
             var viewNames = Object.keys(views);
             if (viewNames.length === 0) {
                 return;
@@ -202,8 +202,8 @@ BookmarkMenu.prototype.GetControls = function () {
         Title: "Clear All",
         ImageSrc: "public/symbols/MarkupDelete.svg",
         click: function (e, menu) {
-            var totalClearedBookmarks = Object.keys(model.checks[menu.Id].bookmarks[menu.ViewerId]).length;
-            model.checks[menu.Id].bookmarks[menu.ViewerId] = {};
+            var totalClearedBookmarks = Object.keys(model.bookmarks[menu.Id][menu.ViewerId]).length;
+            model.bookmarks[menu.Id][menu.ViewerId] = {};
 
             // refresh grid
             if (model.checks[menu.Id].isViewsOpen()) {
@@ -248,12 +248,12 @@ BookmarkMenu.prototype.TerminateEvents = function () {
 
 BookmarkMenu.prototype.OnViewAdded = function (view) {
 
-    var index = Object.keys(model.checks[this.Id].bookmarks[this.ViewerId]).length + 1;
+    var index = Object.keys(model.bookmarks[this.Id][this.ViewerId]).length + 1;
     var name = "Bookmark-" + index;
     view.setName(name);
     // var name = view.getName();
     var uniqueId = view.getUniqueId();
-    model.checks[this.Id].bookmarks[this.ViewerId][name] = uniqueId;
+    model.bookmarks[this.Id][this.ViewerId][name] = uniqueId;
 
     // refresh grid
     if (model.checks[this.Id].isViewsOpen()) {
@@ -265,7 +265,7 @@ BookmarkMenu.prototype.OnViewAdded = function (view) {
 
 BookmarkMenu.prototype.OnViewDeleted = function (view) {
     var name = view.getName();
-    delete model.checks[this.Id].bookmarks[this.ViewerId][name];
+    delete model.bookmarks[this.Id][this.ViewerId][name];
 }
 
 BookmarkMenu.prototype.ShowViews = function () {
@@ -323,7 +323,7 @@ BookmarkMenu.prototype.LoadBookmarkViews = function (fromBookmarkMenu = true) {
     markupColumns.push(column);
 
     var markupsData = [];
-    var bookmarks = model.checks[this.Id].bookmarks[this.ViewerId];
+    var bookmarks = model.bookmarks[this.Id][this.ViewerId];
     for (var view in bookmarks) {
         markupsData.push({
             "View": view,
@@ -393,7 +393,7 @@ BookmarkMenu.prototype.DeleteViews = function () {
 
     for (var i = 0; i < selectedRows.length; i++) {
         this.Webviewer.markupManager.deleteMarkupView(selectedRows[i].Id);
-        delete  model.checks[this.Id].bookmarks[this.ViewerId][selectedRows[i].View];
+        delete  model.bookmarks[this.Id][this.ViewerId][selectedRows[i].View];
     }
 
     // refresh grid

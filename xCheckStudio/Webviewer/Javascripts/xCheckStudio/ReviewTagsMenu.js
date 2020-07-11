@@ -1,7 +1,7 @@
 // TagsMenu menu
-function TagsMenu(id, viewerId) {
+function TagsMenu(id, viewerId, menuId) {
     // call super constructor
-    HoveringMenu.call(this, id, viewerId);
+    HoveringMenu.call(this, id, viewerId, menuId);
   
     this.InitAnnotationOperator();
 
@@ -108,7 +108,7 @@ TagsMenu.prototype.GetControls = function () {
                 else {
                     // unhighlight
                     if (menu.SelectedRowKey["annotations"]) {
-                        var annotation = model.checks[menu.Id].annotations[menu.ViewerId][menu.SelectedRowKey["annotations"].Id];
+                        var annotation = model.annotations[menu.Id][menu.ViewerId][menu.SelectedRowKey["annotations"].Id];
                         annotation.unHighlight();
                         menu.Webviewer.markupManager.refreshMarkup();
                     }
@@ -199,7 +199,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
     annotationColumns.push(column);
 
     var annotationsData = [];
-    var annotations = model.checks[this.Id].annotations[this.ViewerId];
+    var annotations = model.annotations[this.Id][this.ViewerId];
     for (var id in annotations) {
         annotationsData.push({
             "Tag": annotations[id].getLabel(),
@@ -247,7 +247,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
                 
                 _this.RemoveHighlightColor(rowElement);
 
-                var annotation = model.checks[_this.Id].annotations[_this.ViewerId][_this.SelectedRowKey["annotations"].Id];   
+                var annotation = model.annotations[_this.Id][_this.ViewerId][_this.SelectedRowKey["annotations"].Id];   
                 annotation.unHighlight();
             }
 
@@ -255,7 +255,7 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
 
             _this.ApplyHighlightColor(e.rowElement[0]);
             
-            var annotation = model.checks[_this.Id].annotations[_this.ViewerId][e.data.Id];   
+            var annotation = model.annotations[_this.Id][_this.ViewerId][e.data.Id];   
             annotation.highlight();
             _this.Webviewer.markupManager.refreshMarkup();
         },
@@ -289,12 +289,12 @@ TagsMenu.prototype.LoadAnnotations = function (fromTagsMenu = true) {
 // }
 
 TagsMenu.prototype.DeleteAnnotations = function () {
-    var totalClearedAnnotatios = Object.keys(model.checks[this.Id].annotations[this.ViewerId]).length;
-    for (var markupHandle in model.checks[this.Id].annotations[this.ViewerId]) {
+    var totalClearedAnnotatios = Object.keys(model.annotations[this.Id][this.ViewerId]).length;
+    for (var markupHandle in model.annotations[this.Id][this.ViewerId]) {
         this.DeleteAnnotation(markupHandle);
     }
 
-    model.checks[this.Id].annotations[this.ViewerId] = {};
+    model.annotations[this.Id][this.ViewerId] = {};
 
     // refresh grid
     if (model.checks[this.Id].isViewsOpen()) {
@@ -350,7 +350,7 @@ TagsMenu.prototype.InitEvents = function () {
 }
 
 TagsMenu.prototype.OnAnnotationAdded = function (markupHandle, annotationMarkup) {
-    model.checks[this.Id].annotations[this.ViewerId][markupHandle] = annotationMarkup;
+    model.annotations[this.Id][this.ViewerId][markupHandle] = annotationMarkup;
     if (model.checks[this.Id].isViewsOpen()) {
         this.LoadAnnotations();
     }
@@ -360,7 +360,7 @@ TagsMenu.prototype.OnAnnotationDeleted = function (annotationMarkup) {
 }
 
 TagsMenu.prototype.RenameAnnotation = function (markupHandle, newMarkupName) {
-    var annotation = model.checks[this.Id].annotations[this.ViewerId][markupHandle];   
+    var annotation = model.annotations[this.Id][this.ViewerId][markupHandle];   
     if (newMarkupName !== null) {
         annotation.setLabel(newMarkupName);
         this.Webviewer.markupManager.refreshMarkup();
@@ -369,5 +369,5 @@ TagsMenu.prototype.RenameAnnotation = function (markupHandle, newMarkupName) {
 
 TagsMenu.prototype.DeleteAnnotation = function (markupHandle) {
     this.Webviewer.markupManager.unregisterMarkup(markupHandle);
-    delete model.checks[this.Id].annotations[this.ViewerId][markupHandle];   
+    delete model.annotations[this.Id][this.ViewerId][markupHandle];   
 };
