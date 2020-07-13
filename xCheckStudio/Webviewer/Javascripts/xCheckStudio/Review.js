@@ -30,47 +30,48 @@ function initReviewModule() {
             }
 
             // markup views, annotations and bookmarks
-            let tagsAndViews = JSON.parse(checkResults.reviewTagsAndViews)
-            
-            //tags
-            if (tagsAndViews.annotations) {
-                model.annotations = tagsAndViews.annotations;
-            } 
-            model.annotations["comparison"]["a"] = {};
-            model.annotations["comparison"]["b"] = {};
-            model.annotations["comparison"]["c"] = {};
-            model.annotations["comparison"]["d"] = {};
-            model.annotations["compliance"]["a"] = {};
-            model.annotations["compliance"]["b"] = {};
-            model.annotations["compliance"]["c"] = {};
-            model.annotations["compliance"]["d"] = {};
+            if (checkResults.reviewTagsAndViews) {
+                let tagsAndViews = JSON.parse(checkResults.reviewTagsAndViews)
 
-             //bookmarks
-            if (tagsAndViews.bookmarks) {
-                model.bookmarks = tagsAndViews.bookmarks;
+                //tags
+                if (tagsAndViews.annotations) {
+                    model.annotations = tagsAndViews.annotations;
+                }
+                model.annotations["comparison"]["a"] = {};
+                model.annotations["comparison"]["b"] = {};
+                model.annotations["comparison"]["c"] = {};
+                model.annotations["comparison"]["d"] = {};
+                model.annotations["compliance"]["a"] = {};
+                model.annotations["compliance"]["b"] = {};
+                model.annotations["compliance"]["c"] = {};
+                model.annotations["compliance"]["d"] = {};
+
+                //bookmarks
+                if (tagsAndViews.bookmarks) {
+                    model.bookmarks = tagsAndViews.bookmarks;
+                }
+                model.bookmarks["comparison"]["a"] = {};
+                model.bookmarks["comparison"]["b"] = {};
+                model.bookmarks["comparison"]["c"] = {};
+                model.bookmarks["comparison"]["d"] = {};
+                model.bookmarks["compliance"]["a"] = {};
+                model.bookmarks["compliance"]["b"] = {};
+                model.bookmarks["compliance"]["c"] = {};
+                model.bookmarks["compliance"]["d"] = {};
+
+                //markupviews
+                if (tagsAndViews.markupViews) {
+                    model.markupViews = tagsAndViews.markupViews;
+                }
+                model.markupViews["comparison"]["a"] = {};
+                model.markupViews["comparison"]["b"] = {};
+                model.markupViews["comparison"]["c"] = {};
+                model.markupViews["comparison"]["d"] = {};
+                model.markupViews["compliance"]["a"] = {};
+                model.markupViews["compliance"]["b"] = {};
+                model.markupViews["compliance"]["c"] = {};
+                model.markupViews["compliance"]["d"] = {};
             }
-            model.bookmarks["comparison"]["a"] = {};
-            model.bookmarks["comparison"]["b"] = {};
-            model.bookmarks["comparison"]["c"] = {};
-            model.bookmarks["comparison"]["d"] = {};
-            model.bookmarks["compliance"]["a"] = {};
-            model.bookmarks["compliance"]["b"] = {};
-            model.bookmarks["compliance"]["c"] = {};
-            model.bookmarks["compliance"]["d"] = {};
-
-            //markupviews
-            if (tagsAndViews.markupViews) {
-                model.markupViews = tagsAndViews.markupViews;
-            }
-            model.markupViews["comparison"]["a"] = {};
-            model.markupViews["comparison"]["b"] = {};
-            model.markupViews["comparison"]["c"] = {};
-            model.markupViews["comparison"]["d"] = {};
-            model.markupViews["compliance"]["a"] = {};
-            model.markupViews["compliance"]["b"] = {};
-            model.markupViews["compliance"]["c"] = {};
-            model.markupViews["compliance"]["d"] = {};
-
             return resolve(true);
         });
     });
