@@ -113,9 +113,7 @@ ComplianceReviewManager.prototype.CreateCheckGroupButton = function (groupId, co
 ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
     // var commentDiv = document.getElementById(this.DetailedReviewRowCommentDiv);
     // commentDiv.innerHTML = "";
-
     this.detailedReviewRowComments = {};
-
 
     model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
     var tempString = "_" + this.MainReviewTableContainer;

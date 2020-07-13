@@ -635,10 +635,11 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     var columnHeaders = this.CreatePropertiesTableHeader(model.getCurrentReviewManager().ComplianceCheckManager.source);
 
     var tableData = [];
+    model.getCurrentReviewManager().detailedReviewRowComments = {};
     for (var propertyId in component.properties) {
         property = component.properties[propertyId];
 
-        //this.detailedReviewRowComments[Object.keys(this.detailedReviewRowComments).length] = property.Description;
+        model.getCurrentReviewManager().detailedReviewRowComments[propertyId] = property.description;
 
         tableRowContent = this.addPropertyRowToDetailedTable(property, columnHeaders, propertyId);
         tableData.push(tableRowContent);
@@ -704,14 +705,11 @@ ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             },
             onRowClick: function (e) {
                 model.checks["compliance"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
-                // var comment = model.checks["compliance"]["reviewManager"].detailedReviewRowComments[e.rowIndex];
-                // var commentDiv = document.getElementById("ComparisonDetailedReviewComment");
-                // if (comment) {
-                //     commentDiv.innerHTML = "Comment : <br>" + comment;
-                // }
-                // else {
-                //     commentDiv.innerHTML = "Comment : <br>";
-                // }
+                
+                if (e.data.PropertyId in model.getCurrentReviewManager().detailedReviewRowComments) {
+                    let comment = model.getCurrentReviewManager().detailedReviewRowComments[e.data.PropertyId];
+                    DevExpress.ui.notify({ message: comment, width: 500, left: 0}, "info", 1500);
+                }
             },
             onSelectionChanged: function (e) {
                 if (e.currentSelectedRowKeys.length > 0) {

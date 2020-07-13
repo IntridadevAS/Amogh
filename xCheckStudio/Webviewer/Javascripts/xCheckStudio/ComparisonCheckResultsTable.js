@@ -888,8 +888,9 @@ ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function 
 }
 
 ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties) {
-   
+
     var tableData = [];
+    model.getCurrentReviewManager().detailedReviewRowComments = {};
     for (var propertyId in properties) {
         let property = properties[propertyId];
         let tableRowContent = {};
@@ -933,7 +934,7 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
 
         tableRowContent[ComparisonPropertyColumnNames.PropertyId] = propertyId;
 
-        model.getCurrentReviewManager().detailedReviewRowComments[Object.keys(model.getCurrentReviewManager().detailedReviewRowComments).length] = property.description;
+        model.getCurrentReviewManager().detailedReviewRowComments[propertyId] = property.description;
 
         tableData.push(tableRowContent);
     }
@@ -947,7 +948,7 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     // clear comment
     this.SetComment("");
 
-    this.detailedReviewRowComments = {};
+    // this.detailedReviewRowComments = {};
 
     var tableData = [];
     var columnHeaders = [];
@@ -963,7 +964,6 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     var tableData = this.CreateTableData(component.properties);
 
     this.LoadDetailedReviewTableData(columnHeaders, tableData, containerDiv);
-
 }
 
 ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, containerDiv) {
@@ -1038,6 +1038,11 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
             },
             onRowClick: function (e) {
                 model.getCurrentSelectionManager().MaintainHighlightedDetailedRow(e.rowElement[0], e.key);
+
+                if (e.data.PropertyId in model.getCurrentReviewManager().detailedReviewRowComments) {
+                    let comment = model.getCurrentReviewManager().detailedReviewRowComments[e.data.PropertyId];
+                    DevExpress.ui.notify({ message: comment, width: 500, left: 0}, "info", 1500);
+                }
             },
             // onRowPrepared: function(e) {
             //     if(e.isSelected) {
