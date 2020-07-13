@@ -7,7 +7,7 @@ let model = {
   currentView: null,
   currentTabId: null,
   loadSavedCheckspace: false,
-  datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
+  // datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
   checkcaseSupportedTypes: undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
   propertyGroups: {},
   propertyHighlightTemplates: {},
@@ -185,8 +185,11 @@ let controller = {
 
   // NOTE FOR PROTOTECH - run this after file is loaded.
   //It will find the first available "panel", create a tab for it, and select both.
-  addNewFile: function (fileName) {
-    const addedFile = model.views[this.nextAvailableView()];
+  addNewFile: function (fileName, srcId = null) {
+    if (!srcId) {
+      srcId = this.nextAvailableView();
+    }
+    const addedFile = model.views[srcId];
     // const table = addedFile.tableData; //NOTE FOR PROTOTECH - This will select the 'table' for this particular panel
     // const visualizer = addedFile.visualizer; //NOTE FOR PROTOTECH - This will select the 'vizualizer' for this particular panel
     // model.activeTabs++;

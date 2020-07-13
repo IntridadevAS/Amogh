@@ -59,15 +59,15 @@ function loadCheckSpaceForCheck(data) {
         model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
     }
 
-    // maintaint the dataset types
-    var sourceViewerOptions = data["sourceViewerOptions"];
-    if (sourceViewerOptions) {
-        var datasetTypes = [];
-        for (var srcId in sourceViewerOptions) {
-            datasetTypes.push(sourceViewerOptions[srcId]["sourceType"]);
-        }
-        model.datasetTypes = datasetTypes;
-    }
+    // // maintaint the dataset types
+    // var sourceViewerOptions = data["sourceViewerOptions"];
+    // if (sourceViewerOptions) {
+    //     var datasetTypes = [];
+    //     for (var srcId in sourceViewerOptions) {
+    //         datasetTypes.push(sourceViewerOptions[srcId]["sourceType"]);
+    //     }
+    //     model.datasetTypes = datasetTypes;
+    // }
 
     // load data sets 
     loadDataSets(data);
@@ -121,7 +121,7 @@ function loadDataSets(data) {
 
         for (var srcId in viewerOptions) {
             var viewerOption = viewerOptions[srcId];
-            loadDataSource(viewerOption, data, checkCaseName);
+            loadDataSource(viewerOption, data, checkCaseName, srcId);
         }
     }
     else {
@@ -136,14 +136,14 @@ function loadDataSets(data) {
     }
 }
 
-function loadDataSource(viewerOption, data, checkCaseName) {
+function loadDataSource(viewerOption, data, checkCaseName, srcId) {
 
     if (!viewerOption.source ||
         !viewerOption.sourceType) {
         return;
     }
 
-    var addedSource = controller.addNewFile(viewerOption.source);
+    var addedSource = controller.addNewFile(viewerOption.source, srcId);
     restoreComplianceSwitchState(addedSource, data["controlStates"]);
 
     viewTabs.createTab(addedSource);
