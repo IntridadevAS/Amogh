@@ -3433,6 +3433,7 @@
         // get enable vault 
         if (localStorage.getItem('dataVaultEnable') === "true") {
           vaultEnable = true;
+          localStorage.removeItem('dataVaultEnable');
         }
 
         document.getElementById("loadFromVaultBtn").onclick = function () {
@@ -3442,9 +3443,7 @@
           else {
             alert("Data Vault is disabled. Please enable the Vault to proceed.");
           }
-        }
-
-        localStorage.removeItem('dataVaultEnable');
+        }        
 
         var isVault = isDataVault();
         if (isVault) {
@@ -3527,30 +3526,7 @@
         }).dxTextBox("instance");
 
         document.getElementById("saveToVaultOkBtn").onclick = function () {
-          DataVault.onSaveToVaultOKClicked();
-          // var description = vaultDataDescription.option("value");
-          // var version = vaultDataVersion.option("value");
-          // if (!version ||
-          //   version === "") {
-          //   alert("Version can't be empty.");
-          //   return;
-          // }         
-
-          // if (model.currentTabId in SourceManagers) {
-          //   var sourceManager = SourceManagers[model.currentTabId];
-          //   CheckModule.onSaveVault(sourceManager, version, description).then(function (result) {             
-          //     if (result.length > 1 && result[1] === false) {
-          //       // don;t close the prompt
-          //        return;
-          //     }
-
-          //     vaultDataVersion.option("value", "");
-          //     vaultDataDescription.option("value", "");
-
-          //     document.getElementById("uiBlockingOverlay").style.display = "none";
-          //     document.getElementById("saveToVaultPrompt").style.display = "none";
-          //   });
-          // }         
+          DataVault.onSaveToVaultOKClicked();                 
         }
 
         document.getElementById("saveToVaultCanceBtn").onclick = function () {

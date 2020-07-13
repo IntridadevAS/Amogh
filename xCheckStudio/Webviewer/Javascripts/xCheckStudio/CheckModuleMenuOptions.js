@@ -191,6 +191,15 @@ function cancelResetData() {
 
 function resetData() {
     hideResetDataForm();
+
+    localStorage.setItem("dataVaultEnable", "false");
+    if(vaultEnable === true)
+    {
+        localStorage.setItem("dataVaultEnable", "true");
+    }
+
+    // reload check page
+    window.location.href = "checkPage.html";
 }
 
 function hideResetDataForm() {

@@ -32,15 +32,6 @@ function loadCheckCases() {
             // read check case data from XML checkcase data file
             checkCaseManager = new CheckCaseManager();
             checkCaseManager.readCheckCaseData(fileName);
-
-            // // if valid check case is selected, then enable source A controls              
-            // var component = document.getElementById('createbtnA');
-            // if (component.classList.contains("disabledbutton")) {
-            //     component.classList.remove('disabledbutton');
-            // }
-
-            // // enable drop zone for source A
-            // enableDropZone("dropZone1");
         }
 
         // read check cases files list
