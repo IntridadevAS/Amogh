@@ -263,8 +263,14 @@ let viewTabs = {
       } else { return };
     });
 
-    this.comparisonArrow.addEventListener("click", function (event) {
-      viewTabs.complianceArrow.classList.remove("invert");
+    this.comparisonArrow.addEventListener("click", function (event) {      
+      if (viewTabs.complianceArrow.classList.contains("invert")) {
+        viewTabs.complianceArrow.click();
+      }
+
+      if (!("Comparisons" in checkResults)) {
+        return;
+      }      
       if (event.target.classList.contains("invert")) {
         event.target.classList.remove("invert");
         viewTabs.closeSelectFiles();
@@ -274,8 +280,14 @@ let viewTabs = {
       }
     });
 
-    this.complianceArrow.addEventListener("click", function (event) {
-      viewTabs.comparisonArrow.classList.remove("invert");
+    this.complianceArrow.addEventListener("click", function (event) {     
+      if (viewTabs.comparisonArrow.classList.contains("invert")) {
+        viewTabs.comparisonArrow.click();
+      }
+
+      if (!("Compliances" in checkResults)) {
+        return;
+      } 
       if (event.target.classList.contains("invert")) {
         event.target.classList.remove("invert");
         viewTabs.closeSelectFiles();
@@ -353,7 +365,8 @@ let viewTabs = {
     this.selectFiles.innerHTML = "";
   },
 
-  populateComparisons: function () {
+  populateComparisons: function () { 
+
     this.openSelectFiles();
     for (file of Object.values(model.files)) {
       let newCard = this.makeCardForComparison(file);
