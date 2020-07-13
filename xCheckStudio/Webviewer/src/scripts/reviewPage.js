@@ -614,8 +614,22 @@ let viewPanels = {
     let parent = selected.parentNode;
     if (parent.classList.contains("maximize")) {
       parent.classList.remove("maximize");
+
+      if (model.currentCheck === "comparison") {
+        document.getElementById("tableDataComparison").classList.remove("hide");
+      }
+      else if (model.currentCheck === "compliance") {
+        document.getElementById("tableDataCompliance").classList.remove("hide");
+      }
     } else {
       parent.classList.add("maximize");
+
+      if (model.currentCheck === "comparison") {
+        document.getElementById("tableDataComparison").classList.add("hide");
+      }
+      else if (model.currentCheck === "compliance") {
+        document.getElementById("tableDataCompliance").classList.add("hide");
+      }
     }
 
     // resize 3D viewer

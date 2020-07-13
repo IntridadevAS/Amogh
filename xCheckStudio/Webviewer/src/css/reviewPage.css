@@ -308,6 +308,11 @@ tr {
   /* z-index: 3; */
 }
 
+.hide
+{
+  display: none;
+}
+
 .viewport {
   position: absolute;
   top: 50px;
