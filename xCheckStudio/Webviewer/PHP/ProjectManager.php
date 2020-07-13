@@ -78,6 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetNodeIdVsComponentId":
             GetNodeIdVsComponentId();
             break;
+        case "ClearAllCheckResultsFromTemp":
+            ClearAllCheckResultsFromTemp();
+            break;
         default:
             echo "No Function Found!";
     }
@@ -332,6 +335,115 @@ function deleteAllSourceInformation($fileName)
     }
 }
 
+/*
+  Remove all check results from temp db
+*/
+function ClearAllCheckResultsFromTemp()
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName'])
+    ) {
+        echo json_encode(array(
+            "Msg" =>  "Invalid input.",
+            "MsgCode" => 0
+        ));
+
+        return;
+    }
+
+    try {
+        // get project name
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
+
+        $tempDBPath = getCheckDatabasePath($projectName, $checkName);
+
+        // open database             
+        $tempDbh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
+        // begin the transaction
+        $tempDbh->beginTransaction();
+
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckGroups;';
+        $tempDbh->exec($command);
+
+        // delete table, if exists
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
+        $tempDbh->exec($command);
+
+        // delete table
+        $command = 'DROP TABLE IF EXISTS ComparisonCheckProperties;';
+        $tempDbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceANotMatchedComponents;';
+        $tempDbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceBNotMatchedComponents;';
+        $tempDbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceCNotMatchedComponents;';
+        $tempDbh->exec($command);
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS SourceDNotMatchedComponents;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckGroups;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckProperties;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckGroups;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckProperties;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckGroups;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckProperties;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
+        $tempDbh->exec($command);
+
+        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
+        $tempDbh->exec($command);
+
+        $tempDbh->commit();
+        $tempDbh = null; //This is how you close a PDO connection                              
+
+    } catch (Exception $e) {
+        echo json_encode(array(
+            "Msg" =>  "Failed",
+            "MsgCode" => 0
+        ));
+        return;
+    }
+
+    echo json_encode(array(
+        "Msg" =>  "success",
+        "MsgCode" => 1
+    ));
+}
+
 /* 
    Save all data
 */
@@ -348,7 +460,7 @@ function SaveAll()
         ));
 
         return;
-    }
+    }    
 
     // get project name
     $projectName = $_POST['ProjectName'];

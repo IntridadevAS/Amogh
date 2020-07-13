@@ -42,37 +42,7 @@ function CheckManager(name) {
 
                 // get datasource definition order in checkcase
                 var dataSourceOrderInCheckCase =  getDataSourceOrderInCheckcase();
-                // var sourceTypesFromCheckCase = checkCaseManager.CheckCase.SourceTypes;
-
-                // var sourcesTraversed = [];
-                // for (var srcId in SourceManagers) {
-                //     var sourceManager = SourceManagers[srcId];
-                //     if ('sourceA' in sourceTypesFromCheckCase &&
-                //         !sourcesTraversed.includes('sourceA') &&
-                //         sourceTypesFromCheckCase['sourceA'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
-                //         dataSourceOrderInCheckCase[srcId] = 1;
-                //         sourcesTraversed.push('sourceA');
-                //     }
-                //     else if ('sourceB' in sourceTypesFromCheckCase &&
-                //         !sourcesTraversed.includes('sourceB') &&
-                //         sourceTypesFromCheckCase['sourceB'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
-                //         dataSourceOrderInCheckCase[srcId] = 2;
-                //         sourcesTraversed.push('sourceB');
-                //     }
-                //     else if ('sourceC' in sourceTypesFromCheckCase &&
-                //         !sourcesTraversed.includes('sourceC') &&
-                //         sourceTypesFromCheckCase['sourceC'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
-                //         dataSourceOrderInCheckCase[srcId] = 3;
-                //         sourcesTraversed.push('sourceC');
-                //     }
-                //     else if ('sourceD' in sourceTypesFromCheckCase &&
-                //         !sourcesTraversed.includes('sourceD') &&
-                //         sourceTypesFromCheckCase['sourceD'].toLowerCase() === sourceManager.SourceType.toLowerCase()) {
-                //         dataSourceOrderInCheckCase[srcId] = 4;
-                //         sourcesTraversed.push('sourceD');
-                //     }
-                // }
-
+       
                 // selected components
                 var sourceManagerA = SourceManagers["a"];
                 var sourceManagerB = SourceManagers["b"];               

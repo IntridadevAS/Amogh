@@ -37,19 +37,7 @@ var CheckModule = {
                     hideBusyIndicator();
 
                     return resolve(false);
-                });
-                // }
-                // else {
-
-                //     if (!silent) {
-                //         showFailedToSavePrompt();
-                //     }
-                //     // remove busy spinner        
-                //     hideBusyIndicator();
-
-                //     return resolve(false);
-                // }
-                // });
+                });              
             }
             catch (error) {
                 console.log(error.message);
