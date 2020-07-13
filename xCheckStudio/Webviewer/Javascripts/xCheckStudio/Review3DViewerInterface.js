@@ -321,7 +321,8 @@ Review3DViewerInterface.prototype.ChangeComponentColor = function (component, ov
         var child = children[id];
 
         // take care of don't color components
-        if (child.SubClass.toLowerCase() in this.DontColorComponents) {
+        if (child.SubClass &&
+            child.SubClass.toLowerCase() in this.DontColorComponents) {
             var dontColorComponent = this.DontColorComponents[child.SubClass.toLowerCase()];
             if (child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
                 component.MainClass.toLowerCase() === dontColorComponent["parentMainClass"]) {
@@ -331,7 +332,8 @@ Review3DViewerInterface.prototype.ChangeComponentColor = function (component, ov
 
         // take care of color overriding from status components
         var overrideColorWithSeverityPreference = false;
-        if (component.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
+        if (component.MainClass &&
+            component.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
             var overrideSeverityColorComponent = this.OverrideSeverityColorComponents[component.MainClass.toLowerCase()];
             // If child component is not mapped (undefined) then child should carry parent component's color
             if (overrideSeverityColorComponent.includes(child.MainClass.toLowerCase()) && child.Status !== 'undefined') {
