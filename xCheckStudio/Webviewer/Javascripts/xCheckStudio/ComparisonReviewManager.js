@@ -44,12 +44,17 @@ function ComparisonReviewManager(comparisonCheckManager,
 
 ComparisonReviewManager.prototype.loadDatasources = function () {
 
+    let projectInfo = xCheckStudio.Util.getProjectInfo();
+    let checkspaceInfo = xCheckStudio.Util.getCheckspaceInfo();
+    let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
+
     // Source A
     if (this.SourceAViewerData &&
         this.SourceAViewerData["endPointUri"] !== undefined) {
 
+        let pathToDataset = checkspacePath + "/SourceA/" + this.SourceAViewerData["endPointUri"];
         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.SourceAViewerData["source"]))) {
-            var viewerInterface = new Review3DViewerInterface(["compare1", this.SourceAViewerData["endPointUri"]],
+            var viewerInterface = new Review3DViewerInterface(["compare1", pathToDataset],
                 this.SourceAComponentIdVsComponentData,
                 this.SourceANodeIdVsComponentData,
                 this.SourceAViewerData["source"],
@@ -60,7 +65,8 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
             model.checks["comparison"]["sourceAViewer"] = viewerInterface;
         }
         else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.SourceAViewerData["source"]))) {
-            var viewerInterface = new ReviewVisioViewerInterface(["compare1", this.SourceAViewerData["endPointUri"]],
+
+            var viewerInterface = new ReviewVisioViewerInterface(["compare1", pathToDataset],
                 this.SourceAComponentIdVsComponentData,
                 this.SourceANodeIdVsComponentData,
                 this.SourceAViewerData["source"]);
@@ -77,9 +83,10 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 
     // Source B
     if (this.SourceBViewerData && this.SourceBViewerData["endPointUri"] !== undefined) {
-        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.SourceBViewerData["source"]))) {
 
-            var viewerInterface = new Review3DViewerInterface(["compare2", this.SourceBViewerData["endPointUri"]],
+        let pathToDataset = checkspacePath + "/SourceB/" + this.SourceBViewerData["endPointUri"];
+        if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.SourceBViewerData["source"]))) {           
+            var viewerInterface = new Review3DViewerInterface(["compare2", pathToDataset],
                 this.SourceBComponentIdVsComponentData,
                 this.SourceBNodeIdVsComponentData,
                 this.SourceBViewerData["source"],
@@ -89,8 +96,8 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 
             model.checks["comparison"]["sourceBViewer"] = viewerInterface;
         }
-        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.SourceBViewerData["source"]))) {
-            var viewerInterface = new ReviewVisioViewerInterface("b", ["compare2", this.SourceBViewerData["endPointUri"]],
+        else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.SourceBViewerData["source"]))) {          
+            var viewerInterface = new ReviewVisioViewerInterface("b", ["compare2", pathToDataset],
                 this.SourceBComponentIdVsComponentData,
                 this.SourceBNodeIdVsComponentData,
                 this.SourceBViewerData["source"]);
@@ -108,8 +115,11 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 
     // Source C
     if (this.SourceCViewerData && this.SourceCViewerData["endPointUri"] !== undefined) {
+
+        let pathToDataset = checkspacePath + "/SourceC/" + this.SourceCViewerData["endPointUri"];
         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.SourceCViewerData["source"]))) {
-            var viewerInterface = new Review3DViewerInterface(["compare3", this.SourceCViewerData["endPointUri"]],
+
+            var viewerInterface = new Review3DViewerInterface(["compare3", pathToDataset],
                 this.SourceCComponentIdVsComponentData,
                 this.SourceCNodeIdVsComponentData,
                 this.SourceCViewerData["source"],
@@ -120,7 +130,8 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
             model.checks["comparison"]["sourceCViewer"] = viewerInterface;
         }
         else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.SourceCViewerData["source"]))) {
-            var viewerInterface = new ReviewVisioViewerInterface(["compare3", this.SourceCViewerData["endPointUri"]],
+           
+            var viewerInterface = new ReviewVisioViewerInterface(["compare3", pathToDataset],
                 this.SourceCComponentIdVsComponentData,
                 this.SourceCNodeIdVsComponentData,
                 this.SourceCViewerData["source"]);
@@ -137,8 +148,10 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
 
     // Source D
     if (this.SourceDViewerData && this.SourceDViewerData["endPointUri"] !== undefined) {
+
+        let pathToDataset = checkspacePath + "/SourceD/" + this.SourceDViewerData["endPointUri"];
         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.SourceDViewerData["source"]))) {
-            var viewerInterface = new Review3DViewerInterface(["compare4", this.SourceDViewerData["endPointUri"]],
+            var viewerInterface = new Review3DViewerInterface(["compare4", pathToDataset],
                 this.SourceDComponentIdVsComponentData,
                 this.SourceDNodeIdVsComponentData,
                 this.SourceDViewerData["source"],
@@ -149,7 +162,7 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
             model.checks["comparison"]["sourceDViewer"] = viewerInterface;
         }
         else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.SourceDViewerData["source"]))) {
-            var viewerInterface = new ReviewVisioViewerInterface(["compare4", this.SourceDViewerData["endPointUri"]],
+            var viewerInterface = new ReviewVisioViewerInterface(["compare4", pathToDataset],
                 this.SourceDComponentIdVsComponentData,
                 this.SourceDNodeIdVsComponentData,
                 this.SourceDViewerData["source"]);

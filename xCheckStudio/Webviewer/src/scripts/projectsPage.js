@@ -1327,6 +1327,13 @@ let editProjectView = {
       url: "PHP/ProjectManager.php"
     }).done(function (msg) {
       if (msg === "true") {
+        // model current project
+        model.currentProject.projectname = editProjectName;
+        model.currentProject.description = editProjectDescription;
+        model.currentProject.type = editProjectType;
+        model.currentProject.status = editProjectStatus;
+        model.currentProject.comments = editComments;
+
         onToggleOverlayDisplay(false);
         document.getElementById("editProject").classList.remove("projectOverlaysOpen");
         _this.cancelEditProject(true);

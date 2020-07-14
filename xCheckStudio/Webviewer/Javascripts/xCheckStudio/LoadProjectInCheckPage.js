@@ -168,7 +168,27 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
     var fileExtension = xCheckStudio.Util.getFileExtension(viewerOption.source.toLowerCase());
     if (xCheckStudio.Util.isSource3D(fileExtension)) {
 
-        xCheckStudio.Util.fileExists(viewerOption.endPointUri).then(function (success) {
+        let projectInfo = xCheckStudio.Util.getProjectInfo();
+        let checkspaceInfo = xCheckStudio.Util.getCheckspaceInfo();
+        let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
+       
+        
+        let pathToDataset = checkspacePath;      
+        if (addedSource.id === "a") {
+            pathToDataset  += "/SourceA/";
+        }
+        else if (addedSource.id === "b") {
+            pathToDataset += "/SourceB/";
+        }
+        else if (addedSource.id === "c") {
+            pathToDataset += "/SourceC/";
+        }
+        else if (addedSource.id === "d") {
+            pathToDataset += "/SourceD/";
+        }        
+        pathToDataset += viewerOption["endPointUri"];       
+
+        xCheckStudio.Util.fileExists(pathToDataset).then(function (success) {
             if (success) {              
 
                 var sourceManager = createSourceManager(addedSource.id, 
@@ -176,7 +196,7 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
                     fileExtension,
                     addedSource.visualizer.id,
                     addedSource.tableData.id,
-                    viewerOption.endPointUri);
+                    pathToDataset);
                 SourceManagers[addedSource.id] = sourceManager;
 
                 // get hiddent components
@@ -268,7 +288,28 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
         filterCheckCases(false);      
     } 
     else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
-        xCheckStudio.Util.fileExists(viewerOption.endPointUri).then(function (success) {
+        
+        let projectInfo = xCheckStudio.Util.getProjectInfo();
+        let checkspaceInfo = xCheckStudio.Util.getCheckspaceInfo();
+        let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
+       
+        
+        let pathToDataset = checkspacePath;      
+        if (addedSource.id === "a") {
+            pathToDataset  += "/SourceA/";
+        }
+        else if (addedSource.id === "b") {
+            pathToDataset += "/SourceB/";
+        }
+        else if (addedSource.id === "c") {
+            pathToDataset += "/SourceC/";
+        }
+        else if (addedSource.id === "d") {
+            pathToDataset += "/SourceD/";
+        }        
+        pathToDataset += viewerOption["endPointUri"];   
+
+        xCheckStudio.Util.fileExists(pathToDataset).then(function (success) {
             if (!success) {
                 return;
             }
@@ -278,7 +319,7 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
                 fileExtension,
                 addedSource.visualizer.id,
                 addedSource.tableData.id,
-                viewerOption.endPointUri);
+                pathToDataset);
             SourceManagers[addedSource.id] = sourceManager;
 
             sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"]).then(function (result) {

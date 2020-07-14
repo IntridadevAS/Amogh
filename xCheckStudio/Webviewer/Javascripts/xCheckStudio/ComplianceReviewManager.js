@@ -42,8 +42,30 @@ function ComplianceReviewManager(complianceCheckManager,
 ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
     if (this.ViewerData["endPointUri"] !== undefined) {
 
+        let projectInfo = xCheckStudio.Util.getProjectInfo();
+        let checkspaceInfo = xCheckStudio.Util.getCheckspaceInfo();
+        let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
+
+        let pathToDataset = checkspacePath;
+        if (this.DataSourceId === "a") {
+            pathToDataset  += "/SourceA/";
+        }
+        else if (this.DataSourceId === "b") {
+            pathToDataset += "/SourceB/";
+        }
+        else if (this.DataSourceId === "c") {
+            pathToDataset += "/SourceC/";
+        }
+        else if (this.DataSourceId === "d") {
+            pathToDataset += "/SourceD/";
+        }
+        else {
+            return;
+        }
+        pathToDataset += this.ViewerData["endPointUri"];
+
         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(this.ViewerData["source"]))) {
-            var viewerInterface = new Review3DViewerInterface([containerId, this.ViewerData["endPointUri"]],
+            var viewerInterface = new Review3DViewerInterface([containerId, pathToDataset],
                 this.ComponentIdVsComponentData,
                 this.NodeIdVsComponentData,
                 this.ViewerData["source"],
@@ -55,7 +77,7 @@ ComplianceReviewManager.prototype.loadDatasource = function (containerId) {
             model.checks["compliance"]["viewer"] = viewerInterface;
         }
         else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.ViewerData["source"]))) {
-            var viewerInterface = new ReviewVisioViewerInterface([containerId, this.ViewerData["endPointUri"]],
+            var viewerInterface = new ReviewVisioViewerInterface([containerId, pathToDataset],
                 this.ComponentIdVsComponentData,
                 this.NodeIdVsComponentData,
                 this.ViewerData["source"]);

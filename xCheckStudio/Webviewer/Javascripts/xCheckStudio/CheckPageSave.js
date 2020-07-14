@@ -430,10 +430,13 @@ var CheckModule = {
             var sourceManager = SourceManagers[srcId];
             var viewerOptions = [];
             if (sourceManager.Is3DSource()) {
-                viewerOptions.push(sourceManager.Webviewer._params.endpointUri);
+
+                let fileName = xCheckStudio.Util.getFileNameWithExtension(sourceManager.Webviewer._params.endpointUri);
+                viewerOptions.push(fileName);
             }
             else if (sourceManager.IsSVGSource()) {
-                viewerOptions.push(sourceManager.ViewerOptions.endpointUri);
+                let fileName = xCheckStudio.Util.getFileNameWithExtension(sourceManager.ViewerOptions.endpointUri);
+                viewerOptions.push(fileName);
             }
             else {
                 continue;

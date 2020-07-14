@@ -18,6 +18,33 @@ var xCheckStudio;
         }
         Util.getFileNameWithoutExtension = getFileNameWithoutExtension;
 
+        function getFileNameWithExtension(fileName) {
+            return fileName.substring(fileName.lastIndexOf('/') + 1);
+        }
+        Util.getFileNameWithExtension = getFileNameWithExtension;
+
+        // Get Project Info
+        function getProjectInfo(fileName) {
+            let projectinfo = localStorage.getItem('projectinfo');
+            if (projectinfo) {
+                return JSON.parse(projectinfo);
+            }
+
+            return null;
+        }
+        Util.getProjectInfo = getProjectInfo;
+
+        // Get Checkspace Info
+        function getCheckspaceInfo(fileName) {
+            let checkspaceInfo = localStorage.getItem('checkinfo');
+            if (checkspaceInfo) {
+                return JSON.parse(checkspaceInfo);
+            }
+
+            return null;
+        }
+        Util.getCheckspaceInfo = getCheckspaceInfo;
+
         function fileExists(fileURL) {
 
             return new Promise(function (resolve, reject) {

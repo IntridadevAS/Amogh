@@ -599,19 +599,27 @@ function populateComparisonModelBrowser(comparison) {
             // create accordion
             createModelBrowserAccordion(comparison.sources, Comparison.MainReviewContainer);
 
+            let projectInfo = xCheckStudio.Util.getProjectInfo();
+            let checkspaceInfo = xCheckStudio.Util.getCheckspaceInfo();
+            let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
+
             for (var i = 0; i < comparison.sources.length; i++) {
+
                 if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
-                    var source = checkResults.sourceInfo.sourceAFileName;
+                    var source = checkResults.sourceInfo.sourceAFileName;                    
 
                     if (viewerOptions['a']['endPointUri'] !== undefined) {
+                        
+                        // viewer options
+                        let pathToDataset = checkspacePath + "/SourceA/" + viewerOptions['a']["endPointUri"];
+                        let options = ["compare1", pathToDataset];
 
                         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['a']["source"]))) {
                             // model browser
                             var modelBrowser = new ReviewComparison3DModelBrowser("a", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare1", viewerOptions['a']['endPointUri']];
+                            // viewer                           
                             var viewerInterface = new ModelBrowser3DViewer("a", source, options);
                             viewerInterface.setupViewer(550, 280);
                           
@@ -631,8 +639,7 @@ function populateComparisonModelBrowser(comparison) {
                             var modelBrowser = new ReviewComparisonVisioModelBrowser("a", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceAComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare1", viewerOptions['a']['endPointUri']];
+                            // viewer                          
                             var viewerInterface = new ModelBrowserVisioViewer("a", source, options);
                             viewerInterface.setupViewer(false);
 
@@ -692,14 +699,17 @@ function populateComparisonModelBrowser(comparison) {
                     var source = checkResults.sourceInfo.sourceBFileName;
 
                     if (viewerOptions['b']['endPointUri'] !== undefined) {
+                        
+                        // viewer options
+                        let pathToDataset = checkspacePath + "/SourceB/" + viewerOptions['b']["endPointUri"];
+                        let options = ["compare2", pathToDataset];
 
                         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['b']["source"]))) {
                             // model browser
                             var modelBrowser = new ReviewComparison3DModelBrowser("b", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare2", viewerOptions['b']['endPointUri']];
+                            // viewer                           
                             var viewerInterface = new ModelBrowser3DViewer("b", source, options);
                             viewerInterface.setupViewer(550, 280);
 
@@ -719,8 +729,7 @@ function populateComparisonModelBrowser(comparison) {
                             var modelBrowser = new ReviewComparisonVisioModelBrowser("b", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceBComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare2", viewerOptions['b']['endPointUri']];
+                            // viewer                           
                             var viewerInterface = new ModelBrowserVisioViewer("b", source, options);
                             viewerInterface.setupViewer(false);
 
@@ -777,14 +786,17 @@ function populateComparisonModelBrowser(comparison) {
                     var source = checkResults.sourceInfo.sourceCFileName;
 
                     if (viewerOptions['c']['endPointUri'] !== undefined) {
+                        
+                        // viewer options
+                        let pathToDataset = checkspacePath + "/SourceC/" + viewerOptions['c']["endPointUri"];
+                        let options = ["compare3", pathToDataset];
 
                         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['c']["source"]))) {
                             // model browser
                             var modelBrowser = new ReviewComparison3DModelBrowser("c", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare3", viewerOptions['c']['endPointUri']];
+                            // viewer                            
                             var viewerInterface = new ModelBrowser3DViewer("c", source, options);
                             viewerInterface.setupViewer(550, 280);
 
@@ -804,8 +816,7 @@ function populateComparisonModelBrowser(comparison) {
                             var modelBrowser = new ReviewComparisonVisioModelBrowser("c", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceCComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare3", viewerOptions['c']['endPointUri']];
+                            // viewer                          
                             var viewerInterface = new ModelBrowserVisioViewer("c", source, options);
                             viewerInterface.setupViewer(false);
 
@@ -863,13 +874,16 @@ function populateComparisonModelBrowser(comparison) {
 
                     if (viewerOptions['d']['endPointUri'] !== undefined) {
 
+                        // viewer options
+                        let pathToDataset = checkspacePath + "/SourceD/" + viewerOptions['d']["endPointUri"];
+                        let options = ["compare4", pathToDataset];
+
                         if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOptions['d']["source"]))) {
                             // model browser
                             var modelBrowser = new ReviewComparison3DModelBrowser("d", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare4", viewerOptions['d']['endPointUri']];
+                            // viewer                           
                             var viewerInterface = new ModelBrowser3DViewer("d", source, options);
                             viewerInterface.setupViewer(550, 280);
 
@@ -889,8 +903,7 @@ function populateComparisonModelBrowser(comparison) {
                             var modelBrowser = new ReviewComparisonVisioModelBrowser("d", source, comparison);
                             modelBrowser.AddModelBrowser(checkResults.SourceDComparisonComponentsHierarchy);
 
-                            // viewer
-                            var options = ["compare4", viewerOptions['d']['endPointUri']];
+                            // viewer                           
                             var viewerInterface = new ModelBrowserVisioViewer("d", source, options);
                             viewerInterface.setupViewer(false);
 
@@ -973,6 +986,28 @@ function populateComplianceModelBrowser(compliance) {
                 createModelBrowserAccordion([compliance.source], Compliance.MainReviewContainer);
               
                 if (viewerOption['endPointUri'] !== undefined) {
+                    let projectInfo = xCheckStudio.Util.getProjectInfo();
+                    let checkspaceInfo = xCheckStudio.Util.getCheckspaceInfo();
+                    let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
+
+                    let pathToDataset = checkspacePath;
+                    if (srcId === "a") {
+                        pathToDataset  += "/SourceA/";
+                    }
+                    else if (srcId === "b") {
+                        pathToDataset  += "/SourceB/";
+                    }
+                    else if (srcId === "c") {
+                        pathToDataset  += "/SourceC/";
+                    }
+                    else if (srcId === "d") {
+                        pathToDataset  += "/SourceD/";
+                    }
+                    else {
+                        return;
+                    }
+                    pathToDataset += viewerOption["endPointUri"];
+                    var options = [Compliance.ViewerContainer, pathToDataset];
 
                     if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOption["source"]))) {
 
@@ -980,8 +1015,7 @@ function populateComplianceModelBrowser(compliance) {
                         var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
                         modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
-                        // viewer
-                        var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
+                        // viewer                        
                         var viewerInterface = new ModelBrowser3DViewer(srcId, compliance.source, options);
                         viewerInterface.setupViewer(550, 280);
 
@@ -1001,8 +1035,7 @@ function populateComplianceModelBrowser(compliance) {
                         var modelBrowser = new ReviewComplianceVisioModelBrowser(srcId, compliance.source, compliance);
                         modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
-                         // viewer
-                         var options = [Compliance.ViewerContainer, viewerOption['endPointUri']];
+                         // viewer                        
                          var viewerInterface = new ModelBrowserVisioViewer(srcId, compliance.source, options);
                          viewerInterface.setupViewer(true);
  
@@ -1026,6 +1059,12 @@ function populateComplianceModelBrowser(compliance) {
                     }
                     else if (srcId === "b") {
                         source = "SourceB";
+                    }
+                    else if (srcId === "c") {
+                        source = "SourceC";
+                    }
+                    else if (srcId === "d") {
+                        source = "SourceD";
                     }
                     else {
                         return;
