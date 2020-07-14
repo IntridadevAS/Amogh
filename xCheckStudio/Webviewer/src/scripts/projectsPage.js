@@ -21,8 +21,15 @@ let controller = {
       projectView.init();
       this.permissions();
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-      if (userinfo.permission === "check" || userinfo.permission === "prep" || userinfo.permission === "Admin")
+      var callerModuleName = localStorage.getItem("FromCheckClick");
+
+      if (userinfo.permission.toLowerCase() === "checker" ||
+        userinfo.permission.toLowerCase() === "admin") {
         model.currentModule = "check";
+        if (callerModuleName == "false") {
+          model.currentModule = "review";
+        }
+      }
       else
         model.currentModule = "review";
 
