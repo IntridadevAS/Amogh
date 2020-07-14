@@ -287,7 +287,12 @@ UserPropertiesForm.prototype.Init = function () {
     }
 
     document.getElementById("userPropertiesApplyBtn" + this.Id).onclick = function () {
-        _this.OnApply();
+
+        if(_this.PropertiesGrid.hasEditData() === true) {
+            _this.PropertiesGrid.saveEditData().then(() => {
+                _this.OnApply();
+            });
+        }
     }
 
     document.getElementById("userPropertiesCloseBtn" + this.Id).onclick = function () {
