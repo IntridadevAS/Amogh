@@ -562,7 +562,7 @@ function hideMenuItems(items) {
     var disabledMenuItem=[];
     // create drawer menu
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if (userinfo.permission.toLowerCase() === 'review') {
+    if (userinfo.permission.toLowerCase() === 'reviewer') {
         disabledMenuItem = ["check", "output", "reports"];
     }
 
@@ -587,7 +587,7 @@ function disableMenuItems(items) {
     var disabledMenuItem=[];
     // create drawer menu
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if (userinfo.permission.toLowerCase() === 'review') {
+    if (userinfo.permission.toLowerCase() === 'reviewer') {
         disabledMenuItem = ["check", "output", "reports"];
     }
 

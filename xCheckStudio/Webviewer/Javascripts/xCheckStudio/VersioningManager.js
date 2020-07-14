@@ -153,9 +153,8 @@ let VersioningManager = {
 
         var userinfo = JSON.parse(localStorage.getItem('userinfo'));
         if (versionData["id"] !== "currentVersion" &&
-            (userinfo.permission === "check" ||
-                userinfo.permission === "prep" ||
-                userinfo.permission === "Admin")) {
+            (userinfo.permission.toLowerCase() === "checker" ||
+                userinfo.permission.toLowerCase() === "admin")) {
 
             htmlInner += `<div class="versionButtons">`;
             htmlInner += `<div class="star" onclick="setFavoriteVersion(${versionData.id})"></div>`;
