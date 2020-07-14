@@ -293,6 +293,9 @@ UserPropertiesForm.prototype.Init = function () {
                 _this.OnApply();
             });
         }
+        else {
+            _this.OnApply();
+        }
     }
 
     document.getElementById("userPropertiesCloseBtn" + this.Id).onclick = function () {
