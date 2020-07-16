@@ -55,7 +55,7 @@ function enableMenuOptions(disabledItems) {
     if (disabledItems.indexOf(MenuBar.RevisionBtn) === -1) {
         // on Revision
         document.getElementById(MenuBar.RevisionBtn).onclick = function () {
-            alert("Not Handled");
+            DataChangeRevisioning.showForm();
         }
     }
     else {

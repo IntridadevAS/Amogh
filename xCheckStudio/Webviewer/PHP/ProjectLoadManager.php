@@ -171,10 +171,13 @@
             // copy hidden components
             CopyHiddenComponents($dbh, $tempDbh);
             
-            // copy hidden components
+            // copy versions
             CopyVersions($dbh, $tempDbh);
 
-            // copy hidden components
+            // copy revisions
+            CopyRevisions($dbh, $tempDbh);
+
+            // copy checkspace comments
             CopyCheckspaceComments($dbh, $tempDbh);
 
             // copy all components
@@ -221,6 +224,55 @@
         "MsgCode" => 1));                      
         return;
     }
+
+function  CopyRevisions($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM DataChangeRevisions;");
+    if ($results) {
+
+        $command = 'DROP TABLE IF EXISTS DataChangeRevisions;';
+        $toDbh->exec($command);
+        $command = 'CREATE TABLE IF NOT EXISTS DataChangeRevisions(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            description TEXT,
+            comments TEXT,
+            createdById TEXT,
+            createdByAlias TEXT,
+            createdOn TEXT,
+            IsFav INTEGER,
+            dataSourceName TEXT,       
+            dataSourceType TEXT)';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO DataChangeRevisions(
+            id,
+            name, 
+            description, 
+            comments,
+            createdById, 
+            createdByAlias,
+            createdOn, 
+            IsFav,
+            dataSourceName,
+            dataSourceType) VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['description'],
+                $row['comments'],
+                $row['createdById'],
+                $row['createdByAlias'],
+                $row['createdOn'],
+                $row['IsFav'],
+                $row['dataSourceName'],
+                $row['dataSourceType']
+            ));
+        }
+    }
+}
 
 function  CopyVersions($fromDbh, $toDbh)
 {

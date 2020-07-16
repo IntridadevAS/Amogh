@@ -631,6 +631,9 @@ function SaveAll()
         // save versions
         SaveVersionsFromTemp($tempDbh, $dbh);
 
+        // Save revisions
+        SaveRevisionsFromTemp($tempDbh, $dbh);
+
         // save comments from temp
         SaveCheckspaceCommentsFromTemp($tempDbh, $dbh);      
 
@@ -956,6 +959,60 @@ function CreateCheckSpaceDBonSave()
 
     echo "success";
     return;
+}
+
+/* 
+   Save data revisions
+*/
+function SaveRevisionsFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM DataChangeRevisions;");
+
+    // create table
+    $command = 'DROP TABLE IF EXISTS DataChangeRevisions;';
+    $dbh->exec($command);
+
+    if ($selectResults) {
+        $command = 'CREATE TABLE IF NOT EXISTS DataChangeRevisions(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            name TEXT,
+            description TEXT,
+            comments TEXT,
+            createdById TEXT,
+            createdByAlias TEXT,
+            createdOn TEXT,
+            IsFav INTEGER,
+            dataSourceName TEXT,       
+            dataSourceType TEXT)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare("INSERT INTO DataChangeRevisions(
+        id,
+        name, 
+        description, 
+        comments,
+        createdById, 
+        createdByAlias,
+        createdOn, 
+        IsFav,
+        dataSourceName,
+        dataSourceType) VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['name'],
+                $row['description'],
+                $row['comments'],
+                $row['createdById'],
+                $row['createdByAlias'],
+                $row['createdOn'],
+                $row['IsFav'],
+                $row['dataSourceName'],
+                $row['dataSourceType']
+            ));
+        }
+    }
 }
 
 /* 

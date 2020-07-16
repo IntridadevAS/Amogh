@@ -23,6 +23,16 @@
   <!-- UI blocking overlay -->
   <div id="uiBlockingOverlay" class="overlay" style="display: block"></div>
   
+  <!-- version history overlay -->
+  <div id="DataChangeRevisioningPopup" class="popup" style="z-index: 201;">
+    <iframe id="DataChangeRevisioningIFrame" style="width: 100%; height:100%"></iframe>
+  </div>
+  
+  <!-- create version history overlay -->
+  <div id="createRevisioningPopup" class="popup" style="z-index: 202;">
+    <iframe id="createRevisionIFrame" style="width: 100%; height:100%"></iframe>
+  </div>
+
   <div id="busyIndicatorCancel" class="busyIndicatorCancel">Cancel</div>
 
   <!-- reference selection overlay -->
@@ -3404,6 +3414,7 @@
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperator.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageDataVault.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeRevisioning.js"></script>
 
   <script>
     $("#loadIndicator").dxLoadPanel({
@@ -3684,6 +3695,36 @@
             window.location = "landingPage.html";
           }
         }
+
+            // reference related functions
+    function closeDataChangeRevisioningForm() {
+      DataChangeRevisioning.closeForm();
+    }
+
+    function showCreateRevisionForm() {
+      DataChangeRevisioning.showCreateRevisionForm();
+    }
+
+    function closeCreateRevisionForm() {
+      DataChangeRevisioning.closeCreateRevisioninForm();
+    }
+
+    function restoreRevisions() {
+      DataChangeRevisioning.restoreRevisions();
+    }
+
+    function createRevision(revisionData) {
+      DataChangeRevisioning.createRevision(revisionData);
+    }    
+
+    function setFavoriteRevision(revisionId) {
+      DataChangeRevisioning.setFavoriteRevision(revisionId);
+    }
+
+    function deleteRevision(revisionId) {
+      DataChangeRevisioning.deleteRevision(revisionId);
+    }
+
   </script>
 </body>
 
