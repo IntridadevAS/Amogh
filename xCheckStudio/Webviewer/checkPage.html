@@ -23,6 +23,138 @@
   <!-- UI blocking overlay -->
   <div id="uiBlockingOverlay" class="overlay" style="display: block"></div>
   
+  <!-- version history overlay -->
+  <div id="DataChangeRevisioningPopup" class="popup" style="z-index: 201;">
+    <iframe id="DataChangeRevisioningIFrame" style="width: 100%; height:100%"></iframe>
+  </div>
+  
+  <!-- Data change template form -->
+  <div id="dataChangeTemplateForm" class="dataChangeTemplateForm">
+    <div id="dataChangeTemplateFormCaptionBar" class="dataChangeTemplateFormCaptionBar">
+      <div class="definePropertyHighlightFormCaption">Data Change Highlight</div>
+      <img id="dataChangeTemplateFormCloseBtn" class="dataChangeTemplateFormCloseBtn"
+        src="public\symbols\CloseBlack.svg" />
+    </div>
+    <div class="dataChangeTemplateFormArea">
+      <table style="width: 100%; height: 180px; overflow: hidden;">
+        <tr style="overflow: hidden;">
+          <td class="dataChangeTemplateFormToolsColumn" style="overflow: hidden;">
+
+            <div class="dataChangeTemplateFormReset">
+              <!-- <span class="tooltip" data-tooltip="Reset"></span> -->
+              <img id="dataChangeTemplateFormReset" src="public\symbols\Clear-Filled.svg"
+                style="width: 40px; height: 40px;" />
+            </div>
+            <div class="dataChangeTemplateFormResetText">Reset</div>
+
+            <div class="dataChangeTemplateFormRemove ">
+              <!-- <span class="tooltip" data-tooltip="Clear"></span> -->
+              <img id="dataChangeTemplateFormRemove" style="width: 40px; height: 40px;"
+                src="public\symbols\MarkupDeleteBlack.svg" />
+            </div>
+
+            <div class="dataChangeTemplateFormRemoveText">Delete</div>
+          </td>
+          <td class="dataChangeTemplateFormControlsColumn" style="overflow: hidden;">
+            <div style="height: 100%; width:100%; position: relative;">
+              <div id="dataChangeTemplateSourceLabel" class="dataChangeTemplateSourceLabel">Source</div>
+              <div id="dataChangeTemplateSourceSelect" class="dataChangeTemplateSourceSelect"></div>
+              <div id="dataChangeTemplateTargetLabel" class="dataChangeTemplateTargetLabel">Target</div>
+              <div id="dataChangeTemplateTargetSelect" class="dataChangeTemplateTargetSelect"></div>
+              <div id="dataChangeTemplateHistoryLabel" class="dataChangeTemplateHistoryLabel">Change History</div>
+              <div id="dataChangeTemplateHistorySelect" class="dataChangeTemplateHistorySelect"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="dataChangeTemplateFormBottomBar">
+      <div id="dataChangeTemplatesDL" class="dataChangeTemplatesDL"></div>
+      <div id="dataChangeTemplateNameBox" class="dataChangeTemplateNameBox"></div>
+      <div id="dataChangeTemplateFormOptions" class="dataChangeTemplateFormOptions">Options</div>
+
+      <!-- <div class="deletePropertyHighlightBtn tooltipHov">
+        <span class="tooltip" data-tooltip="Delete Property Highlight Template"></span>
+        <img id="deletePropertyHighlightBtna" src="public\symbols\MarkupDeleteBlack.svg"
+          style="width: 25px; height: 25px;" />
+      </div> -->
+
+      <div id="dataChangeTemplateFormApplyBtn" class="dataChangeTemplateFormApplyBtn">Apply</div>      
+    </div>
+  </div>
+
+  <!-- Data change Template options form -->
+  <div id="dataChangeTemplateOptionsForm" class="dataChangeTemplateOptionsForm">
+    <div id="dataChangeTemplateOptionsFormCaptionBar" class="dataChangeTemplateOptionsFormCaptionBar">
+      <div class="dataChangeTemplateOptionsFormCaption">Data Change Highlight Options</div>
+      <img id="dataChangeTemplateOptionsCloseBtn" class="dataChangeTemplateOptionsCloseBtn" src="public\symbols\CloseBlack.svg" />
+    </div>
+    
+    <div class="dataChangeTemplateFormArea">
+      <table style="width: 100%; height: 140px; overflow: hidden;">
+        <tr style="overflow: hidden;">
+          <td class="dataChangeOptionsToolColumn" style="overflow: hidden; position: relative; text-align: center;">
+        
+            <!-- Add btn -->
+            <div class="dataChangeOptionsMatchWithAdd">
+              <img id="dataChangeOptionsMatchWithAdd" src="public\symbols\Add-Filled.svg" style="width: 30px; height: 30px;" />
+            </div>
+            <div id="dataChangeOptionsAddMatchWithText" class="dataChangeOptionsAddMatchWithText">Add</div>
+            
+            <!-- Clear btn -->
+            <div class="dataChangeOptionsMatchWithClear">
+              <img id="dataChangeOptionsMatchWithClear" style="width: 30px; height: 30px;" src="public\symbols\Clear-Filled.svg" />
+            </div>        
+            <div id="dataChangeOptionsClearMatchWithText" class="dataChangeOptionsClearMatchWithText">Clear</div>
+
+          </td>
+          <td class="dataChangeOptionsMatchwithGrid" style="overflow: hidden;">
+            <div id="dataChangeOptionsMatchwithGrid" style="height: 140px; overflow:hidden"> </div>
+          </td>
+        </tr>
+      </table>
+      <div class="dataChangeOptionsListByArea">
+        <div id="dataChangeOptionsListByLabel" class="dataChangeOptionsListByLabel">Group By</div>
+        <div id="dataChangeOptionsListBySelect" class="dataChangeOptionsListBySelect"></div>
+      </div>
+    </div>
+
+    <div id="dataChangeOptionsBottomBar" class="dataChangeOptionsBottomBar">
+      <div id="dataChangeOptionsApplyBtn" class="dataChangeOptionsApplyBtn">Apply</div>
+    </div>
+  </div>
+
+  <!-- Data change template select revision form -->
+  <div id="selectRevisionForm" class="selectRevisionForm">
+    <div id="selectRevisionCaptionBar" class="selectRevisionCaptionBar">
+      <div id="selectRevisionCaption" class="selectRevisionCaption">Select Revision</div>
+      <img id="selectRevisionCloseBtn" class="selectRevisionCloseBtn" src="public\symbols\CloseBlack.svg" />
+    </div>
+  
+    <div class="selectRevisionControlsArea">
+         <div class="useCurrentRevision">
+            <div id="useCurrentRevisionCB" class="useCurrentRevisionCB"></div>
+          </div>
+          <div class="selectRevisionArea">
+            <div id="srfDatasetTypeSelectLabel" class="srfDatasetTypeSelectLabel">Dataset Type</div>
+            <div id="srfDatasetTypeSelect" class="srfDatasetTypeSelect"></div>
+            <div id="srfDatasetNameSelectLabel" class="srfDatasetNameSelectLabel">Dataset Name</div>
+            <div id="srfDatasetNameSelect" class="srfDatasetNameSelect"></div>
+            <div id="srfRevSelectLabel" class="srfRevSelectLabel">Revision</div>
+            <div id="srfRevSelect" class="srfRevSelect"></div>
+          </div>
+    </div>
+  
+    <div id="selectRevisionBottomBar" class="dataChangeOptionsBottomBar">
+      <div id="selectRevisionApplyBtn" class="dataChangeOptionsApplyBtn">Apply</div>
+    </div>
+  </div>
+
+  <!-- create version history overlay -->
+  <div id="createRevisioningPopup" class="popup" style="z-index: 202;">
+    <iframe id="createRevisionIFrame" style="width: 100%; height:100%"></iframe>
+  </div>
+
   <div id="busyIndicatorCancel" class="busyIndicatorCancel">Cancel</div>
 
   <!-- reference selection overlay -->
@@ -1772,22 +1904,26 @@
           <div id="tableContainera" class="tableContainer">
             <!-- tableA           -->
             <div class="tableHeaderArea">
-              <div id="tableHeaderNamea" class="tableHeaderNameRow"> </div>
+              <div class="tableHeaderNameRow">
+                <div id="tableHeaderNamea"></div>
+                <img id="databaseViewBtna" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+              </div>
               <div id="tableHeaderControla" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitcha" class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitcha" class="listTypeSwitch"> </div>
 
-                <div id="groupTemplateSelecta" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitcha" class="groupHighlightSwitch"> </div>
+                <div id="groupTemplateSelecta" class="groupTemplateSelect"> </div>                
+                <div id="groupHighlightTypeSelecta" class="groupHighlightTypeSelect"> </div>
                 <img id="highlightSelectionBtna" class="highlightSelectionBtn"
                   src="public\symbols\Highlight Selection-Off.svg" />
-
+               
               </div>
             </div>
             <div class="tableArea">
               <div id="tableDataA" style="position: relative;"></div>
             </div>
             <div id="itemCountA" class="itemCountClass"></div>
+            <div id="revisionNamea" class="revisionNameDiv"></div>
 
             <div id="tableViewActiona" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
@@ -2127,6 +2263,27 @@
 
             <!-- visualizerA -->
             <div id="visualizerA" class="tempContainer"> </div>
+            
+            <!-- database view container -->
+            <div id="databaseViewera" class="databaseViewer"> </div>
+            <div data-options="dxTemplate : { name: 'databaseViewTabpage' } ">
+            </div>
+            
+            <!-- Select display tables Form -->
+            <div id="selectDisplayTablesForma" class="selectDisplayTablesForm">
+              <div id="selectDisplayTablesCaptionBara" class="selectDisplayTablesCaptionBar">
+                <div class="selectDisplayTablesCaption">Display Tables</div>
+                <img id="selectDisplayTablesCloseBtna" class="selectDisplayTablesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="selectDisplayTablesFormArea">
+                <div id="selectDisplayTablesTagBoxa" class="selectDisplayTablesTagBox"> </div>
+              </div>
+              <div class="selectDisplayTablesBottomBar">
+                <div id="DisplayTablesSelectAllCBa" class="DisplayTablesSelectAllCB"></div>
+                <div id="closeDisplayBtna" class="closeDisplayBtn">Close Display</div>
+                <div id="selectDisplayTablesApplyBtna" class="selectDisplayTablesApplyBtn">Display</div>
+              </div>
+            </div>                                                       
 
           </div>
         </div>
@@ -2134,13 +2291,16 @@
           <div id="tableContainerb" class="tableContainer">
             <!-- tableB -->
             <div class="tableHeaderArea">
-              <div id="tableHeaderNameb" class="tableHeaderNameRow"> </div>
+              <div class="tableHeaderNameRow">
+                <div id="tableHeaderNameb"></div>
+                <img id="databaseViewBtnb" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+              </div>
               <div id="tableHeaderControlb" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitchb" class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitchb" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelectb" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitchb" class="groupHighlightSwitch"> </div>
+                <div id="groupHighlightTypeSelectb" class="groupHighlightTypeSelect"> </div>
                 <img id="highlightSelectionBtnb" class="highlightSelectionBtn"
                   src="public\symbols\Highlight Selection-Off.svg" />
 
@@ -2151,6 +2311,7 @@
               <div id="tableDataB" style="position: relative"> </div>
             </div>
             <div id="itemCountB" class="itemCountClass"></div>
+            <div id="revisionNameb" class="revisionNameDiv"></div>
 
             <div id="tableViewActionb" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
@@ -2478,6 +2639,28 @@
 
             <!-- visualizerB -->
             <div id="visualizerB" class="tempContainer"> </div>
+            
+            <!-- database view container -->
+            <div id="databaseViewerb" class="databaseViewer"> </div>
+            <div data-options="dxTemplate : { name: 'databaseViewTabpage' } ">
+            </div>
+            
+            <!-- Select display tables Form -->
+            <div id="selectDisplayTablesFormb" class="selectDisplayTablesForm">
+              <div id="selectDisplayTablesCaptionBarb" class="selectDisplayTablesCaptionBar">
+                <div class="selectDisplayTablesCaption">Display Tables</div>
+                <img id="selectDisplayTablesCloseBtnb" class="selectDisplayTablesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="selectDisplayTablesFormArea">
+                <div id="selectDisplayTablesTagBoxb" class="selectDisplayTablesTagBox"> </div>
+              </div>
+              <div class="selectDisplayTablesBottomBar">
+                <div id="DisplayTablesSelectAllCBb" class="DisplayTablesSelectAllCB"></div>
+                <div id="closeDisplayBtnb" class="closeDisplayBtn">Close Display</div>
+                <div id="selectDisplayTablesApplyBtnb" class="selectDisplayTablesApplyBtn">Display</div>
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -2485,13 +2668,16 @@
           <div id="tableContainerc" class="tableContainer">
             <!-- tableC -->
             <div class="tableHeaderArea">
-              <div id="tableHeaderNamec" class="tableHeaderNameRow"> </div>
+              <div class="tableHeaderNameRow">
+                <div id="tableHeaderNamec"></div>
+                <img id="databaseViewBtnc" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+              </div>
               <div id="tableHeaderControlc" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitchc" class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitchc" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelectc" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitchc" class="groupHighlightSwitch"> </div>
+                <div id="groupHighlightTypeSelectc" class="groupHighlightTypeSelect"> </div>
                 <img id="highlightSelectionBtnc" class="highlightSelectionBtn"
                   src="public\symbols\Highlight Selection-Off.svg" />
               </div>
@@ -2501,6 +2687,7 @@
               <div id="tableDataC" style="position: relative"> </div>
             </div>
             <div id="itemCountC" class="itemCountClass"></div>
+            <div id="revisionNamec" class="revisionNameDiv"></div>
 
             <div id="tableViewActionc" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
@@ -2833,20 +3020,44 @@
             </div>
 
             <div id="visualizerC" class="tempContainer"> </div>
-
-          </div>
+            
+            <!-- database view container -->
+            <div id="databaseViewerc" class="databaseViewer"> </div>
+            <div data-options="dxTemplate : { name: 'databaseViewTabpage' } ">
+            </div>
+            
+            <!-- Select display tables Form -->
+            <div id="selectDisplayTablesFormc" class="selectDisplayTablesForm">
+              <div id="selectDisplayTablesCaptionBarc" class="selectDisplayTablesCaptionBar">
+                <div class="selectDisplayTablesCaption">Display Tables</div>
+                <img id="selectDisplayTablesCloseBtnc" class="selectDisplayTablesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="selectDisplayTablesFormArea">
+                <div id="selectDisplayTablesTagBoxc" class="selectDisplayTablesTagBox"> </div>
+              </div>
+              <div class="selectDisplayTablesBottomBar">
+                <div id="DisplayTablesSelectAllCBc" class="DisplayTablesSelectAllCB"></div>
+                <div id="closeDisplayBtnc" class="closeDisplayBtn">Close Display</div>
+                <div id="selectDisplayTablesApplyBtnc" class="selectDisplayTablesApplyBtn">Display</div>
+              </div>
+            </div>
+            
+            </div>
         </div>
         <div id="viewPanelD" class="viewPanel hide">
           <div id="tableContainerd" class="tableContainer">
             <!-- tableD -->
             <div class="tableHeaderArea">
-              <div id="tableHeaderNamed" class="tableHeaderNameRow"> </div>
+              <div class="tableHeaderNameRow">
+                <div id="tableHeaderNamed"></div>
+                <img id="databaseViewBtnd" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+              </div>
               <div id="tableHeaderControld" class="tableHeaderControlRow">
                 <div id="includeMemberItemsSwitchd" class="includeMemberItemsSwitch"> </div>
                 <div id="listTypeSwitchd" class="listTypeSwitch"> </div>
 
                 <div id="groupTemplateSelectd" class="groupTemplateSelect"> </div>
-                <div id="groupHighlightSwitchd" class="groupHighlightSwitch"> </div>
+                <div id="groupHighlightTypeSelectd" class="groupHighlightTypeSelect"> </div>
                 <img id="highlightSelectionBtnd" class="highlightSelectionBtn"
                   src="public\symbols\Highlight Selection-Off.svg" />
               </div>
@@ -2856,6 +3067,7 @@
               <div id="tableDataD" style="position: relative"> </div>
             </div>
             <div id="itemCountD" class="itemCountClass"></div>
+            <div id="revisionNamed" class="revisionNameDiv"></div>
 
             <div id="tableViewActiond" class="tableViewAction">
               <img src="public/symbols/Table Views.svg" style="width: 30px; height: 50px;" />
@@ -3186,7 +3398,29 @@
             </div>
 
             <div id="visualizerD" class="tempContainer"> </div>
-          </div>
+
+            <!-- database view container -->
+            <div id="databaseViewerd" class="databaseViewer"> </div>
+            <div data-options="dxTemplate : { name: 'databaseViewTabpage' } ">
+            </div>
+            
+            <!-- Select display tables Form -->
+            <div id="selectDisplayTablesFormd" class="selectDisplayTablesForm">
+              <div id="selectDisplayTablesCaptionBard" class="selectDisplayTablesCaptionBar">
+                <div class="selectDisplayTablesCaption">Display Tables</div>
+                <img id="selectDisplayTablesCloseBtnd" class="selectDisplayTablesCloseBtn" src="public\symbols\CloseBlack.svg" />
+              </div>
+              <div class="selectDisplayTablesFormArea">
+                <div id="selectDisplayTablesTagBoxd" class="selectDisplayTablesTagBox"> </div>
+              </div>
+              <div class="selectDisplayTablesBottomBar">
+                <div id="DisplayTablesSelectAllCBd" class="DisplayTablesSelectAllCB"></div>
+                <div id="closeDisplayBtnd" class="closeDisplayBtn">Close Display</div>
+                <div id="selectDisplayTablesApplyBtnd" class="selectDisplayTablesApplyBtn">Display</div>
+              </div>
+            </div>
+            
+            </div>
         </div>
 
         <div class="checkTogglesContainer">
@@ -3230,7 +3464,7 @@
       right: 0;
       bottom: 0;
       overflow: auto;
-    }
+    }    
 
     .dx-fileuploader-button {
       display: none !important;
@@ -3404,6 +3638,8 @@
   <script type="text/javascript" src="Javascripts\Annotations\AnnotationOperator.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageDataVault.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeRevisioning.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeTemplateForm.js"></script>
 
   <script>
     $("#loadIndicator").dxLoadPanel({
@@ -3684,6 +3920,36 @@
             window.location = "landingPage.html";
           }
         }
+
+            // reference related functions
+    function closeDataChangeRevisioningForm() {
+      DataChangeRevisioning.closeForm();
+    }
+
+    function showCreateRevisionForm() {
+      DataChangeRevisioning.showCreateRevisionForm();
+    }
+
+    function closeCreateRevisionForm() {
+      DataChangeRevisioning.closeCreateRevisioninForm();
+    }
+
+    function restoreRevisions() {
+      DataChangeRevisioning.restoreRevisions();
+    }
+
+    function createRevision(revisionData) {
+      DataChangeRevisioning.createRevision(revisionData);
+    }    
+
+    function setFavoriteRevision(revisionId) {
+      DataChangeRevisioning.setFavoriteRevision(revisionId);
+    }
+
+    function deleteRevision(revisionId) {
+      DataChangeRevisioning.deleteRevision(revisionId);
+    }
+
   </script>
 </body>
 

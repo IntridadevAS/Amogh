@@ -29,8 +29,10 @@ function SCManager(id,
     this.IncludeMemberItemsSwitch;
     this.ListTypeSwitch;
     this.GroupTemplateSelect;
-    this.GroupHighlightSwitch;
+   
+    this.GroupHighlightTypeSelect;
     this.HighlightSelectionBtn;
+    this.GroupDatabaseViewBtn;
 }
 
 // inherit from parent
@@ -417,39 +419,55 @@ SCManager.prototype.InitGroupViewControls = function(){
 
     }).dxSelectBox("instance");
 
-    this.GroupHighlightSwitch = $("#groupHighlightSwitch" + this.Id).dxSwitch({
-        value: false,
+    // group view type select box
+    let groupTypes = ["Group", "Highlight", "Data Change Highlight"];
+    this.GroupHighlightTypeSelect = $("#groupHighlightTypeSelect" + this.Id).dxSelectBox({
+        items: groupTypes,
         visible: false,
-        switchedOffText: "Group",
-        switchedOnText: "Highlight",
-        onValueChanged: function (e) {
+        value: groupTypes[0],
+        itemTemplate: function (data) {
+            return "<div class='custom-item' title='" + data + "'>" + data + "</div>";
+        },
+        onValueChanged: function (e) {            
+            model.views[_this.Id].groupView.ActiveGroupViewType = e.value;
 
-            model.views[_this.Id].groupView.IsHighlightByPropertyActive = e.value;
-            if (e.value === false) {
+            if (e.value === "Group") {
                 _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
             }
-            else {
-                _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));
+            else if (e.value === "Highlight") {
+                _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));                
+            }
+            else if (e.value === "Data Change Highlight") {
+                _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.dataChangeHighlightTemplates)));
             }
 
             model.views[_this.Id].groupView.Clear();
         }
-    }).dxSwitch("instance");
+    }).dxSelectBox("instance");
 
+    // highlight selections btn
     this.HighlightSelectionBtn = document.getElementById("highlightSelectionBtn" + this.Id);
-    this.HighlightSelectionBtn.onclick = function(){
+    this.HighlightSelectionBtn.onclick = function () {
         model.views[_this.Id].groupView.ApplyPropertyHighlightColor();
+    }
+
+    //Group Database View Btn
+    this.GroupDatabaseViewBtn = document.getElementById("databaseViewBtn" + this.Id);
+    this.GroupDatabaseViewBtn.onclick = function () {
+        model.views[_this.Id].groupView.OnGroupDatabaseViewClick();
     }
 }
 
 SCManager.prototype.ShowGroupViewControls = function (show) {
     this.GroupTemplateSelect.option("visible", show);
-    this.GroupHighlightSwitch.option("visible", show);
+    this.GroupHighlightTypeSelect.option("visible", show);
     if (show) {
         this.HighlightSelectionBtn.style.display = "block";
+        this.GroupDatabaseViewBtn.style.display = "block";        
     }
     else {
         this.HighlightSelectionBtn.style.display = "none";
+        this.GroupDatabaseViewBtn.style.display = "none"; 
     }
 
     this.GroupTemplateSelect.option("value", null);
@@ -1167,7 +1185,11 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
         var component = allComponents[nodeId];
 
         // var nodeId = Number(component.NodeId);
-        var parentNodeId = Number(component.ParentNodeId);
+        var parentNodeId = null;
+        if (component.ParentNodeId !== undefined &&
+            component.ParentNodeId !== null) {
+            parentNodeId = Number(component.ParentNodeId);
+        }
         var componentObj = new GenericComponent(component.Name,
             component.MainComponentClass,
             component.SubComponentClass,

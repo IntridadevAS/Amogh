@@ -93,7 +93,8 @@ DefineGroupsForm.prototype.Init = function () {
                 _this.PopulateTemplateGrid();
 
                 var sourceManager = SourceManagers[_this.Id];
-                if (sourceManager.GroupHighlightSwitch.option("value") === false) {
+                let groupViewType = sourceManager.GroupHighlightTypeSelect.option("value");
+                if (groupViewType.toLowerCase() === "group") {
                     sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
                 }
 
@@ -275,7 +276,8 @@ DefineGroupsForm.prototype.OnApply = function () {
     model.propertyGroups[templateName] = group;
 
     var sourceManager = SourceManagers[this.Id];
-    if (sourceManager.GroupHighlightSwitch.option("value") === false) {
+    let groupViewType = sourceManager.GroupHighlightTypeSelect.option("value");
+    if (groupViewType.toLowerCase() === "group") {
         SourceManagers[this.Id].GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
     }
     

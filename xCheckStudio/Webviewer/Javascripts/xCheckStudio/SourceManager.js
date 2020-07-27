@@ -43,10 +43,10 @@ function SourceManager(id, sourceName, sourceType) {
             return GlobalConstants.SourceBComponentsTable;
         }
         else if (this.Id === "c") {
-            return  GlobalConstants.SourceCComponentsTable;
+            return GlobalConstants.SourceCComponentsTable;
         }
         else if (this.Id === "d") {
-            return  GlobalConstants.SourceDComponentsTable;
+            return GlobalConstants.SourceDComponentsTable;
         }
     }
 
@@ -63,6 +63,10 @@ function SourceManager(id, sourceName, sourceType) {
         else if (this.Id === "d") {
             return "SourceDProperties"
         }
+    }
+
+    SourceManager.prototype.GetAllSourceProperties = function () {
+        return [];
     }
 }
 

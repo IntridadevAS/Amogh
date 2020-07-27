@@ -10,7 +10,9 @@ let model = {
   // datasetTypes: undefined, // used when loadSavedCheckspace is true. This is an array of loaded dataset types from saved data
   checkcaseSupportedTypes: undefined, // currently used when loadSavedCheckspace is true. This is an array of dataset types supported by selected checkcase
   propertyGroups: {},
-  propertyHighlightTemplates: {},
+  propertyHighlightTemplates: {}, 
+  dataChangeHighlightTemplates: {},
+  // dataChangeTemplateConfigs: {},
   views: {
     a: {
       id: "a",
