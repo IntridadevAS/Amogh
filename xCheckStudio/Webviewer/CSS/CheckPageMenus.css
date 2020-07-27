@@ -110,7 +110,9 @@
   
   .markupViewsCaption, .userPropertiesCaption, 
   .editUserPropertiesCaption, .clearUserPropertiesCaption,
-  .defineGroupsFormCaption, .definePropertyHighlightFormCaption
+  .defineGroupsFormCaption, .definePropertyHighlightFormCaption,
+  .dataChangeTemplateOptionsFormCaption, .selectRevisionCaption,
+  .selectDisplayTablesCaption
   {
   color: black;
   top: 5px;
@@ -306,7 +308,8 @@
 
 .userPropertiesFormCaptionBar, .editUserPropertiesFormCaptionBar,
 .clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar,
-.definePropertyHighlightFormCaptionBar
+.definePropertyHighlightFormCaptionBar, .dataChangeTemplateOptionsFormCaptionBar,
+.selectRevisionCaptionBar, .selectDisplayTablesCaptionBar
 {
   height: 30px;
   width: 100%;
@@ -314,7 +317,7 @@
 }
 
 .userPropertiesFormGridArea, .defineGroupsFormGridArea,
-.definePropertyHighlightFormGridArea
+.definePropertyHighlightFormGridArea, .dataChangeTemplateFormArea
 {
   height: 180px;
   width: 100%;  
@@ -346,7 +349,7 @@
 }
 
 .userPropertiesFormControlColumn, .defineGroupsFormControlColumn,
-.definePropertyHighlightFormControlColumn
+.definePropertyHighlightFormControlColumn, .dataChangeTemplateFormControlColumn
 {
   /* position: absolute; */
   left:0px;
@@ -388,9 +391,17 @@
 }
 
 .userPropertiesFormBottomBar, .editUserPropertiesFormBottomBar,
-.clearUserPropertiesFormBottomBar
+.clearUserPropertiesFormBottomBar, .dataChangeOptionsBottomBar,
+.selectRevisionBottomBar
 {
   height: 40px;
+  width: 100%;
+  padding: 2px;
+}
+
+.selectDisplayTablesBottomBar
+{
+  height: 70px;
   width: 100%;
   padding: 2px;
 }
@@ -419,7 +430,8 @@
 
 .userPropertiesApplyBtn, .editUserPropertiesApplyBtn,
 .clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn,
-.definePropertyHighlightFormApplyBtn
+.definePropertyHighlightFormApplyBtn, .dataChangeOptionsApplyBtn,
+.selectRevisionApplyBtn, .selectDisplayTablesApplyBtn
 {  
   position: absolute;
   right: 2px;
@@ -434,6 +446,7 @@
   line-height: 26px;
   opacity: 0.75;
   cursor: pointer;
+  color: white
 }
 
 .editUserPropertiesClearBtn
@@ -461,14 +474,18 @@
 .defineGroupsFormCloseBtn:hover, .defineGroupsFormAdd:hover,
 .defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover,
 .definePropertyHighlightFormCloseBtn:hover, .definePropertyHighlightFormAdd:hover,
-.definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover
+.definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover,
+.dataChangeTemplateFormReset:hover, .dataChangeTemplateFormRemove:hover,
+.dataChangeTemplateOptionsCloseBtn:hover, .selectRevisionCloseBtn:hover,
+.selectDisplayTablesCloseBtn:hover, .selectDisplayTablesApplyBtn:hover
 {
   opacity: 1;
 }
 
 .userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
 .clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn,
-.definePropertyHighlightFormCloseBtn
+.definePropertyHighlightFormCloseBtn, .dataChangeTemplateOptionsCloseBtn, 
+.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn
 { 
   font-size: 12px;
   position: absolute;
@@ -682,4 +699,456 @@
   line-height: 1.7;
   display: inline-block;
   vertical-align: middle;
+}
+
+.dataChangeTemplateForm
+{
+    position: absolute; 
+    display: none;
+    z-index: 101;
+    width: 500px;
+    background: white;
+    right: 0px;
+    border: 1px solid black;  
+}
+
+.dataChangeTemplateFormCaptionBar{
+  height: 30px;
+  width: 100%;
+  border-bottom: 1px solid rgb(25.5, 25.5, 25.5);
+}
+
+.dataChangeTemplateFormCaption
+  {
+    color: black;
+    top: 5px;
+    left: 4px;
+    position: absolute;
+  }
+
+  .dataChangeTemplateFormCloseBtn{     
+    font-size: 12px;
+    position: absolute;
+    right : 2px;
+    width : 25px;
+    height : 25px;
+    opacity: 0.75;
+    cursor: pointer;
+  }
+
+  .dataChangeTemplateFormCloseBtn:hover,
+  .dataChangeTemplateFormApplyBtn:hover,
+  .dataChangeOptionsMatchWithAdd:hover{
+    opacity: 1;
+  }
+
+  .dataChangeTemplateFormArea, .selectRevisionControlsArea{
+    height: 180px;
+    width: 100%;  
+  }
+
+  .dataChangeTemplateFormToolsColumn
+  {
+    left:0px;
+    width: 70px;
+    height : 100%; 
+  }
+
+  .dataChangeTemplateFormControlsColumn
+{
+  /* position: absolute; */
+  right:0px;
+  width: calc(100% - 70px);
+  height : 100%;
+  border: 0.25px solid lightgrey;
+}
+
+.dataChangeTemplateFormBottomBar
+{
+  height: 70px;
+  /* width: 100%; */
+  padding: 2px;
+  position: relative;
+}
+
+.dataChangeTemplatesDL
+{
+  width: 200px;
+  font-size: 10px;
+  height: 30px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+}
+
+.dataChangeTemplateFormOptions{
+  position: absolute;
+  left: 210px;
+  width: 60px;
+  font-size: 11px;
+  height: 30px;
+  line-height: 30px;
+  top: 0px;
+  color: gray;
+  cursor: pointer;
+}
+
+.dataChangeTemplateFormOptions:hover{
+  color: black;
+  font-size: 12px;
+}
+
+.dataChangeTemplateNameBox
+{
+  height: 30px;
+  width: 200px;
+  bottom: 4px;
+  left: 4px;
+  position: absolute;
+}
+
+.dataChangeTemplateFormApplyBtn
+{  
+  position: absolute;
+  right: 4px;
+  width: 70px;
+  height: 30px;
+  /* color: black; */
+  background: rgb(25.5, 25.5, 25.5);
+  text-align: center;
+  border-radius: 6px;
+  bottom: 4px;
+  vertical-align: middle;
+  line-height: 26px;
+  opacity: 0.75;
+  cursor: pointer;
+  color: white;
+}
+
+.dataChangeTemplateSourceLabel
+{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.dataChangeTemplateTargetLabel
+{
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.dataChangeTemplateSourceSelect{
+  position: absolute;
+  top: 20px;
+  left: 160px;  
+  width: 260px;
+  height: 30px;
+}
+
+.dataChangeTemplateTargetSelect{
+  position: absolute;
+  top: 70px;
+  left: 160px; 
+  width: 260px;
+  height: 30px;
+}
+
+.dataChangeTemplateHistoryLabel{
+  position: absolute;
+  top: 120px;
+  left: 20px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.dataChangeTemplateHistorySelect{
+  position: absolute;
+  top: 120px;
+  left: 160px; 
+  width: 260px;
+  height: 30px;
+}
+
+.dataChangeTemplateFormRemove
+{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 125px;
+  left : 15px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.dataChangeTemplateFormRemoveText
+{
+  color: black;
+  position: absolute;
+  top: 163px;  
+  width: 70px;
+  text-align: center;
+}
+
+.dataChangeTemplateFormReset
+{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 45px;  
+  left : 15px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.dataChangeTemplateFormResetText
+{
+  color: black;
+  position: absolute;
+  top: 85px;  
+  width: 70px;
+  text-align: center;
+}
+
+.dataChangeOptionsListByArea{
+  height: 40px;
+  width: calc(100% - 8px);
+  /* padding: 2px; */
+  left: 4px;
+  /* border: 0.25px solid lightgrey; */
+  position: absolute;
+}
+
+.dataChangeOptionsMatchWithAdd
+{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 10px;  
+  left : 15px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.dataChangeOptionsAddMatchWithText
+{
+  color: black;
+  position: absolute;
+  top: 40px; 
+  width: 100%;
+  font-size: 14px;
+}
+
+.dataChangeOptionsMatchWithClear
+{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 70px;
+  left: 15px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.dataChangeOptionsClearMatchWithText
+{
+  color: black;
+  position: absolute;
+  top: 100px; 
+  width: 100%;
+  font-size: 14px;
+}
+
+.dataChangeOptionsMatchwithGrid
+{
+  /* position: absolute; */
+  right:0px;
+  width: calc(100% - 60px);
+  height : 100%;
+}
+
+.dataChangeTemplateOptionsForm, .selectRevisionForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 102;
+  width: 405px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
+.dataChangeOptionsToolColumn
+{
+  /* position: absolute; */
+  left:0px;
+  width: 60px;
+  height : 100%;
+  text-align: center;
+}
+
+.dataChangeOptionsListByLabel
+{
+  position: absolute; 
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  top: 10px;
+}
+
+.dataChangeOptionsListBySelect{
+  position: absolute; 
+  left: 80px;
+  width: 250px;
+  height: 30px;
+  top: 10px;
+}
+
+.dataChangeTemplateSourceSelect > * .dx-button-mode-contained,
+.dataChangeTemplateTargetSelect > * .dx-button-mode-contained{
+  border: none !important;
+}
+
+.useCurrentRevision{
+  height: 40px;
+  border-bottom: 1px dashed lightgray;
+}
+
+.useCurrentRevisionCB{
+  width: 100%;
+  position: absolute; 
+  padding: 8px;
+}
+
+.selectRevisionArea{
+  height: calc( 100% - 56px);
+  position: relative;
+  padding: 8px;
+  border-bottom: 1px dashed lightgray;
+}
+
+.srfDatasetTypeSelectLabel{
+  position: absolute;
+  height: 30px;
+  line-height: 30px;
+}
+
+.srfDatasetNameSelectLabel{
+  position: absolute;
+  top: 54px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.srfRevSelectLabel{
+  position: absolute;
+  top: 100px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.srfDatasetTypeSelect{
+  position: absolute;
+  left: 150px;
+  height: 30px;
+  width: 250px;
+}
+
+.srfDatasetNameSelect{
+  position: absolute;
+  top: 54px;
+  left: 150px;
+  height: 30px;
+  width: 250px;
+}
+
+.srfRevSelect{
+  position: absolute;
+  top: 100px;
+  left: 150px;
+  height: 30px;
+  width: 250px;
+}
+
+.disableText{
+  color: lightgray;
+}
+
+.selectDisplayTablesForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 1;
+  width: 400px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
+.selectDisplayTablesFormArea
+{
+  /* height: 100px; */
+  width: 100%;
+  padding: 2px;
+}
+
+.selectDisplayTablesTagBox{
+  width: 100%;
+  height: 80px;
+}
+
+.selectDisplayTablesTagBox > * .dx-tag-container.dx-texteditor-input-container { 
+  height: 80px;
+  overflow-y: auto;
+}
+
+.databaseViewer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  display: none;
+  background: white;
+}
+
+.closeDisplayBtn
+{  
+  position: absolute;
+  left: 2px;
+  width: 110px;
+  height: 30px;
+  /* color: black; */
+  background: rgb(25.5, 25.5, 25.5);
+  text-align: center;
+  border-radius: 6px;
+  bottom: 4px;
+  vertical-align: middle;
+  line-height: 26px;
+  opacity: 0.75;
+  cursor: pointer;
+  color: white
+}
+
+.closeDisplayBtn:hover
+{
+  opacity: 1;
+}
+
+.revisionNameDiv{
+  position: absolute;
+  height: 30px;
+  top: calc(100% - 35px);
+  padding: 10px;
+  width: calc(100% - 180px);
+  left: 120px;  
+  color: white;
+  text-align: center;
+  overflow: hidden;
 }

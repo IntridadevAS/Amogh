@@ -125,7 +125,7 @@ DataDefinitionMenu.prototype.GetControls = function () {
             Title: "Data Change Highlight",
             ImageSrc: "public/symbols/Data Change Highlight.svg",
             click: function (e, menu) {
-                menu.Close();
+                menu.OnDataChangeHighlight();
             }
         },
         {
@@ -184,6 +184,18 @@ DataDefinitionMenu.prototype.OnDefinePropertyHighlights = function () {
         this.CloseOpenForm(model.views[this.Id].definePropertyHighlightsForm);
         
         model.views[this.Id].definePropertyHighlightsForm.Open();
+    }
+}
+
+DataDefinitionMenu.prototype.OnDataChangeHighlight = function () {
+    if (DataChangeTemplateForm.active) {
+        DataChangeTemplateForm.close();
+    }
+    else {
+        // close other open forms
+        this.CloseOpenForm(null);
+        
+        DataChangeTemplateForm.open();
     }
 }
 

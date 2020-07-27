@@ -3,6 +3,10 @@ let DataChangeRevisioning = {
     IframeID : "DataChangeRevisioningIFrame",
 
     showForm: function () {
+        if (!model.currentTabId) {
+            return;
+        }
+
         var overlay = document.getElementById("uiBlockingOverlay");
         var popup = document.getElementById("DataChangeRevisioningPopup");
 
@@ -82,26 +86,34 @@ let DataChangeRevisioning = {
     },
 
     restoreRevisions: function () {
-        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-        $.ajax({
-            data: {
-                'InvokeFunction': 'ReadRevisions',
-                'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname,
-                'dataSourceType' : SourceManagers[model.currentTabId].SourceType.toLowerCase()               
-            },
-            type: "POST",
-            url: "PHP/DataChangeRevisioning.php"
-        }).done(function (msg) {
-            var object = JSON.parse(msg);
-            if (object.MsgCode !== 1) {
-                alert(object.Msg);
+        let sourceType = SourceManagers[model.currentTabId].SourceType.toLowerCase();
+        this.readRevisions(sourceType).then(function (revisions) {
+            if (!revisions) {  
+                alert("Error occurred while restoring revisions.");
                 return;
             }
 
-            var revisions = object.Data;
+            // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            // $.ajax({
+            //     data: {
+            //         'InvokeFunction': 'ReadRevisions',
+            //         'ProjectName': projectinfo.projectname,
+            //         'CheckName': checkinfo.checkname,
+            //         'dataSourceType' : SourceManagers[model.currentTabId].SourceType.toLowerCase()               
+            //     },
+            //     type: "POST",
+            //     url: "PHP/DataChangeRevisioning.php"
+            // }).done(function (msg) {
+            //     var object = JSON.parse(msg);
+            //     if (object.MsgCode !== 1) {
+            //         alert(object.Msg);
+            //         return;
+            //     }
+
+            //     var revisions = object.Data;
             for (var i = 0; i < revisions.length; i++) {
                 var revisionData = revisions[i];
                 revisionData["userAlias"] = revisionData["createdByAlias"];
@@ -119,6 +131,89 @@ let DataChangeRevisioning = {
             revisionData["createdOn"] = "";
 
             DataChangeRevisioning.createRevisionCard(revisionData, false);
+            // });
+        })
+    },
+
+    readRevisions: function (dataSourceType) {
+
+        return new Promise((resolve) => {
+
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            $.ajax({
+                data: {
+                    'InvokeFunction': 'ReadRevisions',
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname,
+                    'dataSourceType': dataSourceType
+                },
+                type: "POST",
+                url: "PHP/DataChangeRevisioning.php"
+            }).done(function (msg) {
+                var object = JSON.parse(msg);
+                if (object.MsgCode !== 1) {
+                    // alert(object.Msg);
+                    return resolve(null);
+                }
+
+                return resolve(object.Data);
+            });
+        });
+    },
+
+    readRevisionComponents: function (revisionInfo) {
+        return new Promise((resolve) => {
+
+            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+
+            $.ajax({
+                data: {
+                    'InvokeFunction': 'ReadRevisionComponents',
+                    'ProjectName': projectinfo.projectname,
+                    'CheckName': checkinfo.checkname,
+                    'revisionData': JSON.stringify(revisionInfo)
+                },
+                type: "POST",
+                url: "PHP/DataChangeRevisioning.php",
+                async: false,
+            }).done(function (msg) {
+                var object = JSON.parse(msg);
+                if (object.MsgCode !== 1) {
+                    return resolve(null);
+                }
+
+                return resolve(JSON.parse(object.Data));
+            });
+        });
+    },    
+
+    readAllRevisionProperties: function (revisionInfo) {
+        return new Promise((resolve) => {
+
+            this.readRevisionComponents(revisionInfo).then(function (allComponents) {
+                if (!allComponents) {
+                    return resolve(null);
+                }
+
+                var allProperties = [];
+                for (var nodeId in allComponents) {
+                    var component = allComponents[nodeId];
+                    if (component.properties &&
+                        component.properties.length > 0) {
+                        for (var i = 0; i < component.properties.length; i++) {
+                            var property = component.properties[i];
+                            if (allProperties.indexOf(property.Name) === -1) {
+                                allProperties.push(property.Name);
+                            }
+                        }
+                    }
+                }
+
+                return resolve(allProperties);
+            });
         });
     },
 

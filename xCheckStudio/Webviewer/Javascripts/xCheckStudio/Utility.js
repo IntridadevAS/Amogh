@@ -140,7 +140,7 @@ var xCheckStudio;
                 else if (status.toLowerCase() == "ok(a)(t)") {
                     return AcceptedColor;
                 }
-                return SuccessColor;
+                return HoopsViewerSuccessColor;
             }
             else if (status.toLowerCase().includes("no match")) {
                 if (parentComponent && (parentComponent.Status.toLowerCase().includes("error") ||
@@ -164,7 +164,7 @@ var xCheckStudio;
                             return HoopsViewerWarningColor;
                         }
                         else if (parentComponent.Status.toLowerCase() == "ok") {
-                            return SuccessColor;
+                            return HoopsViewerSuccessColor;
                         }
                     }
                 }
@@ -493,7 +493,11 @@ var xCheckStudio;
         function getCurrentDateTime() {
             var today = new Date();
             var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
-            var time = today.getHours() + ":" + today.getMinutes();
+            var time = today.getHours() + 
+            ":" + 
+            today.getMinutes() + 
+            ":" + 
+            today.getSeconds();
             var dateTime = date + ' ' + time;
             return dateTime;
         }

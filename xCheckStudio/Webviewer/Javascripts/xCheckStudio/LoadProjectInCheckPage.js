@@ -86,8 +86,21 @@ function loadCheckSpaceForCheck(data) {
     model.propertyGroups = propertyGroups;
 
     // restore highlight property templates 
-    var highlightPropertyTemplates = JSON.parse(data.highlightPropertyTemplates);
-    model.propertyHighlightTemplates = highlightPropertyTemplates;
+    model.propertyHighlightTemplates = JSON.parse(data.highlightPropertyTemplates);
+    
+    // restore data change highlight templates 
+    if (data.dataChangeHighlightTemplates) {
+        model.dataChangeHighlightTemplates = JSON.parse(data.dataChangeHighlightTemplates);
+
+        // // restore template configs
+        // DataChangeTemplateForm.readTemplateConfigs().then(function (data) {
+        //     if (!data) {
+        //         return;
+        //     }
+
+        //     model.dataChangeTemplateConfigs = data;
+        // });
+    }
 }
 
 function loadDataSets(data) {

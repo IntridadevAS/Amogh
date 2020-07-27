@@ -99,8 +99,9 @@ DefinePropertyHighlightsForm.prototype.Init = function () {
                 _this.PopulatePropertyHighlightTemplates();
                 _this.PopulateTemplateGrid();
 
-                var sourceManager = SourceManagers[_this.Id];
-                if (sourceManager.GroupHighlightSwitch.option("value") === true) {
+                var sourceManager = SourceManagers[_this.Id]; 
+                let groupViewType = sourceManager.GroupHighlightTypeSelect.option("value");
+                if (groupViewType.toLowerCase() === "highlight") {
                     sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));
                 }
 
@@ -383,7 +384,8 @@ DefinePropertyHighlightsForm.prototype.OnApply = function () {
     model.propertyHighlightTemplates[templateName] = template;
 
     var sourceManager = SourceManagers[this.Id];
-    if (sourceManager.GroupHighlightSwitch.option("value") === true) {
+    let groupViewType = sourceManager.GroupHighlightTypeSelect.option("value");
+    if (groupViewType.toLowerCase() === "highlight") {
         sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));
     }
 

@@ -96,6 +96,9 @@ var CheckModule = {
             // get all highlight by property templates
             var highlightPropertyTemplates = this.getHighlightPropertyTemplates();
 
+            // data change highlight templates
+            var dataChangeHighlightTemplates = this.getDataChangeHighlightTemplates();
+
             $.ajax({
                 url: 'PHP/ProjectManager.php',
                 type: "POST",
@@ -117,7 +120,8 @@ var CheckModule = {
                     'annotations': JSON.stringify(annotations),
                     "allComponents": JSON.stringify(allComponents),
                     "propertyGroups": JSON.stringify(propertyGroups),
-                    "highlightPropertyTemplates": JSON.stringify(highlightPropertyTemplates)
+                    "highlightPropertyTemplates": JSON.stringify(highlightPropertyTemplates),
+                    "dataChangeHighlightTemplates": JSON.stringify(dataChangeHighlightTemplates)
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
@@ -214,10 +218,11 @@ var CheckModule = {
     },
 
     getHighlightPropertyTemplates: function () {
-        var propertyHighlightTemplates = {};
-        propertyHighlightTemplates = model.propertyHighlightTemplates;
+        return model.propertyHighlightTemplates;
+    },
 
-        return propertyHighlightTemplates;
+    getDataChangeHighlightTemplates: function () {        
+        return model.dataChangeHighlightTemplates;
     },
 
     getAllComponents: function () {

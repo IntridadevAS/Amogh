@@ -1,17 +1,16 @@
-var SuccessColor = "#c9ffcf";//"#70db70";
-var MatchedColor = "#f2edc6";
-var ErrorColor = "#fad9d7";//"#ff4d4d";
+var SuccessColor = "#c9ffcf";
+var ErrorColor = "#fad9d7";
+var HoopsViewerSuccessColor = "#74b741";
 var HoopsViewerErrorColor = "#FF0000";
 var HoopsViewerWarningColor = "#fff729";
-var WarningColor = "#f9ffc7";//"#ffff99";
-var NoMatchColor = "#dddbff"//"#ccccff";
+var WarningColor = "#f9ffc7";
+var NoMatchColor = "#dddbff"
 var NoValueColor = "#f2f2f2";
 var AcceptedColor = "#e8ffeb";
 var PropertyAcceptedColor = "#ffff99";
 var SelectedRowColor = "#e6e8e8";
 var HiddenElementTextColor = "#b3b5b5";
 var MissingItemsColor = "#dddbff";
-// var TransposedColor = "#ace396";
 
 function HighlightManager(viewer,
     componentIdVsComponentData,

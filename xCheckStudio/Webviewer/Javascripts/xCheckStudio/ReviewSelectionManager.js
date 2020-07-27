@@ -11,10 +11,7 @@ ReviewSelectionManager.prototype.GetRowHighlightColor = function (status) {
 
     if (status.toLowerCase() === ("OK").toLowerCase()) {
         return SuccessColor;
-    }
-    // else if (status.toLowerCase() === ("MATCHED").toLowerCase()) {
-    //     return MatchedColor;
-    // }
+    }  
     else if (status.toLowerCase() === ("Error").toLowerCase() ||
     status.toLowerCase() === ("Error(A)").toLowerCase() ||
     status.toLowerCase() === ("Error(T)").toLowerCase() ||

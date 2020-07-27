@@ -190,6 +190,9 @@
             CopyPropertyGroups($dbh, $tempDbh);
             CopyPropertyHighlightGroups($dbh, $tempDbh);
 
+            // copy data change highlight templates
+            CopyDataChangeHighlightTemplates($dbh, $tempDbh);
+
             // Copy markup views
             CopyMarkupViews($dbh, $tempDbh);
             // Copy bookmark views
@@ -425,20 +428,43 @@ function CopyReviewTagsAndViews($fromDbh, $toDbh)
     }
 }
 
-function CopyHighlightPropertyTemplates($fromDbh, $toDbh)
+// function CopyHighlightPropertyTemplates($fromDbh, $toDbh)
+// {
+//     $results = $fromDbh->query("SELECT * FROM highlightPropertyTemplates;");
+//     if ($results) {
+//         $command = 'DROP TABLE IF EXISTS highlightPropertyTemplates;';
+//         $toDbh->exec($command);
+
+//         $command = 'CREATE TABLE IF NOT EXISTS highlightPropertyTemplates(
+//             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+//             value TEXT NOT NULL     
+//           )';
+//         $toDbh->exec($command);
+
+//         $insertStmt = $toDbh->prepare("INSERT INTO highlightPropertyTemplates(id, value) VALUES(?,?)");
+//         while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+//             $insertStmt->execute(array(
+//                 $row['id'],
+//                 $row['value']
+//             ));
+//         }
+//     }
+// }
+
+function CopyDataChangeHighlightTemplates($fromDbh, $toDbh)
 {
-    $results = $fromDbh->query("SELECT * FROM highlightPropertyTemplates;");
+    $results = $fromDbh->query("SELECT * FROM dataChangeHighlightTemplates;");
     if ($results) {
-        $command = 'DROP TABLE IF EXISTS highlightPropertyTemplates;';
+        $command = 'DROP TABLE IF EXISTS dataChangeHighlightTemplates;';
         $toDbh->exec($command);
 
-        $command = 'CREATE TABLE IF NOT EXISTS highlightPropertyTemplates(
+        $command = 'CREATE TABLE IF NOT EXISTS dataChangeHighlightTemplates(
             id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
             value TEXT NOT NULL     
           )';
         $toDbh->exec($command);
 
-        $insertStmt = $toDbh->prepare("INSERT INTO highlightPropertyTemplates(id, value) VALUES(?,?)");
+        $insertStmt = $toDbh->prepare("INSERT INTO dataChangeHighlightTemplates(id, value) VALUES(?,?)");
         while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
             $insertStmt->execute(array(
                 $row['id'],
@@ -704,6 +730,9 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
             $highlightPropertyTemplates =  ReadHighlightPropertyTemplates($dbh);
             $results["highlightPropertyTemplates"] = $highlightPropertyTemplates;
+
+            $dataChangeHighlightTemplates =  ReadDataChangeHighlightTemplates($dbh);
+            $results["dataChangeHighlightTemplates"] = $dataChangeHighlightTemplates;
 
             $markupViews = ReadMarkupViews($dbh);
             $results["markupViews"] = $markupViews;
@@ -2186,6 +2215,23 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
         return NULL;        
     }
+
+
+function ReadDataChangeHighlightTemplates($tempDbh)
+{
+    try {
+        $results = $tempDbh->query("SELECT *FROM dataChangeHighlightTemplates;");
+
+        if ($results) {
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                return  $record['value'];
+            }
+        }
+    } catch (Exception $e) {
+    }
+
+    return NULL;
+}
 
 function ReadHighlightPropertyTemplates($tempDbh)
 {
