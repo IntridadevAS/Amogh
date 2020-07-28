@@ -534,14 +534,6 @@ function cancelReturnCheck() {
     popup.style.display = 'none';
 }
 
-function closeSaveAs() {
-    var overlay = document.getElementById("uiBlockingOverlay");
-    var popup = document.getElementById("ExcelOutputPopup");
-
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
-}
-
 function closeOutpuToOverlay() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup = document.getElementById("outputPopup");
