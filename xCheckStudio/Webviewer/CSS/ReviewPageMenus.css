@@ -80,6 +80,15 @@
   height: 30px; 
   background: white;
   }
+
+  .exportExcelCaptionBar,
+  .exportComparisonToExcelCaptionBar,
+  .exportComplianceToExcelCaptionBar,
+  .exportDatasetsToExcelCaptionBar
+  {
+  height: 30px; 
+  background: lightgray;
+  }
   
   .markupViewsTabs
   {
@@ -97,6 +106,8 @@
   {
   position: absolute;
   right: 0px;
+  width: 25px;
+  height: 25px;
   }
   
   .markupViewsClearBtn{
@@ -106,7 +117,11 @@
   position: absolute;
   }
   
-  .markupViewsCaption{
+  .markupViewsCaption, .exportExcelCaption,
+  .exportComparisonToExcelCaption,
+  .exportComplianceToExcelCaption,
+  .exportDatasetsToExcelCaption
+  {
   color: black;
   top: 5px;
   left: 4px;
@@ -241,4 +256,499 @@
 .contextMenu_style:hover{
  
   opacity: 1;
+}
+
+.exportExcelSelectDataTypeForm
+{
+position: absolute;
+z-index: 101; 
+width: 340px;
+height: 160px;
+display: none;
+left: calc(50% - 170px);
+top:  calc(50% - 80px);;
+background: white;
+}
+
+.exportExcelSelectDataTypeFormArea{
+  height: 130px;
+  position: relative;
+}
+
+.outputReviewsBtn{
+  position: absolute;
+  width: 320px;
+  height: 30px;
+  top: 10px;
+  left: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.outputDatasetsBtn{
+  position: absolute;
+  width: 320px;
+  height: 30px;
+  top: 50px;
+  left: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelSelectDataTypeFormCancel{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 90px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelSelectDataTypeFormCancel:hover,
+.outputReviewsBtn:hover,
+.outputDatasetsBtn:hover,
+.exportComparisonToExcelCancel:hover,
+.exportComparisonToExcelNext:hover,
+.exportExcelselectComplainceCancel:hover,
+.exportExcelselectComplainceApply:hover,
+.exportComplianceToExcelCancel:hover,
+.exportComplianceToExcelBack:hover,
+.exportComplianceToExcelExport:hover,
+.exportDatasetsToExcelCancel:hover,
+.exportDatasetsToExcelExport:hover,
+.exportExcelselectDatasetCancel:hover,
+.exportExcelselectDatasetApply:hover
+{
+  border: 0.5px solid black;
+}
+
+.exportComparisonToExcelForm
+{
+position: absolute;
+z-index: 101; 
+width: 400px;
+height: 290px;
+display: none;
+left: calc(50% - 200px);
+top:  calc(50% - 145px);;
+background: white;
+}
+
+.exportComplianceToExcelForm, .exportDatasetsToExcelForm
+{
+position: absolute;
+z-index: 101; 
+width: 500px;
+height: 290px;
+display: none;
+left: calc(50% - 250px);
+top:  calc(50% - 145px);;
+background: white;
+}
+
+.exportExcelselectComplainceForm
+{
+position: absolute;
+z-index: 101; 
+width: 400px;
+height: 220px;
+display: none;
+left: calc(50% - 200px);
+top:  calc(50% - 105px);
+background: white;
+border: 0.5px solid black;
+}
+
+.exportExcelselectDatasetForm
+{
+position: absolute;
+z-index: 101; 
+width: 400px;
+height: 260px;
+display: none;
+left: calc(50% - 200px);
+top:  calc(50% - 130px);;
+background: white;
+border: 0.5px solid black;
+}
+
+.exportComparisonToExcelFormArea, .exportComplianceToExcelFormArea,
+.exportDatasetsToExcelFormArea
+{
+  height: 260px;
+  position: relative;
+}
+
+.exportComparisonToExcelLabel, .exportComplianceToExcelLabel,
+.exportDatasetsToExcelLabel{
+  position: absolute;
+  width: 320px;
+  height: 30px;
+  /* top: 10px; */
+  left: 10px;
+  /* border: 0.25px solid lightgray; */
+  /* text-align: center; */
+  line-height: 30px;
+  font-weight: bold;
+}
+
+.exportComparisonToExcelDatasetLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 50px;
+  left: 10px; 
+  /* text-align: center; */
+  line-height: 30px;
+}
+
+.exportExcelselectComplainceDatasetLabel,
+.exportExcelselectDatasetLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 10px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+.exportExcelselectGroupByLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 50px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+.exportComparisonToExcelDataset
+{
+  position: absolute;
+  width: 270px;
+  height: 30px;
+  top: 50px;
+  left: 120px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+  overflow: hidden;
+  padding: 2px;
+  font-size: 12px;
+}
+
+.exportExcelselectComplainceDataset,
+.exportExcelselectDataset{
+  position: absolute;
+  width: 270px;
+  height: 30px;
+  top: 10px;
+  left: 120px;  
+  font-size: 12px;
+}
+
+.exportExcelselectGroupBy
+{
+  position: absolute;
+  width: 270px;
+  height: 30px;
+  top: 50px;
+  left: 120px;  
+  font-size: 12px;
+}
+
+.exportComparisonToExcelCategoryLabel
+{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 90px;
+  left: 10px; 
+  /* text-align: center; */
+  line-height: 30px;
+}
+
+.exportExcelselectComplainceCategoryLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 50px;
+  left: 10px;   
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetCategoryLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 90px;
+  left: 10px;   
+  line-height: 30px;
+}
+
+.exportComparisonToExcelCategory{
+  position: absolute;
+  width: 270px;
+  height: 120px;
+  top: 90px;
+  left: 120px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectComplainceCategory
+{
+  position: absolute;
+  width: 270px;
+  height: 120px;
+  top: 50px;
+  left: 120px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetCategory{
+  position: absolute;
+  width: 270px;
+  height: 120px;
+  top: 90px;
+  left: 120px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportComparisonToExcelIncludeProps{
+  position: absolute;
+  width: 200px;
+  height: 30px;
+  top: 220px;
+  left: 10px; 
+  /* text-align: center;
+  line-height: 30px; */
+}
+
+.exportComparisonToExcelCancel{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 220px;
+  right: 100px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectComplainceCancel{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 180px;
+  right: 100px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetCancel{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 220px;
+  right: 100px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportComparisonToExcelNext{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 220px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectComplainceApply{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 180px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetApply{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 220px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportComparisonToExcelIncludeProps > * .dx-checkbox-text,
+.exportComplianceToExcelIncludeProps > * .dx-checkbox-text{
+  line-height: 30px;
+}
+
+.exportComparisonToExcelCategory > * .dx-tag-container.dx-texteditor-input-container,
+.exportExcelselectComplainceCategory  > * .dx-tag-container.dx-texteditor-input-container,
+.exportExcelselectDatasetCategory  > * .dx-tag-container.dx-texteditor-input-container {
+  overflow-y: auto;
+}
+
+.exportComparisonToExcelCategory > * .dx-tag-content,
+.exportExcelselectComplainceCategory  > * .dx-tag-content,
+.exportExcelselectDatasetCategory  > * .dx-tag-content {
+  font-size: 12px;
+  height: 30px;
+}
+
+.exportComplianceToExcelToolsColumn,
+.exportDatasetsToExcelToolsColumn
+{
+  position: absolute;
+  width: 120px;
+  height: calc(100% - 75px);
+  text-align: center;
+  top: 30px;
+  font-size: 14px;
+}
+
+.exportComplianceToExcelControlsColumn,
+.exportDatasetsToExcelControlsColumn
+{
+  position: absolute;
+  width: calc(100% - 120px);
+  height: calc(100% - 75px);
+  left: 120px;
+  top: 30px;
+  padding: 4px;
+}
+
+.exportComplianceToExcelDatasetAdd,
+.exportDatasetsToExcelDatasetAdd{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 40px;
+  left: 40px;
+}
+#exportComplianceToExcelDatasetAdd,
+#exportDatasetsToExcelDatasetAdd
+{
+  width: 40px;
+  height: 40px;
+}
+
+.exportComplianceToExcelDatasetClear,
+.exportDatasetsToExcelDatasetClear{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 120px;
+  left: 40px;
+}
+#exportComplianceToExcelDatasetClear,
+#exportDatasetsToExcelDatasetClear
+{  
+  width: 40px;
+  height: 40px;  
+}
+
+.exportComplianceToExcelDatasetAddText,
+.exportDatasetsToExcelDatasetAddText
+{
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.exportComplianceToExcelDatasetClearText,
+.exportDatasetsToExcelDatasetClearText
+{
+  position: absolute;
+  top: 160px;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.exportComplianceToExcelIncludeProps{
+  position: absolute;
+  width: 200px;
+  height: 30px;
+  bottom: 10px;
+  left: 10px; 
+  /* text-align: center;
+  line-height: 30px; */
+}
+
+.exportComplianceToExcelCancel{
+  position: absolute;
+  right: 190px;
+  bottom: 10px;
+  border: 0.25px solid lightgray;
+  height: 30px;
+  width: 80px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportComplianceToExcelBack,
+.exportDatasetsToExcelCancel{
+  position: absolute;
+  right: 100px;
+  bottom: 10px;
+  border: 0.25px solid lightgray;
+  height: 30px;
+  width: 80px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportComplianceToExcelExport,
+.exportDatasetsToExcelExport{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  border: 0.25px solid lightgray;
+  height: 30px;
+  width: 80px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportComplianceToExcelSelectDatasetLabel,
+.exportDatasetsToExcelSelectDatasetLabel
+{
+  position: absolute;  
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.selectedComplianceDataset:hover{
+  border: 1px solid black;
+}
+
+.dummyReviewsGridDiv,
+.dummyDatasetsGridDiv{
+  position: absolute;
+  display: none;
 }

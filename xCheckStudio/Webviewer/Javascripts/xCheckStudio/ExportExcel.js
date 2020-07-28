@@ -5,13 +5,13 @@ function ExportExcel() {
     this.rowCount = 9;
 }
 
-
-ExportExcel.prototype.ExportReviewTablesData = async function (selectedTables, exportProperties) {
+ExportExcel.prototype.ExportReviewTablesData = async function (selectedTables) {
     var index = 0;
     var save = false;
 
-    var textBoxInstance = $("#reportNameTextBox").dxTextBox("instance");
-    var workbookName = textBoxInstance.option("value");
+    // var textBoxInstance = $("#reportNameTextBox").dxTextBox("instance");
+    // var workbookName = textBoxInstance.option("value");
+    let workbookName = "Excel Report";
 
     this.currentExport = "Review";
     var exportComparisonData;
@@ -29,35 +29,53 @@ ExportExcel.prototype.ExportReviewTablesData = async function (selectedTables, e
             if (!exportComparisonData) {
                 exportComparisonData = new ComparisonData();
             }
-            await exportComparisonData.ExportComparisonComponents(selectedTables[id], exportProperties, save, id, workbookName, this);
+
+            await exportComparisonData.ExportComparisonComponents(
+                selectedTables[id]["categories"],
+                selectedTables[id]["exportProperties"],
+                save,              
+                id,
+                workbookName,
+                this);
         }
-        if (id.includes("Compliance")) {
+        else if (id.includes("Compliance")) {
             this.rowCount = 9;
 
             if (!exportComplianceData) {
                 exportComplianceData = new ComplianceData();
             }
 
-            await exportComplianceData.ExportComplianceComponents(selectedTables[id], exportProperties, save, id, workbookName, this);
+            await exportComplianceData.ExportComplianceComponents(
+                selectedTables[id]["categories"],
+                selectedTables[id]["exportProperties"],
+                save,              
+                id,
+                workbookName,
+                this);
         }
     }
 }
 
-ExportExcel.prototype.ExportDatasetsData = async function (selectedTables, datasets) {
+ExportExcel.prototype.ExportDatasetsData = async function (selectedDatasets) {
 
     this.currentExport = "Dataset";
     var dataset = new DatasetData();
-    for (var id in selectedTables) {
-
-        var datasetGroups = datasets[id];
+    for (let i = 0; i < selectedDatasets.length; i++) {
+        let selectedDataset = selectedDatasets[i];
 
         this.modelBrowserWorkook = new ExcelJS.Workbook();
-        var workbookName = id.split(".")[0];
+        var workbookName = selectedDataset["selectedDataset"].split(".")[0];
+
+        var data = selectedDataset["datasetData"];
 
         this.rowCount = 1;
-
-        await dataset.ExportDatasetsDataComponents(selectedTables[id], datasetGroups, this.modelBrowserWorkook, true, workbookName, this);
-
+        await dataset.ExportDatasetsDataComponents(
+            selectedDataset["selectedCategories"],
+            data,
+            this.modelBrowserWorkook,
+            true,
+            workbookName,
+            this);
     }
 }
 
@@ -93,7 +111,6 @@ ExportExcel.prototype.ExportGroups = async function (selectedTables, save, works
                 _this.RemoveTempTables(selectedTables);
             }
         });
-
     }
 }
 
@@ -183,7 +200,9 @@ ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, contai
                     recursive: true
                 },
                 scrolling: {
-                    mode: "standard"
+                    mode: "virtual",
+                    rowRenderingMode: 'virtual',
+                    columnRenderingMode: 'virtual'
                 },
                 paging: {
                     enabled: false
@@ -577,13 +596,32 @@ ComparisonData.prototype.GetCategoryComponents = function (tableName, data) {
     }
 }
 
-ComparisonData.prototype.ExportComparisonComponents = function (selectedTables, exportProperties, save, worksheetName, workbookName, exportExcelInstance) {
+ComparisonData.prototype.ExportComparisonComponents = function (
+    selectedTables, 
+    exportProperties,
+    save,
+    worksheetName, 
+    workbookName, 
+    exportExcelInstance) {
     return new Promise((resolve) => {
-        this.CreatDummyDataGrids(selectedTables, exportProperties, worksheetName, exportExcelInstance).then(function () {
-            exportExcelInstance.ExportGroups(selectedTables, save, worksheetName, workbookName, exportExcelInstance.reviewWorkbook).then(function () {
-                return resolve(true);
+
+        this.CreatDummyDataGrids(
+            selectedTables,
+            exportProperties,
+            worksheetName,
+            exportExcelInstance).then(function () {
+
+                exportExcelInstance.ExportGroups(
+                    selectedTables, 
+                    save,
+                    worksheetName, 
+                    workbookName, 
+                    exportExcelInstance.reviewWorkbook).then(function () {
+                    return resolve(true);
+                });
+
             });
-        });
+
     })
 }
 
@@ -598,7 +636,7 @@ ComparisonData.prototype.CreatDummyDataGrids = async function (selectedTables, e
 
             let headers = _this.CreateTableHeader(selectedTables, exportProperties, checkData);
             let data = _this.CreateTableData(selectedTables, exportProperties, checkData);
-            let parentTable = document.getElementById("comparisonTables");
+            let parentTable = document.getElementById("dummyReviewsGridDiv");
 
             var allPromises = [];
             for (var tableName in headers) {
@@ -880,14 +918,34 @@ ComplianceData.prototype.GetGroupComponents = function (tableName, checkData) {
     return null;
 }
 
-ComplianceData.prototype.ExportComplianceComponents = function (selectedTables, exportProperties, save, worksheetName, workbookName, exportExcelInstance) {
+ComplianceData.prototype.ExportComplianceComponents = function (
+    selectedTables, 
+    exportProperties, 
+    save,
+    worksheetName, 
+    workbookName, 
+    exportExcelInstance) {
+
     return new Promise((resolve) => {
-        this.CreatDummyDataGrids(selectedTables, exportProperties, worksheetName, exportExcelInstance).then(function () {
-            exportExcelInstance.ExportGroups(selectedTables, save, worksheetName, workbookName, exportExcelInstance.reviewWorkbook).then(function () {
+        
+        this.CreatDummyDataGrids(
+            selectedTables, 
+            exportProperties, 
+            worksheetName, 
+            exportExcelInstance).then(function () {
+
+            exportExcelInstance.ExportGroups(
+                selectedTables, 
+                save,
+                worksheetName, 
+                workbookName, 
+                exportExcelInstance.reviewWorkbook).then(function () {
                 return resolve(true);
             });
         });
-    })
+
+    });
+
 }
 
 ComplianceData.prototype.CreatDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
@@ -906,18 +964,18 @@ ComplianceData.prototype.CreatDummyDataGrids = async function (selectedTables, e
             _this.WorkSheetName = worksheetName;
             headers = _this.CreateTableHeader(selectedTables, exportProperties, checkData);
             data = _this.CreateTableData(selectedTables, exportProperties, checkData);
-            if (worksheetName == "ComplianceA") {
-                parentTable = document.getElementById("complianceSource1tables");
-            }
-            else if (worksheetName == "ComplianceB") {
-                parentTable = document.getElementById("complianceSource2tables");
-            }
-            else if (worksheetName == "ComplianceC") {
-                parentTable = document.getElementById("complianceSource3tables");
-            }
-            else if (worksheetName == "ComplianceD") {
-                parentTable = document.getElementById("complianceSource4tables");
-            }
+            // if (worksheetName == "ComplianceA") {
+            parentTable = document.getElementById("dummyReviewsGridDiv");
+            // }
+            // else if (worksheetName == "ComplianceB") {
+            //     parentTable = document.getElementById("complianceSource2tables");
+            // }
+            // else if (worksheetName == "ComplianceC") {
+            //     parentTable = document.getElementById("complianceSource3tables");
+            // }
+            // else if (worksheetName == "ComplianceD") {
+            //     parentTable = document.getElementById("complianceSource4tables");
+            // }
 
             var allPromises = [];
             for (var tableName in headers) {
@@ -1085,14 +1143,33 @@ DatasetData.prototype.CreateTableHeader = function (tableName, components) {
     return tablesHeaders;
 }
 
-DatasetData.prototype.ExportDatasetsDataComponents = function (selectedTables, datasetGroups, workbook, save, workbookName, exportExcelInstance) {
+DatasetData.prototype.ExportDatasetsDataComponents = function (
+    selectedTables, 
+    datasetGroups, 
+    workbook, 
+    save,   
+    workbookName,
+    exportExcelInstance) {
+
     return new Promise((resolve) => {
-        this.CreateDatasetExportDummyDataGrids(selectedTables, datasetGroups, exportExcelInstance).then(function () {
-            exportExcelInstance.ExportGroups(selectedTables, save, "", workbookName, workbook).then(function () {
-                return resolve(true);
+
+        this.CreateDatasetExportDummyDataGrids(
+            selectedTables,
+            datasetGroups,
+            exportExcelInstance).then(function () {
+
+                exportExcelInstance.ExportGroups(
+                    selectedTables, 
+                    save,
+                    "",
+                    workbookName,
+                    workbook).then(function () {
+                        return resolve(true);
+                    });
+
             });
-        });
-    })
+    });
+
 }
 
 DatasetData.prototype.CreateDatasetExportDummyDataGrids = async function (selectedTables, datasetsGroups, exportExcelInstance) {
@@ -1104,7 +1181,7 @@ DatasetData.prototype.CreateDatasetExportDummyDataGrids = async function (select
 
         headers = this.CreateTableHeader(tableName, components);
         data = this.CreateTableData(tableName, components, headers);
-        parentTable = document.getElementById("dataset1");
+        parentTable = document.getElementById("dummyDatasetsGridDiv");
 
         var header = headers[tableName];
         var tableData = data[tableName];
