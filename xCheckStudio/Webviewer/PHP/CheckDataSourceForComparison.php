@@ -2600,7 +2600,7 @@ function getNoMatchComponent(
             $cPropertyValue,
             $dPropertyName,
             $dPropertyValue,
-            '',
+            'No Match',
             NULL,
             NULL,
             NULL
