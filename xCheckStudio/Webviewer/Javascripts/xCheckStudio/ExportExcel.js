@@ -79,6 +79,71 @@ ExportExcel.prototype.ExportDatasetsData = async function (selectedDatasets) {
     }
 }
 
+ExportExcel.prototype.ExportComparisonGroups = async function (
+    allTablesData, 
+    save, 
+    worksheetName, 
+    workbookName, 
+    workbook) {
+    var _this = this;
+
+    var worksheet;
+    if (this.currentExport.toLowerCase() == "review") {
+        worksheet = workbook.addWorksheet(worksheetName);
+        this.CustomiseHeader(worksheet, worksheetName);
+    }
+
+    let gridNames = [];
+    var isLastTable = false;
+    let allTableHeaders = allTablesData["headers"];
+    for (let i = 0; i < Object.keys(allTableHeaders).length; i++) {
+        let categoryGroupName = Object.keys(allTableHeaders)[i];     
+
+        let categoryGroup = allTableHeaders[categoryGroupName]
+        for (let j = 0; j < Object.keys(categoryGroup).length; j++) {
+            let classGroupName = Object.keys(categoryGroup)[j];
+
+            // export category group name
+            if (j === 0) {
+                Object.assign(
+                    worksheet.getRow(this.rowCount).getCell(1),
+                    {
+                        value: categoryGroupName,
+                        font: { bold: true, size: 18 },
+                        alignment: { horizontal: 'left', vertical: 'top' },
+                    });
+                this.rowCount += 1;
+            }
+
+            let tableId = categoryGroupName + "-" + classGroupName;
+            gridNames.push(tableId);           
+
+            if ((i === Object.keys(allTableHeaders).length - 1) &&
+                (j === Object.keys(categoryGroup).length - 1)) {
+                isLastTable = true;
+            }            
+
+            await this.ExportGroup(
+                classGroupName,
+                tableId,
+                worksheet,
+                save,
+                isLastTable,
+                workbookName,
+                workbook).then(function (result) {
+
+                    if (result) {
+                        _this.rowCount = result;
+                    }
+
+                    if (isLastTable) {
+                        _this.RemoveTempTables(gridNames);
+                    }
+                });
+        }
+    }
+}
+
 ExportExcel.prototype.ExportGroups = async function (selectedTables, save, worksheetName, workbookName, workbook) {
     var _this = this;
 
@@ -102,15 +167,22 @@ ExportExcel.prototype.ExportGroups = async function (selectedTables, save, works
             isLastTable = true;
         }
 
-        await this.ExportGroup(tableName, worksheet, save, isLastTable, workbookName, workbook).then(function (result) {
-            if (result) {
-                _this.rowCount = result;
-            }
+        await this.ExportGroup(
+            tableName,
+            tableName,
+            worksheet,
+            save,
+            isLastTable,
+            workbookName,
+            workbook).then(function (result) {
+                if (result) {
+                    _this.rowCount = result;
+                }
 
-            if (isLastTable) {
-                _this.RemoveTempTables(selectedTables);
-            }
-        });
+                if (isLastTable) {
+                    _this.RemoveTempTables(selectedTables);
+                }
+            });
     }
 }
 
@@ -118,19 +190,32 @@ ExportExcel.prototype.RemoveTempTables = function (selectedTables) {
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
 
-        $("#" + tableName + "_tempTable").remove();
+        $("#" + tableName.replace(/\s/g, '') + "_tempTable").remove();
 
     }
 }
 
-ExportExcel.prototype.ExportGroup = async function (tableName, worksheet, save, isLastTable, workbookName, workbook) {
+ExportExcel.prototype.ExportGroup = async function (
+    tableCaption,
+    tableName,
+    worksheet,
+    save,
+    isLastTable,
+    workbookName,
+    workbook) {
     var _this = this;
 
     if (this.currentExport.toLowerCase() == "review") {
-        Object.assign(worksheet.getRow(this.rowCount).getCell(1), { value: tableName, font: { bold: true, size: 12 }, alignment: { horizontal: 'left', vertical: 'top' }, });
+        Object.assign(
+            worksheet.getRow(this.rowCount).getCell(1),
+            {
+                value: tableCaption,
+                font: { bold: true, size: 12 },
+                alignment: { horizontal: 'left', vertical: 'top' },
+            });
     }
 
-    var dataGrid = $("#" + tableName + "_tempTable").dxDataGrid(("instance"));
+    var dataGrid = $("#" + tableName.replace(/\s/g, '') + "_tempTable").dxDataGrid(("instance"));
 
     var headerStyles = {
         font: { bold: true, size: 11 },
@@ -143,10 +228,14 @@ ExportExcel.prototype.ExportGroup = async function (tableName, worksheet, save, 
         }
     }
 
+    let tableFromRow = _this.rowCount + 1;
+    let tableFromColumn = 1;
+    let tableToColumn = 1;
     await DevExpress.excelExporter.exportDataGrid({
         worksheet: worksheet,
         component: dataGrid,
-        topLeftCell: { row: _this.rowCount + 1, column: 1 },
+        topLeftCell: { row: tableFromRow, column: tableFromColumn },
+        autoFilterEnabled: true,
         customizeCell: function (options) {
             var gridCell = options.gridCell;
             var excelCell = options.cell;
@@ -157,23 +246,139 @@ ExportExcel.prototype.ExportGroup = async function (tableName, worksheet, save, 
                 bottom: { style: 'thin', color: { argb: '000000' } },
                 right: { style: 'thin', color: { argb: '000000' } }
             };
-
             excelCell.width = 30;
 
-            if (gridCell.rowType == "header") {
+            if (gridCell.rowType == "group") {
+                let excelRow = worksheet.getRow(excelCell.fullAddress.row);
+                if (excelRow) {
+                    let value = excelRow.getCell(1).value;
+                    if (value) {
+                        if (value.toLowerCase().includes("error")) {
+                            excelCell.fill = {
+                                type: 'pattern',
+                                pattern: 'solid',
+                                fgColor: { argb: "fad9d7" }
+                            };
+                        }
+                        else if (value.toLowerCase().includes("ok")) {
+                            excelCell.fill = {
+                                type: 'pattern',
+                                pattern: 'solid',
+                                fgColor: { argb: "c9ffcf" }
+                            };
+                        }
+                        else if (value.toLowerCase().includes("no match")) {
+                            excelCell.fill = {
+                                type: 'pattern',
+                                pattern: 'solid',
+                                fgColor: { argb: "dddbff" }
+                            };
+                        }
+                        else if (value.toLowerCase().includes("warning")) {
+                            excelCell.fill = {
+                                type: 'pattern',
+                                pattern: 'solid',
+                                fgColor: { argb: "f9ffc7" }
+                            };
+                        }
+                        else if (value.toLowerCase().includes("undefined")) {
+
+                        }
+                    }
+                }
+            }
+            else if (gridCell.rowType == "header") {
                 excelCell.style = headerStyles;
+                excelCell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: "BEDFE6" }
+                };
+            }
+            else if (gridCell.rowType == "data") {
+                if (_this.currentExport.toLowerCase() === "review") {
+
+                    let columnDataField = gridCell.column.dataField;
+                    if (columnDataField.toLowerCase() === "sourcea" ||
+                        columnDataField.toLowerCase() === "sourceb" ||
+                        columnDataField.toLowerCase() === "sourcec" ||
+                        columnDataField.toLowerCase() === "sourced" ||
+                        columnDataField.toLowerCase() === "componentstatus") {
+                        excelCell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: "D3D3D3" }
+                        };
+
+                        excelCell.font = { bold: true, size: 12 };
+                        excelCell.width = 50;
+                    }
+                    else if (columnDataField.includes("_")) {
+                        var index = columnDataField.indexOf("_");
+                        if (index !== -1) {
+                            let numStr = columnDataField.slice(index + 1);
+                            if (!isNaN(numStr)) {
+                                let num = Number(numStr);
+                                if (num % 2 === 0) {
+                                    excelCell.fill = {
+                                        type: 'pattern',
+                                        pattern: 'solid',
+                                        fgColor: { argb: "D3D3D3" }
+                                    };
+                                }
+                                else {
+                                    // excelCell.fill = {
+                                    //     type: 'pattern',
+                                    //     pattern: 'solid',
+                                    //     fgColor: { argb: "D2DA64" }
+                                    // };
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (_this.currentExport.toLowerCase() === "dataset") {
+                    _this.setAlternateRowColor(gridCell, excelCell);
+                }
+            }
+
+            // get last cell index
+            if (excelCell.fullAddress.col > tableToColumn) {
+                tableToColumn = excelCell.fullAddress.col
             }
         },
     }).then(function (dataGridRange) {
+
+        // // Add auto filter to table
+        // let tableToRow = dataGridRange.to.row;
+        // worksheet.autoFilter = {
+        //     from: {
+        //         row: tableFromRow,
+        //         column: tableFromColumn
+        //     },
+        //     to: {
+        //         row: tableToRow,
+        //         column: tableToColumn
+        //     }
+        // }
+
         if (save && isLastTable) {
             _this.SaveWorkBook(workbookName, workbook);
         }
         else {
             if (_this.currentExport.toLowerCase() == "review") {
-                _this.rowCount = dataGridRange.to.row + 3;
+                _this.rowCount = dataGridRange.to.row + 2;
             }
         }
     });
+}
+
+ExportExcel.prototype.setAlternateRowColor = function (gridCell, excelCell) {
+    if (gridCell.rowType === "data") {
+        if (excelCell.fullAddress.row % 2 === 0) {
+            excelCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "D3D3D3" }, bgColor: { argb: "D3D3D3" } };
+        }
+    }
 }
 
 ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, containerDiv, header) {
@@ -220,6 +425,14 @@ ExportExcel.prototype.CustomiseHeader = function (worksheet, worksheetName) {
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
 
+    // get check case name
+    let checkCaseName = "";
+    if ("checkcaseInfo" in checkResults &&
+        "checkCaseData" in checkResults.checkcaseInfo) {
+        let checkCaseData = JSON.parse(checkResults.checkcaseInfo.checkCaseData);
+        checkCaseName = checkCaseData.CheckCase.Name;
+    }
+
     var generalStyles = {
         font: { bold: true },
         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' } },
@@ -237,7 +450,7 @@ ExportExcel.prototype.CustomiseHeader = function (worksheet, worksheetName) {
     worksheet.getRow(7).numFmt = "d mmmm yyyy";
     worksheet.getRow(1).getCell(3).font = { bold: true, size: 16 };
     worksheet.getColumn(1).values = ["Project/CheckSpace Name:", "CheckCase Name:", "DataSet Name:", "CheckType:", "UserName:", "Date: "];
-    worksheet.getColumn(6).values = [projectinfo.projectname + "/" + checkinfo.checkname, "RVM_2_XML", checkResults.sourceInfo.sourceAFileName + " & " + checkResults.sourceInfo.sourceBFileName, worksheetName, userinfo.alias, new Date()];
+    worksheet.getColumn(6).values = [projectinfo.projectname + "/" + checkinfo.checkname, checkCaseName, checkResults.sourceInfo.sourceAFileName + " & " + checkResults.sourceInfo.sourceBFileName, worksheetName, userinfo.alias, new Date()];
 }
 
 ExportExcel.prototype.SaveWorkBook = function (workbookName, workbook) {
@@ -441,150 +654,586 @@ ComparisonData.prototype.GetData = function () {
     });
 }
 
-ComparisonData.prototype.CreateTableHeader = function (selectedTables, exportProperties, checkData) {
+ComparisonData.prototype.GetCheckcaseMappingInfo = function (component, sources, datasetOrdersInCheckcase) {
+
+    // let datasetOrdersInCheckcase = getDataSourceOrderInCheckcase();
+
+    let checkcase = JSON.parse(checkResults.checkcaseInfo.checkCaseData).CheckCase;
+
+    // get comparison checkcase type
+    let comparisonCheckcaseType = null;
+    for (var i = 0; i < checkcase.CheckTypes.length; i++) {
+        if (checkcase.CheckTypes[i].Name.toLowerCase() === "comparison") {
+            comparisonCheckcaseType = checkcase.CheckTypes[i];
+            break;
+        }
+    }
+    if (comparisonCheckcaseType === null) {
+        return null;
+    }
+
+    // let splitResult = tableName.split("-");
+    // if (splitResult.length < 2) {
+    //     continue;
+    // }
+
+    // get checkcase mapping category group
+    // let checkcaseCategoryGroup = null;
+    let mappingList = ["SourceAName", "SourceBName", "SourceCName", "SourceDName"];
+    // for (let ii = 0; ii < comparisonCheckcaseType.ComponentGroups.length; ii++) {
+    //     let componentGroup = comparisonCheckcaseType.ComponentGroups[ii];
+    //     if (componentGroup[mappingList[datasetOrdersInCheckcase["a"] - 1]] === component.sourceAMainClass &&
+    //         componentGroup[mappingList[datasetOrdersInCheckcase["b"] - 1]] === component.sourceBMainClass) {
+    //         if (sources.length === 3) {
+    //             if (componentGroup[mappingList[datasetOrdersInCheckcase["c"] - 1]] === component.sourceCMainClass) {
+    //                 checkcaseCategoryGroup = componentGroup;
+    //                 break;
+    //             }
+    //         }
+    //         else if (sources.length === 4) {
+    //             if (componentGroup[mappingList[datasetOrdersInCheckcase["c"] - 1]] === component.sourceCMainClass &&
+    //                 componentGroup[mappingList[datasetOrdersInCheckcase["d"] - 1]] === component.sourceDMainClass) {
+    //                 checkcaseCategoryGroup = componentGroup;
+    //                 break;
+    //             }
+    //         }
+    //         else {
+    //             checkcaseCategoryGroup = componentGroup;
+    //             break;
+    //         }
+    //     }
+    // }
+    // if (checkcaseCategoryGroup === null) {
+    //     return null;
+    // }
+
+    // class mapping info
+    let classMappingArray = this.GetClassMappingInfo(component.classMappingInfo, 0);
+    // let classMappingStr = component.classMappingInfo.split(",")[0];
+    // classMappingStr = classMappingStr.replace(new RegExp(' ', 'g'), "");
+    // classMappingStr = classMappingStr.replace(new RegExp('Class:', 'g'), "");
+    // let classMappingArray = classMappingStr.split("-");
+
+    // get check case class mapping
+    let checkcaseClassMapping = null;
+    for (let i = 0; i < comparisonCheckcaseType.ComponentGroups.length; i++) {
+        let checkcaseCategoryGroup = comparisonCheckcaseType.ComponentGroups[i];
+
+        for (let j = 0; j < checkcaseCategoryGroup.ComponentClasses.length; j++) {
+            let componentClass = checkcaseCategoryGroup.ComponentClasses[j];
+
+            if (componentClass[mappingList[datasetOrdersInCheckcase["a"] - 1]] === classMappingArray[0] &&
+                componentClass[mappingList[datasetOrdersInCheckcase["b"] - 1]] === classMappingArray[1]) {
+                if (sources.length === 3) {
+                    if (componentClass[mappingList[datasetOrdersInCheckcase["c"] - 1]] === classMappingArray[2]) {
+                        checkcaseClassMapping = componentClass;
+                        break;
+                    }
+                }
+                else if (sources.length === 4) {
+                    if (componentClass[mappingList[datasetOrdersInCheckcase["c"] - 1]] === classMappingArray[2] &&
+                        componentClass[mappingList[datasetOrdersInCheckcase["d"] - 1]] === classMappingArray[3]) {
+                        checkcaseClassMapping = componentClass;
+                        break;
+                    }
+                }
+                else {
+                    checkcaseClassMapping = componentClass;
+                    break;
+                }
+            }
+        }
+    }
+    //  if (checkcaseClassMapping === null) {
+    //      return null;
+    //  }
+
+    return checkcaseClassMapping;
+}
+
+ComparisonData.prototype.GetPropertyMapping = function (properties, mappedProperties, datasetOrdersInCheckcase) {
+    let mappingList = ["SourceAName", "SourceBName", "SourceCName", "SourceDName"];
+    for (let i = 0; i < mappedProperties.length; i++) {
+        let mappedProperty = mappedProperties[i];
+
+        let match = false;
+        for (let j = 0; j < properties.length; j++) {
+            let property = properties[j];
+            if (property === "missing property") {
+                continue;
+            }
+
+            let srcId = null;
+            if (j === 0) {
+                srcId = "a";
+            }
+            else if (j === 1) {
+                srcId = "b";
+            }
+            else if (j === 2) {
+                srcId = "c";
+            }
+            else if (j === 3) {
+                srcId = "d";
+            }
+            else {
+                continue;
+            }
+            if (mappedProperty[mappingList[datasetOrdersInCheckcase[srcId] - 1]].toLowerCase() === property.toLowerCase()) {
+                match = true;
+            }
+            else {
+                match = false;
+                break;
+            }
+        }
+        if (match) {
+            return mappedProperty;
+        }
+    }
+
+    return null;
+}
+
+ComparisonData.prototype.GetClassMappingArray = function (classMappingInfo) {
+    return classMappingInfo.split(",");
+}
+
+ComparisonData.prototype.GetClassMappingInfo = function (classMappingInfo, index) {
+    let classMappings = this.GetClassMappingArray(classMappingInfo);
+    if (classMappings.length > index) {
+        let classMappingStr = classMappings[index];
+        classMappingStr = classMappingStr.replace(new RegExp(' ', 'g'), "");
+        classMappingStr = classMappingStr.replace(new RegExp('Class:', 'g'), "");
+        return classMappingStr.split("-");
+    }
+
+    return null;
+}
+
+ComparisonData.prototype.GetTablesData = function (selectedTables, exportProperties, checkData) {
     var tablesHeaders = [];
+    var tablesData = [];
+
+    let datasetOrdersInCheckcase = getDataSourceOrderInCheckcase();
+    let mappingList = ["SourceAName", "SourceBName", "SourceCName", "SourceDName"];
+
+    var sources = checkResults["Comparisons"][0]["sources"];
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
         var components = this.GetCategoryComponents(tableName, checkData);
-        var headers = [];
 
-        var sources = checkResults["Comparisons"][0]["sources"];
-        for (var sourceId = 0; sourceId < sources.length; sourceId++) {
-            var Obj = {};
+        var allHeaders = {};
+        var allData = {};
+        let propertyNameGroups = {};
+        for (var componentId in components) {
+            let component = components[componentId];
 
-            Obj["caption"] = sources[sourceId];
-            if (sourceId == 0) {
-                Obj["dataField"] = ComparisonColumnNames.SourceAName;
-            }
-            if (sourceId == 1) {
-                Obj["dataField"] = ComparisonColumnNames.SourceBName;
-            }
-            if (sourceId == 2) {
-                Obj["dataField"] = ComparisonColumnNames.SourceCName;
-            }
-            if (sourceId == 3) {
-                Obj["dataField"] = ComparisonColumnNames.SourceDName;
-            }
+            // // get check case mapping info
+            // let checkCaseMappingInfo = null;
+            // if (component.status.toLowerCase() !== "undefined") {
+            //     checkCaseMappingInfo = this.GetCheckcaseMappingInfo(component, sources, datasetOrdersInCheckcase);
+            // }
 
-            headers.push(Obj);
-        }
+            if (component.status.toLowerCase() === "no match" ||
+                component.status.toLowerCase() === "undefined") {
+                let rowData = {};
+                let classGroup = "No Match";
+                if (component.status.toLowerCase() === "undefined") {
+                    classGroup = "Undefined";
+                }
 
-        var obj = {
-            "caption": "Status",
-            "dataField": "ComponentStatus"
-        };
+                // check if no match is already in allHeaders. if not,
+                // then add
+                if (!(classGroup in allHeaders)) {
+                    allHeaders[classGroup] = [];
+                    allData[classGroup] = [];
+                    propertyNameGroups[classGroup] = {
+                        captions: [],
+                        dataFields: []
+                    };
 
-        headers.push(obj);
+                    // get source names
+                    for (let sourceId = 0; sourceId < sources.length; sourceId++) {
+                        let obj = {};
+                        obj["caption"] = sources[sourceId];
+                        if (sourceId === 0) {
+                            obj["dataField"] = "SourceA";
+                        }
+                        if (sourceId === 1) {
+                            obj["dataField"] = "SourceB";
+                        }
+                        if (sourceId === 2) {
+                            obj["dataField"] = "SourceC";
+                        }
+                        if (sourceId === 3) {
+                            obj["dataField"] = "SourceD";
+                        }
+                        allHeaders[classGroup].push(obj);
+                    }
+                    
+                    // component status
+                    allHeaders[classGroup].push({
+                        "caption": "Status",
+                        "dataField": "ComponentStatus",
+                        // "groupIndex": 0
+                    });
+                    allHeaders[classGroup].push({
+                        "caption": "Class Mapping",
+                        "dataField": "ClassMapping",
+                        "groupIndex": 0
+                    });
+                }
+                if(component.sourceAName !== null)
+                {
+                    rowData["SourceA"] = component.sourceAName;
+                }
+                else if(component.sourceBName !== null)
+                {
+                    rowData["SourceB"] = component.sourceBName;
+                }
+                else if(component.sourceCName !== null)
+                {
+                    rowData["SourceC"] = component.sourceCName;
+                }
+                else if(component.sourceDName !== null)
+                {
+                    rowData["SourceD"] = component.sourceDName;
+                }              
+                rowData["ComponentStatus"] = component.status;
+                rowData["ClassMapping"] = classGroup;
 
-        if (exportProperties) {
-            var data = {};
+                 // now export properties
+                 if (!exportProperties) {
+                    allData[classGroup].push(rowData);
+                    continue;
+                }
 
-            var propertyIndex = 1;
-            var groups = [];
+                var properties = component["properties"];
+                for (let j = 0; j < properties.length; j++) {
+                    let property = properties[j];
 
-            var sourcePropertyNamesGroup = []
-            for (var componentId in components) {
-                var component = components[componentId];
+                    let group = [];
+                    let propNames = [];
+                    let propDataFields = [];
+
+                    let propertyIndex = allHeaders[classGroup].length;
+
+                    let property1 = {};
+                    if (property.sourceAName !== null) {
+                        property1["caption"] = property.sourceAName;
+                        property1["dataField"] = "property_" + propertyIndex;
+
+                        rowData[property1["dataField"]] = property.sourceAValue;
+                    }
+                    else if (property.sourceBName !== null) {
+                        property1["caption"] = property.sourceBName;
+                        property1["dataField"] = "property_" + propertyIndex;
+
+                        rowData[property1["dataField"]] = property.sourceBValue;
+                    }
+                    else if (property.sourceCName !== null) {
+                        property1["caption"] = property.sourceCName;
+                        property1["dataField"] = "property_" + propertyIndex;
+
+                        rowData[property1["dataField"]] = property.sourceCValue;
+                    }
+                    else if (property.sourceDName !== null) {
+                        property1["caption"] = property.sourceDName;
+                        property1["dataField"] = "property_" + propertyIndex;
+
+                        rowData[property1["dataField"]] = property.sourceDName;
+                    }                   
+                    group.push(property1);                   
+                    propNames.push(property1["caption"].toLowerCase());                   
+                    propDataFields.push(property1["dataField"]);
+                    
+                    //  // property group status
+                    //  var propertyStatus = {};
+                    //  propertyStatus["caption"] = "Status";
+                    //  propertyStatus["dataField"] = "Status_" + propertyIndex;
+                    //  group.push(propertyStatus);
+                    //  rowData[propertyStatus["dataField"]] = property.severity;
+                    //  propDataFields.push(propertyStatus["dataField"]);
+
+                     // add group to collection
+                     var a = propertyNameGroups[classGroup]["captions"];
+                     var b = JSON.stringify(propNames);
+                     var c = a.indexOf(b)
+                     if (c === -1) {
+                         propertyNameGroups[classGroup]["captions"].push(b);
+                         propertyNameGroups[classGroup]["dataFields"].push(propDataFields);
+                         // groups.push(group);
+                         for (let k = 0; k < group.length; k++) {
+                             allHeaders[classGroup].push(group[k]);
+                         }
+                         propertyIndex++;
+                     }
+                     else {
+                         // correct the datafields with already existing ones
+                         let propDatafields = propertyNameGroups[classGroup]["dataFields"][c];
+                         for (let ii = 0; ii < propDatafields.length; ii++) {
+                             let oldDataField = "property_" + propertyIndex;
+                             if (oldDataField in rowData) {
+                                 let value = rowData[oldDataField];
+                                 delete rowData[oldDataField];
+                                 rowData[propDatafields[ii]] = value;
+                             }
+                         }
+                     }
+                }
+
+                // push rowdata to all data array
+                allData[classGroup].push(rowData); 
+            }          
+            else {
+                let classMappingArray = this.GetClassMappingInfo(component.classMappingInfo, 0);
+                if (classMappingArray === null ||
+                    classMappingArray.length < 2) {
+                    continue;;
+                }
+                let checkCaseMappingInfo = this.GetCheckcaseMappingInfo(component, sources, datasetOrdersInCheckcase);
+
+                // get class group string
+                let classGroup = "";
+                for (let j = 0; j < classMappingArray.length; j++) {
+                    if (j === 0) {
+                        classGroup = classMappingArray[j];
+                    }
+                    else {
+                        classGroup += "-" + classMappingArray[j];
+                    }
+                }
+
+                let rowData = {};
+                // check if class group is already in allHeaders. if not,
+                // then add
+                if (!(classGroup in allHeaders)) {
+                    allHeaders[classGroup] = [];
+                    allData[classGroup] = [];
+                    propertyNameGroups[classGroup] = {
+                        captions: [],
+                        dataFields: []
+                    };
+
+                    // get source names
+                    for (let sourceId = 0; sourceId < sources.length; sourceId++) {
+                        let obj = {};
+                        obj["caption"] = sources[sourceId];
+                        if (sourceId === 0) {
+                            obj["dataField"] = "SourceA";
+                        }
+                        if (sourceId === 1) {
+                            obj["dataField"] = "SourceB";
+                        }
+                        if (sourceId === 2) {
+                            obj["dataField"] = "SourceC";
+                        }
+                        if (sourceId === 3) {
+                            obj["dataField"] = "SourceD";
+                        }
+                        allHeaders[classGroup].push(obj);
+                    }
+
+                    // component status
+                    allHeaders[classGroup].push({
+                        "caption": "Status",
+                        "dataField": "ComponentStatus",
+                        // "groupIndex": 0
+                    });
+                    allHeaders[classGroup].push({
+                        "caption": "Class Mapping",
+                        "dataField": "ClassMapping",
+                        "groupIndex": 0
+                    });
+                }
+                rowData["SourceA"] = component.sourceAName;
+                rowData["SourceB"] = component.sourceBName;
+                if (sources.length > 2) {
+                    rowData["SourceC"] = component.sourceCName;
+                }
+                if (sources.length > 3) {
+                    rowData["SourceD"] = component.sourceDName;
+                }
+                rowData["ComponentStatus"] = component.status;
+                rowData["ClassMapping"] = classGroup;
+
+                // now export properties
+                if (!exportProperties) {
+                    allData[classGroup].push(rowData);
+                    continue;
+                }
+
                 var properties = component["properties"];
 
-                for (var propertyId in properties) {
-                    var property = properties[propertyId];
+                // let propertyIndex = 1;
+                for (let j = 0; j < properties.length; j++) {
+                    let property = properties[j];
 
-                    var group = [];
-                    var propName = [];
+                    let group = [];
+                    let propNames = [];
+                    let propDataFields = [];
 
-                    if (sources.length > 1) {
-                        var property1 = {};
-                        property1["caption"] = property.sourceAName;
+                    let propertyIndex = allHeaders[classGroup].length;
 
-                        if (property.sourceAName == null) {
-                            property1["caption"] = "Missing property";
-                        }
+                    // Source a property
+                    let property1 = {};
+                    property1["caption"] = property.sourceAName;
+                    property1["dataField"] = "propertA_" + propertyIndex;
+                    rowData[property1["dataField"]] = property.sourceAValue;
+                    if (property.sourceAName == null) {
+                        property1["caption"] = "Missing property";
+                        rowData[property1["dataField"]] = "NULL";
+                    }                   
 
-                        propName.push(property1["caption"]);
+                    // Source b property
+                    var property2 = {};
+                    property2["caption"] = property.sourceBName;
+                    property2["dataField"] = "propertB_" + propertyIndex;
+                    rowData[property2["dataField"]] = property.sourceBValue;
+                    if (property.sourceBName == null) {
+                        property2["caption"] = "Missing property";
+                        rowData[property2["dataField"]] = "NULL";
+                    }                   
 
-                        property1["dataField"] = "propertA_" + propertyIndex;
+                    group.push(property1);
+                    group.push(property2);
+                    propNames.push(property1["caption"].toLowerCase());
+                    propNames.push(property2["caption"].toLowerCase());
+                    propDataFields.push(property1["dataField"]);
+                    propDataFields.push(property2["dataField"]);
 
-                        group.push(property1);
-
-                        var property2 = {};
-                        property2["caption"] = property.sourceBName;
-
-                        if (property.sourceBName == null) {
-                            property2["caption"] = "Missing property";
-                        }
-
-                        propName.push(property2["caption"]);
-
-                        property2["dataField"] = "propertB_" + propertyIndex;
-
-                        group.push(property2);
-
-                    }
-
+                    // Source c property
                     if (sources.length > 2) {
-
                         var property3 = {};
                         property3["caption"] = property.sourceCName;
-
+                        property3["dataField"] = "propertC_" + propertyIndex;
+                        rowData[property3["dataField"]] = property.sourceCValue;
                         if (property.sourceCName == null) {
                             property3["caption"] = "Missing property";
+                            rowData[property3["dataField"]] = "NULL";
                         }
 
-                        propName.push(property3["caption"]);
-
-                        property3["dataField"] = "propertC_" + propertyIndex;
-
                         group.push(property3);
-
+                        propNames.push(property3["caption"].toLowerCase());
+                        propDataFields.push(property3["dataField"]);
                     }
 
+                    // Source d property
                     if (sources.length > 3) {
                         var property4 = {};
                         property4["caption"] = property.sourceDName;
-
+                        property4["dataField"] = "propertD_" + propertyIndex;
+                        rowData[property4["dataField"]] = property.sourceDValue;
                         if (property.sourceDName == null) {
                             property4["caption"] = "Missing property";
+                            rowData[property4["dataField"]] = "NULL";
                         }
 
-                        propName.push(property4["caption"]);
-
-                        property4["dataField"] = "propertD_" + propertyIndex;
-
                         group.push(property4);
+                        propNames.push(property4["caption"].toLowerCase());
+                        propDataFields.push(property4["dataField"]);
                     }
 
+                    // property group status
                     var propertyStatus = {};
                     propertyStatus["caption"] = "Status";
                     propertyStatus["dataField"] = "Status_" + propertyIndex;
                     group.push(propertyStatus);
+                    rowData[propertyStatus["dataField"]] = property.severity;
+                    propDataFields.push(propertyStatus["dataField"]);
 
-                    var a = JSON.stringify(sourcePropertyNamesGroup);
-                    var b = JSON.stringify(propName);
+                    // remove missing property
+                    if (propNames.indexOf("missing property") !== -1 &&
+                        checkCaseMappingInfo !== null) {
+                        let propertyMapping = this.GetPropertyMapping(
+                            propNames,
+                            checkCaseMappingInfo.MappingProperties,
+                            datasetOrdersInCheckcase);
+
+                        if (propertyMapping) {
+                            for (let i = 0; i < propNames.length; i++) {
+                                if (propNames[i] === "missing property") {
+                                    let srcId = null;
+                                    if (i === 0) {
+                                        srcId = "a";
+                                    }
+                                    else if (i === 1) {
+                                        srcId = "b";
+                                    }
+                                    else if (i === 2) {
+                                        srcId = "c";
+                                    }
+                                    else if (i === 3) {
+                                        srcId = "d";
+                                    }
+                                    else {
+                                        continue;
+                                    }
+                                    group[i].caption = propertyMapping[mappingList[datasetOrdersInCheckcase[srcId] - 1]];
+                                    propNames[i] = group[i].caption.toLowerCase();
+                                    // propNames[i] = propertyMapping[mappingList[datasetOrdersInCheckcase[srcId] - 1]];
+                                    // group[i].caption = propNames[i];
+                                }
+                            }
+                        }
+                    }
+
+                    var a = propertyNameGroups[classGroup]["captions"];
+                    var b = JSON.stringify(propNames);
                     var c = a.indexOf(b)
-                    if (c == -1) {
-                        sourcePropertyNamesGroup.push(propName);
-                        groups.push(group);
+                    if (c === -1) {
+                        propertyNameGroups[classGroup]["captions"].push(b);
+                        propertyNameGroups[classGroup]["dataFields"].push(propDataFields);
+                        // groups.push(group);
+                        for (let k = 0; k < group.length; k++) {
+                            allHeaders[classGroup].push(group[k]);
+                        }
                         propertyIndex++;
                     }
+                    else {
+                        // correct the datafields with already existing ones
+                        let propDatafields = propertyNameGroups[classGroup]["dataFields"][c];
+                        for (let ii = 0; ii < propDatafields.length; ii++) {
+                            let oldDataField = null;
+                            if (ii === 0) {
+                                oldDataField = "propertA_" + propertyIndex;
+                            }
+                            else if (ii === 1) {
+                                oldDataField = "propertB_" + propertyIndex;
+                            }
+                            else if (sources.length > 2 && ii === 2) {
+                                oldDataField = "propertC_" + propertyIndex;
+                            }
+                            else if (sources.length > 3 && ii === 3) {
+                                oldDataField = "propertD_" + propertyIndex;
+                            }
+                            else if (ii === propDatafields.length - 1) {
+                                oldDataField = "Status_" + propertyIndex;
+                            }
+
+                            if (oldDataField in rowData) {
+                                let value = rowData[oldDataField];
+                                delete rowData[oldDataField];
+                                rowData[propDatafields[ii]] = value;
+                            }
+                        }
+                    }
                 }
-            }
 
-            for (var a in groups) {
-                for (var b in groups[a]) {
-                    headers.push(groups[a][b]);
-                }
+                // push rowdata to all data array
+                allData[classGroup].push(rowData);
             }
-
-            tablesHeaders[tableName] = headers;
-        }
-        else {
-            tablesHeaders[tableName] = headers;
         }
 
+        tablesHeaders[tableName] = allHeaders;
+        tablesData[tableName] = allData;
     }
 
-    return tablesHeaders;
+    return {
+        "headers": tablesHeaders,
+        "rowsData": tablesData,
+    };
 }
 
 ComparisonData.prototype.GetCategoryComponents = function (tableName, data) {
@@ -597,11 +1246,11 @@ ComparisonData.prototype.GetCategoryComponents = function (tableName, data) {
 }
 
 ComparisonData.prototype.ExportComparisonComponents = function (
-    selectedTables, 
+    selectedTables,
     exportProperties,
     save,
-    worksheetName, 
-    workbookName, 
+    worksheetName,
+    workbookName,
     exportExcelInstance) {
     return new Promise((resolve) => {
 
@@ -609,23 +1258,37 @@ ComparisonData.prototype.ExportComparisonComponents = function (
             selectedTables,
             exportProperties,
             worksheetName,
-            exportExcelInstance).then(function () {
+            exportExcelInstance).then(function (data) {
+                if (!data) {
+                    return resolve(false);;
+                }
 
-                exportExcelInstance.ExportGroups(
-                    selectedTables, 
+                // // tables
+                // let tables = [];
+                // for (let categoryGroup in data.headers) {
+                //     for (let classGroup in data.headers[categoryGroup]) {
+                //         tables.push(classGroup);
+                //     }
+                // }
+
+                exportExcelInstance.ExportComparisonGroups(
+                    data,
                     save,
-                    worksheetName, 
-                    workbookName, 
+                    worksheetName,
+                    workbookName,
                     exportExcelInstance.reviewWorkbook).then(function () {
-                    return resolve(true);
-                });
+                        return resolve(true);
+                    });
 
             });
-
     })
 }
 
-ComparisonData.prototype.CreatDummyDataGrids = async function (selectedTables, exportProperties, worksheetName, exportExcelInstance) {
+ComparisonData.prototype.CreatDummyDataGrids = async function (
+    selectedTables, 
+    exportProperties,
+    worksheetName, 
+    exportExcelInstance) {
     var _this = this;
     return new Promise((resolve) => {
         // let checkData = this.GetData();
@@ -634,35 +1297,40 @@ ComparisonData.prototype.CreatDummyDataGrids = async function (selectedTables, e
                 return resolve(false);
             }
 
-            let headers = _this.CreateTableHeader(selectedTables, exportProperties, checkData);
-            let data = _this.CreateTableData(selectedTables, exportProperties, checkData);
+            // let headers = _this.CreateTableHeader(selectedTables, exportProperties, checkData);
+            // let data = _this.CreateTableData(selectedTables, exportProperties, checkData);
+            let tablesData = _this.GetTablesData(selectedTables, exportProperties, checkData);
+            let headers = tablesData["headers"];
+            let data = tablesData["rowsData"];
             let parentTable = document.getElementById("dummyReviewsGridDiv");
 
             var allPromises = [];
-            for (var tableName in headers) {
-                var header = headers[tableName];
-                var tableData = data[tableName];
+            for (var categoryGroup in headers) {
+                for (var classGroup in headers[categoryGroup]) {
+                   
+                    var header = headers[categoryGroup][classGroup];
+                    var tableData = data[categoryGroup][classGroup];
+                    
+                    var datagridDiv = document.createElement("DIV");
+                    datagridDiv.id = categoryGroup.replace(/\s/g, '') + "-" + classGroup.replace(/\s/g, '') + "_tempTable";
+                    datagridDiv.style.display = "none";
+                    parentTable.append(datagridDiv);
 
-                var datagridDiv = document.createElement("DIV");
-                datagridDiv.id = tableName + "_tempTable";
-                datagridDiv.style.display = "none";
-                parentTable.append(datagridDiv);
-
-                allPromises.push(exportExcelInstance.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header));
+                    allPromises.push(exportExcelInstance.CreateTemporaryComponentGrid(tableData, datagridDiv.id, header));
+                }
             }
 
             if (allPromises.length > 0) {
                 xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
-                    return resolve(res);
+                    return resolve(tablesData);
                 });
             }
             else {
-                return resolve(true);
+                return resolve(null);
             }
         });
     });
 }
-
 
 function ComplianceData(worksheetName) {
     this.ComparisonExportComplete = false;
@@ -819,7 +1487,8 @@ ComplianceData.prototype.CreateTableHeader = function (selectedTables, exportPro
 
         var obj = {
             "caption": "Status",
-            "dataField": "ComponentStatus"
+            "dataField": "ComponentStatus",
+            "groupIndex" : 0           
         };
 
         headers.push(obj);
