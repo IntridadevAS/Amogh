@@ -112,7 +112,8 @@
   .editUserPropertiesCaption, .clearUserPropertiesCaption,
   .defineGroupsFormCaption, .definePropertyHighlightFormCaption,
   .dataChangeTemplateOptionsFormCaption, .selectRevisionCaption,
-  .selectDisplayTablesCaption
+  .selectDisplayTablesCaption, .exportExcelCaption, 
+  .exportDatasetsToExcelCaption
   {
   color: black;
   top: 5px;
@@ -1151,4 +1152,285 @@
   color: white;
   text-align: center;
   overflow: hidden;
+}
+
+.exportExcelSelectDataTypeForm
+{
+position: absolute;
+z-index: 101; 
+width: 340px;
+height: 120px;
+display: none;
+left: calc(50% - 170px);
+top:  calc(50% - 80px);;
+background: white;
+}
+
+.exportExcelCaptionBar,
+.exportDatasetsToExcelCaptionBar
+{
+  height: 30px; 
+  background: lightgray;
+}
+
+.exportExcelSelectDataTypeFormArea{
+  height: 90px;
+  position: relative;
+}
+
+.outputDatasetsBtn{
+  position: absolute;
+  width: 320px;
+  height: 30px;
+  top: 10px;
+  left: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelSelectDataTypeFormCancel:hover,
+.outputDatasetsBtn:hover, .exportDatasetsToExcelCancel:hover,
+.exportDatasetsToExcelExport:hover, .exportExcelselectDatasetCancel:hover,
+.exportExcelselectDatasetApply:hover
+{
+  border: 0.5px solid black;
+}
+
+.exportExcelSelectDataTypeFormCancel{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 50px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportDatasetsToExcelForm
+{
+position: absolute;
+z-index: 101; 
+width: 500px;
+height: 290px;
+display: none;
+left: calc(50% - 250px);
+top:  calc(50% - 145px);;
+background: white;
+}
+
+.exportDatasetsToExcelFormArea
+{
+  height: 260px;
+  position: relative;
+}
+
+.exportDatasetsToExcelLabel{
+  position: absolute;
+  width: 320px;
+  height: 30px;
+  /* top: 10px; */
+  left: 10px;
+  /* border: 0.25px solid lightgray; */
+  /* text-align: center; */
+  line-height: 30px;
+  font-weight: bold;
+}
+
+.exportDatasetsToExcelToolsColumn
+{
+  position: absolute;
+  width: 120px;
+  height: calc(100% - 75px);
+  text-align: center;
+  top: 30px;
+  font-size: 14px;
+}
+
+.exportDatasetsToExcelSelectDatasetLabel
+{
+  position: absolute;  
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.exportDatasetsToExcelDatasetAdd{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 40px;
+  left: 40px;
+}
+
+#exportDatasetsToExcelDatasetAdd
+{
+  width: 40px;
+  height: 40px;
+}
+
+.exportDatasetsToExcelDatasetAddText
+{
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.exportDatasetsToExcelDatasetClear{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 120px;
+  left: 40px;
+}
+
+#exportDatasetsToExcelDatasetClear
+{  
+  width: 40px;
+  height: 40px;  
+}
+
+.exportDatasetsToExcelDatasetClearText
+{
+  position: absolute;
+  top: 160px;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+.exportDatasetsToExcelControlsColumn
+{
+  position: absolute;
+  width: calc(100% - 120px);
+  height: calc(100% - 75px);
+  left: 120px;
+  top: 30px;
+  padding: 4px;
+}
+
+.exportDatasetsToExcelCancel{
+  position: absolute;
+  right: 100px;
+  bottom: 10px;
+  border: 0.25px solid lightgray;
+  height: 30px;
+  width: 80px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportDatasetsToExcelExport{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  border: 0.25px solid lightgray;
+  height: 30px;
+  width: 80px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetForm
+{
+position: absolute;
+z-index: 101; 
+width: 400px;
+height: 260px;
+display: none;
+left: calc(50% - 200px);
+top:  calc(50% - 130px);;
+background: white;
+border: 0.5px solid black;
+}
+
+.exportExcelselectDatasetLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 10px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+.exportExcelselectDataset{
+  position: absolute;
+  width: 270px;
+  height: 30px;
+  top: 10px;
+  left: 120px;  
+  font-size: 12px;
+}
+
+.exportExcelselectGroupByLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 50px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+.exportExcelselectGroupBy
+{
+  position: absolute;
+  width: 270px;
+  height: 30px;
+  top: 50px;
+  left: 120px;  
+  font-size: 12px;
+}
+
+.exportExcelselectDatasetCategoryLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 90px;
+  left: 10px;   
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetCategory{
+  position: absolute;
+  width: 270px;
+  height: 120px;
+  top: 90px;
+  left: 120px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetCategory  > * .dx-tag-container.dx-texteditor-input-container {
+  overflow-y: auto;
+}
+
+.exportExcelselectDatasetCategory  > * .dx-tag-content {
+  font-size: 12px;
+  height: 30px;
+}
+
+.exportExcelselectDatasetCancel{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 220px;
+  right: 100px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+.exportExcelselectDatasetApply{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  top: 220px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
 }

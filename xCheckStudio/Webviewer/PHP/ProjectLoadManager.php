@@ -8,23 +8,26 @@
         return;
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    if ($_SERVER["REQUEST_METHOD"] == "POST")
     {
         $InvokeFunction = trim($_POST["InvokeFunction"], " ");
-        switch ($InvokeFunction) 
+        switch ($InvokeFunction)
         {
             case "InitTempCheckSpaceDB":
-                 InitTempCheckSpaceDB();
+                InitTempCheckSpaceDB();
                 break;
             case "CreateTempCheckSpaceDBByCopy":
-            CreateTempCheckSpaceDBByCopy();
+                CreateTempCheckSpaceDBByCopy();
                 break;
             case "ReadSavedComparisonCheckData":
                 ReadSavedComparisonCheckData();
-            break;
+                break;
             case "ReadComplianceSavedCheckData":
                 ReadComplianceSavedCheckData();
-            break;            
+                break;
+            case "ReadAllSavedDatasets":
+                ReadAllSavedDatasets();
+                break;
             default:
                 echo "No Function Found!";
         }
@@ -3624,4 +3627,89 @@ function ReadAllComponents($tempDbh, $table)
             }
         }     
     
+    }
+
+    function ReadAllSavedDatasets()
+    {
+        if (
+            !isset($_POST['ProjectName']) ||
+            !isset($_POST['CheckName'])
+        )
+        {
+            echo json_encode(array(
+                "Msg" =>  "Invalid input.",
+                "MsgCode" => 0
+            ));
+            return;
+        }
+
+        // get project name       
+        $projectName = $_POST["ProjectName"];
+        $checkName = $_POST['CheckName'];
+
+        $results = array();
+        try
+        {
+            // project DB
+            $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+            if (!file_exists($dbPath))
+            {
+                echo json_encode(array(
+                    "Msg" =>  "Saved data not found",
+                    "MsgCode" => 0
+                ));
+                return;
+            }
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+            // begin the transaction
+            $dbh->beginTransaction();
+
+            $allComponents = ReadAllComponents($dbh, "AllComponentsa");
+            if ($allComponents != NULL)
+            {
+                $results["a"] =  json_decode($allComponents,true);
+            }
+            $allComponents = ReadAllComponents($dbh, "AllComponentsb");
+            if ($allComponents != NULL)
+            {
+                $results["b"] = json_decode($allComponents,true);
+            }
+            $allComponents = ReadAllComponents($dbh, "AllComponentsc");
+            if ($allComponents != NULL)
+            {
+                $results["c"] = json_decode($allComponents,true);
+            }
+            $allComponents = ReadAllComponents($dbh, "AllComponentsd");
+            if ($allComponents != NULL)
+            {
+                $results["d"] = json_decode($allComponents,true);
+            }
+
+            // now read all datasource info
+            // read datasource info
+            $datasourceInfo = readDataSourceInfo($dbh);
+            if ($datasourceInfo != NULL) {
+                $results['sourceInfo'] = $datasourceInfo;
+            }
+
+            // commit changes
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection     
+        }
+        catch (Exception $e)
+        {
+            echo json_encode(array(
+                "Msg" =>  "Failed",
+                "MsgCode" => 0
+            ));
+            return;
+        }
+
+        echo json_encode(array(
+            "Msg" =>  "success",
+            "Data" => $results,
+            "MsgCode" => 1
+        ));
+        return;
     }

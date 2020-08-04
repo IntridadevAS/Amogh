@@ -1667,14 +1667,14 @@
       <div class="outputToVaultBtn" onclick="DataVault.onOutputToVaultClicked()">
         <p>Data Vault</p>
       </div>
-      <div id="Component_27">
+      <div id="Component_27" onclick="onExportExcelClick()">
         <svg class="Rectangle_1242_A55_Rectangle_5">
           <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
             stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Rectangle_1242_A55_Rectangle_5" rx="5"
             ry="5" x="0" y="0" width="90" height="30">
           </rect>
         </svg>
-        <div id="Excel">
+        <div id="ExportExcelLabel">
           <span>Excel</span>
         </div>
       </div>
@@ -1724,7 +1724,66 @@
       </div>
     </div>
   </div>
+
+  <!-- Excel Export Forms-->
+  <!-- Select type of data to export form -->
+  <div id="exportExcelSelectDataTypeForm" class="exportExcelSelectDataTypeForm">
+    <div id="exportExcelSelectDataTypeFormCaptionBar" class="exportExcelCaptionBar">
+      <div class="exportExcelCaption">Output To Excel</div>
+    </div>
+    <div class="exportExcelSelectDataTypeFormArea">
+      <div id="outputDatasetsBtn" class="outputDatasetsBtn">Output Datasets</div>
+      <div id="exportExcelSelectDataTypeFormCancel" class="exportExcelSelectDataTypeFormCancel">Cancel</div>
+    </div>
+  </div>
   
+  <!-- Export Datasets form -->
+  <div id="exportDatasetsToExcelForm" class="exportDatasetsToExcelForm">
+    <div id="exportDatasetsToExcelCaptionBar" class="exportDatasetsToExcelCaptionBar">
+      <div class="exportDatasetsToExcelCaption">Output To Excel</div>
+    </div>
+    <div class="exportDatasetsToExcelFormArea">
+      <div class="exportDatasetsToExcelLabel">Datasets</div>
+  
+      <div class="exportDatasetsToExcelToolsColumn">
+        <div class="exportDatasetsToExcelSelectDatasetLabel">Select Dataset</div>
+        <!-- Add btn -->
+        <div class="exportDatasetsToExcelDatasetAdd">
+          <img id="exportDatasetsToExcelDatasetAdd" src="public\symbols\Add-Filled.svg" />
+        </div>
+        <div class="exportDatasetsToExcelDatasetAddText">Add</div>
+  
+        <!-- Clear btn -->
+        <div class="exportDatasetsToExcelDatasetClear">
+          <img id="exportDatasetsToExcelDatasetClear" src="public\symbols\Clear-Filled.svg" />
+        </div>
+        <div class="exportDatasetsToExcelDatasetClearText">Clear</div>
+      </div>
+      <div id="exportDatasetsToExcelControlsColumn" class="exportDatasetsToExcelControlsColumn">
+      </div>
+  
+      <div id="exportDatasetsToExcelCancel" class="exportDatasetsToExcelCancel">Cancel</div>
+      <div id="exportDatasetsToExcelExport" class="exportDatasetsToExcelExport">Export</div>
+  
+      <!-- <div id="dummyDatasetsGridDiv" class="dummyDatasetsGridDiv"></div> -->
+    </div>
+  </div>
+  
+  <!-- select compliance form -->
+  <div id="exportExcelselectDatasetForm" class="exportExcelselectDatasetForm">
+    <div class="exportExcelselectDatasetLabel">Dataset</div>
+    <div id="exportExcelselectDataset" class="exportExcelselectDataset"></div>
+  
+    <div class="exportExcelselectGroupByLabel">Group By</div>
+    <div id="exportExcelselectGroupBy" class="exportExcelselectGroupBy"></div>
+  
+    <div class="exportExcelselectDatasetCategoryLabel">Category</div>
+    <div id="exportExcelselectDatasetCategory" class="exportExcelselectDatasetCategory"></div>
+  
+    <div id="exportExcelselectDatasetCancel" class="exportExcelselectDatasetCancel">Cancel</div>
+    <div id="exportExcelselectDatasetApply" class="exportExcelselectDatasetApply">Apply</div>
+  </div>
+
   <header>
     <div id="mainMenu" class="dropDownMenu">
       <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
@@ -3641,6 +3700,10 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeRevisioning.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeTemplateForm.js"></script>
 
+  <script type="text/javascript" src="Javascripts\xCheckStudio\CMExportExcel.js"></script>
+
+  <script type="text/javascript" src="src\devExtreme\js\FileSaver.min.js"></script>
+    
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,
