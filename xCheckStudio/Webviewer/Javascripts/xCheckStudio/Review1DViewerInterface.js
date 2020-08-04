@@ -302,7 +302,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     this.CheckStatusArray[sheetName] = checkStatusArray;
 }
 
-Review1DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function(checkComponent, isSourceA) {
+Review1DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function(checkComponent, srcId) {
     
 }
 

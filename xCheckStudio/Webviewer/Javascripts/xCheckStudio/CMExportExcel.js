@@ -85,8 +85,10 @@ let SelectDatasetsDataForm = {
         this.show();
 
         this.getDatasets().then(function (datasets) {
-            if (!datasets) {
-                alert("Datasets data not found.");
+            if (!datasets ||
+                datasets.length === 0) {
+                alert("No saved data found for export.");
+                SelectDatasetsDataForm.close();
                 return;
             }
 

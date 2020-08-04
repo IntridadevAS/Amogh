@@ -12,6 +12,8 @@ function Review3DViewerInterface(viewerOptions,
         source);
 
     this.DataSourceId = dataSourceId;
+
+    this.KeepOriginalColors = false;
 }
 // assign SelectionManager's method to this class
 Review3DViewerInterface.prototype = Object.create(ReviewViewerInterface.prototype);
@@ -173,7 +175,21 @@ Review3DViewerInterface.prototype.setViewerBackgroundColor = function () {
     this.Viewer.view.setBackfacesVisible(true);
 }
 
-Review3DViewerInterface.prototype.highlightComponentsfromResult = function () {
+Review3DViewerInterface.prototype.highlightComponentsfromResult = function (keepOriginalColors = false) {
+
+    // set one neutral color to entire model
+    if (keepOriginalColors === false) {
+        this.KeepOriginalColors = false;
+
+        var rootNode = this.Viewer.model.getAbsoluteRootNode();
+        var communicatorColor = new Communicator.Color(255, 255, 255);
+        this.Viewer.model.setNodesFaceColor([rootNode], communicatorColor);
+        this.Viewer.model.setNodesLineColor([rootNode], communicatorColor);
+    }
+    else {
+        this.KeepOriginalColors = true;
+        this.Viewer.model.resetNodesColor(this.Viewer.model.getAbsoluteRootNode());
+    }
 
     for (var id in this.NodeIdStatusData) {
         var component = this.NodeIdStatusData[id];
@@ -379,14 +395,14 @@ Review3DViewerInterface.prototype.SelectValidNode = function () {
 }
 
 
-Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (checkComponent, isSourceA) {
+Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (checkComponent, srcId) {
 
     var reviewManager = model.getCurrentReviewManager();
     if (!reviewManager) {
         return;
     }
 
-    var sourceComponentData = reviewManager.GetComponentData(checkComponent, isSourceA);
+    var sourceComponentData = reviewManager.GetComponentData(checkComponent, srcId);
 
     var isMainClassValue = false;
 
@@ -408,28 +424,28 @@ Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function 
             var groupId = reviewManager.GetComparisonResultGroupId(parentComponent.MainClass);
             var comp = reviewManager.GetCheckComponent(groupId, parentComponent.Id);
 
-            parentComponentData = reviewManager.GetComponentData(comp, isSourceA);
+            parentComponentData = reviewManager.GetComponentData(comp, srcId);
             if (parentComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
                 this.highlightManager.changeComponentColorInViewer(parentComponentData, false, undefined);
             }
         }
 
         var children = this.Viewer.model.getNodeChildren(parentNodeId);
-        this.ChangeColorInViewer(children, parentComponentData, isSourceA);
+        this.ChangeColorInViewer(children, parentComponentData, srcId);
 
     }
     else if (sourceComponentData.MainClass.toLowerCase() in this.OverrideSeverityColorComponents) {
         this.highlightManager.changeComponentColorInViewer(sourceComponentData, false, undefined);
         var children = this.Viewer.model.getNodeChildren(Number(sourceComponentData.NodeId));
 
-        this.ChangeColorInViewer(children, sourceComponentData, isSourceA);
+        this.ChangeColorInViewer(children, sourceComponentData, srcId);
     }
     else {
         this.highlightManager.changeComponentColorInViewer(sourceComponentData, false, undefined);
     }
 }
 
-Review3DViewerInterface.prototype.ChangeColorInViewer = function (children, parentComponent, isSourceA) {
+Review3DViewerInterface.prototype.ChangeColorInViewer = function (children, parentComponent, srcId) {
     var reviewManager = model.getCurrentReviewManager();
     if (!reviewManager) {
         return;
@@ -441,7 +457,7 @@ Review3DViewerInterface.prototype.ChangeColorInViewer = function (children, pare
 
             var groupId = reviewManager.GetComparisonResultGroupId(checkComponent.MainClass);
             var comp = reviewManager.GetCheckComponent(groupId, checkComponent.Id);
-            var sourceComponentData = reviewManager.GetComponentData(comp, isSourceA);
+            var sourceComponentData = reviewManager.GetComponentData(comp, srcId);
 
             overrideColorWithSeverityPreference = false;
             if (parentComponent) {
@@ -456,7 +472,7 @@ Review3DViewerInterface.prototype.ChangeColorInViewer = function (children, pare
 
             this.highlightManager.changeComponentColorInViewer(sourceComponentData, overrideColorWithSeverityPreference, parentComponent);
             var children1 = this.Viewer.model.getNodeChildren(Number(sourceComponentData.NodeId));
-            this.ChangeColorInViewer(children1, sourceComponentData, isSourceA);
+            this.ChangeColorInViewer(children1, sourceComponentData, srcId);
         }
     }
 }

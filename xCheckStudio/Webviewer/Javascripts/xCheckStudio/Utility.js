@@ -100,20 +100,23 @@ var xCheckStudio;
             if (override && parentComponent) {
                 if (parentComponent.Status.toLowerCase().includes("error")) {
 
-                    if (parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) {
+                    if (parentComponent.accepted.toLowerCase() != 'true' && 
+                        parentComponent.transpose == null) {
                         return HoopsViewerErrorColor;
                     }
                 }
                 else if (parentComponent.Status.toLowerCase().includes("warning")) {
 
-                    if ((parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) &&
+                    if ((parentComponent.accepted.toLowerCase() != 'true' && 
+                         parentComponent.transpose == null) &&
                         status.toLowerCase() !== "error") {
                         return HoopsViewerWarningColor;
                     }
                 }
                 else if (parentComponent.Status.toLowerCase().includes("no match")) {
 
-                    if ((parentComponent.accepted.toLowerCase() != 'true' && parentComponent.transpose == null) &&
+                    if ((parentComponent.accepted.toLowerCase() != 'true' && 
+                         parentComponent.transpose == null) &&
                         (status.toLowerCase() !== "error" ||
                             status.toLowerCase() !== "warning")) {
 
@@ -122,10 +125,11 @@ var xCheckStudio;
                 }
             }
 
-            // if component is mot mapped i.e. undefined, then 
+            // if component is not mapped i.e. undefined, then 
             // don't override the parent's highlight color
-            if (parentComponent &&
-                status.toLowerCase() === "undefined" || status.toLowerCase() === "not checked") {
+            if (/*parentComponent &&*/
+                (status.toLowerCase() === "undefined" ||
+                    status.toLowerCase() === "not checked")) {
                 return undefined;
             }
 
@@ -147,7 +151,8 @@ var xCheckStudio;
                     parentComponent.Status.toLowerCase().includes("ok") ||
                     parentComponent.Status.toLowerCase().includes("warning"))) {
 
-                    if (parentComponent.Status.toLowerCase().includes("(a)") || parentComponent.Status.toLowerCase().includes("(t)")) {
+                    if (parentComponent.Status.toLowerCase().includes("(a)") || 
+                        parentComponent.Status.toLowerCase().includes("(t)")) {
                         return AcceptedColor;
                     }
                     else if (isAccepted(parentComponent)) {
@@ -186,13 +191,12 @@ var xCheckStudio;
                 }
             }
             else if (status.toLowerCase().includes("error")) {
-                if (status.toLowerCase().includes("(a)") || status.toLowerCase().includes("(t)")) {
+                /*if (status.toLowerCase().includes("(a)") || 
+                    status.toLowerCase().includes("(t)")) {
                     return AcceptedColor;
                 }
-                else if (isAccepted(component)) {
-                    return AcceptedColor;
-                }
-                else if (isTransposed(component)) {
+                else */if (isAccepted(component) ||
+                    isTransposed(component)) {
                     return AcceptedColor;
                 }
                 else {
@@ -200,13 +204,12 @@ var xCheckStudio;
                 }
             }
             else if (status.toLowerCase().includes("warning")) {
-                if (status.toLowerCase().includes("(a)") || status.toLowerCase().includes("(t)")) {
+                /* if (status.toLowerCase().includes("(a)") || 
+                    status.toLowerCase().includes("(t)")) {
                     return AcceptedColor;
                 }
-                else if (isAccepted(component)) {
-                    return AcceptedColor;
-                }
-                else if (isTransposed(component)) {
+                else */if (isAccepted(component) ||
+                    isTransposed(component)) {
                     return AcceptedColor;
                 }
                 else {
@@ -214,7 +217,8 @@ var xCheckStudio;
                 }
             }
             else if (status.toLowerCase().includes("no value")) {
-                if (status.toLowerCase().includes("(a)") || status.toLowerCase().includes("(t)")) {
+                if (status.toLowerCase().includes("(a)") || 
+                    status.toLowerCase().includes("(t)")) {
                     return AcceptedColor;
                 }
                 else if (isAccepted(component)) {

@@ -69,6 +69,14 @@ ViewerContextMenu.prototype.GetControls = function () {
             click: function (e, menu) {
                 menu.OnSetDefaultsClicked();
             }
+        },
+        {
+            text: "Show/Hide Original Colors",
+            icon: "public/symbols/Set Defaults.svg",
+            visible: !_this.IsCheckModule(),
+            click: function (e, menu) {
+                menu.OnToggleOriginalColors();
+            }            
         }
     ];    
 }
@@ -190,6 +198,18 @@ ViewerContextMenu.prototype.OnZoomToFitClicked = function () {
 }
 
 ViewerContextMenu.prototype.OnSetDefaultsClicked = function () {
+}
+
+ViewerContextMenu.prototype.OnToggleOriginalColors = function () {
+    if (this.IsCheckModule()) {
+        return;
+    }
+
+    var viewerInterface = this.GetViewerInterface();
+    if (viewerInterface &&
+        viewerInterface.Is3DViewer()) {
+        viewerInterface.highlightComponentsfromResult(!viewerInterface.KeepOriginalColors);
+    }
 }
 
 ViewerContextMenu.prototype.ShowMenu = function (x, y) {
@@ -363,9 +383,14 @@ ViewerContextMenu.prototype.GetViewerInterface = function () {
         if (viewerContainer == model.checks[model.currentCheck].sourceAViewer.ViewerOptions[0]) {
             return model.checks[model.currentCheck].sourceAViewer;
         }
-
-        if (viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
+        else if (viewerContainer == model.checks[model.currentCheck].sourceBViewer.ViewerOptions[0]) {
             return model.checks[model.currentCheck].sourceBViewer;
+        }
+        else if (viewerContainer == model.checks[model.currentCheck].sourceCViewer.ViewerOptions[0]) {
+            return model.checks[model.currentCheck].sourceCViewer;
+        }
+        else if (viewerContainer == model.checks[model.currentCheck].sourceDViewer.ViewerOptions[0]) {
+            return model.checks[model.currentCheck].sourceDViewer;
         }
     }
     else {
