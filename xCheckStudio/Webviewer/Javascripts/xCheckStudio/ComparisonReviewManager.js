@@ -396,11 +396,19 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, true);
+                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
                 }
                 if (results[componentId]["sourceBNodeId"] !== null) {
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
+                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
+                }
+                if (results[componentId]["sourceCNodeId"] !== null) {
+                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
+                }
+                if (results[componentId]["sourceDNodeId"] !== null) {
+                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "d");
                 }
 
                 // call components accepted
@@ -474,11 +482,19 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, 'a');
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
+                        }
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                         }
                     }
                 }
@@ -578,11 +594,19 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
+                        }
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                         }
                     }
 
@@ -660,11 +684,19 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
+                        }
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                         }
                     }
                 }
@@ -730,11 +762,19 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, true);
+                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
                 }
                 if (results[componentId]["sourceBNodeId"] !== null) {
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
+                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
+                }
+                if (results[componentId]["sourceCNodeId"] !== null) {
+                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
+                }
+                if (results[componentId]["sourceDNodeId"] !== null) {
+                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "d");
                 }
             }
         });
@@ -801,11 +841,19 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordionData) {
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
+                        }
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                         }
                     }
                 }
@@ -955,11 +1003,19 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, true);
+                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
                 }
                 if (results[componentId]["sourceBNodeId"] !== null) {
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
+                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
+                }
+                if (results[componentId]["sourceCNodeId"] !== null) {
+                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
+                }
+                if (results[componentId]["sourceDNodeId"] !== null) {
+                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                 }
 
                 // Update original dataset properties               
@@ -1220,11 +1276,19 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
 
                 if (results[componentId]["sourceANodeId"] !== null) {
                     var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, true);
+                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
                 }
                 if (results[componentId]["sourceBNodeId"] !== null) {
                     var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, false);
+                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
+                } 
+                if (results[componentId]["sourceCNodeId"] !== null) {
+                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
+                }
+                if (results[componentId]["sourceDNodeId"] !== null) {
+                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                 }
 
                  // Update original dataset properties               
@@ -1487,11 +1551,19 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
+                        }
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                         }
 
                         // Update original dataset properties 
@@ -1579,13 +1651,20 @@ ComparisonReviewManager.prototype.TransposeComponent = function (
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
                         }
-
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
+                        }
                     }
                 }
                 model.getCurrentReviewTable().Refresh(tableIds);
@@ -1668,11 +1747,19 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
+                        }
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
                         }
 
                         // Update original dataset properties 
@@ -1765,13 +1852,20 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
 
                         if (changedComponent["sourceANodeId"] !== null) {
                             var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, true);
+                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
                         }
                         if (changedComponent["sourceBNodeId"] !== null) {
                             var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, false);
+                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
                         }
-
+                        if (changedComponent["sourceCNodeId"] !== null) {
+                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
+                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
+                        }
+                        if (changedComponent["sourceDNodeId"] !== null) {
+                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
+                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
+                        }
                     }
                 }
                 model.getCurrentReviewTable().Refresh(tableIds);
@@ -2137,16 +2231,24 @@ ComparisonReviewManager.prototype.GetNodeIdvsComponentData = function (viewerId)
     return undefined;
 }
 
-ComparisonReviewManager.prototype.GetComponentData = function (checkComponentData, isSourceA) {
+ComparisonReviewManager.prototype.GetComponentData = function (checkComponentData, srcId) {
 
     var ComponentData;
-    if (isSourceA) {
-        var sourceAId = Number(checkComponentData.sourceAId);
-        ComponentData = model.checks[model.currentCheck]["SourceAcomponentIdVsComponentData"][sourceAId];
+    if (srcId === "a") {
+        var id = Number(checkComponentData.sourceAId);
+        ComponentData = model.checks[model.currentCheck]["SourceAcomponentIdVsComponentData"][id];
     }
-    else {
-        var sourceBId = Number(checkComponentData.sourceBId);
-        ComponentData = model.checks[model.currentCheck]["SourceBcomponentIdVsComponentData"][sourceBId];
+    else if (srcId === "b") {
+        var id = Number(checkComponentData.sourceBId);
+        ComponentData = model.checks[model.currentCheck]["SourceBcomponentIdVsComponentData"][id];
+    }
+    else if (srcId === "c") {
+        var id = Number(checkComponentData.sourceCId);
+        ComponentData = model.checks[model.currentCheck]["SourceCcomponentIdVsComponentData"][id];
+    }
+    else if (srcId === "d") {
+        var id = Number(checkComponentData.sourceDId);
+        ComponentData = model.checks[model.currentCheck]["SourceDcomponentIdVsComponentData"][id];
     }
 
     var sourceComponentData = {};

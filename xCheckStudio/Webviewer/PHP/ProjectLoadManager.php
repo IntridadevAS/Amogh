@@ -3689,7 +3689,14 @@ function ReadAllComponents($tempDbh, $table)
             // now read all datasource info
             // read datasource info
             $datasourceInfo = readDataSourceInfo($dbh);
-            if ($datasourceInfo != NULL) {
+            if (
+                $datasourceInfo != NULL &&
+                (array_key_exists("a",  $results) ||
+                array_key_exists("b",  $results) ||
+                array_key_exists("c",  $results) ||
+                array_key_exists("d",  $results))
+            )
+            {
                 $results['sourceInfo'] = $datasourceInfo;
             }
 

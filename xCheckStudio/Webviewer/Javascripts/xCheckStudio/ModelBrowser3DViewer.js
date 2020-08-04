@@ -8,6 +8,8 @@ function ModelBrowser3DViewer(id,
 
     this.Viewer;
     this.selectedNodeId;
+    
+    this.KeepOriginalColors = false;
 }
 
 ModelBrowser3DViewer.prototype.GetBrowser = function () {
@@ -176,7 +178,21 @@ ModelBrowser3DViewer.prototype.IsNodeInCheckResults = function (node) {
     return false;
 }
 
-ModelBrowser3DViewer.prototype.HighlightComponentsfromResult = function () {
+ModelBrowser3DViewer.prototype.HighlightComponentsfromResult = function (keepOriginalColors = false) {
+
+    // set one neutral color to entire model
+    if (keepOriginalColors === false) {
+        this.KeepOriginalColors = false;
+
+        var rootNode = this.Viewer.model.getAbsoluteRootNode();
+        var communicatorColor = new Communicator.Color(255, 255, 255);
+        this.Viewer.model.setNodesFaceColor([rootNode], communicatorColor);
+        this.Viewer.model.setNodesLineColor([rootNode], communicatorColor);
+    }
+    else {
+        this.KeepOriginalColors = true;
+        this.Viewer.model.resetNodesColor(this.Viewer.model.getAbsoluteRootNode());
+    }
 
     var browser = this.GetBrowser();
 
