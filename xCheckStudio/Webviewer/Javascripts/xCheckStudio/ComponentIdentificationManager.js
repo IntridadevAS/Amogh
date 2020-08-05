@@ -49,6 +49,9 @@ var xCheckStudio;
                     if ("owner" in identifier) {
                         properties['owner'] = identifier.owner;
                     }
+                    if ("createVirtualParents" in identifier) {
+                        properties['createVirtualParents'] = identifier.createVirtualParents;
+                    }
 
                     return properties;
                 }
