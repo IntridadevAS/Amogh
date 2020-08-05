@@ -112,13 +112,13 @@ VisioModelBrowser.prototype.addComponentRow = function (component, parentid) {
     tableRowContent[ModelBrowserColumnNamesVisio.Component] = component.Name;
     tableRowContent[ModelBrowserColumnNamesVisio.MainClass] = (component.MainComponentClass != undefined ? component.MainComponentClass : "");
     tableRowContent[ModelBrowserColumnNamesVisio.SubClass] = (component.SubComponentClass != undefined ? component.SubComponentClass : "");
-    tableRowContent[ModelBrowserColumnNamesVisio.ID] =  component.NodeId;
-    if (this.ModelBrowserAddedNodes.includes(parentid)) {
-        tableRowContent[ModelBrowserColumnNamesVisio.Parent] = parentid;
-    }
-    else {
-        tableRowContent[ModelBrowserColumnNamesVisio.Parent] = undefined;
-    }
+    tableRowContent[ModelBrowserColumnNamesVisio.ID] = component.NodeId;
+    // if (this.ModelBrowserAddedNodes.includes(parentid)) {
+    tableRowContent[ModelBrowserColumnNamesVisio.Parent] = parentid;
+    // }
+    // else {
+    //     tableRowContent[ModelBrowserColumnNamesVisio.Parent] = undefined;
+    // }
 
     this.modelTreeRowData.push(tableRowContent);
 

@@ -6,7 +6,7 @@ function VisioSelectionManager(nodeIdvsSelectedComponents) {
     this.NodeIdvsSelectedComponents = nodeIdvsSelectedComponents;    
     this.SelectedCompoents = [];
 
-    this.SelectedSVGElement;    
+    this.SelectedSVGElements = [];    
 }
 // assign SelectionManager's method to this class
 VisioSelectionManager.prototype = Object.create(SelectionManager.prototype);
@@ -29,35 +29,10 @@ VisioSelectionManager.prototype.OnComponentRowClicked = function (
     }
 
     this.HighlightSelectedRow(rowKey, row, sourceId);
-    // // unhighlight old row
-    // var treeList = $("#" + containerDiv).dxTreeList("instance");
-    // var selectedRows = treeList.getSelectedRowKeys("all");
-
-    // if (!selectedRows.includes(this.HighlightedComponentRowKey)) {
-    //     var treeInstance = SourceManagers[sourceId].ModelTree.TreeInstance;
-    //     if (treeInstance) {
-    //         var index = treeInstance.getRowIndexByKey(this.HighlightedComponentRowKey);
-    //         if (index !== -1) {
-    //             var rowElement = treeInstance.getRowElement(index);
-    //             this.RemoveHighlightColor(rowElement[0]);                
-    //         }
-    //     }       
-    // }
-
-    // // highlight new row  
-    // if (!selectedRows.includes(rowKey)) {
-    //     if (row.rowElement)
-    //         this.ApplyHighlightColor(row.rowElement[0]);
-    //     else {
-    //         this.ApplyHighlightColor(row);
-    //     }
-    // }
-
-    // this.HighlightedComponentRowKey = rowKey;
-
-    if (id && highlightInView === true) {
-        this.HighlightInView(id, sourceId);
-    }
+ 
+    if (highlightInView === true) {
+        this.HighlightInView(rowKey, id, sourceId);
+    }    
 }
 
 VisioSelectionManager.prototype.HighlightSelectedRow = function (rowKey, row, sourceId) {
@@ -88,9 +63,32 @@ VisioSelectionManager.prototype.HighlightSelectedRow = function (rowKey, row, so
 }
 
 /* 
-   This function 
+   This function
 */
-VisioSelectionManager.prototype.HighlightInView = function (id, sourceId) {
+VisioSelectionManager.prototype.HighlightInView = function (rowKey, id, sourceId, clearOld = true) {
+    if (!id) {
+        return;
+        // // if virtual component
+        // var treeInstance = SourceManagers[sourceId].ModelTree.TreeInstance;
+        // let treeNode = treeInstance.getNodeByKey(rowKey);
+        // if (treeNode &&
+        //     treeNode.hasChildren) {
+
+        //     // clear old
+        //     if (clearOld &&
+        //         this.SelectedSVGElements.length > 0) {
+
+        //         for (let i = 0; i < this.SelectedSVGElements.length; i++) {
+        //             this.UnHighlightGAElement(this.SelectedSVGElements[i]);
+        //         }
+        //     }
+
+        //     for (let i = 0; i < treeNode.children.length; i++) {
+        //         let child = treeNode.children[i];
+        //         this.HighlightInView(child.key, child.data.ID, sourceId, false);
+        //     }
+        // }
+    }
 
     // get the inner DOM of *.svg
     var objectElement = document.getElementById("svgViewerObject" + sourceId);
@@ -100,50 +98,27 @@ VisioSelectionManager.prototype.HighlightInView = function (id, sourceId) {
     var tags = svgDoc.getElementsByTagName("title");
     for (var i = 0; i < tags.length; i++) {
         if (tags[i].textContent == id) {
-            // tags[i].parentElement.addEventListener("mousedown", function () {
 
-            if (this.SelectedSVGElement) {
-                this.UnHighlightGAElement(this.SelectedSVGElement);
-                // var paths = this.SelectedSVGElement.getElementsByTagName("path");
-                // for (var j = 0; j < paths.length; j++) {
-                //     var path = paths[j];
-                //     if (path.hasAttribute("originalstroke")) {
-                //         path.setAttribute("stroke", path.getAttribute("originalstroke"));
-                //     }
-                //     if (path.hasAttribute("originalstroke-width")) {
-                //         path.setAttribute("stroke-width", path.getAttribute("originalstroke-width"));
-                //     }
-                // }
+            if (clearOld &&
+                this.SelectedSVGElements.length > 0) {
+
+                for (let i = 0; i < this.SelectedSVGElements.length; i++) {
+                    this.UnHighlightGAElement(this.SelectedSVGElements[i]);
+                }
             }
 
-            this.SelectedSVGElement = tags[i].parentElement;
+            this.SelectedSVGElements.push(tags[i].parentElement);
 
-            this.HighlightGAElement(this.SelectedSVGElement);
-            // var paths = this.SelectedSVGElement.getElementsByTagName("path");
-            // for (var j = 0; j < paths.length; j++) {
-            //     var path = paths[j];
+            this.HighlightGAElement(tags[i].parentElement);
 
-            //     if (!path.hasAttribute("originalstroke")) {
-            //         path.setAttribute("originalstroke", path.getAttribute("stroke"))
-            //     }
-
-            //     if (!path.hasAttribute("originalstroke-width")) {
-            //         path.setAttribute("originalstroke-width", path.getAttribute("stroke-width"))
-            //     }
-
-            //     path.setAttribute("stroke", "red");
-            //     path.setAttribute("stroke-width", "2");
-            // }
-
-            this.ZoomOnElement(this.SelectedSVGElement, objectElement);
-            // }, false);
+            this.ZoomOnElement(tags[i].parentElement, objectElement);
 
             break;
         }
     }
 };
 
-VisioSelectionManager.prototype.HighlightGAElement = function (svgElement) {  
+VisioSelectionManager.prototype.HighlightGAElement = function (svgElement) {
     var paths = svgElement.getElementsByTagName("path");
     for (var j = 0; j < paths.length; j++) {
         var path = paths[j];
@@ -159,6 +134,9 @@ VisioSelectionManager.prototype.HighlightGAElement = function (svgElement) {
         path.setAttribute("stroke", "red");
         path.setAttribute("stroke-width", "2");
     }
+
+    svgElement.style.outline = "2px solid green";
+    svgElement.style.outlineOffset = "10px";
 }
 
 VisioSelectionManager.prototype.UnHighlightGAElement = function (svgElement) {
@@ -172,17 +150,22 @@ VisioSelectionManager.prototype.UnHighlightGAElement = function (svgElement) {
             path.setAttribute("stroke-width", path.getAttribute("originalstroke-width"));
         }
     }
+
+    svgElement.style.outline = "";
+    svgElement.style.outlineOffset = "";
 }
 
 VisioSelectionManager.prototype.SelectFromGA = function (key, svgElement) {
     var _this = this;
 
-    if (this.SelectedSVGElement) {
-        this.UnHighlightGAElement(this.SelectedSVGElement);
+    if (this.SelectedSVGElements.length > 0) {
+        for (let i = 0; i < this.SelectedSVGElements.length; i++) {
+            this.UnHighlightGAElement(this.SelectedSVGElements[i]);
+        }
     }
 
-    this.SelectedSVGElement = svgElement;
-    this.HighlightGAElement(this.SelectedSVGElement);
+    this.SelectedSVGElements.push(svgElement);
+    this.HighlightGAElement(svgElement);
 
     // highlight in table   
     var treeInstance = SourceManagers[model.currentTabId].ModelTree.TreeInstance;
@@ -219,23 +202,55 @@ VisioSelectionManager.prototype.SelectFromGA = function (key, svgElement) {
    This function 
 */
 VisioSelectionManager.prototype.ZoomOnElement = function (selected, svgDoc) {
-    var svgPanZoomControl = SourceManagers[model.currentTabId].SvgPanZoomControl;   
+    var svgPanZoomControl = SourceManagers[model.currentTabId].SvgPanZoomControl;
     svgPanZoomControl.fit();
     svgPanZoomControl.center();
     svgPanZoomControl.zoom(1);
+
+    var bbox = selected.getBBox(),
+        middleX = bbox.x + (bbox.width / 2),
+        middleY = bbox.y + (bbox.height / 2);
+
+    var offset = svgDoc.getBoundingClientRect();
+
+    var matrix = selected.getScreenCTM();
+
+    var absoluteCoords = {
+        x: (matrix.a * middleX) + (matrix.c * middleY) + matrix.e - offset.left,
+        y: (matrix.b * middleX) + (matrix.d * middleY) + matrix.f - offset.top
+    };
     
-    // var bb = selected.getBBox();
-    // // var vbb = svgPanZoomControl.getSizes().viewBox;
-    // // var x = vbb.width / 2 - bb.x - bb.width / 2;
-    // // var y = vbb.height / 2 - bb.y - bb.height / 2;
-    // // var rz = svgPanZoomControl.getSizes().realZoom;
-    // // svgPanZoomControl.pan({ x: -x * rz, y: -y * rz });
-   
-    // // svgPanZoomControl.pan
-    // //     ({
-    // //         x: -(bb.x * rz) - (svgPanZoomControl.getSizes().width / 2),
-    // //         y: -(bb.y * rz) - (svgPanZoomControl.getSizes().height / 2)
-    // //     }); 
+    var rz = svgPanZoomControl.getSizes().realZoom;
+    svgPanZoomControl.pan({ x: 0, y: 0 });
+    svgPanZoomControl.pan
+        ({
+            x: -(absoluteCoords.x * rz) + (svgPanZoomControl.getSizes().width / 2),
+            y: -(absoluteCoords.y * rz) + (svgPanZoomControl.getSizes().height / 2)
+        });
+
+    // highlight item
+    // selected.classList.add("highlightSVGItem");
+    // let styleValue = selected.getAttribute("style");
+    // if (styleValue) {
+    //     styleValue += "; outline: 2px solid green;"
+    //     styleValue += "outline-offset: 10px;"
+    // }
+    // else {
+    //     styleValue = "outline: 2px solid green;";
+    //     styleValue += "outline-offset: 10px;"
+    // }
+    // selected.setAttribute("style", styleValue);
+    // var vbb = svgPanZoomControl.getSizes().viewBox;
+    // var zoom = vbb.width / bbox.width;
+    // svgPanZoomControl.zoom(zoom);
+
+    // var vbb = svgPanZoomControl.getSizes().viewBox;
+    // var x = vbb.width / 2 - absoluteCoords.x - bbox.width / 2;
+    // var y = vbb.height / 2 - absoluteCoords.y - bbox.height / 2;
+    // var rz = svgPanZoomControl.getSizes().realZoom;
+    // var zoom = vbb.width / bbox.width;
+    // svgPanZoomControl.panBy({ x: x * rz, y: y * rz });
+    // svgPanZoomControl.zoom(zoom);
 
     // // var bb=$("#target")[0].getBBox();
     // // var vbb = svgPanZoomControl.getSizes().viewBox;

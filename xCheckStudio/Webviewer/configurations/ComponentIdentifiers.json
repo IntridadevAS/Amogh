@@ -101,9 +101,10 @@
             "vsd",
             "vsdx"
         ],
-        "name": "VMD_<*>_NAME",
-        "category": "VMD_<*>_ACTTYP",
-        "componentClass": "VMD_<*>_ACTTYP",
-        "owner": "VMD_<*>_OWNER"
+        "name": "NAME",
+        "category": "ActType",
+        "componentClass": "ActType",
+        "owner": "OWNER",
+        "createVirtualParents": ["SCTUB", "SCVALV", "SCFITT", "SCINST", "SCOINS"]
     }
 }

@@ -14,6 +14,8 @@ function VisioManager(id,
     this.SelectedSVGElement;
 
     this.SvgPanZoomControl;
+    
+    this.CategoryWiseComponents = {};
 }
 
 // inherit from parent
@@ -124,10 +126,101 @@ VisioManager.prototype.ReadProperties = function () {
                     }
                 }
 
+                // create virtual parents
+                _this.CreateVirtualParents(identifierProperties);
+
                 return resolve(true);
             }
         };
     });
+}
+
+VisioManager.prototype.CreateVirtualParents = function (identifierProperties) {
+    if (!identifierProperties.createVirtualParents ||
+        identifierProperties.createVirtualParents.length === 0) {
+        return;
+    }
+    var targetTypes = identifierProperties.createVirtualParents.map(function (value) {
+        return value.toLowerCase();
+    });
+
+    // create new objects
+    let newObjects = {};
+
+    for (let key in this.SourceProperties) {
+        let component = this.SourceProperties[key];
+        if (!component.MainComponentClass ||
+            targetTypes.indexOf(component.MainComponentClass.toLowerCase()) === -1 ||
+            !component.ParentNodeId) {
+            continue;
+        }
+
+        // create virtual parent
+        this.CreateVirtualParent(component.ParentNodeId, newObjects);
+    }
+
+    // add new virtual parnet components to source properties
+    if (Object.keys(newObjects).length > 0) {
+        for (let key in newObjects) {
+            this.SourceProperties[Object.keys(this.SourceProperties).length + 1] = newObjects[key];
+        }
+    }
+}
+
+VisioManager.prototype.CreateVirtualParent = function (parentStr, newObjects) {   
+    
+    if (parentStr.indexOf(" ") !== -1) {
+        let parentCategory = parentStr.split(" ")[0].trim();
+
+        let parentName = parentStr;
+        if (parentStr.indexOf("of") !== -1) {
+            parparentNameent = parentStr.split('of')[0].trim();
+        }
+
+        if (parentCategory in this.CategoryWiseComponents &&
+            this.CategoryWiseComponents[parentCategory].indexOf(parentName) !== -1) {
+            // parent component is already there, no need to create new one
+            return;
+        }
+
+        // create virtual parent
+        let owner = null;
+        if (parentStr.indexOf("of") !== -1) {
+            owner = parentStr.replace(parentStr.substring(0, parentStr.indexOf("of") + 2), "");
+            owner = owner.trim();
+        }
+        var componentObject = new GenericComponent(parentName,
+            parentCategory,
+            parentCategory,
+            null,
+            owner);
+
+        // add genericProperties object to sourceproperties collection
+        newObjects[Object.keys(newObjects).length + 1] = componentObject;
+
+        // maintain category wise component names
+        if (!(parentCategory in this.CategoryWiseComponents)) {
+            this.CategoryWiseComponents[parentCategory] = [];
+        }
+        this.CategoryWiseComponents[parentCategory].push(parentName);
+
+        if (owner !== null) {
+            this.CreateVirtualParent(owner, newObjects);
+        }
+    }
+
+    // if (parentName.indexOf("of") !== -1) {
+
+    // }
+    // else {
+
+    // }
+    // let parentsArray = component.ParentNodeId.split('of');
+    // for (let i = 0; i < parentsArray.length; i++) {
+    //     let parent = parentsArray[i].trim();
+
+
+    // }
 }
 
 VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierProperties) {
@@ -138,8 +231,9 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
 
     // get component name
     var name = this.GetPropertyValue(propertyElements, identifierProperties.name);
-    if (name == undefined || mainComponentClass === "") {
-        name = shapeElement.getAttribute("name");
+    if (name == undefined || 
+        mainComponentClass === "") {
+        name = shapeElement.getAttribute("label");
     }
 
     // get main component class
@@ -148,7 +242,8 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
     // get sub component class
     var subComponentClass = this.GetPropertyValue(propertyElements, identifierProperties.subClass);
 
-    if ((name !== undefined && name !== "") &&
+    if ((name !== undefined && 
+        name !== "") &&
         (mainComponentClass !== undefined && mainComponentClass !== "") &&
         (subComponentClass !== undefined && mainComponentClass !== "")) {
 
@@ -173,7 +268,7 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
         for (var propertyKey = 0; propertyKey < propertyElements.length; propertyKey++) {
             var propertyElement = propertyElements[propertyKey];
 
-            var propName = propertyElement.getAttribute("name");
+            var propName = propertyElement.getAttribute("label");
             var propValue = propertyElement.getAttribute("value");
 
             var propertyObject = new GenericProperty(propName, "String", propValue);
@@ -182,6 +277,12 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
 
         // add genericProperties object to sourceproperties collection
         this.SourceProperties[Object.keys(this.SourceProperties).length + 1] = componentObject;
+
+        // maintain category wise component names
+        if (!(mainComponentClass in this.CategoryWiseComponents)) {
+            this.CategoryWiseComponents[mainComponentClass] = [];
+        }
+        this.CategoryWiseComponents[mainComponentClass].push(name);
 
         this.PropertyCallout;
     }
@@ -197,13 +298,13 @@ VisioManager.prototype.GetPropertyValue = function (propertyElements, propertyTo
 
     var properties;
     if (propertyToSearch.includes("<*>")) {
-        var properties = propertyToSearch.split("<*>");
+        properties = propertyToSearch.split("<*>");
     }
 
     for (var propertyKey = 0; propertyKey < propertyElements.length; propertyKey++) {
         var propertyElement = propertyElements[propertyKey];
 
-        var propName = propertyElement.getAttribute("name").toLowerCase();
+        var propName = propertyElement.getAttribute("label").toLowerCase();
         if (properties && properties.length > 0) {
             var match = true;
             for (var i = 0; i < properties.length; i++) {
