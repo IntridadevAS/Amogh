@@ -22,10 +22,12 @@
   left: 0;
   bottom: 0;
   /* background-image: url("../../public/imgs/MainPageBckgndField.svg"); */
+  background: url("../../public/imgs/HomeBG.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: 50%, cover;
   overflow-y: auto;
+  background-color: var(--xCheckDarkGrey);
 }
 
 .dropDownProjects {

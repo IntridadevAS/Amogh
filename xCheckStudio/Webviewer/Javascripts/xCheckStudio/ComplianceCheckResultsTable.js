@@ -206,7 +206,8 @@ ComplianceCheckResultsTable.prototype.CreateTableData = function (CheckComponent
                 "SourceAName": component.name,
                 "MainClass": mainClass,
                 "SourceANodeId": component.nodeId,
-                "sourceId": component.sourceId
+                "sourceId": component.sourceId,
+                "status": component.status
             };
 
             model.getCurrentReviewManager().SourceComponentIdvsNodeId[component.id] = component.nodeId;

@@ -11,7 +11,7 @@ function VisioManager(id,
     this.PropertiesText;
     this.NodeIdvsComponentIdList;
 
-    this.SelectedSVGElement;
+    // this.SelectedSVGElement;
 
     this.SvgPanZoomControl;
     
@@ -227,11 +227,18 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
 
     var _this = this;
 
-    var propertyElements = shapeElement.getElementsByTagName("Property");
+    var propertyElements = Array.prototype.slice.apply(shapeElement.children);
+    for (let i = 0; i < propertyElements.length; i++) {
+        if (propertyElements[i].tagName.toLowerCase() !== "property") {
+            propertyElements.splice(i, 1);
+            i--;
+        }
+    }
+    // var propertyElements = shapeElement.getElementsByTagName("Property");
 
     // get component name
     var name = this.GetPropertyValue(propertyElements, identifierProperties.name);
-    if (name == undefined || 
+    if (name == undefined ||
         mainComponentClass === "") {
         name = shapeElement.getAttribute("label");
     }
@@ -242,7 +249,8 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
     // get sub component class
     var subComponentClass = this.GetPropertyValue(propertyElements, identifierProperties.subClass);
 
-    if ((name !== undefined && 
+    let componentObject = null;
+    if ((name !== undefined &&
         name !== "") &&
         (mainComponentClass !== undefined && mainComponentClass !== "") &&
         (subComponentClass !== undefined && mainComponentClass !== "")) {
@@ -258,7 +266,7 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
         var nameU = shapeElement.getAttribute("nameU");
 
         // create generic properties object
-        var componentObject = new GenericComponent(name,
+        componentObject = new GenericComponent(name,
             mainComponentClass,
             subComponentClass,
             nameU,
@@ -283,15 +291,26 @@ VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierP
             this.CategoryWiseComponents[mainComponentClass] = [];
         }
         this.CategoryWiseComponents[mainComponentClass].push(name);
-
-        this.PropertyCallout;
     }
+
+    let childShapeIds = [];
 
     var childShapeElements = shapeElement.getElementsByTagName("Shape");
     for (var childShapeKey = 0; childShapeKey < childShapeElements.length; childShapeKey++) {
         var childShapeElement = childShapeElements[childShapeKey];
-        this.ReadShapeProperties(childShapeElement, identifierProperties);;
+
+        let shapeId = this.ReadShapeProperties(childShapeElement, identifierProperties);;
+        if (shapeId) {
+            childShapeIds.push(shapeId);
+        }
     }
+    if (childShapeIds.length > 0 &&
+        componentObject !== null) {
+        componentObject.XData["childShapes"] = childShapeIds;
+    }
+
+    // return this shape id to parent component
+    return shapeElement.getAttribute("nameU");
 }
 
 VisioManager.prototype.GetPropertyValue = function (propertyElements, propertyToSearch) {
@@ -383,7 +402,7 @@ VisioManager.prototype.SetViewerBackgroundColor = function (color) {
     document.getElementById(this.GetViewerContainerID()).style.background = color;
 }
 
-VisioManager.prototype.BindEvents = function (viewer) {
+VisioManager.prototype.BindEvents = function () {
     var _this = this;
 
     // GA selection    
@@ -410,7 +429,12 @@ VisioManager.prototype.OnSelection = function (id, svgElement) {
         return;
     }
     var key = this.ModelTree.CompIdVsKey[id];
-    this.ModelTree.SelectionManager.SelectFromGA(key, svgElement);
+    this.ModelTree.SelectionManager.SelectFromGA(
+        key,
+        id,
+        this.Id,
+        svgElement
+    );
 };
 
 VisioManager.prototype.menu = function (x, y) {

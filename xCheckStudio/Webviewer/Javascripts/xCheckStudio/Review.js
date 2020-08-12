@@ -1160,36 +1160,8 @@ function createModelBrowserAccordion(sources, container) {
 
         },
         itemTitleTemplate: function (itemData, itemIndex, itemElement) {
-            // var btn = $('<div>')
-            // $(btn).data("index", itemIndex)
-            //     .dxButton({
-            //         icon: "chevrondown",
-            //         width: "38px",
-            //         height: "30px",
-            //         onClick: function (e) {
-            //             e.jQueryEvent.stopPropagation();
-            //             var isOpened = e.element.parent().next().parent().hasClass("dx-accordion-item-opened")
-            //             if (!isOpened) {
-            //                 $("#" + container).dxAccordion("instance").expandItem(e.element.data("index"));
-            //             }
-            //             else {
-            //                 $("#" + container).dxAccordion("instance").collapseItem(e.element.data("index"));
-            //             }
-
-            //         }
-            //     }).css("float", "right").appendTo(itemElement);
-
-            // btn[0].classList.add("accordionButton");
-
             itemElement.append("<h1 style = 'font-size: 15px; text-align: center;color: white;'>" + itemData.title + "</h1>");
-
         },
-        // onItemTitleClick: function (e) {
-        //     e.event.stopPropagation();
-        // },
-        // onItemClick: function (e) {
-        //     e.event.stopPropagation();
-        // }
     });
 }
 
@@ -1234,7 +1206,7 @@ function getAccordionIndex(groupName, container) {
     var index;
     var selectedItems = accordion._selection.getSelectedItemKeys();
     for (var i = 0; i < accordionItems.length; i++) {
-        if (!accordionItems[i]["template"].includes(groupName) ||
+        if (!accordionItems[i]["template"].includes(groupName.replace(/\W/g, '')) ||
             (selectedItems.length > 0 &&
                 accordionItems[i]["template"] == selectedItems[0]["template"])) {
             continue;

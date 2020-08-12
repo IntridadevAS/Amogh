@@ -207,7 +207,7 @@
       document.getElementById("loginInfo").style.display = "none";
       document.getElementById("userNameDiv").style.display = "block";
       var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-      var str1 = "Hi ";
+      var str1 = "Hello ";
       var str2 = userinfo.alias;;
       document.getElementById("username").innerHTML = str1.concat(str2);
       setTimeout(function () {

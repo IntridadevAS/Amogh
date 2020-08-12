@@ -140,7 +140,6 @@ ModelBrowser3DViewer.prototype.onSelection = function (selectionEvent) {
         return;
     }
 
-
     var browser = this.GetBrowser();
     if (browser) {
         browser.HighlightBrowserComponentRow(this.selectedNodeId, true);

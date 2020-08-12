@@ -293,7 +293,7 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
                         if (mainClasses.length !== 2) {
-                            return;
+                            continue;
                         }
 
                         anotherBrowserRowData.Item = checkComponent.sourceAName
@@ -308,12 +308,50 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
                         if (mainClasses.length !== 2) {
-                            return;
+                            continue;
                         }
 
                         anotherBrowserRowData.Item = checkComponent.sourceBName
                         anotherBrowserRowData.Class = checkComponent.sourceBSubComponentClass
                         anotherBrowserRowData.Category = mainClasses[1];
+                    }
+                }
+                else if (browser.Id === "c") {
+                    if (browser.Is1D()) {
+                        var mainClasses = group.componentClass.split("-");
+                        if (mainClasses.length < 3) {
+                            continue;
+                        }
+
+                        anotherBrowserRowData.Item = checkComponent.sourceCName
+                        anotherBrowserRowData.Class = checkComponent.sourceCSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[2];
+                    }
+                    else if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceCNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceCNodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceCName;
+                    }
+                }
+                else if (browser.Id === "d") {
+                    if (browser.Is1D()) {
+                        var mainClasses = group.componentClass.split("-");
+                        if (mainClasses.length < 4) {
+                            continue;
+                        }
+
+                        anotherBrowserRowData.Item = checkComponent.sourceDName
+                        anotherBrowserRowData.Class = checkComponent.sourceDSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[3];
+                    }
+                    else if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceDNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceDNodeId;
+                        anotherBrowserRowData.Item = checkComponent.sourceDName;
                     }
                 }
 
@@ -328,6 +366,10 @@ ReviewComparison3DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                         browser.HighlightComponent(anotherBrowserRowData, false);
                         browser.HighlightInViewer(anotherBrowserRowData);
                     }
+                }
+                else if (browser.IsVisio()) {
+                    browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
+                    browser.HighlightInViewer(anotherBrowserRowData);
                 }
             }
         }
@@ -662,12 +704,12 @@ ReviewComparison3DModelBrowser.prototype.HighlightRow = function (path, selected
 
         if (!treeList.isRowExpanded(node)) {
             treeList.expandRow(node).done(function () {
-                _this.HighlightBrowserRowFromNodeId(selectedNodeId, container);
+                _this.HighlightBrowserRowByKey(selectedNodeId, container);
             });
         }
         else {
             if (i == nodeList.length - 1) {
-                _this.HighlightBrowserRowFromNodeId(selectedNodeId, container);
+                _this.HighlightBrowserRowByKey(selectedNodeId, container);
             }
         }
     }
@@ -675,7 +717,7 @@ ReviewComparison3DModelBrowser.prototype.HighlightRow = function (path, selected
 }
 
 
-ReviewComparison3DModelBrowser.prototype.HighlightBrowserRowFromNodeId = function (selectedNodeId, containerDiv) {
+ReviewComparison3DModelBrowser.prototype.HighlightBrowserRowByKey = function (key, containerDiv) {
 
     var _this = this;
     var treeList = $(containerDiv).dxTreeList("instance");
@@ -683,10 +725,10 @@ ReviewComparison3DModelBrowser.prototype.HighlightBrowserRowFromNodeId = functio
     // //navigate scrollbar to specified row using key
     // treeList.navigateToRow(selectedNodeId).done(function () {
 
-    var rowIndex = treeList.getRowIndexByKey(selectedNodeId);
+    var rowIndex = treeList.getRowIndexByKey(key);
     var row = treeList.getRowElement(rowIndex);
 
-    _this.GetSelectionManager().MaintainHighlightedRow(row[0], containerDiv, selectedNodeId);
+    _this.GetSelectionManager().MaintainHighlightedRow(row[0], containerDiv, key);
     // });
 }
 

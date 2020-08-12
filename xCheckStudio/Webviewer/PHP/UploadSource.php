@@ -137,7 +137,7 @@
         if($ConvertToSCS !== "true" &&
            $ConvertToSVG !== "true")
         {    
-            echo "fail"; 
+            echo "success"; 
             return; 
         }     
 

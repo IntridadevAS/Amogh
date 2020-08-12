@@ -4,16 +4,17 @@
 	<ComponentGroup sourceAGroupName="SCNOZZ"  sourceBGroupName="SCNOZZ">
 			  
 			  <ComponentClass sourceAComponentClass="SCNOZZ"  sourceBComponentClass="SCNOZZ">
-			      <Matchwith sourceAPropertyname="VMD_SCNOZZ_NAME"  sourceBPropertyname ="VMD_SCNOZZ_NAME"/>
-				  <Matchwith sourceAPropertyname="VMD_SCNOZZ_OWNER"  sourceBPropertyname ="VMD_SCNOZZ_OWNER"/>
+			      <Matchwith sourceAPropertyname="NAME"  sourceBPropertyname ="NAME"/>
+				  <!-- <Matchwith sourceAPropertyname="OWNER"  sourceBPropertyname ="OWNER"/> -->
 				  
-			      <Property sourceAName="VMD_SCNOZZ_ACTTYP" sourceBName="VMD_SCNOZZ_ACTTYP"  severity="Error"/>
-				  <Property sourceAName="VMD_SCNOZZ_OWNER" sourceBName="VMD_SCNOZZ_OWNER"  severity="Error"/>
-				  <Property sourceAName="VMD_SCNOZZ_DESC" sourceBName="VMD_SCNOZZ_DESC"  severity="Error"/>
-				  <Property sourceAName="VMD_SCNOZZ_FUNC" sourceBName="VMD_SCNOZZ_FUNC"  severity="Error"/>
-				  <Property sourceAName="VMD_SCNOZZ_BORE" sourceBName="VMD_SCNOZZ_BORE"  severity="Error"/>
-				  <Property sourceAName="VMD_SCNOZZ_CATR" sourceBName="VMD_SCNOZZ_CATR"  severity="Error"/>
-				  <Property sourceAName="VMD_SCNOZZ_TEMP" sourceBName="VMD_SCNOZZ_TEMP"  severity="Error"/>				  
+				  <Property sourceAName="NAME" sourceBName="NAME"  severity="Error"/>				  
+			      <Property sourceAName="ActType" sourceBName="ActType"  severity="Error"/>
+				  <Property sourceAName="OWNER" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="Text" sourceBName="Text"  severity="Error"/>
+				  <Property sourceAName="Catref" sourceBName="Catref"  severity="Error"/>
+				  <Property sourceAName="BORE" sourceBName="BORE"  severity="Error"/>
+				  <Property sourceAName="Cref" sourceBName="Cref"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>				  
 			  </ComponentClass> 
 			  
 	    </ComponentGroup> 
@@ -21,16 +22,17 @@
 		<ComponentGroup sourceAGroupName="SCEQUI"  sourceBGroupName="SCEQUI">
 			  
 			  <ComponentClass sourceAComponentClass="SCEQUI"  sourceBComponentClass="SCEQUI">
-			      <Matchwith sourceAPropertyname="VMD_SCEQUI_NAME"  sourceBPropertyname ="VMD_SCEQUI_NAME"/>
-				  <Matchwith sourceAPropertyname="VMD_SCEQUI_OWNER"  sourceBPropertyname ="VMD_SCEQUI_OWNER"/>
+			      <Matchwith sourceAPropertyname="NAME"  sourceBPropertyname ="NAME"/>
+				  <!-- <Matchwith sourceAPropertyname="OWNER"  sourceBPropertyname ="OWNER"/> -->
 				  
-			      <Property sourceAName="VMD_SCEQUI_ACTTYP" sourceBName="VMD_SCEQUI_ACTTYP"  severity="Error"/>
-				  <Property sourceAName="VMD_SCEQUI_OWNER" sourceBName="VMD_SCEQUI_OWNER"  severity="Error"/>
-				  <Property sourceAName="VMD_SCEQUI_DESC" sourceBName="VMD_SCEQUI_DESC"  severity="Error"/>
-				  <Property sourceAName="VMD_SCEQUI_FUNC" sourceBName="VMD_SCEQUI_FUNC"  severity="Error"/>
-				  <Property sourceAName="VMD_SCEQUI_AREA" sourceBName="VMD_SCEQUI_AREA"  severity="Error"/>
-				  <Property sourceAName="VMD_SCEQUI_NUMB" sourceBName="VMD_SCEQUI_NUMB"  severity="Error"/>
-				  <Property sourceAName="VMD_SCEQUI_POS" sourceBName="VMD_SCEQUI_POS"  severity="Error"/>				  
+				  <Property sourceAName="NAME" sourceBName="NAME"  severity="Error"/>				  
+			      <Property sourceAName="ActType" sourceBName="ActType"  severity="Error"/>
+				  <Property sourceAName="OWNER" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="Text" sourceBName="Text"  severity="Error"/>
+				  <Property sourceAName="Function" sourceBName="Function"  severity="Error"/>
+				  <Property sourceAName="Area" sourceBName="Area"  severity="Error"/>
+				  <Property sourceAName="Inprtref" sourceBName="Inprtref"  severity="Error"/>
+				  <Property sourceAName="Ouprtref" sourceBName="Ouprtref"  severity="Error"/>				  
 			  </ComponentClass> 
 			  
 	    </ComponentGroup> 
@@ -42,13 +44,13 @@
    
    <ComponentGroup name="SCEQUI">
       <ComponentClass name="SCEQUI">	
-			      <Property name="VMD_SCEQUI_ACTTYP" rule="Must have value" severity="Error" comment="Property must have value." />
-				  <Property name="VMD_SCEQUI_OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
-				  <Property name="VMD_SCEQUI_DESC" rule="Must have value" severity="Error" comment="Property must have value." />
-				  <Property name="VMD_SCEQUI_FUNC" rule="Must have value" severity="Error" comment="Property must have value." />
-				  <Property name="VMD_SCEQUI_AREA" rule="Must have value" severity="Error" comment="Property must have value." />
-				  <Property name="VMD_SCEQUI_NUMB" rule="Must have value" severity="Error" comment="Property must have value." />
-				  <Property name="VMD_SCEQUI_POS" rule="Must have value" severity="Error" comment="Property must have value." />
+			      <Property name="ACTTYP" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="DESC" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="FUNC" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="AREA" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="NUMB" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="POS" rule="Must have value" severity="Error" comment="Property must have value." />
       </ComponentClass>
 	  
       <ComponentClass name="Pump">	
@@ -65,14 +67,14 @@
 
 	<ComponentGroup name="SCNOZZ">
       <ComponentClass name="SCNOZZ">
-			<Property name="VMD_SCNOZZ_NAME" rule="Must have value" severity="Error" comment="Property must have value." />
-            <Property name="VMD_SCNOZZ_ACTTYP" rule="Must have value" severity="Error" comment="Property must have value." />
-			<Property name="VMD_SCNOZZ_OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
-			<Property name="VMD_SCNOZZ_DESC" rule="Must have value" severity="Error" comment="Property must have value." />
-			<Property name="VMD_SCNOZZ_FUNC" rule="Must have value" severity="Error" comment="Property must have value." />
-			<Property name="VMD_SCNOZZ_BORE" rule="Must have value" severity="Error" comment="Property must have value." />
-            <Property name="VMD_SCNOZZ_CATR" rule="Must have value" severity="Error" comment="Property must have value." />
-            <Property name="VMD_SCNOZZ_TEMP" rule="Must have value" severity="Error" comment="Property must have value." />			
+			<Property name="NAME" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="ACTTYP" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="DESC" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="FUNC" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="BORE" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="CATR" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="TEMP" rule="Must have value" severity="Error" comment="Property must have value." />			
       </ComponentClass>
    </ComponentGroup>
    </Check>

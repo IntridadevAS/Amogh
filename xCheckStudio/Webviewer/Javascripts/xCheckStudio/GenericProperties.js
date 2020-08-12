@@ -14,6 +14,10 @@ function GenericComponent(name,
 
     this.ID = componentId;
 
+    // this is to hold additional info about component
+    // created while working with Visio
+    this.XData = {};
+
     this.properties = [];
     GenericComponent.prototype.addProperty = function (genericProperty) {
         this.properties.push(genericProperty);
