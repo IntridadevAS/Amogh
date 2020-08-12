@@ -617,7 +617,11 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (accordionData, Ac
 ComplianceReviewManager.prototype.HighlightComponentInGraphicsViewer = function (sheetName, currentReviewTableRowData) {
     // highlight component in graphics view in both viewer
     var nodeId = currentReviewTableRowData.NodeId;
-    model.checks["compliance"]["viewer"].highlightComponent(Compliance.ViewerContainer, sheetName, currentReviewTableRowData, nodeId);
+    model.checks["compliance"]["viewer"].highlightComponent(
+        Compliance.ViewerContainer, 
+        sheetName, 
+        currentReviewTableRowData, 
+        nodeId);
 }
 
 
@@ -983,29 +987,44 @@ ComplianceReviewManager.prototype.SerializeViewsAndTags = function (clear = fals
 }
 
 ComplianceReviewManager.prototype.SerializeMarkupViews = function (clear) {
-    let views = model.markupViews["compliance"][this.DataSourceId];
-    let viewsSerialized = model.checks["compliance"]["viewer"].SerializeViews(views);
-    model.markupViews["compliance"][this.DataSourceId + "_serialized"] = viewsSerialized;
-    if (clear === true) {
-        model.markupViews["compliance"][this.DataSourceId] = {};
+    let viewerInterface = model.checks["compliance"]["viewer"];
+    if (viewerInterface &&
+        viewerInterface.Is3DViewer()) {
+
+        let views = model.markupViews["compliance"][this.DataSourceId];
+        let viewsSerialized =viewerInterface.SerializeViews(views);
+        model.markupViews["compliance"][this.DataSourceId + "_serialized"] = viewsSerialized;
+        if (clear === true) {
+            model.markupViews["compliance"][this.DataSourceId] = {};
+        }
     }
 }
 
 ComplianceReviewManager.prototype.SerializeBookmarks = function (clear) {
-    let views = model.bookmarks["compliance"][this.DataSourceId];
-    let viewsSerialized = model.checks["compliance"]["viewer"].SerializeViews(views);
-    model.bookmarks["compliance"][this.DataSourceId + "_serialized"] = viewsSerialized;
-    if (clear === true) {
-        model.markupViews["compliance"][this.DataSourceId] = {};
+    let viewerInterface = model.checks["compliance"]["viewer"];
+    if (viewerInterface &&
+        viewerInterface.Is3DViewer()) {
+
+        let views = model.bookmarks["compliance"][this.DataSourceId];
+        let viewsSerialized = viewerInterface.SerializeViews(views);
+        model.bookmarks["compliance"][this.DataSourceId + "_serialized"] = viewsSerialized;
+        if (clear === true) {
+            model.markupViews["compliance"][this.DataSourceId] = {};
+        }
     }
 }
 
 ComplianceReviewManager.prototype.SerializeAnnotations = function (clear) {
-    let annotations = model.annotations["compliance"][this.DataSourceId];
-    let annotationsSerialized = model.checks["compliance"]["viewer"].SerializeAnnotations(annotations);
-    model.annotations["compliance"][this.DataSourceId + "_serialized"] = annotationsSerialized;
-    if (clear === true) {
-        model.markupViews["compliance"][this.DataSourceId] = {};
+    let viewerInterface = model.checks["compliance"]["viewer"];
+    if (viewerInterface &&
+        viewerInterface.Is3DViewer()) {
+
+        let annotations = model.annotations["compliance"][this.DataSourceId];
+        let annotationsSerialized = viewerInterface.SerializeAnnotations(annotations);
+        model.annotations["compliance"][this.DataSourceId + "_serialized"] = annotationsSerialized;
+        if (clear === true) {
+            model.markupViews["compliance"][this.DataSourceId] = {};
+        }
     }
 }
 
@@ -1016,20 +1035,31 @@ ComplianceReviewManager.prototype.RestoreViewsAndTags = function (clear = false)
 }
 
 ComplianceReviewManager.prototype.RestoreMarkupViews = function (clear) {
-    let viewsSerialized = model.markupViews["compliance"][this.DataSourceId + "_serialized"];
-    let views = model.checks["compliance"]["viewer"].SerializeViews(viewsSerialized);
-    model.markupViews["compliance"][this.DataSourceId] = views;
-    if (clear === true) {
-        model.markupViews["compliance"][this.DataSourceId + "_serialized"] = [];
+
+    let viewerInterface = model.checks["compliance"]["viewer"];
+    if (viewerInterface &&
+        viewerInterface.Is3DViewer()) {
+
+        let viewsSerialized = model.markupViews["compliance"][this.DataSourceId + "_serialized"];
+        let views = viewerInterface.SerializeViews(viewsSerialized);
+        model.markupViews["compliance"][this.DataSourceId] = views;
+        if (clear === true) {
+            model.markupViews["compliance"][this.DataSourceId + "_serialized"] = [];
+        }
     }
 }
 
 ComplianceReviewManager.prototype.RestoreBookmarks = function (clear) {
-    let viewsSerialized = model.bookmarks["compliance"][this.DataSourceId + "_serialized"];
-    let views = model.checks["compliance"]["viewer"].SerializeViews(viewsSerialized);
-    model.bookmarks["compliance"][this.DataSourceId] = views;
-    if (clear === true) {
-        model.markupViews["compliance"][this.DataSourceId + "_serialized"] = [];
+    let viewerInterface = model.checks["compliance"]["viewer"];
+    if (viewerInterface &&
+        viewerInterface.Is3DViewer()) {
+
+        let viewsSerialized = model.bookmarks["compliance"][this.DataSourceId + "_serialized"];
+        let views = viewerInterface.SerializeViews(viewsSerialized);
+        model.bookmarks["compliance"][this.DataSourceId] = views;
+        if (clear === true) {
+            model.markupViews["compliance"][this.DataSourceId + "_serialized"] = [];
+        }
     }
 }
 

@@ -107,90 +107,142 @@ PropertyCallout.prototype.UpdateForComparison = function (
         sourceDiv.id = "firstSource";
         document.getElementById("propertyCalloutStatusBar" + _this.CheckType).appendChild(sourceDiv);
 
+        let loading = true;
         var firstSourceBtn = $("#firstSource").dxButton({
             // icon: "chevrondown",
             text: "1",
             width: "50px",
             height: "30px",
+            onContentReady: function (e) {
+                if (loading !== true) {
+                    return;
+                }
+                loading = false;
+
+                _this.LoadData(propertyCalloutData, "a");               
+            },
             onClick: function (e) {
-                _this.LoadProperties(propertyCalloutData["a"].properties);
-                _this.LoadReferences(propertyCalloutData["a"].references);
-                _this.LoadComments(propertyCalloutData["a"].comments, propertyCalloutData["a"].componentId, "a");
-                document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['a'].name;
+                _this.LoadData(propertyCalloutData, "a");
+                // _this.LoadProperties(propertyCalloutData["a"].properties);
+                // _this.LoadReferences(propertyCalloutData["a"].references);
+                // _this.LoadComments(propertyCalloutData["a"].comments, propertyCalloutData["a"].componentId, "a");
+                // document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['a'].name;
             }
         }).dxButton("instance");
 
-        firstSourceBtn["_$element"].click();
-        isFirst = false;
+        // firstSourceBtn["_$element"].click();
+        // isFirst = false;
     }
     if ("b" in propertyCalloutData) {
         var sourceDiv = document.createElement("div");
         sourceDiv.id = "secondSource";
         document.getElementById("propertyCalloutStatusBar" + _this.CheckType).appendChild(sourceDiv);
 
+        let loading = true;
         var secondSourceBtn = $("#secondSource").dxButton({
             // icon: "chevrondown",
             text: "2",
             width: "50px",
             height: "30px",
+            onContentReady: function (e) {
+                if (loading !== true) {
+                    return;
+                }
+                loading = false;
+                
+                if (!("a" in propertyCalloutData)) {
+                    _this.LoadData(propertyCalloutData, "b");
+                    // e.component["_$element"].click();
+                }
+            },
             onClick: function (e) {
-                _this.LoadProperties(propertyCalloutData["b"].properties);
-                _this.LoadReferences(propertyCalloutData["b"].references);
-                _this.LoadComments(propertyCalloutData["b"].comments, propertyCalloutData["b"].componentId, "b");
-                document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['b'].name;
+                _this.LoadData(propertyCalloutData, "b");
+                // _this.LoadProperties(propertyCalloutData["b"].properties);
+                // _this.LoadReferences(propertyCalloutData["b"].references);
+                // _this.LoadComments(propertyCalloutData["b"].comments, propertyCalloutData["b"].componentId, "b");
+                // document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['b'].name;
             }
         }).dxButton("instance");
 
-        if (isFirst) {
-            secondSourceBtn["_$element"].click();
-            isFirst = false;
-        }
+        // if (isFirst) {
+        //     secondSourceBtn["_$element"].click();
+        //     isFirst = false;
+        // }
     }
     if ("c" in propertyCalloutData) {
         var sourceDiv = document.createElement("div");
         sourceDiv.id = "thirdSource";
         document.getElementById("propertyCalloutStatusBar" + _this.CheckType).appendChild(sourceDiv);
 
+        let loading = true;
         var thirdSourceBtn = $("#thirdSource").dxButton({
             // icon: "chevrondown",
             text: "3",
             width: "50px",
             height: "30px",
+            onContentReady: function (e) {
+                if (loading !== true) {
+                    return;
+                }
+                loading = false;
+
+                if (!("a" in propertyCalloutData) &&
+                    !("b" in propertyCalloutData)) {
+                    _this.LoadData(propertyCalloutData, "c");
+                    // e.component["_$element"].click();
+                }
+            },
             onClick: function (e) {
-                _this.LoadProperties(propertyCalloutData["c"].properties);
-                _this.LoadReferences(propertyCalloutData["c"].references);
-                _this.LoadComments(propertyCalloutData["c"].comments, propertyCalloutData["c"].componentId, "c");
-                document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['c'].name;
+                _this.LoadData(propertyCalloutData, "c");
+                // _this.LoadProperties(propertyCalloutData["c"].properties);
+                // _this.LoadReferences(propertyCalloutData["c"].references);
+                // _this.LoadComments(propertyCalloutData["c"].comments, propertyCalloutData["c"].componentId, "c");
+                // document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['c'].name;
             }
         }).dxButton("instance");
 
-        if (isFirst) {
-            thirdSourceBtn["_$element"].click();;
-            isFirst = false;
-        }
+        // if (isFirst) {
+        //     thirdSourceBtn["_$element"].click();;
+        //     isFirst = false;
+        // }
     }
     if ("d" in propertyCalloutData) {
         var sourceDiv = document.createElement("div");
         sourceDiv.id = "fourthSource";
         document.getElementById("propertyCalloutStatusBar" + _this.CheckType).appendChild(sourceDiv);
 
+        let loading = true;
         var fourthSourceBtn = $("#fourthSource").dxButton({
             // icon: "chevrondown",
             text: "4",
             width: "50px",
             height: "30px",
+            onContentReady: function (e) {
+                if (loading !== true) {
+                    return;
+                }
+                loading = false;
+
+                if (!("a" in propertyCalloutData) &&
+                    !("b" in propertyCalloutData) &&
+                    !("c" in propertyCalloutData)) {
+                    // e.component["_$element"].click();
+                    _this.LoadData(propertyCalloutData, "d");
+                }
+            },
             onClick: function (e) {
-                _this.LoadProperties(propertyCalloutData["d"].properties);
-                _this.LoadReferences(propertyCalloutData["d"].references);
-                _this.LoadComments(propertyCalloutData["d"].comments, propertyCalloutData["d"].componentId, "d");
-                document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['d'].name;
+                _this.LoadData(propertyCalloutData, "d");
+                // _this.LoadProperties(propertyCalloutData["d"].properties);
+                // _this.LoadReferences(propertyCalloutData["d"].references);
+                // _this.LoadComments(propertyCalloutData["d"].comments, propertyCalloutData["d"].componentId, "d");
+                // document.getElementById("propertyCalloutNameBar" + _this.CheckType).children[0].textContent = propertyCalloutData['d'].name;
             }
         }).dxButton("instance");
 
-        if (isFirst) {
-            fourthSourceBtn["_$element"].click();
-            isFirst = false;
-        }
+        // if (isFirst) {
+        //     fourthSourceBtn["_$element"].click();
+        //     isFirst = false;
+        // }
     }
 
     // hide callout if it was open to avoid
@@ -199,6 +251,13 @@ PropertyCallout.prototype.UpdateForComparison = function (
         var element = document.getElementById("propertyCalloutContainer" + this.CheckType);
         element.setAttribute('style', 'display:none !important');
     }
+}
+
+PropertyCallout.prototype.LoadData = function (propertyCalloutData, srcId) {
+    this.LoadProperties(propertyCalloutData[srcId].properties);
+    this.LoadReferences(propertyCalloutData[srcId].references);
+    this.LoadComments(propertyCalloutData[srcId].comments, propertyCalloutData[srcId].componentId, srcId);
+    document.getElementById("propertyCalloutNameBar" + this.CheckType).children[0].textContent = propertyCalloutData[srcId].name;
 }
 
 PropertyCallout.prototype.UpdateForCompliance = function (

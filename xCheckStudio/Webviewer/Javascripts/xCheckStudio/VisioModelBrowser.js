@@ -29,19 +29,38 @@ VisioModelBrowser.prototype.AddComponentTable = function (components) {
     if (!components) {
         return;
     }
-
-    this.Components = components;
+    
+    // create table headers
     var headers = this.CreateHeaders();  
-
-    for (var index in this.Components) {
-        this.AddComponentTableComponent(this.Components[index], this.Components[index].ParentNodeId);
-    }    
-
     if (headers === undefined ||
-        headers.length === 0 ||
-        this.modelTreeRowData === undefined ||
+        headers.length === 0) {
+        return;
+    }
+
+    // create data rows
+    this.Components = components;
+    for (var index in this.Components) {
+        this.addComponentRow(this.Components[index], this.Components[index].ParentNodeId);
+    }    
+    if (this.modelTreeRowData === undefined ||
         this.modelTreeRowData.length === 0) {
         return;
+    }
+
+    // now adjust parents parents
+    // Parent is null or parent node doesnt exist then make it root node
+    // root value for tree list is -4
+    for (let i = 0; i < this.modelTreeRowData.length; i++) {
+        let rowData = this.modelTreeRowData[i];
+        if (!(ModelBrowserColumnNamesVisio.Parent in rowData)) {
+            continue;
+        }
+
+        let parent = rowData[ModelBrowserColumnNamesVisio.Parent];
+        if (!parent ||
+            !(this.ModelBrowserAddedNodes.includes(parent))) {
+            rowData[ModelBrowserColumnNamesVisio.Parent] = -4;
+        }
     }
 
     this.loadModelBrowserTable(headers);
@@ -90,9 +109,9 @@ VisioModelBrowser.prototype.CreateHeaders = function () {
     return columnHeaders;
 }
 
-VisioModelBrowser.prototype.AddComponentTableComponent = function (component, parentid) {    
-    this.addComponentRow(component, parentid);   
-};
+// VisioModelBrowser.prototype.AddComponentTableComponent = function (component, parentid) {    
+//     this.addComponentRow(component, parentid);   
+// };
 
 VisioModelBrowser.prototype.addComponentRow = function (component, parentid) {
 
@@ -101,9 +120,7 @@ VisioModelBrowser.prototype.addComponentRow = function (component, parentid) {
         parentid.indexOf("/") === 0) {
         parentid = parentid.slice(1);
     }
-    // if (!this.ModelBrowserAddedNodes.includes(parentid)) {
-    //     parentid = 0;
-    // }
+   
     this.ModelBrowserAddedNodes.push(component.Name);     
 
     this.NodeParentList[component.Name] = parentid;
@@ -117,8 +134,14 @@ VisioModelBrowser.prototype.addComponentRow = function (component, parentid) {
     tableRowContent[ModelBrowserColumnNamesVisio.Parent] = parentid;
     // }
     // else {
-    //     tableRowContent[ModelBrowserColumnNamesVisio.Parent] = undefined;
+    //     tableRowContent[ModelBrowserColumnNamesVisio.Parent] = null;
     // }
+
+    // add child shapeids to row data
+    if ("childShapes" in component.XData &&
+        component.XData["childShapes"].length > 0) {
+        tableRowContent["childShapes"] = component.XData["childShapes"];
+    }
 
     this.modelTreeRowData.push(tableRowContent);
 
@@ -137,6 +160,7 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
             dataSource: _this.modelTreeRowData,
             keyExpr: ModelBrowserColumnNamesVisio.Component,
             parentIdExpr: "parent",
+            rootValue: -4,
             columns: columnHeaders,
             columnAutoWidth: true,
             columnResizingMode: 'widget',
@@ -204,15 +228,20 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                     e.component);
             },
             onRowClick: function (e) {
+                console.log("Row clicked");
                 if (e.event.target.tagName.toLowerCase() === "span") {
                     return;
                 }
 
-                _this.SelectionManager.OnComponentRowClicked(e.rowElement[0],
+                console.log("componet clicked-Start");
+                _this.SelectionManager.OnComponentRowClicked(
+                    e.rowElement[0],
                     _this.Id,
-                    e.data.ID,
-                    e.data.Item,
-                    _this.ModelBrowserContainer);
+                    e.data.ID,                   
+                    e.key,
+                    e.data.childShapes
+                );
+                console.log("componet clicked-End");
 
                 // property call out               
                 var sourceProperties = SourceManagers[_this.Id].SourceProperties;
@@ -321,6 +350,8 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
                 
                 model.views[_this.Id].tableViewInstance = null;
                 model.views[_this.Id].tableViewWidget = null;
+
+                _this.ModelBrowserAddedNodes = [];
             }
         }).dxTreeList("instance");
     });

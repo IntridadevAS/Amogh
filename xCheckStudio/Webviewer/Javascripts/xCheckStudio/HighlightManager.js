@@ -4,13 +4,14 @@ var HoopsViewerSuccessColor = "#74b741";
 var HoopsViewerErrorColor = "#FF0000";
 var HoopsViewerWarningColor = "#fff729";
 var WarningColor = "#f9ffc7";
-var NoMatchColor = "#dddbff"
+var NoMatchColor = "#dddbff";
 var NoValueColor = "#f2f2f2";
 var AcceptedColor = "#e8ffeb";
 var PropertyAcceptedColor = "#ffff99";
 var SelectedRowColor = "#e6e8e8";
 var HiddenElementTextColor = "#b3b5b5";
 var MissingItemsColor = "#dddbff";
+var GANoMatchColor = "#8A86CC";
 
 function HighlightManager(viewer,
     componentIdVsComponentData,

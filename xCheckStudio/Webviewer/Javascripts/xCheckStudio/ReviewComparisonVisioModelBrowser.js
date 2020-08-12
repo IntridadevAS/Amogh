@@ -8,6 +8,7 @@ function ReviewComparisonVisioModelBrowser(id,
     this.ModelTreeData = [];
 
     this.NodeIdvsCheckComponent = {};
+    this.NamevsCheckComponent = {};
     this.NodeParentList = {};
 
     this.TreeInstance;
@@ -134,7 +135,7 @@ ReviewComparisonVisioModelBrowser.prototype.CreateBrowserData = function (compon
     this.ModelTreeData.push(tableRowContent);
 
     // maintain nodeId vs component data
-    this.MaintainNameVsCheckComponent(component);
+    this.CacheCheckComponent(component);
 
     // maintain node id vs parent node
     this.NodeParentList[component.Name] = parentName;
@@ -146,11 +147,23 @@ ReviewComparisonVisioModelBrowser.prototype.CreateBrowserData = function (compon
     }
 }
 
-ReviewComparisonVisioModelBrowser.prototype.MaintainNameVsCheckComponent = function (component) {
+ReviewComparisonVisioModelBrowser.prototype.CacheCheckComponent = function (component) {
 
     // maintain track of check components
     if (component.Name) {
-        this.NodeIdvsCheckComponent[component.Name] = {
+        this.NamevsCheckComponent[component.Name] = {
+            "ResultId": component.Id,
+            "Name": component.Name,
+            "MainClass": component.MainClass,
+            "SubClass": component.SubClass,
+            "Status": component.Status,
+            "NodeId": component.NodeId,
+            "GroupId": component.GroupId,
+        };
+    }
+
+    if (component.NodeId) {
+        this.NodeIdvsCheckComponent[component.NodeId] = {
             "ResultId": component.Id,
             "Name": component.Name,
             "MainClass": component.MainClass,
@@ -292,9 +305,35 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInViewer = function (rowDat
 
     var viewerInterface = this.GetViewer();
 
-    if (viewerInterface) {
-        viewerInterface.HighlightComponent(rowData.NodeId);
+    if (viewerInterface &&
+        rowData.Item) {
+
+        //get all component ids       
+        let treeNode = this.TreeInstance.getNodeByKey(rowData.Item);
+        let allIds = this.GetAllChildIds(treeNode);
+
+        if (allIds && allIds.length > 0) {
+            viewerInterface.HighlightComponent(allIds);
+        }
     }
+    else if (viewerInterface) {
+        viewerInterface.UnHighlightComponent();
+    }
+}
+
+ReviewComparisonVisioModelBrowser.prototype.GetAllChildIds = function (treeNode) {
+    let ids = [];
+    if (treeNode && 
+        treeNode.data.NodeId) {
+        ids.push(treeNode.data.NodeId);
+    }
+
+    for (let i = 0; i < treeNode.children.length; i++) {
+        let childIds = this.GetAllChildIds(treeNode.children[i]);
+        ids = ids.concat(childIds);
+    }
+
+    return ids;
 }
 
 ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function (rowData) {
@@ -329,6 +368,7 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function
                     }
                     else if (browser.IsVisio()) {
                         anotherBrowserRowData.NodeId = checkComponent.sourceANodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceAName;
                     }
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
@@ -347,6 +387,7 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function
                     }
                     else if (browser.IsVisio()) {
                         anotherBrowserRowData.NodeId = checkComponent.sourceBNodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceBName;
                     }
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
@@ -365,6 +406,7 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function
                     }
                     else if (browser.IsVisio()) {
                         anotherBrowserRowData.NodeId = checkComponent.sourceCNodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceCName;
                     }
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
@@ -383,6 +425,7 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function
                     }
                     else if (browser.IsVisio()) {
                         anotherBrowserRowData.NodeId = checkComponent.sourceDNodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceDName;
                     }
                     else if (browser.Is1D()) {
                         var mainClasses = group.componentClass.split("-");
@@ -409,6 +452,7 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function
                     }
                 }
                 else if (browser.IsVisio()) {
+                    browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
                     browser.HighlightInViewer(anotherBrowserRowData);
                 }
             }
@@ -416,42 +460,96 @@ ReviewComparisonVisioModelBrowser.prototype.HighlightInAnotherBrowser = function
     }
 }
 
-// ReviewComparisonVisioModelBrowser.prototype.HighlightBrowserComponentRow = function (selectedNodeId, originalComponent) {
-//     var _this = this;
+ReviewComparisonVisioModelBrowser.prototype.HighlightBrowserComponentRow = function (selectedNodeId, originalComponent) {
+    var _this = this;
 
-//     var path = {};
-//     path['path'] = [selectedNodeId];
-//     this.GetTopMostParentNode(selectedNodeId, path);
+    if (!(selectedNodeId in this.NodeIdvsCheckComponent)) {
+        return;
+    }
+    let checkComponent = this.NodeIdvsCheckComponent[selectedNodeId];
 
-//     this.HighlightRow(path, selectedNodeId);
+    var path = {};
+    path['path'] = [checkComponent.Name];
+    this.GetTopMostParentNode(checkComponent.Name, path);
 
+    this.HighlightRow(path, checkComponent.Name);
 
-//     if (originalComponent) {
-//         expandModelBrowserAccordion(this.SourceFileName, "#" + Comparison.MainReviewContainer).then(function (result) {
-//             var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
-//             var row = _this.TreeInstance.getRowElement(rowIndex);
-//             document.getElementById(Comparison.MainReviewContainer).scrollTop = row[0].offsetTop - row[0].offsetHeight;
-//             // _this.TreeInstance.navigateToRow(selectedNodeId).done(function () {
-//             // });
-//         });
+    if (originalComponent) {
+        expandModelBrowserAccordion(this.SourceFileName, "#" + Comparison.MainReviewContainer).then(function (result) {
+            var rowIndex = _this.TreeInstance.getRowIndexByKey(checkComponent.Name);
+            var row = _this.TreeInstance.getRowElement(rowIndex);
+            document.getElementById(Comparison.MainReviewContainer).scrollTop = row[0].offsetTop - row[0].offsetHeight;
+        });
 
-//         // load detailed table
-//         var rowIndex = _this.TreeInstance.getRowIndexByKey(selectedNodeId);
-//         var rows = _this.TreeInstance.getVisibleRows();
-//         if (rowIndex in rows) {
-//             this.LoadDetailedTable(rows[rowIndex].data);
-//         }
+        // load detailed table
+        var rowIndex = _this.TreeInstance.getRowIndexByKey(checkComponent.Name);
+        var rows = _this.TreeInstance.getVisibleRows();
+        if (rowIndex in rows) {
+            this.LoadDetailedTable(rows[rowIndex].data);
+        }
 
-//         // highlight in another browser
-//         var rows = this.TreeInstance.getVisibleRows();
-//         var rowIndex = this.TreeInstance.getRowIndexByKey(selectedNodeId);
-//         if (rowIndex != -1 && (rowIndex in rows)) {
-//             var rowData = rows[rowIndex];
-//             this.HighlightInAnotherBrowser(rowData.data);
-//         }
-//     }
-//     // this.OpenHighlightedRow(path, selectedNodeId);
-// }
+        // highlight in another browser
+        var rows = this.TreeInstance.getVisibleRows();
+        var rowIndex = this.TreeInstance.getRowIndexByKey(checkComponent.Name);
+        if (rowIndex != -1 && (rowIndex in rows)) {
+            var rowData = rows[rowIndex];
+            this.HighlightInAnotherBrowser(rowData.data);
+        }
+    }
+}
+
+ReviewComparisonVisioModelBrowser.prototype.HighlightRow = function (path, itemName) {
+
+    _this = this;
+    if (!('path' in path)) {
+        return;
+    }
+
+    var nodeList = path['path'];
+    nodeList = nodeList.reverse();
+
+    var container = "#" + _this.GetTableDivId();
+    var treeList = $(container).dxTreeList("instance");
+
+    // expand tree if not expanded else select row using key
+    for (var i = 0; i < nodeList.length; i++) {
+        var node = nodeList[i];
+
+        if (!treeList.isRowExpanded(node)) {
+            treeList.expandRow(node).done(function () {
+                _this.HighlightBrowserRowByKey(itemName, container);
+            });
+        }
+        else {
+            if (i == nodeList.length - 1) {
+                _this.HighlightBrowserRowByKey(itemName, container);
+            }
+        }
+    }
+}
+
+ReviewComparisonVisioModelBrowser.prototype.HighlightBrowserRowByKey = function (key, containerDiv) {
+
+    var _this = this;
+
+    var rowIndex = this.TreeInstance.getRowIndexByKey(key);
+    var row = this.TreeInstance.getRowElement(rowIndex);
+
+    _this.GetSelectionManager().MaintainHighlightedRow(row[0], containerDiv, key);
+}
+
+ReviewComparisonVisioModelBrowser.prototype.GetTopMostParentNode = function (item, path) {
+
+    if (item in this.NodeParentList) {
+
+        if (this.NodeParentList[item] === 0) {
+            return;
+        }
+        path['path'].push(this.NodeParentList[item])
+
+        this.GetTopMostParentNode(this.NodeParentList[item], path);
+    }
+}
 
 ReviewComparisonVisioModelBrowser.prototype.LoadDetailedTable = function (rowData) {
     var componentId = rowData.ResultId;

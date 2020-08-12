@@ -120,7 +120,7 @@ var xCheckStudio;
                         (status.toLowerCase() !== "error" ||
                             status.toLowerCase() !== "warning")) {
 
-                        return NoMatchColor;
+                        return GANoMatchColor;
                     }
                 }
             }
@@ -182,7 +182,7 @@ var xCheckStudio;
                     }
                     else {
                         if (parentComponent && (parentComponent.Status.toLowerCase().includes("undefined"))) {
-                            return NoMatchColor;
+                            return GANoMatchColor;
                         }
                         else {
                             return undefined;

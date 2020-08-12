@@ -292,25 +292,25 @@ ReviewCompliance3DModelBrowser.prototype.HighlightRow = function (path, selected
 
         if (!this.TreeInstance.isRowExpanded(node)) {
             this.TreeInstance.expandRow(node).done(function () {
-                _this.HighlightBrowserRowFromNodeId(selectedNodeId);
+                _this.HighlightBrowserRowByKey(selectedNodeId);
             });
         }
         else {
             if (i == nodeList.length - 1) {
-                _this.HighlightBrowserRowFromNodeId(selectedNodeId);
+                _this.HighlightBrowserRowByKey(selectedNodeId);
             }
         }
     }
 }
 
-ReviewCompliance3DModelBrowser.prototype.HighlightBrowserRowFromNodeId = function (selectedNodeId) {
+ReviewCompliance3DModelBrowser.prototype.HighlightBrowserRowByKey = function (key) {
 
     var _this = this;
-  
-    var rowIndex = this.TreeInstance.getRowIndexByKey(selectedNodeId);
+
+    var rowIndex = this.TreeInstance.getRowIndexByKey(key);
     var row = this.TreeInstance.getRowElement(rowIndex);
 
-    _this.GetSelectionManager().MaintainHighlightedRow(row[0], "#" + _this.GetTableDivId(), selectedNodeId);
+    _this.GetSelectionManager().MaintainHighlightedRow(row[0], "#" + _this.GetTableDivId(), key);
     // });
 }
 

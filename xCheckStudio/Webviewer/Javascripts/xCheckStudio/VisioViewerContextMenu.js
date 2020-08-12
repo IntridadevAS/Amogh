@@ -101,6 +101,13 @@ VisioViewerContextMenu.prototype.GetControls = function () {
 }
 
 VisioViewerContextMenu.prototype.OnZoomToFitClicked = function () {
+    var objectElement = document.getElementById("svgViewerObject" + this.Id);
+    let svg = objectElement.contentDocument.getElementsByTagName("svg")[0];
+    if (svg.getAttribute("viewBox") !== null) {
+        svg.removeAttribute("viewBox");
+        return;
+    }
+        
     var svgPanZoomControl = SourceManagers[this.Id].SvgPanZoomControl;   
     svgPanZoomControl.fit();
     svgPanZoomControl.center();

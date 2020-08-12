@@ -509,50 +509,49 @@ Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkCompone
         if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
             continue;
         }
-        else {
+        // else {
 
-            var dataGrid = $(checkTableIds[groupId]).dxDataGrid("instance");
-            var rows = dataGrid.getVisibleRows();
+        var dataGrid = $(checkTableIds[groupId]).dxDataGrid("instance");
+        var rows = dataGrid.getVisibleRows();
 
-            for (var i = 0; i < rows.length; i++) {
-                if (rows[i].rowType == "data") {
-                    var rowObj = rows[i];
-                    var rowData = rowObj.data
-                    var checkComponentId;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].rowType == "data") {
+                var rowObj = rows[i];
+                var rowData = rowObj.data              
 
-                    checkComponentId = rowData.ID;
-                    if (checkComponentId == checkComponentData["Id"]) {
-                        var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
-                        if (highlightedRow) {
+                let checkComponentId = rowData.ID;
+                if (checkComponentId == checkComponentData["Id"]) {
+                    var highlightedRow = model.getCurrentSelectionManager().GetHighlightedRow();
+                    if (highlightedRow) {
 
-                            var grid = $(highlightedRow["tableId"]).dxDataGrid("instance");
-                            var rowIndex = grid.getRowIndexByKey(highlightedRow["rowKey"]);
-                            rowElement = grid.getRowElement(rowIndex)[0];
+                        var grid = $(highlightedRow["tableId"]).dxDataGrid("instance");
+                        var rowIndex = grid.getRowIndexByKey(highlightedRow["rowKey"]);
+                        rowElement = grid.getRowElement(rowIndex)[0];
 
-                            var data = grid.getDataSource().items();
-                            var rowData = data[rowIndex];
-                            model.getCurrentSelectionManager().RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
-                        }
-
-
-                        var row = dataGrid.getRowElement(rowObj.rowIndex)
-
-                        //Expand Accordion and Scroll to Row
-                        model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkComponentData.MainClass);
-
-                        // highlight selected row
-                        model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
-                        model.getCurrentSelectionManager().SetHighlightedRow({
-                            "tableId": checkTableIds[groupId],
-                            "rowKey": checkComponentId
-                        });
-
-                        //break;
-                        return { "row": row[0], "tableId": checkTableIds[groupId] };
+                        var data = grid.getDataSource().items();
+                        var rowData = data[rowIndex];
+                        model.getCurrentSelectionManager().RemoveHighlightColor(rowElement, rowData[ComparisonColumnNames.Status]);
                     }
+
+
+                    var row = dataGrid.getRowElement(rowObj.rowIndex)
+
+                    //Expand Accordion and Scroll to Row
+                    model.getCurrentReviewTable().ExpandAccordionScrollToRow(row[0], checkComponentData.MainClass);
+
+                    // highlight selected row
+                    model.getCurrentSelectionManager().ApplyHighlightColor(row[0])
+                    model.getCurrentSelectionManager().SetHighlightedRow({
+                        "tableId": checkTableIds[groupId],
+                        "rowKey": checkComponentId
+                    });
+
+                    //break;
+                    return { "row": row[0], "tableId": checkTableIds[groupId] };
                 }
             }
         }
+        // }
     }
 
     return undefined;

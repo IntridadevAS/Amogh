@@ -97,7 +97,7 @@ ComparisonReviewManager.prototype.loadDatasources = function () {
             model.checks["comparison"]["sourceBViewer"] = viewerInterface;
         }
         else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(this.SourceBViewerData["source"]))) {          
-            var viewerInterface = new ReviewVisioViewerInterface("b", ["compare2", pathToDataset],
+            var viewerInterface = new ReviewVisioViewerInterface(["compare2", pathToDataset],
                 this.SourceBComponentIdVsComponentData,
                 this.SourceBNodeIdVsComponentData,
                 this.SourceBViewerData["source"]);
@@ -223,6 +223,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
             "sourceBId": component.sourceBId,
             "sourceCId": component.sourceCId,
             "sourceDId": component.sourceDId,
+            "status": component.status
         };
     }
     if (component.sourceBNodeId) {
@@ -241,6 +242,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
             "sourceBId": component.sourceBId,
             "sourceCId": component.sourceCId,
             "sourceDId": component.sourceDId,
+            "status": component.status
         };
     }
 
@@ -260,6 +262,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
             "sourceBId": component.sourceBId,
             "sourceCId": component.sourceCId,
             "sourceDId": component.sourceDId,
+            "status": component.status
         };
     }
 
@@ -279,6 +282,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
             "sourceBId": component.sourceBId,
             "sourceCId": component.sourceCId,
             "sourceDId": component.sourceDId,
+            "status": component.status
         };
     }
 }
@@ -2666,59 +2670,3 @@ ComparisonReviewManager.prototype.RestoreViewsAndTags = function (sourceViewer, 
         }
     }
 }
-
-// ComparisonReviewManager.prototype.SerializeMarkupViews = function (views) {
-
-//     // source a
-//     // var sourceAViewer =  model.checks["comparison"]["sourceAViewer"];
-//     // if (sourceAViewer &&
-//     //     sourceAViewer.Is3DViewer()) {
-        
-//     //     let views = model.markupViews["comparison"]["a"];
-//         let viewsSerialized = sourceAViewer.SerializeViews(views);
-//         return viewsSerialized;
-//     //     model.markupViews["compliance"]["a" + "_serialized"] = viewsSerialized;
-//     // }
-
-//     // source b
-//     var sourceBViewer =  model.checks["comparison"]["sourceBViewer"];
-//     if (sourceBViewer &&
-//         sourceBViewer.Is3DViewer()) {
-        
-//         let views = model.markupViews["comparison"]["b"];
-//         let viewsSerialized = sourceBViewer.SerializeViews(views);
-//         model.markupViews["comparison"]["b" + "_serialized"] = viewsSerialized;
-//     }
-
-//     // source c
-//     var sourceCViewer =  model.checks["comparison"]["sourceCViewer"];
-//     if (sourceCViewer &&
-//         sourceCViewer.Is3DViewer()) {
-        
-//         let views = model.markupViews["comparison"]["c"];
-//         let viewsSerialized = sourceCViewer.SerializeViews(views);
-//         model.markupViews["comparison"]["c" + "_serialized"] = viewsSerialized;
-//     }
-
-//     // source d
-//     var sourceDViewer =  model.checks["comparison"]["sourceDViewer"];
-//     if (sourceDViewer &&
-//         sourceDViewer.Is3DViewer()) {
-        
-//         let views = model.markupViews["comparison"]["d"];
-//         let viewsSerialized = sourceDViewer.SerializeViews(views);
-//         model.markupViews["comparison"]["d" + "_serialized"] = viewsSerialized;
-//     }
-// }
-
-// ComparisonReviewManager.prototype.SerializeBookmarks = function () {
-//     let views = model.bookmarks["compliance"][this.DataSourceId];
-//     let viewsSerialized = model.checks["compliance"]["viewer"].SerializeViews(views);
-//     model.bookmarks["compliance"][this.DataSourceId + "_serialized"] = viewsSerialized;
-// }
-
-// ComparisonReviewManager.prototype.SerializeAnnotations = function () {
-//     let annotations = model.annotations["compliance"][this.DataSourceId];
-//     let annotationsSerialized = model.checks["compliance"]["viewer"].SerializeAnnotations(annotations);
-//     model.annotations["compliance"][this.DataSourceId + "_serialized"] = annotationsSerialized;
-// }

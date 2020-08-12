@@ -252,7 +252,7 @@ ReviewComparison1DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
     if (rowData.GroupId in this.CheckData.results) {
         var group = this.CheckData.results[rowData.GroupId];
         var mainClasses = group.componentClass.split("-");
-        if (mainClasses.length !== 2) {
+        if (mainClasses.length < 2) {
             return;
         }
 
@@ -286,6 +286,10 @@ ReviewComparison1DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                     else if (browser.Is3D()) {
                         anotherBrowserRowData.NodeId = Number(checkComponent.sourceANodeId);
                     }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceANodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceAName;
+                    }
                 }
                 else if (browser.Id === "b") {
                     if (browser.Is1D()) {
@@ -295,6 +299,38 @@ ReviewComparison1DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                     }
                     else if (browser.Is3D()) {
                         anotherBrowserRowData.NodeId = Number(checkComponent.sourceBNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceBNodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceBName;
+                    }
+                }
+                else if (browser.Id === "c") {
+                    if (browser.Is1D()) {
+                        anotherBrowserRowData.Item = checkComponent.sourceCName
+                        anotherBrowserRowData.Class = checkComponent.sourceCSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[2];
+                    }
+                    else if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceCNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceCNodeId;
+                        anotherBrowserRowData.Item =  checkComponent.sourceCName;
+                    }
+                }
+                else if (browser.Id === "d") {
+                    if (browser.Is1D()) {
+                        anotherBrowserRowData.Item = checkComponent.sourceDName
+                        anotherBrowserRowData.Class = checkComponent.sourceDSubComponentClass
+                        anotherBrowserRowData.Category = mainClasses[3];
+                    }
+                    else if (browser.Is3D()) {
+                        anotherBrowserRowData.NodeId = Number(checkComponent.sourceDNodeId);
+                    }
+                    else if (browser.IsVisio()) {
+                        anotherBrowserRowData.NodeId = checkComponent.sourceDNodeId;
+                        anotherBrowserRowData.Item = checkComponent.sourceDName;
                     }
                 }
 
@@ -309,6 +345,10 @@ ReviewComparison1DModelBrowser.prototype.HighlightInAnotherBrowser = function (r
                         browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
                         browser.HighlightInViewer(anotherBrowserRowData);
                     }
+                }
+                else if (browser.IsVisio()) {
+                    browser.HighlightBrowserComponentRow(anotherBrowserRowData.NodeId, false);
+                    browser.HighlightInViewer(anotherBrowserRowData);
                 }
             }
         }

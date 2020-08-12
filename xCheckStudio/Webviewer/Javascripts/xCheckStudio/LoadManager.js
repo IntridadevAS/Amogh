@@ -79,7 +79,7 @@ let LoadManager = {
                             SourceManagers[sourceId] = sourceManager;
                             sourceManager.LoadData().then(function (result) {
                                 return resolve(result);
-                            });
+                            });                            
                         }
                         else {
                             if (formId) {
@@ -162,7 +162,9 @@ let LoadManager = {
                     'fileName': fileNameWithoutExt,
                     'dataSourceType': '1D',
                     'ProjectName': projectinfo.projectname,
-                    'CheckName': checkinfo.checkname},
+                    'CheckName': checkinfo.checkname,
+                    "isDataVault" : "false"
+                },
                 type: "POST",
                 url: "PHP/GetSourceFilePath.php"
             }).done(function (uri) {
