@@ -11,7 +11,8 @@ const CheckPageCleanUp = {
                 async: false,
                 data:
                 {
-                    'InvokeFunction': "ClearTemporaryCheckSpaceDB",
+                    // 'InvokeFunction': "ClearTemporaryCheckSpaceDB",
+                    'InvokeFunction': "OnLeaveCheckModule",
                     'ProjectName': projectinfo.projectname,
                     'CheckName': checkinfo.checkname,
                     'ProjectId': checkinfo.projectid

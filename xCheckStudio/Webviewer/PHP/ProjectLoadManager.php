@@ -2034,35 +2034,36 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
         return false;
     }
 
-    function readDataSourceInfo($dbh) {             
+    function readDataSourceInfo($dbh)
+    {
         try
-        {            
-            $results = $dbh->query("SELECT *FROM  DatasourceInfo;");     
-            
+        {
+            $results = $dbh->query("SELECT *FROM  DatasourceInfo;");
+
             $data = array();
-            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC))
             {
-                $data = array('sourceAFileName' => $record['sourceAFileName'], 
-                            'sourceBFileName'=> $record['sourceBFileName'], 
-                            'sourceCFileName' => $record['sourceCFileName'], 
-                            'sourceDFileName'=> $record['sourceDFileName'],
-                            'sourceAType'=>$record['sourceAType'], 
-                            'sourceBType'=>$record['sourceBType'], 
-                            'sourceCType'=>$record['sourceCType'], 
-                            'sourceDType'=>$record['sourceDType'], 
-                            'orderMaintained'=>$record['orderMaintained']);                                 
-            }                       
-                            
+                $data = array(
+                    'sourceAFileName' => $record['sourceAFileName'],
+                    'sourceBFileName' => $record['sourceBFileName'],
+                    'sourceCFileName' => $record['sourceCFileName'],
+                    'sourceDFileName' => $record['sourceDFileName'],
+                    'sourceAType' => $record['sourceAType'],
+                    'sourceBType' => $record['sourceBType'],
+                    'sourceCType' => $record['sourceCType'],
+                    'sourceDType' => $record['sourceDType'],
+                    'orderMaintained' => $record['orderMaintained']
+                );
+            }
+
             return  $data;
         }
-        catch(Exception $e) 
-        {   
-        
-        } 
-        
+        catch (Exception $e)
+        {
+        }
+
         return NULL;
     }
-
 
     function ReadSavedComparisonCheckData()
     {

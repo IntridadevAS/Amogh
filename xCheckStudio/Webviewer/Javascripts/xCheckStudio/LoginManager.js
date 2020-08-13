@@ -5,7 +5,7 @@ function validateLogindetails(callbackfunction) {
             password: $('#passwordtext').val()
         },
         type: "POST",
-        url: "PHP/login.php",
+        url: "PHP/Login.php",
         success: function (msg) {
             if (msg === "Failed") {
                 window[callbackfunction](1);

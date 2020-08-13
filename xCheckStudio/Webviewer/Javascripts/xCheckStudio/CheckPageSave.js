@@ -3,18 +3,8 @@ var CheckModule = {
 
         return new Promise((resolve) => {
 
-            try {
-
-                // if (Object.keys(SourceManagers).length === 0) {
-                //     showNoDataToSavePrompt();
-                //     return resolve(false);
-                // }
-
+            try {               
                 showBusyIndicator();
-
-                // create project DB
-                // this.createCheckSpaceDBonSave().then(function (result) {
-                // if (result) {
 
                 // save all
                 CheckModule.saveAll().then(function (res) {
@@ -22,7 +12,6 @@ var CheckModule = {
                         if (!silent) {
                             //showSavedDataPrompt();
                         }
-
                         // remove busy spinner        
                         hideBusyIndicator();
 

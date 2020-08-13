@@ -23,8 +23,8 @@
   height: 280px;
   border: 10px solid;
   border-radius: 50px;
-  margin-left: 62px;
-  margin-right: 62px;
+  margin-left: 46px;
+  margin-right: 46px;
   color: var(--xCheckWhite);
   justify-content: center;
   align-items: center;
@@ -34,6 +34,7 @@
   text-decoration: none;
   padding: 12px;
   user-select: none;
+  background: rgb(71, 71, 71, 0.8);
 }
 
 .check {
@@ -76,4 +77,11 @@
   border-color: #C0C0C0;
   color: #C0C0C0;
   opacity: 0.4;
+}
+
+.pickActionLabel{
+  position: absolute;
+  top: 15%;
+  color: white;
+  font-size: 42px;
 }

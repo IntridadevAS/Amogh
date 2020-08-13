@@ -39,6 +39,9 @@ function createWindow()
 
 app.on('ready', createWindow);
 
+// add ignore gpu blacklist flag
+app.commandLine.appendSwitch('ignore-gpu-blacklist');
+
 app.on('window-all-closed', ()=> {
     if(process.platform !== 'darwin')
     {

@@ -81,6 +81,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "ClearAllCheckResultsFromTemp":
             ClearAllCheckResultsFromTemp();
             break;
+        case "OnLeaveCheckModule":
+            OnLeaveCheckModule();
+            break;
         default:
             echo "No Function Found!";
     }
@@ -269,12 +272,141 @@ function RemoveSource()
     }
 }
 
+function removeTempDatasets($projectName, $checkName)
+{
+    $srcArray = ["a", "b", "c", "d"];
+    for ($i = 0; $i < count($srcArray); $i++)
+    {
+        $src = $srcArray[$i];
+
+        $sourcePath = NULL;
+        if ($src === "a")
+        {
+            $sourcePath = getCheckSourceAPath($projectName, $checkName);
+        }
+        else if ($src === "b")
+        {
+            $sourcePath = getCheckSourceBPath($projectName, $checkName);
+        }
+        else if ($src === "c")
+        {
+            $sourcePath = getCheckSourceCPath($projectName, $checkName);
+        }
+        else if ($src === "d")
+        {
+            $sourcePath = getCheckSourceDPath($projectName, $checkName);
+        }
+
+        $tempDir = $sourcePath . "/temp";
+        if (file_exists($tempDir))
+        {
+            deleteFolder($tempDir);           
+        }
+    }
+}
+
+function restoreTempDatasets($projectName, $checkName)
+{
+    $srcArray = ["a", "b", "c", "d"];
+    for ($i = 0; $i < count($srcArray); $i++)
+    {
+        $src = $srcArray[$i];
+
+        $sourcePath = NULL;
+        if ($src === "a")
+        {
+            $sourcePath = getCheckSourceAPath($projectName, $checkName);
+        }
+        else if ($src === "b")
+        {
+            $sourcePath = getCheckSourceBPath($projectName, $checkName);
+        }
+        else if ($src === "c")
+        {
+            $sourcePath = getCheckSourceCPath($projectName, $checkName);
+        }
+        else if ($src === "d")
+        {
+            $sourcePath = getCheckSourceDPath($projectName, $checkName);
+        }
+
+        $tempDir = $sourcePath . "/temp";
+        if (file_exists($tempDir))
+        {
+            // clear files in source path first
+            deleteAllSourceFiles($sourcePath);
+
+            // first restore dataset
+            $scan = glob(rtrim($tempDir, '/') . '/*');
+           
+            //Loop through the list of files.
+            foreach ($scan as $index => $path)
+            {
+                if (is_file($path))
+                {
+                    $file_parts = pathinfo($path);
+                    $ext = $file_parts['extension'];
+                    if (
+                        strtolower($ext) === "scs" ||
+                        strtolower($ext) === "svg" ||
+                        strtolower($ext) === "xml"
+                    )
+                    {
+                        copy($path, $sourcePath . '/' . $file_parts['basename']);
+                    }
+                }
+            }
+
+            // remove folder
+            deleteFolder($tempDir);
+        }
+    }
+}
+
+function OnLeaveCheckModule()
+{
+    if (
+        !isset($_POST['ProjectName']) ||
+        !isset($_POST['CheckName']) ||
+        !isset($_POST['ProjectId'])
+    )
+    {
+        echo 'fail';
+        return;
+    }
+
+    try
+    {
+        // get project name
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
+        $projectId = $_POST['ProjectId'];
+
+        // clear temporary DB
+        $tempDBPath = getCheckDatabasePath($projectName, $checkName);
+        if (file_exists($tempDBPath))
+        {
+            unlink($tempDBPath);
+        }
+
+        // restore temp datasets..which are there after datasets 
+        // are cleared and not saved to permanent db
+        restoreTempDatasets($projectName, $checkName);
+    }
+    catch (Exception $e)
+    {
+        echo "fail";
+        return;
+    }
+}
+
 function RemoveSourceFromDirecory()
 {
     if (
         !isset($_POST['ProjectName']) ||
         !isset($_POST['CheckName']) ||
-        !isset($_POST['SourceId'])
+        !isset($_POST['SourceId']) ||
+        !isset($_POST['SourceType'])
     ) {
         echo json_encode(array(
             "Msg" =>  "Invalid input.",
@@ -287,50 +419,198 @@ function RemoveSourceFromDirecory()
         // get project name
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
-        $sourceId = $_POST['SourceId'];
+        $sourceId = $_POST['SourceId'];      
+        $sourceType = $_POST['SourceType'];
 
-        $sourcePath;
+        $sourcePath = NULL;
         // delete source files
         if (strtolower($sourceId) === "a") {
             $sourcePath = getCheckSourceAPath($projectName, $checkName);
         } else if (strtolower($sourceId) === "b") {
             $sourcePath = getCheckSourceBPath($projectName, $checkName);
-        } else if (strtolower($sourceId) === "c") {
+        }
+        else if (strtolower($sourceId) === "c")
+        {
             $sourcePath = getCheckSourceCPath($projectName, $checkName);
-        } else if (strtolower($sourceId) === "d") {
+        }
+        else if (strtolower($sourceId) === "d")
+        {
             $sourcePath = getCheckSourceDPath($projectName, $checkName);
         }
+        if (!$sourcePath)
+        {
+            echo json_encode(array(
+                    "Msg" =>  "Failed to remove source.",
+                    "MsgCode" => 0
+                ));
+            return;
+        }
 
-        deleteAllSourceInformation($sourcePath);
+        // check if there is an already temp directory
+        $tempDir = $sourcePath . "/temp";
+        if (!file_exists($tempDir))
+        {
+            $copySource = false;
+
+            // check if this is source is saved
+            $datasourceInfo = readDataSourceInfo($projectName, $checkName);
+            if ($datasourceInfo != NULL)
+            {
+                if (
+                    strtolower($sourceId) === "a" &&
+                    array_key_exists('sourceAFileName', $datasourceInfo) &&
+                    ($datasourceInfo['sourceAFileName'] !== NULL &&
+                    $datasourceInfo['sourceAFileName'] !== "")
+                )
+                {
+                    $copySource = true;
+                }
+                else if (
+                    strtolower($sourceId) === "b" &&
+                    array_key_exists('sourceBFileName', $datasourceInfo) &&
+                    ($datasourceInfo['sourceBFileName'] !== NULL &&
+                    $datasourceInfo['sourceBFileName'] !== "")
+                )
+                {
+                    $copySource = true;
+                }
+                else if (
+                    strtolower($sourceId) === "c" &&
+                    array_key_exists('sourceCFileName', $datasourceInfo) &&
+                    ($datasourceInfo['sourceCFileName'] !== NULL &&
+                    $datasourceInfo['sourceCFileName'] !== "")
+                )
+                {
+                    $copySource = true;
+                }
+                else if (
+                    strtolower($sourceId) === "d" &&
+                    array_key_exists('sourceDFileName', $datasourceInfo) &&
+                    ($datasourceInfo['sourceDFileName'] !== NULL &&
+                    $datasourceInfo['sourceDFileName'] !== "")
+                )
+                {
+                    $copySource = true;
+                }
+
+                if ($copySource === true)
+                {                   
+                    mkdir($tempDir, 0777, true);
+
+                    $scan = glob(rtrim($sourcePath, '/') . '/*');
+                    //Loop through the list of files.
+                    foreach ($scan as $index => $path)
+                    {
+                        if (is_file($path))
+                        {
+                            $file_parts = pathinfo($path);
+                            $ext = $file_parts['extension'];
+                            if (strtolower($ext) === "scs")
+                            {
+                                copy($path, dirname($path) . '/temp/' . $file_parts['basename']);
+                            }
+                            else if ((strtolower($sourceType) === 'vsd' ||
+                                    strtolower($sourceType) === 'vsdx') &&
+                                (strtolower($ext) === "xml" ||
+                                    strtolower($ext) === "svg")
+                            )
+                            {
+                                copy($path, dirname($path) . '/temp/' . $file_parts['basename']);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // now delete files in source folder without recursion
+        deleteAllSourceFiles($sourcePath);
+
         echo json_encode(array(
             "Msg" =>  "success",
+            // "Data" => $sourcePath,
             "MsgCode" => 1
         ));
         return;
     } catch (Exception $e) {
-        echo json_encode(array(
-            "Msg" =>  "Failed to remove source.",
-            "MsgCode" => 0
-        ));
-        return;
+      
     }
+
+    echo json_encode(array(
+        "Msg" =>  "Failed to remove source.",
+        "MsgCode" => 0
+    ));
+    return;
 }
 
-function deleteAllSourceInformation($fileName)
+function readDataSourceInfo($projectName, $checkName)
 {
-    //It it's a file.
-    if (is_file($fileName)) {
-        //Attempt to delete it.
-        return unlink($fileName);
+    try
+    {
+        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+
+        $data = NULL;
+        if (file_exists($dbPath))
+        {
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+
+            // begin the transaction
+            $dbh->beginTransaction();
+
+            $results = $dbh->query("SELECT *FROM  DatasourceInfo;");
+
+            $data = array();
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC))
+            {
+                $data = array(
+                    'sourceAFileName' => $record['sourceAFileName'],
+                    'sourceBFileName' => $record['sourceBFileName'],
+                    'sourceCFileName' => $record['sourceCFileName'],
+                    'sourceDFileName' => $record['sourceDFileName'],
+                    'sourceAType' => $record['sourceAType'],
+                    'sourceBType' => $record['sourceBType'],
+                    'sourceCType' => $record['sourceCType'],
+                    'sourceDType' => $record['sourceDType'],
+                    'orderMaintained' => $record['orderMaintained']
+                );
+
+                break;
+            }
+
+            // commit changes
+            $dbh->commit();
+            $dbh = null;
+        }
+        return  $data;
     }
-    //If it's a directory.
-    elseif (is_dir($fileName)) {
+    catch (Exception $e)
+    {
+    }
+
+    return NULL;
+}
+
+function deleteAllSourceFiles($fileName)
+{    
+    if (is_file($fileName))
+    {
+        //Attempt to delete it.
+        unlink($fileName);
+    }   
+    else if (is_dir($fileName))
+    {
         //Get a list of the files in this directory.
         $scan = glob(rtrim($fileName, '/') . '/*');
         //Loop through the list of files.
-        foreach ($scan as $index => $path) {
+        foreach ($scan as $index => $path)
+        {
             //Call our recursive function.
-            deleteAllSourceInformation($path);
+            // deleteAllSourceFiles($path);
+            if (is_file($path))
+            {
+                //Attempt to delete it.
+                unlink($path);
+            }
         }
     }
 }
@@ -648,6 +928,9 @@ function SaveAll()
         $tempDbh->commit();
         $dbh = null; //This is how you close a PDO connection                    
         $tempDbh = null; //This is how you close a PDO connection                        
+
+        // remove all temp datasource folders
+        removeTempDatasets($projectName, $checkName);
 
         echo json_encode(array(
             "Msg" =>  "success",

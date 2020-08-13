@@ -8,7 +8,7 @@ function onLogoutUser(alluser) {
                 "AllUser": alluser,
             },
             type: "POST",
-            url: "PHP/logout.php",
+            url: "PHP/Logout.php",
             success: function (msg) {
                 var object = JSON.parse(msg);
                 if (object.Msg === "Success") {
