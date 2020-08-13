@@ -635,6 +635,11 @@ function removeSourceFilesFromDirectory() {
     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
     var tabId = viewTabs.tabToDelete.getAttribute("data-id");
+    if (!(tabId in model.views)) {
+      return;
+    }
+    let srcType = model.views[tabId].type;
+
     $.ajax({
       url: 'PHP/ProjectManager.php',
       type: "POST",
@@ -644,7 +649,8 @@ function removeSourceFilesFromDirectory() {
         'InvokeFunction': "RemoveSourceFromDirecory",
         'ProjectName': projectinfo.projectname,
         'CheckName': checkinfo.checkname,
-        'SourceId': tabId
+        'SourceId': tabId,
+        'SourceType': srcType
       },
       success: function (msg) {
         return resolve(true);
