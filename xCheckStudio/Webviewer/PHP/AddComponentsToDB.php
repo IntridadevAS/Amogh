@@ -44,7 +44,7 @@
         global $checkName;
         //global $SourceDataSheets;
 
-        $dbh;
+        $dbh = null;
         try{
         
             // open database
@@ -53,8 +53,8 @@
             
             // create Components table
             $source = $_POST['Source'];   
-            $componentsTableName;
-            $propertiesTableName;         
+            $componentsTableName= null;
+            $propertiesTableName= null;        
             if(strtolower($source) == "sourcea")
             {
                 $componentsTableName = "SourceAComponents";
@@ -186,7 +186,7 @@
     {      
         global $projectName;
         global $checkName;
-        $dbh;
+        $dbh = null;
         try{
         
             // open database
@@ -194,9 +194,9 @@
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
             
             // create Components table
-            $source = $_POST['Source'];   
-            $componentsTableName;
-            $propertiesTableName;         
+            $source = $_POST['Source'];
+            $componentsTableName = null;
+            $propertiesTableName = null;        
             if(strtolower($source) == "sourcea")
             {
                 $componentsTableName = "SourceAComponents";

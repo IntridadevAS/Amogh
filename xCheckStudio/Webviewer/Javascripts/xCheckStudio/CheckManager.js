@@ -96,7 +96,7 @@ function CheckManager(name) {
                 var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
                 var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
                 $.ajax({
-                    url: 'PHP/checkDataSourceForCompliance.php',
+                    url: 'PHP/CheckDataSourceForCompliance.php',
                     type: "POST",
                     async: false,
                     data: {

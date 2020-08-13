@@ -212,7 +212,7 @@ let UploadManager = {
     uploadFilesFromFolder: function (uploadFormData, mainFileName, addedSource) {
 
         $.ajax({
-            url: "uploads/uploadDirectory.php",
+            url: "PHP/UploadDirectory.php",
             type: "POST",
             data: uploadFormData,
             cache: false,
@@ -233,7 +233,7 @@ let UploadManager = {
         formData.append("MainFile", mainFileName);
 
         $.ajax({
-            url: "uploads/convertDatasource.php",
+            url: "PHP/ConvertDatasource.php",
             type: "POST",
             data: formData,
             cache: false,

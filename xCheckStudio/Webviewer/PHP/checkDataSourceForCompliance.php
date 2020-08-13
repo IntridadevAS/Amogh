@@ -696,7 +696,7 @@
                             $propertyName = $property['name'];
                             $propertyValue = $property["value"];
                             $result = checkComplianceRule($checkCaseMappingProperty, $propertyValue);
-                            $severity;
+                            $severity = null;
                             if($result == true) {
                                 $severity = "OK";
                             }
