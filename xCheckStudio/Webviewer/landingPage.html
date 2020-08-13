@@ -414,7 +414,7 @@
     <a class="homeLink" id="homeButton"><img class="headerLogo" src="public/symbols/XcheckLogoIcon.svg" alt=""></a>
     <div class="userInfo">
       <p id="userName" class="userName"> </p>
-      <!-- <img id="userImg" src="public/notAUserImg.jpg" alt=""> -->
+      
       <img id="userImg" src="" alt="">
       <div class="programCntrls">
         <button><img class="symbol" src="public/symbols/minimizeWin.svg" alt="minimize program"
@@ -428,16 +428,28 @@
   </header>
   <div id="drawer" style="position: fixed; top:50px; left: 0px">
     <div class="container">
-
-      <div id="checkmodule">
-        <img src="public/symbols/Check_Module_Icon.svg" class="module check" onclick="OnCheckClick()" onmouseover="OnDisplayToolTip('checktooltiptext')" onmouseout="OnHideToolTip('checktooltiptext')"/> <div id ="checktooltiptext" class="checktooltiptext" style="text-align: center; visibility: hidden; font-size: 30px; color: white; padding-top: 25px;">Check</div>
-      </div>
-      <div id="reviewmodule">
-        <img src="public/symbols/Review_Module_Icon.svg" class="module review" onclick="OnReviewClicked()" onmouseover="OnDisplayToolTip('reviewtooltiptext')" onmouseout="OnHideToolTip('reviewtooltiptext')"/>  <div id ="reviewtooltiptext" class="tooltiptext" style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">Review</div>
-      </div>
-      <div id="prepmodule">
-        <img src="public/symbols/Prep_Module_Icon.svg" class="module prep" onclick="OnPrepClick()" onmouseover="OnDisplayToolTip('preptooltiptext')" onmouseout="OnHideToolTip('preptooltiptext')"/> <div id ="preptooltiptext" class="tooltiptext" style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">Prep</div>
-      </div>
+     
+        <div class="pickActionLabel">Pick an action</div>
+    
+        <div id="checkmodule">
+          <img src="public/symbols/Check_Module_Icon.svg" class="module check" onclick="OnCheckClick()"
+            onmouseover="OnDisplayToolTip('checktooltiptext')" onmouseout="OnHideToolTip('checktooltiptext')" />
+          <div id="checktooltiptext" class="checktooltiptext"
+            style="text-align: center; visibility: hidden; font-size: 30px; color: white; padding-top: 25px;">Check</div>
+        </div>
+        <div id="reviewmodule">
+          <img src="public/symbols/Review_Module_Icon.svg" class="module review" onclick="OnReviewClicked()"
+            onmouseover="OnDisplayToolTip('reviewtooltiptext')" onmouseout="OnHideToolTip('reviewtooltiptext')" />
+          <div id="reviewtooltiptext" class="tooltiptext"
+            style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">Review</div>
+        </div>
+        <div id="prepmodule">
+          <img src="public/symbols/Prep_Module_Icon.svg" class="module prep" onclick="OnPrepClick()"
+            onmouseover="OnDisplayToolTip('preptooltiptext')" onmouseout="OnHideToolTip('preptooltiptext')" />
+          <div id="preptooltiptext" class="tooltiptext"
+            style="text-align: center; visibility: hidden;  font-size: 30px; color: white; padding-top: 25px;">Prep</div>
+        </div>
+      
     </div>
   </div>
   <script>
