@@ -927,11 +927,11 @@ let checkView = {
       this.toggle.remove();
     } else if (controller.permissions()) {
       if (controller.currentModule() == "review") {
-        this.toggle.innerHTML = "<h2>ENTER CHECKS</h2>";
+        this.toggle.innerHTML = "<h2>CHECK MODULES</h2>";
         this.toggle.classList.add("chkRevBorderBlue");
         this.toggle.classList.remove("chkRevBorderRed");
       } else if (controller.currentModule() == "check") {
-        this.toggle.innerHTML = "<h2>ENTER REVIEWS</h2>";
+        this.toggle.innerHTML = "<h2>REVIEW MODULES</h2>";
         this.toggle.classList.add("chkRevBorderRed");
         this.toggle.classList.remove("chkRevBorderBlue");
       }
@@ -966,7 +966,7 @@ let checkView = {
       let newCheckCard = `
         <div class="checkSpaceCard newCheckCardFlag" onclick="newCheckView.init()">\
           <div class="checkCardInfo checkCardInfoNew"><div class="plusBtn"></div></div>\
-          <div class="checkCardTitle checkCardTitleNew"><h2>New Check</h2></div>\
+          <div class="checkCardTitle checkCardTitleNew"><h2>New Checkspace</h2></div>\
         </div>`;
       this.checkCardContainer.innerHTML = newCheckCard;
     }
@@ -1481,7 +1481,7 @@ let deleteItems = {
       }
     } else if (type == "check") {
       delType.innerHTML = "CheckSpace";
-      message.innerHTML = "Delete this CheckSpace and all associated checks?";
+      message.innerHTML = "Delete this Checkspace and all associated checks?";
       controller.setCurrentCheck(id);
     } else if (type == "review") {
       delType.innerHTML = "Review";
