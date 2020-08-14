@@ -272,7 +272,7 @@ function RemoveSource()
     }
 }
 
-function removeTempDatasets($projectName, $checkName)
+function RemoveTempDatasets($projectName, $checkName)
 {
     $srcArray = ["a", "b", "c", "d"];
     for ($i = 0; $i < count($srcArray); $i++)
@@ -305,7 +305,7 @@ function removeTempDatasets($projectName, $checkName)
     }
 }
 
-function restoreTempDatasets($projectName, $checkName)
+function ManageDatasetsOnLeavingCM($projectName, $checkName)
 {
     $srcArray = ["a", "b", "c", "d"];
     for ($i = 0; $i < count($srcArray); $i++)
@@ -333,6 +333,8 @@ function restoreTempDatasets($projectName, $checkName)
         $tempDir = $sourcePath . "/temp";
         if (file_exists($tempDir))
         {
+            // restore temp datasets
+            
             // clear files in source path first
             deleteAllSourceFiles($sourcePath);
 
@@ -359,6 +361,11 @@ function restoreTempDatasets($projectName, $checkName)
 
             // remove folder
             deleteFolder($tempDir);
+        }
+        else if(IsDatasetSaved( $projectName, $checkName, $src) === false)
+        { 
+            // remove unsaved dataset
+            deleteAllSourceFiles($sourcePath);
         }
     }
 }
@@ -391,7 +398,7 @@ function OnLeaveCheckModule()
 
         // restore temp datasets..which are there after datasets 
         // are cleared and not saved to permanent db
-        restoreTempDatasets($projectName, $checkName);
+        ManageDatasetsOnLeavingCM($projectName, $checkName);
     }
     catch (Exception $e)
     {
@@ -450,50 +457,50 @@ function RemoveSourceFromDirecory()
         $tempDir = $sourcePath . "/temp";
         if (!file_exists($tempDir))
         {
-            $copySource = false;
+            // $copySource = false;
 
             // check if this is source is saved
-            $datasourceInfo = readDataSourceInfo($projectName, $checkName);
-            if ($datasourceInfo != NULL)
-            {
-                if (
-                    strtolower($sourceId) === "a" &&
-                    array_key_exists('sourceAFileName', $datasourceInfo) &&
-                    ($datasourceInfo['sourceAFileName'] !== NULL &&
-                    $datasourceInfo['sourceAFileName'] !== "")
-                )
-                {
-                    $copySource = true;
-                }
-                else if (
-                    strtolower($sourceId) === "b" &&
-                    array_key_exists('sourceBFileName', $datasourceInfo) &&
-                    ($datasourceInfo['sourceBFileName'] !== NULL &&
-                    $datasourceInfo['sourceBFileName'] !== "")
-                )
-                {
-                    $copySource = true;
-                }
-                else if (
-                    strtolower($sourceId) === "c" &&
-                    array_key_exists('sourceCFileName', $datasourceInfo) &&
-                    ($datasourceInfo['sourceCFileName'] !== NULL &&
-                    $datasourceInfo['sourceCFileName'] !== "")
-                )
-                {
-                    $copySource = true;
-                }
-                else if (
-                    strtolower($sourceId) === "d" &&
-                    array_key_exists('sourceDFileName', $datasourceInfo) &&
-                    ($datasourceInfo['sourceDFileName'] !== NULL &&
-                    $datasourceInfo['sourceDFileName'] !== "")
-                )
-                {
-                    $copySource = true;
-                }
-
-                if ($copySource === true)
+            // $datasourceInfo = readDataSourceInfo($projectName, $checkName);
+            // if ($datasourceInfo != NULL)
+            // {
+                // if (
+                //     strtolower($sourceId) === "a" &&
+                //     array_key_exists('sourceAFileName', $datasourceInfo) &&
+                //     ($datasourceInfo['sourceAFileName'] !== NULL &&
+                //     $datasourceInfo['sourceAFileName'] !== "")
+                // )
+                // {
+                //     $copySource = true;
+                // }
+                // else if (
+                //     strtolower($sourceId) === "b" &&
+                //     array_key_exists('sourceBFileName', $datasourceInfo) &&
+                //     ($datasourceInfo['sourceBFileName'] !== NULL &&
+                //     $datasourceInfo['sourceBFileName'] !== "")
+                // )
+                // {
+                //     $copySource = true;
+                // }
+                // else if (
+                //     strtolower($sourceId) === "c" &&
+                //     array_key_exists('sourceCFileName', $datasourceInfo) &&
+                //     ($datasourceInfo['sourceCFileName'] !== NULL &&
+                //     $datasourceInfo['sourceCFileName'] !== "")
+                // )
+                // {
+                //     $copySource = true;
+                // }
+                // else if (
+                //     strtolower($sourceId) === "d" &&
+                //     array_key_exists('sourceDFileName', $datasourceInfo) &&
+                //     ($datasourceInfo['sourceDFileName'] !== NULL &&
+                //     $datasourceInfo['sourceDFileName'] !== "")
+                // )
+                // {
+                //     $copySource = true;
+                // }
+                $isSaved = IsDatasetSaved($projectName, $checkName, $sourceId);
+                if ($isSaved === true)
                 {                   
                     mkdir($tempDir, 0777, true);
 
@@ -520,7 +527,7 @@ function RemoveSourceFromDirecory()
                         }
                     }
                 }
-            }
+            // }
         }
 
         // now delete files in source folder without recursion
@@ -543,6 +550,57 @@ function RemoveSourceFromDirecory()
     return;
 }
 
+function IsDatasetSaved(
+    $projectName,
+    $checkName,
+    $sourceId
+)
+{
+    // check if this is source is saved
+    $datasourceInfo = readDataSourceInfo($projectName, $checkName);
+    if ($datasourceInfo != NULL)
+    {
+        if (
+            strtolower($sourceId) === "a" &&
+            array_key_exists('sourceAFileName', $datasourceInfo) &&
+            ($datasourceInfo['sourceAFileName'] !== NULL &&
+                $datasourceInfo['sourceAFileName'] !== "")
+        )
+        {
+            return true;
+        }
+        else if (
+            strtolower($sourceId) === "b" &&
+            array_key_exists('sourceBFileName', $datasourceInfo) &&
+            ($datasourceInfo['sourceBFileName'] !== NULL &&
+                $datasourceInfo['sourceBFileName'] !== "")
+        )
+        {
+            return true;
+        }
+        else if (
+            strtolower($sourceId) === "c" &&
+            array_key_exists('sourceCFileName', $datasourceInfo) &&
+            ($datasourceInfo['sourceCFileName'] !== NULL &&
+                $datasourceInfo['sourceCFileName'] !== "")
+        )
+        {
+            return true;
+        }
+        else if (
+            strtolower($sourceId) === "d" &&
+            array_key_exists('sourceDFileName', $datasourceInfo) &&
+            ($datasourceInfo['sourceDFileName'] !== NULL &&
+                $datasourceInfo['sourceDFileName'] !== "")
+        )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function readDataSourceInfo($projectName, $checkName)
 {
     try
@@ -560,21 +618,24 @@ function readDataSourceInfo($projectName, $checkName)
             $results = $dbh->query("SELECT *FROM  DatasourceInfo;");
 
             $data = array();
-            while ($record = $results->fetch(\PDO::FETCH_ASSOC))
+            if ($results)
             {
-                $data = array(
-                    'sourceAFileName' => $record['sourceAFileName'],
-                    'sourceBFileName' => $record['sourceBFileName'],
-                    'sourceCFileName' => $record['sourceCFileName'],
-                    'sourceDFileName' => $record['sourceDFileName'],
-                    'sourceAType' => $record['sourceAType'],
-                    'sourceBType' => $record['sourceBType'],
-                    'sourceCType' => $record['sourceCType'],
-                    'sourceDType' => $record['sourceDType'],
-                    'orderMaintained' => $record['orderMaintained']
-                );
+                while ($record = $results->fetch(\PDO::FETCH_ASSOC))
+                {
+                    $data = array(
+                        'sourceAFileName' => $record['sourceAFileName'],
+                        'sourceBFileName' => $record['sourceBFileName'],
+                        'sourceCFileName' => $record['sourceCFileName'],
+                        'sourceDFileName' => $record['sourceDFileName'],
+                        'sourceAType' => $record['sourceAType'],
+                        'sourceBType' => $record['sourceBType'],
+                        'sourceCType' => $record['sourceCType'],
+                        'sourceDType' => $record['sourceDType'],
+                        'orderMaintained' => $record['orderMaintained']
+                    );
 
-                break;
+                    break;
+                }
             }
 
             // commit changes
@@ -930,7 +991,7 @@ function SaveAll()
         $tempDbh = null; //This is how you close a PDO connection                        
 
         // remove all temp datasource folders
-        removeTempDatasets($projectName, $checkName);
+        RemoveTempDatasets($projectName, $checkName);
 
         echo json_encode(array(
             "Msg" =>  "success",

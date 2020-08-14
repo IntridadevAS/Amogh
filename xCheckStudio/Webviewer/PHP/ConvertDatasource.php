@@ -47,17 +47,65 @@
 
     $fileNameLowerCase = strtolower($fileName);
     $file_parts = pathinfo($fileNameLowerCase);
-    if (isset($file_parts['extension'])) {
-        switch (strtolower($file_parts['extension'])) {
+    if (isset($file_parts['extension']))
+    {
+        switch (strtolower($file_parts['extension']))
+        {
             case "vsd":
             case "vsdx":
                 $launch_converter = "../xCheckFileReader/x64/Release/VisioReader.exe";
-            break;
+                break;
         }
     }
 
     $command = '"'.$launch_converter. '" "'. $inputFileName. '"';
     exec($command, $output);
+
+    // remove original dataset files
+    if (
+        isset($file_parts['extension']) &&
+        (strtolower($file_parts['extension']) === "vsd" ||
+            strtolower($file_parts['extension']) === "vsdx")
+    )
+    {
+        $scan = glob(rtrim($uploadDirectory, '/') . '/*');
+        //Loop through the list of files.
+        foreach ($scan as $index => $path)
+        {
+            if (is_file($path))
+            {
+                $file_parts1 = pathinfo($path);
+                $ext = $file_parts1['extension'];
+                if (
+                    strtolower($ext) !== "svg" ||
+                    strtolower($ext) !== "xml"
+                )
+                {
+                    unlink($path);
+                }
+            }
+        }
+    }
+    else
+    {
+        $scan = glob(rtrim($uploadDirectory, '/') . '/*');
+        //Loop through the list of files.
+        foreach ($scan as $index => $path)
+        {
+            if (is_file($path))
+            {
+                $file_parts1 = pathinfo($path);
+                $ext = $file_parts1['extension'];
+                if (
+                    strtolower($ext) !== "scs"
+                )
+                {
+                    unlink($path);
+                }
+            }
+        }
+    }
+
     echo  trim($file);
 
 function fileExists($fileName, $caseSensitive = true) {
