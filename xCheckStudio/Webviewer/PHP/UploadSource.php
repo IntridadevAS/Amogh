@@ -179,6 +179,47 @@
         }
         exec($command, $output);
 
+        // remove original dataset files
+        if ($ConvertToSCS === "true")
+        {            
+            $scan = glob(rtrim($uploadDirectory, '/') . '/*');
+            //Loop through the list of files.
+            foreach ($scan as $index => $path)
+            {
+                if (is_file($path))
+                {
+                    $file_parts1 = pathinfo($path);
+                    $ext = $file_parts1['extension'];
+                    if (
+                        strtolower($ext) !== "scs" 
+                    )
+                    {
+                        unlink($path);                        
+                    }
+                }
+            }
+        }
+        else if ($ConvertToSVG === "true")
+        {
+            $scan = glob(rtrim($uploadDirectory, '/') . '/*');
+            //Loop through the list of files.
+            foreach ($scan as $index => $path)
+            {
+                if (is_file($path))
+                {
+                    $file_parts1 = pathinfo($path);
+                    $ext = $file_parts1['extension'];
+                    if (
+                        strtolower($ext) !== "svg" &&
+                        strtolower($ext) !== "xml"
+                    )
+                    {
+                        unlink($path);                        
+                    }
+                }
+            }
+        }
+
         // echo $command;
         echo 'success';        
         return; 
