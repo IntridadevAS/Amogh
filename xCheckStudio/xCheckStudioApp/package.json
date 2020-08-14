@@ -20,7 +20,7 @@
 	},
 	"build": {
 		"appId": "com.intrida.xCheckStudioApp",
-		"productName": "xCheckStudio Client",				
+		"productName": "XcheckStudio",				
 		"win": {
 			"target": [
 				"nsis"
