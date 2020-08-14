@@ -26,7 +26,7 @@ var Example;
                 this._viewer.view.pickFromPoint(downPosition, config).then(function (selectionItem) {
                     var selectionPosition = selectionItem.getPosition();
                     if (selectionPosition) {
-                        var annotationMarkup = new Example.AnnotationMarkup(_this._viewer, selectionPosition, "Annotation " + _this._annotationCount++);
+                        var annotationMarkup = new Example.AnnotationMarkup(_this._viewer, selectionPosition, "Tag " + _this._annotationCount++);
                         var markupHandle = _this._viewer.markupManager.registerMarkup(annotationMarkup);
                         // _this._annotationRegistry[markupHandle] = annotationMarkup;
                         _this.callbacks.annotationAdded(markupHandle, annotationMarkup);

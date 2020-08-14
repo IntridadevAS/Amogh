@@ -286,7 +286,7 @@ DefineGroupsForm.prototype.OnApply = function () {
     this.PopulateGroups();
     this.PopulateTemplateGrid();
 
-    DevExpress.ui.notify("Group '" + templateName + "' created successfully.");
+    DevExpress.ui.notify("Group template '" + templateName + "' created successfully.");
 }
 
 // DefineGroupsForm.prototype.GetAllSourceProperties = function () {

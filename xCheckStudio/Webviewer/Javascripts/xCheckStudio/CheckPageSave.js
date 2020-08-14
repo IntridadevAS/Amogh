@@ -589,7 +589,7 @@ function showReplaceVaultDataSetDialog() {
         $(function () {
             var replaceVaultDataSetDialog = DevExpress.ui.dialog.custom({
                 title: "Save Data",
-                messageHtml: "Dataset already exists in vault<br>Replace the existing or Rename the identifier.",
+                messageHtml: "This version of the dataset already exists in vault<br>Replace the existing version or Use another version.",
                 buttons: [{
                     text: "Cancel",
                     onClick: function (e) {
