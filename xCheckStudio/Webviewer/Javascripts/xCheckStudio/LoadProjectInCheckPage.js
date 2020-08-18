@@ -57,17 +57,7 @@ function loadCheckSpaceForCheck(data) {
     if (data.checkCaseInfo) {
         var checkCaseData = JSON.parse(data.checkCaseInfo.checkCaseData);
         model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
-    }
-
-    // // maintaint the dataset types
-    // var sourceViewerOptions = data["sourceViewerOptions"];
-    // if (sourceViewerOptions) {
-    //     var datasetTypes = [];
-    //     for (var srcId in sourceViewerOptions) {
-    //         datasetTypes.push(sourceViewerOptions[srcId]["sourceType"]);
-    //     }
-    //     model.datasetTypes = datasetTypes;
-    // }
+    }  
 
     // load data sets 
     loadDataSets(data);
@@ -90,25 +80,17 @@ function loadCheckSpaceForCheck(data) {
     
     // restore data change highlight templates 
     if (data.dataChangeHighlightTemplates) {
-        model.dataChangeHighlightTemplates = JSON.parse(data.dataChangeHighlightTemplates);
+        model.dataChangeHighlightTemplates = JSON.parse(data.dataChangeHighlightTemplates);       
+    }
 
-        // // restore template configs
-        // DataChangeTemplateForm.readTemplateConfigs().then(function (data) {
-        //     if (!data) {
-        //         return;
-        //     }
-
-        //     model.dataChangeTemplateConfigs = data;
-        // });
+     // restore db conenction info
+     if (data.dbConnectionInfo) {
+        model.dbConnectionInfo = JSON.parse(data.dbConnectionInfo);       
     }
 }
 
 function loadDataSets(data) {
-    // return new Promise((resolve) => {
-    // if (!data["checkCaseInfo"] ||
-    //     !data["sourceViewerOptions"]) {
-    //     return;
-    // }
+   
     var checkCaseInfo = data["checkCaseInfo"];    
 
     // get selected check case name

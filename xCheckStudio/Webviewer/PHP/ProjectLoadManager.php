@@ -196,6 +196,9 @@
             // copy data change highlight templates
             CopyDataChangeHighlightTemplates($dbh, $tempDbh);
 
+            // copy db conenction info
+            CopyDBConnectionInfo($dbh, $tempDbh);
+
             // Copy markup views
             CopyMarkupViews($dbh, $tempDbh);
             // Copy bookmark views
@@ -477,6 +480,30 @@ function CopyDataChangeHighlightTemplates($fromDbh, $toDbh)
     }
 }
 
+function CopyDBConnectionInfo($fromDbh, $toDbh)
+{
+    $results = $fromDbh->query("SELECT * FROM dbConnectionInfo;");
+    if ($results) {
+        $command = 'DROP TABLE IF EXISTS dbConnectionInfo;';
+        $toDbh->exec($command);
+
+        $command = 'CREATE TABLE IF NOT EXISTS dbConnectionInfo(
+            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            value TEXT NOT NULL     
+          )';
+        $toDbh->exec($command);
+
+        $insertStmt = $toDbh->prepare("INSERT INTO dbConnectionInfo(id, value) VALUES(?,?)");
+        while ($row = $results->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+    }
+}
+
+
 function CopyPropertyHighlightGroups($fromDbh, $toDbh)
 {
     $results = $fromDbh->query("SELECT * FROM highlightPropertyTemplates;");
@@ -736,6 +763,9 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
 
             $dataChangeHighlightTemplates =  ReadDataChangeHighlightTemplates($dbh);
             $results["dataChangeHighlightTemplates"] = $dataChangeHighlightTemplates;
+
+            $dbConnectionInfo =  ReadDBConnectionInfo($dbh);
+            $results["dbConnectionInfo"] = $dbConnectionInfo;
 
             $markupViews = ReadMarkupViews($dbh);
             $results["markupViews"] = $markupViews;
@@ -2225,6 +2255,22 @@ function ReadDataChangeHighlightTemplates($tempDbh)
 {
     try {
         $results = $tempDbh->query("SELECT *FROM dataChangeHighlightTemplates;");
+
+        if ($results) {
+            while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {
+                return  $record['value'];
+            }
+        }
+    } catch (Exception $e) {
+    }
+
+    return NULL;
+}
+
+function ReadDBConnectionInfo($tempDbh)
+{
+    try {
+        $results = $tempDbh->query("SELECT *FROM dbConnectionInfo;");
 
         if ($results) {
             while ($record = $results->fetch(\PDO::FETCH_ASSOC)) {

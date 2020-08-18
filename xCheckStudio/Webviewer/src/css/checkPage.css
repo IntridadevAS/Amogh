@@ -757,3 +757,192 @@ button[type="submit"] {
 .busyIndicatorCancel:hover{
   color: white;
 }
+
+.connectToSQLForm
+{
+position: absolute;
+z-index: 101; 
+width: 400px;
+height: 460px;
+display: none;
+left: calc(50% - 200px);
+top:  calc(50% - 230px);;
+background: white;
+border: 0.5px solid black;
+}
+
+.serverTypeLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 10px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#serverTypeSelect{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 10px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+.serverLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 50px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#serverSelect{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 50px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+.databaseLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 90px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#databaseInput{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 90px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+.authenticationLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 130px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#authenticationSelect{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 130px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+.userNameLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 170px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#userNameInput{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 170px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+.passwordLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 210px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#passwordInput{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 210px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+#connectToSQLBtn{
+  position: absolute;
+  left: 10px;
+  top: 250px;
+  border: 0.25px solid lightgray;
+  height: 30px;
+  width: 80px;
+  text-align: center;
+  line-height: 30px;
+}
+
+#connectionStatus{
+  position: absolute;
+  width: 250px;
+  height: 30px;
+  top: 250px;
+  left: 140px;  
+  font-size: 16px;
+  line-height: 30px;
+  /* font-weight: bold; */
+}
+
+.dbTablesLabel{
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 290px;
+  left: 10px;  
+  line-height: 30px;
+}
+
+#dbTablesTagBox{
+  position: absolute;
+  width: 250px;
+  height: 120px;
+  top: 290px;
+  left: 140px;  
+  font-size: 12px;
+}
+
+#connectToSQLBtn:hover, #loadDataFromSQLBtn:hover,
+#cancelLoadDataFromSQL:hover
+{
+  border: 0.5px solid black;
+}
+
+#loadDataFromSQLBtn{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  bottom: 10px;
+  right: 10px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}
+
+#cancelLoadDataFromSQL{
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  bottom: 10px;
+  right: 100px;
+  border: 0.25px solid lightgray;
+  text-align: center;
+  line-height: 30px;
+}

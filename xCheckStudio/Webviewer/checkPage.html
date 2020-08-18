@@ -579,7 +579,7 @@
       <div id="Load_Data_Connect_to_Data_Source">
         <span>Connect to Data Source</span>
       </div>
-      <div id="Load_Data_Component_12">
+      <div id="OpenConnectToSQLFormBtn" onclick="closeLoadDataForm(); SQLLoadManager.open();">
         <svg class="Load_Data_Rectangle_1242">
           <rect fill="rgba(59,59,59,1)" stroke="rgba(21,185,249,1)" stroke-width="1px" stroke-linejoin="miter"
             stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Load_Data_Rectangle_1242" rx="5"
@@ -1781,7 +1781,31 @@
     <div id="exportExcelselectDatasetCancel" class="exportExcelselectDatasetCancel">Cancel</div>
     <div id="exportExcelselectDatasetApply" class="exportExcelselectDatasetApply">Apply</div>
   </div>
+  
+  <!-- connect to SQL overlay -->
+  <div id="connectToSQLForm" class="connectToSQLForm">
+    <div class="serverTypeLabel">Server Type</div>
+    <div id="serverTypeSelect"></div>
+    <div class="serverLabel">Server</div>
+    <div id="serverSelect"></div>
+    <div class="databaseLabel">Database</div>
+    <div id="databaseInput"></div>
+    <div class="authenticationLabel">Authentication</div>
+    <div id="authenticationSelect"></div>
+    <div class="userNameLabel">User Name</div>
+    <div id="userNameInput"></div>
+    <div class="passwordLabel">Password</div>
+    <div id="passwordInput"></div>
+    <div id="connectToSQLBtn">Connect</div>
+    <div id="connectionStatus"></div>
 
+    <div class="dbTablesLabel">Tables</div>
+    <div id="dbTablesTagBox"></div>
+
+    <div id="cancelLoadDataFromSQL">Cancel</div>
+    <div id="loadDataFromSQLBtn">Load</div>
+  </div>  
+            
   <header>
     <div id="mainMenu" class="dropDownMenu">
       <img id="menuIcon" src="public/symbols/Menu.svg" alt="" class="srcImg">
@@ -1955,8 +1979,8 @@
                 <p>OK</p>
               </div>
             </div>
-          </div>
-  
+          </div>          
+
         <div id="viewPanelA" class="viewPanel">
           <div id="tableContainera" class="tableContainer">
             <!-- tableA           -->
@@ -3696,7 +3720,8 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CMExportExcel.js"></script>
 
   <script type="text/javascript" src="src\devExtreme\js\FileSaver.min.js"></script>
-    
+  
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SQLLoadManager.js"></script>
   <script>
     $("#loadIndicator").dxLoadPanel({
       "visible": false,

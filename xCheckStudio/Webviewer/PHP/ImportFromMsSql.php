@@ -46,8 +46,7 @@
             // echo json_encode($genericProp);
  
             $sql = "select column_name from information_schema.columns where table_name = '$tablename'";
-            $result = $conn->query($sql);
-            // $column_names = $stmt1->fetchAll();
+            $result = $conn->query($sql);          
             $column_names = $result->fetchAll();
             foreach ($column_names as $value)
             {
@@ -55,13 +54,36 @@
                 {                     
                     $genericProp->categoryPresent = true;
                 }            
-            }
-            // echo json_encode($column_names);
+            }          
             $yourArray[$index] = $genericProp;
-            // echo json_encode($yourArray);
+           
             $index++;
             $tableno++;
         }
-        echo json_encode($yourArray);
+       
+        return $yourArray;
+    }
+
+    function getAllMSSQLTables($conn)
+    {
+        try
+        {
+            $sql = "select table_name from information_schema.tables";
+            $stmt = $conn->query($sql);
+            $results = $stmt->fetchAll();
+
+            $tableNames = array();
+            foreach ($results as $result)
+            {
+                array_push($tableNames, $result["table_name"]);
+            }
+
+            return $tableNames;
+        }
+        catch (PDOException $e)
+        {
+        }
+
+        return null;
     }
 ?>

@@ -46,6 +46,8 @@ function createSourceManager(id,
             sourceManager = new IGSSourceManager(id, fileName, sourceType, viewerOptions);
         break;
         case "json":
+        case "mysql":
+        case "mssql":
             sourceManager = new DBSourceManager(id, fileName, sourceType, viewerContainer, modelTreeContainer);
         break;
         case "xls":

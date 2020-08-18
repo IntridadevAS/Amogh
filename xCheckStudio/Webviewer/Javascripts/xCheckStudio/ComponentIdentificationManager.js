@@ -26,7 +26,7 @@ var xCheckStudio;
             });
         }
 
-        function getComponentIdentificationProperties(fileExtension, mainComponentClass) {
+        function getComponentIdentificationProperties(fileExtension) {
 
             var extension = fileExtension.toLowerCase();
 

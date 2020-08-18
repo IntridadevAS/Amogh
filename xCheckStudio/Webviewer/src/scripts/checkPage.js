@@ -12,7 +12,10 @@ let model = {
   propertyGroups: {},
   propertyHighlightTemplates: {}, 
   dataChangeHighlightTemplates: {},
-  // dataChangeTemplateConfigs: {},
+  dbConnectionInfo: {
+    "mssql": {},
+    "mysql": {}
+  },
   views: {
     a: {
       id: "a",

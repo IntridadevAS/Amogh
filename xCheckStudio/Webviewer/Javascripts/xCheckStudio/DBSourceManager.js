@@ -45,13 +45,13 @@ DBSourceManager.prototype.ClearSource = function () {
   parent.appendChild(viewerContainerDiv); 
 }
 
-DBSourceManager.prototype.LoadData = function (uri) {
+DBSourceManager.prototype.LoadData = function (uri, connectionInfo = null) {
   var _this = this;
   return new Promise((resolve) => {
 
     // read data
     var dbReader = new DBReader();
-    dbReader.ReadDBData(uri).then(function (result) {
+    dbReader.ReadDBData(uri, connectionInfo).then(function (result) {
       if (!result) {
         return resolve(true);
       }
@@ -80,7 +80,7 @@ DBSourceManager.prototype.LoadData = function (uri) {
 DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedComponents) {
 
   var dbReader = new DBReader();
-  this.SourceProperties = dbReader.RestoreDBData(classWiseComponents);
+  this.SourceProperties = dbReader.RestoreDBData(classWiseComponents, this.SourceType);
 
   //add model Browser Table
   this.ModelTree = new DBModelBrowser(this.Id,

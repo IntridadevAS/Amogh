@@ -45,6 +45,30 @@
                 $index++;
                 $tableno++;
         }
-        echo json_encode($yourArray);
+        // echo json_encode($yourArray);
+        return $yourArray;
+    }
+
+    function getAllMYSQLTables($conn)
+    {
+        try
+        {
+            $sql = "SHOW TABLES FROM testdb";           
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_NUM);
+           
+            $tableNames = array();
+            foreach($results as $result){                
+                array_push($tableNames, $result[0]);
+            }
+
+            return $tableNames;
+        }
+        catch (PDOException $e)
+        {
+        }
+
+        return null;
     }
 ?>
