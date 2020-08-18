@@ -88,6 +88,9 @@ var CheckModule = {
             // data change highlight templates
             var dataChangeHighlightTemplates = this.getDataChangeHighlightTemplates();
 
+            // db connection info
+            var dbConnectionInfo = this.getDBConnectionInfo();
+
             $.ajax({
                 url: 'PHP/ProjectManager.php',
                 type: "POST",
@@ -110,7 +113,8 @@ var CheckModule = {
                     "allComponents": JSON.stringify(allComponents),
                     "propertyGroups": JSON.stringify(propertyGroups),
                     "highlightPropertyTemplates": JSON.stringify(highlightPropertyTemplates),
-                    "dataChangeHighlightTemplates": JSON.stringify(dataChangeHighlightTemplates)
+                    "dataChangeHighlightTemplates": JSON.stringify(dataChangeHighlightTemplates),
+                    "dbConnectionInfo":  JSON.stringify(dbConnectionInfo)
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
@@ -212,6 +216,10 @@ var CheckModule = {
 
     getDataChangeHighlightTemplates: function () {        
         return model.dataChangeHighlightTemplates;
+    },
+
+    getDBConnectionInfo: function () {        
+        return model.dbConnectionInfo;
     },
 
     getAllComponents: function () {

@@ -28,7 +28,7 @@ var Sources3D = ["xml",
     "3ds",
     "u3d",
     "sat", "sab"];
-var Sources1D = ["json", "xls"];
+var Sources1D = ["json", "mssql", "mysql", "xls"];
 var SourcesVSD = ["vsd", "vsdx"];
 
 var ExcelSources = ["xls"];

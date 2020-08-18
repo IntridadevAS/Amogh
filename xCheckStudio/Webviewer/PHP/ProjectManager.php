@@ -889,6 +889,9 @@ function SaveAll()
 
             // data change highlight templates
             SaveDataChangeHighlightTemplates($dbh);
+
+            // save db connection info
+            SaveDBConnectionInfo($dbh);
             
         } else {
             // save check module control state from temp check space db to main checkspace db
@@ -938,6 +941,9 @@ function SaveAll()
 
              // data change highlight templates
              SaveDataChangeHighlightTemplatesFromTemp($tempDbh, $dbh);
+
+             // db connection info
+             SaveDBConnectionInfoFromTemp($tempDbh, $dbh);
         }
 
         // comparison result tables table                               
@@ -2329,6 +2335,33 @@ function SaveDataChangeHighlightTemplatesFromTemp($tempDbh, $dbh)
     return false;
 }  
 
+function SaveDBConnectionInfoFromTemp($tempDbh, $dbh)
+{
+    $selectResults = $tempDbh->query("SELECT * FROM dbConnectionInfo");
+    if ($selectResults) {
+        $command = 'DROP TABLE IF EXISTS dbConnectionInfo;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE dbConnectionInfo(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertStmt = $dbh->prepare('INSERT INTO dbConnectionInfo(id, value) VALUES(?,?) ');
+
+        while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC)) {
+            $insertStmt->execute(array(
+                $row['id'],
+                $row['value']
+            ));
+        }
+
+
+        return true;
+    }
+    return false;
+}  
+
 function SavePropertyGroupsFromTemp($tempDbh, $dbh)
 {
     $selectResults = $tempDbh->query("SELECT * FROM propertyGroups");
@@ -3068,6 +3101,35 @@ function SaveDataChangeHighlightTemplates($dbh)
 
         $insertQuery = 'INSERT INTO dataChangeHighlightTemplates(value) VALUES(?) ';
         $values = array($_POST['dataChangeHighlightTemplates']);
+
+        $stmt = $dbh->prepare($insertQuery);
+        $stmt->execute($values);
+    } catch (Exception $e) {
+        return false;
+    }
+
+    return true;
+}
+
+function SaveDBConnectionInfo($dbh)
+{
+    if (!isset($_POST['dbConnectionInfo'])) {
+        return false;
+    }
+
+    try {
+
+        // drop table if exists
+        $command = 'DROP TABLE IF EXISTS dbConnectionInfo;';
+        $dbh->exec($command);
+
+        $command = 'CREATE TABLE dbConnectionInfo(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        value TEXT NOT NULL)';
+        $dbh->exec($command);
+
+        $insertQuery = 'INSERT INTO dbConnectionInfo(value) VALUES(?) ';
+        $values = array($_POST['dbConnectionInfo']);
 
         $stmt = $dbh->prepare($insertQuery);
         $stmt->execute($values);

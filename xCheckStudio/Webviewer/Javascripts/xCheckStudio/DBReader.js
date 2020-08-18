@@ -2,7 +2,26 @@ function DBReader() {
 
     this.DBData = {};
 
-    DBReader.prototype.ReadDBData = function (uri) {       
+    DBReader.prototype.ReadDBData = function (uri, connectionInfo) {
+        return new Promise((resolve) => {
+
+            if (uri) {
+                this.ReadDataByJson(uri).then(function (result) {
+                    return resolve(result);
+                });
+            }
+            else if (connectionInfo) {
+                this.ReadDataByConnectionInfo(connectionInfo).then(function (result) {
+                    return resolve(result);
+                });
+            }
+            else {
+                return resolve(null);
+            }
+        });
+    }
+
+    DBReader.prototype.ReadDataByConnectionInfo = function (connectionInfo) {
         return new Promise((resolve) => {
             var _this = this;
 
@@ -10,15 +29,25 @@ function DBReader() {
                 url: 'PHP/PDOConnectionForDatabases.php',
                 type: 'POST',
                 // dataType: 'JSON',
-                data: ({ uri: uri }),
+                data: ({
+                    "InvokeFunction": "ReadByConnectionInfo",
+                    "connectionInfo": JSON.stringify(connectionInfo)
+                }),
                 async: false,
-                success: function (data) {
+                success: function (msg) {
+                    let result = JSON.parse(msg);
+                    if (result.MsgCode !== 1) {
+                        return resolve(null);
+                    }
 
-                    var sourceData = JSON.parse(data);
-                    var sourceProperties = _this.ProcessDBData(sourceData);
+                    // var sourceData = JSON.parse(result.Data);
+                    var sourceData = result.Data;
+                    var sourceProperties = _this.ProcessDBData(
+                        sourceData["data"], 
+                        sourceData["serverType"]
+                        );
 
                     return resolve(sourceProperties);
-
                 },
                 error: function (xhr, status, error) {
                     return resolve(undefined);
@@ -27,7 +56,43 @@ function DBReader() {
         });
     }
 
-    DBReader.prototype.RestoreDBData = function (classWiseComponents) {
+    DBReader.prototype.ReadDataByJson = function (uri) {       
+        return new Promise((resolve) => {
+            var _this = this;
+
+            $.ajax({
+                url: 'PHP/PDOConnectionForDatabases.php',
+                type: 'POST',
+                // dataType: 'JSON',
+                data: ({
+                    "InvokeFunction": "ReadByJSON",
+                    uri: uri
+                }),
+                async: false,
+                success: function (msg) {
+                    let result = JSON.parse(msg);
+                    if (result.MsgCode !== 1) {
+                        return resolve(null);
+                    }
+
+                    // var sourceData = JSON.parse(result.Data);
+                    var sourceData = result.Data;
+                    var sourceProperties = _this.ProcessDBData(
+                        sourceData["data"],
+                        sourceData["serverType"]);
+
+                    return resolve(sourceProperties);
+                },
+                error: function (xhr, status, error) {
+                    return resolve(undefined);
+                },
+            });
+        });
+    }
+
+    DBReader.prototype.RestoreDBData = function (classWiseComponents, sourceType) {       
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
+
         var sourceProperties = [];
         for (var mainClass in classWiseComponents) {
             var sourcePropertiesTemp = {};
@@ -40,22 +105,20 @@ function DBReader() {
                 var genericPropertiesObject = new GenericComponent();
                 genericPropertiesObject.ID = compId;
     
+                // iterate over properties
                 for (var propId in component) {
                     var property = component[propId];
-    
+
                     var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
                     genericPropertiesObject.addProperty(genericPropertyObject);
-    
-                    if ((property.name === "Name") ||
-                        (genericPropertiesObject.Name === undefined &&
-                            property.name === "Tagnumber")) {
+
+                    if (property.name.toLowerCase() === identifierProperties.name.toLowerCase()) {
                         genericPropertiesObject.Name = property.value;
                     }
-                    else if (property.name === "ComponentClass") {
+                    else if (property.name.toLowerCase() === identifierProperties.mainCategory.toLowerCase()) {
                         genericPropertiesObject.MainComponentClass = property.value;
                     }
-                    else if (property.name.toLowerCase() === "component class" ||
-                        property.name.toLowerCase() === "class") {
+                    else if (property.name.toLowerCase() === identifierProperties.subClass.toLowerCase()) {
                         genericPropertiesObject.SubComponentClass = property.value;
                     }
                 }
@@ -80,106 +143,85 @@ function DBReader() {
     }
 
 
-    DBReader.prototype.ProcessDBData = function (Db_data) {
-       
+    DBReader.prototype.ProcessDBData = function (dbData, serverType) {
+        let extension = null;
+        if (serverType === "sqlsrv") {
+            extension = "MSSQL";
+        }
+        else if (serverType === "mysql") {
+            extension = "MYSQL";
+        }
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(extension);
+
         var sourceProperties = [];
         var componentId = 1;
-        for (var i = 0; i < Db_data.length; i++) {
-            var sourcePropertiesTemp = {};
-            var rows = Db_data[i].properties;
-            for(var j = 0; j < rows.length; j++)
-            {
-                var row = rows[j];
-                var name = undefined;
-                if(row.EquipmentNo !== undefined)
-                {
-                    name = row.EquipmentNo;
-                }
-                else if(row.Name !== undefined)
-                {
-                    name = row.Name;
-                }
-                else if(row.CatalogNo != undefined)
-                {
-                    name = row.CatalogNo;
-                }
-                if(name === undefined)
-                {
+        for (var i = 0; i < dbData.length; i++) {
+
+            var rows = dbData[i].properties;
+            var dbTable = dbData[i].TableName;
+
+            // var subClassWiseComponents = {};
+            for (var j = 0; j < rows.length; j++) {
+                let row = rows[j];
+                if (!identifierProperties.name in row) {
                     continue;
                 }
-    
-                var mainComponentClass;
-                if(Db_data[i].categoryPresent)
-                {
-                    mainComponentClass = row.category.split('.')[0].charAt(0).toUpperCase() + row.category.split('.')[0].slice(1);
-                }
-                else
-                {
-                    mainComponentClass = Db_data[i].TableName.split('.')[0].charAt(0).toUpperCase() + Db_data[i].TableName.split('.')[0].slice(1);
-                }
-            
-                var subComponentClass = " ";
-                if(row["EqType"])
-                {
-                    subComponentClass = row["EqType"];
-                }
-                else if(row["Class"])
-                {
-                    subComponentClass = row["Class"];
-                }
-                else if(row["Component Class"])
-                {
-                    subComponentClass = row["Component Class"];
-                }
-                else if(row.EqType)
-                {
-                    subComponentClass = row.EqType;
-                }
-                else if(row.Class)
-                {
-                    subComponentClass = row.Class;
-                }
-            
-                if(subComponentClass === undefined)
-                {
+                let name = row[identifierProperties.name];
+                if (!name) {
                     continue;
-                }       
-                    
+                }
+
+                // add main component class property to row item
+                row["MainComponentClass"] = dbTable;
+
+                let mainComponentClass = null;
+                if (identifierProperties.mainCategory in row) {
+                    mainComponentClass = row[identifierProperties.mainCategory];
+                }
+
+                let subComponentClass = null;
+                if (identifierProperties.subClass in row) {
+                    subComponentClass = row[identifierProperties.subClass];
+                }
+
                 // create generic properties object
-                var genericPropertiesObject = new GenericComponent(name,
+                var componentObject = new GenericComponent(
+                    name,
                     mainComponentClass,
                     subComponentClass,
                     undefined,
                     undefined,
                     componentId);
-    
-                // add component class as generic property
-                var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
-                genericPropertiesObject.addProperty(componentClassPropertyObject);
-    
+                componentId++;
+
                 // iterate node properties and add to generic properties object
                 for (var key in row) {
                     var value = row[key];
-                    if(value === undefined)
-                    {
+                    if (value === undefined ||
+                        value === null) {
                         value = "";
                     }
-                    var genericPropertyObject = new GenericProperty(key, "String",value);
-                    genericPropertiesObject.addProperty(genericPropertyObject);
+                    var propObj = new GenericProperty(key, "String", value);
+                    componentObject.addProperty(propObj);
                 }
-    
-                // add genericProperties object to sourceproperties collection
-                if (subComponentClass in sourcePropertiesTemp) {
-                    sourcePropertiesTemp[subComponentClass].push(genericPropertiesObject);
+
+                if (mainComponentClass &&
+                    mainComponentClass !== "" &&
+                    subComponentClass &&
+                    subComponentClass !== "") {
+
+                    if (!(mainComponentClass in this.DBData)) {
+                        this.DBData[mainComponentClass] = {};
+                    }
+
+                    if (!(subComponentClass in this.DBData[mainComponentClass])) {
+                        this.DBData[mainComponentClass][subComponentClass] = [];
+                    }
+                    this.DBData[mainComponentClass][subComponentClass].push(componentObject);
+
+                    sourceProperties.push(componentObject)
                 }
-                else {
-                    sourcePropertiesTemp[subComponentClass] = [genericPropertiesObject];
-                }
-    
-                sourceProperties.push(genericPropertiesObject)
-                componentId++;
             }
-            this.DBData[mainComponentClass] = sourcePropertiesTemp;
         }
 
         return sourceProperties;

@@ -24,13 +24,21 @@
         "category": "MainComponentClass",
         "componentClass": "ComponentClass"
     },
-    "db": {
+    "mysql": {
         "extensions": [
-            "json"
+            "mysql"
         ],
         "name": "Name",
         "category": "MainComponentClass",
-        "componentClass": "ComponentClass"
+        "componentClass": "Class"
+    },
+    "mssql": {
+        "extensions": [
+            "mssql"
+        ],
+        "name": "Name",
+        "category": "MainComponentClass",
+        "componentClass": "Class"
     },
     "solidworks assembly": {
         "extensions": [
