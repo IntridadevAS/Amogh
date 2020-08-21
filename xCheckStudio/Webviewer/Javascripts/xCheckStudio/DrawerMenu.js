@@ -217,6 +217,15 @@ let menu = {
     },
 
     onDataDefinitionsClicked: function () {
+        if (!model.currentTabId ||
+            !model.currentTabId in model.views) {
+            return;
+        }
+
+        if (!model.views[model.currentTabId].displayMenu) {
+            return;
+        }
+        
         model.views[model.currentTabId].dataDefinitionMenu.Open();
     },
 
