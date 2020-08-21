@@ -280,9 +280,8 @@ let SelectDatasetsDataForm = {
                 type: "POST",
                 url: "PHP/ProjectLoadManager.php"
             }).done(function (msg) {
-                var message = JSON.parse(msg);
-
-                if (message.MsgCode === 1) {
+                var message = xCheckStudio.Util.tryJsonParse(msg);
+                if (message !== null && message.MsgCode === 1) {
                     return resolve(message.Data);
                 }
 

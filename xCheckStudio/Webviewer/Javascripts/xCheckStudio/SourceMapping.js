@@ -334,19 +334,6 @@ function uploadDataSet(event) {
     if (inputSourceType.toLowerCase() === 'xls') {
         var file = event.target.files[0];   
         extractXLSAttributeData(file);
-
-        // readXLSAttributeData(file).then(function(attributes){
-
-        //     dataSetAttributes[file.name] = attributes;
-
-        //     // add data source name to loadedDataSetSelect
-        //     var loadedDataSetSelect = document.getElementById("loadedDataSetSelect");
-        //     var option = document.createElement("option");
-        //     option.innerText = file.name;
-        //     loadedDataSetSelect.appendChild(option);
-    
-        //     document.getElementById("uploadDataSetForm").reset();
-        // });      
     }
     else {
 
@@ -360,10 +347,10 @@ function uploadDataSet(event) {
                 return;
             }
 
-            var attributes = JSON.parse(result.target.response);
+            var attributes = xCheckStudio.Util.tryJsonParse(result.target.response);
 
             for (var fileName in attributes) {
-                dataSetAttributes[fileName] = JSON.parse(attributes[fileName]);
+                dataSetAttributes[fileName] = xCheckStudio.Util.tryJsonParse(attributes[fileName]);
 
                 // add data source name to loadedDataSetSelect
                 var loadedDataSetSelect = document.getElementById("loadedDataSetSelect");

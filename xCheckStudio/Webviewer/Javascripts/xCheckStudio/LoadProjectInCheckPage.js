@@ -27,8 +27,9 @@ function initCheckSpace() {
             type: "POST",
             url: "PHP/ProjectLoadManager.php"
         }).done(function (msg) {
-            var message = JSON.parse(msg);
-            if (message.MsgCode === 1) {
+            var message = xCheckStudio.Util.tryJsonParse(msg);           
+            if (message !== null && 
+                message.MsgCode === 1) {
                 return resolve(message);
             }
 
@@ -55,8 +56,12 @@ function loadCheckSpaceForCheck(data) {
 
     // get array of datasets allowed by checkcase
     if (data.checkCaseInfo) {
-        var checkCaseData = JSON.parse(data.checkCaseInfo.checkCaseData);
-        model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
+        var checkCaseData = xCheckStudio.Util.tryJsonParse(data.checkCaseInfo.checkCaseData);
+        if (checkCaseData !== null &&
+            checkCaseData.CheckCase &&
+            checkCaseData.CheckCase.SourceTypes) {
+            model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
+        }
     }  
 
     // load data sets 
@@ -66,26 +71,31 @@ function loadCheckSpaceForCheck(data) {
         data["checkspaceComments"].length > 0) {
             for(var i = 0;  i < data["checkspaceComments"].length; i++)
             {
-                var commentData = JSON.parse(data["checkspaceComments"][i]);
-                commentsCallout.ShowComment(commentData);
+                var commentData = xCheckStudio.Util.tryJsonParse(data["checkspaceComments"][i]);
+                if (commentData !== null) {
+                    commentsCallout.ShowComment(commentData);
+                }
             }
     }   
 
     // restore property groups
-    var propertyGroups = JSON.parse(data.propertyGroups);
+    let propertyGroups = xCheckStudio.Util.tryJsonParse(data.propertyGroups);
     model.propertyGroups = propertyGroups;
 
     // restore highlight property templates 
-    model.propertyHighlightTemplates = JSON.parse(data.highlightPropertyTemplates);
-    
+    let propertyHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.highlightPropertyTemplates);
+    model.propertyHighlightTemplates = propertyHighlightTemplates;
+
     // restore data change highlight templates 
     if (data.dataChangeHighlightTemplates) {
-        model.dataChangeHighlightTemplates = JSON.parse(data.dataChangeHighlightTemplates);       
+        let dataChangeHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.dataChangeHighlightTemplates);
+        model.dataChangeHighlightTemplates = dataChangeHighlightTemplates;
     }
 
-     // restore db conenction info
-     if (data.dbConnectionInfo) {
-        model.dbConnectionInfo = JSON.parse(data.dbConnectionInfo);       
+    // restore db conenction info
+    if (data.dbConnectionInfo) {
+        let dbConnectionInfo = xCheckStudio.Util.tryJsonParse(data.dbConnectionInfo);
+        model.dbConnectionInfo = dbConnectionInfo;
     }
 }
 
@@ -97,9 +107,9 @@ function loadDataSets(data) {
     var checkCaseName;
     if (checkCaseInfo) {
         if ('checkCaseData' in checkCaseInfo) {
-            var checkCaseManager = JSON.parse(checkCaseInfo['checkCaseData']);
-
-            if ('CheckCase' in checkCaseManager) {
+            let checkCaseManager = xCheckStudio.Util.tryJsonParse(checkCaseInfo['checkCaseData']);
+            if (checkCaseManager !== null &&
+                'CheckCase' in checkCaseManager) {
                 var checkCase = checkCaseManager['CheckCase'];
                 if ('Name' in checkCase) {
                     checkCaseName = checkCase['Name'];
@@ -198,8 +208,9 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
                 var hiddenItems = [];
                 var hiddenComponents = data.hiddenComponents;
                 if ("hiddenComponents" in hiddenComponents) {
-                    var comps = JSON.parse(hiddenComponents["hiddenComponents"]);
-                    if (addedSource.id in comps) {
+                    var comps = xCheckStudio.Util.tryJsonParse(hiddenComponents["hiddenComponents"]);
+                    if (comps !== null &&
+                        addedSource.id in comps) {
                         for (var node in comps[addedSource.id]) {
                             hiddenItems.push(Number(node));
                         }
@@ -208,8 +219,9 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
                 // get visible components
                 var visibleItems = [];
                 if ("visibleComponents" in hiddenComponents) {
-                    var comps = JSON.parse(hiddenComponents["visibleComponents"]);
-                    if (addedSource.id in comps) {
+                    var comps = xCheckStudio.Util.tryJsonParse(hiddenComponents["visibleComponents"]);
+                    if (comps !== null &&
+                        addedSource.id in comps) {
                         for (var node in comps[addedSource.id]) {
                             visibleItems.push(Number(node));
                         }

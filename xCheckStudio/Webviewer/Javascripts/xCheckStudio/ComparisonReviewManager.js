@@ -367,8 +367,10 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
@@ -444,8 +446,10 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let tableIds = [];
                 for (var groupId in results) {
@@ -567,7 +571,11 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
+
                 let tableIds = [];
                 for (var groupId in results) {
                     _this.ComparisonCheckManager["results"][groupId].categoryStatus = "ACCEPTED"
@@ -652,8 +660,10 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let  tableIds = [];
                 for (var groupId in results) {
@@ -732,8 +742,10 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
                 checkResultComponent.accepted = results[componentId].accepted;
@@ -810,7 +822,10 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordionData) {
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let tableIds = [];
                 for (var groupId in results) {
@@ -954,8 +969,10 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                 "sourceProps" : JSON.stringify(sourceProps),
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
                 var properties = checkResultComponent["properties"];
@@ -1026,7 +1043,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                 if ("a" in sourceCompIds) {
                     let compId = sourceCompIds['a'];
 
-                    let allCompsA;
+                    let allCompsA = null;
                     if ("allComponents" in checkResults &&
                         "a" in checkResults.allComponents) {
                         allCompsA = JSON.parse(checkResults.allComponents["a"]);
@@ -1248,8 +1265,10 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                 "sourceProps" : JSON.stringify(sourceProps),
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
@@ -1514,8 +1533,10 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let tableIds = [];
                 for (var groupId in results) {
@@ -1613,8 +1634,10 @@ ComparisonReviewManager.prototype.TransposeComponent = function (
                 'CheckName': checkinfo.checkname               
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
                
                 var tableIds = [];
                 for (var groupId in results) {
@@ -1707,7 +1730,10 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
             async: true,
             data: { 'groupid': groupId, 'transposeType': 'restoreCategory', 'transposeLevel': 'categorylevel', 'ProjectName': projectinfo.projectname, 'CheckName': checkinfo.checkname },
             success: function (msg) {
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let tableIds = [];
                 for (var groupId in results) {
@@ -1813,8 +1839,10 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var tableIds = [];
                 for (var groupId in results) {

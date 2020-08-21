@@ -158,12 +158,7 @@ PropertyCallout.prototype.Update = function (componentName,
                     win.loadURL(value);
                 }
                 else if (type.toLowerCase() === "document") {
-                    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-                    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
                    
-                    // var docUrl = path.join(window.location.origin, "Projects", projectinfo.projectname, "CheckSpaces", checkinfo.checkname, value);
-                    // if (type.toLowerCase() === "document") {
-
                     var fileExtension = xCheckStudio.Util.getFileExtension(value);
 
                     if (fileExtension.toLowerCase() === "doc" ||

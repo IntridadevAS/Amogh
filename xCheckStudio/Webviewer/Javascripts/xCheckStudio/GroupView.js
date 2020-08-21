@@ -78,9 +78,15 @@ GroupView.prototype.UpdateComponents = function (componentsData) {
 
     var sourceManager = SourceManagers[this.Id];
     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
     for (var nodeId in componentsData) {
         var componentData = componentsData[nodeId];
 
@@ -649,9 +655,10 @@ GroupView.prototype.CheckRevisions = function (
             },
             type: "POST",
             url: "PHP/DataChangeRevisioning.php",
-        }).done(function (msg) {
-            var object = JSON.parse(msg);
-            if (object.MsgCode !== 1) {
+        }).done(function (msg) {           
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null ||
+                object.MsgCode !== 1) {
                 return resolve(null);
             }
 

@@ -310,7 +310,7 @@ let UploadManager = {
         xhr.open("POST", "PHP/GetSourceData.php", true);
         xhr.onload = function (data) {
 
-            var sourceArray = JSON.parse(data.target.response);
+            var sourceArray = xCheckStudio.Util.tryJsonParse(data.target.response);
 
             if (!sourceArray ||
                 sourceArray.length === 0) {

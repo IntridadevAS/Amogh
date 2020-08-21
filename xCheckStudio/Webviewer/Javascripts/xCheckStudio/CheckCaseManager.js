@@ -8,8 +8,9 @@ function CheckCaseManager() {
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "PHP/ReadCheckCaseXml.php", true);
-        xhr.onload = function (data) {           
-            _this.CheckCase = JSON.parse(data.currentTarget.responseText);
+        xhr.onload = function (data) {      
+            
+            _this.CheckCase = xCheckStudio.Util.tryJsonParse(data.currentTarget.responseText);
            
             // write check case data to DB
             $.ajax({

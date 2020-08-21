@@ -134,9 +134,9 @@ const DataVault = {
                     'ProjectName': model.currentProject.projectname,
                     'DataToDelete': JSON.stringify(dataToDelete)
                 },
-                success: function (msg) {
-                    var message = JSON.parse(msg);
-                    if (message.MsgCode !== 1) {
+                success: function (msg) {                    
+                    var message = xCheckStudio.Util.tryJsonParse(msg);
+                    if (message === null || message.MsgCode !== 1) {
                         return resolve(false);
                     }
 
@@ -276,8 +276,7 @@ const DataVault = {
     readDataFromVault: function(){
         
         return new Promise((resolve) => {            
-            // var projectinfo = JSON.parse(model.currentProject);
-
+           
             $.ajax({
                 url: 'PHP/DataVault.php',
                 type: "POST",
@@ -288,10 +287,9 @@ const DataVault = {
                     'ProjectName': model.currentProject.projectname
                 },
                 success: function (msg) {
-                    var message = JSON.parse(msg);
-                    if(message.MsgCode !== 1)
-                    {
-                        return resolve(null); 
+                    var message = xCheckStudio.Util.tryJsonParse(msg);
+                    if (message === null || message.MsgCode !== 1) {
+                        return resolve(null);
                     }
 
                     return resolve(message.Data);

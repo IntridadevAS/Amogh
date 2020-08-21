@@ -171,8 +171,8 @@ function getSourceComponents() {
                 'CheckName': checkinfo.checkname
             },
             success: function (data) {
-                var result = JSON.parse(data);
-                if (result.MsgCode != 1) {
+                var result = xCheckStudio.Util.tryJsonParse(data);                
+                if (result === null || result.MsgCode != 1) {
                     return resolve(undefined);
                 }
 

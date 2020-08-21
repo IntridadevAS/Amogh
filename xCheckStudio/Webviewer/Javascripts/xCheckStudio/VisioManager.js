@@ -98,7 +98,7 @@ VisioManager.prototype.ReadProperties = function () {
                 _this.PropertiesText = this.responseText
 
                 var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(_this.SourceType);
-                if (identifierProperties === undefined) {
+                if (identifierProperties === null) {
                     return resolve(undefined);
                 }
 
@@ -379,7 +379,7 @@ VisioManager.prototype.AddComponentsToDB = function () {
         url: "PHP/AddComponentsToDB.php"
     }).done(function (msg) {
         if (msg !== 'fail') {
-            _this.NodeIdvsComponentIdList = JSON.parse(msg);
+            _this.NodeIdvsComponentIdList = xCheckStudio.Util.tryJsonParse(msg);
         }
 
 

@@ -134,7 +134,7 @@ var CheckModule = {
             var userinfo = JSON.parse(localStorage.getItem('userinfo'));
 
             this.datasetAlreadyExistInVault(projectinfo.projectname, sourceManager.SourceName, version).then(function (result) {
-                if (result.MsgCode === -1) {
+                if (result && result.MsgCode === -1) {
 
                     showReplaceVaultDataSetDialog().then(function (result) {
                         if (result.buttonText.toLowerCase() === "cancel") {
@@ -162,10 +162,10 @@ var CheckModule = {
                         }
                     });
                 }
-                else if (result.MsgCode !== 1) {
+                else if (result && result.MsgCode !== 1) {
                     return resolve([false]);
                 }
-                else if (result.MsgCode === 1) {
+                else if (!result || result.MsgCode === 1) {
                     DataVault.saveDataToVault(projectinfo, userinfo, sourceManager, version, description, "false", "false").then(function (res) {
                         return resolve([res]);
                     });
@@ -188,15 +188,7 @@ var CheckModule = {
                     'version': version
                 },
                 success: function (msg) {
-                    var message = JSON.parse(msg);
-                    // if (message.MsgCode === -1) {
-                    //     alert(message.Msg);
-                    //     return resolve(false);
-                    // }
-                    // else if (message.MsgCode !== 1) {
-                    //     return resolve(false);
-                    // }
-
+                    var message = xCheckStudio.Util.tryJsonParse(msg);                   
                     return resolve(message);
                 }
             });
@@ -424,9 +416,7 @@ var CheckModule = {
     },
 
     getSourceViewerOptions: function () {
-
-        // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-        // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+      
         var viewerOptionsObject = {};
         for (var srcId in SourceManagers) {
             var sourceManager = SourceManagers[srcId];

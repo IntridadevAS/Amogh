@@ -18,7 +18,8 @@ var xCheckStudio;
 
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        return resolve(JSON.parse(this.responseText));
+                        var result = xCheckStudio.Util.tryJsonParse(this.responseText);                   
+                        return resolve(result);
                     }
                 };
                 xmlhttp.open("GET", url, true);
@@ -27,6 +28,9 @@ var xCheckStudio;
         }
 
         function getComponentIdentificationProperties(fileExtension) {
+            if (componentIdentifiers === null) {
+                return null;
+            }
 
             var extension = fileExtension.toLowerCase();
 

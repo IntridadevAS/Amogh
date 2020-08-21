@@ -458,7 +458,7 @@ let SQLLoadManager = {
                 }),
                 async: false,
                 success: function (msg) {
-                    let result = JSON.parse(msg);
+                    let result = xCheckStudio.Util.tryJsonParse(msg);
                    
                     return resolve(result);
                 },

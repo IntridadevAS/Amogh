@@ -1175,8 +1175,13 @@
           controller.init().then(function () {
             var fromInfoStr = localStorage.getItem('fromInfo');
             if (fromInfoStr) {
-              localStorage.removeItem('fromInfo');
-              var fromInfo = JSON.parse(fromInfoStr);
+              localStorage.removeItem('fromInfo'); 
+              
+              var fromInfo = xCheckStudio.Util.tryJsonParse(fromInfoStr);
+              if(fromInfo === null)
+              {
+                return;
+              }              
 
               model.currentModule = fromInfo.fromModule;
 

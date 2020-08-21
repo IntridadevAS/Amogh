@@ -356,6 +356,17 @@ var xCheckStudio;
         }
         Util.waitUntilAllPromises = waitUntilAllPromises;
 
+        function tryJsonParse(jsonString) {
+            var jsonResult = null;
+            try {
+                jsonResult = JSON.parse(jsonString);
+            }
+            catch (e) { }
+
+            return jsonResult;
+        }
+        Util.tryJsonParse = tryJsonParse;
+
         function dragElement(elmnt, draggableArea) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             if (draggableArea) {

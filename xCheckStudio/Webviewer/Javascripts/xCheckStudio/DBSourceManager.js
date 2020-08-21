@@ -121,7 +121,8 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
     type: "POST",
     url: "PHP/AddComponentsToDB.php"
   }).done(function (data) {
-    _this.ComponentIdVsData = JSON.parse(data);
+    var result = xCheckStudio.Util.tryJsonParse(data);
+    _this.ComponentIdVsData = result;
   });
 
 }

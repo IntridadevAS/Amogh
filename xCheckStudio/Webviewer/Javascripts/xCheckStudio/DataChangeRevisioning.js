@@ -76,7 +76,11 @@ let DataChangeRevisioning = {
             type: "POST",
             url: "PHP/DataChangeRevisioning.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object == null) {
+                return;
+            }
+
             if (object.MsgCode !== 1) {
                 alert(object.Msg);
                 return;
@@ -94,32 +98,11 @@ let DataChangeRevisioning = {
                 return;
             }
 
-            // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            // $.ajax({
-            //     data: {
-            //         'InvokeFunction': 'ReadRevisions',
-            //         'ProjectName': projectinfo.projectname,
-            //         'CheckName': checkinfo.checkname,
-            //         'dataSourceType' : SourceManagers[model.currentTabId].SourceType.toLowerCase()               
-            //     },
-            //     type: "POST",
-            //     url: "PHP/DataChangeRevisioning.php"
-            // }).done(function (msg) {
-            //     var object = JSON.parse(msg);
-            //     if (object.MsgCode !== 1) {
-            //         alert(object.Msg);
-            //         return;
-            //     }
-
-            //     var revisions = object.Data;
             for (var i = 0; i < revisions.length; i++) {
                 var revisionData = revisions[i];
                 revisionData["userAlias"] = revisionData["createdByAlias"];
                 DataChangeRevisioning.createRevisionCard(revisionData, false);
             }
-
 
             // create current version card
             var revisionData = {};
@@ -130,8 +113,7 @@ let DataChangeRevisioning = {
             revisionData["userAlias"] = userInfo.alias;
             revisionData["createdOn"] = "";
 
-            DataChangeRevisioning.createRevisionCard(revisionData, false);
-            // });
+            DataChangeRevisioning.createRevisionCard(revisionData, false);            
         })
     },
 
@@ -152,9 +134,9 @@ let DataChangeRevisioning = {
                 type: "POST",
                 url: "PHP/DataChangeRevisioning.php"
             }).done(function (msg) {
-                var object = JSON.parse(msg);
-                if (object.MsgCode !== 1) {
-                    // alert(object.Msg);
+                var object = xCheckStudio.Util.tryJsonParse(msg);
+                if (object === null ||
+                    object.MsgCode !== 1) {
                     return resolve(null);
                 }
 
@@ -180,8 +162,9 @@ let DataChangeRevisioning = {
                 url: "PHP/DataChangeRevisioning.php",
                 async: false,
             }).done(function (msg) {
-                var object = JSON.parse(msg);
-                if (object.MsgCode !== 1) {
+                var object = xCheckStudio.Util.tryJsonParse(msg);
+                if (object === null ||
+                    object.MsgCode !== 1) {
                     return resolve(null);
                 }
 
@@ -318,7 +301,11 @@ let DataChangeRevisioning = {
             type: "POST",
             url: "PHP/DataChangeRevisioning.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null) {
+                return;
+            }
+
             if (object.MsgCode !== 1) {
                 alert(object.Msg);
                 return;
