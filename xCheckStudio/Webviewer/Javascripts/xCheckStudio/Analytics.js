@@ -54,7 +54,10 @@ let Analytics = {
                     'CheckName': checkinfo.checkname
                 },
                 success : function(msg) {
-                    var analyticsData = JSON.parse(msg);
+                    var analyticsData = xCheckStudio.Util.tryJsonParse(msg);
+                    if (analyticsData === null) {
+                        return resolve(false);;
+                    }  
 
                     // update not checked comps
                     if ("comparison" in analyticsData &&

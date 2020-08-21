@@ -579,7 +579,7 @@ Review3DViewerInterface.prototype.SerializeViews = function (views) {
 
 Review3DViewerInterface.prototype.RestoreViews = function (viewsStr) {
     var markupManager = this.Viewer.markupManager;
-    markupManager.loadMarkupData(JSON.parse(viewsStr)).then(function (result) {
+    markupManager.loadMarkupData(xCheckStudio.Util.tryJsonParse(viewsStr)).then(function (result) {
 
     });
 
@@ -605,7 +605,7 @@ Review3DViewerInterface.prototype.SerializeAnnotations = function (annotations) 
 }
 
 Review3DViewerInterface.prototype.RestoreAnnotations = function (annotationsStr) {
-    var annotations = JSON.parse(annotationsStr);
+    var annotations = xCheckStudio.Util.tryJsonParse(annotationsStr);
 
     var restoredAnnotations = [];
     for (var i = 0; i < annotations.length; i++) {

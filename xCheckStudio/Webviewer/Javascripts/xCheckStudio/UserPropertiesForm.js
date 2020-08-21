@@ -350,10 +350,15 @@ UserPropertiesForm.prototype.OnApply =  function(){
 
         var sourceManager = SourceManagers[_this.Id];
         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-        var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-        var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-        var classProperty =  identifierProperties.subClass.replace("Intrida Data/", "");
-       
+        var nameProperty = "";
+        var categoryProperty = "";
+        var classProperty = "";
+        if (identifierProperties !== null) {
+            nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+            categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+            classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+        }
+
         var data = {};
         var alreadyExistingProps = {};     
         for (var i = 0; i < selectedNodeIds.length; i++) {
@@ -462,9 +467,9 @@ UserPropertiesForm.prototype.OnApply =  function(){
             type: "POST",
             url: "PHP/UserProperties.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
-            if (object.MsgCode !== 1) {
-                // failed
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null ||
+                object.MsgCode !== 1) {
                 return;
             }
 
@@ -493,57 +498,3 @@ UserPropertiesForm.prototype.Close = function () {
 
     this.Clear();
 }
-
-// UserPropertiesForm.prototype.GetAllSourceProperties = function () {
-//     var sourceManager = SourceManagers[this.Id];
-
-//     var allProperties = [];
-//     if (sourceManager.Is3DSource()) {
-//         var allComponents = sourceManager.AllComponents;
-
-//         for (var nodeId in allComponents) {
-//             var component = allComponents[nodeId];
-//             if (component.properties.length > 0) {
-//                 for (var i = 0; i < component.properties.length; i++) {
-//                     var property = component.properties[i];
-//                     if (allProperties.indexOf(property.Name) === -1) {
-//                         allProperties.push(property.Name);
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     return allProperties;
-// }
-
-// function commonDifferentProperties(objects) {
-//     if (objects.length === 0) {
-//         return null;
-//     }
-
-//     var common = JSON.parse(JSON.stringify(objects[0]));
-//     var unmatchedProps = {};
-//     for (var i = 1; i < objects.length; i++) {
-//         for (var prop in objects[i]) {
-//             checkProps(objects[i], common, prop);
-//         }
-//         for (var commProp in common) {
-//             checkProps(common, objects[i], commProp);
-//         }
-//     }
-//     return {
-//         "common": common,
-//         "notCommon": unmatchedProps
-//     };
-
-//     function checkProps(source, target, prop) {
-//         if (source.hasOwnProperty(prop)) {
-//             var val = source[prop];
-//             if (!target.hasOwnProperty(prop) || target[prop] !== val) {
-//                 unmatchedProps[prop] = true;
-//                 delete common[prop];
-//             }
-//         }
-//     }
-// }

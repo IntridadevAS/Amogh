@@ -367,8 +367,8 @@ let controller = {
           type: "POST",
           url: "PHP/ProjectManager.php"
         }).done(function (msg) {
-          var object = JSON.parse(msg);
-          if (object.projectid !== -1) {
+          var object = xCheckStudio.Util.tryJsonParse(msg);
+          if (object !== null && object.projectid !== -1) {
             localStorage.setItem('projectinfo', JSON.stringify(msg));
             newProjectView.closeNewProject();
             controller.fetchProjects();
@@ -400,8 +400,11 @@ let controller = {
         type: "POST",
         url: "PHP/ProjectManager.php"
       }).done(function (msg) {
-        var object = JSON.parse(msg);
-        var array = [];
+        var object = xCheckStudio.Util.tryJsonParse(msg);
+        if (object === null) {
+          return;
+        }
+
         for (var i in object) {
           var obj = object[i];
           if (obj.type.toLowerCase() === 'private')
@@ -449,7 +452,11 @@ let controller = {
       type: "POST",
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
-      var objectArray = JSON.parse(msg);
+      var objectArray = xCheckStudio.Util.tryJsonParse(msg);
+      if (objectArray === null) {
+        return;
+      }
+
       model.projectChecks = [...objectArray];
       controller.sortChecks();
       checkView.init()
@@ -484,7 +491,11 @@ let controller = {
       type: "POST",
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
-      var objectArray = JSON.parse(msg);
+      var objectArray = xCheckStudio.Util.tryJsonParse(msg);
+      if (objectArray === null) {
+        return;
+      }
+
       model.projectReviews = [...objectArray];
       controller.sortReviews();
       checkView.init()
@@ -530,26 +541,9 @@ let controller = {
   },
 
   setVaultEnable: function (projID, vaultEnable) {
-    // var obj = model.myProjects.find(obj => obj.projectid == projID);
-    // if (obj === undefined) {
-    //   obj = model.publicProjects.find(obj => obj.projectid == projID);
-    // }
-    // if (obj === undefined) {
-    //   console.log("No project found to mark as favourite");
-    //   return;
-    // }
-    // var newFav = 0;
-    // if (obj.IsFavourite === "0") {
-    //   newFav = 1;
-    // }
-    // else {
-    //   newFav = 0;
-    // }
-    // var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     $.ajax({
       data: {
         'InvokeFunction': 'SetVaultEnable',
-        // 'userid': userinfo.userid,
         'ProjectId': projID,
         'vaultEnable': vaultEnable,
       },
@@ -693,7 +687,11 @@ let controller = {
       type: "POST",
       url: "PHP/ProjectManager.php"
     }).done(function (msg) {
-      var result = JSON.parse(msg);
+      var result = xCheckStudio.Util.tryJsonParse(msg);
+      if (result === null) {
+        return;
+      }
+
       if (result.MsgCode !== 1) {
         showAlertForm(result.Msg);
         return;
@@ -704,21 +702,23 @@ let controller = {
   },
 
   CopyCheckspace: function (checkspaceData, source) {
-    var currentProj = controller.getCurrentProj();
-    // var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    var currentProj = controller.getCurrentProj();   
     $.ajax({
       data: {
         'InvokeFunction': 'CopyCheckSpace',
         'ProjectName': currentProj.projectname,
-        'ProjectId': currentProj.projectid,
-        // 'userid': userinfo.userid,
+        'ProjectId': currentProj.projectid,        
         'CheckSpaceInfo': JSON.stringify(checkspaceData),
         "source": source
       },
       type: "POST",
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
-      var object = JSON.parse(msg);
+      var object = xCheckStudio.Util.tryJsonParse(msg);
+      if (object === null) {
+        return;
+      }
+
       if (object.MsgCode !== 1) {
         showAlertForm(object.Msg);
         return;
@@ -1169,14 +1169,13 @@ let newCheckView = {
       type: "POST",
       url: "PHP/CheckSpaceManager.php"
     }).done(function (msg) {
-      var object = JSON.parse(msg);
-      if (object.checkid === 0) {
-        //alert('Check Space with provided name already exists');
-        showAlertForm('Check Space with provided name already exists');
-      }
-      else if (object.checkid === -1) {
-        // alert('Failed to create check space');
+      var object = xCheckStudio.Util.tryJsonParse(msg);
+      if (object === null ||
+        object.checkid === -1) {
         showAlertForm('Failed to create check space');
+      }
+      else if (object.checkid === 0) {
+        showAlertForm('Check Space with provided name already exists');
       }
       else {
         controller.fetchProjectChecks(controller.getCurrentProj().projectid);

@@ -159,8 +159,8 @@ const DataVault = {
                     'ProjectName': projectinfo.projectname
                 },
                 success: function (msg) {
-                    var message = JSON.parse(msg);
-                    if (message.MsgCode !== 1) {
+                    var message = xCheckStudio.Util.tryJsonParse(msg);
+                    if (message === null || message.MsgCode !== 1) {
                         return resolve(null);
                     }
 
@@ -241,8 +241,8 @@ const DataVault = {
                     'srcId' : srcId
                 },
                 success: function (msg) {
-                    var message = JSON.parse(msg);
-                    if (message.MsgCode !== 1) {
+                    var message = xCheckStudio.Util.tryJsonParse(msg);
+                    if (message === null || message.MsgCode !== 1) {
                         return resolve(null);
                     }
 
@@ -281,8 +281,8 @@ const DataVault = {
                     'version': version
                 },
                 success: function (msg) {
-                    var message = JSON.parse(msg);
-                    if (message.MsgCode !== 1) {
+                    var message = xCheckStudio.Util.tryJsonParse(msg);
+                    if (message === null || message.MsgCode !== 1) {
                         return resolve(null);
                     }
 
@@ -400,9 +400,8 @@ const DataVault = {
                     'mergeData' : mergeData
                 },
                 success: function (msg) {
-                    var message = JSON.parse(msg);
-
-                    if (message.MsgCode !== 1) {
+                    var message = xCheckStudio.Util.tryJsonParse(msg);
+                    if (message === null || message.MsgCode !== 1) {
                         return resolve(false);
                     }
 

@@ -2165,10 +2165,18 @@ function populateCheckCaseInfo() {
 		},
 		success: function (msg) {
 			if (msg !== "fail") {
-				var checkCaseInfo = JSON.parse(msg);
+				var checkCaseInfo = xCheckStudio.Util.tryJsonParse(msg);
+				if(checkCaseInfo === null)
+				{
+					return;
+				}
 
 				if ('checkCaseData' in checkCaseInfo) {
-					var checkCaseData = JSON.parse(checkCaseInfo['checkCaseData']);
+					var checkCaseData = xCheckStudio.Util.tryJsonParse(checkCaseInfo['checkCaseData']);							
+					if(checkCaseData === null)
+					{
+						return;
+					}
 
 					if ('CheckCase' in checkCaseData) {
 						var checkCase = checkCaseData['CheckCase'];

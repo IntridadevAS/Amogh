@@ -34,13 +34,12 @@ function DBReader() {
                     "connectionInfo": JSON.stringify(connectionInfo)
                 }),
                 async: false,
-                success: function (msg) {
-                    let result = JSON.parse(msg);
-                    if (result.MsgCode !== 1) {
+                success: function (msg) {                  
+                    var result = xCheckStudio.Util.tryJsonParse(msg);
+                    if (result === null || result.MsgCode !== 1) {
                         return resolve(null);
                     }
-
-                    // var sourceData = JSON.parse(result.Data);
+                    
                     var sourceData = result.Data;
                     var sourceProperties = _this.ProcessDBData(
                         sourceData["data"], 
@@ -70,12 +69,11 @@ function DBReader() {
                 }),
                 async: false,
                 success: function (msg) {
-                    let result = JSON.parse(msg);
-                    if (result.MsgCode !== 1) {
+                    var result = xCheckStudio.Util.tryJsonParse(msg);
+                    if (result === null || result.MsgCode !== 1) {
                         return resolve(null);
                     }
-
-                    // var sourceData = JSON.parse(result.Data);
+                   
                     var sourceData = result.Data;
                     var sourceProperties = _this.ProcessDBData(
                         sourceData["data"],
@@ -92,6 +90,9 @@ function DBReader() {
 
     DBReader.prototype.RestoreDBData = function (classWiseComponents, sourceType) {       
         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
+        if (identifierProperties === null) {
+            return [];
+        }
 
         var sourceProperties = [];
         for (var mainClass in classWiseComponents) {
@@ -142,7 +143,6 @@ function DBReader() {
         // this.dbmodelbrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
     }
 
-
     DBReader.prototype.ProcessDBData = function (dbData, serverType) {
         let extension = null;
         if (serverType === "sqlsrv") {
@@ -152,6 +152,9 @@ function DBReader() {
             extension = "MYSQL";
         }
         var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(extension);
+        if (identifierProperties === null) {
+            return [];
+        }
 
         var sourceProperties = [];
         var componentId = 1;

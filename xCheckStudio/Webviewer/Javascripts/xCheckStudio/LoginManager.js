@@ -13,8 +13,9 @@ function validateLogindetails(callbackfunction) {
             else if (msg === "Locked") {
                 showUserLoggedInPrompt();
             }
-            else {
-                var object = JSON.parse(msg);
+            else {        
+                let object = xCheckStudio.Util.tryJsonParse(msg);       
+               
                 localStorage.setItem('userinfo', JSON.stringify(object));
                 window[callbackfunction](0);
             }

@@ -23,16 +23,16 @@ function initReviewModule() {
             // load comments in comment callout
             if ("checkspaceComments" in checkResults &&
                 checkResults["checkspaceComments"].length > 0) {
-                for (var i = 0; i < checkResults["checkspaceComments"].length; i++) {
-                    var commentData = JSON.parse(checkResults["checkspaceComments"][i]);
+                for (var i = 0; i < checkResults["checkspaceComments"].length; i++) {                  
+                    let commentData = xCheckStudio.Util.tryJsonParse(checkResults["checkspaceComments"][i]);
+
                     commentsCallout.ShowComment(commentData);
                 }
             }
 
             // markup views, annotations and bookmarks
             if (checkResults.reviewTagsAndViews) {
-                let tagsAndViews = JSON.parse(checkResults.reviewTagsAndViews)
-
+                let tagsAndViews = xCheckStudio.Util.tryJsonParse(checkResults.reviewTagsAndViews);
                 //tags
                 if (tagsAndViews.annotations) {
                     model.annotations = tagsAndViews.annotations;
@@ -196,8 +196,8 @@ function populateCheckResults(comparison,
             'CheckName': checkinfo.checkname
         },
         success: function (msg) {
-            var viewerOptions = JSON.parse(msg);
-
+            var viewerOptions = xCheckStudio.Util.tryJsonParse(msg);
+           
             var classWiseComponents = {};
             if (viewerOptions['a']['endPointUri'] === undefined) {
 
@@ -213,7 +213,7 @@ function populateCheckResults(comparison,
                     },
                     success: function (msg) {
                         if (msg != 'fail') {
-                            classWiseComponents['a'] = sourceAClassWiseComponents = JSON.parse(msg);
+                            classWiseComponents['a'] = sourceAClassWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
                         }
                     }
                 });
@@ -234,7 +234,7 @@ function populateCheckResults(comparison,
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
-                            classWiseComponents['b'] = JSON.parse(msg);
+                            classWiseComponents['b'] = xCheckStudio.Util.tryJsonParse(msg);
                         }
                     }
                 });
@@ -255,7 +255,7 @@ function populateCheckResults(comparison,
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
-                            classWiseComponents['c'] = JSON.parse(msg);
+                            classWiseComponents['c'] = xCheckStudio.Util.tryJsonParse(msg);
                         }
                     }
                 });
@@ -276,13 +276,11 @@ function populateCheckResults(comparison,
                     },
                     success: function (msg) {
                         if (msg != 'fail' && msg != "") {
-                            classWiseComponents['d'] = JSON.parse(msg);
+                            classWiseComponents['d'] = xCheckStudio.Util.tryJsonParse(msg);
                         }
                     }
                 });
             }
-
-
 
             if (comparison) {
                 loadComparisonData(comparison,
@@ -591,7 +589,7 @@ function populateComparisonModelBrowser(comparison) {
             'CheckName': checkinfo.checkname
         },
         success: function (msg) {
-            var viewerOptions = JSON.parse(msg);
+            var viewerOptions = xCheckStudio.Util.tryJsonParse(msg);
 
             // make viewers enable
             enableViewers(comparison.sources);
@@ -668,7 +666,7 @@ function populateComparisonModelBrowser(comparison) {
                             },
                             success: function (msg) {
                                 if (msg != 'fail') {
-                                    var sourceAClassWiseComponents = JSON.parse(msg);
+                                    var sourceAClassWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
 
                                     // model browser
                                     var modelBrowser = new ReviewComparison1DModelBrowser("a", source, comparison);
@@ -758,7 +756,7 @@ function populateComparisonModelBrowser(comparison) {
                             },
                             success: function (msg) {
                                 if (msg != 'fail') {
-                                    var sourceBClassWiseComponents = JSON.parse(msg);
+                                    var sourceBClassWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
 
                                     // model browser
                                     var modelBrowser = new ReviewComparison1DModelBrowser("b", source, comparison);
@@ -845,7 +843,7 @@ function populateComparisonModelBrowser(comparison) {
                             },
                             success: function (msg) {
                                 if (msg != 'fail') {
-                                    var sourceCClassWiseComponents = JSON.parse(msg);
+                                    var sourceCClassWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
 
                                     // model browser
                                     var modelBrowser = new ReviewComparison1DModelBrowser("c", source, comparison);
@@ -932,7 +930,7 @@ function populateComparisonModelBrowser(comparison) {
                             },
                             success: function (msg) {
                                 if (msg != 'fail') {
-                                    var sourceDClassWiseComponents = JSON.parse(msg);
+                                    var sourceDClassWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
 
                                     // model browser
                                     var modelBrowser = new ReviewComparison1DModelBrowser("d", source, comparison);
@@ -974,7 +972,7 @@ function populateComplianceModelBrowser(compliance) {
             'CheckName': checkinfo.checkname
         },
         success: function (msg) {
-            var viewerOptions = JSON.parse(msg);
+            var viewerOptions = xCheckStudio.Util.tryJsonParse(msg);
 
             for (var srcId in viewerOptions) {
                 var viewerOption = viewerOptions[srcId];
@@ -1082,7 +1080,7 @@ function populateComplianceModelBrowser(compliance) {
                         },
                         success: function (msg) {
                             if (msg != 'fail') {
-                                var classWiseComponents = JSON.parse(msg);
+                                var classWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
 
                                 // model browser
                                 var modelBrowser = new ReviewCompliance1DModelBrowser(srcId, compliance.source, compliance);

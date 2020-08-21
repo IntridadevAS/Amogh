@@ -304,7 +304,7 @@ VisioModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders) {
 
                                 if ("comment" in references[_this.Id]) {
                                     for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
-                                        commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+                                        commentsData.push(xCheckStudio.Util.tryJsonParse(references[_this.Id]["comment"][i]));
                                     }
                                 }
                             }

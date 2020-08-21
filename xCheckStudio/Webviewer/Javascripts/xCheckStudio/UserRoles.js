@@ -560,7 +560,7 @@ function getUserInfo() {    // var usersInfo;
             },
             success: function (msg) {
                 if (msg != 'fail') {
-                    var usersInfo = JSON.parse(msg);
+                    var usersInfo = xCheckStudio.Util.tryJsonParse(msg);
                     return resolve(usersInfo);
                 }
 

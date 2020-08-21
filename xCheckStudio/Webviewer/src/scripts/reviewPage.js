@@ -784,7 +784,7 @@ function clearData() {
 function getDataSourceOrderInCheckcase() {
   var dataSourceOrderInCheckCase = {};
 
-  var checkCaseData = JSON.parse(checkResults.checkcaseInfo.checkCaseData);
+  var checkCaseData = xCheckStudio.Util.tryJsonParse(checkResults.checkcaseInfo.checkCaseData);
   var sourceTypesFromCheckCase = checkCaseData.CheckCase.SourceTypes;
 
   var sourcesTraversed = [];

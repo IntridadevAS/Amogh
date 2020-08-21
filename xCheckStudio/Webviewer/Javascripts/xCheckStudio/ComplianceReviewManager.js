@@ -177,8 +177,10 @@ ComplianceReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var tableIds = [];
                 for (var groupId in results) {
@@ -243,7 +245,10 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
@@ -313,8 +318,10 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionDa
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var tableIds = [];
                 for (var groupId in results) {
@@ -431,8 +438,10 @@ ComplianceReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let tableIds = [];
                 for (var groupId in results) {
@@ -495,8 +504,10 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
 
@@ -568,7 +579,10 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (accordionData, Ac
                 'CheckName': checkinfo.checkname
             },
             success: function (msg) {
-                var results = JSON.parse(msg);;
+                var results = xCheckStudio.Util.tryJsonParse(msg);
+                if (results === null) {
+                    return;
+                }
 
                 let tableIds = [];
                 for (var groupId in results) {

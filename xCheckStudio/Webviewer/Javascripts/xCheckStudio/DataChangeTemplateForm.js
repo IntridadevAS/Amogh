@@ -394,58 +394,7 @@ let DataChangeTemplateForm = {
     setTargetRevision : function(revId){
         let revText = this.getRevisionText(revId);
         this.targetBox.option("value", revText);
-    },
-
-    // writeTemplateConfigs: function () {
-    //     return new Promise((resolve) => {
-
-    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    //         $.ajax({
-    //             data: {
-    //                 'InvokeFunction': 'WriteDataChangeTemplateConfig',
-    //                 'ProjectName': projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname,
-    //                 'configData': JSON.stringify(model.dataChangeTemplateConfigs)
-    //             },
-    //             type: "POST",
-    //             url: "PHP/DataChangeRevisioning.php"
-    //         }).done(function (msg) {
-    //             var object = JSON.parse(msg);
-    //             if (object.MsgCode !== 1) {
-    //                 return resolve(false);
-    //             }
-
-    //             return resolve(true);
-    //         });
-    //     });
-    // },
-
-    // readTemplateConfigs: function () {
-    //     return new Promise((resolve) => {
-
-    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-    //         $.ajax({
-    //             data: {
-    //                 'InvokeFunction': 'ReadDataChangeTemplateConfig',
-    //                 'ProjectName': projectinfo.projectname,
-    //                 'CheckName': checkinfo.checkname
-    //             },
-    //             type: "POST",
-    //             url: "PHP/DataChangeRevisioning.php"
-    //         }).done(function (msg) {
-    //             var object = JSON.parse(msg);
-    //             if (object.MsgCode !== 1) {
-    //                 return resolve(null);
-    //             }
-
-    //             return resolve(JSON.parse(object.Data));
-    //         });
-    //     });
-    // },
+    },    
 
     populateSourceRevisions: function () {
 

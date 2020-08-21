@@ -66,7 +66,7 @@ let VersioningManager = {
             type: "POST",
             url: "PHP/VersionManager.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
+            var object = xCheckStudio.Util.tryJsonParse(msg);
             if (object.MsgCode !== 1) {
                 showAlertForm(object.Msg);
                 return;
@@ -88,7 +88,7 @@ let VersioningManager = {
             type: "POST",
             url: "PHP/VersionManager.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
+            var object = xCheckStudio.Util.tryJsonParse(msg);
             if (object.MsgCode !== 1) {
                 showAlertForm(object.Msg);
                 return;
@@ -230,7 +230,7 @@ let VersioningManager = {
             type: "POST",
             url: "PHP/VersionManager.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
+            var object = xCheckStudio.Util.tryJsonParse(msg);
             if (object.MsgCode !== 1) {
                 showAlertForm(object.Msg);
                 return;

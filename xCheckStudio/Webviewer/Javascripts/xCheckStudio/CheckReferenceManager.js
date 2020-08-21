@@ -54,7 +54,7 @@ let ReferenceManager = {
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
-                        var references = JSON.parse(msg);
+                        var references = xCheckStudio.Util.tryJsonParse(msg);
                         return resolve(references);
                     }
 
@@ -117,9 +117,8 @@ let ReferenceManager = {
         }
 
         for (var i = 0; i < comments.length; i++) {
-            var comment = comments[i];
-
-            ReferenceManager.showComment(JSON.parse(comment));            
+            var comment = xCheckStudio.Util.tryJsonParse(comments[i]);
+            ReferenceManager.showComment(comment);
         }
     },
 
@@ -423,7 +422,7 @@ let ReferenceManager = {
             },
             success: function (msg) {
                 if (msg != 'fail') {
-                    var commentData = JSON.parse(msg);
+                    var commentData = xCheckStudio.Util.tryJsonParse(msg);
                     ReferenceManager.showComment(commentData);
                 }
             }
@@ -462,8 +461,7 @@ let ReferenceManager = {
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
-                        var commentData = JSON.parse(msg);
-
+                        var commentData = xCheckStudio.Util.tryJsonParse(msg);
                         return resolve(commentData);
                     }
 

@@ -219,19 +219,7 @@ let LoadManager = {
             }
 
             var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            // var checkName
-            // var isVault = null;
-            // if (isDataVault()) {
-            //     isVault = "true";
-            //     checkName = null;
-            // }
-            // else {
-            //     var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-            //     checkName = checkinfo.checkname;
-            //     isVault = "false";
-            // }
+            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));           
 
             $.ajax({
                 data: {'Source': sourceId,

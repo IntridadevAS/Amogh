@@ -24,16 +24,6 @@ let ReferenceManager = {
 
         // set title
         ReferenceManager.setTitle(title);
-        // var referenceIFrame = document.getElementById("referenceIFrame");
-        // if (!referenceIFrame) {
-        //     return;
-        // }
-
-        // var sourceTitle = referenceIFrame.contentDocument.getElementById("sourceTitle");
-        // if (!sourceTitle) {
-        //     return;
-        // }
-        // sourceTitle.innerText = title;
 
         // restore references
         for (var src in ReferenceManager.componentIds) {
@@ -44,24 +34,7 @@ let ReferenceManager = {
                 continue;
             }
 
-            // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-
-            // // add reference
-            // $.ajax({
-            //     url: 'PHP/GetReferences.php',
-            //     type: "POST",
-            //     async: true,
-            //     data: {
-            //         'currentSource': src,
-            //         'components': JSON.stringify(componentIds),
-            //         'projectName': projectinfo.projectname,
-            //         'checkName': checkinfo.checkname
-            //     },
-            //     success: function (msg) {
-            //         if (msg != 'fail') {
             var references = ReferenceManager.getReferences(componentIds, src);
-            // ReferenceManager.getReferences(componentIds, src).then(function (references) {
             if (references) {
                 for (source in references) {
                     ReferenceManager.loadWebAddresses(source, references[source]['webAddress']);
@@ -69,41 +42,31 @@ let ReferenceManager = {
                     ReferenceManager.loadImages(source, references[source]['image']);
                     ReferenceManager.loadComments(source, references[source]['comment']);
                 }
-            }
-
-            // })
-        }
-        //         }
-        //     });
-        // }
+            }            
+        }        
     },
 
     getReferences: function (componentIds, src) {
         var references;
-        // return new Promise((resolve) => {
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-            // add reference
-            $.ajax({
-                url: 'PHP/GetReferences.php',
-                type: "POST",
-                async: false,
-                data: {
-                    'currentSource': src,
-                    'components': JSON.stringify(componentIds),
-                    'projectName': projectinfo.projectname,
-                    'checkName': checkinfo.checkname
-                },
-                success: function (msg) {
-                    if (msg != 'fail') {
-                         references = JSON.parse(msg);
-                        // return resolve(references);                        
-                    }
-
-                    // return resolve(undefined);
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        // add reference
+        $.ajax({
+            url: 'PHP/GetReferences.php',
+            type: "POST",
+            async: false,
+            data: {
+                'currentSource': src,
+                'components': JSON.stringify(componentIds),
+                'projectName': projectinfo.projectname,
+                'checkName': checkinfo.checkname
+            },
+            success: function (msg) {
+                if (msg != 'fail') {
+                    references = xCheckStudio.Util.tryJsonParse(msg);
                 }
-            });
-        // });
+            }
+        });
         return references;
     },
 
@@ -161,7 +124,7 @@ let ReferenceManager = {
 
         for (var i = 0; i < comments.length; i++) {
             var comment = comments[i];
-            ReferenceManager.showComment(currentSource, JSON.parse(comment));
+            ReferenceManager.showComment(currentSource, xCheckStudio.Util.tryJsonParse(comment));
         }
     },
 
@@ -444,7 +407,7 @@ let ReferenceManager = {
             },
             success: function (msg) {
                 if (msg != 'fail') {
-                    var commentData = JSON.parse(msg);
+                    var commentData = xCheckStudio.Util.tryJsonParse(msg);
                     ReferenceManager.showComment(currentSource, commentData);
                 }
             }
@@ -483,7 +446,7 @@ let ReferenceManager = {
                 },
                 success: function (msg) {
                     if (msg != 'fail') {
-                        var commentData = JSON.parse(msg);
+                        var commentData = xCheckStudio.Util.tryJsonParse(msg);
 
                         return resolve(commentData);
                     }

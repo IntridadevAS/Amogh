@@ -37,7 +37,7 @@ var ReviewModule = {
         return new Promise((resolve) => {
             let allComponents = {};
             for (var srcId in checkResults.allComponents) {
-                allComponents["AllComponents" + srcId] = JSON.parse(checkResults.allComponents[srcId]);
+                allComponents["AllComponents" + srcId] = xCheckStudio.Util.tryJsonParse(checkResults.allComponents[srcId]);
             }
 
             // get views and tags

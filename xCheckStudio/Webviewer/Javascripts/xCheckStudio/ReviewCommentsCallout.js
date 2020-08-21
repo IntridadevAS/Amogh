@@ -195,7 +195,7 @@ CommentsCallout.prototype.ProcessComment = function (value) {
             },
             success: function (msg) {
                 if (msg != 'fail') {
-                    var commentData = JSON.parse(msg);
+                    var commentData = xCheckStudio.Util.tryJsonParse(msg);
 
                     return resolve(commentData);
                 }

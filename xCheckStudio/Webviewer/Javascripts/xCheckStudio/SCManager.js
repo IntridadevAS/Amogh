@@ -246,7 +246,7 @@ SCManager.prototype.RestoreNodeIdVsCompList = function () {
         type: "POST",
         url: "PHP/ProjectManager.php"
     }).done(function (msg) {
-        var result = JSON.parse(msg);
+        var result = xCheckStudio.Util.tryJsonParse(msg);
         if (result.MsgCode !== 1) {
             return;
         }
@@ -906,13 +906,9 @@ SCManager.prototype.AddComponentsToDB = function () {
         url: "PHP/AddComponentsToDB.php"
     }).done(function (msg) {
         if (msg !== 'fail') {
-            _this.NodeIdvsComponentIdList = JSON.parse(msg);
+            _this.NodeIdvsComponentIdList = xCheckStudio.Util.tryJsonParse(msg);
         }
-        // // remove busy spinner
-        // var busySpinner = document.getElementById("divLoading");
-        // if (busySpinner.classList.contains('show'))
-        //     busySpinner.classList.remove('show')
-
+       
         console.log("End of AddComponentsToDB");
     });
 }
@@ -1007,7 +1003,7 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
 
                     if ("comment" in references[_this.Id]) {
                         for (var i = 0; i < references[_this.Id]["comment"].length; i++) {
-                            commentsData.push(JSON.parse(references[_this.Id]["comment"][i]));
+                            commentsData.push(xCheckStudio.Util.tryJsonParse(references[_this.Id]["comment"][i]));
                         }
                     }
                 }
@@ -1070,11 +1066,11 @@ SCManager.prototype.SerializeMarkupViews = function () {
 
 SCManager.prototype.RestoreMarkupViews = function (viewsStr) {
     var markupManager = this.Webviewer.markupManager;
-    markupManager.loadMarkupData(JSON.parse(viewsStr)).then(function(result){
+    markupManager.loadMarkupData(xCheckStudio.Util.tryJsonParse(viewsStr)).then(function(result){
 
     });
     var currentView = model.views[this.Id];
-    var views = JSON.parse(JSON.parse(viewsStr)).views;
+    var views = xCheckStudio.Util.tryJsonParse(xCheckStudio.Util.tryJsonParse(viewsStr)).views;
     for (var i = 0; i < views.length; i++) {
         currentView.markupViews[views[i].name] = views[i].uniqueId;
     }
@@ -1120,12 +1116,12 @@ SCManager.prototype.SerializeViews = function (views) {
 
 SCManager.prototype.RestoreBookmarkViews = function (viewsStr) {
     var markupManager = this.Webviewer.markupManager;
-    markupManager.loadMarkupData(JSON.parse(viewsStr)).then(function(result){
+    markupManager.loadMarkupData(xCheckStudio.Util.tryJsonParse(viewsStr)).then(function(result){
 
     });
     
     var currentView = model.views[this.Id];
-    var views = JSON.parse(JSON.parse(viewsStr)).views;
+    var views = xCheckStudio.Util.tryJsonParse(xCheckStudio.Util.tryJsonParse(viewsStr)).views;
     for (var i = 0; i < views.length; i++) {
         currentView.bookmarks[views[i].name] = views[i].uniqueId;
     }
@@ -1152,7 +1148,7 @@ SCManager.prototype.SerializeAnnotations = function () {
 }
 
 SCManager.prototype.RestoreAnnotations = function (annotationsStr) {
-    var annotations = JSON.parse(annotationsStr);
+    var annotations = xCheckStudio.Util.tryJsonParse(annotationsStr);
     for (var i = 0; i < annotations.length; i++) {
         var annotation = annotations[i];
 
@@ -1180,7 +1176,7 @@ SCManager.prototype.RestoreAnnotations = function (annotationsStr) {
 SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
     var _this = this;
 
-    var allComponents = JSON.parse(allComponentsStr);
+    var allComponents = xCheckStudio.Util.tryJsonParse(allComponentsStr);
     for (var nodeId in allComponents) {
         var component = allComponents[nodeId];
 

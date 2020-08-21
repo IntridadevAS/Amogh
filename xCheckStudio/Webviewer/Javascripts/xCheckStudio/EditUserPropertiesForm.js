@@ -89,9 +89,15 @@ EditUserPropertiesForm.prototype.OnApply = function () {
     var sourceManager = SourceManagers[_this.Id];
 
     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
 
     var data = {};
     for (var nodeId in this.UpdatedRowsData) {
@@ -145,30 +151,6 @@ EditUserPropertiesForm.prototype.OnApply = function () {
             DevExpress.ui.notify("Properties updated successfully.");
         }       
     });
-
-    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    // $.ajax({
-    //     data: {
-    //         'PropertyData': JSON.stringify(data),
-    //         'ComponentTable': sourceManager.GetComponentsTableName(),
-    //         'PropertyTable': sourceManager.GetPropertiesTableName(),
-    //         'InvokeFunction': 'Update',
-    //         'ProjectName': projectinfo.projectname,
-    //         'CheckName': checkinfo.checkname
-    //     },
-    //     type: "POST",
-    //     url: "PHP/UserProperties.php"
-    // }).done(function (msg) {
-    //     var object = JSON.parse(msg);
-    //     if (object.MsgCode !== 1) {
-    //         // failed
-    //         return;
-    //     }
-
-    //     _this.UpdatedRowsData = {};
-    //     DevExpress.ui.notify("Properties updated successfully.");
-    // });
 }
 
 EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data) {
@@ -190,11 +172,11 @@ EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data) {
             type: "POST",
             url: "PHP/UserProperties.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
-            if (object.MsgCode !== 1) {              
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null || object.MsgCode !== 1) {
                 return resolve(false);
             }
-                       
+
             DevExpress.ui.notify("Properties updated successfully.");
             return resolve(true);
         });
@@ -371,9 +353,14 @@ EditUserPropertiesForm.prototype.EditPropertyForAll = function (columnIndex, old
     var sourceManager = SourceManagers[_this.Id];
 
     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
 
     var data = {};
     var alreadyExistingProps = [];    
@@ -472,10 +459,15 @@ EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex,
     var sourceManager = SourceManagers[_this.Id];
 
     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
-
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+    
     var data = {};
     for (var i = 0; i < items.length; i++) {
         var nodeId = items[i].NodeId;
@@ -528,28 +520,7 @@ EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex,
             DevExpress.ui.notify("Properties updated successfully.");
             _this.LoadData();
         }
-    });
-    // var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-    // var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
-    // $.ajax({
-    //     data: {
-    //         'PropertyData': JSON.stringify(data),
-    //         'ComponentTable': sourceManager.GetComponentsTableName(),
-    //         'PropertyTable': sourceManager.GetPropertiesTableName(),
-    //         'InvokeFunction': 'Update',
-    //         'ProjectName': projectinfo.projectname,
-    //         'CheckName': checkinfo.checkname
-    //     },
-    //     type: "POST",
-    //     url: "PHP/UserProperties.php"
-    // }).done(function (msg) {
-    //     var object = JSON.parse(msg);
-    //     if (object.MsgCode !== 1) {            
-    //         return;
-    //     }           
-        
-    //     DevExpress.ui.notify("Properties updated successfully.");
-    // });
+    });    
 }
 
 EditUserPropertiesForm.prototype.GetSelectedComponents = function () {
@@ -719,9 +690,14 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
     var sourceManager = SourceManagers[_this.Id];
 
     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-    var categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-    var classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
 
     var editUserPropertiesForm = model.views[this.Id].editUserPropertiesForm;
     var selectedNodeIds = editUserPropertiesForm.GetSelectedComponents();
@@ -790,10 +766,9 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
             },
             type: "POST",
             url: "PHP/UserProperties.php"
-        }).done(function (msg) {
-            var object = JSON.parse(msg);
-            if (object.MsgCode !== 1) {
-                // failed
+        }).done(function (msg) {           
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null || object.MsgCode !== 1) {
                 return;
             }           
             
@@ -884,8 +859,8 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
             type: "POST",
             url: "PHP/UserProperties.php"
         }).done(function (msg) {
-            var object = JSON.parse(msg);
-            if (object.MsgCode !== 1) {                
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null || object.MsgCode !== 1) {
                 return;
             }
             
