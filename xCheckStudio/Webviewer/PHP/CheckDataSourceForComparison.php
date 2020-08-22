@@ -43,16 +43,6 @@ $SourceBProperties = $SourceComponents['b']['properties'];
 $SourceCProperties = $SourceComponents['c']['properties'];
 $SourceDProperties = $SourceComponents['d']['properties'];
 
-// $SourceAComponents = array();
-// $SourceBComponents = array();
-// $SourceCComponents = array();
-// $SourceDComponents = array();
-
-// $SourceAProperties = array();
-// $SourceBProperties = array();
-// $SourceCProperties = array();
-// $SourceDProperties = array();
-
 $CheckComponentsGroups = array();
 
 $SourceANotCheckedComponents = array();
