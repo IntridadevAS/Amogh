@@ -3800,6 +3800,12 @@
             // show busy loader
             onCheckButtonClick();
           };
+          // avoid enter key press from triggering the click
+          checkButton.onkeydown = function(e){
+            if(e.keyCode === 13){
+                e.preventDefault();
+            }
+          };
 
           // enable menu options
           enableMenuOptions([]);
