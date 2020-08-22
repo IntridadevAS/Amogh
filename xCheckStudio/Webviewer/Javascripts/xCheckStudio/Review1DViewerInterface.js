@@ -59,7 +59,8 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
 
     // get class wise components 
     // If component group is undefined, get its sheetName using mainclass and then get class wise components
-    if(sheetName == "Undefined") {
+    if (!sheetName ||
+        sheetName.toLowerCase() === "undefined") {
         var component = model.getCurrentReviewManager().GetCheckComponent(CurrentReviewTableRowData.groupId, CurrentReviewTableRowData.ID);
         sheetName = model.getCurrentReviewManager().GetSheetName(component, viewerContainer);
     }
