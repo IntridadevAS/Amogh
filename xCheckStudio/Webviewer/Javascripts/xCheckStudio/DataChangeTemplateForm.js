@@ -222,7 +222,7 @@ let DataChangeTemplateForm = {
         DataChangeTemplateForm.setTemplateSelectValue("New");
 
         // update template select for table view
-        var sourceManager = SourceManagers[this.Id];
+        var sourceManager = SourceManagers[model.currentTabId];
         let groupViewType = sourceManager.GroupHighlightTypeSelect.option("value");
         if (groupViewType.toLowerCase() === "data change highlight") {
             sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.dataChangeHighlightTemplates)));
@@ -345,7 +345,7 @@ let DataChangeTemplateForm = {
         this.setTemplateSelectValue("New");
 
         // update template select for table view
-        var sourceManager = SourceManagers[this.Id];
+        var sourceManager = SourceManagers[model.currentTabId];
         let groupViewType = sourceManager.GroupHighlightTypeSelect.option("value");
         if (groupViewType.toLowerCase() === "data change highlight") {
             sourceManager.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.dataChangeHighlightTemplates)));

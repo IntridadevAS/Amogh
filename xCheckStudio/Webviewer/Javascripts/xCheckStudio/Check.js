@@ -405,97 +405,15 @@ function performComplianceCheck(checkcase, srcId, srcComponents) {
     });
 }
 
-// function performSourceAComplianceCheck(checkcase) {
-
-//     return new Promise((resolve) => {
-//         if (!("a" in SourceManagers)) {
-//             return resolve(false);
-//         }
-
-//         var checkType = undefined;
-//         var studioInterface = undefined;
-
-//         // get check type
-//         studioInterface = SourceManagers["a"];
-//         var dataSourceOrderInCheckCase = getDataSourceOrderInCheckcase();
-//         var sourceOrderInCheckcase = dataSourceOrderInCheckCase['a'];
-
-//         // if (dataSourceOrderMaintained) {
-//         //     checkType = checkcase.getCheckType("ComplianceSourceA");
-//         //     if (!checkType) {
-//         //         checkType = checkcase.getCheckType("Compliance");
-//         //     }
-//         // }
-//         // else {
-//         //     checkType = checkcase.getCheckType("ComplianceSourceB");
-//         //     if (!checkType) {
-//         //         checkType = checkcase.getCheckType("Compliance");
-//         //     }
-//         // }
-
-//         if (!checkType ||
-//             !studioInterface) {
-//             alert('Compliance check can not be performed.');
-//             return resolve(false);
-//         }
-
-//         if (!sourceAComplianceCheckManager) {
-//             sourceAComplianceCheckManager = new CheckManager();
-//             sourceAComplianceCheckManager.performCheck(checkType,
-//                 false,
-//                 studioInterface).then(function (result) {
-//                     return resolve(result);
-//                 });
-//         }
-//     });
-// }
-
-// function performSourceBComplianceCheck(checkcase) {
-//     return new Promise((resolve) => {
-//         if (!("b" in SourceManagers)) {
-//             return resolve(false);
-//         }
-
-//         var checkType = undefined;
-//         var studioInterface = undefined;
-
-//         studioInterface = SourceManagers["b"];
-//         if (dataSourceOrderMaintained) {
-//             checkType = checkcase.getCheckType("ComplianceSourceB");
-//             if (!checkType) {
-//                 checkType = checkcase.getCheckType("Compliance");
-//             }
-//         }
-//         else {
-//             checkType = checkcase.getCheckType("ComplianceSourceA");
-//             if (!checkType) {
-//                 checkType = checkcase.getCheckType("Compliance");
-//             }
-//         }
-
-//         if (!checkType ||
-//             !studioInterface) {
-//             alert('Compliance check can not be performed.');
-//             return resolve(false);
-//         }
-
-//         if (!sourceBComplianceCheckManager) {
-//             sourceBComplianceCheckManager = new CheckManager();
-//             sourceBComplianceCheckManager.performCheck(checkType,
-//                 false,
-//                 studioInterface).then(function (result) {
-//                     return resolve(result);
-//                 });
-//         }
-//     });
-// }
-
 function cancelCheckResults() {
     document.getElementById("uiBlockingOverlay").style.display = "none";
     document.getElementById("Check_Complete").style.display = "none";
 }
 
 function reviewResults(callbackFunction) { 
+    // hide check_complete prompt to avoid double clicking issue
+    document.getElementById("Check_Complete").style.display = "none";
+    
     SetCheckSpaceReviewStatus().then(function (res) {
         CheckModule.onSaveProgress(true).then(function (result) {
             if (callbackFunction) {

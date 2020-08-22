@@ -64,6 +64,7 @@ ListView.prototype.UpdateComponents = function (componentsData) {
         // Update all components from this class
         if (nodeId in this.Components) {
             var component = this.Components[nodeId];
+
             if (componentData.name &&
                 component.Name !== componentData.name) {
                 component.Name = componentData.name;
@@ -81,11 +82,26 @@ ListView.prototype.UpdateComponents = function (componentsData) {
                 needsUpdate = true;
             }
 
+            // if component is new component, then add properties from
+            // allcomponents to new component being added.
+            if (componentData["newComponent"] === true) {
+                for (let i = 0; i < component.properties.length; i++) {
+                    let prop = component.properties[i];
+                    componentData.properties.push({
+                        "property": prop.Name,
+                        "value": prop.Value,
+                        "action": "add",
+                        "userdefined": "false"
+                    });
+                }
+            }
+
             // add properties to components
             for (var i = 0; i < componentData.properties.length; i++) {
                 var prop = componentData.properties[i];
-               
-                if (prop.action.toLowerCase() === "add") {
+
+                if (prop.action.toLowerCase() === "add" &&
+                    prop["userdefined"] !== "false") {
                     var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
                     component.addProperty(genericPropertyObject);
                 }
@@ -120,8 +136,8 @@ ListView.prototype.UpdateComponents = function (componentsData) {
                             component.SubComponentClass = prop.value;
                         }
                         needsUpdate = true;
-                    }                
-                    component.updateProperty(prop.oldProperty, prop.property, prop.value)                   
+                    }
+                    component.updateProperty(prop.oldProperty, prop.property, prop.value)
                 }
             }
         }

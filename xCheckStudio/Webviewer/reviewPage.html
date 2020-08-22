@@ -120,7 +120,7 @@
             d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
           </path>
         </svg>
-        <div id="NO" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onLeavingPage)">
+        <div id="NO" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onLeavingPage, 'returnProjectCenterPopup')">
           <span>No</span>
         </div>
       </div>
@@ -131,7 +131,7 @@
             y="0" width="90" height="30">
           </rect>
         </svg>
-        <div id="YES" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onSaveAndLeavePage)">
+        <div id="YES" style="cursor: pointer;" onclick="returnProjectCenter(ReviewPageCleanUp.onSaveAndLeavePage, 'returnProjectCenterPopup')">
           <span>Yes</span>
         </div>
       </div>
@@ -535,7 +535,7 @@
             d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
           </path>
         </svg>
-        <div id="NO" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onLeavingPage)">
+        <div id="NO" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onLeavingPage, 'signOutPopup')">
           <span>No</span>
         </div>
       </div>
@@ -546,7 +546,7 @@
             y="0" width="90" height="30">
           </rect>
         </svg>
-        <div id="YES" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onSaveAndLeavePage)">
+        <div id="YES" style="cursor: pointer;" onclick="signOut(ReviewPageCleanUp.onSaveAndLeavePage, 'signOutPopup')">
           <span>Yes</span>
         </div>
       </div>
@@ -642,7 +642,7 @@
               d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
             </path>
           </svg>
-          <div id="NO" style="cursor: pointer;" onclick="returnToProject(ReviewPageCleanUp.onLeavingPage)">
+          <div id="NO" style="cursor: pointer;" onclick="returnToProject(ReviewPageCleanUp.onLeavingPage, 'returnToProjectPopup')">
             <span>No</span>
           </div>
         </div>
@@ -653,7 +653,7 @@
               y="0" width="90" height="30">
             </rect>
           </svg>
-          <div id="YES" style="cursor: pointer;" onclick="returnToProject(ReviewPageCleanUp.onSaveAndLeavePage)">
+          <div id="YES" style="cursor: pointer;" onclick="returnToProject(ReviewPageCleanUp.onSaveAndLeavePage, 'returnToProjectPopup')">
             <span>Yes</span>
           </div>
         </div>
@@ -700,7 +700,7 @@
             d="M 5 0 L 85 0 C 87.76142120361328 0 90 2.238576173782349 90 5 L 90 25 C 90 27.76142311096191 87.76142120361328 30 85 30 L 5 30 C 2.238576173782349 30 0 27.76142311096191 0 25 L 0 5 C 0 2.238576173782349 2.238576173782349 0 5 0 Z">
           </path>
         </svg>
-        <div id="NO" style="cursor: pointer;" onclick="exit()">
+        <div id="NO" style="cursor: pointer;" onclick="exit(ReviewPageCleanUp.onLeavingPage, 'exitPopup')">
           <span>No</span>
         </div>
       </div>
@@ -711,7 +711,7 @@
             y="0" width="90" height="30">
           </rect>
         </svg>
-        <div id="YES" style="cursor: pointer;" onclick="exit(ReviewPageCleanUp.onSaveAndLeavePage)">
+        <div id="YES" style="cursor: pointer;" onclick="exit(ReviewPageCleanUp.onSaveAndLeavePage, 'exitPopup')">
           <span>Yes</span>
         </div>
       </div>
@@ -1904,7 +1904,10 @@
       popup.style.display = 'none';
     }
 
-    function exit(callbackFuntion) {
+    function exit(callbackFuntion, promptId) {
+      // close the prompt form to avoid double clicking issue
+      document.getElementById(promptId).style.display = "none";
+
       onclosewindow(callbackFuntion);
     }
 
@@ -1968,8 +1971,8 @@
       VersioningManager.deleteVersion(versionId);
     }
 
-      function returnToProject(callbackFunction) {
-        returnProjectCenter(callbackFunction);
+      function returnToProject(callbackFunction, promptId) {
+        returnProjectCenter(callbackFunction, promptId);
       }
 
       function cancelReturnToProject() {

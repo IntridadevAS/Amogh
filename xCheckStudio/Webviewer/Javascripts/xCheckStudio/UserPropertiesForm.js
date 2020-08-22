@@ -389,10 +389,15 @@ UserPropertiesForm.prototype.OnApply =  function(){
                 delete data[nodeId];
                 continue;
             }
-                   
+            
+            data[nodeId]["newComponent"] = false;
             if (sourceManager.NodeIdvsComponentIdList[nodeId]) {
                 // Properties to already existing component
-                data[nodeId]["component"] = sourceManager.GetCompIdByNodeId[nodeId];
+                data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
+            }
+            else {
+                // new component
+                data[nodeId]["newComponent"] = true;
             }
             
             // Properties to new component
