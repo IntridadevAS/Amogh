@@ -259,6 +259,16 @@ let viewTabs = {
     this.container.addEventListener("click", function () {
       let changeTab = event.target.closest('.tab');
       if (changeTab) {
+        // close of select files prompt is open
+        if (changeTab.id === "comparisonTab" &&
+          viewTabs.complianceArrow.classList.contains("invert")) {
+          viewTabs.complianceArrow.click();
+        }
+        else if (changeTab.id === "complianceTab" &&
+          viewTabs.comparisonArrow.classList.contains("invert")) {
+          viewTabs.comparisonArrow.click();
+        }
+
         controller.selectView(changeTab);
       } else { return };
     });

@@ -25,6 +25,38 @@ function onCheckButtonClick() {
         // check if any check case type is selected
         var comparisonSwitch = document.getElementById('comparisonSwitch');
 
+        // check if data sequence is correct to perform comparison
+        if (comparisonSwitch.checked) {
+            if ("d" in SourceManagers) {
+                if (!("a" in SourceManagers) ||
+                    !("b" in SourceManagers) ||
+                    !("c" in SourceManagers)) {
+                    alert("Dataset sequence error.\nPlease reload your datasets to perform comparison check.");
+                    hideBusyIndicator();
+                    return;
+                }
+            }
+            else if ("c" in SourceManagers) {
+                if (!("a" in SourceManagers) ||
+                    !("b" in SourceManagers)) {
+                    alert("Dataset sequence error.\nPlease reload your datasets to perform comparison check.");
+                    hideBusyIndicator();
+                    return;
+                }
+            }
+            else if ("b" in SourceManagers) {
+                if (!("a" in SourceManagers)) {
+                    alert("Dataset sequence error.\nPlease reload your datasets to perform comparison check.");
+                    hideBusyIndicator();
+                    return;
+                }
+            }
+            else {
+                alert("Dataset sequence error.\nPlease reload your datasets to perform comparison check.");
+                hideBusyIndicator();
+                return;
+            }
+        }
 
         //var checkPerformed = false;  
         var checkcase = new CheckCase("");
