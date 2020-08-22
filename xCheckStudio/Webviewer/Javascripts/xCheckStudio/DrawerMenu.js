@@ -407,6 +407,9 @@ function cancelReturnHome() {
 }
 
 function returnHome(callbackFunction) {
+    // hide prompt form to avoid double clicking issue
+    document.getElementById("returnHomePopup").style.display = "none";
+
     if (callbackFunction) {
         callbackFunction().then(function (result) {
             window.location = "landingPage.html";
@@ -431,7 +434,10 @@ function cancelReturnProjectCenter() {
     popup.style.display = 'none';
 }
 
-function returnProjectCenter(callbackFunction) {
+function returnProjectCenter(callbackFunction, promptId) {
+    // close the prompt form to avoid double clicking issue
+    document.getElementById(promptId).style.display = "none";
+
     if (callbackFunction) {
       callbackFunction().then(function (result) {
         window.location = "projectsPage.html";
@@ -475,7 +481,10 @@ function cancelSignOut() {
     popup.style.display = 'none';
 }
 
-function signOut(callbackFunction) {
+function signOut(callbackFunction, promptId) {
+    // close the prompt form to avoid double clicking issue
+    document.getElementById(promptId).style.display = "none";
+
     if (callbackFunction) {
         callbackFunction().then(function (result) {
             onLogoutUser("No").then(function (status) {
@@ -551,7 +560,10 @@ function closeOutpuToOverlay() {
     popup.style.display = 'none';
 }
 
-function returnCheck(callbackFunction) {
+function returnCheck(callbackFunction) {    
+     // close the prompt form to avoid double clicking issue
+     document.getElementById("returnCheckPopup").style.display = "none";
+
     if (callbackFunction) {
         callbackFunction();
     }

@@ -110,11 +110,26 @@ GroupView.prototype.UpdateComponents = function (componentsData) {
                 needsUpdate = true;
             }
 
+            // if component is new component, then add properties from
+            // allcomponents to new component being added.
+            if (componentData["newComponent"] === true) {
+                for (let i = 0; i < component.properties.length; i++) {
+                    let prop = component.properties[i];
+                    componentData.properties.push({
+                        "property": prop.Name,
+                        "value": prop.Value,
+                        "action": "add",
+                        "userdefined": "false"
+                    });
+                }
+            }
+
             // add properties to components
             for (var i = 0; i < componentData.properties.length; i++) {
                 var prop = componentData.properties[i];
 
-                if (prop.action.toLowerCase() === "add") {
+                if (prop.action.toLowerCase() === "add" &&
+                    prop["userdefined"] !== "false") {
                     var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
                     component.addProperty(genericPropertyObject);
                 }
@@ -318,6 +333,9 @@ GroupView.prototype.LoadDataChangeView = function (template) {
     let options = null;
     if ("options" in template) {
         options = template["options"];
+    }
+    if (options === null) {
+        return;
     }
 
     // check if target revision is recent or not

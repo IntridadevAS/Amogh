@@ -72,10 +72,8 @@ function Update()
         $tempDBh->exec($command);
 
         $newComponentIds = array();
-        foreach ($propertyData as $nodeId => $nodeData) {
-            // var_dump($nodeData);
-            // continue;
-            $componentId = NULL;
+        foreach ($propertyData as $nodeId => $nodeData) {         
+            $componentId = NULL;           
 
             if (array_key_exists ( "component" , $nodeData)) {
                 // Component is already there
@@ -108,7 +106,7 @@ function Update()
                 }
             } else {
                     // new component
-                    $qry = 'INSERT INTO ' . $componentTable . '(name,  mainclass, subclass, nodeid, parentid) VALUES(?,?,?,?,?) ';
+                    $qry = 'INSERT INTO ' . $componentTable . '(name, mainclass, subclass, nodeid, parentid) VALUES(?,?,?,?,?) ';
 
                     $values = array(
                         $nodeData["name"],
@@ -144,17 +142,26 @@ function Update()
                 $action = $property["action"];
 
                 if (strtolower($action) == "add") {
+                    $userdefined = 1;
+                    if (
+                        array_key_exists("userdefined", $property) &&
+                        $property["userdefined"] === "false"
+                    )
+                    {
+                        $userdefined = 0;
+                    }
+
                     $insertPropertyQuery = 'INSERT INTO ' .  $propertyTable . '(name, format, value,  ownercomponent, userdefined) VALUES(?,?,?,?,?) ';
                     $propertyValues = array(
                         $name,
                         "String",
                         $value,
                         $componentId,
-                        1
+                        $userdefined
                     );
 
                     $stmt = $tempDBh->prepare($insertPropertyQuery);
-                    $stmt->execute($propertyValues);
+                    $stmt->execute($propertyValues);                    
                 } else if (strtolower($action) == "remove") {
                     $query =  "Delete from " . $propertyTable . " where ownercomponent=" . $componentId . " and userdefined=1 and name='" . $name . "';";
                     $stmt = $tempDBh->prepare($query);
