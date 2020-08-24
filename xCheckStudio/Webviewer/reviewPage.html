@@ -1751,7 +1751,17 @@
         document.getElementById("uiBlockingOverlay").style.display = "none";
       });
       // // hide busy indicator
-      // hideBusyIndicator();     
+      // hideBusyIndicator();   
+      
+    // handle on closing application
+    const { ipcRenderer } = require("electron");
+        ipcRenderer.on("beforeClosingApp", (event, file) => {   
+            // check in the checkspace
+            CheckspaceCheckout.checkinCheckspace().then(function(result){                
+                onLogoutUser("No").then(function (status) {                 
+                });
+            });           
+        });
     }
 
     function showBusyIndicator() {

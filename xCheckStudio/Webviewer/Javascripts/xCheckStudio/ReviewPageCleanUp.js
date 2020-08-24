@@ -8,7 +8,7 @@ const ReviewPageCleanUp = {
 
             // checkin back the checkspace
             if (checkinChckspace === true) {
-                allPromises.push(ReviewPageCleanUp.checkinCheckspace());
+                allPromises.push(CheckspaceCheckout.checkinCheckspace());
             }
 
             xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
@@ -37,27 +37,27 @@ const ReviewPageCleanUp = {
         });
     },
 
-    checkinCheckspace: function () {
-        return new Promise((resolve) => {
-            var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
-            var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+    // checkinCheckspace: function () {
+    //     return new Promise((resolve) => {
+    //         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+    //         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
 
-            $.ajax({
-                url: 'PHP/CheckSpaceManager.php',
-                type: "POST",
-                async: false,
-                data:
-                {
-                    'InvokeFunction': "CheckinCheckspace",
-                    'projectName': projectinfo.projectname,
-                    'checkId': checkinfo.checkid
-                },
-                success: function (msg) {
-                    return resolve(true);
-                }
-            });
-        });
-    },
+    //         $.ajax({
+    //             url: 'PHP/CheckSpaceManager.php',
+    //             type: "POST",
+    //             async: false,
+    //             data:
+    //             {
+    //                 'InvokeFunction': "CheckinCheckspace",
+    //                 'projectName': projectinfo.projectname,
+    //                 'checkId': checkinfo.checkid
+    //             },
+    //             success: function (msg) {
+    //                 return resolve(true);
+    //             }
+    //         });
+    //     });
+    // },
 
     cleanTempFilesAndVars: function () {
         return new Promise((resolve) => {

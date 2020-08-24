@@ -31,9 +31,15 @@ function createWindow()
                 }
             );
     });
-   
-    win.on('closed', ()=>{
+
+    win.on('closed', () => {
         win = null;
+    })  
+    
+    win.on('close', (e) => {
+        e.preventDefault();
+        win.webContents.send("beforeClosingApp", "it is being closed..");
+        win.hide();       
     })
 }
 
