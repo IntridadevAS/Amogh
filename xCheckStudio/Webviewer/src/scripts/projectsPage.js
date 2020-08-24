@@ -947,13 +947,38 @@ let checkView = {
     localStorage.setItem('projectinfo', JSON.stringify(proj));
     controller.setCurrentCheck(subject.id);
     var check = model.currentCheck;
-    localStorage.setItem('checkinfo', JSON.stringify(check));
 
-    localStorage.setItem('isDataVault', "false");
+    // Checkout checkspace
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    CheckspaceCheckout.checkout(
+      proj.projectname,
+      check.checkid,
+      userinfo.userid
+    ).then(function (result) {
+      // var object = xCheckStudio.Util.tryJsonParse(msg);
+      if (result === null) {
+        showAlertForm('Failed to checkout checkspace');
+        return;
+      }
+      else if (result.MsgCode === -1) {
+        showAlertForm('Checkspace is in use by \'' + result.Data + '\'.');
+        return;
+      }
+      else if (result.MsgCode !== 1) {
+        showAlertForm('Failed to checkout checkspace');
+        return;
+      }
 
-    localStorage.setItem('dataVaultEnable', proj.vaultEnable);
-   
-    window.location.href = "checkPage.html";   
+      check.locked = "1";
+      check.lockedBy = userinfo.userid;
+      localStorage.setItem('checkinfo', JSON.stringify(check));
+
+      localStorage.setItem('isDataVault', "false");
+
+      localStorage.setItem('dataVaultEnable', proj.vaultEnable);
+
+      window.location.href = "checkPage.html";
+    });
   },
 
   leaveCheck: function (subject) {
@@ -1020,7 +1045,29 @@ let checkView = {
     controller.setCurrentReview(subject.id);
     localStorage.setItem('checkinfo', JSON.stringify(model.currentReview));
 
-    window.location.href = "reviewPage.html";
+    // Checkout checkspace
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    CheckspaceCheckout.checkout(
+      proj.projectname,
+      model.currentReview.checkid,
+      userinfo.userid
+    ).then(function (result) {
+      // var object = xCheckStudio.Util.tryJsonParse(msg);
+      if (result === null) {
+        showAlertForm('Failed to checkout checkspace');
+        return;
+      }
+      else if (result.MsgCode === -1) {
+        showAlertForm('Checkspace is in use by \'' + result.Data + '\'.');
+        return;
+      }
+      else if (result.MsgCode !== 1) {
+        showAlertForm('Failed to checkout checkspace');
+        return;
+      }
+
+      window.location.href = "reviewPage.html";
+    });
   },
 
 
@@ -1373,10 +1420,10 @@ let editCheckView = {
   },
 
   closeEditCheck: function () {
-    this.onUpdateCheck();
+    this.onUpdateCheckspace();
   },
 
-  onUpdateCheck: function () {
+  onUpdateCheckspace: function () {
     let editCheckConfig = document.getElementById("editCheckConfig").value;
     let editCheckStatus = document.getElementById("editCheckStatus").value;
     let editCheckComments = document.getElementById("editCheckComments").value;
@@ -1388,7 +1435,7 @@ let editCheckView = {
     // add this project's entry in main DB
     $.ajax({
       data: {
-        'InvokeFunction': 'UpdateCheck',
+        'InvokeFunction': 'UpdateCheckspace',
         'userid': userinfo.userid,
         'CheckId': currentCheck.checkid,
         'projectname': currentProject.projectname,

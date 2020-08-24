@@ -444,6 +444,10 @@ let viewTabs = {
   },
 
   getComparison: function () {
+    if (!comparisons) {
+      return null;
+    }
+
     for (var i = 0; i < comparisons.length; i++) {
       var comparison = comparisons[i];
 
@@ -504,8 +508,12 @@ let viewTabs = {
   },
 
   enterCompliance: function () {
+    if (!compliances) {
+      return;
+    }
+    
     // clear earlier data
-    clearData();
+    clearData();   
 
     for (var i = 0; i < compliances.length; i++) {
       var compliance = compliances[i];
