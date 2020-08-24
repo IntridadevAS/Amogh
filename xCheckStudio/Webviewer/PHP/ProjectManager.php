@@ -9,9 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "CreateProject":
             CreateProject();
             break;
-        // case "AddProjectToMainDB":
-        //     AddProjectToMainDB();
-        //     break;
         case "AddNewProjectToMainDB":
             AddNewProjectToMainDB();
             break;

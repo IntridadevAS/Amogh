@@ -7,12 +7,12 @@ var DrawerMenu = {
             closeOnOutsideClick: false,
             openedStateMode: "overlap",
             position: "left",
-            revealMode: "expand",            
+            revealMode: "expand",
             template: function () {
                 var $list = $("<div>").addClass("panel-list");
                 hideMenuItems(hiddenItems);
-                disableMenuItems(disableItems);               
-                  
+                disableMenuItems(disableItems);
+
                 return $list.dxList({
                     dataSource: menuItems,
                     hoverStateEnabled: true,
@@ -21,30 +21,29 @@ var DrawerMenu = {
                     width: "80px",
                     elementAttr: { class: "dx-theme-accent-as-background-color" },
                     selectionMode: "single",
-                    itemTemplate: function(data, index) {
-                        var result = $("<div>").addClass("menuItem");              
-                       
+                    itemTemplate: function (data, index) {
+                        var result = $("<div>").addClass("menuItem");
+
                         $("<img>").attr({
                             "src": data.ImageSrc,
-                             style: "width: 25px; height: 25px;"
+                            style: "width: 25px; height: 25px;"
                         }).appendTo(result);
-                        $("<div>").text(data.Title).attr({                            
+                        $("<div>").text(data.Title).attr({
                             style: "white-space: initial;"
                         }).appendTo(result);
-                                        
-                        return result;                
+
+                        return result;
                     },
-                    onSelectionChanged: function (e) {                       
-                        if (e.component._selection.getSelectedItems().length > 0)
-                        {
+                    onSelectionChanged: function (e) {
+                        if (e.component._selection.getSelectedItems().length > 0) {
                             e.addedItems[0].click(e);
                             e.component._selection.deselectAll();
                         }
                     }
                 });
             },
-            closeOnOutsideClick: function(e) {
-                if(drawerOpened === true) {
+            closeOnOutsideClick: function (e) {
+                if (drawerOpened === true) {
                     drawerOpened = false;
                     swapIcon();
                 }
@@ -104,7 +103,7 @@ var menuItems = [
             }
             else {
                 menu.onProjectsClicked();
-            }      
+            }
         }
     },
     {
@@ -118,7 +117,7 @@ var menuItems = [
     {
         id: 6,
         Title: "Review",
-        ImageSrc: "public/symbols/Review_Module_Icon.svg",       
+        ImageSrc: "public/symbols/Review_Module_Icon.svg",
         click: function () {
             menu.onReviewClicked();
         }
@@ -183,7 +182,7 @@ var menuItems = [
 
 let menu = {
 
-     onSearchClick: function () {
+    onSearchClick: function () {
         console.log("Seacrh not implemented");
     },
 
@@ -225,7 +224,7 @@ let menu = {
         if (!model.views[model.currentTabId].displayMenu) {
             return;
         }
-        
+
         model.views[model.currentTabId].dataDefinitionMenu.Open();
     },
 
@@ -240,14 +239,12 @@ let menu = {
 
         var popup;
 
-        if( (typeof isDataVault) !== "undefined"  && isDataVault() === true)
-        {
+        if ((typeof isDataVault) !== "undefined" && isDataVault() === true) {
             popup = document.getElementById("returnHomeFromVaultPopup");
         }
-        else
-        {
+        else {
             popup = document.getElementById("returnHomePopup");
-        }        
+        }
 
         overlay.style.display = 'block';
         popup.style.display = 'block';
@@ -260,7 +257,7 @@ let menu = {
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
-    onProjectsClickedDirectOpen: function() {
+    onProjectsClickedDirectOpen: function () {
         window.location = "projectsPage.html";
     },
 
@@ -270,12 +267,12 @@ let menu = {
         var overlay = document.getElementById("uiBlockingOverlay");
 
         var popup;
-        if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+        if ((typeof isDataVault) !== "undefined" && isDataVault() === true) {
             popup = document.getElementById("returnToProjectCenterFromVaultPopup");
         }
         else {
             popup = document.getElementById("returnProjectCenterPopup");
-        }         
+        }
 
         overlay.style.display = 'block';
         popup.style.display = 'block';
@@ -356,12 +353,12 @@ let menu = {
         var overlay = document.getElementById("uiBlockingOverlay");
 
         var popup;
-        if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+        if ((typeof isDataVault) !== "undefined" && isDataVault() === true) {
             popup = document.getElementById("signOutFromVaultPopup");
         }
         else {
             popup = document.getElementById("signOutPopup");
-        }                   
+        }
 
         overlay.style.display = 'block';
         popup.style.display = 'block';
@@ -374,7 +371,7 @@ let menu = {
         popup.style.left = ((window.innerWidth / 2) - 290) + "px";
     },
 
-    onSignOutAllUsersClicked: function (){
+    onSignOutAllUsersClicked: function () {
         swapIcon();
         DrawerMenu.drawer.hide();
         var overlay = document.getElementById("uiBlockingOverlay");
@@ -395,7 +392,7 @@ let menu = {
 function cancelReturnHome() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup;
-    if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+    if ((typeof isDataVault) !== "undefined" && isDataVault() === true) {
         popup = document.getElementById("returnHomeFromVaultPopup");
     }
     else {
@@ -423,12 +420,12 @@ function returnHome(callbackFunction) {
 function cancelReturnProjectCenter() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup;
-    if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+    if ((typeof isDataVault) !== "undefined" && isDataVault() === true) {
         popup = document.getElementById("returnToProjectCenterFromVaultPopup");
     }
     else {
         popup = document.getElementById("returnProjectCenterPopup");
-    }     
+    }
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
@@ -439,13 +436,13 @@ function returnProjectCenter(callbackFunction, promptId) {
     document.getElementById(promptId).style.display = "none";
 
     if (callbackFunction) {
-      callbackFunction().then(function (result) {
-        window.location = "projectsPage.html";
-      });
+        callbackFunction().then(function (result) {
+            window.location = "projectsPage.html";
+        });
     }
     else {
         window.location = "projectsPage.html";
-    }   
+    }
 }
 
 function cancelReturnPREP() {
@@ -470,12 +467,12 @@ function returnToPREP(callbackFunction) {
 function cancelSignOut() {
     var overlay = document.getElementById("uiBlockingOverlay");
     var popup;
-    if( (typeof isDataVault) !== "undefined"  && isDataVault() === true){
+    if ((typeof isDataVault) !== "undefined" && isDataVault() === true) {
         popup = document.getElementById("signOutFromVaultPopup");
     }
     else {
         popup = document.getElementById("signOutPopup");
-    } 
+    }
 
     overlay.style.display = 'none';
     popup.style.display = 'none';
@@ -525,11 +522,11 @@ function signOutAllUsers(callbackFunction) {
     }
     else {
         onLogoutUser("Yes").then(function (status) {
-                var overlay = document.getElementById("uiBlockingOverlay");
-                var popup = document.getElementById("signOutAllUsersPopup");
+            var overlay = document.getElementById("uiBlockingOverlay");
+            var popup = document.getElementById("signOutAllUsersPopup");
 
-                overlay.style.display = 'none';
-                popup.style.display = 'none';
+            overlay.style.display = 'none';
+            popup.style.display = 'none';
         });
     }
 }
@@ -560,44 +557,50 @@ function closeOutpuToOverlay() {
     popup.style.display = 'none';
 }
 
-function returnCheck(callbackFunction) {    
-     // close the prompt form to avoid double clicking issue
-     document.getElementById("returnCheckPopup").style.display = "none";
+function returnCheck(callbackFunction) {
+    // close the prompt form to avoid double clicking issue
+    document.getElementById("returnCheckPopup").style.display = "none";
 
+    let allPromises = [];
     if (callbackFunction) {
-        callbackFunction();
+        allPromises.push(callbackFunction());
     }
 
-    window.location = "checkPage.html";
+    let projInfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("projectinfo"));
+    let checkinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("checkinfo"));
+    let userinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("userinfo"));
+
+    if (projInfo &&
+        checkinfo &&
+        userinfo) {
+        xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
+
+            CheckspaceCheckout.checkout(
+                projInfo.projectname,
+                checkinfo.checkid,
+                userinfo.userid
+            ).then(function (result) {
+                // var object = xCheckStudio.Util.tryJsonParse(msg);
+                if (result === null) {
+                    showAlertForm('Failed to checkout checkspace');
+                    return;
+                }
+                else if (result.MsgCode === -1) {
+                    showAlertForm('Checkspace is in use by \'' + result.Data + '\'.');
+                    return;
+                }
+                else if (result.MsgCode !== 1) {
+                    showAlertForm('Failed to checkout checkspace');
+                    return;
+                }
+                window.location = "checkPage.html";
+            });
+        });
+    }
 }
 
 function hideMenuItems(items) {
-    var disabledMenuItem=[];
-    // create drawer menu
-    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
-    if (userinfo.permission.toLowerCase() === 'reviewer') {
-        disabledMenuItem = ["check", "output", "reports"];
-    }
-
-    if (userinfo.type.toLowerCase() !== 'admin') {
-        disabledMenuItem.push("prep");
-        disabledMenuItem.push("sign out all users");
-    }
-
-    var mergedArrayWithoutDuplicates = items.concat(disabledMenuItem.filter(seccondArrayItem => !items.includes(seccondArrayItem)));
-
-    for (var i = 0; i < mergedArrayWithoutDuplicates.length; i++) {
-        for (var j = 0; j < menuItems.length; j++) {
-            var menuItem = menuItems[j];
-            if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {               
-                menuItem["visible"] = false;
-            }
-        }
-    }
-}
-
-function disableMenuItems(items) {
-    var disabledMenuItem=[];
+    var disabledMenuItem = [];
     // create drawer menu
     var userinfo = JSON.parse(localStorage.getItem('userinfo'));
     if (userinfo.permission.toLowerCase() === 'reviewer') {
@@ -615,7 +618,32 @@ function disableMenuItems(items) {
         for (var j = 0; j < menuItems.length; j++) {
             var menuItem = menuItems[j];
             if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
-                menuItem["disabled"] = true;               
+                menuItem["visible"] = false;
+            }
+        }
+    }
+}
+
+function disableMenuItems(items) {
+    var disabledMenuItem = [];
+    // create drawer menu
+    var userinfo = JSON.parse(localStorage.getItem('userinfo'));
+    if (userinfo.permission.toLowerCase() === 'reviewer') {
+        disabledMenuItem = ["check", "output", "reports"];
+    }
+
+    if (userinfo.type.toLowerCase() !== 'admin') {
+        disabledMenuItem.push("prep");
+        disabledMenuItem.push("sign out all users");
+    }
+
+    var mergedArrayWithoutDuplicates = items.concat(disabledMenuItem.filter(seccondArrayItem => !items.includes(seccondArrayItem)));
+
+    for (var i = 0; i < mergedArrayWithoutDuplicates.length; i++) {
+        for (var j = 0; j < menuItems.length; j++) {
+            var menuItem = menuItems[j];
+            if (menuItem.Title.toLowerCase() === mergedArrayWithoutDuplicates[i].toLowerCase()) {
+                menuItem["disabled"] = true;
             }
         }
     }
@@ -630,9 +658,42 @@ function cancelGotoReview() {
 }
 
 function gotoReview(callbackFunction) {
+
+    let allPromises = [];
     if (callbackFunction) {
-        callbackFunction();
+        allPromises.push(callbackFunction());
     }
 
-    window.location = "reviewPage.html";
+    let projInfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("projectinfo"));
+    let checkinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("checkinfo"));
+    let userinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("userinfo"));
+
+    if (projInfo &&
+        checkinfo &&
+        userinfo) {
+        xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
+
+            CheckspaceCheckout.checkout(
+                projInfo.projectname,
+                checkinfo.checkid,
+                userinfo.userid
+            ).then(function (result) {
+                // var object = xCheckStudio.Util.tryJsonParse(msg);
+                if (result === null) {
+                    showAlertForm('Failed to checkout checkspace');
+                    return;
+                }
+                else if (result.MsgCode === -1) {
+                    showAlertForm('Checkspace is in use by \'' + result.Data + '\'.');
+                    return;
+                }
+                else if (result.MsgCode !== 1) {
+                    showAlertForm('Failed to checkout checkspace');
+                    return;
+                }
+
+                window.location = "reviewPage.html";
+            });
+        });
+    }
 }

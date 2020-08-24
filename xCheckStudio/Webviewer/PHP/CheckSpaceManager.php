@@ -14,8 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "GetCheckSpaces":
             GetCheckSpaces();
             break;
-        case "UpdateCheck":
-            UpdateCheck();
+        case "UpdateCheckspace":
+            UpdateCheckspace();
             break;
         case "DeleteCheckSpace":
             DeleteCheckSpace();
@@ -25,6 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         case "SetReviewStatus":
             SetReviewStatus();
+            break;
+        case "CheckoutCheckspace":
+            CheckoutCheckspace();
+            break;
+        case "CheckinCheckspace":
+            CheckinCheckspace();
             break;
         default:
             echo "No Function Found!";
@@ -95,10 +101,14 @@ function CopyCheckSpaceToProjDB()
                                         checkdate,
                                         projectid,
                                         userid,
-                                        review) VALUES (?,?,?,?,?,?,?,?,?,?)';
+                                        review,
+                                        locked,
+                                        lockedBy) 
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
 
         $stmt = $dbh->prepare($query);
-        $stmt->execute(array($name,
+        $stmt->execute(array(
+            $name,
             $status,
             $config,
             $description,
@@ -107,7 +117,10 @@ function CopyCheckSpaceToProjDB()
             $date,
             $projId,
             $userId,
-            $review));
+            $review,
+            0,
+            NULL
+        ));
 
         $array = array("checkid" => $dbh->lastInsertId(),
             "checkname" => $name,
@@ -119,7 +132,9 @@ function CopyCheckSpaceToProjDB()
             "checkdate" => $date,
             "projectid" => $projId,
             "userid" => $userId,
-            "review" => $review);
+            "review" => $review,
+            "locked" => 0,
+            "lockedBy" => NULL);
 
         $dbh = null; //This is how you close a PDO connection
         return array("Msg" => "Success",
@@ -157,9 +172,35 @@ function CreateCheckSpace()
             $dbPath = getProjectDatabasePath($projectName);
             $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
             if (CreateCheckSpaceSchemaIfNot($dbh) == true) {
-                $query = 'INSERT INTO CheckSpace (checkname,checkstatus,checkconfiguration,checkdescription,checkcomments,checkisfavourite,checkdate,projectid, userid, review) VALUES (?,?,?,?,?,?,?,?,?,?)';
+                $query = 'INSERT INTO CheckSpace (
+                    checkname,
+                    checkstatus,
+                    checkconfiguration,
+                    checkdescription,
+                    checkcomments,
+                    checkisfavourite,
+                    checkdate,
+                    projectid, 
+                    userid, 
+                    review,
+                    locked,
+                    lockedBy) 
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
                 $stmt = $dbh->prepare($query);
-                $stmt->execute(array($CheckName, $CheckStatus, $CheckConfiguration, $CheckDescription, $CheckComments, $CheckIsFavourite, $CheckCreateDate, $ProjectId, $UserId, $review));
+                $stmt->execute(array(
+                    $CheckName,
+                    $CheckStatus,
+                    $CheckConfiguration,
+                    $CheckDescription,
+                    $CheckComments,
+                    $CheckIsFavourite,
+                    $CheckCreateDate,
+                    $ProjectId,
+                    $UserId,
+                    $review,
+                    0,
+                    NULL
+                ));
                 $returnData = array(
                     "checkid" => $dbh->lastInsertId(),
                     "checkname" => $CheckName,
@@ -172,6 +213,8 @@ function CreateCheckSpace()
                     "projectid" => $ProjectId,
                     "userid" => $UserId,
                     "review" => $review,
+                    "locked" => 0,
+                    "lockedBy" => NULL
                 );
                 // echo json_encode($array);
 
@@ -223,16 +266,12 @@ function GetCheckSpaces()
     // get project name
     $userid = trim($_POST["userid"], " ");
     $projectName = $_POST['ProjectName'];
-    // $ProjectId = trim($_POST["ProjectId"], " ");
-    // $permission = GetUserPermission($userid);
+  
     try
     {
         $dbPath = getProjectDatabasePath($projectName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
-        CreateCheckSpaceSchemaIfNot($dbh);
-        /*if(strcasecmp ($permission, "check") == 0)
-        $query =  "select * from CheckSpace where userid=".$userid." and ProjectId=".$ProjectId;
-        else*/
+        CreateCheckSpaceSchemaIfNot($dbh);       
         $query = "select * from CheckSpace";
         $stmt = $dbh->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -275,7 +314,7 @@ function CreateCheckSpaceSchemaIfNot($dbh)
     {
         $table_name = 'CheckSpace';
         $test = "SELECT 1 FROM " . $table_name . " LIMIT 1";
-        $test = $dbh->query($test); //$db needs to be PDO instance
+        $test = $dbh->query($test); 
 
         if ($test) {
             return true;
@@ -293,7 +332,9 @@ function CreateCheckSpaceSchemaIfNot($dbh)
                 checkdate	TEXT NOT NULL,
                 projectid	INTEGER NOT NULL,
                 userid	INTEGER NOT NULL,
-                review INTEGER)";
+                review INTEGER,
+                locked INTEGER,
+                lockedBy INTEGER)";
             $dbh->exec($command);
             $dbh->commit();
         }
@@ -372,7 +413,7 @@ function SetReviewStatus()
     }
 }
 
-function UpdateCheck()
+function UpdateCheckspace()
 {
     $userid = trim($_POST["userid"], " ");
     $CheckId = trim($_POST["CheckId"], " ");
@@ -394,4 +435,202 @@ function UpdateCheck()
         echo "failed";
         return;
     }
+}
+
+function CheckoutCheckspace()
+{
+    if (
+        !isset($_POST["projectName"]) ||
+        !isset($_POST["checkId"]) ||
+        !isset($_POST["userId"])
+    )
+    {
+        echo json_encode(
+            array(
+                "Msg" => "Invalid Inputs",
+                "MsgCode" => 0
+            )
+        );
+        return;
+    }
+
+    try
+    {
+        $projectName = trim($_POST["projectName"], " ");
+        $checkId = trim($_POST["checkId"], " ");
+        $userId = trim($_POST["userId"], " ");
+
+        $checkedOutBy = IsCheckspaceAlreadyCheckedout(
+            $projectName,
+            $checkId,
+            $userId
+        );
+        if ($checkedOutBy !== null)
+        {
+            // get locked by user name
+            $dbh = new PDO("sqlite:../Data/Main.db") or die("cannot open the database");
+
+            $stmt = $dbh->query("SELECT * FROM LoginInfo where userid=" . $checkedOutBy);
+            $lockedBy = null;
+            if ($stmt)
+            {
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC))
+                {
+                    $lockedBy = $row['alias'];
+                    break;
+                }
+            }
+
+            echo json_encode(
+                array(
+                    "Msg" => "Already Checkout by other user.",
+                    "Data" => $lockedBy,
+                    "MsgCode" => -1
+                )
+            );
+            return;
+        }
+
+        $response = LockUnlockCheckspace(
+            $projectName,
+            $checkId,
+            $userId,
+            true
+        );
+
+        echo json_encode(            
+            array(
+                "Msg" => "Success",
+                "Data" => $response,
+                "MsgCode" => 1
+            )
+        );
+    }
+    catch (Exception $e)
+    {
+        echo json_encode(
+            array(
+                "Msg" => "Failed",
+                "MsgCode" => 0
+            )
+        );
+        return;
+    }
+}
+
+function CheckinCheckspace()
+{
+    if (
+        !isset($_POST["projectName"]) ||
+        !isset($_POST["checkId"])
+    )
+    {
+        echo json_encode(
+            array(
+                "Msg" => "Invalid Inputs",
+                "MsgCode" => 0
+            )
+        );
+        return;
+    }
+
+    try
+    {
+        $projectName = trim($_POST["projectName"], " ");
+        $checkId = trim($_POST["checkId"], " ");       
+
+        $response = LockUnlockCheckspace(
+            $projectName,
+            $checkId,
+            NULL,
+            false
+        );
+
+        echo json_encode(            
+            array(
+                "Msg" => "Success",
+                "Data" => $response,
+                "MsgCode" => 1
+            )
+        );   
+    }
+    catch (Exception $e)
+    {
+        echo json_encode(
+            array(
+                "Msg" => "Failed",
+                "MsgCode" => 0
+            )
+        );
+        return;
+    }
+}
+
+function IsCheckspaceAlreadyCheckedout(
+    $projectName,
+    $checkId,
+    $userId
+)
+{
+    try
+    { 
+        $dbh = new PDO("sqlite:" . getProjectDatabasePath($projectName)) or die("cannot open the database");
+
+        $selectResults = $dbh->query("SELECT * FROM CheckSpace where checkid=" . $checkId);
+
+        if ($selectResults)
+        {
+            while ($row = $selectResults->fetch(\PDO::FETCH_ASSOC))
+            {
+                if (
+                    $row['locked'] === "1" &&
+                    $row['lockedBy'] !== $userId
+                )
+                {
+                    return $row['lockedBy'];
+                }
+                break;
+            }
+        }
+    }
+    catch (Exception $e)
+    {
+        
+    }
+
+    return null;
+}
+
+function LockUnlockCheckspace(
+    $projectName, 
+    $checkId, 
+    $userId, 
+    $lock)
+{
+    try
+    {       
+        $dbh = new PDO("sqlite:" . getProjectDatabasePath($projectName)) or die("cannot open the database");
+        $query = 'UPDATE CheckSpace Set locked=?, lockedBy=? WHERE checkid=?';
+        $stmt = $dbh->prepare($query);
+
+        $response = null;
+        if ($lock === true
+        )
+        {
+            $response = $stmt->execute(array(1, $userId, $checkId));
+        }
+        else
+        {
+            $response = $stmt->execute(array(0, NULL, $checkId));
+        }       
+               
+        $dbh = null; 
+        return $response;
+    }
+    catch (Exception $e)
+    {
+        
+    }
+
+    return null;
 }

@@ -447,12 +447,46 @@ function reviewResults(callbackFunction) {
     document.getElementById("Check_Complete").style.display = "none";
     
     SetCheckSpaceReviewStatus().then(function (res) {
-        CheckModule.onSaveProgress(true).then(function (result) {
+        CheckModule.onSaveProgress(true).then(function (result) {            
+           
+            let allPromises = [];
             if (callbackFunction) {
-                callbackFunction();
+                allPromises.push(callbackFunction());
             }
 
-            window.location = "reviewPage.html";
+            // check in the checkspace
+            let projInfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("projectinfo"));
+            let checkinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("checkinfo"));
+            let userinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem("userinfo"));
+
+            if (projInfo &&
+                checkinfo &&
+                userinfo) {
+                    
+                xCheckStudio.Util.waitUntilAllPromises(allPromises).then(function (res) {
+                    CheckspaceCheckout.checkout(
+                        projInfo.projectname,
+                        checkinfo.checkid,
+                        userinfo.userid
+                    ).then(function (result) {
+                        // var object = xCheckStudio.Util.tryJsonParse(msg);
+                        if (result === null) {
+                            showAlertForm('Failed to checkout checkspace');
+                            return;
+                        }
+                        else if (result.MsgCode === -1) {
+                            showAlertForm('Checkspace is in use by \'' + result.Data + '\'.');
+                            return;
+                        }
+                        else if (result.MsgCode !== 1) {
+                            showAlertForm('Failed to checkout checkspace');
+                            return;
+                        }
+
+                        window.location = "reviewPage.html";
+                    });
+                });                
+            }            
         });
     });
 }

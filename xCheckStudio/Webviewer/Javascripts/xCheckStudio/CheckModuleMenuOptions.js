@@ -192,7 +192,7 @@ function cancelResetData() {
 function resetData() {
     hideResetDataForm();
 
-    CheckPageCleanUp.onLeavingPage().then(function (res) {
+    CheckPageCleanUp.onLeavingPage(false).then(function (res) {
 
         localStorage.setItem("dataVaultEnable", "false");
         if (vaultEnable === true) {
