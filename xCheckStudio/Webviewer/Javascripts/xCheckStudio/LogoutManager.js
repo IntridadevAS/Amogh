@@ -3,7 +3,7 @@ function onLogoutUser(alluser) {
     return new Promise((resolve) => {      
         let userinfo = xCheckStudio.Util.tryJsonParse(localStorage.getItem('userinfo'));
         if (userinfo === null) {
-            return;
+            return resolve(false);        
         }
         
         $.ajax({
