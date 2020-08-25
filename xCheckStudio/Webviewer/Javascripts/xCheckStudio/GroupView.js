@@ -489,6 +489,7 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                     e.items = [
                         {
                             text: "Hide",
+                            icon: "public/symbols/Hide.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.OnHideClicked();
@@ -496,6 +497,7 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                         },
                         {
                             text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.OnIsolateClicked();
@@ -510,6 +512,7 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                         },
                         {
                             text: "Reference",
+                            beginGroup: true,
                             onItemClick: function () {
                                 _this.OnReferenceClicked();
                             }
@@ -1103,6 +1106,7 @@ GroupView.prototype.LoadTable = function () {
                 e.items = [
                     {
                         text: "Hide",
+                        icon: "public/symbols/Hide.svg",
                         visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnHideClicked();
@@ -1110,6 +1114,7 @@ GroupView.prototype.LoadTable = function () {
                     },
                     {
                         text: "Isolate",
+                        icon: "public/symbols/Isolate.svg",
                         visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnIsolateClicked();
@@ -1124,6 +1129,7 @@ GroupView.prototype.LoadTable = function () {
                     },
                     {
                         text: "Reference",
+                        beginGroup: true,
                         onItemClick: function () {
                             _this.OnReferenceClicked();
                         }

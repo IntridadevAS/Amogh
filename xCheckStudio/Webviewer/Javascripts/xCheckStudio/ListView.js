@@ -485,6 +485,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                     e.items = [
                         {
                             text: "Hide",
+                            icon: "public/symbols/Hide.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("hide");
@@ -492,6 +493,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                         },
                         {
                             text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("isolate");
@@ -503,19 +505,34 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("show");
                             }
-                        },
-                        {
-                            text: "Properties",
-                            visible: _this.Webviewer,
-                            onItemClick: function () {
-                                _this.ContextMenu.OnMenuItemClicked("properties");
-                            }
-                        },
+                        },                      
                         {
                             text: "Translucency",
+                            icon: "public/symbols/Transparency.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
+                        },
+                        {
+                            text: "Properties",                           
+                            onItemClick: function () {
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+                                
+                                let compData = null;
+                                if (_this.Webviewer) {
+                                    compData = {
+                                        "name" : rowsData[0].Item,
+                                        "nodeId": rowsData[0].NodeId
+                                    };
+                                }
+                                else {
+                                    compData = rowsData[0];
+                                }
+                                _this.ContextMenu.OnMenuItemClicked("properties", compData);
                             }
                         },
                         {

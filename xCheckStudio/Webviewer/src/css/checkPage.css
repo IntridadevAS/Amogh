@@ -622,7 +622,7 @@ button[type="submit"] {
 
 .dx-menu-item-text
 {
-  font-size: 14px;
+  font-size: 14px;  
 }
 
 .dataVaultOverlay
@@ -933,4 +933,22 @@ border: 0.5px solid black;
   border: 0.25px solid lightgray;
   text-align: center;
   line-height: 30px;
+}
+
+.dx-context-menu .dx-submenu
+{
+  background-color: #191919 !important;
+  border: none !important;
+}
+
+.dx-context-menu .dx-submenu .dx-menu-item-wrapper .dx-menu-item
+{
+  color: white !important;
+  font-family: Montserrat !important;
+  font-size: 14px !important;  
+}
+
+.dx-context-menu .dx-submenu .dx-menu-item-wrapper .dx-state-hover
+{
+  background-color: gray !important;
 }

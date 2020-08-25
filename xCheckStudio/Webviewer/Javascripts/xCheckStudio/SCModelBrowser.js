@@ -260,6 +260,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                     e.items = [
                         {
                             text: "Hide",
+                            icon: "public/symbols/Hide.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("hide");
@@ -267,6 +268,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                         },
                         {
                             text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("isolate");
@@ -278,9 +280,18 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("show");
                             }
+                        },                        
+                        {
+                            text: "Translucency",
+                            icon: "public/symbols/Transparency.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
                         },
                         {
                             text: "Properties",
+                            beginGroup: true,
                             onItemClick: function () {
                                 let rowsData = e.component.getSelectedRowsData();
                                 if (rowsData.length === 0) {
@@ -292,13 +303,6 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                                     "nodeId": rowsData[0].NodeId
                                 }
                                 );
-                            }
-                        },
-                        {
-                            text: "Translucency",
-                            visible: _this.Webviewer,
-                            onItemClick: function () {
-                                _this.ContextMenu.OnMenuItemClicked("translucency");
                             }
                         },
                         {
@@ -648,6 +652,7 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                     e.items = [
                         {
                             text: "Hide",
+                            icon: "public/symbols/Hide.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("hide");
@@ -655,6 +660,7 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                         },
                         {
                             text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("isolate");
@@ -668,7 +674,16 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                             }
                         },
                         {
+                            text: "Translucency",
+                            icon: "public/symbols/Transparency.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
+                        },
+                        {
                             text: "Properties",
+                            beginGroup: true,
                             onItemClick: function () {
                                 let rowsData = e.component.getSelectedRowsData();
                                 if (rowsData.length === 0) {
@@ -681,14 +696,7 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                                 }
                                 );
                             }
-                        },
-                        {
-                            text: "Translucency",
-                            visible: _this.Webviewer,
-                            onItemClick: function () {
-                                _this.ContextMenu.OnMenuItemClicked("translucency");
-                            }
-                        },
+                        },                                               
                         {
                             text: "Reference",                           
                             onItemClick: function () {
