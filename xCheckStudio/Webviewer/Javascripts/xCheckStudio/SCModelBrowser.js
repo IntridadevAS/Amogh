@@ -18,6 +18,8 @@ function SCModelBrowser(id,
 
     // selectiion manager
     this.SelectionManager = new SCSelectionManager(nodeIdvsSelectedComponents);
+
+    this.ContextMenu = null;
 }
 
 // assign ModelBrowser's method to this class
@@ -198,9 +200,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                 model.views[_this.Id].tableViewInstance = e.component;  
                 model.views[_this.Id].tableViewWidget = "treelist";
 
-                // initialize the context menu
-                var modelBrowserContextMenu = new ModelBrowserContextMenu();
-                modelBrowserContextMenu.Init(_this);
+                // initialize the context menu         
+                _this.ContextMenu = new ModelBrowserContextMenu();
+                _this.ContextMenu.ModelBrowser = _this;
+
                 _this.ShowItemCount(_this.modelTreeRowData.length);
 
                  // set active table view type
@@ -231,7 +234,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                 _this.SelectionManager.OnComponentRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
 
                 // property call out      
-                SourceManagers[_this.Id].OpenPropertyCallout(e.data.Item, e.data.NodeId);
+                SourceManagers[_this.Id].OpenPropertyCallout({
+                    "name": e.data.Item,
+                    "nodeId": e.data.NodeId
+                });
             },
             onRowPrepared: function (e) {
                 if (e.rowType !== "data") {
@@ -249,6 +255,65 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                     }
                 }
             },
+            onContextMenuPreparing: function (e) {
+                if (e.row.rowType === "data") {
+                    e.items = [
+                        {
+                            text: "Hide",
+                            icon: "public/symbols/Hide.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("hide");
+                            }
+                        },
+                        {
+                            text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("isolate");
+                            }
+                        },
+                        {
+                            text: "Show",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("show");
+                            }
+                        },                        
+                        {
+                            text: "Translucency",
+                            icon: "public/symbols/Transparency.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
+                        },
+                        {
+                            text: "Properties",
+                            beginGroup: true,
+                            onItemClick: function () {
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+                                
+                                _this.ContextMenu.OnMenuItemClicked("properties", {
+                                    "name": rowsData[0].Item,
+                                    "nodeId": rowsData[0].NodeId
+                                }
+                                );
+                            }
+                        },
+                        {
+                            text: "Reference",                           
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("reference");
+                            }
+                        }
+                    ];
+                }
+            },
             onDisposing: function (e) {
                 _this.SelectionManager.SelectedComponentIds = [];
                 _this.SelectionManager.SelectedCompoents = [];
@@ -257,6 +322,8 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
 
                 model.views[_this.Id].tableViewInstance = null;  
                 model.views[_this.Id].tableViewWidget = null;
+
+                _this.ContextMenu = null;
             }
         });
     });
@@ -540,15 +607,15 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                 model.views[_this.Id].tableViewWidget = "treelist";
 
                 // initialize the context menu
-                var modelBrowserContextMenu = new ModelBrowserContextMenu(false);
-                modelBrowserContextMenu.Init(_this);
-                
+                _this.ContextMenu = new ModelBrowserContextMenu(false);
+                _this.ContextMenu.ModelBrowser = _this;
+                                
                 _this.ShowItemCount(_this.modelTreeRowData.length);
 
                 // set active table view type
                 model.views[_this.Id].activeTableView = GlobalConstants.TableView.DataBrowser;
                 document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.DataBrowser;
-            },
+            },      
             onSelectionChanged: function (e) {
                 var checkBoxStatus;
                 var clickedCheckBoxRowKeys;
@@ -573,15 +640,79 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                 _this.SelectionManager.OnBrowserRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
 
                 // property call out    
-                SourceManagers[_this.Id].OpenPropertyCallout(e.data.Name, e.data.NodeId);
+                SourceManagers[_this.Id].OpenPropertyCallout({
+                    "name": e.data.Name, 
+                    "nodeId":e.data.NodeId
+                });
             },
             onRowPrepared: function (e) {
+            },
+            onContextMenuPreparing: function (e) {
+                if (e.row.rowType === "data") {
+                    e.items = [
+                        {
+                            text: "Hide",
+                            icon: "public/symbols/Hide.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("hide");
+                            }
+                        },
+                        {
+                            text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("isolate");
+                            }
+                        },
+                        {
+                            text: "Show",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("show");
+                            }
+                        },
+                        {
+                            text: "Translucency",
+                            icon: "public/symbols/Transparency.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
+                        },
+                        {
+                            text: "Properties",
+                            beginGroup: true,
+                            onItemClick: function () {
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+                                
+                                _this.ContextMenu.OnMenuItemClicked("properties", {
+                                    "name": rowsData[0].Item,
+                                    "nodeId": rowsData[0].NodeId
+                                }
+                                );
+                            }
+                        },                                               
+                        {
+                            text: "Reference",                           
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("reference");
+                            }
+                        }
+                    ];
+                }
             },
             onDisposing: function (e) {
                 _this.SelectionManager.SelectedComponentIds = [];
                 _this.SelectionManager.SelectedCompoents = [];
                 _this.SelectionManager.HighlightedComponentRow = null;
                 _this.SelectionManager.HighlightedComponentRowKey = null;
+
+                _this.ContextMenu = null;
             }
         });
     });

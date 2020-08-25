@@ -14,7 +14,9 @@ function DBModelBrowser(id,
 
     this.SelectionManager = new DBSelectionManager(selectedComponents);
 
-    this.LoadedComponentClass
+    this.LoadedComponentClass;
+
+    this.ContextMenu = null;
 }
 
 // assign ModelBrowser's method to this class
@@ -244,10 +246,13 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                 model.views[_this.Id].tableViewWidget = "datagrid";
                 
                 // initialize the context menu
-                var modelBrowserContextMenu = new ModelBrowserContextMenu();
-                modelBrowserContextMenu.Init(_this);
+                _this.ContextMenu = new ModelBrowserContextMenu();
+                _this.ContextMenu.ModelBrowser = _this;
 
                 _this.ShowItemCount(tableData.length);
+
+                // set active table view type
+                model.views[_this.Id].activeTableView = GlobalConstants.TableView.DataBrowser;
 
                 document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.DataBrowser;
             },
@@ -287,9 +292,34 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                 //property call out
                 SourceManagers[_this.Id].OpenPropertyCalloutByCompId(e.data.ComponentId);                
             },
+            onContextMenuPreparing: function (e) {
+                if (e.row.rowType === "data") {
+                    e.items = [ 
+                        {
+                            text: "Properties",
+                            onItemClick: function () {
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+
+                                _this.ContextMenu.OnMenuItemClicked("properties", rowsData[0]);
+                            }
+                        },                      
+                        {
+                            text: "Reference",                           
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("reference");
+                            }
+                        }
+                    ];
+                }
+            },
             onDisposing:function(e){
                 model.views[_this.Id].tableViewInstance = null;  
                 model.views[_this.Id].tableViewWidget = null;
+
+                _this.ContextMenu = null;
             }
         });
     });

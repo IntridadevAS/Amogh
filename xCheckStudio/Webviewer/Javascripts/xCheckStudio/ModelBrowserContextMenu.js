@@ -8,90 +8,90 @@ function ModelBrowserContextMenu(haveComponentOptions = true) {
       this.TranslucencyActive = false;
 }
 
-ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
+// ModelBrowserContextMenu.prototype.Init = function (modelBrowser) {
 
-      var _this = this;
-      this.ModelBrowser = modelBrowser;
+//       var _this = this;
+//       this.ModelBrowser = modelBrowser;
 
-      $("#" + this.ModelBrowser.ModelBrowserContainer).contextMenu({
-            className: 'contextMenu_style',
-            selector: 'tr',           
-            build: function ($triggerElement, e) {
-                  return {
-                        callback: function (key, options) {
-                              _this.OnMenuItemClicked(key, options);
-                        },
-                        items: {                   
-                              "hide": {
-                                    name: "Hide",
-                                    icon: "hide",
-                                    visible: function () {
-                                          if (_this.HaveSCOperations()) {
-                                                return true;
-                                          }
+//       $("#" + this.ModelBrowser.ModelBrowserContainer).contextMenu({
+//             className: 'contextMenu_style',
+//             selector: 'tr',           
+//             build: function ($triggerElement, e) {
+//                   return {
+//                         callback: function (key, options) {
+//                               _this.OnMenuItemClicked(key, options);
+//                         },
+//                         items: {                   
+//                               "hide": {
+//                                     name: "Hide",
+//                                     icon: "hide",
+//                                     visible: function () {
+//                                           if (_this.HaveSCOperations()) {
+//                                                 return true;
+//                                           }
 
-                                          return false;
-                                    }
-                              },
-                              "isolate": {
-                                    name: "Isolate",
-                                    icon: "isolate",
-                                    visible: function () {
-                                          if (_this.HaveSCOperations()) {
-                                                return true;
-                                          }
+//                                           return false;
+//                                     }
+//                               },
+//                               "isolate": {
+//                                     name: "Isolate",
+//                                     icon: "isolate",
+//                                     visible: function () {
+//                                           if (_this.HaveSCOperations()) {
+//                                                 return true;
+//                                           }
 
-                                          return false;
-                                    }
-                              },
-                              "show": {
-                                    name: "Show",
-                                    icon: "show",
-                                    visible: function () {
-                                          if (_this.HaveSCOperations()) {
-                                                return true;
-                                          }
+//                                           return false;
+//                                     }
+//                               },
+//                               "show": {
+//                                     name: "Show",
+//                                     icon: "show",
+//                                     visible: function () {
+//                                           if (_this.HaveSCOperations()) {
+//                                                 return true;
+//                                           }
 
-                                          return false;
-                                    }
-                              },
-                              "modelViews": {
-                                    name: "Model Views",
-                                    icon: "modelViews",
-                                    visible: function () {
-                                          if (_this.HaveSCOperations()) {
-                                                return true;
-                                          }
+//                                           return false;
+//                                     }
+//                               },
+//                               "modelViews": {
+//                                     name: "Model Views",
+//                                     icon: "modelViews",
+//                                     visible: function () {
+//                                           if (_this.HaveSCOperations()) {
+//                                                 return true;
+//                                           }
 
-                                          return false;
-                                    }
-                              },
-                              "translucency": {
-                                    name: "Translucency",
-                                    icon: "translucency",
-                                    visible: function () {
-                                          if (_this.HaveSCOperations()) {
-                                                return true;
-                                          }
+//                                           return false;
+//                                     }
+//                               },
+//                               "translucency": {
+//                                     name: "Translucency",
+//                                     icon: "translucency",
+//                                     visible: function () {
+//                                           if (_this.HaveSCOperations()) {
+//                                                 return true;
+//                                           }
 
-                                          return false;
-                                    }
-                              },
-                              "reference": {
-                                    name: "Reference",
-                                    icon: "reference",
-                                    visible: function () {
-                                          if (_this.HaveComponentOptions) {
-                                                return true;
-                                          }
-                                          return false;
-                                    }
-                              }
-                        }
-                  };
-            }
-      });
-}
+//                                           return false;
+//                                     }
+//                               },
+//                               "reference": {
+//                                     name: "Reference",
+//                                     icon: "reference",
+//                                     visible: function () {
+//                                           if (_this.HaveComponentOptions) {
+//                                                 return true;
+//                                           }
+//                                           return false;
+//                                     }
+//                               }
+//                         }
+//                   };
+//             }
+//       });
+// }
 
 ModelBrowserContextMenu.prototype.HaveSCOperations = function () {
       if (!this.ModelBrowser ||
@@ -124,14 +124,17 @@ ModelBrowserContextMenu.prototype.OnMenuItemClicked = function (key, options) {
       else if (key.toLowerCase() === "reference") {
             this.OnReferenceClicked();
       }
-      else if (key.toLowerCase() === "modelviews") {
-            this.OnModelViewsClicked();
+      else if (key.toLowerCase() === "properties") {
+            this.OnPropertiesClicked(options);
       }
 }
 
-ModelBrowserContextMenu.prototype.OnModelViewsClicked = function () {
+ModelBrowserContextMenu.prototype.OnPropertiesClicked = function (data) {
       closeAnyOpenMenu();
-      model.views[model.currentTabId].displayMenu.ModelViewsMenu.Open();
+
+      // property call out      
+      SourceManagers[model.currentTabId].PropertyCallout.Open();
+      SourceManagers[model.currentTabId].OpenPropertyCallout(data);
 }
 
 ModelBrowserContextMenu.prototype.OnReferenceClicked = function () {

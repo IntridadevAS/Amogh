@@ -48,7 +48,8 @@ PropertyCallout.prototype.Close = function () {
     document.getElementById("propertyCalloutNameBar" + this.Id).style.display = "none";
 }
 
-PropertyCallout.prototype.Update = function (componentName,
+PropertyCallout.prototype.Update = function (
+    componentName,
     componentId,
     properties,
     references,

@@ -592,7 +592,10 @@ SCManager.prototype.SelectComponentRow = function (selectionEvent) {
             this.ModelTree.HighlightComponentRow(this.SelectedNodeId);
 
             //property callout
-            this.OpenPropertyCallout(undefined, this.SelectedNodeId);
+            this.OpenPropertyCallout({
+                "name": undefined, 
+                "nodeId": this.SelectedNodeId
+            });
         }
     }
 };
@@ -614,7 +617,10 @@ SCManager.prototype.SelectBrowserItem = function (selectionEvent) {
         this.ModelTree.HighlightComponentRow(this.SelectedNodeId);
 
         //property callout
-        this.OpenPropertyCallout(undefined, this.SelectedNodeId);
+        this.OpenPropertyCallout({
+            "name": undefined, 
+            "nodeId": this.SelectedNodeId
+        });
     }
 }
 
@@ -883,12 +889,17 @@ SCManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {
 
     if (nodeId in this.AllComponents) {
         var compData = this.AllComponents[nodeId];
-        this.OpenPropertyCallout(compData.Name, nodeId);
+        this.OpenPropertyCallout({
+            "name": compData.Name, 
+            "nodeId": nodeId
+        });
     }
 }
 
-SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
+SCManager.prototype.OpenPropertyCallout = function (compData) {
     var _this = this;
+    let componentName = compData["name"];
+    let nodeId = compData["nodeId"];
 
     var sourceProperties = this.SourceProperties;
     if (nodeId in sourceProperties) {
@@ -900,7 +911,6 @@ SCManager.prototype.OpenPropertyCallout = function (componentName, nodeId) {
             property["Name"] = sourceProperties[nodeId].properties[i].Name;
             property["Value"] = sourceProperties[nodeId].properties[i].Value;
             properties.push(property);
-
         }
 
         // references        

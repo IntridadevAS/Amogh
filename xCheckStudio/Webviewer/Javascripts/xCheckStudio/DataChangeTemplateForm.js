@@ -878,20 +878,7 @@ let DataChangeTemplateOptionsForm = {
                         }
                     });
                 }
-            },
-            // onContextMenuPreparing: function (e) {
-            //     if (e.row.rowType === "data") {
-            //         e.items = [
-            //             {
-            //                 text: "Remove Color",
-            //                 onItemClick: function () {
-            //                     e.row.data["Color"] = null; 
-            //                     e.row.cells[colorColumnIndex].cellElement[0].style.backgroundColor = "#FFFFFF";
-            //                 }
-            //             }
-            //         ]
-            //     }
-            // }
+            },        
         }).dxDataGrid("instance");
     },
 }

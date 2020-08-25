@@ -369,7 +369,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 // initialize the context menu
                 _this.ContextMenu = new ModelBrowserContextMenu(true);
                 _this.ContextMenu.ModelBrowser = _this;
-                // modelBrowserContextMenu.Init(_this);
+                
                 _this.ShowItemCount(e.component.getDataSource().totalCount());
 
                 // restore selected components
@@ -466,17 +466,17 @@ ListView.prototype.LoadTable = function (selectedComps) {
                     e.items = [
                         {
                             text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
-                            visible: !_this.Flat,
+                            disabled: _this.Flat,
                             onItemClick: function () {
                                 e.component.option("selection.recursive", _this.ExcludeMembers);
-                                _this.ExcludeMembers = !_this.ExcludeMembers;                                
+                                _this.ExcludeMembers = !_this.ExcludeMembers;
                             }
                         },
                         {
-                            text: _this.Flat ? "Nested" : "Flat",
+                            text: "Flat/Nested",
                             onItemClick: function () {
-                                _this.Flat = !_this.Flat;                                
-                                _this.Show();                                
+                                _this.Flat = !_this.Flat;
+                                _this.Show();
                             }
                         }
                     ];
@@ -485,6 +485,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                     e.items = [
                         {
                             text: "Hide",
+                            icon: "public/symbols/Hide.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("hide");
@@ -492,7 +493,8 @@ ListView.prototype.LoadTable = function (selectedComps) {
                         },
                         {
                             text: "Isolate",
-                            disabled: !_this.Webviewer,
+                            icon: "public/symbols/Isolate.svg",
+                            visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("isolate");
                             }
@@ -503,19 +505,34 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("show");
                             }
-                        },
-                        {
-                            text: "Model Views",
-                            visible: _this.Webviewer,
-                            onItemClick: function () {
-                                _this.ContextMenu.OnMenuItemClicked("modelviews");
-                            }
-                        },
+                        },                      
                         {
                             text: "Translucency",
+                            icon: "public/symbols/Transparency.svg",
                             visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
+                        },
+                        {
+                            text: "Properties",                           
+                            onItemClick: function () {
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+                                
+                                let compData = null;
+                                if (_this.Webviewer) {
+                                    compData = {
+                                        "name" : rowsData[0].Item,
+                                        "nodeId": rowsData[0].NodeId
+                                    };
+                                }
+                                else {
+                                    compData = rowsData[0];
+                                }
+                                _this.ContextMenu.OnMenuItemClicked("properties", compData);
                             }
                         },
                         {
@@ -583,7 +600,10 @@ ListView.prototype.HighlightRow = function (rowKey, nodeId) {
 
     // property callout                
     if (nodeId in _this.Components) {
-        SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[nodeId].Name, nodeId);
+        SourceManagers[_this.Id].OpenPropertyCallout({
+                "name": _this.Components[nodeId].Name, 
+                "nodeId": nodeId
+            });
     }
 }
 

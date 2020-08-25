@@ -68,6 +68,7 @@ function GroupView(
     }
     this.DisplayTablesForm = null;
     this.ExcludeMembers = false;
+    this.Flat = false;
 }
 // assign ModelBrowser's method to this class
 GroupView.prototype = Object.create(ModelBrowser.prototype);
@@ -383,13 +384,19 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
     var loadingBrower = true;
     var containerDiv = "#" + _this.ModelBrowserContainer;
 
+    let keyExpr = "NodeId";
+    let parentIdExpr = "ParentNodeId";
+    // if (this.Flat) {
+    //     parentIdExpr = "notexistingproperty";
+    // }
+
     $(function () {
         _this.GroupViewTree = $(containerDiv).dxTreeList({
             columns: headers,
             dataSource: tableData,
             // dataStructure: 'tree',
-            keyExpr: "NodeId",
-            parentIdExpr: "ParentNodeId",
+            keyExpr: keyExpr,
+            parentIdExpr:parentIdExpr,
             rootValue: _this.RootNodeId,
             columnAutoWidth: true,
             columnResizingMode: 'widget',
@@ -436,10 +443,10 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
             onSelectionChanged: function (e) {               
             },
             onRowClick: function (e) {
-                if (e.rowType !== "data") {
+                if (e.rowType !== "data" ||
+                    e.event.target.tagName.toLowerCase() === "span") {
                     return;
                 }
-
                 if (Object.keys(_this.HighlightedRow).length > 0) {
                     var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
                     if (oldRowKey === e.key) {
@@ -478,13 +485,60 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                 }
             },
             onContextMenuPreparing: function (e) {
-                if (e.row.rowType === "header") {
+                if (e.row.rowType === "data") {
+                    e.items = [
+                        {
+                            text: "Hide",
+                            icon: "public/symbols/Hide.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.OnHideClicked();
+                            }
+                        },
+                        {
+                            text: "Isolate",
+                            icon: "public/symbols/Isolate.svg",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.OnIsolateClicked();
+                            }
+                        },
+                        {
+                            text: "Show",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.OnShowClicked();
+                            }
+                        },
+                        {
+                            text: "Reference",
+                            beginGroup: true,
+                            onItemClick: function () {
+                                _this.OnReferenceClicked();
+                            }
+                        },
+                    ]
+                }
+                else if (e.row.rowType === "header") {
                     e.items = [
                         {
                             text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
+                            disabled: _this.Flat,
                             onItemClick: function () {
                                 e.component.option("selection.recursive", _this.ExcludeMembers);
                                 _this.ExcludeMembers = !_this.ExcludeMembers;                                
+                            }
+                        },
+                        {
+                            text: "Flat/Nested",
+                            onItemClick: function () {
+                                _this.Flat = !_this.Flat;
+                                if (_this.Flat) {
+                                    e.component.option("parentIdExpr", "notexistingproperty");
+                                }
+                                else {
+                                    e.component.option("parentIdExpr", "ParentNodeId");
+                                }
                             }
                         }
                     ];
@@ -527,6 +581,7 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                 document.getElementById("revisionName" + _this.Id).innerText = "";
 
                 _this.ExcludeMembers = false;
+                _this.Flat = false;
             }
         }).dxTreeList("instance");
     });
@@ -562,11 +617,7 @@ GroupView.prototype.GetDataChangeViewData = function (checkResults) {
             if ("target" in item) {
                 itemData = item["target"];
             }
-            // else if("source" in item)
-            // {
-            //     itemData = item["source"];    
-            // }
-
+         
             if (itemData) {
                 tableRowContent["Item"] = itemData.Name;
                 tableRowContent["Category"] = (itemData.MainComponentClass ? itemData.MainComponentClass : "");
@@ -1055,24 +1106,30 @@ GroupView.prototype.LoadTable = function () {
                 e.items = [
                     {
                         text: "Hide",
+                        icon: "public/symbols/Hide.svg",
+                        visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnHideClicked();
                         }
                     },
                     {
                         text: "Isolate",
+                        icon: "public/symbols/Isolate.svg",
+                        visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnIsolateClicked();
                         }
                     },
                     {
                         text: "Show",
+                        visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnShowClicked();
                         }
                     },
                     {
                         text: "Reference",
+                        beginGroup: true,
                         onItemClick: function () {
                             _this.OnReferenceClicked();
                         }
@@ -1268,7 +1325,10 @@ GroupView.prototype.HighlightRow = function (rowKey, nodeId, highlightInGA = tru
 
     // property callout                
     if (nodeId in this.Components) {
-        SourceManagers[this.Id].OpenPropertyCallout(this.Components[nodeId].Name, nodeId);
+        SourceManagers[this.Id].OpenPropertyCallout({
+            "name": this.Components[nodeId].Name, 
+            "nodeId": nodeId
+        });
     }
 
     // enable events
@@ -1511,8 +1571,7 @@ GroupView.prototype.HighlightHiddenRows = function (isHide, selectedRows) {
     }
 }
 
-GroupView.prototype.HighlightHiddenRowsFromNodeIds = function (isHide, nodeIds) {
-    // var selectedNodeIds =  this.GetSelectedNodes();
+GroupView.prototype.HighlightHiddenRowsFromNodeIds = function (isHide, nodeIds) {   
     var selectedRows = this.GetSelectedRowsFromNodeIds(nodeIds);
     this.HighlightHiddenRows(isHide, selectedRows);
 }
@@ -1526,11 +1585,27 @@ GroupView.prototype.GetSelectedRowsFromNodeIds = function (selectedNodeIds) {
             continue;
         }
         var rowKey = this.NodeIdVsTableItems[nodeId];
-        var rowIndex = this.GroupViewGrid.getRowIndexByKey(rowKey);
+        var rowIndex = -1;
+
+        if (this.GroupViewTree) {
+            rowIndex = this.GroupViewTree.getRowIndexByKey(rowKey);
+        }
+        else if (this.GroupViewGrid) {
+            rowIndex = this.GroupViewGrid.getRowIndexByKey(rowKey);
+        }
 
         if (rowIndex !== -1) {
-            var row = this.GroupViewGrid.getRowElement(rowIndex);
-            selectedRows.push(row[0]);
+            var row = null;
+            if (this.GroupViewTree) {
+                row = this.GroupViewTree.getRowElement(rowIndex);
+            }
+            else if (this.GroupViewGrid) {
+                row = this.GroupViewGrid.getRowElement(rowIndex);
+            }
+
+            if (row) {
+                selectedRows.push(row[0]);
+            }
         }
     }
 
@@ -1544,9 +1619,9 @@ GroupView.prototype.ShowAllHiddenRows = function () {
     sourceManager.HiddenNodeIds = [];
 }
 
-
 GroupView.prototype.GetSelectedNodeIds = function () {
-    return Object.values(this.SelectedRows);
+    // return Object.values(this.SelectedRows);
+    return this.GetSelectedNodes();
 }
 
 GroupView.prototype.GetSelectedComponents = function () {
@@ -1799,8 +1874,21 @@ GroupView.prototype.SelectRow = function (rowKey) {
 
 GroupView.prototype.GetSelectedNodes = function () {
     var selectedNodes = [];
-    for (var rowKey in this.SelectedRows) {
-        selectedNodes.push(Number(this.SelectedRows[rowKey]));
+    // for (var rowKey in this.SelectedRows) {
+    //     selectedNodes.push(Number(this.SelectedRows[rowKey]));
+    // }
+    let rowsData = null;
+    if (this.GroupViewTree) {
+        rowsData = this.GroupViewTree.getSelectedRowsData();
+    }
+    else if (this.GroupViewGrid) {
+        rowsData = this.GroupViewGrid.getSelectedRowsData();
+    }
+
+    if (rowsData) {
+        for (let i = 0; i < rowsData.length; i++) {
+            selectedNodes.push(Number(rowsData[i].NodeId));
+        }
     }
 
     return selectedNodes;
@@ -2116,7 +2204,7 @@ GroupView.prototype.OnHideClicked = function () {
     if (!this.Webviewer) {
         return;
     }
-
+    
     var selectedNodeIds = this.GetSelectedNodes();
     if (!selectedNodeIds ||
         selectedNodeIds.length === 0) {
