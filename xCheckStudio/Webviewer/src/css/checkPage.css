@@ -201,18 +201,6 @@ button + button {
   padding: 6px 10px;
 }
 
-.includeMemberItemsSwitch{
-position: absolute;
-right: 5px;
-width: 65px !important;
-}
-
-.listTypeSwitch{
-  position: absolute;
-right: 80px;
-width: 65px !important;
-}
-
 .tableHeaderControlRow{
   position: relative;
   height: 30px;

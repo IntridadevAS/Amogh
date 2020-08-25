@@ -39,6 +39,9 @@ function ListView(
     this.CurrentRowId = 0;
 
     this.Flat = false;
+    this.ExcludeMembers = false;
+
+    _this.ContextMenu = null;
 }
 // assign ModelBrowser's method to this class
 ListView.prototype = Object.create(ModelBrowser.prototype);
@@ -173,12 +176,7 @@ ListView.prototype.UpdateComponents = function (componentsData) {
 ListView.prototype.Show = function (selectedComps) {
     this.Headers = [];
     this.TableData = [];
-
-    this.Flat = false;
-    if (SourceManagers[this.Id].ListTypeSwitch &&
-        SourceManagers[this.Id].ListTypeSwitch.option("value")) {
-        this.Flat = true;
-    }
+   
 
     // Create Headers
     this.CreateHeaders();
@@ -308,15 +306,13 @@ ListView.prototype.LoadTable = function (selectedComps) {
     // set selection mode
     var selectionAttribute = {
         mode: "multiple",
-        recursive: false,
+        recursive: true,
     };
-    if (SourceManagers[_this.Id].IncludeMemberItemsSwitch) {
-        if (SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("value")) {
-            selectionAttribute = {
-                mode: "multiple",
-                recursive: true,
-            };
-        }
+    if (_this.ExcludeMembers === true) {
+        selectionAttribute = {
+            mode: "multiple",
+            recursive: false,
+        };
     }
 
     $(function () {
@@ -371,13 +367,13 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 _this.CacheItems(e.component.getDataSource().items());
 
                 // initialize the context menu
-                var modelBrowserContextMenu = new ModelBrowserContextMenu(true);
-                modelBrowserContextMenu.Init(_this);
+                _this.ContextMenu = new ModelBrowserContextMenu(true);
+                _this.ContextMenu.ModelBrowser = _this;
+                // modelBrowserContextMenu.Init(_this);
                 _this.ShowItemCount(e.component.getDataSource().totalCount());
 
                 // restore selected components
-                if (selectedComps && selectedComps.length > 0) {
-                    // var includeMember = SourceManagers[_this.Id].GetIncludeMember();
+                if (selectedComps && selectedComps.length > 0) {                    
                     var selectedNodes = [];
                     for (var i = 0; i < selectedComps.length; i++) {
                         selectedNodes.push(Number(selectedComps[i].NodeId));
@@ -394,14 +390,6 @@ ListView.prototype.LoadTable = function (selectedComps) {
 
                 document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.List;
 
-                // enable list view switches
-                if (SourceManagers[_this.Id].IncludeMemberItemsSwitch) {
-                    SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("visible", true);
-                }
-                if (SourceManagers[_this.Id].ListTypeSwitch) {
-                    SourceManagers[_this.Id].ListTypeSwitch.option("visible", true);
-                }
-
                 // enable events
                 _this.InitEvents();
             },           
@@ -413,7 +401,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 _this.AvoidViewerEvents = true;
 
                 var includeMember = SourceManagers[_this.Id].GetIncludeMember();
-                // if (includeMember === true) {
+               
                 var selected;
                 var rowKeys;
                 if (e.currentSelectedRowKeys.length > 0) {
@@ -426,38 +414,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 }
 
                 _this.OnSelectRecurcively(rowKeys, selected, includeMember);
-                // }
-                // else {
-                //     if (e.currentSelectedRowKeys.length > 0) {
-                //         for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                //             var rowKey = Number(e.currentSelectedRowKeys[i]);
-                //             var rowIndex = e.component.getRowIndexByKey(rowKey);
-                //             var visibleRows = e.component.getVisibleRows();
-                //             var nodeId = visibleRows[rowIndex].data.NodeId;
-
-                //             _this.SelectedRows[rowKey] = nodeId;
-
-                //             _this.Webviewer.selectionManager.selectNode(nodeId, Communicator.SelectionMode.Add);
-                //         }
-                //     }
-                //     else if (e.currentDeselectedRowKeys.length > 0) {
-                //         for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                //             var rowKey = Number(e.currentDeselectedRowKeys[i]);
-
-                //             if (rowKey in _this.SelectedRows) {
-                //                 delete _this.SelectedRows[rowKey];
-                //             }
-                //         }
-
-                //         //now manage selection in viewer
-                //         _this.Webviewer.selectionManager.clear();
-                //         for (var rowKey in _this.SelectedRows) {
-                //             _this.Webviewer.selectionManager.selectNode(_this.SelectedRows[rowKey],
-                //                 Communicator.SelectionMode.Add);
-                //         }
-                //     }
-                // }
-
+               
                 if (model.views[_this.Id].editUserPropertiesForm.Active) {
                     model.views[_this.Id].editUserPropertiesForm.LoadData();
                 }
@@ -472,47 +429,9 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 _this.AvoidViewerEvents = true;
 
                 _this.UnHighlightRow();                
-                // if (Object.keys(_this.HighlightedRow).length > 0) {
-
-                //     var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
-                //     var rowIndex = e.component.getRowIndexByKey(oldRowKey);
-                //     var rowElement = e.component.getRowElement(rowIndex)[0];
-                //     if (oldRowKey in _this.SelectedRows) {
-                //         _this.SetRowColor(rowElement, GlobalConstants.TableRowSelectedColor);
-                //     }
-                //     else {
-                //         _this.SetRowColor(rowElement, GlobalConstants.TableRowNormalColor);
-                //     }
-                //     delete _this.HighlightedRow[oldRowKey];
-                // }
-
+               
                 _this.HighlightRow(e.key, e.data.NodeId);
-                // _this.HighlightedRow[e.key] = e.data.NodeId;
-
-                // var rowIndex = e.component.getRowIndexByKey(Number(e.key));
-                // var rowElement = e.component.getRowElement(rowIndex)[0];
-                // _this.SetRowColor(rowElement, GlobalConstants.TableRowHighlightedColor);
-
-                // if (!(e.key in _this.SelectedRows)) {
-                //     //now manage selection in viewer
-                //     _this.Webviewer.selectionManager.clear();
-                //     for (var rowKey in _this.SelectedRows) {
-                //         _this.Webviewer.selectionManager.selectNode(
-                //             _this.SelectedRows[rowKey],
-                //             Communicator.SelectionMode.Add);
-                //     }
-
-                //     _this.Webviewer.selectionManager.selectNode(
-                //         e.data.NodeId,
-                //         Communicator.SelectionMode.Add);
-                // }
-                // _this.Webviewer.view.fitNodes([e.data.NodeId]);
-
-                // // property callout                
-                // if (e.data.NodeId in _this.Components) {
-                //     SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[e.data.NodeId].Name, e.data.NodeId);
-                // }
-
+                
                 _this.AvoidViewerEvents = false;
             },
             onRowPrepared: function (e) {                
@@ -542,6 +461,72 @@ ListView.prototype.LoadTable = function (selectedComps) {
                
                 _this.AvoidTableEvents = false;                
             },
+            onContextMenuPreparing: function (e) {
+                if (e.row.rowType === "header") {
+                    e.items = [
+                        {
+                            text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
+                            visible: !_this.Flat,
+                            onItemClick: function () {
+                                e.component.option("selection.recursive", _this.ExcludeMembers);
+                                _this.ExcludeMembers = !_this.ExcludeMembers;                                
+                            }
+                        },
+                        {
+                            text: _this.Flat ? "Nested" : "Flat",
+                            onItemClick: function () {
+                                _this.Flat = !_this.Flat;                                
+                                _this.Show();                                
+                            }
+                        }
+                    ];
+                }
+                else  if (e.row.rowType === "data") {
+                    e.items = [
+                        {
+                            text: "Hide",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("hide");
+                            }
+                        },
+                        {
+                            text: "Isolate",
+                            disabled: !_this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("isolate");
+                            }
+                        },
+                        {
+                            text: "Show",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("show");
+                            }
+                        },
+                        {
+                            text: "Model Views",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("modelviews");
+                            }
+                        },
+                        {
+                            text: "Translucency",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("translucency");
+                            }
+                        },
+                        {
+                            text: "Reference",                           
+                            onItemClick: function () {
+                                _this.ContextMenu.OnMenuItemClicked("reference");
+                            }
+                        }
+                    ];
+                }
+            },
             onDisposing: function (e) {
                  // disable events
                 _this.TerminateEvents();
@@ -559,14 +544,14 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 _this.KeyVsTableItems = {};
                 _this.NodeIdVsTableItems = {};
 
-                SourceManagers[_this.Id].IncludeMemberItemsSwitch.option("visible", false);
-                SourceManagers[_this.Id].ListTypeSwitch.option("visible", false);
-
                 // if active selection is not single select
                 if (model.views[_this.Id].activeSelection !== "Single Select") {
                     _this.Webviewer.operatorManager.set(Communicator.OperatorId.Select, 1);
                     model.views[_this.Id].activeSelection = "Single Select";
                 }
+
+                _this.ExcludeMembers = false;                
+                _this.ContextMenu = null;
             }
         }).dxTreeList("instance");
     });
