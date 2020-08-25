@@ -485,7 +485,38 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                 }
             },
             onContextMenuPreparing: function (e) {
-                if (e.row.rowType === "header") {
+                if (e.row.rowType === "data") {
+                    e.items = [
+                        {
+                            text: "Hide",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.OnHideClicked();
+                            }
+                        },
+                        {
+                            text: "Isolate",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.OnIsolateClicked();
+                            }
+                        },
+                        {
+                            text: "Show",
+                            visible: _this.Webviewer,
+                            onItemClick: function () {
+                                _this.OnShowClicked();
+                            }
+                        },
+                        {
+                            text: "Reference",
+                            onItemClick: function () {
+                                _this.OnReferenceClicked();
+                            }
+                        },
+                    ]
+                }
+                else if (e.row.rowType === "header") {
                     e.items = [
                         {
                             text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
@@ -1534,8 +1565,7 @@ GroupView.prototype.HighlightHiddenRows = function (isHide, selectedRows) {
     }
 }
 
-GroupView.prototype.HighlightHiddenRowsFromNodeIds = function (isHide, nodeIds) {
-    // var selectedNodeIds =  this.GetSelectedNodes();
+GroupView.prototype.HighlightHiddenRowsFromNodeIds = function (isHide, nodeIds) {   
     var selectedRows = this.GetSelectedRowsFromNodeIds(nodeIds);
     this.HighlightHiddenRows(isHide, selectedRows);
 }
@@ -1549,11 +1579,27 @@ GroupView.prototype.GetSelectedRowsFromNodeIds = function (selectedNodeIds) {
             continue;
         }
         var rowKey = this.NodeIdVsTableItems[nodeId];
-        var rowIndex = this.GroupViewGrid.getRowIndexByKey(rowKey);
+        var rowIndex = -1;
+
+        if (this.GroupViewTree) {
+            rowIndex = this.GroupViewTree.getRowIndexByKey(rowKey);
+        }
+        else if (this.GroupViewGrid) {
+            rowIndex = this.GroupViewGrid.getRowIndexByKey(rowKey);
+        }
 
         if (rowIndex !== -1) {
-            var row = this.GroupViewGrid.getRowElement(rowIndex);
-            selectedRows.push(row[0]);
+            var row = null;
+            if (this.GroupViewTree) {
+                row = this.GroupViewTree.getRowElement(rowIndex);
+            }
+            else if (this.GroupViewGrid) {
+                row = this.GroupViewGrid.getRowElement(rowIndex);
+            }
+
+            if (row) {
+                selectedRows.push(row[0]);
+            }
         }
     }
 
@@ -1567,9 +1613,9 @@ GroupView.prototype.ShowAllHiddenRows = function () {
     sourceManager.HiddenNodeIds = [];
 }
 
-
 GroupView.prototype.GetSelectedNodeIds = function () {
-    return Object.values(this.SelectedRows);
+    // return Object.values(this.SelectedRows);
+    return this.GetSelectedNodes();
 }
 
 GroupView.prototype.GetSelectedComponents = function () {
@@ -1822,8 +1868,21 @@ GroupView.prototype.SelectRow = function (rowKey) {
 
 GroupView.prototype.GetSelectedNodes = function () {
     var selectedNodes = [];
-    for (var rowKey in this.SelectedRows) {
-        selectedNodes.push(Number(this.SelectedRows[rowKey]));
+    // for (var rowKey in this.SelectedRows) {
+    //     selectedNodes.push(Number(this.SelectedRows[rowKey]));
+    // }
+    let rowsData = null;
+    if (this.GroupViewTree) {
+        rowsData = this.GroupViewTree.getSelectedRowsData();
+    }
+    else if (this.GroupViewGrid) {
+        rowsData = this.GroupViewGrid.getSelectedRowsData();
+    }
+
+    if (rowsData) {
+        for (let i = 0; i < rowsData.length; i++) {
+            selectedNodes.push(Number(rowsData[i].NodeId));
+        }
     }
 
     return selectedNodes;
@@ -2139,7 +2198,7 @@ GroupView.prototype.OnHideClicked = function () {
     if (!this.Webviewer) {
         return;
     }
-
+    
     var selectedNodeIds = this.GetSelectedNodes();
     if (!selectedNodeIds ||
         selectedNodeIds.length === 0) {
