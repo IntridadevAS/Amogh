@@ -468,8 +468,13 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
                             disabled: _this.Flat,
                             onItemClick: function () {
-                                e.component.option("selection.recursive", _this.ExcludeMembers);
                                 _this.ExcludeMembers = !_this.ExcludeMembers;
+
+                                e.component.option("selection.recursive", !_this.ExcludeMembers);
+
+                                _this.SelectedRows = {};
+                                let rowKeys = e.component.getSelectedRowKeys();
+                                _this.OnSelectRecurcively(rowKeys, true, !_this.ExcludeMembers);
                             }
                         },
                         {
