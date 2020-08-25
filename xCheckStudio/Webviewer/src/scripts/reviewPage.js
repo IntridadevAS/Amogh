@@ -60,6 +60,12 @@ let model = {
           }
         }
       },
+      updateAccordionDimensions: function () {
+        if (this.reviewManager ||
+          Object.keys(this.modelBrowsers).length > 0) {
+          $("#" + Comparison.MainReviewContainer).dxAccordion("instance").updateDimensions()
+        }
+      }
     },
     "compliance": {
       reviewManager: null,
@@ -95,6 +101,12 @@ let model = {
           for (var browser in this.modelBrowsers) {
             this.modelBrowsers[browser]["viewer"].ResizeViewer();
           }
+        }
+      },
+      updateAccordionDimensions: function () {
+        if (this.reviewManager ||
+          Object.keys(this.modelBrowsers).length > 0) {
+          $("#" + Compliance.MainReviewContainer).dxAccordion("instance").updateDimensions()
         }
       }
     }
@@ -665,6 +677,7 @@ let viewPanels = {
 
     // resize 3D viewer
     model.checks[model.currentCheck].resizeViewers();
+    model.checks[model.currentCheck].updateAccordionDimensions();
   },
 
   onMouseOverMaxMin: function (selected) {
