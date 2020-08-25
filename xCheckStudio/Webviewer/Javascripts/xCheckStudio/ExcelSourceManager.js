@@ -130,6 +130,10 @@ ExcelSourceManager.prototype.GetViewerContainerID = function () {
   return this.ViewerContainer;
 }
 
+ExcelSourceManager.prototype.OpenPropertyCallout = function (compData) {
+  this.OpenPropertyCalloutByCompId(compData.ComponentId);
+}
+
 ExcelSourceManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {
   var _this = this;
 

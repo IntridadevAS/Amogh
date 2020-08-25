@@ -1072,18 +1072,21 @@ GroupView.prototype.LoadTable = function () {
                 e.items = [
                     {
                         text: "Hide",
+                        visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnHideClicked();
                         }
                     },
                     {
                         text: "Isolate",
+                        visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnIsolateClicked();
                         }
                     },
                     {
                         text: "Show",
+                        visible: _this.Webviewer,
                         onItemClick: function () {
                             _this.OnShowClicked();
                         }
@@ -1285,7 +1288,10 @@ GroupView.prototype.HighlightRow = function (rowKey, nodeId, highlightInGA = tru
 
     // property callout                
     if (nodeId in this.Components) {
-        SourceManagers[this.Id].OpenPropertyCallout(this.Components[nodeId].Name, nodeId);
+        SourceManagers[this.Id].OpenPropertyCallout({
+            "name": this.Components[nodeId].Name, 
+            "nodeId": nodeId
+        });
     }
 
     // enable events

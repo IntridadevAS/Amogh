@@ -234,7 +234,10 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                 _this.SelectionManager.OnComponentRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
 
                 // property call out      
-                SourceManagers[_this.Id].OpenPropertyCallout(e.data.Item, e.data.NodeId);
+                SourceManagers[_this.Id].OpenPropertyCallout({
+                    "name": e.data.Item,
+                    "nodeId": e.data.NodeId
+                });
             },
             onRowPrepared: function (e) {
                 if (e.rowType !== "data") {
@@ -279,7 +282,16 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                         {
                             text: "Properties",
                             onItemClick: function () {
-                                // _this.ContextMenu.OnMenuItemClicked("modelviews");
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+                                
+                                _this.ContextMenu.OnMenuItemClicked("properties", {
+                                    "name": rowsData[0].Item,
+                                    "nodeId": rowsData[0].NodeId
+                                }
+                                );
                             }
                         },
                         {
@@ -624,7 +636,10 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                 _this.SelectionManager.OnBrowserRowClicked(e, _this.Webviewer, e.data.NodeId, _this.ModelBrowserContainer);
 
                 // property call out    
-                SourceManagers[_this.Id].OpenPropertyCallout(e.data.Name, e.data.NodeId);
+                SourceManagers[_this.Id].OpenPropertyCallout({
+                    "name": e.data.Name, 
+                    "nodeId":e.data.NodeId
+                });
             },
             onRowPrepared: function (e) {
             },
@@ -655,7 +670,16 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                         {
                             text: "Properties",
                             onItemClick: function () {
-                                // _this.ContextMenu.OnMenuItemClicked("modelviews");
+                                let rowsData = e.component.getSelectedRowsData();
+                                if (rowsData.length === 0) {
+                                    return;
+                                }
+                                
+                                _this.ContextMenu.OnMenuItemClicked("properties", {
+                                    "name": rowsData[0].Item,
+                                    "nodeId": rowsData[0].NodeId
+                                }
+                                );
                             }
                         },
                         {

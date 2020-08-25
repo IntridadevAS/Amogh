@@ -369,7 +369,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 // initialize the context menu
                 _this.ContextMenu = new ModelBrowserContextMenu(true);
                 _this.ContextMenu.ModelBrowser = _this;
-                // modelBrowserContextMenu.Init(_this);
+                
                 _this.ShowItemCount(e.component.getDataSource().totalCount());
 
                 // restore selected components
@@ -505,10 +505,10 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             }
                         },
                         {
-                            text: "Model Views",
+                            text: "Properties",
                             visible: _this.Webviewer,
                             onItemClick: function () {
-                                _this.ContextMenu.OnMenuItemClicked("modelviews");
+                                _this.ContextMenu.OnMenuItemClicked("properties");
                             }
                         },
                         {
@@ -583,7 +583,10 @@ ListView.prototype.HighlightRow = function (rowKey, nodeId) {
 
     // property callout                
     if (nodeId in _this.Components) {
-        SourceManagers[_this.Id].OpenPropertyCallout(_this.Components[nodeId].Name, nodeId);
+        SourceManagers[_this.Id].OpenPropertyCallout({
+                "name": _this.Components[nodeId].Name, 
+                "nodeId": nodeId
+            });
     }
 }
 

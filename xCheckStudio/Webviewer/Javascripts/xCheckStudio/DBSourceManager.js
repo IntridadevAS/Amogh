@@ -127,10 +127,14 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
 
 }
 
+DBSourceManager.prototype.OpenPropertyCallout = function (compData) {
+  this.OpenPropertyCalloutByCompId(compData.ComponentId);
+}
+
 DBSourceManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {
   var _this = this;
 
-  var component = _this.SourceProperties[componentId];
+  var component = _this.SourceProperties[componentId - 1];
 
   // properties
   var properties = []
