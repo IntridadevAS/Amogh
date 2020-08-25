@@ -68,6 +68,7 @@ function GroupView(
     }
     this.DisplayTablesForm = null;
     this.ExcludeMembers = false;
+    this.Flat = false;
 }
 // assign ModelBrowser's method to this class
 GroupView.prototype = Object.create(ModelBrowser.prototype);
@@ -383,13 +384,19 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
     var loadingBrower = true;
     var containerDiv = "#" + _this.ModelBrowserContainer;
 
+    let keyExpr = "NodeId";
+    let parentIdExpr = "ParentNodeId";
+    // if (this.Flat) {
+    //     parentIdExpr = "notexistingproperty";
+    // }
+
     $(function () {
         _this.GroupViewTree = $(containerDiv).dxTreeList({
             columns: headers,
             dataSource: tableData,
             // dataStructure: 'tree',
-            keyExpr: "NodeId",
-            parentIdExpr: "ParentNodeId",
+            keyExpr: keyExpr,
+            parentIdExpr:parentIdExpr,
             rootValue: _this.RootNodeId,
             columnAutoWidth: true,
             columnResizingMode: 'widget',
@@ -436,10 +443,10 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
             onSelectionChanged: function (e) {               
             },
             onRowClick: function (e) {
-                if (e.rowType !== "data") {
+                if (e.rowType !== "data" ||
+                    e.event.target.tagName.toLowerCase() === "span") {
                     return;
                 }
-
                 if (Object.keys(_this.HighlightedRow).length > 0) {
                     var oldRowKey = Number(Object.keys(_this.HighlightedRow)[0]);
                     if (oldRowKey === e.key) {
@@ -482,9 +489,22 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                     e.items = [
                         {
                             text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
+                            disabled: _this.Flat,
                             onItemClick: function () {
                                 e.component.option("selection.recursive", _this.ExcludeMembers);
                                 _this.ExcludeMembers = !_this.ExcludeMembers;                                
+                            }
+                        },
+                        {
+                            text: "Flat/Nested",
+                            onItemClick: function () {
+                                _this.Flat = !_this.Flat;
+                                if (_this.Flat) {
+                                    e.component.option("parentIdExpr", "notexistingproperty");
+                                }
+                                else {
+                                    e.component.option("parentIdExpr", "ParentNodeId");
+                                }
                             }
                         }
                     ];
@@ -527,6 +547,7 @@ GroupView.prototype.LoadDataChangeViewTable = function (headers, tableData, isTa
                 document.getElementById("revisionName" + _this.Id).innerText = "";
 
                 _this.ExcludeMembers = false;
+                _this.Flat = false;
             }
         }).dxTreeList("instance");
     });
@@ -562,11 +583,7 @@ GroupView.prototype.GetDataChangeViewData = function (checkResults) {
             if ("target" in item) {
                 itemData = item["target"];
             }
-            // else if("source" in item)
-            // {
-            //     itemData = item["source"];    
-            // }
-
+         
             if (itemData) {
                 tableRowContent["Item"] = itemData.Name;
                 tableRowContent["Category"] = (itemData.MainComponentClass ? itemData.MainComponentClass : "");

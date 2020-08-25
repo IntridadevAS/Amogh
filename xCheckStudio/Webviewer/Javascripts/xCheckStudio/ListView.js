@@ -466,17 +466,17 @@ ListView.prototype.LoadTable = function (selectedComps) {
                     e.items = [
                         {
                             text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
-                            visible: !_this.Flat,
+                            disabled: _this.Flat,
                             onItemClick: function () {
                                 e.component.option("selection.recursive", _this.ExcludeMembers);
-                                _this.ExcludeMembers = !_this.ExcludeMembers;                                
+                                _this.ExcludeMembers = !_this.ExcludeMembers;
                             }
                         },
                         {
-                            text: _this.Flat ? "Nested" : "Flat",
+                            text: "Flat/Nested",
                             onItemClick: function () {
-                                _this.Flat = !_this.Flat;                                
-                                _this.Show();                                
+                                _this.Flat = !_this.Flat;
+                                _this.Show();
                             }
                         }
                     ];
@@ -492,7 +492,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                         },
                         {
                             text: "Isolate",
-                            disabled: !_this.Webviewer,
+                            visible: _this.Webviewer,
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("isolate");
                             }
