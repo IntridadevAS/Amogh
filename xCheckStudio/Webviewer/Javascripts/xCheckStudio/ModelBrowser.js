@@ -61,14 +61,6 @@ ModelBrowser.prototype.Clear = function (tableControl) {
 
         model.views[this.Id].tableViewInstance = null;
         model.views[this.Id].tableViewWidget = null;
-
-        // disable list view switches
-        if (SourceManagers[this.Id].IncludeMemberItemsSwitch) {
-            SourceManagers[this.Id].IncludeMemberItemsSwitch.option("visible", false);
-        }
-        if (SourceManagers[this.Id].ListTypeSwitch) {
-            SourceManagers[this.Id].IncludeMemberItemsSwitch.option("visible", false);
-        }
     }
 
     // clear count

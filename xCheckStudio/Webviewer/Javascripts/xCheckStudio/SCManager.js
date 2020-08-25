@@ -26,8 +26,6 @@ function SCManager(id,
 
     this.PropertyCallout;    
     
-    this.IncludeMemberItemsSwitch;
-    this.ListTypeSwitch;
     this.GroupTemplateSelect;
    
     this.GroupHighlightTypeSelect;
@@ -171,8 +169,6 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                                 _this.ViewerOptions.modelTree,
                                 _this.AllComponents,
                                 viewer);
-                            // init list view switches
-                            _this.InitListViewSwitches();
 
                             if (!isDataVault()) {
                                 // Init group view
@@ -367,41 +363,6 @@ SCManager.prototype.InitViewActionMenu = function () {
             _this.OpenTableViewsMenu();
         }     
     }
-}
-
-SCManager.prototype.InitListViewSwitches = function () { 
-    var _this = this;
-    this.IncludeMemberItemsSwitch = $("#includeMemberItemsSwitch" + this.Id).dxSwitch({
-        value: false,
-        // disabled: true,
-        visible: false,
-        switchedOffText: "Exclude",
-        switchedOnText: "Include",
-        onValueChanged: function (e) {
-            if (model.views[_this.Id].listView.ListViewTableInstance) {
-                model.views[_this.Id].listView.ListViewTableInstance.option("selection.recursive", e.value);
-                model.views[_this.Id].listView.OnIncludeMembers(e.value);
-            }
-        }
-    }).dxSwitch("instance");
-
-    this.ListTypeSwitch = $("#listTypeSwitch" + this.Id).dxSwitch({
-        value: false,
-        // disabled: true,
-        visible: false,
-        switchedOffText: "Nested",
-        switchedOnText: "Flat",
-        onValueChanged: function (e) {
-            model.views[_this.Id].listView.Show();
-
-            if (e.value === true) {
-                _this.IncludeMemberItemsSwitch.option("disabled", true);
-            }
-            else {
-                _this.IncludeMemberItemsSwitch.option("disabled", false);
-            }
-        }
-    }).dxSwitch("instance");
 }
 
 SCManager.prototype.InitGroupViewControls = function(){
@@ -1242,10 +1203,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
 
     // Init table views action menu
     _this.InitViewActionMenu();
-
-    // init list view switches
-    _this.InitListViewSwitches();
-    // }   
+      
 
     // create property callout
     _this.PropertyCallout = new PropertyCallout(_this.Id);
@@ -1286,8 +1244,8 @@ SCManager.prototype.GetAllSourceProperties = function () {
 }
 
 SCManager.prototype.GetIncludeMember = function () {
-    if (this.IncludeMemberItemsSwitch) {
-        return this.IncludeMemberItemsSwitch.option("value");
+    if (model.views[this.Id].listView) {
+        return !model.views[this.Id].listView.ExcludeMembers;
     }
 
     return false;

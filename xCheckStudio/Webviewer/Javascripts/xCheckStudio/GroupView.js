@@ -2352,11 +2352,7 @@ GroupView.prototype.HighlightGAByDataChangeColors = function () {
     if (selectedRowKeys.length === 0) {
         return;
     }
-
-    // if (this.ExcludeMembers) {
-
-    // }
-    // else {
+   
     for (let i = 0; i < selectedRowKeys.length; i++) {
         let rowKey = selectedRowKeys[i];
         let rowNode = this.GroupViewTree.getNodeByKey(rowKey);
