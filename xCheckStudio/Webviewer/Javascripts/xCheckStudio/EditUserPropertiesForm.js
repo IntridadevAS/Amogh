@@ -7,7 +7,7 @@ function EditUserPropertiesForm(id) {
 
     this.UpdatedRowsData = {};
 
-    this.ClearUserPropertiesForm = new ClearUserPropertiesForm(id);
+    this.ClearUserPropertiesForm = null;
     this.editUserPropertyNameForm = new EditUserPropertyNameForm(id);
 }
 
@@ -48,7 +48,14 @@ EditUserPropertiesForm.prototype.Init = function () {
     }
 
     document.getElementById("editUserPropertiesApplyBtn" + this.Id).onclick = function () {
-        _this.OnApply();
+        if (_this.PropertiesGrid.hasEditData() === true) {
+            _this.PropertiesGrid.saveEditData().then(() => {
+                _this.OnApply();
+            });
+        }
+        else {
+            _this.OnApply();
+        }
     }
 
     document.getElementById("editUserPropertiesCloseBtn" + this.Id).onclick = function () {
@@ -57,103 +64,10 @@ EditUserPropertiesForm.prototype.Init = function () {
 }
 
 EditUserPropertiesForm.prototype.OnClear = function () {
-    // var selectedRowsData = this.PropertiesGrid.getSelectedRowsData();
-    // var properties = [];
-
-    // var visibleColumns = this.PropertiesGrid.getVisibleColumns();
-    // for (var i = 0; i < selectedRowsData.length; i++) {
-    //     var rowData = selectedRowsData[i];
-
-    //     for (var prop in rowData) {
-    //         if (prop.toLowerCase() === "item" ||
-    //             prop.toLowerCase() === "nodeid") {
-    //             continue;
-    //         }
-
-    //         var columnIndex = this.PropertiesGrid.getVisibleColumnIndex(prop)
-    //         if (columnIndex === -1) {
-    //             continue;
-    //         }
-    //         var propName = visibleColumns[columnIndex].caption;
-    //         if (properties.indexOf(propName) === -1) {
-    //             properties.push(propName);
-    //         }
-    //     }
-    // }
-
     this.ClearUserPropertiesForm.Open();
 }
 
-EditUserPropertiesForm.prototype.OnApply = function () {
-    var _this = this
-    var sourceManager = SourceManagers[_this.Id];
-
-    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    
-    var nameProperty = "";
-    var categoryProperty = "";
-    var classProperty = "";
-    if (identifierProperties !== null) {
-        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
-    }
-
-    var data = {};
-    for (var nodeId in this.UpdatedRowsData) {
-        var properties = this.UpdatedRowsData[nodeId];
-
-        data[nodeId] = {};
-        data[nodeId]["properties"] = [];
-        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
-
-        var name = null;
-        var category = null;
-        var componentClass = null;
-        for (var property in properties) {
-            var value = properties[property];
-
-            if (property.toLowerCase() === nameProperty.toLowerCase()) {
-                name = value;
-            }
-            if (property.toLowerCase() === categoryProperty.toLowerCase()) {
-                category = value;
-            }
-            if (property.toLowerCase() === classProperty.toLowerCase()) {
-                componentClass = value;
-            }
-
-            data[nodeId]["properties"].push({
-                "property": property,
-                "oldProperty": property,
-                "value": value ? value : "",
-                "action": "update"
-            });
-        }
-
-        data[nodeId]["name"] = name;
-        data[nodeId]["category"] = category;
-        data[nodeId]["componentClass"] = componentClass;
-        data[nodeId]["parent"] = null;
-    }
-
-    // Update components in tables
-    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
-        model.views[_this.Id].listView.UpdateComponents(data);
-    }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
-        model.views[_this.Id].groupView.UpdateComponents(data);
-    }
-
-    this.UpdatePropertiesInDB(data).then(function (result) {
-        if (result === true) {
-            _this.UpdatedRowsData = {};
-            DevExpress.ui.notify("Properties updated successfully.");
-        }       
-    });
-}
-
-EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data) {
+EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data, sourceType) {
     var _this = this;
     return new Promise((resolve) => {
         var sourceManager = SourceManagers[_this.Id];
@@ -167,7 +81,8 @@ EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data) {
                 'PropertyTable': sourceManager.GetPropertiesTableName(),
                 'InvokeFunction': 'Update',
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname,
+                "SourceType": sourceType
             },
             type: "POST",
             url: "PHP/UserProperties.php"
@@ -181,6 +96,15 @@ EditUserPropertiesForm.prototype.UpdatePropertiesInDB = function (data) {
             return resolve(true);
         });
     });
+}
+
+EditUserPropertiesForm.prototype.OnEditPropertyForAll = function (columnIndex, propertyName) {
+    var _this = this;
+    function callbackFunc(columnIndex, oldPropertyName, newPropertyName) {
+        _this.EditPropertyForAll(columnIndex, oldPropertyName, newPropertyName)
+    }
+
+    this.editUserPropertyNameForm.Open(columnIndex, propertyName, callbackFunc);
 }
 
 EditUserPropertiesForm.prototype.LoadData = function () {
@@ -200,8 +124,8 @@ EditUserPropertiesForm.prototype.LoadData = function () {
     columns.push(column);
 
     column = {};
-    column["caption"] = "NodeId";
-    column["dataField"] = "NodeId";;
+    column["caption"] = "Id";
+    column["dataField"] = "Id";;
     column["visible"] = false;
     columns.push(column);
 
@@ -213,12 +137,12 @@ EditUserPropertiesForm.prototype.LoadData = function () {
         selected = model.views[this.Id].groupView.GetSelectedComponents();
     }
 
-    for (var nodeId in selected) {
-        var selectedComp = selected[nodeId];
+    for (var id in selected) {
+        var selectedComp = selected[id];
 
         var rowData = {};
         rowData["Item"] = selectedComp.Name;
-        rowData["NodeId"] = nodeId;
+        rowData["Id"] = id;
 
         for (var i = 0; i < selectedComp.properties.length; i++) {
             var property = selectedComp.properties[i];
@@ -290,20 +214,14 @@ EditUserPropertiesForm.prototype.LoadData = function () {
         },
         onSelectionChanged: function (e) {
         },
-        // onRowInserted: function (e) {
-
-        // },
-        // onRowRemoved: function (e) {
-
-        // },
         onRowUpdating(e) {
-            var nodeId = e.oldData.NodeId;
-            if (!(nodeId in _this.UpdatedRowsData)) {
-                _this.UpdatedRowsData[e.oldData.NodeId] = {};
+            var id = e.oldData.Id;
+            if (!(id in _this.UpdatedRowsData)) {
+                _this.UpdatedRowsData[id] = {};
             }
 
             for (var prop in e.newData) {
-                _this.UpdatedRowsData[e.oldData.NodeId][prop] = e.newData[prop];
+                _this.UpdatedRowsData[id][prop] = e.newData[prop];
             }
         },
         onEditorPreparing: function (e) {
@@ -317,16 +235,19 @@ EditUserPropertiesForm.prototype.LoadData = function () {
             }
         },
         onContextMenuPreparing: function (e) {
-            if (e.row.rowType === "header") {
+            if (e.row.rowType === "header" &&
+                e.column.type !== "selection") {
                 e.items = [
                     {
                         text: "Edit",
+                        disabled: (e.column.dataField.toLowerCase() === "item" || e.column.dataField.toLowerCase() === "Id"),
                         onItemClick: function () {
                             _this.OnEditPropertyForAll(e.columnIndex, e.column.caption);
                         }
                     },
                     {
                         text: "Remove",
+                        disabled: (e.column.dataField.toLowerCase() === "item" || e.column.dataField.toLowerCase() === "Id"),
                         onItemClick: function () {
                             _this.OnRemovePropertyForAll(e.columnIndex, e.column.caption);
                         }
@@ -337,206 +258,20 @@ EditUserPropertiesForm.prototype.LoadData = function () {
     }).dxDataGrid("instance");
 }
 
-EditUserPropertiesForm.prototype.OnEditPropertyForAll = function (columnIndex, propertyName) {
-    var _this = this;
-    function callbackFunc(columnIndex, oldPropertyName, newPropertyName){
-        _this.EditPropertyForAll(columnIndex, oldPropertyName, newPropertyName)
-    }
-
-    this.editUserPropertyNameForm.Open(columnIndex, propertyName, callbackFunc);
+EditUserPropertiesForm.prototype.DeletePropertyColumn = function (property) {
+    this.PropertiesGrid.deleteColumn(property);
 }
 
-EditUserPropertiesForm.prototype.EditPropertyForAll = function (columnIndex, oldPropertyName, newPropertyName) {
-    var _this = this;
-    var items = _this.PropertiesGrid.getDataSource().items();
-
-    var sourceManager = SourceManagers[_this.Id];
-
-    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = "";
-    var categoryProperty = "";
-    var classProperty = "";
-    if (identifierProperties !== null) {
-        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
-    }
-
-    var data = {};
-    var alreadyExistingProps = [];    
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        var nodeId = item.NodeId;
-
-        data[nodeId] = {};
-        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
-
-        data[nodeId]["properties"] = [];
-       
-        // check if property already exists with component or not
-        var componentObj = sourceManager.AllComponents[nodeId];    
-        if (componentObj.propertyExists(newPropertyName)) {
-            alreadyExistingProps.push(componentObj.Name);            
-        }
-        else {
-            data[nodeId]["properties"].push({
-                "property": newPropertyName,
-                "oldProperty": oldPropertyName,
-                "value": item[oldPropertyName] ? item[oldPropertyName] : "",
-                "action": "update"
-            });
-        }     
-        if (data[nodeId]["properties"].length === 0) {
-            delete data[nodeId];
-            continue;
-        }       
-
-        var name = null;
-        var category = null;
-        var componentClass = null;
-
-        // if old property was component identifier propertyy
-        if (oldPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
-            name = SourceManagers[this.Id].GetNodeName(nodeId);
-        }
-        if (oldPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
-            category = "";
-        }
-        if (oldPropertyName.toLowerCase() === classProperty.toLowerCase()) {
-            componentClass = "";
-        }
-
-        // if new property is component identifier propertyy
-        if (newPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
-            name = item[oldPropertyName];
-        }
-        if (newPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
-            category = item[oldPropertyName];
-        }
-        if (newPropertyName.toLowerCase() === classProperty.toLowerCase()) {
-            componentClass = item[oldPropertyName]
-        }
-
-        data[nodeId]["name"] = name;
-        data[nodeId]["category"] = category;
-        data[nodeId]["componentClass"] = componentClass;
-        data[nodeId]["parent"] = null;
-    }
-
-    // if property already exists
-    if (alreadyExistingProps.length > 0) {
-        var msg = "Property '" + newPropertyName + "' already exists for following components and will not be considered for same.\n\n";
-        for (var i = 0; i < alreadyExistingProps.length; i++) {
-            msg += "\t" + alreadyExistingProps[i] + "\n";
-        }
-
-        alert(msg);
-    }
-    if (Object.keys(data).length === 0) {
-        return;
-    }
-
-    // Update components in tables
-    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
-        model.views[_this.Id].listView.UpdateComponents(data);
-    }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
-        model.views[_this.Id].groupView.UpdateComponents(data);
-    }
-
-    this.UpdatePropertiesInDB(data).then(function (result) {
-        if (result === true) {
-            DevExpress.ui.notify("Property updated successfully.");
-            _this.LoadData();
-        }
-    });
-}
-
-EditUserPropertiesForm.prototype.OnRemovePropertyForAll = function (columnIndex, propertyName) {
-    var _this = this;
-    var items = _this.PropertiesGrid.getDataSource().items();
-
-    var sourceManager = SourceManagers[_this.Id];
-
-    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
-    var nameProperty = "";
-    var categoryProperty = "";
-    var classProperty = "";
-    if (identifierProperties !== null) {
-        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
-        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
-        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
-    }
-    
-    var data = {};
-    for (var i = 0; i < items.length; i++) {
-        var nodeId = items[i].NodeId;
-
-        data[nodeId] = {};
-        data[nodeId]["properties"] = [];
-        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
-
-        var name = null;
-        var category = null;
-        var componentClass = null;
-        // for (var j = 0; j < selectedProperties.length; j++) {
-        //     var property = selectedProperties[j];
-
-        if (propertyName.toLowerCase() === nameProperty.toLowerCase()) {
-            name = sourceManager.GetNodeName(nodeId);
-        }
-        if (propertyName.toLowerCase() === categoryProperty.toLowerCase()) {
-            category = "";
-        }
-        if (propertyName.toLowerCase() === classProperty.toLowerCase()) {
-            componentClass = "";
-        }
-
-        data[nodeId]["properties"].push({
-            "property": propertyName,
-            "action": "remove",
-            "value": ""
-        });
-        // }
-
-        data[nodeId]["name"] = name;
-        data[nodeId]["category"] = category;
-        data[nodeId]["componentClass"] = componentClass;
-        data[nodeId]["parent"] = null;
-    }
-
-    // Update components in list view table    
-    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
-        model.views[_this.Id].listView.UpdateComponents(data);
-    }
-    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
-        model.views[_this.Id].groupView.UpdateComponents(data);
-    }
-    // Update components in editUserProperties table
-    model.views[this.Id].editUserPropertiesForm.DeletePropertyColumn(propertyName);
-
-    this.UpdatePropertiesInDB(data).then(function (result) {
-        if (result === true) {
-            DevExpress.ui.notify("Properties updated successfully.");
-            _this.LoadData();
-        }
-    });    
-}
-
-EditUserPropertiesForm.prototype.GetSelectedComponents = function () {
+EditUserPropertiesForm.prototype.GetSelectedIds = function () {
     var selectedRowsData = this.PropertiesGrid.getSelectedRowsData();
 
     var selectedNodeIds = [];
     for (var i = 0; i < selectedRowsData.length; i++) {
         var rowData = selectedRowsData[i];
-        selectedNodeIds.push(rowData["NodeId"]);
+        selectedNodeIds.push(rowData["Id"]);
     }
 
     return selectedNodeIds;
-}
-
-EditUserPropertiesForm.prototype.DeletePropertyColumn = function (property) {
-    this.PropertiesGrid.deleteColumn(property);
 }
 
 EditUserPropertiesForm.prototype.UpdateComponents = function (properties, clearValues = false) {
@@ -564,7 +299,528 @@ EditUserPropertiesForm.prototype.UpdateComponents = function (properties, clearV
                 this.PropertiesGrid.cellValue(rowIndex, properties[j], "NULL");
             }
         }
-    }   
+    }
+}
+
+/*
+ Edit User Properties form for 3D datasets
+*/
+function EditUserPropertiesForm3D(id) {
+    EditUserPropertiesForm.call(this, id);
+
+    this.ClearUserPropertiesForm = new ClearUserPropertiesForm3D(id);
+}
+// assign EditUserPropertiesForm's method to this class
+EditUserPropertiesForm3D.prototype = Object.create(EditUserPropertiesForm.prototype);
+EditUserPropertiesForm3D.prototype.constructor = EditUserPropertiesForm3D;
+
+EditUserPropertiesForm3D.prototype.OnApply = function () {
+    var _this = this
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var data = {};
+    for (var nodeId in this.UpdatedRowsData) {
+        var properties = this.UpdatedRowsData[nodeId];
+
+        data[nodeId] = {};
+        data[nodeId]["properties"] = [];
+        data[nodeId]["component"] = sourceManager.GetCompIdByNodeId(nodeId);
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+        for (var property in properties) {
+            var value = properties[property];
+
+            if (property.toLowerCase() === nameProperty.toLowerCase()) {
+                name = value;
+            }
+            if (property.toLowerCase() === categoryProperty.toLowerCase()) {
+                category = value;
+            }
+            if (property.toLowerCase() === classProperty.toLowerCase()) {
+                componentClass = value;
+            }
+
+            data[nodeId]["properties"].push({
+                "property": property,
+                "oldProperty": property,
+                "value": value ? value : "",
+                "action": "update"
+            });
+        }
+
+        data[nodeId]["name"] = name;
+        data[nodeId]["category"] = category;
+        data[nodeId]["componentClass"] = componentClass;
+        data[nodeId]["parent"] = null;
+    }
+
+    // Update components in tables
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
+
+    this.UpdatePropertiesInDB(data, "3D").then(function (result) {
+        if (result === true) {
+            _this.UpdatedRowsData = {};
+            DevExpress.ui.notify("Properties updated successfully.");
+        }
+    });
+}
+
+EditUserPropertiesForm3D.prototype.EditPropertyForAll = function (columnIndex, oldPropertyName, newPropertyName) {
+    var _this = this;
+    var items = _this.PropertiesGrid.getDataSource().items();
+
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var data = {};
+    var alreadyExistingProps = [];
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var id = item.Id;
+
+        data[id] = {};
+        data[id]["component"] = sourceManager.GetCompIdByNodeId(id);
+
+        data[id]["properties"] = [];
+
+        // check if property already exists with component or not
+        var componentObj = sourceManager.AllComponents[id];
+        if (componentObj.propertyExists(newPropertyName)) {
+            alreadyExistingProps.push(componentObj.Name);
+        }
+        else {
+            data[id]["properties"].push({
+                "property": newPropertyName,
+                "oldProperty": oldPropertyName,
+                "value": item[oldPropertyName] ? item[oldPropertyName] : "",
+                "action": "update"
+            });
+        }
+        if (data[id]["properties"].length === 0) {
+            delete data[id];
+            continue;
+        }
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+
+        // if old property was component identifier propertyy
+        if (oldPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = SourceManagers[this.Id].GetNodeName(id);
+        }
+        if (oldPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = "";
+        }
+        if (oldPropertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = "";
+        }
+
+        // if new property is component identifier propertyy
+        if (newPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = item[oldPropertyName];
+        }
+        if (newPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = item[oldPropertyName];
+        }
+        if (newPropertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = item[oldPropertyName]
+        }
+
+        data[id]["name"] = name;
+        data[id]["category"] = category;
+        data[id]["componentClass"] = componentClass;
+        data[id]["parent"] = null;
+    }
+
+    // if property already exists
+    if (alreadyExistingProps.length > 0) {
+        var msg = "Property '" + newPropertyName + "' already exists for following components and will not be considered for same.\n\n";
+        for (var i = 0; i < alreadyExistingProps.length; i++) {
+            msg += "\t" + alreadyExistingProps[i] + "\n";
+        }
+
+        alert(msg);
+    }
+    if (Object.keys(data).length === 0) {
+        return;
+    }
+
+    // Update components in tables
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
+
+    this.UpdatePropertiesInDB(data, "3D").then(function (result) {
+        if (result === true) {
+            DevExpress.ui.notify("Property updated successfully.");
+            _this.LoadData();
+        }
+    });
+}
+
+EditUserPropertiesForm3D.prototype.OnRemovePropertyForAll = function (columnIndex, propertyName) {
+    var _this = this;
+    var items = _this.PropertiesGrid.getDataSource().items();
+
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var data = {};
+    for (var i = 0; i < items.length; i++) {
+        var id = items[i].Id;
+
+        data[id] = {};
+        data[id]["properties"] = [];
+        data[id]["component"] = sourceManager.GetCompIdByNodeId(id);
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+        // for (var j = 0; j < selectedProperties.length; j++) {
+        //     var property = selectedProperties[j];
+
+        if (propertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = sourceManager.GetNodeName(id);
+        }
+        if (propertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = "";
+        }
+        if (propertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = "";
+        }
+
+        data[id]["properties"].push({
+            "property": propertyName,
+            "action": "remove",
+            "value": ""
+        });
+        // }
+
+        data[id]["name"] = name;
+        data[id]["category"] = category;
+        data[id]["componentClass"] = componentClass;
+        data[id]["parent"] = null;
+    }
+
+    // Update components in list view table    
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
+    // Update components in editUserProperties table
+    model.views[this.Id].editUserPropertiesForm.DeletePropertyColumn(propertyName);
+
+    this.UpdatePropertiesInDB(data, "3D").then(function (result) {
+        if (result === true) {
+            DevExpress.ui.notify("Properties updated successfully.");
+            _this.LoadData();
+        }
+    });
+}
+
+/*
+ Edit User Properties form for 1D datasets
+*/
+function EditUserPropertiesForm1D(id) {
+    EditUserPropertiesForm.call(this, id);
+
+    this.ClearUserPropertiesForm = new ClearUserPropertiesForm1D(id);
+}
+// assign EditUserPropertiesForm's method to this class
+EditUserPropertiesForm1D.prototype = Object.create(EditUserPropertiesForm.prototype);
+EditUserPropertiesForm1D.prototype.constructor = EditUserPropertiesForm1D;
+
+EditUserPropertiesForm1D.prototype.OnApply = function () {
+    var _this = this
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var data = {};
+    for (var id in this.UpdatedRowsData) {
+        var properties = this.UpdatedRowsData[id];
+
+        data[id] = {};
+        data[id]["properties"] = [];
+        data[id]["component"] = id;
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+        for (var property in properties) {
+            var value = properties[property];
+
+            if (property.toLowerCase() === nameProperty.toLowerCase()) {
+                name = value;
+            }
+            if (property.toLowerCase() === categoryProperty.toLowerCase()) {
+                category = value;
+            }
+            if (property.toLowerCase() === classProperty.toLowerCase()) {
+                componentClass = value;
+            }
+
+            data[id]["properties"].push({
+                "property": property,
+                "oldProperty": property,
+                "value": value ? value : "",
+                "action": "update"
+            });
+        }
+
+        data[id]["name"] = name;
+        data[id]["category"] = category;
+        data[id]["componentClass"] = componentClass;
+        data[id]["parent"] = null;
+    }
+
+    // Update components in tables
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        // model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
+
+    this.UpdatePropertiesInDB(data, "1D").then(function (result) {
+        if (result === true) {
+            _this.UpdatedRowsData = {};
+            DevExpress.ui.notify("Properties updated successfully.");
+        }
+    });
+}
+
+EditUserPropertiesForm1D.prototype.EditPropertyForAll = function (
+    columnIndex,
+    oldPropertyName,
+    newPropertyName) {
+    var _this = this;
+
+    var items = _this.PropertiesGrid.getDataSource().items();
+
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var data = {};
+    var alreadyExistingProps = [];
+    let allComponents = sourceManager.GetAllComponents();
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var id = item.Id;
+
+        data[id] = {};
+        data[id]["component"] = id;
+
+        data[id]["properties"] = [];
+
+        // check if property already exists with component or not
+        var componentObj = allComponents[id];
+        if (componentObj.propertyExists(newPropertyName)) {
+            alreadyExistingProps.push(componentObj.Name);
+        }
+        else {
+            data[id]["properties"].push({
+                "property": newPropertyName,
+                "oldProperty": oldPropertyName,
+                "value": item[oldPropertyName] ? item[oldPropertyName] : "",
+                "action": "update"
+            });
+        }
+        if (data[id]["properties"].length === 0) {
+            delete data[id];
+            continue;
+        }
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+
+        // if old property was component identifier propertyy
+        if (oldPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = SourceManagers[this.Id].GetNodeName(id);
+        }
+        if (oldPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = "";
+        }
+        if (oldPropertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = "";
+        }
+
+        // if new property is component identifier propertyy
+        if (newPropertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = item[oldPropertyName];
+        }
+        if (newPropertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = item[oldPropertyName];
+        }
+        if (newPropertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = item[oldPropertyName]
+        }
+
+        data[id]["name"] = name;
+        data[id]["category"] = category;
+        data[id]["componentClass"] = componentClass;
+        data[id]["parent"] = null;
+    }
+
+    // if property already exists
+    if (alreadyExistingProps.length > 0) {
+        var msg = "Property '" + newPropertyName + "' already exists for following components and will not be considered for same.\n\n";
+        for (var i = 0; i < alreadyExistingProps.length; i++) {
+            msg += "\t" + alreadyExistingProps[i] + "\n";
+        }
+
+        alert(msg);
+    }
+    if (Object.keys(data).length === 0) {
+        return;
+    }
+
+    // Update components in tables
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        // model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
+
+    this.UpdatePropertiesInDB(data, "1D").then(function (result) {
+        if (result === true) {
+            DevExpress.ui.notify("Property updated successfully.");
+            _this.LoadData();
+        }
+    });
+}
+
+EditUserPropertiesForm1D.prototype.OnRemovePropertyForAll = function (columnIndex, propertyName) {
+    var _this = this;
+    var items = _this.PropertiesGrid.getDataSource().items();
+
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var data = {};
+    for (var i = 0; i < items.length; i++) {
+        var id = items[i].Id;
+
+        data[id] = {};
+        data[id]["properties"] = [];
+        data[id]["component"] = id;
+
+        var name = null;
+        var category = null;
+        var componentClass = null;
+        // for (var j = 0; j < selectedProperties.length; j++) {
+        //     var property = selectedProperties[j];
+
+        if (propertyName.toLowerCase() === nameProperty.toLowerCase()) {
+            name = items[i].Item;
+        }
+        if (propertyName.toLowerCase() === categoryProperty.toLowerCase()) {
+            category = "";
+        }
+        if (propertyName.toLowerCase() === classProperty.toLowerCase()) {
+            componentClass = "";
+        }
+
+        data[id]["properties"].push({
+            "property": propertyName,
+            "action": "remove",
+            "value": ""
+        });
+        // }
+
+        data[id]["name"] = name;
+        data[id]["category"] = category;
+        data[id]["componentClass"] = componentClass;
+        data[id]["parent"] = null;
+    }
+
+    // Update components in list view table    
+    if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+        // model.views[_this.Id].listView.UpdateComponents(data);
+    }
+    else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+        model.views[_this.Id].groupView.UpdateComponents(data);
+    }
+    // Update components in editUserProperties table
+    model.views[this.Id].editUserPropertiesForm.DeletePropertyColumn(propertyName);
+
+    this.UpdatePropertiesInDB(data, "1D").then(function (result) {
+        if (result === true) {
+            DevExpress.ui.notify("Properties updated successfully.");
+            _this.LoadData();
+        }
+    });
 }
 
 // Clear User Properties Form
@@ -606,7 +862,7 @@ ClearUserPropertiesForm.prototype.Close = function () {
 }
 
 ClearUserPropertiesForm.prototype.Init = function () {
-    var _this = this;    
+    var _this = this;
 
     this.LoadData();
 
@@ -681,11 +937,21 @@ ClearUserPropertiesForm.prototype.LoadData = function () {
         searchEnabled: true,
         hideSelectedItems: true,
         placeholder: "Select Properties...",
-        disabled:  disabled
+        disabled: disabled
     }).dxTagBox("instance");
 }
 
-ClearUserPropertiesForm.prototype.OnApply = function () {
+/*
+ Clear User Properties form for 3D datasets
+*/
+function ClearUserPropertiesForm3D(id) {
+    ClearUserPropertiesForm.call(this, id);
+}
+// assign ClearUserPropertiesForm's method to this class
+ClearUserPropertiesForm3D.prototype = Object.create(ClearUserPropertiesForm.prototype);
+ClearUserPropertiesForm3D.prototype.constructor = ClearUserPropertiesForm3D;
+
+ClearUserPropertiesForm3D.prototype.OnApply = function () {
     var _this = this
     var sourceManager = SourceManagers[_this.Id];
 
@@ -700,10 +966,10 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
     }
 
     var editUserPropertiesForm = model.views[this.Id].editUserPropertiesForm;
-    var selectedNodeIds = editUserPropertiesForm.GetSelectedComponents();
-   
+    var selectedNodeIds = editUserPropertiesForm.GetSelectedIds();
+
     var selectedProperties = this.PropertiesTagBox._selectedItems;
-    if (this.PropertiesCB.option("value")) {        
+    if (this.PropertiesCB.option("value")) {
 
         var data = {};
         for (var i = 0; i < selectedNodeIds.length; i++) {
@@ -762,17 +1028,18 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
                 'PropertyTable': sourceManager.GetPropertiesTableName(),
                 'InvokeFunction': 'Update',
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname,
+                "SourceType": "3D"
             },
             type: "POST",
             url: "PHP/UserProperties.php"
-        }).done(function (msg) {           
+        }).done(function (msg) {
             var object = xCheckStudio.Util.tryJsonParse(msg);
             if (object === null || object.MsgCode !== 1) {
                 return;
-            }           
-            
-            DevExpress.ui.notify("Properties updated successfully.");
+            }
+
+            // DevExpress.ui.notify("Properties updated successfully.");
         });
     }
 
@@ -843,8 +1110,8 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
         }
 
         // Update components in editUserProperties table
-        model.views[this.Id].editUserPropertiesForm.UpdateComponents(allProperties, true);   
-        
+        model.views[this.Id].editUserPropertiesForm.UpdateComponents(allProperties, true);
+
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
         $.ajax({
@@ -854,7 +1121,8 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
                 'PropertyTable': sourceManager.GetPropertiesTableName(),
                 'InvokeFunction': 'Update',
                 'ProjectName': projectinfo.projectname,
-                'CheckName': checkinfo.checkname
+                'CheckName': checkinfo.checkname,
+                "SourceType": "3D"
             },
             type: "POST",
             url: "PHP/UserProperties.php"
@@ -863,8 +1131,208 @@ ClearUserPropertiesForm.prototype.OnApply = function () {
             if (object === null || object.MsgCode !== 1) {
                 return;
             }
-            
-            DevExpress.ui.notify("Properties updated successfully.");
+
+            // DevExpress.ui.notify("Properties updated successfully.");
+        });
+    }
+
+    this.PropertiesTagBox.reset();
+    this.LoadData();
+}
+
+/*
+ Clear User Properties form for 1D datasets
+*/
+function ClearUserPropertiesForm1D(id) {
+    ClearUserPropertiesForm.call(this, id);
+}
+// assign ClearUserPropertiesForm's method to this class
+ClearUserPropertiesForm1D.prototype = Object.create(ClearUserPropertiesForm.prototype);
+ClearUserPropertiesForm1D.prototype.constructor = ClearUserPropertiesForm1D;
+
+ClearUserPropertiesForm1D.prototype.OnApply = function () {
+    var _this = this
+    var sourceManager = SourceManagers[_this.Id];
+
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
+    var nameProperty = "";
+    var categoryProperty = "";
+    var classProperty = "";
+    if (identifierProperties !== null) {
+        nameProperty = identifierProperties.name.replace("Intrida Data/", "");
+        categoryProperty = identifierProperties.mainCategory.replace("Intrida Data/", "");
+        classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
+    }
+
+    var editUserPropertiesForm = model.views[this.Id].editUserPropertiesForm;
+    var selectedIds = editUserPropertiesForm.GetSelectedIds();
+    let allComponents = sourceManager.GetAllComponents();
+
+    var selectedProperties = this.PropertiesTagBox._selectedItems;
+    if (this.PropertiesCB.option("value")) {
+
+        var data = {};
+        for (var i = 0; i < selectedIds.length; i++) {
+            var id = selectedIds[i];
+
+            data[id] = {};
+            data[id]["properties"] = [];
+            data[id]["component"] = id;
+
+            var name = null;
+            var category = null;
+            var componentClass = null;
+            for (var j = 0; j < selectedProperties.length; j++) {
+                var property = selectedProperties[j];
+
+                if (property.toLowerCase() === nameProperty.toLowerCase()) {
+                    name = allComponents[id].Name;
+                }
+                if (property.toLowerCase() === categoryProperty.toLowerCase()) {
+                    category = "";
+                }
+                if (property.toLowerCase() === classProperty.toLowerCase()) {
+                    componentClass = "";
+                }
+
+                data[id]["properties"].push({
+                    "property": property,
+                    "action": "remove",
+                    "value": ""
+                });
+            }
+
+            data[id]["name"] = name;
+            data[id]["category"] = category;
+            data[id]["componentClass"] = componentClass;
+            data[id]["parent"] = null;
+        }
+
+        // Update components in list view table
+        if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+            // model.views[_this.Id].listView.UpdateComponents(data);
+        }
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+            model.views[_this.Id].groupView.UpdateComponents(data);
+        }
+
+        // Update components in editUserProperties table
+        model.views[this.Id].editUserPropertiesForm.UpdateComponents(selectedProperties);
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            data: {
+                'PropertyData': JSON.stringify(data),
+                'ComponentTable': sourceManager.GetComponentsTableName(),
+                'PropertyTable': sourceManager.GetPropertiesTableName(),
+                'InvokeFunction': 'Update',
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname,
+                "SourceType": "1D"
+            },
+            type: "POST",
+            url: "PHP/UserProperties.php"
+        }).done(function (msg) {
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null || object.MsgCode !== 1) {
+                return;
+            }
+
+            // DevExpress.ui.notify("Properties updated successfully.");
+        });
+    }
+
+    if (this.ClearValuesCB.option("value")) {
+        var columns = editUserPropertiesForm.PropertiesGrid.getVisibleColumns();
+        var allProperties = [];
+        for (var i = 0; i < columns.length; i++) {
+            var column = columns[i];
+            if (column.type === "selection" ||
+                column.caption.toLowerCase() === "item" ||
+                column.caption.toLowerCase() === "id") {
+                continue;
+            }
+
+            if (this.PropertiesCB.option("value") &&
+                selectedProperties.indexOf(column.caption) !== -1) {
+                continue;
+            }
+            allProperties.push(column.caption);
+        }
+
+        var selectedProperties = this.PropertiesTagBox._selectedItems;
+
+        var data = {};
+        for (var i = 0; i < selectedIds.length; i++) {
+            var id = selectedIds[i];
+
+            data[id] = {};
+            data[id]["properties"] = [];
+            data[id]["component"] = id;
+
+            var name = null;
+            var category = null;
+            var componentClass = null;
+            for (var j = 0; j < allProperties.length; j++) {
+                var property = allProperties[j];
+
+                if (property.toLowerCase() === nameProperty.toLowerCase()) {
+                    name = allComponents[id].Name;
+                }
+                if (property.toLowerCase() === categoryProperty.toLowerCase()) {
+                    category = "";
+                }
+                if (property.toLowerCase() === classProperty.toLowerCase()) {
+                    componentClass = "";
+                }
+
+                data[id]["properties"].push({
+                    "property": property,
+                    "oldProperty": property,
+                    "action": "update",
+                    "value": ""
+                });
+            }
+
+            data[id]["name"] = name;
+            data[id]["category"] = category;
+            data[id]["componentClass"] = componentClass;
+            data[id]["parent"] = null;
+        }
+
+        // Update components in list view table
+        if (model.views[_this.Id].activeTableView.toLowerCase() === "list view") {
+            // model.views[_this.Id].listView.UpdateComponents(data);
+        }
+        else if (model.views[_this.Id].activeTableView.toLowerCase() === "groups view") {
+            model.views[_this.Id].groupView.UpdateComponents(data);
+        }
+
+        // Update components in editUserProperties table
+        model.views[this.Id].editUserPropertiesForm.UpdateComponents(allProperties, true);
+
+        var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+        var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
+        $.ajax({
+            data: {
+                'PropertyData': JSON.stringify(data),
+                'ComponentTable': sourceManager.GetComponentsTableName(),
+                'PropertyTable': sourceManager.GetPropertiesTableName(),
+                'InvokeFunction': 'Update',
+                'ProjectName': projectinfo.projectname,
+                'CheckName': checkinfo.checkname,
+                "SourceType": "1D"
+            },
+            type: "POST",
+            url: "PHP/UserProperties.php"
+        }).done(function (msg) {
+            var object = xCheckStudio.Util.tryJsonParse(msg);
+            if (object === null || object.MsgCode !== 1) {
+                return;
+            }
+
+            // DevExpress.ui.notify("Properties updated successfully.");
         });
     }
 
@@ -898,8 +1366,8 @@ EditUserPropertyNameForm.prototype.Open = function (columnIndex, propertyName, c
     this.PropertyName = propertyName;
     // this.OKCallbackFunc = callbackFunc;
 
-    var editUserPropertyNameForm = document.getElementById(this.GetHtmlElementId());    
-    editUserPropertyNameForm.style.display = "block";    
+    var editUserPropertyNameForm = document.getElementById(this.GetHtmlElementId());
+    editUserPropertyNameForm.style.display = "block";
 
     // editUserPropertyNameForm.style.top = ((window.innerHeight / 2) - 50) + "px";
     // editUserPropertyNameForm.style.left = ((window.innerWidth / 2) - 175) + "px";
@@ -915,7 +1383,7 @@ EditUserPropertyNameForm.prototype.Close = function () {
     this.Active = false;
 
     var editUserPropertyNameForm = document.getElementById(this.GetHtmlElementId());
-    editUserPropertyNameForm.style.display = "none";   
+    editUserPropertyNameForm.style.display = "none";
 }
 
 EditUserPropertyNameForm.prototype.Init = function (propertyName, callbackFunc) {

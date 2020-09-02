@@ -26,11 +26,11 @@ function SCManager(id,
 
     this.PropertyCallout;    
     
-    this.GroupTemplateSelect;
+    // this.GroupTemplateSelect;
    
-    this.GroupHighlightTypeSelect;
-    this.HighlightSelectionBtn;
-    this.GroupDatabaseViewBtn;
+    // this.GroupHighlightTypeSelect;
+    // this.HighlightSelectionBtn;
+    // this.GroupDatabaseViewBtn;
 }
 
 // inherit from parent
@@ -58,6 +58,10 @@ SCManager.prototype.GetCurrentTable = function () {
 
 SCManager.prototype.GetViewerContainerID = function () {
     return this.ViewerOptions.containerId;
+}
+
+SCManager.prototype.GetAllComponents = function () {
+    return this.AllComponents;
 }
 
 SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadFromSaved = false) {
@@ -172,7 +176,7 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
 
                             if (!isDataVault()) {
                                 // Init group view
-                                model.views[_this.Id].groupView = new GroupView(
+                                model.views[_this.Id].groupView = new GroupView3D(
                                     _this.Id,
                                     _this.ViewerOptions.modelTree,
                                     _this.AllComponents,
@@ -419,20 +423,20 @@ SCManager.prototype.InitGroupViewControls = function(){
     }
 }
 
-SCManager.prototype.ShowGroupViewControls = function (show) {
-    this.GroupTemplateSelect.option("visible", show);
-    this.GroupHighlightTypeSelect.option("visible", show);
-    if (show) {
-        this.HighlightSelectionBtn.style.display = "block";
-        this.GroupDatabaseViewBtn.style.display = "block";        
-    }
-    else {
-        this.HighlightSelectionBtn.style.display = "none";
-        this.GroupDatabaseViewBtn.style.display = "none"; 
-    }
+// SCManager.prototype.ShowGroupViewControls = function (show) {
+//     this.GroupTemplateSelect.option("visible", show);
+//     this.GroupHighlightTypeSelect.option("visible", show);
+//     if (show) {
+//         this.HighlightSelectionBtn.style.display = "block";
+//         this.GroupDatabaseViewBtn.style.display = "block";        
+//     }
+//     else {
+//         this.HighlightSelectionBtn.style.display = "none";
+//         this.GroupDatabaseViewBtn.style.display = "none"; 
+//     }
 
-    this.GroupTemplateSelect.option("value", null);
-}
+//     this.GroupTemplateSelect.option("value", null);
+// }
 
 // SCManager.prototype.ShowListViewFloatingMenu = function (show) {
 //     // if (this.DataBrowserSDA) {
@@ -1198,7 +1202,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
     if (!isDataVault()) {
 
         // Init group view
-        model.views[_this.Id].groupView = new GroupView(
+        model.views[_this.Id].groupView = new GroupView3D(
             _this.Id,
             _this.ViewerOptions.modelTree,
             _this.AllComponents,
@@ -1251,6 +1255,50 @@ SCManager.prototype.GetAllSourceProperties = function () {
     // }
 
     return allProperties;
+}
+
+SCManager.prototype.GetAllSourcePropertiesWithValues = function () {
+    // var sourceManager = SourceManagers[this.Id];
+
+    var traversedProperties = [];
+
+    var allProperties = {};
+    var allvalues = {};
+    // if (sourceManager.Is3DSource()) {
+        var allComponents = this.AllComponents;
+
+        for (var nodeId in allComponents) {
+            var component = allComponents[nodeId];
+            if (component.properties.length > 0) {
+                for (var i = 0; i < component.properties.length; i++) {
+                    var property = component.properties[i];
+
+                    if (traversedProperties.indexOf(property.Name) === -1) {
+                        traversedProperties.push(property.Name);
+
+                        allProperties[JSON.stringify({ "Name": property.Name })] = { "Name": property.Name };
+                    }
+
+                    var valueObj = {
+                        "Name": property.Name,
+                        "Value": property.Value
+                    };
+
+                    var valueObjStr = JSON.stringify(valueObj);
+
+                    if (!(valueObjStr in allvalues)) {
+                        allvalues[valueObjStr] = valueObj;
+                    }
+                }
+            }
+        }
+    // }
+
+    traversedProperties = [];
+    return {
+        properties: allProperties,
+        values: allvalues
+    };
 }
 
 SCManager.prototype.GetIncludeMember = function () {

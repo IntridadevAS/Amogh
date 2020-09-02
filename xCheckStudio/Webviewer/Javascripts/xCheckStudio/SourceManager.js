@@ -8,6 +8,12 @@ function SourceManager(id, sourceName, sourceType) {
     this.SourceProperties = {};
     this.ModelTree = undefined;
 
+    // group view controls
+    this.GroupTemplateSelect = null;
+    this.GroupHighlightTypeSelect = null;
+    this.HighlightSelectionBtn = null;
+    this.GroupDatabaseViewBtn = null;
+
     // virtual function
     SourceManager.prototype.GetViewerContainerID = function () {
     };
@@ -16,6 +22,10 @@ function SourceManager(id, sourceName, sourceType) {
         return this.ModelTree;
     }
 
+    SourceManager.prototype.GetAllComponents = function () {
+        return this.SourceProperties;
+    }
+    
     // virtual function
     SourceManager.prototype.Is3DSource = function () {
         return false;
@@ -67,6 +77,21 @@ function SourceManager(id, sourceName, sourceType) {
 
     SourceManager.prototype.GetAllSourceProperties = function () {
         return [];
+    }
+
+    SourceManager.prototype.ShowGroupViewControls = function (show) {
+        this.GroupTemplateSelect.option("visible", show);
+        this.GroupHighlightTypeSelect.option("visible", show);
+        if (show) {
+            this.HighlightSelectionBtn.style.display = "block";
+            this.GroupDatabaseViewBtn.style.display = "block";
+        }
+        else {
+            this.HighlightSelectionBtn.style.display = "none";
+            this.GroupDatabaseViewBtn.style.display = "none";
+        }
+
+        this.GroupTemplateSelect.option("value", null);
     }
 }
 

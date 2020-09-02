@@ -61,7 +61,7 @@ let DataChangeRevisioning = {
         revisionData["srcId"] = model.currentTabId;
         revisionData["dataSourceName"] = SourceManagers[model.currentTabId].SourceName;
         revisionData["dataSourceType"] = SourceManagers[model.currentTabId].SourceType.toLowerCase();
-        revisionData["allComponents"] = JSON.stringify(SourceManagers[model.currentTabId].AllComponents);
+        revisionData["allComponents"] = JSON.stringify(SourceManagers[model.currentTabId].GetAllComponents());
 
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
         var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));

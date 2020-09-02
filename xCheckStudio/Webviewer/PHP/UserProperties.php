@@ -23,7 +23,8 @@ function Update()
         !isset($_POST['CheckName']) ||
         !isset($_POST['ComponentTable']) ||
         !isset($_POST['PropertyTable']) ||
-        !isset($_POST['PropertyData'])
+        !isset($_POST['PropertyData']) ||
+        !isset($_POST['SourceType'])
     ) {
         echo json_encode(array(
             "Msg" =>  "Invalid input.",
@@ -40,6 +41,7 @@ function Update()
         $componentTable = $_POST['ComponentTable'];
         $propertyTable = $_POST['PropertyTable'];
         $propertyData = json_decode($_POST['PropertyData'],true);
+        $sourceType = $_POST['SourceType'];
 
         $tempDBPath = getCheckDatabasePath($projectName, $checkName);
         $tempDBh = new PDO("sqlite:$tempDBPath") or die("cannot open the database");
@@ -72,7 +74,7 @@ function Update()
         $tempDBh->exec($command);
 
         $newComponentIds = array();
-        foreach ($propertyData as $nodeId => $nodeData) {         
+        foreach ($propertyData as $id => $nodeData) {         
             $componentId = NULL;           
 
             if (array_key_exists ( "component" , $nodeData)) {
@@ -108,6 +110,11 @@ function Update()
                     // new component
                     $qry = 'INSERT INTO ' . $componentTable . '(name, mainclass, subclass, nodeid, parentid) VALUES(?,?,?,?,?) ';
 
+                    $nodeId = null;
+                    if (strtolower($sourceType) === "3d")
+                    {
+                        $nodeId = $id;
+                    }
                     $values = array(
                         $nodeData["name"],
                         $nodeData["category"],
@@ -125,7 +132,7 @@ function Update()
                 $stmt =  $tempDBh->query($qry);
                 while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                     $componentId  = $row['id'];  
-                    $newComponentIds[$componentId ] = $nodeId;                
+                    $newComponentIds[$componentId ] = $id;                
                     break;
                 }               
             }

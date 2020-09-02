@@ -14,14 +14,20 @@ function DBModelBrowser(id,
 
     this.SelectionManager = new DBSelectionManager(selectedComponents);
 
-    this.LoadedComponentClass;
+    this.LoadedComponentClass = null;
 
     this.ContextMenu = null;
+
+    this.GADataTable = null;
 }
 
 // assign ModelBrowser's method to this class
 DBModelBrowser.prototype = Object.create(ModelBrowser.prototype);
 DBModelBrowser.prototype.constructor = DBModelBrowser;
+
+DBModelBrowser.prototype.GetSelectedIds = function () {
+    return this.SelectionManager.SelectedComponentIds;
+}
 
 DBModelBrowser.prototype.CreateHeaders = function () {
     var columnHeaders = [];
@@ -75,7 +81,7 @@ DBModelBrowser.prototype.CreateHeaders = function () {
     return columnHeaders;
 }
 
-DBModelBrowser.prototype.CreateModelBrowserTable = function (sourceProperties) {
+DBModelBrowser.prototype.CreateModelBrowser = function (sourceProperties) {
     if(sourceProperties !== null) {
         var _this = this;
 
@@ -105,109 +111,7 @@ DBModelBrowser.prototype.CreateModelBrowserTable = function (sourceProperties) {
         }
 
         this.LoadModelBrowserTable(columnHeaders, tableData);
-    } 
-    // if (!this.DBData) {
-    //     return;
-    // }
-    // // var _this = this;
-
-    // var columnHeaders = this.CreateHeaders();
-
-    // tableData = [];
-    // //add each sheet to model browser 
-    // // iterate over sheets from excel file
-    // // filename.split('.')[0]
-    // var rowKey = 1;
-    // for (var component in this.DBData) {
-    //     var mainComponentClass = component;
-    //     var mainComponentStyleClass = mainComponentClass + "_" + this.ModelBrowserContainer;
-    //     var styleList = undefined;
-    //     var componentStyleClass = this.GetComponentstyleClass(mainComponentStyleClass);
-    //     //set  row data 
-    //     var rowData = [];
-    //     rowData.push(mainComponentClass);
-    //     rowData.push("");
-    //     rowData.push("");
-    //     rowData.push("");
-
-    //     //add sheet names as 1st parent(collapsible row)
-    //     // this.addComponentRow(styleList, componentStyleClass, rowData);
-    //     var parentMainClassStyleList = componentStyleClass;
-
-    //     //iterate over each component class in sheet
-    //     for (var component in this.DBData[mainComponentClass]) {
-    //         styleList = parentMainClassStyleList;
-    //         var subComponentClass = component;
-    //         var subComponentStyleClass = subComponentClass + "_" + this.ModelBrowserContainer;
-    //         componentStyleClass = this.GetComponentstyleClass(subComponentStyleClass);
-
-    //         //add component class as second level parent(collapsible row)
-    //         //iterate over each component having same component class 
-    //         var children = this.DBData[mainComponentClass][subComponentClass];
-    //         for (i = 0; i < children.length; i++) {
-    //             if (styleList !== undefined) {
-    //                 styleList = styleList + " " + componentStyleClass;
-    //             }
-    //             else {
-    //                 styleList = componentStyleClass;
-    //             }
-    //             var child = children[i];
-    //             var name = child.Name;
-    //             var rowData = [];
-
-    //             //if component name or main component class is undefined then only add compoment row to model browser
-    //             if (name !== undefined && mainComponentClass !== undefined) {
-
-    //                 tableRowContent = {};
-    //                 tableRowContent[ModelBrowserColumnNames1D.Component.replace(/\s/g, '')] = name;
-    //                 tableRowContent[ModelBrowserColumnNames1D.MainClass.replace(/\s/g, '')] = mainComponentClass;
-    //                 tableRowContent[ModelBrowserColumnNames1D.SubClass.replace(/\s/g, '')] = subComponentClass;
-
-
-    //                 var description = "";
-    //                 for (var j = 0; j < child.properties.length; j++) {
-    //                     var childProperties = child.properties[j];
-    //                     if (childProperties["Name"] === "Description") {
-
-    //                         description = childProperties["Value"];
-    //                         break;
-    //                     }
-    //                 }
-    //                 tableRowContent[ModelBrowserColumnNames1D.Description.replace(/\s/g, '')] = description;
-    //                 tableRowContent[ModelBrowserColumnNames1D.ComponentId.replace(/\s/g, '')] = rowKey;
-    //                 tableData.push(tableRowContent);
-    //                 rowKey++;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // this.LoadModelBrowserTable(columnHeaders, tableData);
-}
-
-DBModelBrowser.prototype.GetModelBrowserHeaderTable = function () {
-    var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
-    return modelBrowserData.children[0];
-}
-
-DBModelBrowser.prototype.GetModelBrowserDataTable = function () {
-    var modelBrowserData = document.getElementById(this.ModelBrowserContainer);
-    return modelBrowserData.children[1];
-}
-
-DBModelBrowser.prototype.GetModelBrowserDataRows = function () {
-    var modelBrowserDataTable = this.GetModelBrowserDataTable();
-
-    return modelBrowserDataTable.getElementsByTagName("tr");
-}
-
-DBModelBrowser.prototype.GetComponentstyleClass = function (componentName) {
-    var componentStyleClass = componentName.replace(" ", "");
-    componentStyleClass = componentStyleClass.replace(":", "");
-    componentStyleClass = componentStyleClass.replace(".", "");
-    componentStyleClass = componentStyleClass.replace("/", "");
-
-    return componentStyleClass;
+    }     
 }
 
 DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
@@ -257,14 +161,14 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                 document.getElementById("tableHeaderName" + _this.Id).innerText = GlobalConstants.TableView.DataBrowser;
             },
             onContentReady: function (e) {
-                if(loadingBrower && _this.SelectionManager.ComponentIdvsSelectedComponents)
+                if(loadingBrower && _this.SelectionManager.SelectedComponentIds)
                 {
-                    e.component.selectRows(Object.keys(_this.SelectionManager.ComponentIdvsSelectedComponents));
+                    e.component.selectRows(_this.SelectionManager.SelectedComponentIds);
                 }
                 loadingBrower = false;
                 
-                //  // show table view action button
-                //  document.getElementById("tableViewAction" + _this.Id).style.display = "block";
+                 // show table view action button
+                 document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },  
             onSelectionChanged: function (e) {
                 if(e.currentSelectedRowKeys.length > 0) {
@@ -319,7 +223,14 @@ DBModelBrowser.prototype.LoadModelBrowserTable = function (columnHeaders,
                 model.views[_this.Id].tableViewInstance = null;  
                 model.views[_this.Id].tableViewWidget = null;
 
+                _this.SelectionManager.SelectedComponentIds = [];
+
                 _this.ContextMenu = null;
+
+                // discard the viewer table
+                if (_this.GADataTable) {
+                    _this.DisposeGAGrid(_this.ViewerContainer);
+                }
             }
         });
     });
@@ -413,35 +324,32 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
     }
 
     // get identifier column names
-    var identifierColumns = {};
-    var firstRow = data[0];
-
-    for (var column in firstRow) {
-        if (column.toLowerCase() === "component class" ||
-            column.toLowerCase() === "componentclass") {
-            identifierColumns["componentClass"] = column;
-        }
-        else if (column.toLowerCase() === "name") {
-            identifierColumns["name"] = column;
-        }
-        else if (column.toLowerCase() === "tagnumber" &&
-            !("name" in identifierColumns)) {
-            identifierColumns["name"] = column;
-        }
-        else if (column.toLowerCase() === "description") {
-            identifierColumns["description"] = column;
-        }
-
-        // if (identifierColumns.length === 3) {
-        //     break;
-        // }
-    }
-
-    if (identifierColumns.name === undefined ||
-        identifierColumns.componentClass === undefined) {
+    // var identifierColumns = {};
+    // var firstRow = data[0];
+    var identifierColumns = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(SourceManagers[this.Id].SourceType);
+    if (identifierColumns === null) {
         return;
     }
-
+    // for (var column in firstRow) {
+    //     if (column.toLowerCase() === "component class" ||
+    //         column.toLowerCase() === "componentclass") {
+    //         identifierColumns["componentClass"] = column;
+    //     }
+    //     else if (column.toLowerCase() === "name") {
+    //         identifierColumns["name"] = column;
+    //     }
+    //     else if (column.toLowerCase() === "tagnumber" &&
+    //         !("name" in identifierColumns)) {
+    //         identifierColumns["name"] = column;
+    //     }
+    //     else if (column.toLowerCase() === "description") {
+    //         identifierColumns["description"] = column;
+    //     }
+    // }
+    if (!identifierColumns.name||
+        !identifierColumns.subClass) {
+        return;
+    }
 
     // find the row to be highlighted in viewer
     var name = thisRow.cells[ModelBrowserColumns1D.Component].innerText.trim();
@@ -451,7 +359,7 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
         var dataRow = data[i];
 
         if (name === dataRow[identifierColumns.name] &&
-            subClass === dataRow[identifierColumns.componentClass]) {
+            subClass === dataRow[identifierColumns.subClass]) {
 
             var row = dataGrid.getRowElement(i);
 
@@ -464,28 +372,6 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
     }
 }
 
-// DBModelBrowser.prototype.Clear = function () {
-//     var containerDiv = "#" + this.ModelBrowserContainer;
-
-//     var browserContainer = document.getElementById(this.ModelBrowserContainer);
-//     var parent = browserContainer.parentElement;
-
-//     //remove html element which holds grid
-//     $(containerDiv).remove();
-
-//     //Create and add div with same id to add grid again
-//     //devExtreme does not have destroy method. We have to remove the html element and add it again to create another table
-//     var browserContainerDiv = document.createElement("div")
-//     browserContainerDiv.id = this.ModelBrowserContainer;
-//     var styleRule = ""
-//     styleRule = "position: relative";
-//     browserContainerDiv.setAttribute("style", styleRule);
-//     parent.appendChild(browserContainerDiv);
-
-//     // clear count
-//     this.GetItemCountDiv().innerHTML = "";
-// }
-
 DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
     tableData) {
 
@@ -493,7 +379,7 @@ DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
     var _this = this;
     return new Promise(function (resolve) {
         $(function () {
-            $(containerDiv).dxDataGrid({
+            _this.GADataTable = $(containerDiv).dxDataGrid({
                 dataSource: tableData,
                 columns: columnHeaders,
                 showBorders: true,
@@ -515,18 +401,22 @@ DBModelBrowser.prototype.LoadDBDataTable = function (columnHeaders,
                     recursive: true
                 }, 
                 paging: { enabled: false },
-                onRowClick: function(e) {
+                onRowClick: function (e) {
                     // console.log(e)
                     _this.SelectionManager.HandleRowSelectInViewer(e.rowElement[0], _this.ModelBrowserContainer, _this.ViewerContainer);
                 },
+                onDisposing: function (e) {
+                    _this.GADataTable = null;
+                    _this.LoadedComponentClass = null;
+                }
             });
         });
     });
 }
 
-DBModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
-    return this.SelectionManager.SelectedCompoentExists(componentRow);
-}
+// DBModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
+//     return this.SelectionManager.SelectedCompoentExists(componentRow);
+// }
 
 DBModelBrowser.prototype.GetSelectedComponents = function () {
     return this.SelectionManager.GetSelectedComponents();

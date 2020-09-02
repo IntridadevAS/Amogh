@@ -2,10 +2,16 @@
 function DataDefinitionMenu(id) {
     this.Id = id;
 
-    this.Active = false;       
+    this.Active = false;
 
-    model.views[this.Id].userPropertiesForm = new UserPropertiesForm(this.Id);
-    model.views[this.Id].editUserPropertiesForm = new EditUserPropertiesForm(this.Id);
+    if (SourceManagers[this.Id].Is3DSource()) {
+        model.views[this.Id].userPropertiesForm = new UserPropertiesForm3D(this.Id);
+        model.views[this.Id].editUserPropertiesForm = new EditUserPropertiesForm3D(this.Id);
+    }
+    else if (SourceManagers[this.Id].Is1DSource()) {
+        model.views[this.Id].userPropertiesForm = new UserPropertiesForm1D(this.Id);
+        model.views[this.Id].editUserPropertiesForm = new EditUserPropertiesForm1D(this.Id);
+    }
     model.views[this.Id].defineGroupsForm = new DefineGroupsForm(this.Id);
     model.views[this.Id].definePropertyHighlightsForm = new DefinePropertyHighlightsForm(this.Id);
 }

@@ -1,7 +1,7 @@
-function DBSelectionManager(componentIdvsSelectedComponents) {
+function DBSelectionManager(selectedComponentIds) {
      // call super constructor
      SelectionManager.call(this);
-     this.ComponentIdvsSelectedComponents = componentIdvsSelectedComponents;
+     this.SelectedComponentIds = selectedComponentIds? Object.keys(selectedComponentIds) : [];
      this.SelectedCompoents = [];
 
      this.SelectedDBRow;
@@ -261,24 +261,16 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
 }
 
 DBSelectionManager.prototype.GetSelectedComponentIds = function () {
-     if (!(model.currentTabId in SourceManagers)) {
-          return;
-     }
-     var sourceManager = SourceManagers[model.currentTabId];
+     // if (!(model.currentTabId in SourceManagers)) {
+     //      return;
+     // }
+     // var sourceManager = SourceManagers[model.currentTabId];
      var selectedCompoents = this.GetSelectedComponents();
 
      var componentIds = [];
-     for (id in sourceManager.ComponentIdVsData) {
-          var compData = sourceManager.ComponentIdVsData[id];
-
-          for (var i = 0; i < selectedCompoents.length; i++) {
-               var selectedComponent = selectedCompoents[i];
-               if (selectedComponent.Name === compData.name &&
-                    selectedComponent.MainComponentClass === compData.mainClass &&
-                    selectedComponent.ComponentClass === compData.subClass) {
-                    componentIds.push(id);
-               }
-          }
+     for (var i = 0; i < selectedCompoents.length; i++) {
+          var selectedComponent = selectedCompoents[i];
+          componentIds.push(Number(selectedComponent["ComponentId"]));
      }
 
      return componentIds;

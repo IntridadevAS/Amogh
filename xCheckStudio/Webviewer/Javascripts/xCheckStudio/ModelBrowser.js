@@ -66,3 +66,17 @@ ModelBrowser.prototype.Clear = function (tableControl) {
     // clear count
     this.GetItemCountDiv().innerHTML = "";
 }
+
+ModelBrowser.prototype.DisposeGAGrid = function (viewerContainer) {
+    var tableElement = document.getElementById(viewerContainer);
+    var parent = tableElement.parentElement;
+
+    $("#" + viewerContainer).dxDataGrid("dispose");
+    $("#" + viewerContainer).remove();
+
+    //Create and add div with same id to add grid again
+    var browserContainerDiv = document.createElement("div")
+    browserContainerDiv.id = viewerContainer;
+    browserContainerDiv.classList.add("tempContainer");
+    parent.appendChild(browserContainerDiv);
+}

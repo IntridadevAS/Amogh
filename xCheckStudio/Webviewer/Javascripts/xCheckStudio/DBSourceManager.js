@@ -1,13 +1,11 @@
 function DBSourceManager(id,
-  sourceName, 
+  sourceName,
   sourceType,
   viewerContainer,
   modelBrowsercontainer) {
 
   this.ModelBrowsercontainer = modelBrowsercontainer;
-  this.ViewerContainer = viewerContainer;
-
-  this.ComponentIdVsData;
+  this.ViewerContainer = viewerContainer;  
 
   // call super constructor
   SourceManager.call(this, id, sourceName, sourceType);
@@ -19,9 +17,88 @@ function DBSourceManager(id,
 DBSourceManager.prototype = Object.create(SourceManager.prototype);
 DBSourceManager.prototype.constructor = DBSourceManager;
 
+// get functions
+DBSourceManager.prototype.GetCurrentTable = function () {
+  var activeTableView = model.views[this.Id].activeTableView;
+  if (activeTableView === GlobalConstants.TableView.DataBrowser) {
+    return this.GetModelBrowser;
+  }
+  else if (activeTableView === GlobalConstants.TableView.List) {
+    // return model.views[this.Id].listView;
+  }
+  else if (activeTableView === GlobalConstants.TableView.Group) {
+    return model.views[this.Id].groupView;
+  }
+
+  return null;
+}
+
 DBSourceManager.prototype.Is1DSource = function () {
   return true;
 };
+
+DBSourceManager.prototype.GetAllSourceProperties = function () {
+
+  var allProperties = [];
+  let allComponents = this.SourceProperties;
+  for (var componentId in allComponents) {
+    var component = allComponents[componentId];
+    if (component.properties.length > 0) {
+      for (var i = 0; i < component.properties.length; i++) {
+        var property = component.properties[i];
+        if (allProperties.indexOf(property.Name) === -1) {
+          allProperties.push(property.Name);
+        }
+      }
+    }
+  }
+
+  return allProperties;
+}
+
+DBSourceManager.prototype.GetAllSourcePropertiesWithValues = function () {
+  // var sourceManager = SourceManagers[this.Id];
+  var traversedProperties = [];
+
+  var allProperties = {};
+  var allvalues = {};
+  // if (sourceManager.Is3DSource()) {
+  // var allComponents = sourceManager.AllComponents;
+  var allComponents = this.SourceProperties;
+
+  for (var nodeId in allComponents) {
+    var component = allComponents[nodeId];
+    if (component.properties.length > 0) {
+      for (var i = 0; i < component.properties.length; i++) {
+        var property = component.properties[i];
+
+        if (traversedProperties.indexOf(property.Name) === -1) {
+          traversedProperties.push(property.Name);
+
+          allProperties[JSON.stringify({ "Name": property.Name })] = { "Name": property.Name };
+        }
+
+        var valueObj = {
+          "Name": property.Name,
+          "Value": property.Value
+        };
+
+        var valueObjStr = JSON.stringify(valueObj);
+
+        if (!(valueObjStr in allvalues)) {
+          allvalues[valueObjStr] = valueObj;
+        }
+      }
+    }
+  }
+  // }
+
+  traversedProperties = [];
+  return {
+    properties: allProperties,
+    values: allvalues
+  };
+}
 
 DBSourceManager.prototype.ClearSource = function () {
   this.ModelTree.Clear();
@@ -42,7 +119,7 @@ DBSourceManager.prototype.ClearSource = function () {
   // var styleRule = ""
   // styleRule = "position: relative";
   // viewerContainerDiv.setAttribute("style", styleRule);
-  parent.appendChild(viewerContainerDiv); 
+  parent.appendChild(viewerContainerDiv);
 }
 
 DBSourceManager.prototype.LoadData = function (uri, connectionInfo = null) {
@@ -61,17 +138,25 @@ DBSourceManager.prototype.LoadData = function (uri, connectionInfo = null) {
       _this.AddComponentsToDB(_this.ViewerContainer);
 
       //add model Browser Table
-      _this.ModelTree = new DBModelBrowser(_this.Id, 
-        _this.ModelBrowsercontainer, 
+      _this.ModelTree = new DBModelBrowser(_this.Id,
+        _this.ModelBrowsercontainer,
         _this.ViewerContainer,
         dbReader.DBData);
-        
-      _this.ModelTree.CreateModelBrowserTable(_this.SourceProperties);   
-      
-      // create property callout
-      _this.PropertyCallout = new PropertyCallout(_this.Id);
-      _this.PropertyCallout.Init();
-      
+
+      _this.ModelTree.CreateModelBrowser(_this.SourceProperties);
+
+      // Init Property Callout
+      _this.InitPropertyCallout();
+
+      // Init table views action menu
+      _this.InitViewActionMenu();
+
+      // Init group view
+      _this.InitGroupView(dbReader.DBData);
+
+      // init data definition menu
+      _this.InitDataDefinitionMenu();
+
       return resolve(true);
     });
   });
@@ -88,7 +173,94 @@ DBSourceManager.prototype.RestoreData = function (classWiseComponents, selectedC
     this.ViewerContainer,
     dbReader.DBData,
     selectedComponents);
-  this.ModelTree.CreateModelBrowserTable(this.SourceProperties);
+  this.ModelTree.CreateModelBrowser(this.SourceProperties);
+
+  // Init Property Callout
+  this.InitPropertyCallout();
+
+  // Init table views action menu
+  this.InitViewActionMenu();
+
+  // Init group view
+  this.InitGroupView(dbReader.DBData);
+
+  // init data definition menu
+  this.InitDataDefinitionMenu();
+}
+
+DBSourceManager.prototype.InitDataDefinitionMenu = function () {
+  model.views[this.Id].dataDefinitionMenu = new DataDefinitionMenu(this.Id);
+}
+
+DBSourceManager.prototype.InitGroupView = function (dbData) {
+  model.views[this.Id].groupView = new GroupView1D(
+    this.Id,
+    this.ModelBrowsercontainer,
+    this.SourceProperties,
+    dbData,
+    this.ViewerContainer);
+
+  this.InitGroupViewControls();
+}
+
+
+DBSourceManager.prototype.InitGroupViewControls = function () {
+  var _this = this;
+
+  var groups = ["Clear"];
+  groups = groups.concat(Object.keys(model.propertyGroups));
+  this.GroupTemplateSelect = $("#groupTemplateSelect" + this.Id).dxSelectBox({
+    items: groups,
+    value: "Clear",
+    visible: false,
+    onValueChanged: function (data) {
+      model.views[_this.Id].groupView.OnGroupTemplateChanged(data.value);
+    }
+
+  }).dxSelectBox("instance");
+
+  // group view type select box
+  let groupTypes = ["Group", "Highlight", "Data Change Highlight"];
+  this.GroupHighlightTypeSelect = $("#groupHighlightTypeSelect" + this.Id).dxSelectBox({
+    items: groupTypes,
+    visible: false,
+    value: groupTypes[0],
+    itemTemplate: function (data) {
+      return "<div class='custom-item' title='" + data + "'>" + data + "</div>";
+    },
+    onValueChanged: function (e) {
+      model.views[_this.Id].groupView.ActiveGroupViewType = e.value;
+
+      if (e.value === "Group") {
+          _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
+      }
+      else if (e.value === "Highlight") {
+          _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyHighlightTemplates)));                
+      }
+      else if (e.value === "Data Change Highlight") {
+          _this.GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.dataChangeHighlightTemplates)));
+      }
+
+      model.views[_this.Id].groupView.Clear();
+    }
+  }).dxSelectBox("instance");
+
+  // highlight selections btn
+  this.HighlightSelectionBtn = document.getElementById("highlightSelectionBtn" + this.Id);
+  this.HighlightSelectionBtn.onclick = function () {
+    model.views[_this.Id].groupView.ApplyPropertyHighlightColor();
+  }
+
+  //Group Database View Btn
+  this.GroupDatabaseViewBtn = document.getElementById("databaseViewBtn" + this.Id);
+  this.GroupDatabaseViewBtn.onclick = function () {
+    model.views[_this.Id].groupView.OnGroupDatabaseViewClick();
+  }
+}
+
+DBSourceManager.prototype.InitPropertyCallout = function () {
+  this.PropertyCallout = new PropertyCallout(this.Id);
+  this.PropertyCallout.Init();
 }
 
 DBSourceManager.prototype.AddComponentsToDB = function () {
@@ -107,11 +279,11 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
   else if (this.ViewerContainer.toLowerCase() == "visualizerd") {
     source = "SourceD"
   }
-  
+
   var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
   var checkinfo = JSON.parse(localStorage.getItem('checkinfo'));
   $.ajax({
-    data: { 
+    data: {
       'Components': JSON.stringify(this.SourceProperties),
       'Source': source,
       'DataSourceType': '1D',
@@ -121,8 +293,7 @@ DBSourceManager.prototype.AddComponentsToDB = function () {
     type: "POST",
     url: "PHP/AddComponentsToDB.php"
   }).done(function (data) {
-    var result = xCheckStudio.Util.tryJsonParse(data);
-    _this.ComponentIdVsData = result;
+    // var result = xCheckStudio.Util.tryJsonParse(data);   
   });
 
 }
@@ -134,7 +305,7 @@ DBSourceManager.prototype.OpenPropertyCallout = function (compData) {
 DBSourceManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {
   var _this = this;
 
-  var component = _this.SourceProperties[componentId - 1];
+  var component = _this.SourceProperties[componentId];
 
   // properties
   var properties = []
@@ -198,11 +369,104 @@ DBSourceManager.prototype.OpenPropertyCalloutByCompId = function (componentId) {
     }
 
     // if (properties.length > 0) {
-      _this.PropertyCallout.Update(component.Name,
-        componentId,
-        properties,
-        referencesData,
-        commentsData);
+    _this.PropertyCallout.Update(component.Name,
+      componentId,
+      properties,
+      referencesData,
+      commentsData);
     // }
   });
+}
+
+DBSourceManager.prototype.InitViewActionMenu = function () {
+  var _this = this;
+
+  document.getElementById("tableViewAction" + this.Id).onclick = function () {
+    if (this.classList.contains("openSDAMenu")) {
+      _this.CloseTableViewsMenu();
+    }
+    else {
+      _this.OpenTableViewsMenu();
+    }
+  }
+}
+
+DBSourceManager.prototype.OpenTableViewsMenu = function () {
+  var _this = this;
+
+  var mainBtn = document.getElementById("tableViewAction" + this.Id);
+  mainBtn.classList.add("openSDAMenu");
+  mainBtn.children[0].src = "public/symbols/CloseBlack.svg";
+
+  var dataBrowserSDA = document.getElementById("dataBrowserAction" + _this.Id);
+  dataBrowserSDA.classList.add("showSDA");
+  dataBrowserSDA.onclick = function () {
+    if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.DataBrowser) {
+      var selectedIds = _this.GetCurrentTable().GetSelectedIds();
+
+      _this.ModelTree.SelectionManager.SelectedComponentIds = selectedIds;
+      _this.ModelTree.CreateModelBrowser(_this.SourceProperties);
+
+      _this.CloseTableViewsMenu();
+
+      if (!isDataVault()) {
+        // hide group view controls
+        _this.ShowGroupViewControls(false);
+      }
+    }
+  }
+
+  var listViewSDA = document.getElementById("listviewAction" + _this.Id);
+  listViewSDA.classList.add("showSDA");
+  listViewSDA.onclick = function () {
+    if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
+      // var selectedIds = _this.GetCurrentTable().GetSelectedIds();
+      // if (selectedComps.constructor === Object) {
+      //     selectedComps = Object.values(selectedComps);
+      // }
+
+      // model.views[_this.Id].listView.Show(selectedComps);
+
+      _this.CloseTableViewsMenu();
+
+      if (!isDataVault()) {
+        // hide group view controls
+        _this.ShowGroupViewControls(false);
+      }
+    }
+  }
+
+  var groupsSDA = document.getElementById("groupsAction" + _this.Id);
+  if (!isDataVault()) {
+    groupsSDA.classList.add("showSDA");
+    groupsSDA.onclick = function () {
+      if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {
+        model.views[_this.Id].groupView.Show();
+
+        model.views[_this.Id].activeTableView = GlobalConstants.TableView.Group;
+
+        _this.CloseTableViewsMenu();
+
+        // show group view controls
+        _this.ShowGroupViewControls(true);
+      }
+    }
+  }
+}
+
+DBSourceManager.prototype.CloseTableViewsMenu = function () {
+  var _this = this;
+
+  var mainBtn = document.getElementById("tableViewAction" + this.Id);
+  mainBtn.classList.remove("openSDAMenu");
+  mainBtn.children[0].src = "public/symbols/Table Views.svg";
+
+  var dataBrowserSDA = document.getElementById("dataBrowserAction" + _this.Id);
+  dataBrowserSDA.classList.remove("showSDA");
+
+  var listViewSDA = document.getElementById("listviewAction" + _this.Id);
+  listViewSDA.classList.remove("showSDA");
+
+  var groupsSDA = document.getElementById("groupsAction" + _this.Id);
+  groupsSDA.classList.remove("showSDA");
 }

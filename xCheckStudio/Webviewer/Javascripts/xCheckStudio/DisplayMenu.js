@@ -138,36 +138,4 @@ function closeAnyOpenMenu() {
     if (model.views[model.currentTabId].activeMenu) {
         model.views[model.currentTabId].activeMenu.Close();
     }
-    // if (model.views[model.currentTabId].displayMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.MarkupMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.MarkupMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.MarkupMenu.ShapesMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.MarkupMenu.ShapesMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.BookmarkMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.BookmarkMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.TagsMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.TagsMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.ModelViewsMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.DisplayStylesMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.ModelViewsMenu.DisplayStylesMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.SectioningMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.ModelViewsMenu.SectioningMenu.Close();
-    // }
-    // if (model.views[model.currentTabId].displayMenu.ModelViewsMenu.MeasureMenu.Active) {
-    //     model.views[model.currentTabId].displayMenu.ModelViewsMenu.MeasureMenu.Close();
-    // }
-
-    // // 
-    // if (model.views[model.currentTabId].dataDefinitionMenu.Active) {
-    //     model.views[model.currentTabId].dataDefinitionMenu.Close();
-    // }
 }
