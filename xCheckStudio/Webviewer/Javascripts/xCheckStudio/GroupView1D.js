@@ -1517,7 +1517,7 @@ GroupView1D.prototype.LoadDataChangeView = function (template) {
     // // check if target revision is recent or not
     // let isTargetNewer = "true";
     let isTargetCurrent = false;
-    if (template["target"]["name"] === "Current") {
+    if (template["target"]["id"].toLowerCase() === "current") {
         // isTargetNewer = "true";
         isTargetCurrent = true;
     }
