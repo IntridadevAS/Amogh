@@ -518,7 +518,7 @@ function SetCheckSpaceReviewStatus() {
 function deleteCheckResultsFromDB(checkType) {
     return new Promise((resolve) => {
 
-        var functionToInvoke = undefined;
+        var functionToInvoke = null;
         if (checkType.toLowerCase() === "comparison") {
             functionToInvoke = "DeleteComparisonResults";
         }
@@ -535,7 +535,7 @@ function deleteCheckResultsFromDB(checkType) {
             functionToInvoke = "DeleteSourceDComplianceResults";
         }
 
-        if (functionToInvoke === undefined) {
+        if (functionToInvoke === null) {
             return resolve(false);
         }
         var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));

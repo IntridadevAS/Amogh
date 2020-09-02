@@ -3823,10 +3823,10 @@ function DeleteComparisonResults()
     // get project name
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
-    $dbh;
+    $dbh = null;
     try {
         // open database
-        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
@@ -3871,10 +3871,10 @@ function DeleteSourceAComplianceResults()
 {
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
-    $dbh;
+    $dbh = null;
     try {
         // open database
-        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
@@ -3916,10 +3916,10 @@ function DeleteSourceBComplianceResults()
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
-    $dbh;
+    $dbh = null;
     try {
         // open database
-        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
@@ -3961,10 +3961,10 @@ function DeleteSourceCComplianceResults()
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
-    $dbh;
+    $dbh = null;
     try {
         // open database
-        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
@@ -4006,10 +4006,10 @@ function DeleteSourceDComplianceResults()
     $projectName = $_POST['ProjectName'];
     $checkName = $_POST['CheckName'];
 
-    $dbh;
+    $dbh = null;
     try {
         // open database
-        $dbPath = getSavedCheckDatabasePath($projectName, $checkName);
+        $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
         // begin the transaction
