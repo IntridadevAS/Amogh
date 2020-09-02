@@ -2523,7 +2523,13 @@ function ReadAllComponents($tempDbh, $table)
                         $properties = $tempDbh->query("SELECT *FROM  $propertiesTableName where ownercomponent=".$id.';');                        
                         while ($property = $properties->fetch(\PDO::FETCH_ASSOC)) 
                         {
-                            $propertyArray = array('id' => $property['id'], 'name'=> $property['name'], 'format'=>$property['format'], 'value'=>$property['value']);   
+                            $propertyArray = array(
+                                'id' => $property['id'],
+                                'name' => $property['name'],
+                                'format' => $property['format'],
+                                'value' => $property['value'],
+                                'userDefined' => $property['userdefined']
+                            );   
                             
                             array_push($propertyList, $propertyArray);
                         }

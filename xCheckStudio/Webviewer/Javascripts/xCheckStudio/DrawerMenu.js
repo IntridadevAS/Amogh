@@ -221,7 +221,7 @@ let menu = {
             return;
         }
 
-        if (!model.views[model.currentTabId].displayMenu) {
+        if (!model.views[model.currentTabId].dataDefinitionMenu) {
             return;
         }
 

@@ -63,6 +63,20 @@ function loadCheckSpaceForCheck(data) {
             model.checkcaseSupportedTypes = Object.values(checkCaseData.CheckCase.SourceTypes);
         }
     }  
+    
+    // restore property groups
+    let propertyGroups = xCheckStudio.Util.tryJsonParse(data.propertyGroups);
+    model.propertyGroups = propertyGroups;
+
+    // restore highlight property templates 
+    let propertyHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.highlightPropertyTemplates);
+    model.propertyHighlightTemplates = propertyHighlightTemplates;
+
+    // restore data change highlight templates 
+    if (data.dataChangeHighlightTemplates) {
+        let dataChangeHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.dataChangeHighlightTemplates);
+        model.dataChangeHighlightTemplates = dataChangeHighlightTemplates;
+    }
 
     // load data sets 
     loadDataSets(data);
@@ -77,20 +91,6 @@ function loadCheckSpaceForCheck(data) {
                 }
             }
     }   
-
-    // restore property groups
-    let propertyGroups = xCheckStudio.Util.tryJsonParse(data.propertyGroups);
-    model.propertyGroups = propertyGroups;
-
-    // restore highlight property templates 
-    let propertyHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.highlightPropertyTemplates);
-    model.propertyHighlightTemplates = propertyHighlightTemplates;
-
-    // restore data change highlight templates 
-    if (data.dataChangeHighlightTemplates) {
-        let dataChangeHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.dataChangeHighlightTemplates);
-        model.dataChangeHighlightTemplates = dataChangeHighlightTemplates;
-    }
 
     // restore db conenction info
     if (data.dbConnectionInfo) {

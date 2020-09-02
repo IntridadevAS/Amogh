@@ -114,7 +114,8 @@ DefinePropertyHighlightsForm.prototype.Init = function () {
 DefinePropertyHighlightsForm.prototype.PopulateTemplateGrid = function () {
     var _this = this;
 
-    var allData = this.GetAllSourceProperties();
+    let sourceManager = SourceManagers[this.Id];
+    var allData = sourceManager.GetAllSourcePropertiesWithValues();
     
     var rowsData = [];
     if (_this.PropertyHighlightTemplateSelect) {
@@ -397,49 +398,49 @@ DefinePropertyHighlightsForm.prototype.OnApply = function () {
     DevExpress.ui.notify("Property highlight template '" + templateName + "' created successfully.");
 }
 
-DefinePropertyHighlightsForm.prototype.GetAllSourceProperties = function () {
-    var sourceManager = SourceManagers[this.Id];
+// DefinePropertyHighlightsForm.prototype.GetAllSourceProperties = function () {
+//     var sourceManager = SourceManagers[this.Id];
 
-    var traversedProperties = [];
+//     var traversedProperties = [];
   
-    var allProperties = {};
-    var allvalues = {};
-    if (sourceManager.Is3DSource()) {
-        var allComponents = sourceManager.AllComponents;
+//     var allProperties = {};
+//     var allvalues = {};
+//     if (sourceManager.Is3DSource()) {
+//         var allComponents = sourceManager.AllComponents;
 
-        for (var nodeId in allComponents) {
-            var component = allComponents[nodeId];
-            if (component.properties.length > 0) {
-                for (var i = 0; i < component.properties.length; i++) {
-                    var property = component.properties[i];
+//         for (var nodeId in allComponents) {
+//             var component = allComponents[nodeId];
+//             if (component.properties.length > 0) {
+//                 for (var i = 0; i < component.properties.length; i++) {
+//                     var property = component.properties[i];
 
-                    if (traversedProperties.indexOf(property.Name) === -1) {
-                        traversedProperties.push(property.Name);
+//                     if (traversedProperties.indexOf(property.Name) === -1) {
+//                         traversedProperties.push(property.Name);
 
-                        allProperties[JSON.stringify({ "Name": property.Name })] = { "Name": property.Name };
-                    }
+//                         allProperties[JSON.stringify({ "Name": property.Name })] = { "Name": property.Name };
+//                     }
 
-                    var valueObj = {
-                        "Name": property.Name,
-                        "Value": property.Value
-                    };
+//                     var valueObj = {
+//                         "Name": property.Name,
+//                         "Value": property.Value
+//                     };
                     
-                    var valueObjStr = JSON.stringify(valueObj);
+//                     var valueObjStr = JSON.stringify(valueObj);
                     
-                    if (!(valueObjStr in allvalues)) {
-                        allvalues[valueObjStr] = valueObj;
-                    }                   
-                }
-            }
-        }
-    }
+//                     if (!(valueObjStr in allvalues)) {
+//                         allvalues[valueObjStr] = valueObj;
+//                     }                   
+//                 }
+//             }
+//         }
+//     }
 
-    traversedProperties = [];
-    return {
-        properties: allProperties,           
-        values: allvalues       
-    };
-}
+//     traversedProperties = [];
+//     return {
+//         properties: allProperties,           
+//         values: allvalues       
+//     };
+// }
 
 var colorPickerEditCellTemplate = function (cellElement, cellInfo) {
     var color = cellInfo.value;

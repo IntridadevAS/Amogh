@@ -26,6 +26,33 @@ function SCModelBrowser(id,
 SCModelBrowser.prototype = Object.create(ModelBrowser.prototype);
 SCModelBrowser.prototype.constructor = SCModelBrowser;
 
+// GET FUNCTIONS
+SCModelBrowser.prototype.GetSelectedNodeIds = function () {
+    return this.SelectionManager.SelectedComponentIds;
+}
+
+SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function (selectedNodeIds) {
+    var selectedRows = [];
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+
+    for (var i = 0; i < selectedNodeIds.length; i++) {
+        var nodeId = Number(selectedNodeIds[i]);
+
+        var rowIndex = treeList.getRowIndexByKey(nodeId);
+
+        if (rowIndex !== -1) {
+            var row = treeList.getRowElement(rowIndex);
+            selectedRows.push(row[0]);
+        }
+    }
+    return selectedRows;
+}
+
+// SET FUNCTIONS
+
+
+
+// OPERATIONS
 SCModelBrowser.prototype.CreateHeaders = function () {
     var columnHeaders = [];
     for (var i = 0; i < Object.keys(ModelBrowserColumns3D).length; i++) {
@@ -103,9 +130,9 @@ SCModelBrowser.prototype.addComponentRow = function (nodeId, parentNode) {
     this.modelTreeRowData.push(tableRowContent);
 }
 
-SCModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
-    //return this.SelectionManager.SelectedCompoentExists(componentRow);
-}
+// SCModelBrowser.prototype.SelectedCompoentExists = function (componentRow) {
+//     //return this.SelectionManager.SelectedCompoentExists(componentRow);
+// }
 
 SCModelBrowser.prototype.AddComponentTable = function (components, selectedNodeIds = []) {
     if (!components) {
@@ -329,23 +356,6 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
     });
 }
 
-SCModelBrowser.prototype.GetSelectedRowsFromNodeIds = function (selectedNodeIds) {
-    var selectedRows = [];
-    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
-
-    for (var i = 0; i < selectedNodeIds.length; i++) {
-        var nodeId = Number(selectedNodeIds[i]);
-
-        var rowIndex = treeList.getRowIndexByKey(nodeId);
-
-        if (rowIndex !== -1) {
-            var row = treeList.getRowElement(rowIndex);
-            selectedRows.push(row[0]);
-        }
-    }
-    return selectedRows;
-}
-
 SCModelBrowser.prototype.HighlightHiddenRowsFromNodeIds = function (isHide, nodeIds) {
     var selectedRows = this.GetSelectedRowsFromNodeIds(nodeIds);
     this.HighlightHiddenRows(isHide, selectedRows);
@@ -463,10 +473,6 @@ SCModelBrowser.prototype.AddSelectedComponent = function (checkedComponent) {
 
 SCModelBrowser.prototype.ClearSelectedComponent = function () {
     this.SelectionManager.ClearSelectedComponent();
-}
-
-SCModelBrowser.prototype.GetSelectedNodeIds = function () {
-    return this.SelectionManager.SelectedComponentIds;
 }
 
 SCModelBrowser.prototype.OpenHighlightedRow = function (path, selectedNodeId) {

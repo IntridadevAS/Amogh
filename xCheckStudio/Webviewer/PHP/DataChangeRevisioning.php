@@ -570,10 +570,10 @@
                     $newItem = array();
                     $newItem["target"] = $component;
 
-                    $newItem["status"] = "New Item";
+                    $newItem["_status"] = "New Item";
                     if ($isTargetNewer === "false")
                     {
-                        $newItem["status"] = "Deleted Item";
+                        $newItem["_status"] = "Deleted Item";
                     }
 
                     array_push($checkResult["Undefined"], $newItem);
@@ -592,10 +592,10 @@
                     {
                         $newItem = array();
                         $newItem["target"] = $component;
-                        $newItem["status"] = "New Item";
+                        $newItem["_status"] = "New Item";
                         if ($isTargetNewer === "false")
                         {
-                            $newItem["status"] = "Deleted Item";
+                            $newItem["_status"] = "Deleted Item";
                         }
 
                         // check if list by property exists
@@ -786,7 +786,7 @@
                             }
                         }
 
-                        $newItem["status"] = $status;
+                        $newItem["_status"] = $status;
 
                         // check if list by property exists
                         $prop = GetProperty($component, $listby);
@@ -816,10 +816,10 @@
                     // new item
                     $newItem = array();
                     $newItem["target"] = $component;
-                    $newItem["status"] = "New Item";
+                    $newItem["_status"] = "New Item";
                     if ($isTargetNewer === "false")
                     {
-                        $newItem["status"] = "Deleted Item";
+                        $newItem["_status"] = "Deleted Item";
                     }
                     $prop = GetProperty($component, $listby);
                     if ($prop === null)
@@ -864,10 +864,10 @@
 
                     $item = array();
                     $item["source"] = $srcComponent;
-                    $item["status"] = "Deleted Item";
+                    $item["_status"] = "Deleted Item";
                     if ($isTargetNewer === "false")
                     {
-                        $item["status"] = "New Item";
+                        $item["_status"] = "New Item";
                     }
 
                     array_push($checkResult["Undefined"], $item);
@@ -886,10 +886,10 @@
                     {
                         $newItem = array();
                         $newItem["source"] = $srcComponent;
-                        $newItem["status"] = "Deleted Item";
+                        $newItem["_status"] = "Deleted Item";
                         if ($isTargetNewer === "false")
                         {
-                            $newItem["status"] = "New Item";
+                            $newItem["_status"] = "New Item";
                         }
 
                         // check if list by property exists
@@ -937,10 +937,10 @@
                     // new item
                     $newItem = array();
                     $newItem["source"] = $srcComponent;
-                    $newItem["status"] = "Deleted Item";
+                    $newItem["_status"] = "Deleted Item";
                     if ($isTargetNewer === "false")
                     {
-                        $newItem["status"] = "New Item";
+                        $newItem["_status"] = "New Item";
                     }
 
                     $prop = GetProperty($srcComponent, $listby);

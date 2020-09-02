@@ -7,15 +7,16 @@ function ExcelReader() {
 
     this.SheetData = {};
 
-    ExcelReader.prototype.ReadFileData = function (file) {
+    ExcelReader.prototype.ReadFileData = function (file, sourceType) {
         return new Promise((resolve) => {
             if (file) {
+
                 var reader = new FileReader();
                 var _this = this;
                 reader.onload = function (readerEvt) {
                     var data = readerEvt.target.result;
                     data = new Uint8Array(data);
-                    var sourceProperties = _this.ProcessWorkbook(XLSX.read(data, { type: 'array' }));
+                    var sourceProperties = _this.ProcessWorkbook(XLSX.read(data, { type: 'array' }), sourceType);
                     return resolve(sourceProperties);
                 };
                 reader.readAsArrayBuffer(file);
@@ -23,27 +24,30 @@ function ExcelReader() {
         });
     }
 
-    ExcelReader.prototype.ProcessWorkbook = function (workbook) {
+    ExcelReader.prototype.ProcessWorkbook = function (workbook, sourceType) {
         var _this = this;
-        //this.global_wb = wb;
+
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
+        if (identifierProperties === null) {
+            return {};
+        }
+
         var wb = workbook;
         var sourceProperties = {};
         workbook.SheetNames.forEach(function (sheetName) {
-            var properties = _this.ReadSheetData(sheetName, wb.Sheets[sheetName]);
-            if(properties.length > 0)
-            {
-                for(var i = 0; i < properties.length; i++)
-                {
+            var properties = _this.ReadSheetData(sheetName, wb.Sheets[sheetName], identifierProperties);          
+            if (properties.length > 0) {
+                for (var i = 0; i < properties.length; i++) {
                     properties[i]["ID"] = Object.keys(sourceProperties).length + 1;
-                    sourceProperties[Object.keys(sourceProperties).length + 1] = properties[i];                   
-                }                
+                    sourceProperties[Object.keys(sourceProperties).length + 1] = properties[i];
+                }
             }
         });
 
         return sourceProperties;
     }
 
-    ExcelReader.prototype.ReadSheetData = function (sheetName, sheetData) {
+    ExcelReader.prototype.ReadSheetData = function (sheetName, sheetData, identifierProperties) {
         // if (this.containerId === "modelTree1") {         
         var formattedExcelData = this.GetSheetData(sheetData);
         //}
@@ -51,45 +55,71 @@ function ExcelReader() {
         //     formattedExcelData = this.getSheetData(sheetName);
         // }
         var sourceProperties = [];
-        var sourcePropertiesTemp = {};
+        // var sourcePropertiesTemp = {};      
         for (var i = 0; i < formattedExcelData.length; i++) {
             var row = formattedExcelData[i];
-            var name;
-            if (row.Name !== undefined) {
-                name = row.Name;
-            }
-            else if (row.Tagnumber !== undefined) {
-                name = row.Tagnumber;
-            }
+            // var name;
+            // if (property.name.toLowerCase() === identifierProperties.name.toLowerCase()) {
+            //     name = property.value;
+            // }
+            // if (row.Name !== undefined) {
+            //     name = row.Name;
+            // }
+            // else if (row.Tagnumber !== undefined) {
+            //     name = row.Tagnumber;
+            // }
 
-            if (name === undefined) {
+            // if (name === undefined) {
+            //     continue;
+            // }
+            if (!identifierProperties.name in row) {
+                continue;
+            }
+            let name = row[identifierProperties.name];
+            if (!name) {
                 continue;
             }
 
-            var mainComponentClass = sheetName;
-            var subComponentClass;
-            if (row["Component Class"]) {
-                subComponentClass = row["Component Class"];
-            }
-            else if (row["Component class"]) {
-                subComponentClass = row["Component class"];
-            }
-            else if (row.Class) {
-                subComponentClass = row.Class;
+            // add main component class property to row item
+            row[identifierProperties.mainCategory] = sheetName;
+
+            let mainComponentClass = null;
+            if (identifierProperties.mainCategory in row) {
+                mainComponentClass = row[identifierProperties.mainCategory];
             }
 
-            if (subComponentClass === undefined) {
-                continue;
+            let subComponentClass = null;
+            if (identifierProperties.subClass in row) {
+                subComponentClass = row[identifierProperties.subClass];
             }
+
+            // var mainComponentClass = sheetName;
+            // var subComponentClass;          
+
+
+            // if (row["Component Class"]) {
+            //     subComponentClass = row["Component Class"];
+            // }
+            // else if (row["Component class"]) {
+            //     subComponentClass = row["Component class"];
+            // }
+            // else if (row.Class) {
+            //     subComponentClass = row.Class;
+            // }
+
+            // if (subComponentClass === undefined) {
+            //     continue;
+            // }
 
             // create generic properties object
-            var genericPropertiesObject = new GenericComponent(name,
+            var compObject = new GenericComponent(
+                name,
                 mainComponentClass,
                 subComponentClass);
 
-            // add component class as generic property
-            var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
-            genericPropertiesObject.addProperty(componentClassPropertyObject);
+            // // add component class as generic property
+            // var componentClassPropertyObject = new GenericProperty("ComponentClass", "String", subComponentClass);
+            // genericPropertiesObject.addProperty(componentClassPropertyObject);
 
             // iterate node properties and add to generic properties object
             for (var key in row) {
@@ -98,27 +128,34 @@ function ExcelReader() {
                     value = "";
                 }
                 var genericPropertyObject = new GenericProperty(key, "String", value);
-                genericPropertiesObject.addProperty(genericPropertyObject);
+                compObject.addProperty(genericPropertyObject);
             }
 
             // add genericProperties object to sourceproperties collection
-            if (subComponentClass in sourcePropertiesTemp) {
-                sourcePropertiesTemp[subComponentClass].push(genericPropertiesObject);
-            }
-            else {
-                sourcePropertiesTemp[subComponentClass] = [genericPropertiesObject];
-            }
+            if (mainComponentClass &&
+                mainComponentClass !== "" &&
+                subComponentClass &&
+                subComponentClass !== "") {
+                if (!(mainComponentClass in this.SheetData)) {
+                    this.SheetData[mainComponentClass] = {};
+                }
 
-            sourceProperties.push(genericPropertiesObject)
+                if (!(subComponentClass in this.SheetData[mainComponentClass])) {
+                    this.SheetData[mainComponentClass][subComponentClass] = [];
+                }
+
+                this.SheetData[mainComponentClass][subComponentClass].push(compObject);
+                sourceProperties.push(compObject);
+            }
         }
-        if (Object.entries(sourcePropertiesTemp).length > 0 && sourcePropertiesTemp.constructor === Object) {
-            this.SheetData[sheetName] = sourcePropertiesTemp;
-        }
+        // if (Object.entries(sourcePropertiesTemp).length > 0 && sourcePropertiesTemp.constructor === Object) {
+        //     this.SheetData[sheetName] = sourcePropertiesTemp;
+        // }
 
         return sourceProperties;
     }
 
-    ExcelReader.prototype.GetSheetData = function (sheetData) {   
+    ExcelReader.prototype.GetSheetData = function (sheetData) {
         var data = XLSX.utils.sheet_to_json(sheetData, { header: 1 });
         return this.FormatData(data);
     }
@@ -151,52 +188,73 @@ function ExcelReader() {
 
     }
 
-    ExcelReader.prototype.RestoreSheetData = function (classWiseComponents) {
+    ExcelReader.prototype.RestoreSheetData = function (classWiseComponents, sourceType) {
+        var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceType);
+        if (identifierProperties === null) {
+            return {};
+        }
 
         var sourceProperties = {};
         for (var mainClass in classWiseComponents) {
-            var sourcePropertiesTemp = {};
 
             var components = classWiseComponents[mainClass];
 
             for (var compId in components) {
                 var component = components[compId];
 
-                var genericPropertiesObject = new GenericComponent();
-                genericPropertiesObject.ID = compId;
+                var componentObject = new GenericComponent();
+                componentObject.ID = compId;
 
+                let name = null;
+                let mainComponentClass = mainClass;
+                let subClass = null;
                 for (var propId in component) {
                     var property = component[propId];
-
-                    var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
-                    genericPropertiesObject.addProperty(genericPropertyObject);
-
-                    if ((property.name === "Name") ||
-                        (genericPropertiesObject.Name === undefined &&
-                            property.name === "Tagnumber")) {
-                        genericPropertiesObject.Name = property.value;
+                    
+                    let userDefined = false;
+                    if (property.userDefined === "1") {
+                        userDefined = true;
                     }
-                    else if (property.name === "ComponentClass") {
-                        genericPropertiesObject.MainComponentClass = property.value;
+                    var genericPropertyObject = new GenericProperty(
+                        property.name,
+                        "String",
+                        property.value,
+                        userDefined
+                    );
+                    componentObject.addProperty(genericPropertyObject);
+
+                    if (property.name === identifierProperties.name) {
+                        name = property.value;
                     }
-                    else if (property.name.toLowerCase() === "component class" ||
-                        property.name.toLowerCase() === "class") {
-                        genericPropertiesObject.SubComponentClass = property.value;
+                    // else if (property.name === identifierProperties.mainCategory) {
+                    //     mainComponentClass = null;
+                    // }
+                    else if (property.name === identifierProperties.subClass) {
+                        subClass = property.value;
                     }
                 }
+                componentObject.Name = name;
+                componentObject.MainComponentClass = mainComponentClass;
+                componentObject.SubComponentClass = subClass;
 
-                // add genericProperties object to sourceproperties collection
-                if (genericPropertiesObject.SubComponentClass in sourcePropertiesTemp) {
-                    sourcePropertiesTemp[genericPropertiesObject.SubComponentClass].push(genericPropertiesObject);
-                }
-                else {
-                    sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
-                }
+                if (mainComponentClass &&
+                    mainComponentClass !== "" &&
+                    subClass &&
+                    subClass !== "") {
 
-                sourceProperties[genericPropertiesObject.ID] = genericPropertiesObject;
+                    if (!(mainComponentClass in this.SheetData)) {
+                        this.SheetData[mainComponentClass] = {};
+                    }
+
+                    if (!(subClass in this.SheetData[mainComponentClass])) {
+                        this.SheetData[mainComponentClass][subClass] = [];
+                    }
+
+                    this.SheetData[mainComponentClass][subClass].push(componentObject);
+
+                    sourceProperties[componentObject.ID] = componentObject;
+                }
             }
-
-            this.SheetData[mainClass] = sourcePropertiesTemp;
         }
 
         return sourceProperties;

@@ -22,7 +22,7 @@
         ],
         "name": "Name",
         "category": "MainComponentClass",
-        "componentClass": "ComponentClass"
+        "componentClass": "Class"
     },
     "mysql": {
         "extensions": [

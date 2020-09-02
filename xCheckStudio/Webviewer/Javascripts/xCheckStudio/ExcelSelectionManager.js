@@ -1,8 +1,8 @@
-function ExcelSelectionManager(componentIdvsSelectedComponents) {
+function ExcelSelectionManager(selectedComponentIds) {
      // call super constructor
      SelectionManager.call(this);
 
-     this.ComponentIdvsSelectedComponents = componentIdvsSelectedComponents;
+     this.SelectedComponentIds = selectedComponentIds? Object.keys(selectedComponentIds) : [];
      this.SelectedCompoents = [];
 
      this.SelectedSheetRow;
@@ -160,7 +160,8 @@ ExcelSelectionManager.prototype.HighlightBrowserRow = function (row, key, contai
 /* 
   This function 
 */
-ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
+ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (
+     thisRow,
      modelBrowserContainer,
      viewerContainer) {
 
@@ -168,8 +169,8 @@ ExcelSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           return;
      }
 
-    var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
-    var sheetData = dataGrid.getDataSource().items();  
+     var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
+     var sheetData = dataGrid.getDataSource().items();
 
      // get identifier column names
      var identifierColumns = {};
@@ -267,25 +268,17 @@ ExcelSelectionManager.prototype.HighlightSheetRow = function (row) {
 }
 
 ExcelSelectionManager.prototype.GetSelectedComponentIds = function () {
-     if (!(model.currentTabId in SourceManagers)) {
-          return;
-     }
-     var sourceManager = SourceManagers[model.currentTabId];
+     // if (!(model.currentTabId in SourceManagers)) {
+     //      return;
+     // }
+     // var sourceManager = SourceManagers[model.currentTabId];
      var selectedCompoents = this.GetSelectedComponents();
 
      var componentIds = [];
-     for (id in sourceManager.ComponentIdVsData) {
-          var compData = sourceManager.ComponentIdVsData[id];
-
-          for (var i = 0; i < selectedCompoents.length; i++) {
-               var selectedComponent = selectedCompoents[i];
-               if (selectedComponent.Name === compData.name &&
-                    selectedComponent.MainComponentClass === compData.mainClass &&
-                    selectedComponent.ComponentClass === compData.subClass) {
-                    componentIds.push(id);
-               }
-          }
-     }
-
+     for (var i = 0; i < selectedCompoents.length; i++) {
+          var selectedComponent = selectedCompoents[i];
+          componentIds.push(Number(selectedComponent["ComponentId"]));
+     }   
+    
      return componentIds;
 }

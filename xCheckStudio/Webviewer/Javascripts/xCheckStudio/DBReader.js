@@ -94,7 +94,7 @@ function DBReader() {
             return [];
         }
 
-        var sourceProperties = [];
+        var sourceProperties = {};
         for (var mainClass in classWiseComponents) {
             var sourcePropertiesTemp = {};
     
@@ -109,8 +109,16 @@ function DBReader() {
                 // iterate over properties
                 for (var propId in component) {
                     var property = component[propId];
-
-                    var genericPropertyObject = new GenericProperty(property.name, "String", property.value);
+                    
+                    let userDefined = false;
+                    if (property.userDefined === "1") {
+                        userDefined = true;
+                    }
+                    var genericPropertyObject = new GenericProperty(
+                        property.name,
+                        "String",
+                        property.value,
+                        userDefined);
                     genericPropertiesObject.addProperty(genericPropertyObject);
 
                     if (property.name.toLowerCase() === identifierProperties.name.toLowerCase()) {
@@ -132,15 +140,13 @@ function DBReader() {
                     sourcePropertiesTemp[genericPropertiesObject.SubComponentClass] = [genericPropertiesObject];
                 }
     
-                sourceProperties.push(genericPropertiesObject)
+                sourceProperties[compId] = genericPropertiesObject;
             }
     
             this.DBData[mainClass] = sourcePropertiesTemp;
         }
     
-        return sourceProperties;
-        // //add model Browser Table
-        // this.dbmodelbrowser.createModelBrowserTable(this.sourceDataSheet, containerId);
+        return sourceProperties;        
     }
 
     DBReader.prototype.ProcessDBData = function (dbData, serverType) {
@@ -156,7 +162,7 @@ function DBReader() {
             return [];
         }
 
-        var sourceProperties = [];
+        var sourceProperties = {};
         var componentId = 1;
         for (var i = 0; i < dbData.length; i++) {
 
@@ -194,8 +200,7 @@ function DBReader() {
                     subComponentClass,
                     undefined,
                     undefined,
-                    componentId);
-                componentId++;
+                    componentId);               
 
                 // iterate node properties and add to generic properties object
                 for (var key in row) {
@@ -222,8 +227,10 @@ function DBReader() {
                     }
                     this.DBData[mainComponentClass][subComponentClass].push(componentObject);
 
-                    sourceProperties.push(componentObject)
+                    sourceProperties[componentId] = componentObject;
                 }
+
+                componentId++;
             }
         }
 
