@@ -520,48 +520,67 @@ let viewTabs = {
   },
 
   enterCompliance: function () {
-    if (!compliances) {
+    if (!compliances ||
+      !model.selectedCompliance) {
       return;
     }
-    
+
     // clear earlier data
-    clearData();   
+    clearData();
 
-    for (var i = 0; i < compliances.length; i++) {
-      var compliance = compliances[i];
-      if (compliance.source === model.selectedCompliance.fileName) {
-
-        // populate check results
-        populateCheckResults(undefined,
-          compliance,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          model.selectedCompliance.id);
-
-        break;
-      }
+    // get src index
+    let srcId = model.selectedCompliance.id;
+    let index = srcId === "a" ? 0 : (srcId === "b" ? 1 : (srcId === "c" ? 2 : (srcId === "d" ? 3 : null)));
+    if (index === null) {
+      return;
     }
+
+    // for (var i = 0; i < compliances.length; i++) {
+    var compliance = compliances[index];
+    if (compliance.source === model.selectedCompliance.fileName) {
+
+      // populate check results
+      populateCheckResults(undefined,
+        compliance,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        model.selectedCompliance.id);
+
+      // break;
+    }
+    // }
 
     // close select files UI
     viewTabs.closeSelectFiles();
   },
 
   enterComplianceBrowser: function () {
+    if (!model.selectedCompliance) {
+      return;
+    }
+
     // clear earlier data
     clearData();
 
-    for (var i = 0; i < compliances.length; i++) {
-      var compliance = compliances[i];
-      if (compliance.source === model.selectedCompliance.fileName) {
-
-        // populate check results
-        populateComplianceModelBrowser(compliance);
-
-        break;
-      }
+    // get src index
+    let srcId = model.selectedCompliance.id;
+    let index = srcId === "a" ? 0 : (srcId === "b" ? 1 : (srcId === "c" ? 2 : (srcId === "d" ? 3 : null)));
+    if (index === null) {
+      return;
     }
+
+    // for (var i = 0; i < compliances.length; i++) {
+    var compliance = compliances[index];
+    if (compliance.source === model.selectedCompliance.fileName) {
+
+      // populate check results
+      populateComplianceModelBrowser(compliance);
+
+      // break;
+    }
+    // }
 
     // close select files UI
     viewTabs.closeSelectFiles();

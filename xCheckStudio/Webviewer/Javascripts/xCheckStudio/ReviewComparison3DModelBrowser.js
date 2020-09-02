@@ -24,7 +24,7 @@ ReviewComparison3DModelBrowser.prototype.Is3D = function () {
 }
 
 ReviewComparison3DModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '') + "_" + Comparison.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + this.Id + "_" + Comparison.MainReviewContainer;
 }
 
 ReviewComparison3DModelBrowser.prototype.GetSelectionManager = function () {
@@ -44,7 +44,7 @@ ReviewComparison3DModelBrowser.prototype.AddModelBrowser = function (comparisonC
 
 
     for (var key in comparisonComponents) {
-        this.CreateBrowserData(comparisonComponents[key], 0)
+        this.CreateBrowserData(comparisonComponents[key], -4)
     }
 
     this.LoadTable(headers);
@@ -154,6 +154,7 @@ ReviewComparison3DModelBrowser.prototype.LoadTable = function (headers) {
         dataSource: _this.ModelTreeData,
         keyExpr: Comparison3DBrowserNames.NodeId,
         parentIdExpr: Comparison3DBrowserNames.Parent,
+        rootValue: -4,
         columns: headers,
         columnAutoWidth: true,
         columnResizingMode: 'widget',

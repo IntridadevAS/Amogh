@@ -1884,9 +1884,9 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
         $component["SubClass"] = $compRow['subclass'];
 
         // read an additional info
-        $stmt = $dbh->query("SELECT * FROM  ComparisonCheckComponents where ".$nodeIdAttribute." =$nodeId");
-        $comparisonComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);            
-        if(!$comparisonComponentRow)
+        $stmt = $dbh->query("SELECT * FROM  ComparisonCheckComponents where " . $nodeIdAttribute . " =$nodeId");
+        $comparisonComponentRow = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$comparisonComponentRow)
         {
             $component["Id"] =  NULL;
             $component["GroupId"]  = NULL;
@@ -1904,35 +1904,40 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
         }
 
         // traverse child if any
-        $childrenStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where parentid =$nodeId"); 
-        while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC)) 
-        {               
-            $childComponent = traverseRecursivelyFor3DComparison($dbh, $childRow['nodeid'], $traversedNodes, $source);
-
-            if($childComponent !== NULL)
+        $childrenStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where parentid =$nodeId");
+        if ($childrenStmt)
+        {
+            while ($childRow = $childrenStmt->fetch(\PDO::FETCH_ASSOC))
             {
-                array_push($component["Children"], $childComponent);
+                $childComponent = traverseRecursivelyFor3DComparison($dbh, $childRow['nodeid'], $traversedNodes, $source);
+
+                if ($childComponent !== NULL)
+                {
+                    array_push($component["Children"], $childComponent);
+                }
             }
-        }          
+        }
 
         // traverse parent, if any
         $parentComponent = NULL;
         $parentNode = $compRow['parentid'];
-        $parentStmt = $dbh->query("SELECT * FROM  ".$componentsTable." where nodeid =".$parentNode);
-
-        while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC)) 
-        {    
-            $parentComponent = traverseRecursivelyFor3DComparison($dbh, $parentRow['nodeid'], $traversedNodes, $source);
-
-            if($parentComponent !== NULL)
+        $parentStmt = $dbh->query("SELECT * FROM  " . $componentsTable . " where nodeid =" . $parentNode);
+        if ($parentStmt)
+        {
+            while ($parentRow = $parentStmt->fetch(\PDO::FETCH_ASSOC))
             {
-                array_push($parentComponent["Children"], $component);
-            }
+                $parentComponent = traverseRecursivelyFor3DComparison($dbh, $parentRow['nodeid'], $traversedNodes, $source);
 
-            break;
+                if ($parentComponent !== NULL)
+                {
+                    array_push($parentComponent["Children"], $component);
+                }
+
+                break;
+            }
         }
 
-        if($parentComponent != NULL)
+        if ($parentComponent != NULL)
         {
             return $parentComponent;
         }

@@ -213,9 +213,9 @@ ModelBrowser3DViewer.prototype.ChangeComponentColor = function (component, overr
         var child = children[id];
 
         // take care of don't color components
-        if (child.SubClass.toLowerCase() in DontColorComponents) {
+        if (child.SubClass && child.SubClass.toLowerCase() in DontColorComponents) {
             var dontColorComponent = DontColorComponents[child.SubClass.toLowerCase()];
-            if (child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
+            if (child.MainClass && child.MainClass.toLowerCase() === dontColorComponent["mainClass"] &&
                 component.MainClass.toLowerCase() === dontColorComponent["parentMainClass"]) {
                 continue;
             }
@@ -223,7 +223,7 @@ ModelBrowser3DViewer.prototype.ChangeComponentColor = function (component, overr
 
         // take care of color overriding from status components
         var overrideColorWithSeverityPreference = false;
-        if (component.MainClass.toLowerCase() in OverrideSeverityColorComponents) {
+        if (component.MainClass && component.MainClass.toLowerCase() in OverrideSeverityColorComponents) {
             var overrideSeverityColorComponent = OverrideSeverityColorComponents[component.MainClass.toLowerCase()];
             if (overrideSeverityColorComponent.includes(child.MainClass.toLowerCase())) {
                 overrideColorWithSeverityPreference = true;

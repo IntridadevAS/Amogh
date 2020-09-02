@@ -603,7 +603,7 @@ function populateComparisonModelBrowser(comparison) {
 
             for (var i = 0; i < comparison.sources.length; i++) {
 
-                if (checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
+                if (i === 0 && checkResults.sourceInfo.sourceAFileName === comparison.sources[i]) {
                     var source = checkResults.sourceInfo.sourceAFileName;                    
 
                     if (viewerOptions['a']['endPointUri'] !== undefined) {
@@ -693,7 +693,7 @@ function populateComparisonModelBrowser(comparison) {
                         });
                     }
                 }
-                else if (checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
+                else if (i === 1 && checkResults.sourceInfo.sourceBFileName === comparison.sources[i]) {
                     var source = checkResults.sourceInfo.sourceBFileName;
 
                     if (viewerOptions['b']['endPointUri'] !== undefined) {
@@ -780,7 +780,7 @@ function populateComparisonModelBrowser(comparison) {
                         });
                     }
                 }
-                else if (checkResults.sourceInfo.sourceCFileName === comparison.sources[i]) {
+                else if (i === 2 && checkResults.sourceInfo.sourceCFileName === comparison.sources[i]) {
                     var source = checkResults.sourceInfo.sourceCFileName;
 
                     if (viewerOptions['c']['endPointUri'] !== undefined) {
@@ -867,7 +867,7 @@ function populateComparisonModelBrowser(comparison) {
                         });
                     }
                 }
-                else if (checkResults.sourceInfo.sourceDFileName === comparison.sources[i]) {
+                else if (i === 3 && checkResults.sourceInfo.sourceDFileName === comparison.sources[i]) {
                     var source = checkResults.sourceInfo.sourceDFileName;
 
                     if (viewerOptions['d']['endPointUri'] !== undefined) {
@@ -974,14 +974,14 @@ function populateComplianceModelBrowser(compliance) {
         success: function (msg) {
             var viewerOptions = xCheckStudio.Util.tryJsonParse(msg);
 
-            for (var srcId in viewerOptions) {
-                var viewerOption = viewerOptions[srcId];
+            if (model.selectedCompliance.id in viewerOptions) {
+                var viewerOption = viewerOptions[model.selectedCompliance.id];
                 if (viewerOption.source !== compliance.source) {
-                    continue;
+                    return;
                 }
 
                 // create accordion
-                createModelBrowserAccordion([compliance.source], Compliance.MainReviewContainer);
+                createModelBrowserAccordion([compliance.source], Compliance.MainReviewContainer, model.selectedCompliance.id);
               
                 if (viewerOption['endPointUri'] !== undefined) {
                     let projectInfo = xCheckStudio.Util.getProjectInfo();
@@ -989,16 +989,16 @@ function populateComplianceModelBrowser(compliance) {
                     let checkspacePath = "../Projects/" + projectInfo.projectname + "/CheckSpaces/" + checkspaceInfo.checkname;
 
                     let pathToDataset = checkspacePath;
-                    if (srcId === "a") {
+                    if (model.selectedCompliance.id === "a") {
                         pathToDataset  += "/SourceA/";
                     }
-                    else if (srcId === "b") {
+                    else if (model.selectedCompliance.id === "b") {
                         pathToDataset  += "/SourceB/";
                     }
-                    else if (srcId === "c") {
+                    else if (model.selectedCompliance.id === "c") {
                         pathToDataset  += "/SourceC/";
                     }
-                    else if (srcId === "d") {
+                    else if (model.selectedCompliance.id === "d") {
                         pathToDataset  += "/SourceD/";
                     }
                     else {
@@ -1010,11 +1010,11 @@ function populateComplianceModelBrowser(compliance) {
                     if (xCheckStudio.Util.isSource3D(xCheckStudio.Util.getFileExtension(viewerOption["source"]))) {
 
                         // model browser
-                        var modelBrowser = new ReviewCompliance3DModelBrowser(srcId, compliance.source, compliance);
+                        var modelBrowser = new ReviewCompliance3DModelBrowser(model.selectedCompliance.id, compliance.source, compliance);
                         modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
                         // viewer                        
-                        var viewerInterface = new ModelBrowser3DViewer(srcId, compliance.source, options);
+                        var viewerInterface = new ModelBrowser3DViewer(model.selectedCompliance.id, compliance.source, options);
                         viewerInterface.setupViewer(550, 280);
 
                         // selection manager
@@ -1030,11 +1030,11 @@ function populateComplianceModelBrowser(compliance) {
                     }
                     else if (xCheckStudio.Util.isSourceVisio(xCheckStudio.Util.getFileExtension(viewerOption["source"]))) {
                         // model browser
-                        var modelBrowser = new ReviewComplianceVisioModelBrowser(srcId, compliance.source, compliance);
+                        var modelBrowser = new ReviewComplianceVisioModelBrowser(model.selectedCompliance.id, compliance.source, compliance);
                         modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
                          // viewer                        
-                         var viewerInterface = new ModelBrowserVisioViewer(srcId, compliance.source, options);
+                         var viewerInterface = new ModelBrowserVisioViewer(model.selectedCompliance.id, compliance.source, options);
                          viewerInterface.setupViewer(true);
  
                          // selection manager
@@ -1052,16 +1052,16 @@ function populateComplianceModelBrowser(compliance) {
                 else {
 
                     var source;
-                    if (srcId === "a") {
+                    if (model.selectedCompliance.id === "a") {
                         source = "SourceA";
                     }
-                    else if (srcId === "b") {
+                    else if (model.selectedCompliance.id === "b") {
                         source = "SourceB";
                     }
-                    else if (srcId === "c") {
+                    else if (model.selectedCompliance.id === "c") {
                         source = "SourceC";
                     }
-                    else if (srcId === "d") {
+                    else if (model.selectedCompliance.id === "d") {
                         source = "SourceD";
                     }
                     else {
@@ -1083,11 +1083,11 @@ function populateComplianceModelBrowser(compliance) {
                                 var classWiseComponents = xCheckStudio.Util.tryJsonParse(msg);
 
                                 // model browser
-                                var modelBrowser = new ReviewCompliance1DModelBrowser(srcId, compliance.source, compliance);
+                                var modelBrowser = new ReviewCompliance1DModelBrowser(model.selectedCompliance.id, compliance.source, compliance);
                                 modelBrowser.AddModelBrowser(compliance.ComponentsHierarchy);
 
                                 // // viewer
-                                var viewerInterface = new ModelBrowser1DViewer(srcId, compliance.source, classWiseComponents, Compliance.ViewerContainer);
+                                var viewerInterface = new ModelBrowser1DViewer(model.selectedCompliance.id, compliance.source, classWiseComponents, Compliance.ViewerContainer);
 
                                 // selection manager
                                 var selectionManager = new ReviewModelBrowserSelectionManager();
@@ -1102,9 +1102,8 @@ function populateComplianceModelBrowser(compliance) {
                             }
                         }
                     });
-                }
+                }               
             }
-
         }
     });
 }
@@ -1135,16 +1134,22 @@ function enableViewers(sources) {
     }
 }
 
-function createModelBrowserAccordion(sources, container) {
+function createModelBrowserAccordion(
+    sources,
+    container,
+    sourceId = null
+) {
     var parentTable = document.getElementById(container);
 
-    var data = createAccordionData(sources);   
+    var data = createAccordionData(sources, sourceId);
     for (var i = 0; i < data.length; i++) {
+      
         var div = document.createElement("DIV");
-        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")        
-        div.id = data[i]["template"].replace(/\W/g, '');        
-        var datagridDiv = document.createElement("DIV");       
-        datagridDiv.id = data[i]["template"].replace(/\W/g, '') + "_" + container;      
+        div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }")
+        div.id = data[i]["template"];
+        var datagridDiv = document.createElement("DIV");
+
+        datagridDiv.id = data[i]["template"].replace(/\W/g, '') + "_" + container;
         div.append(datagridDiv);
         parentTable.append(div);
     }
@@ -1163,14 +1168,23 @@ function createModelBrowserAccordion(sources, container) {
     });
 }
 
-function createAccordionData(sources) {
+function createAccordionData(sources, sourceId) {
 
+    let generateSrcId = true;
+    if (sourceId) {
+        generateSrcId = false;
+    }
     var data = [];
     for (var i = 0; i < sources.length; i++) {
         var source = sources[i];
 
+        // get source id
+        if (generateSrcId === true) {
+            sourceId = i === 0 ? "a" : (i === 1 ? "b" : (i === 2 ? "c" : (i === 3 ? "d" : null)));
+        }
+
         var dataObject = {};
-        dataObject["template"] = source.replace(/\W/g, '');
+        dataObject["template"] = source.replace(/\W/g, '') + "_" + sourceId;
         dataObject["title"] = source;
 
         data.push(dataObject);

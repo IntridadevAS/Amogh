@@ -407,6 +407,8 @@ tr {
   border: var(--xCheckMedGrey) solid var(--borderWidth);
   border-radius: var(--borderRadiusVal);
   z-index: 4;
+  word-wrap: break-word;
+  overflow: auto;
 }
 
 .enterBtn{

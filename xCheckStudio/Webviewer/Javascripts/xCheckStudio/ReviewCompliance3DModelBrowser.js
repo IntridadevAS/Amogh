@@ -25,7 +25,7 @@ ReviewCompliance3DModelBrowser.prototype.Is3D = function () {
 }
 
 ReviewCompliance3DModelBrowser.prototype.GetTableDivId = function () {
-    return this.SourceFileName.replace(/\W/g, '') + "_" + Compliance.MainReviewContainer;
+    return this.SourceFileName.replace(/\W/g, '') + "_" + this.Id + "_" + Compliance.MainReviewContainer;
 }
 
 ReviewCompliance3DModelBrowser.prototype.GetSelectionManager = function () {
@@ -45,7 +45,7 @@ ReviewCompliance3DModelBrowser.prototype.AddModelBrowser = function (complianceC
 
 
     for (var key in complianceComponents) {
-        this.CreateBrowserData(complianceComponents[key], 0)
+        this.CreateBrowserData(complianceComponents[key], -4)
     }
 
     this.LoadTable(headers);
@@ -60,7 +60,6 @@ ReviewCompliance3DModelBrowser.prototype.CreateHeaders = function () {
         var dataField;
         var width;
         var visible = true
-
 
         if (i === Compliance3DBrowserColumns.Component) {
             caption = Compliance3DBrowserNames.Component;
@@ -153,6 +152,7 @@ ReviewCompliance3DModelBrowser.prototype.LoadTable = function (headers) {
         dataSource: _this.ModelTreeData,
         keyExpr: Compliance3DBrowserNames.NodeId,
         parentIdExpr: Compliance3DBrowserNames.Parent,
+        rootValue: -4,
         columns: headers,
         columnAutoWidth: true,
         columnResizingMode: 'widget',
