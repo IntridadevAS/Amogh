@@ -60,6 +60,10 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
         //     // e.event.stopPropagation();
         // },
         onItemContextMenu: function (e) {
+            if (e.event.target.localName.toLowerCase() !== "h1") {
+                return;
+            }
+
             var containerDiv = "#" + _this.getTableId(e.itemData["template"]);
             if (!(containerDiv in _this.ContextMenus) && !e.itemData["template"].toLowerCase().includes("undefined")) {
                 var reviewComparisonContextMenuManager = new ReviewComparisonContextMenuManager(model.getCurrentReviewManager());

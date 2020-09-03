@@ -26,6 +26,11 @@ ReviewComplianceContextMenuManager.prototype.InitComponentLevelContextMenu = fun
         selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
+            if (selectedRow[0].classList.contains("dx-datagrid-filter-row") ||
+                selectedRow[0].classList.contains("dx-header-row")) {
+                return false;
+            }
+
             var accept = true;
             accept = _this.ChooseActionForComplianceComponent(selectedRow[0]);
             var conditionalName = (accept) ? 'Accept' : 'Unaccept';

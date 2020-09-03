@@ -25,6 +25,10 @@ ReviewComparisonContextMenuManager.prototype.InitComponentLevelContextMenu = fun
         selector: 'tr',
         build: function ($triggerElement, e) {
             var selectedRow = $triggerElement;
+            if (selectedRow[0].classList.contains("dx-datagrid-filter-row") ||
+                selectedRow[0].classList.contains("dx-header-row")) {
+                return false;
+            }
 
             let transposed = _this.AreSelectedComponentsTransposed();
             let accepted = _this.AreSelecteComponentsAccepted();
