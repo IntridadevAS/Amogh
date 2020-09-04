@@ -1,0 +1,173 @@
+<CheckCase name="Mssql_2_Mssql" sourceA="MSSQL" sourceB="MSSQL">
+
+	<Check type="Comparison" sourceAType="MSSQL" sourceBType="MSSQL">
+	   <ComponentGroup sourceAGroupName="DeviceCatalog" sourceBGroupName="DeviceCatalog">
+	   
+		   <ComponentClass sourceAComponentClass="IS Barrier" sourceBComponentClass="IS Barrier">
+				<Matchwith sourceAPropertyname="DeviceCatID"  sourceBPropertyname ="DeviceCatID"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+			   
+		   <ComponentClass sourceAComponentClass="RELAY" sourceBComponentClass="RELAY">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+			   
+		   <ComponentClass sourceAComponentClass="I/O Module" sourceBComponentClass="I/O Module">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+			   
+		   <ComponentClass sourceAComponentClass="Field Bus Block" sourceBComponentClass="Field Bus Block">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+			   
+		   <ComponentClass sourceAComponentClass="Protective Device" sourceBComponentClass="Protective Device">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+		</ComponentGroup>
+
+	   <ComponentGroup sourceAGroupName="NO Push Button" sourceBGroupName="NO Push Button">
+	   
+		   <ComponentClass sourceAComponentClass="NO Push Button" sourceBComponentClass="NO Push Button">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+		</ComponentGroup>	   
+
+	   <ComponentGroup sourceAGroupName="NC Push Button" sourceBGroupName="NC Push Button">
+	   
+		   <ComponentClass sourceAComponentClass="NC Push Button" sourceBComponentClass="NC Push Button">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+		</ComponentGroup>
+
+	   <ComponentGroup sourceAGroupName="Motor Contactor" sourceBGroupName="Motor Contactor">
+	   
+		   <ComponentClass sourceAComponentClass="Motor Contactor" sourceBComponentClass="Motor Contactor">
+				<Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>
+				
+				<Property sourceAName="ModelNo" sourceBName="ModelNo"  severity="Warning"/>  
+				 <Property sourceAName="Manufacturer" sourceBName="Manufacturer"  severity="Warning"/>  
+				 <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>
+				 <Property sourceAName="Sequence" sourceBName="Sequence"  severity="Warning"/>
+				 <Property sourceAName="IOType" sourceBName="IOType"  severity="Warning"/>
+				 <Property sourceAName="NoOfPoints" sourceBName="NoOfPoints"  severity="Warning"/>
+				 <Property sourceAName="DwgDescription" sourceBName="DwgDescription"  severity="Warning"/>
+	 
+		   </ComponentClass>  
+		</ComponentGroup>
+
+	</Check>
+	
+	<Check type="Compliance" sourceType="MSSQL" >
+	   <ComponentGroup name="IS Barrier" >
+		  <ComponentClass name="IS Barrier">
+				 <Property name="ModelNo" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />
+				 <Property name="Manufacturer" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Description" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Sequence" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="IOType [mm]" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="NoOfPoints" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="DwgDescription" rule="Must have value" severity="Error"    comment="Property must have value." />
+		   </ComponentClass>                           
+	   </ComponentGroup>
+	  
+   <ComponentGroup name="RELAY" >
+		  <ComponentClass name="RELAY">
+				 <Property name="ModelNo" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />
+				 <Property name="Manufacturer" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Description" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Sequence" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="IOType [mm]" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="NoOfPoints" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="DwgDescription" rule="Must have value" severity="Error"    comment="Property must have value." />
+		   </ComponentClass>                           
+	   </ComponentGroup>	  
+
+   <ComponentGroup name="I/O Module" >
+		  <ComponentClass name="I/O Module">
+				 <Property name="ModelNo" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />
+				 <Property name="Manufacturer" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Description" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Sequence" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="IOType [mm]" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="NoOfPoints" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="DwgDescription" rule="Must have value" severity="Error"    comment="Property must have value." />
+		   </ComponentClass>                           
+	   </ComponentGroup>
+
+   <ComponentGroup name="Field Bus Block" >
+		  <ComponentClass name="Field Bus Block">
+				 <Property name="ModelNo" rule="Should start with-W" severity="Error"    comment="Property should start with-W." />
+				 <Property name="Manufacturer" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Description" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="Sequence" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="IOType [mm]" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="NoOfPoints" rule="Must have value" severity="Error"    comment="Property must have value." />
+				 <Property name="DwgDescription" rule="Must have value" severity="Error"    comment="Property must have value." />
+		   </ComponentClass>                           
+	   </ComponentGroup>
+	
+	</Check>
+	 
+</CheckCase>

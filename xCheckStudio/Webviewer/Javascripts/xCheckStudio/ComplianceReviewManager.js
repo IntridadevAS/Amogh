@@ -140,7 +140,8 @@ ComplianceReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
     model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
     var tempString = "_" + this.MainReviewTableContainer;
     containerDiv = containerDiv.replace("#", "");
-    var sheetName = containerDiv.replace(tempString, "");
+    // var sheetName = containerDiv.replace(tempString, "");
+    let sheetName = this.GetSheetName(rowData, Compliance.ViewerContainer);
 
     if (this.SourceComponents !== undefined) {
 
@@ -373,7 +374,7 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionDa
 
 ComplianceReviewManager.prototype.GetSheetName = function (component, viewerContainerId) {
     var sheetName;
-    sheetName = this.ComplianceCheckManager["ComponentsHierarchy"][component.sourceId].MainClass;
+    sheetName = this.ComplianceCheckManager["ComponentsHierarchy"][component.SourceId].MainClass;
     return sheetName;
 }
 

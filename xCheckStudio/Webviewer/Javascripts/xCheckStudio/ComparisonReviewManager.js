@@ -298,7 +298,8 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
 
     if (model.checks["comparison"]["sourceAViewer"]) {
 
-        var sheetName = result[0];
+        // var sheetName = result[0];
+        let sheetName = this.GetSheetName(rowData, Comparison.ViewerAContainer);
 
         model.checks["comparison"]["sourceAViewer"].highlightComponent(Comparison.ViewerAContainer,
             sheetName,
@@ -306,7 +307,8 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             rowData.SourceANodeId);
     }
     if (model.checks["comparison"]["sourceBViewer"]) {
-        var sheetName = result[1];
+        // var sheetName = result[1];
+        let sheetName = this.GetSheetName(rowData, Comparison.ViewerBContainer);
 
         model.checks["comparison"]["sourceBViewer"].highlightComponent(Comparison.ViewerBContainer,
             sheetName,
@@ -314,7 +316,8 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
             rowData.SourceBNodeId);
     }
     if (model.checks["comparison"]["sourceCViewer"]) {
-        var sheetName = result[2];
+        // var sheetName = result[2];
+        let sheetName = this.GetSheetName(rowData, Comparison.ViewerCContainer);
 
         model.checks["comparison"]["sourceCViewer"].highlightComponent(Comparison.ViewerCContainer,
             sheetName,
@@ -323,7 +326,8 @@ ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData
                 SourceCNodeId);
     }
     if (model.checks["comparison"]["sourceDViewer"]) {
-        var sheetName = result[3];
+        // var sheetName = result[3];
+        let sheetName = this.GetSheetName(rowData, Comparison.ViewerDContainer);
 
         model.checks["comparison"]["sourceDViewer"].highlightComponent(Comparison.ViewerDContainer,
             sheetName,
@@ -891,19 +895,23 @@ ComparisonReviewManager.prototype.GetCellValue = function (currentReviewTableRow
 }
 
 ComparisonReviewManager.prototype.GetSheetName = function (component, viewerContainerId) {
-    var sheetName;
+    var sheetName = null;
 
-    if (viewerContainerId == Comparison.ViewerAContainer) {
-        sheetName = sourceAComparisonHierarchy[component.sourceAId].MainClass;
+    if (viewerContainerId == Comparison.ViewerAContainer &&
+        component.SourceAId in sourceAComparisonHierarchy) {
+        sheetName = sourceAComparisonHierarchy[component.SourceAId].MainClass;
     }
-    else if (viewerContainerId == Comparison.ViewerBContainer) {
-        sheetName = sourceBComparisonHierarchy[component.sourceBId].MainClass;
+    else if (viewerContainerId == Comparison.ViewerBContainer &&
+        component.SourceBId in sourceBComparisonHierarchy) {
+        sheetName = sourceBComparisonHierarchy[component.SourceBId].MainClass;
     }
-    else if (viewerContainerId == Comparison.ViewerCContainer) {
-        sheetName = sourceCComparisonHierarchy[component.sourceCId].MainClass;
+    else if (viewerContainerId == Comparison.ViewerCContainer &&
+        component.SourceCId in sourceCComparisonHierarchy) {
+        sheetName = sourceCComparisonHierarchy[component.SourceCId].MainClass;
     }
-    else if (viewerContainerId == Comparison.ViewerDContainer) {
-        sheetName = sourceDComparisonHierarchy[component.sourceDId].MainClass;
+    else if (viewerContainerId == Comparison.ViewerDContainer &&
+        component.SourceDId in sourceDComparisonHierarchy) {
+        sheetName = sourceDComparisonHierarchy[component.SourceDId].MainClass;
     }
 
     return sheetName;

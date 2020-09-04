@@ -15,7 +15,9 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }");
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
-        datagridDiv.id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+        let id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;;
+        id = id.replace(/\//g, '');
+        datagridDiv.id = id;
         div.append(datagridDiv);
         parentTable.append(div);
     }
@@ -27,7 +29,9 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         selectedIndex: -1,
         onSelectionChanged: function (e) {
             if (e.addedItems.length > 0) {
-                model.getCurrentReviewTable().CurrentTableId = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+                let id = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
+                id = id.replace(/\//g, '');
+                model.getCurrentReviewTable().CurrentTableId = id;
             }
         },
         itemTitleTemplate: function (itemData, itemIndex, itemElement) {
@@ -79,7 +83,9 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
 }
 
 ComplianceCheckResultsTable.prototype.getTableId = function (tableName) {
-    return tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+    let id = tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+    id = id.replace(/\//g, '');
+    return id;
 }
 
 ComplianceCheckResultsTable.prototype.GetAccordionData = function (groupName) {
@@ -317,6 +323,7 @@ ComplianceCheckResultsTable.prototype.CreateTable = function (groupId, component
     var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);;
 
     var id = "#" + componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
+    id = id.replace(/\//g, '');    
     this.LoadReviewTableData(columnHeaders, tableData, id);
 
     // maintain table ids
