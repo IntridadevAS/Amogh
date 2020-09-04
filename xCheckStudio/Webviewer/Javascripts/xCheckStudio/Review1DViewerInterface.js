@@ -65,7 +65,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
         sheetName = model.getCurrentReviewManager().GetSheetName(component, viewerContainer);
     }
 
-    var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName, true);
+    var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName, false);
     if (!classWiseComponents) {
         return;
     }

@@ -10,6 +10,9 @@ ReviewComparisonSelectionManager.prototype.constructor = ReviewComparisonSelecti
 ReviewComparisonSelectionManager.prototype.HandleCheckComponentSelectFormCheckBox = function (currentRow, tableId, checkBoxState) {
 
     var rowKey = this.GetSelectedRowKey(currentRow.rowIndex, tableId);
+    if (!rowKey) {
+        return;
+    }
 
     if (checkBoxState == "on" &&
         !this.ComponentSelected(rowKey, tableId)) {
@@ -70,6 +73,9 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     }
 
     rowKey = this.GetSelectedRowKey(currentReviewTableRow.rowIndex, tableId);
+    if (!rowKey) {
+        return;
+    }
 
     this.ApplyHighlightColor(currentReviewTableRow);
     this.SetHighlightedRow({
@@ -78,11 +84,15 @@ ReviewComparisonSelectionManager.prototype.MaintainHighlightedRow = function (cu
     });   
 }
 
-ReviewComparisonSelectionManager.prototype.GetSelectedRowKey = function(rowIndex, tableId) {
-    var dataGrid =  $(tableId).dxDataGrid("instance");
+ReviewComparisonSelectionManager.prototype.GetSelectedRowKey = function (rowIndex, tableId) {
+    var dataGrid = $(tableId).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
     var rowData = rows[rowIndex];
-    return rowData.key;
+    if (rowData) {
+        return rowData.key;
+    }
+
+    return null;
 }
 
 ReviewComparisonSelectionManager.prototype.MaintainHighlightedDetailedRow = function (currentDetailedTableRow, rowKey) {

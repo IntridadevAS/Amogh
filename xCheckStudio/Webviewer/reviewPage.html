@@ -1829,6 +1829,16 @@
 
       if (visualizer.classList.contains("maximize")) {
         visualizer.classList.remove("maximize");
+
+        if (model.currentCheck === "comparison") {
+          document.getElementById("tableDataComparison").classList.remove("hide");
+        }
+        else if (model.currentCheck === "compliance") {
+          document.getElementById("tableDataCompliance").classList.remove("hide");
+        }
+
+        // update accordion dimensions
+        model.checks[model.currentCheck].updateAccordionDimensions();
       }
 
       Analytics.ShowSmallAnalytics(visualizer, smallAnalyticsContainer);

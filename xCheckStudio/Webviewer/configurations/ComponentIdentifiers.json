@@ -37,7 +37,7 @@
             "mssql"
         ],
         "name": "Name",
-        "category": "MainComponentClass",
+        "category": "Class",
         "componentClass": "Class"
     },
     "solidworks assembly": {
