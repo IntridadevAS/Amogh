@@ -22,24 +22,6 @@
 
     function readAnalyticsData()
     { 
-        $checkComponentTable = NULL;   
-        $sourceASelectedCompTable = NULL;
-        $sourceBSelectedCompTable = NULL;
-        $sourceCSelectedCompTable = NULL;
-        $sourceCSelectedCompTable = NULL;
-   
-        $sourceAComponentsTable = NULL;
-        $sourceBComponentsTable = NULL;
-        $sourceCComponentsTable = NULL;
-        $sourceDComponentsTable = NULL;
-   
-        $sourceAnotSelectedCompsTable = NULL;
-        $sourceBnotSelectedCompsTable = NULL;
-        $sourceCnotSelectedCompsTable = NULL;
-        $sourceDnotSelectedCompsTable = NULL;
-   
-        $checkGroupsTable = NULL;
-
         $analyticsResults = array();
         $comparisonResults = getComparisonAnalyticsDataCount();
 
@@ -91,8 +73,24 @@
             $analyticsResults['complianceD'] = $complianceDResults;
         }
 
-
         return $analyticsResults; 
+    }
+
+    function getComparisonSeverityCount($dbh, $table, $severity)
+    {
+        $serverityCount = 0;
+
+        $sources = array("sourceAId", "sourceBId", "sourceCId", "sourceDId");
+        for ($i = 0; $i < count($sources); $i++)
+        {
+            $results = $dbh->query("SELECT COUNT(DISTINCT $sources[$i]) FROM $table where status='$severity' and  $sources[$i] is NOT NULL;");
+            if ($results)
+            {
+                $serverityCount += $results->fetchColumn();
+            }
+        }
+
+        return $serverityCount;
     }
 
     function getComparisonAnalyticsDataCount() {
@@ -138,7 +136,7 @@
             //get datasourceInfo to check how many datasources were loaded
             $results = $mainDbh->query("SELECT *FROM  DatasourceInfo;");     
                 
-            $data = array();
+            // $data = array();
             while ($record = $results->fetch(\PDO::FETCH_ASSOC)) 
             {
                 if($record['sourceCFileName'] !== NULL) {
@@ -150,117 +148,45 @@
             }
 
             // get ok components count
-            $okCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK';");                
-            if($results)
-            {
-                $okCount = $results->fetchColumn();
-            }
-
-             // get okA components count
-            $okACount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)';");                
-            if($results)
-            {
-                $okACount = $results->fetchColumn();
-            }
-
+            $okCount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'OK');
+         
+            // get okA components count
+            $okACount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'OK(A)');
+           
             // get okT components count
-            $okTCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)';");                
-            if($results)
-            {
-                $okTCount = $results->fetchColumn();
-            }
-
+            $okTCount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'OK(T)');
+           
             // get okAT components count
-            $okATCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)(T)';");                
-            if($results)
-            {
-                $okATCount = $results->fetchColumn();
-            }
-
+            $okATCount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'OK(A)(T)');
 
             // get error components count
-            $errorCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error';");     
-            if($results)
-            {
-                $errorCount = $results->fetchColumn();
-            }
+            $errorCount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Error');
 
             // get errorA components count
-            $errorA = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error(A)';");     
-            if($results)
-            {
-                $errorA = $results->fetchColumn();
-            }
+            $errorA = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Error(A)');
 
             // get errorT components count
-            $errorT = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error(T)';");     
-            if($results)
-            {
-                $errorT = $results->fetchColumn();
-            }
+            $errorT = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Error(T)');
 
             // get errorAT components count
-            $errorAT = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Error(A)(T)';");     
-            if($results)
-            {
-                $errorAT = $results->fetchColumn();
-            }
+            $errorAT = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Error(A)(T)');
 
             // get Warning components count
-            $warningCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Warning';");     
-            if($results)
-            {             
-                $warningCount = $results->fetchColumn();
-            }
+            $warningCount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Warning');
 
             // get Warning components count
-            $warningA = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Warning(A)';");     
-            if($results)
-            {             
-                $warningA = $results->fetchColumn();
-            }
+            $warningA = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Warning(A)');
 
             // get Warning components count
-            $warningT = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Warning(T)';");     
-            if($results)
-            {             
-                $warningT = $results->fetchColumn();
-            }
+            $warningT = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Warning(T)');
 
             // get Warning components count
-            $warningAT = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='Warning(A)(T)';");     
-            if($results)
-            {             
-                $warningAT = $results->fetchColumn();
-            }
-            
+            $warningAT = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'Warning(A)(T)');
            
             // get No Match components count
-            $nomatchCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='No Match';");     
-            if($results)
-            {
-                $nomatchCount = $results->fetchColumn();
-            }
+            $nomatchCount = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'No Match');
 
-            $undefinedCount = 0;
-            $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='undefined';");     
-            if($results)
-            {
-                $undefinedCount = $results->fetchColumn();
-            }
+            $undefinedCount  = getComparisonSeverityCount($mainDbh, $checkComponentTable, 'undefined');
 
             // get spource A selected components count
             $sourceASelectedCount =  0;
@@ -709,12 +635,12 @@
             $totalErrorCount = $errorCount + $errorA + $errorT + $errorAT;
             $totalWarningCount =  $warningCount + $warningA + $warningT + $warningAT;
 
-            $okCount *=$comparisonDataSources;
-            $okACount *=$comparisonDataSources;
-            $okTCount *=$comparisonDataSources;
-            $okATCount *=$comparisonDataSources;
-            $totalErrorCount *= $comparisonDataSources;
-            $warningCount *= $comparisonDataSources;
+            // $okCount *=$comparisonDataSources;
+            // $okACount *=$comparisonDataSources;
+            // $okTCount *=$comparisonDataSources;
+            // $okATCount *=$comparisonDataSources;
+            // $totalErrorCount *= $comparisonDataSources;
+            // $warningCount *= $comparisonDataSources;
 
             return array("okCount" =>$okCount, 
                         "errorCount" =>$totalErrorCount,
@@ -1350,6 +1276,3 @@
             //echo 'Message: ' .$e->getMessage();             
         }
     }
-
-    
-?>
