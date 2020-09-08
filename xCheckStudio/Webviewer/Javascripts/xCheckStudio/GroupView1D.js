@@ -847,19 +847,7 @@ GroupView1D.prototype.HighlightInGA = function (rowData) {
 
             var columnHeaders = [];
             let traversedProperties = [];
-            // var firstComponent = components[0];
-            // var firstComponentProperties = firstComponent.properties;
-            // for (var i = 0; i < firstComponentProperties.length; i++) {
-            //     columnHeader = {};
-
-            //     columnHeader["caption"] = firstComponentProperties[i].Name;
-            //     columnHeader["dataField"] = firstComponentProperties[i].Name.replace(/\s/g, '');
-            //     columnHeader["dataType"] = "string";
-            //     columnHeader["width"] = "100px";
-
-            //     columnHeaders.push(columnHeader);
-            // }
-
+            
             var tableData = [];
             for (var i = 0; i < components.length; i++) {
 

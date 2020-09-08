@@ -364,10 +364,14 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
         componentsGroupName = "Undefined";
     }
 
+    // remove the special characters and whitespaces from componentgroup name
+    // to have propert check in table ids
+    let groupNameToSearch = xCheckStudio.Util.createValidHTMLId(componentsGroupName);
+
     var checkTableIdFound = false;
     var undefinedGroupId;
     for (var groupId in checkTableIds) {
-        if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
+        if (!checkTableIds[groupId].toLowerCase().includes(groupNameToSearch.toLowerCase())) {
             if(checkTableIds[groupId].toLowerCase().includes("undefined")) {
                 undefinedGroupId = groupId;
             }

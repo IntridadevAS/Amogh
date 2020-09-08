@@ -15,8 +15,8 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         div.setAttribute('data-options', "dxTemplate: { name: '" + data[i]["template"] + "' }");
         div.id = data[i]["template"];
         var datagridDiv = document.createElement("DIV");
-        let id = data[i]["template"].replace(/\s/g, '') + "_" + this.MainReviewTableContainer;;
-        id = id.replace(/\//g, '');
+        let id = data[i]["template"] + "_" + this.MainReviewTableContainer;;
+        id = xCheckStudio.Util.createValidHTMLId(id); 
         datagridDiv.id = id;
         div.append(datagridDiv);
         parentTable.append(div);
@@ -29,8 +29,8 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
         selectedIndex: -1,
         onSelectionChanged: function (e) {
             if (e.addedItems.length > 0) {
-                let id = e.addedItems[0]["template"].replace(/\s/g, '') + "_" + _this.MainReviewTableContainer;
-                id = id.replace(/\//g, '');
+                let id = e.addedItems[0]["template"] + "_" + _this.MainReviewTableContainer;
+                id = xCheckStudio.Util.createValidHTMLId(id);
                 model.getCurrentReviewTable().CurrentTableId = id;
             }
         },
@@ -83,8 +83,8 @@ ComplianceCheckResultsTable.prototype.CreateAccordion = function () {
 }
 
 ComplianceCheckResultsTable.prototype.getTableId = function (tableName) {
-    let id = tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-    id = id.replace(/\//g, '');
+    let id = tableName + "_" + this.MainReviewTableContainer;
+    id = xCheckStudio.Util.createValidHTMLId(id);
     return id;
 }
 
@@ -322,8 +322,8 @@ ComplianceCheckResultsTable.prototype.CreateTable = function (groupId, component
 
     var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);;
 
-    var id = "#" + componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-    id = id.replace(/\//g, '');    
+    var id = componentsGroup.componentClass + "_" + this.MainReviewTableContainer;
+    id = "#" + xCheckStudio.Util.createValidHTMLId(id);   
     this.LoadReviewTableData(columnHeaders, tableData, id);
 
     // maintain table ids
