@@ -66,7 +66,6 @@ ReviewVisioViewerInterface.prototype.setupViewer = function (id, isCompliance = 
     });
 }
 
-
 ReviewVisioViewerInterface.prototype.BindEvents = function () {
     var _this = this;
 

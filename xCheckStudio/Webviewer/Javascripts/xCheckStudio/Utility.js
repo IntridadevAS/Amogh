@@ -147,18 +147,15 @@ var xCheckStudio;
                 return HoopsViewerSuccessColor;
             }
             else if (status.toLowerCase().includes("no match")) {
-                if (parentComponent && (parentComponent.Status.toLowerCase().includes("error") ||
-                    parentComponent.Status.toLowerCase().includes("ok") ||
-                    parentComponent.Status.toLowerCase().includes("warning"))) {
+                if (parentComponent &&
+                    (parentComponent.Status.toLowerCase().includes("error") ||
+                        parentComponent.Status.toLowerCase().includes("ok") ||
+                        parentComponent.Status.toLowerCase().includes("warning"))) {
 
-                    if (parentComponent.Status.toLowerCase().includes("(a)") || 
-                        parentComponent.Status.toLowerCase().includes("(t)")) {
-                        return AcceptedColor;
-                    }
-                    else if (isAccepted(parentComponent)) {
-                        return AcceptedColor;
-                    }
-                    else if (isTransposed(parentComponent)) {
+                    if (parentComponent.Status.toLowerCase().includes("(a)") ||
+                        parentComponent.Status.toLowerCase().includes("(t)") ||
+                        isAccepted(parentComponent) ||
+                        isTransposed(parentComponent)) {
                         return AcceptedColor;
                     }
                     else {
@@ -174,19 +171,17 @@ var xCheckStudio;
                     }
                 }
                 else {
-                    if (isAccepted(component)) {
-                        return AcceptedColor;
-                    }
-                    else if (isTransposed(component)) {
+                    if (isAccepted(component) ||
+                        isTransposed(component)) {
                         return AcceptedColor;
                     }
                     else {
-                        if (parentComponent && (parentComponent.Status.toLowerCase().includes("undefined"))) {
-                            return GANoMatchColor;
-                        }
-                        else {
-                            return undefined;
-                        }
+                        // if (parentComponent && (parentComponent.Status.toLowerCase().includes("undefined"))) {
+                        return GANoMatchColor;
+                        // }
+                        // else {
+                        //     return undefined;
+                        // }
                     }
                 }
             }
