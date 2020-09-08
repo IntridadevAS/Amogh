@@ -273,7 +273,9 @@ function getSourceComponents() {
 
 function validCheckcaseSelected() {
     var checkCaseSelect = document.getElementById("checkCaseSelect");
-    if (checkCaseSelect.value.toLowerCase() === "autoselect") {
+    if (checkCaseSelect.value.toLowerCase() === "autoselect" ||
+        !checkCaseManager ||
+        !checkCaseManager.CheckCase) {
 
         if (checkCaseSelect.options.length === 1) {
             showNotValidCheckcasePrompt();
