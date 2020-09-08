@@ -17,6 +17,8 @@ DefineGroupsForm.prototype.Open = function () {
 
     var defineGroupsForm = document.getElementById(this.GetHtmlElementId());
     defineGroupsForm.style.display = "block";
+    defineGroupsForm.style.top = "calc( 50% - 141px)";    
+    defineGroupsForm.style.left = "calc( 50% - 225px)";   
 
     // Make the DIV element draggable:
     xCheckStudio.Util.dragElement(defineGroupsForm,

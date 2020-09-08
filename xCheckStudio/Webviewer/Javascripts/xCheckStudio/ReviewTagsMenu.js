@@ -147,8 +147,11 @@ TagsMenu.prototype.GetControls = function () {
 TagsMenu.prototype.ShowViews = function () {
     var _this = this;
     model.checks[_this.Id].viewsOpen = true;
-
-    document.getElementById("markupViewsContainer" + this.Id).style.display = "block";
+    
+    let markupViewsForm = document.getElementById("markupViewsContainer" + this.Id);
+    markupViewsForm.style.display = "block";
+    markupViewsForm.style.top = "calc( 50% - 179px)";    
+    markupViewsForm.style.left = "calc( 50% - 170px)";
 
     $("#markupViewTabs" + this.Id).dxTabPanel({
         dataSource: [

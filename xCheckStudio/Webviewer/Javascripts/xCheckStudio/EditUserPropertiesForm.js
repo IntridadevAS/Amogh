@@ -20,7 +20,9 @@ EditUserPropertiesForm.prototype.Open = function () {
 
     var editUserPropertiesForm = document.getElementById(this.GetHtmlElementId());
     editUserPropertiesForm.style.display = "block";
-
+    editUserPropertiesForm.style.top = "calc( 50% - 286px)";    
+    editUserPropertiesForm.style.left = "calc( 50% - 400px)"; 
+    
     // Make the DIV element draggable:
     xCheckStudio.Util.dragElement(editUserPropertiesForm,
         document.getElementById("editUserPropertiesFormCaptionBar" + this.Id));
@@ -35,6 +37,14 @@ EditUserPropertiesForm.prototype.Close = function () {
     editUserPropertiesForm.style.display = "none";
 
     this.UpdatedRowsData = {};
+
+    // close clear properties and edit property names forms if open
+    if (this.ClearUserPropertiesForm.Active) {
+        this.ClearUserPropertiesForm.Close();
+    }
+    if (this.editUserPropertyNameForm.Active) {
+        this.editUserPropertyNameForm.Close();
+    }
 }
 
 EditUserPropertiesForm.prototype.Init = function () {
@@ -846,6 +856,8 @@ ClearUserPropertiesForm.prototype.Open = function () {
 
     var clearUserPropertiesForm = document.getElementById(this.GetHtmlElementId());
     clearUserPropertiesForm.style.display = "block";
+    clearUserPropertiesForm.style.top = "calc( 50% - 82px)";    
+    clearUserPropertiesForm.style.left = "calc( 50% - 200px)"; 
 
     // Make the DIV element draggable:
     xCheckStudio.Util.dragElement(clearUserPropertiesForm,
@@ -1368,10 +1380,9 @@ EditUserPropertyNameForm.prototype.Open = function (columnIndex, propertyName, c
 
     var editUserPropertyNameForm = document.getElementById(this.GetHtmlElementId());
     editUserPropertyNameForm.style.display = "block";
-
-    // editUserPropertyNameForm.style.top = ((window.innerHeight / 2) - 50) + "px";
-    // editUserPropertyNameForm.style.left = ((window.innerWidth / 2) - 175) + "px";
-
+    editUserPropertyNameForm.style.top = "calc( 50% - 55px)";    
+    editUserPropertyNameForm.style.left = "calc( 50% - 175px)";
+    
     // Make the DIV element draggable:
     xCheckStudio.Util.dragElement(editUserPropertyNameForm,
         document.getElementById("editUserPropertyNameCaptionBar" + this.Id));
