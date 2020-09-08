@@ -3,14 +3,14 @@
 	<Check type="Comparison" sourceAType="XML" sourceBType="MSSQL">
 	    <ComponentGroup sourceAGroupName="ProcessInstrument" sourceBGroupName="IS Barrier">
 		    <ComponentClass sourceAComponentClass="FlowElement" sourceBComponentClass="IS Barrier">
-		      <Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>			
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>			
 			    <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>			 		
 				<Property sourceAName="Manufacturer" sourceBName="Manufacturer" severity="Warning"/>								    
 			</ComponentClass>
 
 
 		    <ComponentClass sourceAComponentClass="FlowControlValve" sourceBComponentClass="IS Barrier">
-		      <Matchwith sourceAPropertyname="ModelNo"  sourceBPropertyname ="ModelNo"/>			
+		      <Matchwith sourceAPropertyname="TagName"  sourceBPropertyname ="Name"/>			
 			    <Property sourceAName="Description" sourceBName="Description"  severity="Error"/>			 		
 				<Property sourceAName="Manufacturer" sourceBName="Manufacturer" severity="Warning"/>								    
 			</ComponentClass>

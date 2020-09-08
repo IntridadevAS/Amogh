@@ -499,14 +499,14 @@ Review3DViewerInterface.prototype.IsNodeInCheckResults = function (node) {
     component row for given check component data */
 Review3DViewerInterface.prototype.GetReviewComponentRow = function (checkComponentData) {
     var componentsGroupName = checkComponentData["MainClass"];
-    // var mainReviewTableContainer = document.getElementById(model.getCurrentReviewManager().MainReviewTableContainer);
-    // if (!mainReviewTableContainer) {
-    //     return undefined;
-    // }
+   
+     // remove the special characters and whitespaces from componentgroup name
+    // to have propert check in table ids
+    let groupNameToSearch = xCheckStudio.Util.createValidHTMLId(componentsGroupName);
 
     var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
     for (var groupId in checkTableIds) {
-        if (!checkTableIds[groupId].toLowerCase().includes(componentsGroupName.toLowerCase())) {
+        if (!checkTableIds[groupId].toLowerCase().includes(groupNameToSearch.toLowerCase())) {
             continue;
         }
         // else {

@@ -190,8 +190,8 @@ ExportExcel.prototype.RemoveTempTables = function (selectedTables) {
     for (var id = 0; id < selectedTables.length; id++) {
         var tableName = selectedTables[id];
 
-        $("#" + tableName.replace(/\s/g, '') + "_tempTable").remove();
-
+        let id = xCheckStudio.Util.createValidHTMLId(tableName + "_tempTable");
+        $("#" + id).remove();
     }
 }
 
@@ -215,7 +215,8 @@ ExportExcel.prototype.ExportGroup = async function (
             });
     }
 
-    var dataGrid = $("#" + tableName.replace(/\s/g, '') + "_tempTable").dxDataGrid(("instance"));
+    let id = xCheckStudio.Util.createValidHTMLId(tableName + "_tempTable");
+    var dataGrid = $("#" + id).dxDataGrid(("instance"));
 
     var headerStyles = {
         font: { bold: true, size: 11 },
@@ -1312,7 +1313,9 @@ ComparisonData.prototype.CreatDummyDataGrids = async function (
                     var tableData = data[categoryGroup][classGroup];
                     
                     var datagridDiv = document.createElement("DIV");
-                    datagridDiv.id = categoryGroup.replace(/\s/g, '') + "-" + classGroup.replace(/\s/g, '') + "_tempTable";
+
+                    let id = xCheckStudio.Util.createValidHTMLId(categoryGroup + "-" + classGroup + "_tempTable");
+                    datagridDiv.id = id;
                     datagridDiv.style.display = "none";
                     parentTable.append(datagridDiv);
 

@@ -124,10 +124,10 @@ function DBReader() {
                     if (property.name.toLowerCase() === identifierProperties.name.toLowerCase()) {
                         genericPropertiesObject.Name = property.value;
                     }
-                    else if (property.name.toLowerCase() === identifierProperties.mainCategory.toLowerCase()) {
+                    if (property.name.toLowerCase() === identifierProperties.mainCategory.toLowerCase()) {
                         genericPropertiesObject.MainComponentClass = property.value;
                     }
-                    else if (property.name.toLowerCase() === identifierProperties.subClass.toLowerCase()) {
+                    if (property.name.toLowerCase() === identifierProperties.subClass.toLowerCase()) {
                         genericPropertiesObject.SubComponentClass = property.value;
                     }
                 }

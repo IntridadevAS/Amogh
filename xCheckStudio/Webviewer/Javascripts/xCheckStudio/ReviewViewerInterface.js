@@ -107,40 +107,34 @@ ReviewViewerInterface.prototype.GetComplianceCheckComponentData = function (revi
 ReviewViewerInterface.prototype.ResizeViewer = function () {    
 }
 
-ReviewViewerInterface.prototype.HighlightMatchedComponent = function(containerDiv, rowData) {
-    
-    var sheetNameString = containerDiv.replace("#", "");
-    sheetNameString = sheetNameString.split('_')[0];
-    var sheetNameArray = sheetNameString.split('-');
-
+ReviewViewerInterface.prototype.HighlightMatchedComponent = function(containerDiv, rowData) {   
+  
     if(model.currentCheck == "comparison") {
         if(model.checks[model.currentCheck].sourceAViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceAViewer;
-            if(viewerInterface !== this) {
-               
-                var sheetName = sheetNameArray[0];
+            if(viewerInterface !== this) {               
+                var sheetName = model.getCurrentReviewManager().GetSheetName(rowData, Comparison.ViewerAContainer);
                 viewerInterface.highlightComponent(Comparison.ViewerAContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceANodeId]);
             }
         }
         if (model.checks[model.currentCheck].sourceBViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceBViewer;
             if (viewerInterface !== this) {
-
-                var sheetName = sheetNameArray[1];
+                var sheetName = model.getCurrentReviewManager().GetSheetName(rowData, Comparison.ViewerBContainer);
                 viewerInterface.highlightComponent(Comparison.ViewerBContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceBNodeId]);
             }
         }
         if (model.checks[model.currentCheck].sourceCViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceCViewer;
             if (viewerInterface !== this) {
-                var sheetName = sheetNameArray[2];
+                var sheetName = model.getCurrentReviewManager().GetSheetName(rowData, Comparison.ViewerCContainer);
                 viewerInterface.highlightComponent(Comparison.ViewerCContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceCNodeId]);
             }
         }
         if (model.checks[model.currentCheck].sourceDViewer) {
             var viewerInterface = model.checks[model.currentCheck].sourceDViewer;
             if (viewerInterface !== this) {
-                var sheetName = sheetNameArray[3];
+                var sheetName = model.getCurrentReviewManager().GetSheetName(rowData, Comparison.ViewerDContainer);
                 viewerInterface.highlightComponent(Comparison.ViewerDContainer, sheetName, rowData, rowData[ComparisonColumnNames.SourceDNodeId]);
             }
         }

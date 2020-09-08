@@ -290,11 +290,7 @@ ComparisonReviewManager.prototype.MaintainNodeIdVsCheckComponent = function (com
 ComparisonReviewManager.prototype.OnCheckComponentRowClicked = function (rowData, containerDiv) {
 
     // populate property table
-    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));
-
-    var sheetNameArray = containerDiv.replace("#", "");
-    sheetNameArray = sheetNameArray.split('_')[0];
-    var result = sheetNameArray.split('-');
+    model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, containerDiv.replace("#", ""));   
 
     if (model.checks["comparison"]["sourceAViewer"]) {
 
@@ -915,30 +911,6 @@ ComparisonReviewManager.prototype.GetSheetName = function (component, viewerCont
     }
 
     return sheetName;
-}
-
-ComparisonReviewManager.prototype.GetMainClassOfUndefinedComponent = function (groupName, nodeId, isSourceA) {
-    if (groupName !== "undefined") {
-        var result = groupName.split('-');
-        if (isSourceA) {
-            MainClassName = result[0];
-        }
-        else {
-            MainClassName = result[1];
-        }
-    }
-    else {
-        var souceCompponents;
-        if (isSourceA) {
-            souceCompponents = this.SourceAComponents;
-        }
-        else {
-            souceCompponents = this.SourceAComponents;
-        }
-
-        this.GetSourceComponentFromNodeId(souceCompponents, nodeId);
-    }
-
 }
 
 ComparisonReviewManager.prototype.GetSourceComponentFromNodeId = function (sourceComponents, nodeId) {

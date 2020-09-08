@@ -254,6 +254,13 @@ var xCheckStudio;
         }
         Util.getComponentHexColor = getComponentHexColor;
 
+        function createValidHTMLId(inputStr) {
+            let id = inputStr.replace(/\s/g, '');
+            id = id.replace(/\//g, '');
+
+            return id;
+        }
+        Util.createValidHTMLId = createValidHTMLId;
 
         function rgbToHex(r, g, b) {
             return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);

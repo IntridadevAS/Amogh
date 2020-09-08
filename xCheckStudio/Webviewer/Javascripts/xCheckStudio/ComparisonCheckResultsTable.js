@@ -77,8 +77,8 @@ ComparisonCheckResultsTable.prototype.CreateAccordion = function () {
 }
 
 ComparisonCheckResultsTable.prototype.getTableId = function (tableName) {
-    let id = tableName.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-    id = id.replace(/\//g, '');
+    let id = tableName + "_" + this.MainReviewTableContainer;
+    id = xCheckStudio.Util.createValidHTMLId(id);
     return id
 }
 
@@ -413,8 +413,8 @@ ComparisonCheckResultsTable.prototype.CreateTable = function (groupId, component
     // create table data
     var tableData = this.CreateTableData(componentsGroup.components, groupId, componentsGroup.componentClass);
 
-    var id = "#" + componentsGroup.componentClass.replace(/\s/g, '') + "_" + this.MainReviewTableContainer;
-    id = id.replace(/\//g, '');
+    var id = componentsGroup.componentClass + "_" + this.MainReviewTableContainer;
+    id = "#" + xCheckStudio.Util.createValidHTMLId(id);   
 
     // Create table for category results
     this.LoadReviewTableData(columnHeaders, tableData, id);
@@ -543,7 +543,6 @@ ComparisonCheckResultsTable.prototype.Destroy = function () {
 
         $(id).remove()
     }
-
 
     //Destroy accordion
     $("#" + this.MainReviewTableContainer).dxAccordion("dispose");
