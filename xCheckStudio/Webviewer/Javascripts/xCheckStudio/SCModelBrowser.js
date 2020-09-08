@@ -391,9 +391,12 @@ SCModelBrowser.prototype.OnComponentSelected = function (clickedCheckBoxRowKeys,
     componentObj,
     containerDiv) {
 
-    for (var i = 0; i < clickedCheckBoxRowKeys.length; i++) {
-        // componentObj.expandRow(clickedCheckBoxRowKeys[i]);
+    for (var i = 0; i < clickedCheckBoxRowKeys.length; i++) {       
         var nodeObj = componentObj.getNodeByKey(clickedCheckBoxRowKeys[i]);
+        if (!nodeObj) {
+            continue;
+        }
+
         var row = componentObj.getRowElement(componentObj.getRowIndexByKey(nodeObj.key));
         this.SelectionManager.SelectComponent(row[0], checkBoxStatus, nodeObj.data, containerDiv);
         if (nodeObj.hasChildren) {
