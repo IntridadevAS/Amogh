@@ -17,6 +17,8 @@ DefinePropertyHighlightsForm.prototype.Open = function () {
 
     var definePropertyHighlightForm = document.getElementById(this.GetHtmlElementId());
     definePropertyHighlightForm.style.display = "block";
+    definePropertyHighlightForm.style.top = "calc( 50% - 141px)";    
+    definePropertyHighlightForm.style.left = "calc( 50% - 275px)";  
 
     // Make the DIV element draggable:
     xCheckStudio.Util.dragElement(definePropertyHighlightForm,

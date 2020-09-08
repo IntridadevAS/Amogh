@@ -266,7 +266,10 @@ BookmarkMenu.prototype.ShowViews = function () {
     var _this = this;
     model.views[_this.Id].displayMenu.ViewsOpen = true;
 
-    document.getElementById("markupViewsContainer" + this.Id).style.display = "block";
+    let markupViewsForm = document.getElementById("markupViewsContainer" + this.Id);
+    markupViewsForm.style.display = "block";
+    markupViewsForm.style.top = "calc( 50% - 179px)";    
+    markupViewsForm.style.left = "calc( 50% - 170px)"; 
 
     $("#markupViewTabs" + this.Id).dxTabPanel({
         dataSource: [
