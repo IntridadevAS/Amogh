@@ -1,0 +1,135 @@
+<CheckCase name="2D(.vsd) - 3D(.rvm)"  sourceA="VSD" sourceB="RVM">
+
+<Check type="Comparison" sourceAType="VSD" sourceBType="RVM">
+	<ComponentGroup sourceAGroupName="SCNOZZ"  sourceBGroupName="NOZZ">
+			  
+			  <ComponentClass sourceAComponentClass="SCNOZZ"  sourceBComponentClass="NOZZ">
+			      <Matchwith sourceAPropertyname="NAME"  sourceBPropertyname ="NAME"/>
+				  <!--<Matchwith sourceAPropertyname="OWNER"  sourceBPropertyname ="OWNER"/>
+				  -->
+			      <Property sourceAName="ActType" sourceBName="Type"  severity="Error"/>
+				  <Property sourceAName="OWNER" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="NAME" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				  <Property sourceAName="Function" sourceBName="Func"  severity="Error"/>
+				  <Property sourceAName="BORE" sourceBName="BORE"  severity="Error"/>
+				  <Property sourceAName="Spref" sourceBName="Spref"  severity="Error"/>
+				  <Property sourceAName="TEMP" sourceBName="TEMP"  severity="Error"/>				  
+			  </ComponentClass> 
+			  
+	    </ComponentGroup> 
+		
+		<ComponentGroup sourceAGroupName="SCEQUI"  sourceBGroupName="EQUI">
+			  
+			  <ComponentClass sourceAComponentClass="SCEQUI"  sourceBComponentClass="EQUI">
+			      <Matchwith sourceAPropertyname="NAME"  sourceBPropertyname ="NAME"/>
+				  <!--<Matchwith sourceAPropertyname="OWNER"  sourceBPropertyname ="OWNER"/>
+				  -->
+			      <Property sourceAName="ActType" sourceBName="Type"  severity="Error"/>
+				  <Property sourceAName="OWNER" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="NAME" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				  <Property sourceAName="Function" sourceBName="Func"  severity="Error"/>
+				  <Property sourceAName="AREA" sourceBName="AREA"  severity="Error"/>
+				  <Property sourceAName="Number" sourceBName="Numb"  severity="Error"/>
+				  <Property sourceAName="Position" sourceBName="Pos"  severity="Error"/>				  
+			  </ComponentClass> 
+			  
+	    </ComponentGroup> 
+
+		<ComponentGroup sourceAGroupName="SCVALV"  sourceBGroupName="VALV">
+			  
+			  <ComponentClass sourceAComponentClass="SCVALV"  sourceBComponentClass="VALV">
+			      <Matchwith sourceAPropertyname="NAME"  sourceBPropertyname ="NAME"/>
+				  <!--<Matchwith sourceAPropertyname="OWNER"  sourceBPropertyname ="OWNER"/>
+				  -->
+			      <Property sourceAName="ActType" sourceBName="Type"  severity="Error"/>
+				  <Property sourceAName="OWNER" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="NAME" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				  <Property sourceAName="Function" sourceBName="Func"  severity="Error"/>
+				  <Property sourceAName="AREA" sourceBName="AREA"  severity="Error"/>
+				  <Property sourceAName="Number" sourceBName="Numb"  severity="Error"/>
+				  <Property sourceAName="SPREF" sourceBName="SPREF"  severity="Error"/>				  
+			  </ComponentClass> 
+			  
+	    </ComponentGroup> 
+
+		<ComponentGroup sourceAGroupName="SCOINS"  sourceBGroupName="ISNT">
+			  
+			  <ComponentClass sourceAComponentClass="SCOINS"  sourceBComponentClass="INST">
+			      <Matchwith sourceAPropertyname="NAME"  sourceBPropertyname ="NAME"/>
+				 <!-- <Matchwith sourceAPropertyname="OWNER"  sourceBPropertyname ="OWNER"/>
+				  -->
+			      <Property sourceAName="ActType" sourceBName="Type"  severity="Error"/>
+				  <Property sourceAName="OWNER" sourceBName="OWNER"  severity="Error"/>
+				  <Property sourceAName="NAME" sourceBName="NAME"  severity="Error"/>
+				  <Property sourceAName="Description" sourceBName="Desc"  severity="Error"/>
+				  <Property sourceAName="Function" sourceBName="Func"  severity="Error"/>
+				  <Property sourceAName="AREA" sourceBName="AREA"  severity="Error"/>
+				  <Property sourceAName="Number" sourceBName="Numb"  severity="Error"/>
+				  <Property sourceAName="SPREF" sourceBName="SPREF"  severity="Error"/>				  
+			  </ComponentClass> 
+			  
+	    </ComponentGroup> 		
+
+</Check>
+	
+
+<Check type="Compliance" sourceType="VSD">
+   
+   <ComponentGroup name="SCEQUI">
+      <ComponentClass name="SCEQUI">	
+			      <Property name="ActType" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Function" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="AREA" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Number" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Position" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>
+	    
+    </ComponentGroup>
+
+   <ComponentGroup name="SCVALV">
+      <ComponentClass name="SCEQUI">	
+			      <Property name="ActType" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Function" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="AREA" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Number" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPREF" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>
+	    
+    </ComponentGroup>
+
+   <ComponentGroup name="SCVALV">
+      <ComponentClass name="SCEQUI">	
+			      <Property name="ActType" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Function" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="AREA" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="Number" rule="Must have value" severity="Error" comment="Property must have value." />
+				  <Property name="SPREF" rule="Must have value" severity="Error" comment="Property must have value." />
+      </ComponentClass>
+	    
+    </ComponentGroup>
+
+
+	<ComponentGroup name="SCOINS">
+      <ComponentClass name="SCOINS">
+			<Property name="NAME" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="ActType" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="OWNER" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Description" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="Function" rule="Must have value" severity="Error" comment="Property must have value." />
+			<Property name="BORE" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="Spref" rule="Must have value" severity="Error" comment="Property must have value." />
+            <Property name="TEMP" rule="Must have value" severity="Error" comment="Property must have value." />			
+      </ComponentClass>
+   </ComponentGroup>
+   </Check>
+
+</CheckCase>
