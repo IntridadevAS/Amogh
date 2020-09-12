@@ -323,29 +323,11 @@ DBModelBrowser.prototype.HighlightRowInDBData = function (thisRow) {
         return;
     }
 
-    // get identifier column names
-    // var identifierColumns = {};
-    // var firstRow = data[0];
+    // get identifier properties
     var identifierColumns = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(SourceManagers[this.Id].SourceType);
     if (identifierColumns === null) {
         return;
-    }
-    // for (var column in firstRow) {
-    //     if (column.toLowerCase() === "component class" ||
-    //         column.toLowerCase() === "componentclass") {
-    //         identifierColumns["componentClass"] = column;
-    //     }
-    //     else if (column.toLowerCase() === "name") {
-    //         identifierColumns["name"] = column;
-    //     }
-    //     else if (column.toLowerCase() === "tagnumber" &&
-    //         !("name" in identifierColumns)) {
-    //         identifierColumns["name"] = column;
-    //     }
-    //     else if (column.toLowerCase() === "description") {
-    //         identifierColumns["description"] = column;
-    //     }
-    // }
+    }   
     if (!identifierColumns.name||
         !identifierColumns.subClass) {
         return;

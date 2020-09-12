@@ -327,48 +327,26 @@ ExcelModeBrowser.prototype.LoadSheetDataTable = function (columnHeaders,
 ExcelModeBrowser.prototype.HighlightRowInSheetData = function (thisRow) {
     var dataGrid = $("#" + this.ViewerContainer).dxDataGrid("instance");
     var data = dataGrid.getDataSource().items();
-
-
     if (data.length === 0) {
         return;
     }
 
-    // get identifier column names
-    var identifierColumns = {};
-
-    var firstRow = data[0];
-
-    for (var column in firstRow) {
-        if (column.toLowerCase() === "component class" ||
-            column.toLowerCase() === "componentclass") {
-            identifierColumns["componentClass"] = column;
-        }
-        else if (column.toLowerCase() === "name") {
-            identifierColumns["name"] = column;
-        }
-        else if (column.toLowerCase() === "tagnumber" &&
-            !("name" in identifierColumns)) {
-            identifierColumns["name"] = column;
-        }
-        else if (column.toLowerCase() === "description") {
-            identifierColumns["description"] = column;
-        }
-    }
-
-    if (identifierColumns.name === undefined ||
-        identifierColumns.componentClass === undefined) {
+    // get identifier properties
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(SourceManagers[this.Id].SourceType);
+    if (identifierProperties === null ||
+        !identifierProperties.name ||
+        !identifierProperties.subClass) {
         return;
     }
 
     // find the row to be highlighted in viewer
     var name = thisRow.cells[ModelBrowserColumns1D.Component].innerText.trim();
-    //var mainClass = thisRow.cells[ModelBrowserColumns1D.MainClass].innerText.trim();
     var subClass = thisRow.cells[ModelBrowserColumns1D.SubClass].innerText.trim();
 
     for (var i = 0; i < data.length; i++) {
         var dataRow = data[i];
-        if (name === dataRow[identifierColumns.name] &&
-            subClass === dataRow[identifierColumns.componentClass]) {
+        if (name === dataRow[identifierProperties.name] &&
+            subClass === dataRow[identifierProperties.subClass]) {
 
             var row = dataGrid.getRowElement(i);
 

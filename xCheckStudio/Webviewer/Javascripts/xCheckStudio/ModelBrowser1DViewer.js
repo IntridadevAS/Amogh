@@ -52,33 +52,16 @@ ModelBrowser1DViewer.prototype.HighlightComponent = function (componentRowData, 
 
     var sheetComponents = this.SourceComponents[componentRowData.Category];
 
-    // read identifier properties
-    for (var componentId in sheetComponents) {
-        var component = sheetComponents[componentId];
-        for (var i = 0; i < component.length; i++) {
-            var property = component[i];
-            if (property.name.toLowerCase() === "component class" ||
-                property.name.toLowerCase() === "componentclass") {
-                this.IdentifierProperties["componentClass"] = property.name;
-            }
-            else if (property.name.toLowerCase() === "name") {
-                this.IdentifierProperties["name"] = property.name;
-            }
-            else if (property.name.toLowerCase() === "tagnumber" &&
-                !("name" in identifierColumns)) {
-                this.IdentifierProperties["name"] = property.name;
-            }
-            else if (property.name.toLowerCase() === "description") {
-                this.IdentifierProperties["description"] = property.name;
-            }
-        }
-
-        break;
-    }
-    if (this.IdentifierProperties.name === undefined ||
-        this.IdentifierProperties.componentClass === undefined) {
+    // get identifier properties
+    let ext = xCheckStudio.Util.getFileExtension(this.Source);
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(ext);
+    if (identifierProperties === null ||
+        !identifierProperties.name ||
+        !identifierProperties.subClass) {
         return;
     }
+    this.IdentifierProperties["name"] = identifierProperties.name;
+    this.IdentifierProperties["componentClass"] = identifierProperties.subClass;
 
     // create headers
     var columnHeaders = [];

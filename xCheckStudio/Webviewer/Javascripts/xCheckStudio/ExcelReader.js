@@ -58,20 +58,7 @@ function ExcelReader() {
         // var sourcePropertiesTemp = {};      
         for (var i = 0; i < formattedExcelData.length; i++) {
             var row = formattedExcelData[i];
-            // var name;
-            // if (property.name.toLowerCase() === identifierProperties.name.toLowerCase()) {
-            //     name = property.value;
-            // }
-            // if (row.Name !== undefined) {
-            //     name = row.Name;
-            // }
-            // else if (row.Tagnumber !== undefined) {
-            //     name = row.Tagnumber;
-            // }
-
-            // if (name === undefined) {
-            //     continue;
-            // }
+           
             if (!identifierProperties.name in row) {
                 continue;
             }
