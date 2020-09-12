@@ -7,11 +7,11 @@ if(!isset($_POST['ActionToPerform']) || !isset($_POST['CheckName']) || !isset($_
  return;
 }
 
-$projectName = $_POST['ProjectName'];
-$checkName = $_POST['CheckName'];
-$ActionToPerform = $_POST['ActionToPerform'];
+// $projectName = $_POST['ProjectName'];
+// $checkName = $_POST['CheckName'];
+$actionToPerform = $_POST['ActionToPerform'];
 
-switch ($ActionToPerform) {
+switch ($actionToPerform) {
     case "acceptComparisonComponent":
         acceptComparisonComponent();
         break;
@@ -28,21 +28,21 @@ switch ($ActionToPerform) {
     case "acceptComplianceSourceBComponent":
     case "acceptComplianceSourceCComponent":
     case "acceptComplianceSourceDComponent":
-        acceptComplianceComponent();
+        acceptComplianceComponent($actionToPerform);
         break;
 
     case "acceptComplianceSourceAProperty":
     case "acceptComplianceSourceBProperty":
     case "acceptComplianceSourceCProperty":
     case "acceptComplianceSourceDProperty":
-        acceptComplianceProperty();
+        acceptComplianceProperty($actionToPerform);
         break;
 
     case "acceptComplianceSourceACategory":
     case "acceptComplianceSourceBCategory":
     case "acceptComplianceSourceCCategory":
     case "acceptComplianceSourceDCategory":
-        acceptComplianceCategory();
+        acceptComplianceCategory($actionToPerform);
         break;
 
     case "unAcceptComparisonComponent":
@@ -61,32 +61,32 @@ switch ($ActionToPerform) {
     case "unAcceptComplianceSourceBComponent":
     case "unAcceptComplianceSourceCComponent":
     case "unAcceptComplianceSourceDComponent":
-        unAcceptComplianceComponent();
+        unAcceptComplianceComponent($actionToPerform);
         break;
 
     case "unAcceptComplianceSourceAProperty":
     case "unAcceptComplianceSourceBProperty":
     case "unAcceptComplianceSourceCProperty":
     case "unAcceptComplianceSourceDProperty":
-        unAcceptComplianceProperty();
+        unAcceptComplianceProperty($actionToPerform);
         break;
 
     case "unAcceptComplianceSourceACategory":
     case "unAcceptComplianceSourceBCategory":
     case "unAcceptComplianceSourceCCategory":
     case "unAcceptComplianceSourceDCategory":
-        unAcceptComplianceCategory();
+        unAcceptComplianceCategory($actionToPerform);
         break;
 
     default:
         break;
 }
 
-function acceptComparisonComponent() {
-    global $projectName;
-    global $checkName;
+function acceptComparisonComponent() {    
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
-    $dbh;
+    $dbh = null;
     try{
     
         // open database
@@ -180,8 +180,8 @@ function acceptComparisonComponent() {
 
 function acceptComparisonProperty() {
 
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -265,8 +265,8 @@ function acceptComparisonCategory() {
         return;
     }
 
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $groupid = $_POST['groupid'];
 
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -376,13 +376,12 @@ function acceptComparisonCategory() {
     echo json_encode($results);
 }
 
-function acceptComplianceComponent() {
-    global $projectName;
-    global $checkName;
+function acceptComplianceComponent($actionToPerform) {
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
-    global $ActionToPerform;
-
-    $dbh;
+    
+    $dbh = null;
     try{
     
         // open database
@@ -392,22 +391,22 @@ function acceptComplianceComponent() {
         $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)', ' ');
         $results = array();
 
-        if($ActionToPerform == "acceptComplianceSourceAComponent") {
+        if($actionToPerform == "acceptComplianceSourceAComponent") {
 
             $CheckComponentsTable = "SourceAComplianceCheckComponents";
             $CheckPropertiesTable = "SourceAComplianceCheckProperties";
         }
-        else if($ActionToPerform == "acceptComplianceSourceBComponent") {
+        else if($actionToPerform == "acceptComplianceSourceBComponent") {
 
             $CheckComponentsTable = "SourceBComplianceCheckComponents";
             $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         }
-        else if($ActionToPerform == "acceptComplianceSourceCComponent") {
+        else if($actionToPerform == "acceptComplianceSourceCComponent") {
 
             $CheckComponentsTable = "SourceCComplianceCheckComponents";
             $CheckPropertiesTable = "SourceCComplianceCheckProperties";
         }
-        else if($ActionToPerform == "acceptComplianceSourceDComponent") {
+        else if($actionToPerform == "acceptComplianceSourceDComponent") {
 
             $CheckComponentsTable = "SourceDComplianceCheckComponents";
             $CheckPropertiesTable = "SourceDComplianceCheckProperties";
@@ -463,10 +462,10 @@ function acceptComplianceComponent() {
     }
 }
 
-function acceptComplianceProperty() {
-    global $projectName;
-    global $checkName;
-    global $ActionToPerform;
+function acceptComplianceProperty($actionToPerform) {
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
+   
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -479,19 +478,19 @@ function acceptComplianceProperty() {
 
     $dbh->beginTransaction();
 
-    if($ActionToPerform == "acceptComplianceSourceAProperty") {
+    if($actionToPerform == "acceptComplianceSourceAProperty") {
         $componentTableName = 'SourceAComplianceCheckComponents';
         $propertiesTableName = 'SourceAComplianceCheckProperties';  
     }
-    else if($ActionToPerform == "acceptComplianceSourceBProperty") {
+    else if($actionToPerform == "acceptComplianceSourceBProperty") {
         $componentTableName = 'SourceBComplianceCheckComponents';
         $propertiesTableName = 'SourceBComplianceCheckProperties'; 
     }
-    else if($ActionToPerform == "acceptComplianceSourceCProperty") {
+    else if($actionToPerform == "acceptComplianceSourceCProperty") {
         $componentTableName = 'SourceCComplianceCheckComponents';
         $propertiesTableName = 'SourceCComplianceCheckProperties'; 
     }
-    else if($ActionToPerform == "acceptComplianceSourceDProperty") {
+    else if($actionToPerform == "acceptComplianceSourceDProperty") {
         $componentTableName = 'SourceDComplianceCheckComponents';
         $propertiesTableName = 'SourceDComplianceCheckProperties'; 
     }
@@ -559,17 +558,16 @@ function acceptComplianceProperty() {
     echo json_encode($results);
 }
 
-function acceptComplianceCategory() {
+function acceptComplianceCategory($actionToPerform) {
     if(!isset($_POST['groupid'])) {
         echo 'fail';
         return;
     }
 
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $groupid = $_POST['groupid'];
-    global $ActionToPerform;
-
+   
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
@@ -580,28 +578,28 @@ function acceptComplianceCategory() {
     $componentsArray = array();
     $results = array();
 
-    if($ActionToPerform == "acceptComplianceSourceACategory") {
+    if($actionToPerform == "acceptComplianceSourceACategory") {
 
         $CheckComponentsTable = "SourceAComplianceCheckComponents";
         $CheckPropertiesTable = "SourceAComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
-    else if($ActionToPerform == "acceptComplianceSourceBCategory") {
+    else if($actionToPerform == "acceptComplianceSourceBCategory") {
 
         $CheckComponentsTable = "SourceBComplianceCheckComponents";
         $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
-    else if($ActionToPerform == "acceptComplianceSourceCategory") {
+    else if($actionToPerform == "acceptComplianceSourceCategory") {
 
         $CheckComponentsTable = "SourceCComplianceCheckComponents";
         $CheckPropertiesTable = "SourceCComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceCComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
-    else if($ActionToPerform == "acceptComplianceSourceDCategory") {
+    else if($actionToPerform == "acceptComplianceSourceDCategory") {
 
         $CheckComponentsTable = "SourceDComplianceCheckComponents";
         $CheckPropertiesTable = "SourceDComplianceCheckProperties";
@@ -648,60 +646,12 @@ function acceptComplianceCategory() {
     $dbh = null;
 
     echo json_encode($results);
-
-    // global $projectName;
-    // global $checkName;
-    // global $ActionToPerform;
-    // $groupid = $_POST['groupid'];
-
-    // $dbPath = getCheckDatabasePath($projectName, $checkName);
-    // $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
-
-    // $categoryStatus = 'ACCEPTED';
-    // $status = 'true';
-    // $dontChangeOk = 'OK';
-    // $componentTableName;
-    // $propertiesTableName;
-    // $dbh->beginTransaction();
-
-    // if($ActionToPerform == "categoryComplianceA") {
-    //     $componentTableName = 'SourceAComplianceCheckComponents';
-    //     $propertiesTableName = 'SourceAComplianceCheckProperties'; 
-    //     $command = $dbh->prepare('UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    //     $command->execute(array($categoryStatus, $groupid, $dontChangeOk)); 
-    // }
-    // else if($ActionToPerform == "categoryComplianceB") {
-    //     $componentTableName = 'SourceBComplianceCheckComponents';
-    //     $propertiesTableName = 'SourceBComplianceCheckProperties';
-    //     $command = $dbh->prepare('UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus!=?');
-    //     $command->execute(array($categoryStatus, $groupid, $dontChangeOk)); 
-    // }
-
-    //     $sql = "UPDATE ".$componentTableName." SET accepted=? WHERE ownerGroup=? AND status!=?";
-    //     $sql1 = "UPDATE ".$propertiesTableName." SET accepted=? WHERE ownerComponent=? AND severity!=?";
-    //     $command = $dbh->prepare($sql);
-    //     $command->execute(array($status, $groupid, $dontChangeOk));
-
-    //     $components = $dbh->query("SELECT * FROM $componentTableName  WHERE ownerGroup= $groupid;");
-    //     if($components) 
-    //     {            
-    //         while ($comp = $components->fetch(\PDO::FETCH_ASSOC)) 
-    //         {
-    //             if($comp['status'] !== $dontChangeOk) {
-    //                 $command = $dbh->prepare($sql1);
-    //                 $command->execute(array($status, $comp['id'], $dontChangeOk));
-    //             }
-    //         }
-    //     }
-
-    // $dbh->commit();
-    // $dbh = null;
 }
 
 function unAcceptComponent() {
     $statusArray = array();
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
     $status = "false";
 
@@ -784,8 +734,8 @@ function unAcceptComponent() {
 }
 
 function unAcceptComparisonProperty() {
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -864,8 +814,8 @@ function unAcceptComparisonProperty() {
 }
 
 function unAcceptComparisonCategory() {
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $groupid = $_POST['groupid'];
 
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -949,13 +899,12 @@ function unAcceptComparisonCategory() {
     echo json_encode($results);
 }
 
-function unAcceptComplianceComponent() {
+function unAcceptComplianceComponent($actionToPerform) {
 
-    global $projectName;
-    global $checkName;
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
-    global $ActionToPerform;
-
+   
     $dbh;
     try{
     
@@ -966,22 +915,22 @@ function unAcceptComplianceComponent() {
         $dontChangeOk = array('OK', 'OK(T)', 'No Value', 'Missing Property(s)', ' ');
         $results = array();
 
-        if($ActionToPerform == "unAcceptComplianceSourceAComponent") {
+        if($actionToPerform == "unAcceptComplianceSourceAComponent") {
 
             $CheckComponentsTable = "SourceAComplianceCheckComponents";
             $CheckPropertiesTable = "SourceAComplianceCheckProperties";
         }
-        else if($ActionToPerform == "unAcceptComplianceSourceBComponent") {
+        else if($actionToPerform == "unAcceptComplianceSourceBComponent") {
 
             $CheckComponentsTable = "SourceBComplianceCheckComponents";
             $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         }
-        else if($ActionToPerform == "unAcceptComplianceSourceCComponent") {
+        else if($actionToPerform == "unAcceptComplianceSourceCComponent") {
 
             $CheckComponentsTable = "SourceCComplianceCheckComponents";
             $CheckPropertiesTable = "SourceCComplianceCheckProperties";
         }
-        else if($ActionToPerform == "unAcceptComplianceSourceDComponent") {
+        else if($actionToPerform == "unAcceptComplianceSourceDComponent") {
 
             $CheckComponentsTable = "SourceDComplianceCheckComponents";
             $CheckPropertiesTable = "SourceDComplianceCheckProperties";
@@ -1044,10 +993,9 @@ function unAcceptComplianceComponent() {
     }
 }
 
-function unAcceptComplianceProperty() {
-    global $projectName;
-    global $checkName;
-    global $ActionToPerform;
+function unAcceptComplianceProperty($actionToPerform) {
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -1060,19 +1008,19 @@ function unAcceptComplianceProperty() {
 
     $dbh->beginTransaction();
 
-    if($ActionToPerform == "unAcceptComplianceSourceAProperty") {
+    if($actionToPerform == "unAcceptComplianceSourceAProperty") {
         $componentTableName = 'SourceAComplianceCheckComponents';
         $propertiesTableName = 'SourceAComplianceCheckProperties';  
     }
-    else if($ActionToPerform == "unAcceptComplianceSourceBProperty") {
+    else if($actionToPerform == "unAcceptComplianceSourceBProperty") {
         $componentTableName = 'SourceBComplianceCheckComponents';
         $propertiesTableName = 'SourceBComplianceCheckProperties'; 
     }
-    else if($ActionToPerform == "unAcceptComplianceSourceCProperty") {
+    else if($actionToPerform == "unAcceptComplianceSourceCProperty") {
         $componentTableName = 'SourceCComplianceCheckComponents';
         $propertiesTableName = 'SourceCComplianceCheckProperties'; 
     }
-    else if($ActionToPerform == "unAcceptComplianceSourceDProperty") {
+    else if($actionToPerform == "unAcceptComplianceSourceDProperty") {
         $componentTableName = 'SourceDComplianceCheckComponents';
         $propertiesTableName = 'SourceDComplianceCheckProperties'; 
     }
@@ -1138,12 +1086,11 @@ function unAcceptComplianceProperty() {
     echo json_encode($results);
 }
 
-function unAcceptComplianceCategory() {
-    global $projectName;
-    global $checkName;
+function unAcceptComplianceCategory($actionToPerform) {
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $groupid = $_POST['groupid'];
-    global $ActionToPerform;
-
+    
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
@@ -1154,28 +1101,28 @@ function unAcceptComplianceCategory() {
     $componentsArray = array();
     $results = array();
 
-    if($ActionToPerform == "unAcceptComplianceSourceACategory") {
+    if($actionToPerform == "unAcceptComplianceSourceACategory") {
 
         $CheckComponentsTable = "SourceAComplianceCheckComponents";
         $CheckPropertiesTable = "SourceAComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceAComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
-    else if($ActionToPerform == "unAcceptComplianceSourceBCategory") {
+    else if($actionToPerform == "unAcceptComplianceSourceBCategory") {
 
         $CheckComponentsTable = "SourceBComplianceCheckComponents";
         $CheckPropertiesTable = "SourceBComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceBComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
-    else if($ActionToPerform == "unAcceptComplianceSourceCCategory") {
+    else if($actionToPerform == "unAcceptComplianceSourceCCategory") {
 
         $CheckComponentsTable = "SourceCComplianceCheckComponents";
         $CheckPropertiesTable = "SourceCComplianceCheckProperties";
         $command = $dbh->prepare("UPDATE SourceCComplianceCheckGroups SET categoryStatus=? WHERE id=? AND categoryStatus NOT IN ( '" . implode($dontChangeOk, "', '") . "' )");
         $command->execute(array($categoryStatus, $groupid)); 
     }
-    else if($ActionToPerform == "unAcceptComplianceSourceDCategory") {
+    else if($actionToPerform == "unAcceptComplianceSourceDCategory") {
 
         $CheckComponentsTable = "SourceDComplianceCheckComponents";
         $CheckPropertiesTable = "SourceDComplianceCheckProperties";

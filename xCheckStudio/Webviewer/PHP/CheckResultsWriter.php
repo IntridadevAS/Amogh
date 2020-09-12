@@ -1,166 +1,172 @@
 <?php
     require_once 'GlobalConstants.php';
 
-    function writeComplianceResultToDB($checkGroupsTable, 
-                                       $checkComponentsTable,
-                                       $checkPropertiesTable)
-    {
-        global $CheckComponentsGroups;
-        global $projectName;
-        global $checkName;
-
+    function writeComplianceResultToDB(
+        $checkGroupsTable,
+        $checkComponentsTable,
+        $checkPropertiesTable,
+        $checkComponentsGroups,
+        $projectName,
+        $checkName
+    )
+    {       
         try
-        {   
+        {
             // open database
             $dbPath = getCheckDatabasePath($projectName, $checkName);
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
             // begin the transaction
             $dbh->beginTransaction();
-          
+
             // CheckGroups table
-            
-            // drop table if exists
-            $command = 'DROP TABLE IF EXISTS '. $checkGroupsTable. ';';
-            $dbh->exec($command);   
 
-            $command = 'CREATE TABLE '.$checkGroupsTable.'(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                componentClass TEXT NOT NULL,
-                componentCount Integer,
-                categoryStatus TEXT NOT NULL)'; 
-            $dbh->exec($command);  
-
-            // CheckComponents table
-            
             // drop table if exists
-            $command = 'DROP TABLE IF EXISTS '. $checkComponentsTable. ';';
+            $command = 'DROP TABLE IF EXISTS ' . $checkGroupsTable . ';';
             $dbh->exec($command);
 
-             $command = 'CREATE TABLE '.$checkComponentsTable.'(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,     
-                mainComponentClass TEXT,           
-                subComponentClass TEXT,            
-                status TEXT,
-                accepted TEXT,
-                nodeId TEXT,
-                sourceId INTEGER,
-                ownerGroup INTEGER NOT NULL)'; 
-            $ss = $dbh->exec($command);    
-            
+            $command = 'CREATE TABLE ' . $checkGroupsTable . '(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    componentClass TEXT NOT NULL,
+                    componentCount Integer,
+                    categoryStatus TEXT NOT NULL)';
+            $dbh->exec($command);
+
+            // CheckComponents table
+
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS ' . $checkComponentsTable . ';';
+            $dbh->exec($command);
+
+            $command = 'CREATE TABLE ' . $checkComponentsTable . '(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT,     
+                    mainComponentClass TEXT,           
+                    subComponentClass TEXT,            
+                    status TEXT,
+                    accepted TEXT,
+                    nodeId TEXT,
+                    sourceId INTEGER,
+                    ownerGroup INTEGER NOT NULL)';
+            $ss = $dbh->exec($command);
+
             // ComparisonCheckProperties table
 
             // drop table if exists
-            $command = 'DROP TABLE IF EXISTS '. $checkPropertiesTable. ';';
+            $command = 'DROP TABLE IF EXISTS ' . $checkPropertiesTable . ';';
             $dbh->exec($command);
 
-             $command = 'CREATE TABLE '.$checkPropertiesTable.'(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                name TEXT,              
-                value TEXT,
-                result TEXT,
-                severity TEXT,
-                accepted TEXT,
-                performCheck TEXT,
-                description TEXT,
-                ownerComponent INTEGER NOT NULL,
-                rule TEXT)'; 
-            $dbh->exec($command);    
+            $command = 'CREATE TABLE ' . $checkPropertiesTable . '(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    name TEXT,              
+                    value TEXT,
+                    result TEXT,
+                    severity TEXT,
+                    accepted TEXT,
+                    performCheck TEXT,
+                    description TEXT,
+                    ownerComponent INTEGER NOT NULL,
+                    rule TEXT)';
+            $dbh->exec($command);
 
 
-            foreach($CheckComponentsGroups as $mainClass => $checkComponentGroup)
+            foreach ($checkComponentsGroups as $mainClass => $checkComponentGroup)
             {
                 // Insert group to database
 
                 $componentClass = $checkComponentGroup->ComponentClass;
-                $componentCount =  count(  $checkComponentGroup->Components );
+                $componentCount =  count($checkComponentGroup->Components);
                 $categoryStatus = 'OK';
 
-                foreach($checkComponentGroup->Components as $key => $checkComponent)
-                { 
-                    if($checkComponent->Status !== 'OK') {
+                foreach ($checkComponentGroup->Components as $key => $checkComponent)
+                {
+                    if ($checkComponent->Status !== 'OK')
+                    {
                         $categoryStatus = 'UNACCEPTED';
                         break;
                     }
                 }
 
-                $insertGroupQuery = 'INSERT INTO '.$checkGroupsTable.'(componentClass, componentCount, categoryStatus) VALUES(?,?,?) ';                                        
+                $insertGroupQuery = 'INSERT INTO ' . $checkGroupsTable . '(componentClass, componentCount, categoryStatus) VALUES(?,?,?) ';
                 $groupValues = array($componentClass,  $componentCount, $categoryStatus);
 
                 $insertGroupStmt = $dbh->prepare($insertGroupQuery);
-                $insertGroupStmt->execute($groupValues);  
+                $insertGroupStmt->execute($groupValues);
 
                 // get group id for recently added row
-                $qry = 'SELECT id FROM '.$checkGroupsTable.' where rowid='.$dbh->lastInsertId();                
-                $stmt =  $dbh->query($qry); 
+                $qry = 'SELECT id FROM ' . $checkGroupsTable . ' where rowid=' . $dbh->lastInsertId();
+                $stmt =  $dbh->query($qry);
                 $groupId = -1;
-                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) 
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC))
                 {
                     $groupId = $row['id'];
-                    break;                    
+                    break;
                 }
 
                 // Insert Components to database
 
-                foreach($checkComponentGroup->Components as $key => $checkComponent)
-                {                   
-                    $insertComponentQuery = 'INSERT INTO '.$checkComponentsTable.'(
-                        name, 
-                        mainComponentClass,
-                        subComponentClass, 
-                        status, 
-                        accepted,
-                        nodeId,
-                        sourceId,
-                        ownerGroup) VALUES(?,?,?,?,?,?,?,?) ';                                                                          
+                foreach ($checkComponentGroup->Components as $key => $checkComponent)
+                {
+                    $insertComponentQuery = 'INSERT INTO ' . $checkComponentsTable . '(
+                            name, 
+                            mainComponentClass,
+                            subComponentClass, 
+                            status, 
+                            accepted,
+                            nodeId,
+                            sourceId,
+                            ownerGroup) VALUES(?,?,?,?,?,?,?,?) ';
 
-                    $componentValues = array($checkComponent->SourceAName, 
-                                             $checkComponent->SourceAMainComponentClass,
-                                             $checkComponent->SourceASubComponentClass,
-                                             $checkComponent->Status,
-                                             'false',
-                                             $checkComponent->SourceANodeId,
-                                             $checkComponent->SourceAId,
-                                             $groupId);                   
-                   
+                    $componentValues = array(
+                        $checkComponent->SourceAName,
+                        $checkComponent->SourceAMainComponentClass,
+                        $checkComponent->SourceASubComponentClass,
+                        $checkComponent->Status,
+                        'false',
+                        $checkComponent->SourceANodeId,
+                        $checkComponent->SourceAId,
+                        $groupId
+                    );
+
                     $insertComponentStmt = $dbh->prepare($insertComponentQuery);
                     $insertComponentStmt->execute($componentValues);
 
                     // get component id for recently added row
-                    $qry1 = 'SELECT id FROM '.$checkComponentsTable.' where rowid='.$dbh->lastInsertId();                
-                    $stmt1 =  $dbh->query($qry1); 
-                    $componentId=-1;
-                    while ($row1 = $stmt1->fetch(\PDO::FETCH_ASSOC)) 
+                    $qry1 = 'SELECT id FROM ' . $checkComponentsTable . ' where rowid=' . $dbh->lastInsertId();
+                    $stmt1 =  $dbh->query($qry1);
+                    $componentId = -1;
+                    while ($row1 = $stmt1->fetch(\PDO::FETCH_ASSOC))
                     {
                         $componentId = $row1['id'];
-                        break;                    
+                        break;
                     }
 
                     // insert CheckProperties to database
 
-                    foreach($checkComponent->CheckProperties as $key => $checkProperty)
+                    foreach ($checkComponent->CheckProperties as $key => $checkProperty)
                     {
-                        $insertPropertyQuery = 'INSERT INTO '.$checkPropertiesTable.'(
-                                                name,
-                                                value, 
-                                                result, 
-                                                severity,
-                                                accepted,
-                                                performCheck,
-                                                description,
-                                                ownerComponent,
-                                                rule) VALUES(?,?,?,?,?,?,?,?,?) ';                                        
-                        $propertyValues = array($checkProperty->SourceAName,
-                                                $checkProperty->SourceAValue,
-                                                $checkProperty->Result,
-                                                $checkProperty->Severity,
-                                                'false',
-                                                $checkProperty->PerformCheck,
-                                                $checkProperty->Description,
-                                                $componentId,
-                                                $checkProperty->Rule);
-                        
+                        $insertPropertyQuery = 'INSERT INTO ' . $checkPropertiesTable . '(
+                                                    name,
+                                                    value, 
+                                                    result, 
+                                                    severity,
+                                                    accepted,
+                                                    performCheck,
+                                                    description,
+                                                    ownerComponent,
+                                                    rule) VALUES(?,?,?,?,?,?,?,?,?) ';
+                        $propertyValues = array(
+                            $checkProperty->SourceAName,
+                            $checkProperty->SourceAValue,
+                            $checkProperty->Result,
+                            $checkProperty->Severity,
+                            'false',
+                            $checkProperty->PerformCheck,
+                            $checkProperty->Description,
+                            $componentId,
+                            $checkProperty->Rule
+                        );
+
                         $insertPropertyStmt = $dbh->prepare($insertPropertyQuery);
                         $insertPropertyStmt->execute($propertyValues);
                     }
@@ -170,20 +176,19 @@
             // commit update
             $dbh->commit();
             $dbh = null; //This is how you close a PDO connection
-        }                
-        catch(Exception $e)
-        {        
-            echo "fail"; 
+        }
+        catch (Exception $e)
+        {
+            echo "fail";
             return;
-        }   
-
+        }
     }
     
-    function writeComparisonResultsToDB()
-    {
-        global $CheckComponentsGroups;
-        global $projectName;
-        global $checkName;
+    function writeComparisonResultsToDB(
+        $checkComponentsGroups,
+        $projectName,
+        $checkName)
+    {        
         try
         {   
             // open database
@@ -250,7 +255,7 @@
             $command = CREATE_COMPARISONPROPERTIES_TABLE;
             $dbh->exec($command);    
 
-            foreach($CheckComponentsGroups as $mainClass => $checkComponentGroup)
+            foreach($checkComponentsGroups as $mainClass => $checkComponentGroup)
             {
                 // Insert group to database
 
@@ -417,57 +422,7 @@
             return;
         }   
 
-    }
-
-    function writeComparisonCheckStatistics()
-    {
-        global $projectName;
-        global $checkName;
-        try
-        {   
-            // open database
-            $dbPath = getCheckDatabasePath($projectName, $checkName);
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
-
-            // begin the transaction
-            $dbh->beginTransaction();           
-          
-            $statistics = getCheckStatistics($dbh, 'ComparisonCheckComponents');
-                       
-            // read class wise check results counts
-            $checkGroups = getCheckGroupsInfo($dbh, "ComparisonCheckComponents", "ComparisonCheckGroups");
-            $checkGroupsString = json_encode($checkGroups);
-
-            $command = 'CREATE TABLE ComparisonCheckStatistics(
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                comparisonOK INTEGER default 0,
-                comparisonError INTEGER default 0,
-                comparisonWarning INTEGER default 0,
-                comparisonNoMatch INTEGER default 0,
-                comparisonUndefined INTEGER default 0,
-                comparisonCheckGroupsInfo TEXT)'; 
-            $dbh->exec($command); 
-
-            $qry = 'INSERT INTO ComparisonCheckStatistics(comparisonOK, comparisonError, comparisonWarning, comparisonNoMatch, 
-                   comparisonUndefined, comparisonCheckGroupsInfo) VALUES(?,?,?,?,?,?) ';                                         
-            $stmt = $dbh->prepare($qry);
-            $stmt->execute(array($statistics['ok'], 
-                                 $statistics['error'], 
-                                 $statistics['warning'], 
-                                 $statistics['nomatch'], 
-                                 $statistics['undefined'], 
-                                 $checkGroupsString ));  
-            
-            // commit update
-            $dbh->commit();
-            $dbh = null; //This is how you close a PDO connection
-         }                
-         catch(Exception $e)
-         {        
-             echo "fail"; 
-             return;
-         }   
-    }
+    }    
 
     function getCheckStatistics($dbh, $table)
     {
@@ -582,10 +537,8 @@
             return $checkGroups;
     }
 
-    function writeSourceAComplianceCheckStatistics()
+    function writeSourceAComplianceCheckStatistics($projectName, $checkName)
     {
-        global $projectName;
-        global $checkName;
         try
         {   
             // open database
@@ -629,10 +582,8 @@
         }   
    }
 
-   function writeSourceBComplianceCheckStatistics()
+   function writeSourceBComplianceCheckStatistics($projectName, $checkName)
     {
-        global $projectName;
-        global $checkName;
         try
         {   
             // open database
@@ -675,10 +626,8 @@
         }   
    }    
 
-   function writeSourceCComplianceCheckStatistics()
-   {
-        global $projectName;
-        global $checkName;
+   function writeSourceCComplianceCheckStatistics($projectName, $checkName)
+   {       
         try
         {   
             // open database
@@ -721,10 +670,8 @@
         }   
     }  
 
-    function writeSourceDComplianceCheckStatistics()
-   {
-        global $projectName;
-        global $checkName;
+    function writeSourceDComplianceCheckStatistics($projectName, $checkName)
+   {       
         try
         {   
             // open database
@@ -768,63 +715,63 @@
     }
 
     
-    function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
-                                            $tableName,
-                                            $projectName,$checkName)
-    {        
-        try
-        {   
-            // open database
-            $dbPath = getCheckDatabasePath($projectName, $checkName);
-            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
+    // function writeNotMatchedComponentsToDB($notMatchedComponents,                                              
+    //                                         $tableName,
+    //                                         $projectName,$checkName)
+    // {        
+    //     try
+    //     {   
+    //         // open database
+    //         $dbPath = getCheckDatabasePath($projectName, $checkName);
+    //         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");         
 
-            // begin the transaction
-            $dbh->beginTransaction();
+    //         // begin the transaction
+    //         $dbh->beginTransaction();
 
-            // SourceANotCheckedComponents table
+    //         // SourceANotCheckedComponents table
             
-            // drop table if exists
-            $command = 'DROP TABLE IF EXISTS '.$tableName.';';
-            $dbh->exec($command);
+    //         // drop table if exists
+    //         $command = 'DROP TABLE IF EXISTS '.$tableName.';';
+    //         $dbh->exec($command);
 
-            $command = 'CREATE TABLE '.$tableName.'(
-                    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                    name TEXT,
-                    mainClass TEXT,
-                    subClass TEXT,
-                    nodeId TEXT,
-                    mainTableId TEXT)'; 
-            $dbh->exec($command);    
+    //         $command = 'CREATE TABLE '.$tableName.'(
+    //                 id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    //                 name TEXT,
+    //                 mainClass TEXT,
+    //                 subClass TEXT,
+    //                 nodeId TEXT,
+    //                 mainTableId TEXT)'; 
+    //         $dbh->exec($command);    
 
-            foreach($notMatchedComponents as $key =>$value)            
-            {               
-                $name = $value["name"];
-                $mainclass = $value["mainclass"];
-                $subclass =  $value["subclass"];               
+    //         foreach($notMatchedComponents as $key =>$value)            
+    //         {               
+    //             $name = $value["name"];
+    //             $mainclass = $value["mainclass"];
+    //             $subclass =  $value["subclass"];               
 
-                $nodeId = NULL;
-                if(array_key_exists("nodeid", $value))
-                { 
-                    $nodeId = $value["nodeid"];
-                }
+    //             $nodeId = NULL;
+    //             if(array_key_exists("nodeid", $value))
+    //             { 
+    //                 $nodeId = $value["nodeid"];
+    //             }
 
-                $mainTableId = $value["id"];
+    //             $mainTableId = $value["id"];
 
-                $insertQuery = 'INSERT INTO '. $tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
-                $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
+    //             $insertQuery = 'INSERT INTO '. $tableName.'(name, mainClass, subClass, nodeId, mainTableId) VALUES(?,?,?,?,?) ';                                        
+    //             $values = array( $name,  $mainclass, $subclass, $nodeId ,$mainTableId);
 
-                $insertStmt = $dbh->prepare($insertQuery);
-                $insertStmt->execute($values);  
-            }
+    //             $insertStmt = $dbh->prepare($insertQuery);
+    //             $insertStmt->execute($values);  
+    //         }
 
-            // commit update
-            $dbh->commit();
-            $dbh = null; //This is how you close a PDO connection
-        }
-        catch(Exception $e)
-        {        
-            echo "fail"; 
-            return;
-        }
-    }
+    //         // commit update
+    //         $dbh->commit();
+    //         $dbh = null; //This is how you close a PDO connection
+    //     }
+    //     catch(Exception $e)
+    //     {        
+    //         echo "fail"; 
+    //         return;
+    //     }
+    // }
 ?>

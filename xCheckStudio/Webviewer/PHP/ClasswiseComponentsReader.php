@@ -12,9 +12,9 @@
 
     function getMainClassWiseComponents($mainClassProperty)
     {      
-        global $projectName;
-        global $checkName;
-        $dbh;
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
+        $dbh = null;
         try
         {        
             // open database
@@ -25,9 +25,9 @@
             $dbh->beginTransaction();
 
             // create Components table
-            $source = $_POST['Source'];   
-            $componentsTableName;
-            $propertiesTableName;         
+            $source = $_POST['Source'];
+            $componentsTableName = null;
+            $propertiesTableName = null;       
             if(strtolower($source) == "sourcea")
             {
                 $componentsTableName = "SourceAComponents";

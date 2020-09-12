@@ -8,29 +8,42 @@ $transposeType = $_POST['transposeType'];
 $transposeLevel = $_POST['transposeLevel'];
 
 if($transposeType == 'restoreProperty' && $transposeLevel == 'propertyLevel') {
-     RestorePropertyTranspose();
+     RestorePropertyTranspose($projectName, $checkName);
 }
 else if($transposeType == 'restoreComponent' && $transposeLevel == 'componentLevel') {
-     RestoreComponentTranspose();
+     RestoreComponentTranspose($projectName, $checkName);
 }
 else if($transposeType == 'restoreCategory' && $transposeLevel == 'categorylevel') {
-    RestoreCategoryTranspose();
+    RestoreCategoryTranspose($projectName, $checkName);
 }
 else if($transposeLevel == 'propertyLevel') {
-    TransposeProperties();
+    TransposeProperties(
+        $projectName,
+        $checkName,
+        $transposeType
+    );
 }
 else if($transposeLevel == 'componentLevel') {
-    TransposeComponents();
+    TransposeComponents(
+        $projectName,
+        $checkName,
+        $transposeType
+    );
 }
 else if($transposeLevel == 'categorylevel') {
-    TransposeCategories();
+    TransposeCategories(
+        $projectName,
+        $checkName,
+        $transposeType
+    );
 }
 
-function TransposeProperties() {
-    global $projectName;
-    global $checkName;
-    global $transposeType;
-
+function TransposeProperties(
+    $projectName,
+    $checkName,
+    $transposeType
+)
+{   
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
     $dontChangeOk = array('OK', 'OK(T)', 'OK(A)', 'No Value', 'OK(A)(T)', 'Missing Property(s)');
@@ -141,9 +154,8 @@ function TransposeProperties() {
     echo json_encode($results);
 }
 
-function RestorePropertyTranspose() {
-    global $projectName;
-    global $checkName;
+function RestorePropertyTranspose($projectName, $checkName) {
+  
     $transposeType = null;
 
     $componentid = $_POST['componentid']; 
@@ -257,12 +269,13 @@ function RestorePropertyTranspose() {
     echo json_encode($results);   
 }
 
-function TransposeComponents() {
-    global $projectName;
-    global $checkName;
+function TransposeComponents(
+    $projectName,
+    $checkName,
+    $transposeType
+    ) {   
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
-    global $transposeType;
-
+   
     $dbh = null;
     try{
     
@@ -419,10 +432,9 @@ function TransposeComponents() {
     }
 }
 
-function RestoreComponentTranspose() {
+function RestoreComponentTranspose($projectName, $checkName) {
     $statusArray = array();
-    global $projectName;
-    global $checkName;
+ 
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
     $transposeType = null;
 
@@ -557,10 +569,9 @@ function RestoreComponentTranspose() {
         echo json_encode($results);
 }
 
-function RestoreCategoryTranspose() {
+function RestoreCategoryTranspose($projectName, $checkName) {
     $statusArray = array();
-    global $projectName;
-    global $checkName;
+  
     $groupid = $_POST['groupid'];
     $transposeType = null;
 
@@ -708,17 +719,17 @@ function RestoreCategoryTranspose() {
 
 }
 
-function TransposeCategories() {
+function TransposeCategories(
+    $projectName,
+    $checkName,
+    $transposeType
+) {
     if(!isset($_POST['groupid'])) {
         echo 'fail';
         return;
     }
 
-    global $projectName;
-    global $checkName;
-    $groupid = $_POST['groupid'];
-    global $transposeType;
-
+    $groupid = $_POST['groupid'];  
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
