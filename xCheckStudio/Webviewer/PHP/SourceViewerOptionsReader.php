@@ -18,7 +18,7 @@
         {
             $projectName = $_POST['ProjectName'];
             $checkName = $_POST['CheckName'];
-            //global $DBPath ;
+            
             $DBPath = getCheckDatabasePath($projectName, $checkName);
             try
             {  

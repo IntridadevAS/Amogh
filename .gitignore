@@ -9,3 +9,4 @@ php-7.2.11-nts-Win32-VC15-x64/
 *.txt
 xCheckStudio/xCheckFileReader/x64/Release/bin/resource/
 xCheckStudio/JS Obfuscation
+xCheckStudio/PHP Obfuscation

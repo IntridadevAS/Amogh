@@ -7,8 +7,8 @@
     }
 
      // get project name
-     $projectName = $_POST['ProjectName'];
-     $checkName = $_POST['CheckName'];
+    //  $projectName = $_POST['ProjectName'];
+    //  $checkName = $_POST['CheckName'];
 
     $values = readAnalyticsData();    
     if($values != 'fail')
@@ -94,8 +94,8 @@
     }
 
     function getComparisonAnalyticsDataCount() {
-        global $projectName;
-        global $checkName;
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
 
         $checkGroupsTable = "ComparisonCheckGroups";
 
@@ -681,8 +681,8 @@
 
     function getSubClassWiseComparisonData($checkComponentTable, $ownerGroupId)
     {
-        global $projectName;
-        global $checkName;
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
         
         try {
 
@@ -810,8 +810,8 @@
     }
 
     function getVersioningInfo($checkComponentTable, $comparisonDataSources) {
-        global $projectName;
-        global $checkName;
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
         
         try {
 
@@ -936,15 +936,15 @@
         $sourcenotSelectedCompsTable
         ) {
 
-        global $projectName;
-        global $checkName;
+        $projectName = $_POST['ProjectName'];
+        $checkName = $_POST['CheckName'];
         //$dbh;
         try
-        {      
+        {
 
             // open database
             $mainDbPath = getCheckDatabasePath($projectName, $checkName);
-            $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database"); 
+            $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database");
             // begin the transaction
             $mainDbh->beginTransaction(); 
 
