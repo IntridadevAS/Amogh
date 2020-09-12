@@ -187,8 +187,8 @@ ExportExcel.prototype.ExportGroups = async function (selectedTables, save, works
 }
 
 ExportExcel.prototype.RemoveTempTables = function (selectedTables) {
-    for (var id = 0; id < selectedTables.length; id++) {
-        var tableName = selectedTables[id];
+    for (var i = 0; i < selectedTables.length; i++) {
+        var tableName = selectedTables[i];
 
         let id = xCheckStudio.Util.createValidHTMLId(tableName + "_tempTable");
         $("#" + id).remove();

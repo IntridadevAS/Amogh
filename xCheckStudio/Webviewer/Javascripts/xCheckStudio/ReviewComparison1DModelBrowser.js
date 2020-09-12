@@ -232,7 +232,7 @@ ReviewComparison1DModelBrowser.prototype.AddTableContentCount = function (contai
 
         // var countBox = document.getElementById(id);
         // modelBrowserTableRows contains header and search bar row as row hence count is length-1
-        var rowCount = this.ModelTreeData;
+        var rowCount = this.ModelTreeData.length;
         div2.innerHTML = "Count :" + rowCount;
         modelBrowserDataTable.appendChild(div2);
     }

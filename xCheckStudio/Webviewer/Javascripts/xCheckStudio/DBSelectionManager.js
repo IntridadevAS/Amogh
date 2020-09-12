@@ -185,36 +185,13 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
           return;
      }
 
-     // get identifier column names
-     var identifierColumns = {};
-
-     var firstRow = sheetData[0];
-     for (var column in firstRow) {
-          if (column.toLowerCase() === "component class" ||
-               column.toLowerCase() === "componentclass") {
-               identifierColumns["componentClass"] = column;
-          }
-          else if (column.toLowerCase() === "name") {
-               identifierColumns["name"] = column;
-          }
-          else if (column.toLowerCase() === "tagnumber" &&
-               !("name" in identifierColumns)) {
-               identifierColumns["name"] = column;
-          }
-          else if (column.toLowerCase() === "description") {
-               identifierColumns["description"] = column;
-          }
-
-          // if (identifierColumns.length === 3) {
-          //     break;
-          // }
-     }
-
-     if (!identifierColumns.name === undefined ||
-          identifierColumns.componentClass === undefined) {
+     // get identifier properties
+     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(SourceManagers[model.currentTabId].SourceType);
+     if (identifierProperties === null ||
+          !identifierProperties.name ||
+          !identifierProperties.subClass) {
           return;
      }
-
 
      // get model browser all rows data
      var modelBrowserDataGrid = $("#" + modelBrowserContainer).dxDataGrid("instance");
@@ -225,8 +202,8 @@ DBSelectionManager.prototype.HandleRowSelectInViewer = function (thisRow,
 
      // find the row to be highlighted in viewer
      var selectedRowData = sheetData[thisRow.rowIndex];
-     var name = selectedRowData[identifierColumns.name];
-     var subClass = selectedRowData[identifierColumns.componentClass];
+     var name = selectedRowData[identifierProperties.name];
+     var subClass = selectedRowData[identifierProperties.subClass];
 
      for (var i = 0; i < modelBrowserData.length; i++) {
           var rowData = modelBrowserData[i];

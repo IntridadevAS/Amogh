@@ -955,6 +955,8 @@ let checkView = {
       check.checkid,
       userinfo.userid
     ).then(function (result) {
+      removeSelectedFromCheckCard();
+      
       // var object = xCheckStudio.Util.tryJsonParse(msg);
       if (result === null) {
         showAlertForm('Failed to checkout checkspace');
@@ -1599,6 +1601,24 @@ function scrollContentDivToTop() {
 
 
 function cancelEnterCheck() {
+  removeSelectedFromCheckCard();
+  // var checkCardContainer = document.getElementById("checkCardContainer");
+  // if (checkCardContainer) {
+
+  //   for (var i = 0; i < checkCardContainer.children.length; i++) {
+  //     var checkCard = checkCardContainer.children[i];
+  //     if (checkCard.classList.contains("checkSpaceCard") &&
+  //       checkCard.classList.contains("selected")) {
+  //       checkCard.classList.remove("selected");
+  //       break;
+  //     }
+  //   }
+  // }
+
+  hideEnterCheckForm();
+}
+
+function removeSelectedFromCheckCard() {
   var checkCardContainer = document.getElementById("checkCardContainer");
   if (checkCardContainer) {
 
@@ -1611,8 +1631,6 @@ function cancelEnterCheck() {
       }
     }
   }
-
-  hideEnterCheckForm();
 }
 
 function enterCheck() {
@@ -1629,7 +1647,7 @@ function enterCheck() {
       checkView.checkClicked(checkCard);
       break;
     }
-  }
+  } 
 
   hideEnterCheckForm();
 }

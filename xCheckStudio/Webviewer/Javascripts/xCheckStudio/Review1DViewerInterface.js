@@ -53,16 +53,51 @@ Review1DViewerInterface.prototype.highlightComponent = function (viewerContainer
         nodeIdString);
 }
 
+Review1DViewerInterface.prototype.GetSourceViewerData = function () {
+    let reviewManager = model.getCurrentReviewManager();
+    if (model.currentCheck === "comparison") {
+        if (this.Id === "a") {
+            return reviewManager.SourceAViewerData;
+        }
+        else if (this.Id === "b") {
+            return reviewManager.SourceBViewerData;
+        }
+        else if (this.Id === "c") {
+            return reviewManager.SourceCViewerData;
+        }
+        else if (this.Id === "d") {
+            return reviewManager.SourceDViewerData;
+        }
+    }
+    else if (model.currentCheck === "compliance") {
+        return reviewManager.ViewerData;
+    }
+
+    return null;
+}
+
+Review1DViewerInterface.prototype.GetIdentifierProperties = function () {
+    let sourceViewerData = this.GetSourceViewerData();
+    if (sourceViewerData === null) {
+        return;
+    }
+    let ext = xCheckStudio.Util.getFileExtension(sourceViewerData.source);
+    var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(ext);
+
+    return identifierProperties;
+}
+
 Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContainer,
     sheetName,
     CurrentReviewTableRowData) {
-
+    let reviewManager  = model.getCurrentReviewManager();
+    
     // get class wise components 
     // If component group is undefined, get its sheetName using mainclass and then get class wise components
     if (!sheetName ||
         sheetName.toLowerCase() === "undefined") {
-        var component = model.getCurrentReviewManager().GetCheckComponent(CurrentReviewTableRowData.groupId, CurrentReviewTableRowData.ID);
-        sheetName = model.getCurrentReviewManager().GetSheetName(component, viewerContainer);
+        var component = reviewManager.GetCheckComponent(CurrentReviewTableRowData.groupId, CurrentReviewTableRowData.ID);
+        sheetName =reviewManager.GetSheetName(component, viewerContainer);
     }
 
     var classWiseComponents = this.GetClasswiseComponentsBySheetName(sheetName, false);
@@ -86,20 +121,26 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
             componentProperties = classWiseComponents[componentId];
             break;
         }
-
         if (componentProperties === undefined) {
+            return;
+        }       
+
+        // get identifier properties
+        let identifierProperties = this.GetIdentifierProperties();
+        if (identifierProperties === null ||
+            !identifierProperties.name ||
+            !identifierProperties.subClass) {
             return;
         }
 
-        var column = {};
+        let column = {};
+        let columnHeaders = [];
 
-        columnHeaders = [];
-
+        let traversedColumns = [];
         for (var i = 0; i < componentProperties.length; i++) {
             var compProperty = componentProperties[i];
 
-            columnHeader = {};
-
+            let columnHeader = {};
             columnHeader["caption"] = compProperty['name'];
             columnHeader["dataField"] = compProperty['name'];
             var type;
@@ -112,23 +153,21 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
             else {
                 continue;
             }
-
             columnHeader["dataType"] = type;
             columnHeader["width"] = "90";
             columnHeaders.push(columnHeader);
 
-            //tagnumber is for instruments XLS data sheet
-            if (Object.keys(column).length <= 3) {
-                if (compProperty['name'] === "ComponentClass" ||
-                    compProperty['name'] === "Name" ||
-                    compProperty['name'] === "Description" ||
-                    compProperty['name'] === "Tagnumber") {
-                    column[compProperty['name']] = i;
-                }
+            //tag number is for instruments XLS data sheet           
+            // if (Object.keys(column).length <= 3) {
+            if (compProperty['name'] === identifierProperties.name) {
+                column["Name"] = i;
             }
+            // }
+
+            traversedColumns.push(compProperty['name']);
         }
 
-        tableData = [];
+        let tableData = [];
         for (var componentId in classWiseComponents) {
             var component = classWiseComponents[componentId];
 
@@ -138,22 +177,46 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
 
                 // get property value
                 tableRowContent[compProperty['name']] = compProperty['value'];
+
+                if(traversedColumns.indexOf(compProperty['name']) === -1)
+                {
+                    let columnHeader = {};
+                    columnHeader["caption"] = compProperty['name'];
+                    columnHeader["dataField"] = compProperty['name'];
+                    var type;
+                    if (compProperty['format'].toLowerCase() === "string") {
+                        type = "string";
+                    }
+                    else if (compProperty['format'].toLowerCase() === "number") {
+                        type = "number";
+                    }
+                    else {
+                        continue;
+                    }
+                    columnHeader["dataType"] = type;
+                    columnHeader["width"] = "90";
+
+                    columnHeaders.push(columnHeader);
+                    traversedColumns.push(compProperty['name']);
+                }
             }
 
             tableData.push(tableRowContent);
         }
 
-
-
         this.CheckStatusArray = {};
         this.SelectedSheetRow = undefined;
 
-        this.LoadSheetTableData(columnHeaders, tableData, "#" + viewerContainer, CurrentReviewTableRowData, column, sheetName);
-
+        this.LoadSheetTableData(
+            columnHeaders, 
+            tableData, 
+            "#" + viewerContainer, 
+            CurrentReviewTableRowData, 
+            column, 
+            sheetName);
 
         // keep track of currently loaded sheet data
         this.ActiveSheetName = sheetName;
-
     }
 };
 
@@ -198,7 +261,12 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
         deferRendering: true,
         onContentReady: function (e) {
             this.SelectedSheetRow = undefined;
-            _this.highlightSheetRowsFromCheckStatus(viewerContainer, CurrentReviewTableRowData, column, sheetName);
+            _this.highlightSheetRowsFromCheckStatus(
+                viewerContainer,
+                CurrentReviewTableRowData,
+                column,
+                sheetName
+            );
         },
         onRowClick: function (e) {
             _this.OnViewerRowClicked(e.rowElement[0], viewerContainer);
@@ -208,10 +276,14 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
     // });
 };
 
-Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (viewerContainer,
+Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
+    viewerContainer,
     reviewTableRowData,
     column,
     sheetName) {
+    if (!column['Name']) {
+        return;
+    }
 
     var selectedComponentName;
     if (this.Id === "a") {
@@ -262,16 +334,9 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
         }
 
         for (var i = 0; i < rows.length; i++) {
-            var row = dataGrid.getRowElement(rows[i].rowIndex)[0];            
+            var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
 
-            var componentName;
-            if (column['Name'] !== undefined) {
-                componentName = row.cells[column['Name']].textContent;
-            }
-            else if (column['Tagnumber'] !== undefined) {
-                componentName = row.cells[column['Tagnumber']].textContent;
-            }
-
+            let componentName = row.cells[column['Name']].textContent;
             if (sourceComponentName === componentName) {
                 // maintain rowwise review row data
                 this.RowWiseReviewRowData[row.rowIndex] = currentReviewTableRowData;
@@ -282,7 +347,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
                     this.SelectedSheetRow = row;
 
                     // var id = viewerContainer.replace("#", "");
-                    dataGrid.getScrollable().scrollTo({top: row.offsetTop - row.offsetHeight});
+                    dataGrid.getScrollable().scrollTo({ top: row.offsetTop - row.offsetHeight });
                 }
                 else {
 
@@ -295,7 +360,6 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
                 checkStatusArray[row.rowIndex] = currentReviewTableRowData.status;
                 break;
             }
-
         }
     }
 
@@ -328,30 +392,28 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
 
     var dataGrid = $(viewerContainer).dxDataGrid("instance");
     var columnHeaders = dataGrid.getVisibleColumns();
+
+    // get identifier properties
+    let identifierProperties = this.GetIdentifierProperties();
+    if (identifierProperties === null) {
+        return;
+    }
+
     var column = {};
     for (var i = 0; i < columnHeaders.length; i++) {
         var columnHeader = columnHeaders[i];
-        //tagnumber is for instruments XLS data sheet
-        if (columnHeader["caption"] === "ComponentClass" ||
-            columnHeader["caption"] === "Name" ||
-            columnHeader["caption"] === "Description" ||
-            columnHeader["caption"] === "Tagnumber") {
-            column[columnHeader["caption"]] = i;
-        }
-        if (Object.keys(column).length === 3) {
+        //tag number is for instruments XLS data sheet
+        if (columnHeader["caption"] === identifierProperties.name) {
+            column["Name"] = i;
             break;
         }
     }
-
-
-    var componentName;
-    if (column.Name !== undefined) {
-        componentName = sheetDataRow.cells[column.Name].textContent;
-    }
-    else if (column.Tagnumber !== undefined) {
-        componentName = sheetDataRow.cells[column.Tagnumber].textContent;
+    if (!column["Name"]) {
+        return;
     }
 
+    let componentName = sheetDataRow.cells[column["Name"]].textContent;
+   
     var checkTableIds = model.getCurrentReviewTable().CheckTableIds;
     //var componentsGroupName = sheetDataRow.cells[column.ComponentClass].textContent;
     // check if sheet row is in RowWiseReviewRowData. If it is not, 
@@ -526,34 +588,31 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
     var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
 
+     // get identifier properties
+     let identifierProperties = this.GetIdentifierProperties();
+     if (identifierProperties === null) {
+         return;
+     }
+
     // var headers = dataGrid.getVisibleColumns();
     var columnHeaders = dataGrid.getVisibleColumns();
     var column = {};
     for (var i = 0; i < columnHeaders.length; i++) {
         var columnHeader = columnHeaders[i];
-        //tagnumber is for instruments XLS data sheet
-        if (columnHeader["caption"] === "ComponentClass" ||
-            columnHeader["caption"] === "Name" ||
-            columnHeader["caption"] === "Description" ||
-            columnHeader["caption"] === "Tagnumber") {
-            column[columnHeader["caption"]] = i;
+        //tag number is for instruments XLS data sheet
+        if (columnHeader["caption"] === identifierProperties.name) {
+            column["Name"] = i;
         }
-        if (Object.keys(column).length === 3) {
-            break;
-        }
+    }
+    if (!column["Name"]) {
+        return;
     }
 
     for (var i = 0; i < rows.length; i++) {
         var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
 
-        var componentName;
-        if (column.Name !== undefined) {
-            componentName = row.cells[column.Name].textContent;
-        }
-        else if (column.Tagnumber !== undefined) {
-            componentName = row.cells[column.Tagnumber].textContent;
-        }
-
+        var componentName = row.cells[column["Name"]].textContent;
+        
         if (selectedComponentName === componentName) {
             if(this.SelectedSheetRow) {
                 model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, currentReviewTableRowData.Status);
