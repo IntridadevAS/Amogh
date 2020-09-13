@@ -373,8 +373,13 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionDa
 }
 
 ComplianceReviewManager.prototype.GetSheetName = function (component, viewerContainerId) {
-    var sheetName;
-    sheetName = this.ComplianceCheckManager["ComponentsHierarchy"][component.SourceId].MainClass;
+    var sheetName = null;
+
+    if ("ComponentsHierarchy" in this.ComplianceCheckManager &&
+        component.SourceId in this.ComplianceCheckManager["ComponentsHierarchy"]) {
+        sheetName = this.ComplianceCheckManager["ComponentsHierarchy"][component.SourceId].MainClass;
+    }
+
     return sheetName;
 }
 

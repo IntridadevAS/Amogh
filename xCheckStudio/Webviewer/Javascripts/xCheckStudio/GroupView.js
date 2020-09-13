@@ -412,7 +412,7 @@ GroupView.prototype.LoadDatabaseViewTabs =function(showTables){
         let templateDiv = document.createElement('div');
         templateDiv.setAttribute("data-options", "dxTemplate : { name: '" + tabId + "' } ")
         let gridDiv = document.createElement('div');
-        gridDiv.id = "tabGrid_" + this.Id + "_" + group;
+        gridDiv.id = xCheckStudio.Util.createValidHTMLId("tabGrid_" + this.Id + "_" + group);
         templateDiv.appendChild(gridDiv);
         document.getElementById("databaseViewer" + this.Id).appendChild(templateDiv);
 
@@ -440,7 +440,7 @@ GroupView.prototype.LoadDatabaseViewTabs =function(showTables){
         onSelectionChanged: function (e) {
 
             // dispose old grid
-            let gridDivId = "tabGrid_" + _this.Id + "_" + e.removedItems[0].title;
+            let gridDivId = xCheckStudio.Util.createValidHTMLId("tabGrid_" + _this.Id + "_" + e.removedItems[0].title);
             let gridDiv = document.getElementById(gridDivId)
             var parent = gridDiv.parentElement;
 
@@ -647,7 +647,7 @@ GroupView.prototype.LoadDatabaseViewTable = function (groupName, group) {
 
         // load grid
         let loadingBrowser = true;
-        let gridDivId = "tabGrid_" + _this.Id + "_" + groupName;
+        let gridDivId = xCheckStudio.Util.createValidHTMLId("tabGrid_" + _this.Id + "_" + groupName);
         $("#" + gridDivId).dxDataGrid({
             columns: columns,
             dataSource: rowsData,

@@ -281,7 +281,7 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     reviewTableRowData,
     column,
     sheetName) {
-    if (!column['Name']) {
+    if (!("Name" in column)) {
         return;
     }
 
@@ -408,7 +408,7 @@ Review1DViewerInterface.prototype.GetCheckComponentRow = function (sheetDataRow,
             break;
         }
     }
-    if (!column["Name"]) {
+    if (!("Name" in column)) {
         return;
     }
 
@@ -603,8 +603,8 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
         if (columnHeader["caption"] === identifierProperties.name) {
             column["Name"] = i;
         }
-    }
-    if (!column["Name"]) {
+    }    
+    if (!("Name" in column)) {
         return;
     }
 

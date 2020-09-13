@@ -1201,6 +1201,13 @@
           document.getElementById("dataVaultBtn").onclick = function () {
             DataVault.toggle();
           }
+
+          // handle on closing application
+          const { ipcRenderer } = require("electron");
+          ipcRenderer.on("beforeClosingApp", (event, file) => { 
+            onLogoutUser("No").then(function (status) {                  
+            });
+          });
         }
 
      //   function OnDisplayToolTip(text) {

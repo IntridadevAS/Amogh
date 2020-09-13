@@ -475,6 +475,13 @@
       }
 
       DrawerMenu.create(disabledMenuItem, []);
+
+      // handle on closing application
+      const { ipcRenderer } = require("electron");
+      ipcRenderer.on("beforeClosingApp", (event, file) => { 
+        onLogoutUser("No").then(function (status) {                  
+        });
+      });
     }
 
     function setUserName() {

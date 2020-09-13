@@ -36,10 +36,15 @@ function createWindow()
         win = null;
     })  
     
+    let firstBeforeClose = true;
     win.on('close', (e) => {
-        e.preventDefault();
-        win.webContents.send("beforeClosingApp", "it is being closed..");
-        win.hide();       
+        if (firstBeforeClose === true) {
+            e.preventDefault();
+            win.webContents.send("beforeClosingApp", "it is being closed..");
+            firstBeforeClose = false;
+            app.quit();
+        }
+        // win.hide();       
     })
 }
 
