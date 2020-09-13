@@ -419,21 +419,21 @@ DBSourceManager.prototype.OpenTableViewsMenu = function () {
   var listViewSDA = document.getElementById("listviewAction" + _this.Id);
   listViewSDA.classList.add("showSDA");
   listViewSDA.onclick = function () {
-    if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
-      // var selectedIds = _this.GetCurrentTable().GetSelectedIds();
-      // if (selectedComps.constructor === Object) {
-      //     selectedComps = Object.values(selectedComps);
-      // }
+    // if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
+    //   // var selectedIds = _this.GetCurrentTable().GetSelectedIds();
+    //   // if (selectedComps.constructor === Object) {
+    //   //     selectedComps = Object.values(selectedComps);
+    //   // }
 
-      // model.views[_this.Id].listView.Show(selectedComps);
+    //   // model.views[_this.Id].listView.Show(selectedComps);
 
       _this.CloseTableViewsMenu();
 
-      if (!isDataVault()) {
-        // hide group view controls
-        _this.ShowGroupViewControls(false);
-      }
-    }
+    //   if (!isDataVault()) {
+    //     // hide group view controls
+    //     _this.ShowGroupViewControls(false);
+    //   }
+    // }
   }
 
   var groupsSDA = document.getElementById("groupsAction" + _this.Id);
