@@ -15,14 +15,14 @@ function PREPManager() {
         var createConfigurationButton = document.getElementById("createConfigurationButton");
         createConfigurationButton.onclick = function()
         {
-            _this.OnCreateConfigurationClicked();
+            // _this.OnCreateConfigurationClicked();
         }
 
          // manage configuration button click
          var manageConfigurationButton = document.getElementById("manageConfigurationButton");
          manageConfigurationButton.onclick = function()
          {
-            _this.OnManageConfigurationClicked();
+            // _this.OnManageConfigurationClicked();
          }       
     }
 

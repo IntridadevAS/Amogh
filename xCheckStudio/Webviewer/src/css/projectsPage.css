@@ -809,17 +809,18 @@ input[type=checkbox] + label {
 
 .dataVaultBtn
 {
-  width: 120px;
+  width: 220px;
   height: 30px; 
   position: absolute;  
   text-align: center;  
-  left: 240px;
-  top: 21px;
+  left: 10px;
+  top: 260px;
   border: 2px solid var(--xCheckRed);
   background-color: var(--xCheckBlack);
   border-radius: var(--borderRadiusVal); 
   line-height: 25px;
   font-size: 16px;
+  z-index: 1;
 }
 
 .dataVaultBtn:hover

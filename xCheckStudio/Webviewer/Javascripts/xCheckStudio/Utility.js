@@ -521,7 +521,7 @@ var xCheckStudio;
         Util.getCurrentDateTime = getCurrentDateTime;
 
         function isProjectorCheckSpaceNameValid(name) {
-            var pattern = new RegExp(/[\ / \\ : * ? "< > |]/); //unacceptable chars
+            var pattern = new RegExp(/[\/\\:*?"<>|]/); //unacceptable chars
             if (pattern.test(name)) {
                 return false;
             }

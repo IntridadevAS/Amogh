@@ -119,16 +119,20 @@ var menuItems = [
 
 let menu = {
     onVersionInfoClicked: function () {
-        console.log("onVersionInfoClicked");
+        const shell = require('electron').shell;
+        shell.openExternal("https://www.xcheck.studio/log-in");
     },
     onHelpClicked: function () {
-        console.log("onHelpClicked");
+        const shell = require('electron').shell;
+        shell.openExternal("https://www.xcheck.studio/log-in");
     },
     onFAQsClicked: function () {
-        console.log("onFAQsClicked");
+        const shell = require('electron').shell;
+        shell.openExternal("https://www.xcheck.studio/log-in");
     },
     onWhatsNewClicked: function () {
-        console.log("onWhatsNewClicked");
+        const shell = require('electron').shell;
+        shell.openExternal("https://www.xcheck.studio/log-in");
     },
     onExitClicked: function () {
         console.log("onExitClicked");
