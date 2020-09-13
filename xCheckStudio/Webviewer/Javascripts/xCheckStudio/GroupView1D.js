@@ -949,13 +949,13 @@ GroupView1D.prototype.LoadGATable = function (
                     SourceManagers[_this.Id].OpenPropertyCalloutByCompId(e.data._Id);
                 },
                 onRowPrepared: function (e) {
-                    // if (e.rowType === "data" &&
-                    //     _this.HighlightedGARow !== e.rowElement[0]) {
-                    //     // set row colors
-                    //     if (e.data["_Id"] in _this.RowWiseColors) {
-                    //         e.rowElement[0].backgroundColor = _this.RowWiseColors[e.data["_Id"]];
-                    //     }
-                    // }
+                    if (e.rowType === "data" &&
+                        _this.HighlightedGARow !== e.rowElement[0]) {
+                        // set row colors
+                        if (e.data["_Id"] in _this.GARowWiseColors) {
+                            e.rowElement[0].style.backgroundColor = _this.GARowWiseColors[e.data["_Id"]];                           
+                        }
+                    }
                 },
                 onDisposing: function (e) {
                     _this.GADataTable = null;
