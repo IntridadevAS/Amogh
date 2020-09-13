@@ -7,7 +7,7 @@ function onCreateVersion()
     var versionName = document.getElementById("versionName").value;
     if(!versionName || versionName == "")
     {
-        window.parent.showAlertForm("Version name can't be empty.");
+        window.parent.showAlertForm("Revision name can't be empty.");
         return;
     }
 

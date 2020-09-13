@@ -323,7 +323,7 @@ let menu = {
         swapIcon();
         DrawerMenu.drawer.hide();
         const shell = require('electron').shell;
-        shell.openExternal("https://www.intrida.com/");
+        shell.openExternal("https://www.xcheck.studio/log-in");
     },
 
     onSettingsClicked: function () {
