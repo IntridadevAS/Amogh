@@ -1632,6 +1632,10 @@ GroupView1D.prototype.LoadDataChangeViewTable = function (
                 }       
             },
             onRowClick: function (e) {
+                if (e.rowType !== "data") {
+                    return;
+                }
+                
                 // open property callout
                 SourceManagers[_this.Id].OpenPropertyCalloutByCompId(e.data.Id);
                 // if (e.rowType !== "data" ||
