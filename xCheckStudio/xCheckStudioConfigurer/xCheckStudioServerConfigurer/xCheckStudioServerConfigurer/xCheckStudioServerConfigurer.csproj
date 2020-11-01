@@ -59,7 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Reprise">
-      <HintPath>..\..\..\..\..\..\..\RLM\rlm.v14.0BL2-x64_w4\dotnet\Reprise\Reprise\bin\x64\Release\Reprise.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\data\rlm.v14.0BL2-x64_w4\rlm.v14.0BL2-x64_w4\dotnet\Reprise\Reprise\bin\x64\Release\Reprise.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -157,9 +157,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\x64\Release\XcheckStudio-HubManager.exe" "D:\Intrida\Source Code\VS Code\xCheckStudioViewer\xCheckStudio\Webviewer\installer src" /Y /I
-xcopy "$(ProjectDir)bin\x64\Release\System.Data.SQLite.dll" "D:\Intrida\Source Code\VS Code\xCheckStudioViewer\xCheckStudio\Webviewer\installer src" /Y /I
-xcopy "$(ProjectDir)bin\x64\Release\x64\SQLite.Interop.dll" "D:\Intrida\Source Code\VS Code\xCheckStudioViewer\xCheckStudio\Webviewer\installer src" /Y /I
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\x64\Release\XcheckStudio-HubManager.exe" "I:\Intrida\source code\xCheckStudioViewer\xCheckStudio\Webviewer\installer src" /Y /I
+xcopy "$(ProjectDir)bin\x64\Release\System.Data.SQLite.dll" "I:\Intrida\source code\xCheckStudioViewer\xCheckStudio\Webviewer\installer src" /Y /I
+xcopy "$(ProjectDir)bin\x64\Release\x64\SQLite.Interop.dll" "I:\Intrida\source code\xCheckStudioViewer\xCheckStudio\Webviewer\installer src" /Y /I
 </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" />

@@ -1,6 +1,6 @@
 {
 	"name": "xcheckstudio",
-	"author" : "XcheckStudio",
+	"author": "XcheckStudio",
 	"version": "1.0.0",
 	"main": "main.js",
 	"devDependencies": {
@@ -20,26 +20,26 @@
 	},
 	"build": {
 		"appId": "com.intrida.xCheckStudioApp",
-		"productName": "XcheckStudio",				
+		"productName": "XcheckStudio",
 		"win": {
 			"target": [
 				"nsis"
 			],
-			"icon": "build/main_256x256.ico"			
+			"icon": "build/main_256x256.ico"
 		},
 		"nsis": {
 			"oneClick": false,
 			"installerIcon": "build/main_32x32.ico",
-			"uninstallerIcon": "build/main_32x32.ico",		
-			"installerSidebar":"build/banner.bmp",	
-			"uninstallerSidebar":"build/banner.bmp",	
+			"uninstallerIcon": "build/main_32x32.ico",
+			"installerSidebar": "build/banner.bmp",
+			"uninstallerSidebar": "build/banner.bmp",
 			"runAfterFinish": false,
 			"allowToChangeInstallationDirectory": true,
 			"perMachine": true,
 			"deleteAppDataOnUninstall": true,
-			"createDesktopShortcut" : "always",
-			"createStartMenuShortcut" : true,
-			"menuCategory" : true
+			"createDesktopShortcut": "always",
+			"createStartMenuShortcut": true,
+			"menuCategory": true
 		}
 	}
 }
