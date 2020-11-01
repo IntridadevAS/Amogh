@@ -599,7 +599,16 @@ ComparisonCheckResultsTable.prototype.UpdateGridData = function (componentId,
     dataGrid.repaintRows(rowIndex);
 
     if (populateDetailedTable) {
-        model.checks["comparison"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
+        var detailedInfoTable = model.checks["comparison"]["detailedInfoTable"];
+        if (
+          detailedInfoTable.CurrentComponent &&
+          (detailedInfoTable.CurrentComponent.id !== rowData.ID ||
+          detailedInfoTable.CurrentComponent.groupId !== rowData.groupId)
+        ) {
+          return;
+        }
+
+        detailedInfoTable.populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
     }
 }
 
@@ -707,6 +716,8 @@ ComparisonCheckResultsTable.prototype.GetDataForSelectedRow = function (selected
 function ComparisonCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
     this.SelectedProperties = [];
+
+    this.CurrentComponent = null;
 }
 
 ComparisonCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (sources) {
@@ -949,6 +960,21 @@ ComparisonCheckPropertiesTable.prototype.CreateTableData = function (properties)
 }
 
 ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData, containerDiv) {
+
+    // if (
+    //   this.CurrentComponent &&
+    //   this.CurrentComponent.id === rowData.ID &&
+    //   this.CurrentComponent.groupId === rowData.groupId
+    // ) {
+    //   return;
+    // }
+
+    this.Destroy();
+    this.CurrentComponent = {
+      id: rowData.ID,
+      groupId: rowData.groupId,
+    };    
+
     //Clear earlier selection from detailed review table
     this.SelectedProperties = [];
     // clear comment
@@ -972,11 +998,13 @@ ComparisonCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
     this.LoadDetailedReviewTableData(columnHeaders, tableData, containerDiv);
 }
 
-ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, containerDiv) {
+ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (
+    columnHeaders, 
+    tableData, 
+    containerDiv) {
     var viewerContainer = "#" + this.DetailedReviewTableContainer;
-    var _this = this;
+    var _this = this;   
 
-    this.Destroy();
     // var height =  document.getElementById("tableDataComparison").offsetHeight / 2 + "px";
     $(function () {
         $(viewerContainer).dxDataGrid({
@@ -1050,6 +1078,9 @@ ComparisonCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function 
                     DevExpress.ui.notify({ message: comment, width: 500, left: 0}, "info", 1500);
                 }
             },
+            onDisposing: function (e) {
+                _this.CurrentComponent = null;
+            }
             // onRowPrepared: function(e) {
             //     if(e.isSelected) {
             //         _this.SelectionManager.ApplyHighlightColor(e.rowElement[0])

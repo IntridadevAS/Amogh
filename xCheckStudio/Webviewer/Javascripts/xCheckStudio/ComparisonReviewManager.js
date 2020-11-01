@@ -400,23 +400,8 @@ ComparisonReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                     false);
                 model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
-                if (results[componentId]["sourceANodeId"] !== null) {
-                    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
-                }
-                if (results[componentId]["sourceBNodeId"] !== null) {
-                    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
-                }
-                if (results[componentId]["sourceCNodeId"] !== null) {
-                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
-                }
-                if (results[componentId]["sourceDNodeId"] !== null) {
-                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "d");
-                }
-
+                _this.UpdateInViewerOnStatusChange(checkResultComponent); 
+                
                 // call components accepted
                 _this.OnComponentsAccepted([checkResultComponent], "property");
             }
@@ -488,22 +473,7 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, 'a');
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);                       
                     }
                 }
 
@@ -517,6 +487,44 @@ ComparisonReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
     }
     catch (error) { }
 }
+
+ComparisonReviewManager.prototype.UpdateInViewerOnStatusChange = function (
+  changedComponent
+) {
+  var srcs = {
+    a: {
+      nameProp: "sourceAName",
+      mainClassProp: "sourceAMainClass",
+      viewerProp: "sourceAViewer",
+    },
+    b: {
+      nameProp: "sourceBName",
+      mainClassProp: "sourceBMainClass",
+      viewerProp: "sourceBViewer",
+    },
+    c: {
+      nameProp: "sourceCName",
+      mainClassProp: "sourceCMainClass",
+      viewerProp: "sourceCViewer",
+    },
+    d: {
+      nameProp: "sourceDName",
+      mainClassProp: "sourceDMainClass",
+      viewerProp: "sourceDViewer",
+    },
+  };
+
+  for (var srcId in srcs) {
+    if (changedComponent[srcs[srcId].nameProp]) {
+      var viewerInterface = model.checks["comparison"][srcs[srcId].viewerProp];
+      viewerInterface.ChangeComponentColorOnStatusChange(
+        changedComponent,
+        srcId,
+        changedComponent[srcs[srcId].mainClassProp]
+      );
+    }
+  }
+};
 
 ComparisonReviewManager.prototype.GetWorstSeverityStatusOfComponent = function (properties) {
 
@@ -604,22 +612,7 @@ ComparisonReviewManager.prototype.updateStatusOfCategory = function (accordionDa
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent); 
                     }
 
                     // call components accepted
@@ -696,22 +689,7 @@ ComparisonReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);
                     }
                 }
 
@@ -776,22 +754,7 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                     false);                    
                 model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
-                if (results[componentId]["sourceANodeId"] !== null) {
-                    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
-                }
-                if (results[componentId]["sourceBNodeId"] !== null) {
-                    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
-                }
-                if (results[componentId]["sourceCNodeId"] !== null) {
-                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
-                }
-                if (results[componentId]["sourceDNodeId"] !== null) {
-                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "d");
-                }
+                _this.UpdateInViewerOnStatusChange(checkResultComponent);
             }
         });
     }
@@ -858,22 +821,7 @@ ComparisonReviewManager.prototype.UnAcceptCategory = function (accordionData) {
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);
                     }
                 }
 
@@ -1002,22 +950,7 @@ ComparisonReviewManager.prototype.TransposeProperty = function (
                     false);
                 model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
-                if (results[componentId]["sourceANodeId"] !== null) {
-                    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
-                }
-                if (results[componentId]["sourceBNodeId"] !== null) {
-                    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
-                }
-                if (results[componentId]["sourceCNodeId"] !== null) {
-                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
-                }
-                if (results[componentId]["sourceDNodeId"] !== null) {
-                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                }
+                _this.UpdateInViewerOnStatusChange(checkResultComponent);
 
                 // Update original dataset properties               
                 if ("a" in sourceCompIds) {
@@ -1277,22 +1210,7 @@ ComparisonReviewManager.prototype.RestorePropertyTranspose = function (
                     false);
                 model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
-                if (results[componentId]["sourceANodeId"] !== null) {
-                    var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                    sourceAViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "a");
-                }
-                if (results[componentId]["sourceBNodeId"] !== null) {
-                    var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                    sourceBViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "b");
-                } 
-                if (results[componentId]["sourceCNodeId"] !== null) {
-                    var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                    sourceCViewerInterface.ChangeComponentColorOnStatusChange(checkResultComponent, "c");
-                }
-                if (results[componentId]["sourceDNodeId"] !== null) {
-                    var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                    sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                }
+                _this.UpdateInViewerOnStatusChange(checkResultComponent);
 
                  // Update original dataset properties               
                 if ("a" in sourceCompIds) {
@@ -1554,22 +1472,7 @@ ComparisonReviewManager.prototype.RestoreComponentTranspose = function (selected
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);
 
                         // Update original dataset properties 
                         let affectedComponents = [];
@@ -1656,22 +1559,7 @@ ComparisonReviewManager.prototype.TransposeComponent = function (
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);
                     }
                 }
                 model.getCurrentReviewTable().Refresh(tableIds);
@@ -1755,22 +1643,7 @@ ComparisonReviewManager.prototype.RestoreCategoryTranspose = function (accordion
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);
 
                         // Update original dataset properties 
                         let affectedComponents = [];
@@ -1862,22 +1735,7 @@ ComparisonReviewManager.prototype.TransposeCategory = function (key, accordionDa
                             tableIds.push(tableContainer);
                         }
 
-                        if (changedComponent["sourceANodeId"] !== null) {
-                            var sourceAViewerInterface = model.checks["comparison"]["sourceAViewer"];
-                            sourceAViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "a");
-                        }
-                        if (changedComponent["sourceBNodeId"] !== null) {
-                            var sourceBViewerInterface = model.checks["comparison"]["sourceBViewer"];
-                            sourceBViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "b");
-                        }
-                        if (changedComponent["sourceCNodeId"] !== null) {
-                            var sourceCViewerInterface = model.checks["comparison"]["sourceCViewer"];
-                            sourceCViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "c");
-                        }
-                        if (changedComponent["sourceDNodeId"] !== null) {
-                            var sourceDViewerInterface = model.checks["comparison"]["sourceDViewer"];
-                            sourceDViewerInterface.ChangeComponentColorOnStatusChange(changedComponent, "d");
-                        }
+                        _this.UpdateInViewerOnStatusChange(changedComponent);
                     }
                 }
                 model.getCurrentReviewTable().Refresh(tableIds);
@@ -2265,6 +2123,7 @@ ComparisonReviewManager.prototype.GetComponentData = function (checkComponentDat
 
     var sourceComponentData = {};
 
+    sourceComponentData["Name"] = ComponentData.name;
     sourceComponentData["Status"] = checkComponentData.status;
     sourceComponentData["accepted"] = checkComponentData.accepted;
     sourceComponentData["transpose"] = checkComponentData.transpose;

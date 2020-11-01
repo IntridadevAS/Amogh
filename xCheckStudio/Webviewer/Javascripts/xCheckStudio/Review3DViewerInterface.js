@@ -394,8 +394,10 @@ Review3DViewerInterface.prototype.SelectValidNode = function () {
     }
 }
 
-
-Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (checkComponent, srcId) {
+Review3DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (
+    checkComponent, 
+    srcId,
+    mainComponentClass = null) {
 
     var reviewManager = model.getCurrentReviewManager();
     if (!reviewManager) {

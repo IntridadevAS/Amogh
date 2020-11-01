@@ -17,6 +17,10 @@ function Review1DViewerInterface(id,
     this.Id = id;
     
     this.RowWiseReviewRowData = {};
+
+    this.NameIdentifierProperty = null;
+
+    this.GridInstance = null;
 }
 
 // assign SelectionManager's method to this class
@@ -90,8 +94,10 @@ Review1DViewerInterface.prototype.GetIdentifierProperties = function () {
 Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContainer,
     sheetName,
     CurrentReviewTableRowData) {
-    let reviewManager  = model.getCurrentReviewManager();
-    
+    // this.NameIdentifierProperty = null;        
+
+    let reviewManager  = model.getCurrentReviewManager();    
+
     // get class wise components 
     // If component group is undefined, get its sheetName using mainclass and then get class wise components
     if (!sheetName ||
@@ -110,10 +116,12 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
 
     //check if sheet is already loaded       
     if (sheetName === currentlyLoadedSheet) {
-
         this.HighlightRowInSheetData(CurrentReviewTableRowData, viewerContainer);
         return;
     }
+
+    // destroy old grid
+    this.Destroy(viewerContainer.replace("#", ""));
 
     if (classWiseComponents !== {}) {
         var componentProperties;
@@ -161,6 +169,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
             // if (Object.keys(column).length <= 3) {
             if (compProperty['name'] === identifierProperties.name) {
                 column["Name"] = i;
+                this.NameIdentifierProperty = compProperty['name'];
             }
             // }
 
@@ -229,52 +238,54 @@ Review1DViewerInterface.prototype.unHighlightComponent = function () {
     }
 }
 
-Review1DViewerInterface.prototype.LoadSheetTableData = function (columnHeaders,
-    tableData,
-    viewerContainer,
-    CurrentReviewTableRowData,
-    column,
-    sheetName) {
+Review1DViewerInterface.prototype.LoadSheetTableData = function (
+  columnHeaders,
+  tableData,
+  viewerContainer,
+  CurrentReviewTableRowData,
+  column,
+  sheetName
+) {
+  var _this = this;
 
-    var _this = this;
+//   this.Destroy(viewerContainer.replace("#", "")); 
 
-    this.Destroy(viewerContainer.replace("#", ""));
-
-    // $(function () {
-
-    $(viewerContainer).dxDataGrid({
-        dataSource: tableData,
-        columns: columnHeaders,
-        showBorders: true,
-        showRowLines: true,
-        allowColumnResizing: true,
-        height: "100%",
-        width: "100%",
-        hoverStateEnabled: true,
-        filterRow: {
-            visible: true
-        },
-        scrolling: {
-            mode: "standard"
-        },
-        paging: { enabled: false },
-        deferRendering: true,
-        onContentReady: function (e) {
-            this.SelectedSheetRow = undefined;
-            _this.highlightSheetRowsFromCheckStatus(
-                viewerContainer,
-                CurrentReviewTableRowData,
-                column,
-                sheetName
-            );
-        },
-        onRowClick: function (e) {
-            _this.OnViewerRowClicked(e.rowElement[0], viewerContainer);
-        }
-
-    });
-    // });
-};
+  this.GridInstance = $(viewerContainer).dxDataGrid({
+    dataSource: tableData,
+    columns: columnHeaders,
+    showBorders: true,
+    showRowLines: true,
+    allowColumnResizing: true,
+    height: "100%",
+    width: "100%",
+    hoverStateEnabled: true,
+    filterRow: {
+      visible: true,
+    },
+    scrolling: {
+      mode: "standard",
+    },
+    paging: { enabled: false },
+    deferRendering: true,
+    onContentReady: function (e) {
+      this.SelectedSheetRow = undefined;
+      _this.highlightSheetRowsFromCheckStatus(
+        viewerContainer,
+        CurrentReviewTableRowData,
+        column,
+        sheetName
+      );
+    },
+    onRowClick: function (e) {
+      _this.OnViewerRowClicked(e.rowElement[0], viewerContainer);
+    },
+    onDisposing: function (e) {
+      _this.NameIdentifierProperty = null;
+      _this.GridInstance = null;
+      _this.CheckStatusArray = {};
+    }
+  }).dxDataGrid("instance");  
+};;;
 
 Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     viewerContainer,
@@ -367,9 +378,55 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     this.CheckStatusArray[sheetName] = checkStatusArray;
 }
 
-Review1DViewerInterface.prototype.ChangeComponentColorOnStatusChange =  function(checkComponent, srcId) {
-    
-}
+Review1DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (
+  checkComponent,
+  srcId,
+  mainComponentClass = null
+) {
+  if (mainComponentClass !== this.ActiveSheetName) {
+    return;
+  }
+
+  var reviewManager = model.getCurrentReviewManager();
+  if (!reviewManager) {
+    return;
+  }
+
+  var sourceComponentData = reviewManager.GetComponentData(
+    checkComponent,
+    srcId
+  );
+  if (!sourceComponentData) {
+    return;
+  }
+
+//   var hexColor = xCheckStudio.Util.getComponentHexColor(
+//     sourceComponentData,
+//     false,
+//     undefined
+//   );
+  var hexColor = model.getCurrentSelectionManager().GetRowHighlightColor(checkComponent.status);
+  if (hexColor === undefined) {
+    return;
+  }
+
+  var rows = this.GridInstance.getVisibleRows();
+  for (let i = 0; i < rows.length; i++) {
+    let row = rows[i];
+
+    if (row.data[this.NameIdentifierProperty] !== sourceComponentData.Name) {
+      continue;
+    }
+
+    let rowElement = this.GridInstance.getRowElement(i)[0];
+    for (var j = 0; j < rowElement.cells.length; j++) {
+        cell = rowElement.cells[j];
+        cell.style.backgroundColor = hexColor;
+    }
+
+    this.CheckStatusArray[this.ActiveSheetName][i] = checkComponent.status;
+  }
+};
 
 Review1DViewerInterface.prototype.OnViewerRowClicked = function (row, viewerContainer) {
 

@@ -216,7 +216,7 @@ ComplianceReviewManager.prototype.AcceptComponents = function (selectedGroupIdsV
                         }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
-                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent)
+                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent, null, changedComponent.mainComponentClass);
                     }
                 }
 
@@ -287,7 +287,7 @@ ComplianceReviewManager.prototype.AcceptProperty = function (selectedPropertiesK
                 model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 var sourceViewer = model.checks["compliance"]["viewer"];
-                sourceViewer.ChangeComponentColorOnStatusChange(checkResultComponent);
+                sourceViewer.ChangeComponentColorOnStatusChange(checkResultComponent, null, checkResultComponent.mainComponentClass);
             }
         });
     }
@@ -359,7 +359,7 @@ ComplianceReviewManager.prototype.UpdateStatusOfCategory = function (accordionDa
                         }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
-                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent);
+                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent, null, changedComponent.mainComponentClass);
                     }
                 }
 
@@ -479,7 +479,7 @@ ComplianceReviewManager.prototype.UnAcceptComponents = function (selectedGroupId
                         }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
-                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent);
+                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent, null, changedComponent.mainComponentClass);
                     }
                 }
 
@@ -553,7 +553,7 @@ ComplianceReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 model.checks[model.currentCheck]["reviewTable"].Refresh([tableContainer]);
 
                 var sourceViewer = model.checks["compliance"]["viewer"];
-                sourceViewer.ChangeComponentColorOnStatusChange(checkResultComponent);
+                sourceViewer.ChangeComponentColorOnStatusChange(checkResultComponent, null, checkResultComponent.mainComponentClass);
             }
         });
     }
@@ -621,7 +621,7 @@ ComplianceReviewManager.prototype.UnAcceptCategory = function (accordionData, Ac
                         }
 
                         var sourceViewer = model.checks["compliance"]["viewer"];
-                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent);
+                        sourceViewer.ChangeComponentColorOnStatusChange(changedComponent, null, changedComponent.mainComponentClass);
                     }
                 }
 
@@ -796,12 +796,12 @@ ComplianceReviewManager.prototype.getSourcePropertiesNamesFromDetailedReview = f
     return row.cells[CompliancePropertyColumns.PropertyName].innerText;
 }
 
-ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
-    var checkGroup = this.ComplianceCheckManager.results[groupId];
-    var component = checkGroup.components[componentId];
+// ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
+//     var checkGroup = this.ComplianceCheckManager.results[groupId];
+//     var component = checkGroup.components[componentId];
 
-    return component;
-}
+//     return component;
+// }
 
 ComplianceReviewManager.prototype.GetCheckComponetDataByNodeId = function (viewerId, selectedNode) {
     var checkComponentData;
@@ -820,6 +820,8 @@ ComplianceReviewManager.prototype.GetFileName = function () {
 ComplianceReviewManager.prototype.GetCheckComponent = function (groupId, componentId) {
     var checkGroup = this.GetCheckGroup(groupId);
     var component = checkGroup.components[componentId];
+
+    component.mainComponentClass = checkGroup.componentClass;
 
     return component;
 }
@@ -841,6 +843,7 @@ ComplianceReviewManager.prototype.GetComponentData = function (checkComponentDat
 
     var sourceComponentData = {};
 
+    sourceComponentData["Name"] = checkComponentData.name;
     sourceComponentData["Status"] = checkComponentData.status;
     sourceComponentData["accepted"] = checkComponentData.accepted;
     sourceComponentData["transpose"] = checkComponentData.transpose;
