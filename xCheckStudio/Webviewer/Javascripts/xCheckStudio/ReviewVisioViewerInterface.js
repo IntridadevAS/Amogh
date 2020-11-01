@@ -557,7 +557,10 @@ ReviewVisioViewerInterface.prototype.HighlightNodeInViewer = function (ids) {
     }
 };
 
-ReviewVisioViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (checkComponent, srcId) {
+ReviewVisioViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (
+    checkComponent, 
+    srcId,
+    mainComponentClass = null) {
 
     var reviewManager = model.getCurrentReviewManager();
     if (!reviewManager) {

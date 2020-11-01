@@ -475,7 +475,16 @@ ComplianceCheckResultsTable.prototype.UpdateGridData = function (componentId,
     dataGrid.repaintRows(rowIndex);
 
     if (populateDetailedTable) {
-        model.checks["compliance"]["detailedInfoTable"].populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
+        var detailedInfoTable = model.checks["compliance"]["detailedInfoTable"];
+        if (
+          detailedInfoTable.CurrentComponent &&
+          (detailedInfoTable.CurrentComponent.id !== rowData.ID ||
+          detailedInfoTable.CurrentComponent.groupId !== rowData.groupId)
+        ) {
+          return;
+        }
+
+        detailedInfoTable.populateDetailedReviewTable(rowData, tableContainer.replace("#", ""));
     }
 }
 
@@ -558,6 +567,8 @@ ComplianceCheckResultsTable.prototype.GetDataForSelectedRow = function (selected
 function ComplianceCheckPropertiesTable(detailedReviewTableContainer) {
     this.DetailedReviewTableContainer = detailedReviewTableContainer;
     this.SelectedProperties = [];
+
+    this.CurrentComponent = null;
 }
 
 ComplianceCheckPropertiesTable.prototype.CreatePropertiesTableHeader = function (source) {
@@ -634,6 +645,20 @@ ComplianceCheckPropertiesTable.prototype.addPropertyRowToDetailedTable = functio
 
 ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function (rowData, containerDiv) {
 
+    // if (
+    //     this.CurrentComponent &&
+    //     this.CurrentComponent.id === rowData.ID &&
+    //     this.CurrentComponent.groupId === rowData.groupId
+    //   ) {
+    //     return;
+    //   }
+  
+      this.Destroy();
+      this.CurrentComponent = {
+        id: rowData.ID,
+        groupId: rowData.groupId,
+      };   
+
     // var tableData = [];
     // var columnHeaders = [];
     //Clear earlier selection from detailed review table
@@ -665,79 +690,103 @@ ComplianceCheckPropertiesTable.prototype.populateDetailedReviewTable = function 
 ComplianceCheckPropertiesTable.prototype.LoadDetailedReviewTableData = function (columnHeaders, tableData, viewerContainer, containerDiv) {
     var _this = this;
 
-    this.Destroy();
+    // this.Destroy();
 
     $(function () {
         $(viewerContainer).dxDataGrid({
-            dataSource: tableData,
-            columns: columnHeaders,
-            keyExpr: CompliancePropertyColumnNames.PropertyId,
-            columnAutoWidth: true,
-            columnResizingMode: 'widget',
-            wordWrapEnabled: false,
-            showBorders: true,
-            showRowLines: true,
-            allowColumnResizing: true,
-            hoverStateEnabled: true,
-            filterRow: {
-                visible: true
-            },
-            selection: {
-                mode: "multiple",
-                showCheckBoxesMode: "always",
-                recursive: true
-            },
-            scrolling: {
-                mode: "standard"
-            },
-            paging: {
-                enabled: false
-            },
-            onContentReady: function (e) {
-                // initialize the context menu
-                // internal call from repaint rows gives containerId with # hence check
-                if (!containerDiv.includes("#")) {
-                    containerDiv = "#" + containerDiv;
-                }
+          dataSource: tableData,
+          columns: columnHeaders,
+          keyExpr: CompliancePropertyColumnNames.PropertyId,
+          columnAutoWidth: true,
+          columnResizingMode: "widget",
+          wordWrapEnabled: false,
+          showBorders: true,
+          showRowLines: true,
+          allowColumnResizing: true,
+          hoverStateEnabled: true,
+          filterRow: {
+            visible: true,
+          },
+          selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always",
+            recursive: true,
+          },
+          scrolling: {
+            mode: "standard",
+          },
+          paging: {
+            enabled: false,
+          },
+          onContentReady: function (e) {
+            // initialize the context menu
+            // internal call from repaint rows gives containerId with # hence check
+            if (!containerDiv.includes("#")) {
+              containerDiv = "#" + containerDiv;
+            }
 
-                if (!(containerDiv in model.getCurrentReviewTable().ContextMenus)) {
-                    var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(model.getCurrentReviewManager());
-                    model.getCurrentReviewTable().ContextMenus[containerDiv] = reviewComplianceContextMenuManager;
-                }
+            if (!(containerDiv in model.getCurrentReviewTable().ContextMenus)) {
+              var reviewComplianceContextMenuManager = new ReviewComplianceContextMenuManager(
+                model.getCurrentReviewManager()
+              );
+              model.getCurrentReviewTable().ContextMenus[
+                containerDiv
+              ] = reviewComplianceContextMenuManager;
+            }
 
-                model.getCurrentReviewTable().ContextMenus[containerDiv].InitPropertyLevelContextMenu(viewerContainer);
-                _this.highlightDetailedReviewTableFromCheckStatus(_this.DetailedReviewTableContainer);
-            },
-            onCellPrepared: function (e) {
-                if (e.rowType == "header") {
-                    e.cellElement.css("text-align", "center");
-                    e.cellElement.css("color", "black");
-                    e.cellElement.css("font-weight", "bold");
+            model
+              .getCurrentReviewTable()
+              .ContextMenus[containerDiv].InitPropertyLevelContextMenu(
+                viewerContainer
+              );
+            _this.highlightDetailedReviewTableFromCheckStatus(
+              _this.DetailedReviewTableContainer
+            );
+          },
+          onCellPrepared: function (e) {
+            if (e.rowType == "header") {
+              e.cellElement.css("text-align", "center");
+              e.cellElement.css("color", "black");
+              e.cellElement.css("font-weight", "bold");
+            }
+          },
+          onRowClick: function (e) {
+            model.checks["compliance"][
+              "selectionManager"
+            ].MaintainHighlightedDetailedRow(e.rowElement[0]);
+
+            if (
+              e.data.PropertyId in
+              model.getCurrentReviewManager().detailedReviewRowComments
+            ) {
+              let comment = model.getCurrentReviewManager()
+                .detailedReviewRowComments[e.data.PropertyId];
+              DevExpress.ui.notify(
+                { message: comment, width: 500, left: 0 },
+                "info",
+                1500
+              );
+            }
+          },
+          onSelectionChanged: function (e) {
+            if (e.currentSelectedRowKeys.length > 0) {
+              for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
+                _this.SelectedProperties.push(e.currentSelectedRowKeys[i]);
+              }
+            } else {
+              for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
+                var index = _this.SelectedProperties.indexOf(
+                  e.currentDeselectedRowKeys[i]
+                );
+                if (index > -1) {
+                  _this.SelectedProperties.splice(index, 1);
                 }
-            },
-            onRowClick: function (e) {
-                model.checks["compliance"]["selectionManager"].MaintainHighlightedDetailedRow(e.rowElement[0]);
-                
-                if (e.data.PropertyId in model.getCurrentReviewManager().detailedReviewRowComments) {
-                    let comment = model.getCurrentReviewManager().detailedReviewRowComments[e.data.PropertyId];
-                    DevExpress.ui.notify({ message: comment, width: 500, left: 0}, "info", 1500);
-                }
-            },
-            onSelectionChanged: function (e) {
-                if (e.currentSelectedRowKeys.length > 0) {
-                    for (var i = 0; i < e.currentSelectedRowKeys.length; i++) {
-                        _this.SelectedProperties.push(e.currentSelectedRowKeys[i]);
-                    }
-                }
-                else {
-                    for (var i = 0; i < e.currentDeselectedRowKeys.length; i++) {
-                        var index = _this.SelectedProperties.indexOf(e.currentDeselectedRowKeys[i]);
-                        if (index > -1) {
-                            _this.SelectedProperties.splice(index, 1);
-                        }
-                    }
-                }
-            },
+              }
+            }
+          },
+          onDisposing: function (e) {
+            _this.CurrentComponent = null;
+          },
         });
     });
 
