@@ -22,7 +22,7 @@
         ],
         "name": "Name",
         "category": "MainComponentClass",
-        "componentClass": "Class"
+        "componentClass": "Category1"
     },
     "mysql": {
         "extensions": [
@@ -61,8 +61,8 @@
             "rvt"
         ],
         "name": "Name",
-        "category": "TYPE",
-        "componentClass": "TYPE"
+        "category": "Category1",
+        "componentClass": "Category1"
     },
     "igs": {
         "extensions": [
