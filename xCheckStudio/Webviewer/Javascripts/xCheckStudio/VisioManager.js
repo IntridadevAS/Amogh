@@ -55,6 +55,8 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
 
             model.views[_this.Id].viewerContextMenu = new VisioViewerContextMenu(_this.Id);
             model.views[_this.Id].viewerContextMenu.Init(true);
+
+            _this.BindEvents();
         });
 
         _this.ModelTree = new VisioModelBrowser(_this.Id,
@@ -74,8 +76,6 @@ VisioManager.prototype.LoadData = function (selectedComponents) {
                 _this.ModelTree.AddComponentTable(_this.SourceProperties);
 
                 _this.AddComponentsToDB();
-
-                _this.BindEvents();
             }
 
             return resolve(true);
