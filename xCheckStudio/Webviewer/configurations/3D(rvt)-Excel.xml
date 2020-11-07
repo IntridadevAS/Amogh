@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+       Intrida Compliance check rules keywords.
+       
+       ""
+       Must have value
+       Should start with-somevalue
+       Should be number
+       Equal to-somevalue
+       Should end with-somevalue
+	   
+	   Note: These keywords are not case sensitive.
+-->
+
+<CheckCase name="3D(.rvt) - 1D(.xls)" sourceA="RVT" sourceB="XLS">
+	<Check type="Comparison"  sourceAType="RVT" sourceBType="XLS"> 	  
+		<ComponentGroup sourceAGroupName="Doors" sourceBGroupName="Doors">
+		  <ComponentClass sourceAComponentClass="Doors" sourceBComponentClass="Doors">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Windows" sourceBGroupName="Windows">
+		  <ComponentClass sourceAComponentClass="Windows" sourceBComponentClass="Windows">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Plumbing Fixtures" sourceBGroupName="Plumbing Fixtures">
+		  <ComponentClass sourceAComponentClass="Plumbing Fixtures" sourceBComponentClass="Plumbing Fixtures">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Structural Columns" sourceBGroupName="Structural Columns">
+		  <ComponentClass sourceAComponentClass="Structural Columns" sourceBComponentClass="Structural Columns">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Electrical Fixtures" sourceBGroupName="Electrical Fixtures">
+		  <ComponentClass sourceAComponentClass="Electrical Fixtures" sourceBComponentClass="Electrical Fixtures">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Mechanical Equipment" sourceBGroupName="Mechanical Equipment">
+		  <ComponentClass sourceAComponentClass="Mechanical Equipment" sourceBComponentClass="Mechanical Equipment">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+
+		<ComponentGroup sourceAGroupName="Duct Fittings" sourceBGroupName="Duct Fittings">
+		  <ComponentClass sourceAComponentClass="Duct Fittings" sourceBComponentClass="Duct Fittings">
+			 <Matchwith sourceAPropertyname="Seq"  sourceBPropertyname ="Seq"/>
+			 <Matchwith sourceAPropertyname="Owner1"  sourceBPropertyname ="Owner1"/>
+			 <Matchwith sourceAPropertyname="Level"  sourceBPropertyname ="Level"/>
+			 <Property sourceAName="Name" sourceBName="Name"  severity="Error" comment="This is for unique identification"/>
+			 <Property sourceAName="Seq" sourceBName="Seq"  severity="Error" comment="Item sequence is required"/>
+		     <Property sourceAName="Category1" sourceBName="Category1"  severity="Warning" comment="Category must exist"/>
+			 <Property sourceAName="Description" sourceBName="Description"  severity="Warning" comment="This property is required"/>
+		     <Property sourceAName="Level" sourceBName="Level"  severity="Error" comment="Ensure the Level value is always a match"/>
+		     <Property sourceAName="Material" sourceBName="Material"  severity="Warning" comment="Material property should be entered"/>
+		     <Property sourceAName="Required" sourceBName="Required"  severity="Error" comment="This Property must have a value"/>
+		     <Property sourceAName="BuildingNumber" sourceBName="BuildingNumber"  severity="Error" comment="Building Number must be a match"/>
+		     <Property sourceAName="Classification" sourceBName="Classification"  severity="Warning" comment="Classification is required"/>
+		     <Property sourceAName="AssetIdentifier" sourceBName="AssetIdentifier"  severity="Warning" comment="AssetIdentifier must be present"/>
+		     <Property sourceAName="TagNumber" sourceBName="TagNumber"  severity="Error" comment="TagNumber must have value"/>
+		     <Property sourceAName="Cost" sourceBName="Cost"  severity="Warning" comment="Costs must be correcty reconciled"/>
+		     <Property sourceAName="AreaUnits" sourceBName="AreaUnits"  severity="Warning" comment="AreaUnits should be available in final revision"/>			 
+		  </ComponentClass>
+	    </ComponentGroup>
+		
+	</Check> 
+
+	
+	<Check type="ComplianceSourceA" sourceType="RVT" > 	  
+		<ComponentGroup name="IFCSITE">
+		  <ComponentClass name="IFCSITE">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="Project Address" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Project Name" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Project Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Client Name" rule="Must have value" severity="Warning" comment="See project spec doc. Very important!." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Required for COBie!." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   
+	   <ComponentGroup name="IFCBUILDING">
+	   <ComponentClass name="IFCBUILDING">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+       </ComponentClass>
+	   </ComponentGroup>
+	   	   
+	   <ComponentGroup name="IFCBUILDINGSTOREY">
+		  <ComponentClass name="IFCBUILDINGSTOREY">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   
+	   <ComponentGroup name="Doors">
+		  <ComponentClass name="Doors">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Structural Columns">
+		  <ComponentClass name="Structural Columns">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Mechanical Equipment">
+		  <ComponentClass name="Mechanical Equipment">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Building number value should be correct." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Classification value is required." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Contact Project manager if this is missing." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="Property must have value." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Plumbing Fixtures">
+		  <ComponentClass name="Plumbing Fixtures">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Warning" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Warning" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Warning" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Windows">
+		  <ComponentClass name="Windows">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="Property must have value." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+
+	</Check>
+
+	<Check type="ComplianceSourceB" sourceType="XLS" > 	  
+		<ComponentGroup name="IFCSITE">
+		  <ComponentClass name="IFCSITE">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="Project Address" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Project Name" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Project Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Client Name" rule="Must have value" severity="Warning" comment="See project spec doc. Very important!." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Required for COBie!." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   
+	   <ComponentGroup name="IFCBUILDING">
+	   <ComponentClass name="IFCBUILDING">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+       </ComponentClass>
+	   </ComponentGroup>
+	   	   
+	   <ComponentGroup name="IFCBUILDINGSTOREY">
+		  <ComponentClass name="IFCBUILDINGSTOREY">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+	   
+	   <ComponentGroup name="Doors">
+		  <ComponentClass name="Doors">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Structural Columns">
+		  <ComponentClass name="Structural Columns">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Mechanical Equipment">
+		  <ComponentClass name="Mechanical Equipment">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Building number value should be correct." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Classification value is required." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Contact Project manager if this is missing." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="Property must have value." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Plumbing Fixtures">
+		  <ComponentClass name="Plumbing Fixtures">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Warning" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Warning" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Warning" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+	   <ComponentGroup name="Windows">
+		  <ComponentClass name="Windows">
+			 <Property name="Seq" rule="Must have value" severity="Error" comment="Property must have value." />
+			 <Property name="Name" severity="Warning" comment="Property must have value."/>
+			 <Property name="Description" rule="Must have value" severity="Error" comment="Ensure Description is entered.." />
+			 <Property name="Level" rule="Must have value" severity="Warning" comment="The correct component Level must be displayed.." />
+			 <Property name="Material" rule="Must have value" severity="Warning" comment="Noted component material must be correct.." />
+			 <Property name="Required" rule="Must have value" severity="Warning" comment="Indicate if item is required." />
+			 <Property name="BuildingNumber" rule="Must have value" severity="Error" comment="Building number value should be correct." />
+			 <Property name="Classification" rule="Must have value" severity="Warning" comment="Classification value is required." />
+			 <Property name="COBie" rule="Must have value" severity="Error" comment="Contact Project manager if this is missing." />
+			 <Property name="Category1" rule="Must have value" severity="Error" comment="See project specification doc." />
+			 <Property name="Tag Number" rule="Must have value" severity="Warning" comment="See project specification doc." />
+			 <Property name="Cost" rule="Must have value" severity="Warning" comment="Property must have value." />
+			 <Property name="AssetIdentifier" rule="Must have value" severity="Warning" comment="Property must have value." />
+		  </ComponentClass>
+	   </ComponentGroup>
+
+
+	</Check>
+	
+</CheckCase>

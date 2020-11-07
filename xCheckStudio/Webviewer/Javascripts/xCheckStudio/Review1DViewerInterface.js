@@ -181,6 +181,9 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
             var component = classWiseComponents[componentId];
 
             tableRowContent = {};
+
+            // add component id which can be used for unique identification
+            tableRowContent["xcs_id_"] = componentId;
             for (var i = 0; i < component.length; i++) {
                 var compProperty = component[i];
 
@@ -292,91 +295,89 @@ Review1DViewerInterface.prototype.highlightSheetRowsFromCheckStatus = function (
     reviewTableRowData,
     column,
     sheetName) {
-    if (!("Name" in column)) {
+      if (!("Name" in column)) {
         return;
-    }
+      }
+      
+      var selectedComponentId;
+      if (model.currentCheck === "comparison") {
+        if (this.Id === "a") {
+          selectedComponentId = reviewTableRowData.SourceAId;
+        } else if (this.Id === "b") {
+          selectedComponentId = reviewTableRowData.SourceBId;
+        } else if (this.Id === "c") {
+          selectedComponentId = reviewTableRowData.SourceCId;
+        } else if (this.Id === "d") {
+          selectedComponentId = reviewTableRowData.SourceDId;
+        }
+      } else if (model.currentCheck === "compliance") {
+        selectedComponentId = reviewTableRowData.SourceId;
+      }
 
-    var selectedComponentName;
-    if (this.Id === "a") {
-        selectedComponentName = reviewTableRowData.SourceA;
-    }
-    else if (this.Id === "b") {
-        selectedComponentName = reviewTableRowData.SourceB;
-    }
-    else if (this.Id === "c") {
-        selectedComponentName = reviewTableRowData.SourceC;
-    }
-    else if (this.Id === "d") {
-        selectedComponentName = reviewTableRowData.SourceD;
-    }
+      var checkGroup = model
+        .getCurrentReviewManager()
+        .GetCheckGroup(reviewTableRowData.groupId);
 
-    var checkGroup = model.getCurrentReviewManager().GetCheckGroup(reviewTableRowData.groupId);
+      var dataGrid = $(viewerContainer).dxDataGrid("instance");
+      var rows = dataGrid.getVisibleRows();
 
-    var dataGrid = $(viewerContainer).dxDataGrid("instance");
-    var rows = dataGrid.getVisibleRows();
-
-    // get rowIndex vs status array
-    var checkStatusArray = {};
-    for (var componentId in checkGroup.components) {
-        var currentReviewTableRowData = checkGroup.components[componentId];        
-
-        var sourceComponentName;
+      // get rowIndex vs status array
+      var checkStatusArray = {};
+      for (var componentId in checkGroup.components) {
+        var currentReviewTableRowData = checkGroup.components[componentId];
+      
+        var sourceComponentId;
         if (this.IsComparison) {
-            if (this.Id === "a") {
-                sourceComponentName = currentReviewTableRowData.sourceAName;
-            }
-            else if (this.Id === "b") {
-                sourceComponentName = currentReviewTableRowData.sourceBName;
-            }
-            else if (this.Id === "c") {
-                sourceComponentName = currentReviewTableRowData.sourceCName;
-            }
-            else if (this.Id === "d") {
-                sourceComponentName = currentReviewTableRowData.sourceDName;
-            }
+          if (this.Id === "a") {
+            sourceComponentId = currentReviewTableRowData.sourceAId;
+          } else if (this.Id === "b") {
+            sourceComponentId = currentReviewTableRowData.sourceBId;
+          } else if (this.Id === "c") {
+            sourceComponentId = currentReviewTableRowData.sourceCId;
+          } else if (this.Id === "d") {
+            sourceComponentId = currentReviewTableRowData.sourceDId;
+          }
+        } else {
+            sourceComponentId= currentReviewTableRowData.sourceId
         }
-        else {
-            sourceComponentName = currentReviewTableRowData.name;
-        }
-
-        if (!sourceComponentName ||
-            sourceComponentName === "") {
-            continue;
+        if (!sourceComponentId) {
+          continue;
         }
 
         for (var i = 0; i < rows.length; i++) {
-            var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
+          var row = dataGrid.getRowElement(i)[0];
 
-            let componentName = row.cells[column['Name']].textContent;
-            if (sourceComponentName === componentName) {
-                // maintain rowwise review row data
-                this.RowWiseReviewRowData[row.rowIndex] = currentReviewTableRowData;
+          if (sourceComponentId == rows[i].data["xcs_id_"]) {
+            // maintain row-wise review row data
+            this.RowWiseReviewRowData[row.rowIndex] = currentReviewTableRowData;
 
-                if (componentName === selectedComponentName) {
-                    // highlight sheet data row
-                    model.getCurrentSelectionManager().ApplyHighlightColor(row);
-                    this.SelectedSheetRow = row;
+            if (sourceComponentId == selectedComponentId) {
+              // highlight sheet data row
+              model.getCurrentSelectionManager().ApplyHighlightColor(row);
+              this.SelectedSheetRow = row;
 
-                    // var id = viewerContainer.replace("#", "");
-                    dataGrid.getScrollable().scrollTo({ top: row.offsetTop - row.offsetHeight });
-                }
-                else {
-
-                    var color = model.getCurrentSelectionManager().GetRowHighlightColor(currentReviewTableRowData.status);
-                    for (var j = 0; j < row.cells.length; j++) {
-                        cell = row.cells[j];
-                        cell.style.backgroundColor = color;
-                    }
-                }
-                checkStatusArray[row.rowIndex] = currentReviewTableRowData.status;
-                break;
+              // var id = viewerContainer.replace("#", "");
+              dataGrid
+                .getScrollable()
+                .scrollTo({ top: row.offsetTop - row.offsetHeight });
+            } else {
+              var color = model
+                .getCurrentSelectionManager()
+                .GetRowHighlightColor(currentReviewTableRowData.status);
+              for (var j = 0; j < row.cells.length; j++) {
+                cell = row.cells[j];
+                cell.style.backgroundColor = color;
+              }
             }
+            checkStatusArray[row.rowIndex] = currentReviewTableRowData.status;
+            break;
+          }
         }
-    }
+      }
 
-    this.CheckStatusArray = {};
-    this.CheckStatusArray[sheetName] = checkStatusArray;
-}
+      this.CheckStatusArray = {};
+      this.CheckStatusArray[sheetName] = checkStatusArray;
+    }
 
 Review1DViewerInterface.prototype.ChangeComponentColorOnStatusChange = function (
   checkComponent,
@@ -622,57 +623,35 @@ Review1DViewerInterface.prototype.unhighlightSelectedSheetRowInviewer = function
     // }
 }
 
-Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentReviewTableRowData, viewerContainer) {
-    var selectedComponentName;
-    if (this.Id === "a") {
-        selectedComponentName = currentReviewTableRowData.SourceA;
-    }
-    else if (this.Id === "b") {
-        selectedComponentName = currentReviewTableRowData.SourceB;
-    }
-    else if (this.Id === "c") {
-        selectedComponentName = currentReviewTableRowData.SourceC;
-    }
-    else if (this.Id === "d") {
-        selectedComponentName = currentReviewTableRowData.SourceD;
-    }
-    else {
-        return;
-    }
-
-    //var checkGroup = model.getCurrentReviewManager().GetCheckGroup(reviewTableRowData.groupId);
+Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentReviewTableRowData, viewerContainer) {       
+    var selectedComponentId;
+    if (model.currentCheck === "comparison") {
+      if (this.Id === "a") {
+        selectedComponentId = currentReviewTableRowData.SourceAId;
+      } else if (this.Id === "b") {
+        selectedComponentId = currentReviewTableRowData.SourceBId;
+      } else if (this.Id === "c") {
+        selectedComponentId = currentReviewTableRowData.SourceCId;
+      } else if (this.Id === "d") {
+        selectedComponentId = currentReviewTableRowData.SourceDId;
+      }
+    } else if (model.currentCheck === "compliance") {
+      selectedComponentId = currentReviewTableRowData.SourceId;
+    } else {
+      return;
+    }   
 
     var dataGrid = $("#" + viewerContainer).dxDataGrid("instance");
     var rows = dataGrid.getVisibleRows();
 
-     // get identifier properties
-     let identifierProperties = this.GetIdentifierProperties();
-     if (identifierProperties === null) {
-         return;
-     }
-
-    // var headers = dataGrid.getVisibleColumns();
-    var columnHeaders = dataGrid.getVisibleColumns();
-    var column = {};
-    for (var i = 0; i < columnHeaders.length; i++) {
-        var columnHeader = columnHeaders[i];
-        //tag number is for instruments XLS data sheet
-        if (columnHeader["caption"] === identifierProperties.name) {
-            column["Name"] = i;
-        }
-    }    
-    if (!("Name" in column)) {
-        return;
-    }
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = dataGrid.getRowElement(rows[i].rowIndex)[0];
-
-        var componentName = row.cells[column["Name"]].textContent;
+    for (var i = 0; i < rows.length; i++) {       
+        var row = dataGrid.getRowElement(i)[0];       
         
-        if (selectedComponentName === componentName) {
+        if (selectedComponentId == rows[i].data["xcs_id_"]) {
             if(this.SelectedSheetRow) {
-                model.getCurrentSelectionManager().ChangeBackgroundColor(this.SelectedSheetRow, currentReviewTableRowData.Status);
+                model.getCurrentSelectionManager().ChangeBackgroundColor(
+                    this.SelectedSheetRow, 
+                    currentReviewTableRowData.Status);
             }
             this.HighlightSheetDataRow(viewerContainer, row);
             // scroll to rowElement
