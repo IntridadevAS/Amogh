@@ -113,6 +113,6 @@
         "category": "ActType",
         "componentClass": "ActType",
         "owner": "OWNER",
-        "createVirtualParents": ["SCTUB", "SCVALV", "SCFITT", "SCINST", "SCOINS"]
+        "createVirtualParents": ["SCTUB", "SCVALV", "SCFITT", "SCINST", "SCOINS", "SCEQUI"]
     }
 }

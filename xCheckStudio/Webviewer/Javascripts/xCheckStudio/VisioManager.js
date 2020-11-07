@@ -167,61 +167,58 @@ VisioManager.prototype.CreateVirtualParents = function (identifierProperties) {
     }
 }
 
-VisioManager.prototype.CreateVirtualParent = function (parentStr, newObjects) {   
-    
-    if (parentStr.indexOf(" ") !== -1) {
-        let parentCategory = parentStr.split(" ")[0].trim();
+VisioManager.prototype.CreateVirtualParent = function (parentStr, newObjects) {
+  if (!parentStr) {
+    return;
+  }
 
-        let parentName = parentStr;
-        if (parentStr.indexOf("of") !== -1) {
-            parparentNameent = parentStr.split('of')[0].trim();
-        }
+  // if (parentStr.indexOf(" ") !== -1) {
+  let parentCategory = parentStr.split(" ")[0].trim();
 
-        if (parentCategory in this.CategoryWiseComponents &&
-            this.CategoryWiseComponents[parentCategory].indexOf(parentName) !== -1) {
-            // parent component is already there, no need to create new one
-            return;
-        }
+  let parentName = parentStr;
+//   if (parentStr.indexOf("of") !== -1) {
+//     parentName = parentStr.split("of")[0].trim();
+//   }
 
-        // create virtual parent
-        let owner = null;
-        if (parentStr.indexOf("of") !== -1) {
-            owner = parentStr.replace(parentStr.substring(0, parentStr.indexOf("of") + 2), "");
-            owner = owner.trim();
-        }
-        var componentObject = new GenericComponent(parentName,
-            parentCategory,
-            parentCategory,
-            null,
-            owner);
+  if (
+    parentCategory in this.CategoryWiseComponents &&
+    this.CategoryWiseComponents[parentCategory].indexOf(parentName) !== -1
+  ) {
+    // parent component is already there, no need to create new one
+    return;
+  }
 
-        // add genericProperties object to sourceproperties collection
-        newObjects[Object.keys(newObjects).length + 1] = componentObject;
+  // create virtual parent
+  let owner = null;
+  if (parentStr.indexOf("of") !== -1) {
+    owner = parentStr.replace(
+      parentStr.substring(0, parentStr.indexOf("of") + 2),
+      ""
+    );
+    owner = owner.trim();
+  }
+  var componentObject = new GenericComponent(
+    parentName,
+    parentCategory,
+    parentCategory,
+    null,
+    owner
+  );
 
-        // maintain category wise component names
-        if (!(parentCategory in this.CategoryWiseComponents)) {
-            this.CategoryWiseComponents[parentCategory] = [];
-        }
-        this.CategoryWiseComponents[parentCategory].push(parentName);
+  // add genericProperties object to sourceproperties collection
+  newObjects[Object.keys(newObjects).length + 1] = componentObject;
 
-        if (owner !== null) {
-            this.CreateVirtualParent(owner, newObjects);
-        }
-    }
+  // maintain category wise component names
+  if (!(parentCategory in this.CategoryWiseComponents)) {
+    this.CategoryWiseComponents[parentCategory] = [];
+  }
+  this.CategoryWiseComponents[parentCategory].push(parentName);
 
-    // if (parentName.indexOf("of") !== -1) {
-
-    // }
-    // else {
-
-    // }
-    // let parentsArray = component.ParentNodeId.split('of');
-    // for (let i = 0; i < parentsArray.length; i++) {
-    //     let parent = parentsArray[i].trim();
-
-
-    // }
-}
+  if (owner !== null) {
+    this.CreateVirtualParent(owner, newObjects);
+  }
+  // }
+};
 
 VisioManager.prototype.ReadShapeProperties = function (shapeElement, identifierProperties) {
 
