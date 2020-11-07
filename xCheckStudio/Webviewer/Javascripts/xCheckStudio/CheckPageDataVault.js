@@ -197,8 +197,7 @@ const DataVault = {
             var selectedItem = selectedItems[i];
             
             // get current source id
-            var srcIds = ['a', 'b', 'c', 'd'];
-            var srcId = srcIds[model.activeTabs + i];
+            var srcId = controller.nextAvailableView();
 
             if (xCheckStudio.Util.isSource3D(selectedItem.Type)) {
                 DataVault.load3DDataSetInCheckSpace(selectedItem, srcId).then(function (status) {
