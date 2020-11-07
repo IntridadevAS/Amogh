@@ -7,8 +7,8 @@ if(!isset($_POST['ActionToPerform']) || !isset($_POST['CheckName']) || !isset($_
  return;
 }
 
-// $projectName = $_POST['ProjectName'];
-// $checkName = $_POST['CheckName'];
+$projectName = $_POST['ProjectName'];
+$checkName = $_POST['CheckName'];
 $actionToPerform = $_POST['ActionToPerform'];
 
 switch ($actionToPerform) {
@@ -28,21 +28,21 @@ switch ($actionToPerform) {
     case "acceptComplianceSourceBComponent":
     case "acceptComplianceSourceCComponent":
     case "acceptComplianceSourceDComponent":
-        acceptComplianceComponent($actionToPerform);
+        acceptComplianceComponent();
         break;
 
     case "acceptComplianceSourceAProperty":
     case "acceptComplianceSourceBProperty":
     case "acceptComplianceSourceCProperty":
     case "acceptComplianceSourceDProperty":
-        acceptComplianceProperty($actionToPerform);
+        acceptComplianceProperty();
         break;
 
     case "acceptComplianceSourceACategory":
     case "acceptComplianceSourceBCategory":
     case "acceptComplianceSourceCCategory":
     case "acceptComplianceSourceDCategory":
-        acceptComplianceCategory($actionToPerform);
+        acceptComplianceCategory();
         break;
 
     case "unAcceptComparisonComponent":
@@ -61,21 +61,21 @@ switch ($actionToPerform) {
     case "unAcceptComplianceSourceBComponent":
     case "unAcceptComplianceSourceCComponent":
     case "unAcceptComplianceSourceDComponent":
-        unAcceptComplianceComponent($actionToPerform);
+        unAcceptComplianceComponent();
         break;
 
     case "unAcceptComplianceSourceAProperty":
     case "unAcceptComplianceSourceBProperty":
     case "unAcceptComplianceSourceCProperty":
     case "unAcceptComplianceSourceDProperty":
-        unAcceptComplianceProperty($actionToPerform);
+        unAcceptComplianceProperty();
         break;
 
     case "unAcceptComplianceSourceACategory":
     case "unAcceptComplianceSourceBCategory":
     case "unAcceptComplianceSourceCCategory":
     case "unAcceptComplianceSourceDCategory":
-        unAcceptComplianceCategory($actionToPerform);
+        unAcceptComplianceCategory();
         break;
 
     default:
@@ -83,8 +83,8 @@ switch ($actionToPerform) {
 }
 
 function acceptComparisonComponent() {    
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
     $dbh = null;
     try{
@@ -180,8 +180,8 @@ function acceptComparisonComponent() {
 
 function acceptComparisonProperty() {
 
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -265,8 +265,8 @@ function acceptComparisonCategory() {
         return;
     }
 
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
 
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -376,11 +376,12 @@ function acceptComparisonCategory() {
     echo json_encode($results);
 }
 
-function acceptComplianceComponent($actionToPerform) {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+function acceptComplianceComponent() {
+    global $projectName;
+    global $checkName;
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
-    
+    global $actionToPerform;
+
     $dbh = null;
     try{
     
@@ -462,10 +463,11 @@ function acceptComplianceComponent($actionToPerform) {
     }
 }
 
-function acceptComplianceProperty($actionToPerform) {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
-   
+function acceptComplianceProperty() {
+    global $projectName;
+    global $checkName;
+    global $actionToPerform;
+
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -558,16 +560,17 @@ function acceptComplianceProperty($actionToPerform) {
     echo json_encode($results);
 }
 
-function acceptComplianceCategory($actionToPerform) {
+function acceptComplianceCategory() {
     if(!isset($_POST['groupid'])) {
         echo 'fail';
         return;
     }
 
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
-   
+    global $actionToPerform;
+
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 
@@ -650,8 +653,8 @@ function acceptComplianceCategory($actionToPerform) {
 
 function unAcceptComponent() {
     $statusArray = array();
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
     $status = "false";
 
@@ -734,8 +737,8 @@ function unAcceptComponent() {
 }
 
 function unAcceptComparisonProperty() {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -814,8 +817,8 @@ function unAcceptComparisonProperty() {
 }
 
 function unAcceptComparisonCategory() {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
 
     $dbPath = getCheckDatabasePath($projectName, $checkName);
@@ -899,12 +902,13 @@ function unAcceptComparisonCategory() {
     echo json_encode($results);
 }
 
-function unAcceptComplianceComponent($actionToPerform) {
+function unAcceptComplianceComponent() {
 
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+    global $projectName;
+    global $checkName;
     $selectedGroupIdsVsResultsIds = (object) json_decode($_POST['selectedGroupIdsVsResultsIds'], true);
-   
+    global $actionToPerform;
+
     $dbh;
     try{
     
@@ -993,9 +997,10 @@ function unAcceptComplianceComponent($actionToPerform) {
     }
 }
 
-function unAcceptComplianceProperty($actionToPerform) {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+function unAcceptComplianceProperty() {
+    global $projectName;
+    global $checkName;
+    global $actionToPerform;
     $componentid = $_POST['componentid']; 
     $selectedPropertyIds = json_decode($_POST['propertyIds']); 
 
@@ -1086,11 +1091,12 @@ function unAcceptComplianceProperty($actionToPerform) {
     echo json_encode($results);
 }
 
-function unAcceptComplianceCategory($actionToPerform) {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
+function unAcceptComplianceCategory() {
+    global $projectName;
+    global $checkName;
     $groupid = $_POST['groupid'];
-    
+    global $actionToPerform;
+
     $dbPath = getCheckDatabasePath($projectName, $checkName);
     $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database"); 
 

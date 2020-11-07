@@ -8,8 +8,8 @@
     }
         
     // get project name
-    // $projectName = $_POST['ProjectName'];
-    // $checkName = $_POST['CheckName'];
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
     $values =readCheckCaseInfo();
     if($values != 'fail')
     {
@@ -22,9 +22,9 @@
 
     function readCheckCaseInfo()
     {      
-        $projectName = $_POST['ProjectName'];
-        $checkName = $_POST['CheckName'];
-        $dbh = null;
+        global $projectName;
+        global $checkName;
+        $dbh;
         try
         {        
             // open database
