@@ -13,8 +13,8 @@
     }
 
     // get project name
-    // $projectName = $_POST['ProjectName'];
-    // $checkName = $_POST['CheckName'];
+    $projectName = $_POST['ProjectName'];
+    $checkName = $_POST['CheckName'];
    
     $Components = json_decode($_POST['Components'],false);
     // var_dump($Components);
@@ -40,8 +40,9 @@
     
     function addComponentsToDB($ComponentsList)
     {
-        $projectName = $_POST['ProjectName'];
-        $checkName = $_POST['CheckName'];
+        global $projectName;
+        global $checkName;
+        //global $SourceDataSheets;
 
         $dbh = null;
         try{
@@ -183,8 +184,8 @@
 
     function add1DComponentsToDB($ComponentsList)
     {      
-        $projectName = $_POST['ProjectName'];
-        $checkName = $_POST['CheckName'];
+        global $projectName;
+        global $checkName;
         $dbh = null;
         try{
         

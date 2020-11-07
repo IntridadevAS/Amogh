@@ -18,63 +18,84 @@ if (
     return;
 }
 
+$dataSourceOrderInCheckCase = json_decode($_POST['dataSourceOrderInCheckCase'], true);
+
+$SourceASelectedComponents = json_decode($_POST['SourceASelectedComponents'], true);
+$SourceBSelectedComponents = json_decode($_POST['SourceBSelectedComponents'], true);
+$SourceCSelectedComponents = json_decode($_POST['SourceCSelectedComponents'], true);
+$SourceDSelectedComponents = json_decode($_POST['SourceDSelectedComponents'], true);
+
+$CheckCaseType = json_decode($_POST['CheckCaseType'], true);
+
+$projectName = $_POST['ProjectName'];
+$checkName = $_POST['CheckName'];
+
+// get source components and thier properties from database
+$SourceComponents = json_decode($_POST['SourceComponents'], true);
+
+$SourceAComponents = $SourceComponents['a']['components'];
+$SourceBComponents = $SourceComponents['b']['components'];
+$SourceCComponents = $SourceComponents['c']['components'];
+$SourceDComponents = $SourceComponents['d']['components'];
+
+$SourceAProperties = $SourceComponents['a']['properties'];
+$SourceBProperties = $SourceComponents['b']['properties'];
+$SourceCProperties = $SourceComponents['c']['properties'];
+$SourceDProperties = $SourceComponents['d']['properties'];
+
+$CheckComponentsGroups = array();
+
+$SourceANotCheckedComponents = array();
+$SourceBNotCheckedComponents = array();
+$SourceCNotCheckedComponents = array();
+$SourceDNotCheckedComponents = array();
+
+// // read source wise components and thier properties
+// getSourceComponents();
+// return;
+
 // perform comparison check on components
-$checkComponentsGroups = checkDataSources();
+checkDataSources(count($dataSourceOrderInCheckCase));
 
 // write check result to database
-writeComparisonResultsToDB(
-    $checkComponentsGroups,
-    $_POST['ProjectName'],
-    $_POST['CheckName']
-);
+writeComparisonResultsToDB();
 
+//echo json_encode($CheckComponentsGroups);
 echo 'success';
-
-function getDataSourceOrderInCheckCase()
+function checkDataSources($totalSources)
 {
-    return json_decode($_POST['dataSourceOrderInCheckCase'], true);
-}
-
-function getCheckCaseType()
-{
-    return json_decode($_POST['CheckCaseType'], true);
-}
-
-function checkDataSources()
-{
-    $dataSourceOrderInCheckCase = getDataSourceOrderInCheckCase();
-    $totalSources = count($dataSourceOrderInCheckCase);
     if (
         $totalSources < 2 ||
         $totalSources > 4
-    )
-    {
+    ) {
         echo 'fail';
         return;
     }
 
-    $SourceComponents = json_decode($_POST['SourceComponents'], true);
     // all source components
-    $SourceAComponents = $SourceComponents['a']['components'];
-    $SourceBComponents = $SourceComponents['b']['components'];
-    $SourceCComponents = $SourceComponents['c']['components'];
-    $SourceDComponents = $SourceComponents['d']['components'];
+    global $SourceAComponents;
+    global $SourceBComponents;
+    global $SourceCComponents;
+    global $SourceDComponents;
+
     // all source properties
-    $SourceAProperties = $SourceComponents['a']['properties'];
-    $SourceBProperties = $SourceComponents['b']['properties'];
-    $SourceCProperties = $SourceComponents['c']['properties'];
-    $SourceDProperties = $SourceComponents['d']['properties'];
+    global $SourceAProperties;
+    global $SourceBProperties;
+    global $SourceCProperties;
+    global $SourceDProperties;
 
     // all source selected components
-    $SourceASelectedComponents = json_decode($_POST['SourceASelectedComponents'], true);
-    $SourceBSelectedComponents = json_decode($_POST['SourceBSelectedComponents'], true);
-    $SourceCSelectedComponents = json_decode($_POST['SourceCSelectedComponents'], true);
-    $SourceDSelectedComponents = json_decode($_POST['SourceDSelectedComponents'], true);
+    global $SourceASelectedComponents;
+    global $SourceBSelectedComponents;
+    global $SourceCSelectedComponents;
+    global $SourceDSelectedComponents;
 
-    $SourceANotCheckedComponents = array();
-    $SourceBNotCheckedComponents = array();
-    $SourceCNotCheckedComponents = array();
-    $SourceDNotCheckedComponents = array();    
+    global $SourceANotCheckedComponents;
+    global $SourceBNotCheckedComponents;
+    global $SourceCNotCheckedComponents;
+    global $SourceDNotCheckedComponents;
+
+    global $dataSourceOrderInCheckCase;
 
     // This arrays are used to store the components which are matched 
     // before that data source's loop is started executing.
@@ -83,9 +104,6 @@ function checkDataSources()
     $sourceBAlreadyMatchedComponents = array();
     $sourceCAlreadyMatchedComponents = array();
     $sourceDAlreadyMatchedComponents = array();
-
-    // check result array
-    $checkComponentsGroups = array();
 
     // perform comparison in context of source a components
     foreach ($SourceAComponents as $mainClass => $currentComponents) {
@@ -110,7 +128,7 @@ function checkDataSources()
             // check if mainclass is mapped
             // if not mapped, then component will go to 'Undefined' group
             if (!$groupMapped) {
-                addUndefinedComponent($sourceAComponent, 1, $checkComponentsGroups);
+                addUndefinedComponent($sourceAComponent, 1);
                 continue;
             }
 
@@ -133,7 +151,7 @@ function checkDataSources()
                 }
             }
             if (!$isClassMapped) {
-                addUndefinedComponent($sourceAComponent, 1, $checkComponentsGroups);
+                addUndefinedComponent($sourceAComponent, 1);
                 continue;
             }
 
@@ -280,7 +298,7 @@ function checkDataSources()
             }
            
             if ($isUndefinedComponent) {
-                addUndefinedComponent($sourceAComponent, 1, $checkComponentsGroups);
+                addUndefinedComponent($sourceAComponent, 1);
             } else {
                 $totalGroupWiseMatechedComponents = count($groupWiseMatechedComponents);
 
@@ -363,8 +381,7 @@ function checkDataSources()
                                 $SourceBProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
                         }
                         else if ($totalSources === 3)
@@ -378,8 +395,7 @@ function checkDataSources()
                                 $SourceCProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
                         }
                         else if ($totalSources === 4)
@@ -395,8 +411,7 @@ function checkDataSources()
                                 $SourceDProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
                         }
 
@@ -459,7 +474,7 @@ function checkDataSources()
     
                             $groupName =  getGroupTitle($mappingGroup, $totalSources);
     
-                            $componentGroup = getCheckComponentGroup($groupName, $checkComponentsGroups);
+                            $componentGroup = getCheckComponentGroup($groupName);
                             $componentGroup->AddCheckComponent($noMatchComponent);
                         }
                     }
@@ -467,6 +482,7 @@ function checkDataSources()
             }
         }
     }
+
 
     // perform comparison in context of source b components
     foreach ($SourceBComponents as $mainClass => $currentComponents) {
@@ -491,7 +507,7 @@ function checkDataSources()
             // check if mainclass is mapped
             // if not mapped, then component will go to 'Undefined' group
             if (!$groupMapped) {
-                addUndefinedComponent($sourceBComponent, 2, $checkComponentsGroups);
+                addUndefinedComponent($sourceBComponent, 2);
                 continue;
             }
 
@@ -514,7 +530,7 @@ function checkDataSources()
                 }
             }
             if (!$isClassMapped) {
-                addUndefinedComponent($sourceBComponent, 2, $checkComponentsGroups);
+                addUndefinedComponent($sourceBComponent, 2);
                 continue;
             }
 
@@ -660,7 +676,7 @@ function checkDataSources()
             }
 
             if ($isUndefinedComponent) {
-                addUndefinedComponent($sourceBComponent, 2, $checkComponentsGroups);
+                addUndefinedComponent($sourceBComponent, 2);
             } else {
                 $totalGroupWiseMatechedComponents =  count($groupWiseMatechedComponents);
 
@@ -741,8 +757,7 @@ function checkDataSources()
                                 $SourceBProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
                         }
                         else if ($totalSources === 3)
@@ -756,8 +771,7 @@ function checkDataSources()
                                 $SourceCProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
                         }
                         else if ($totalSources === 4)
@@ -773,8 +787,7 @@ function checkDataSources()
                                 $SourceDProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
                         }
 
@@ -854,7 +867,7 @@ function checkDataSources()
                                 $groupName =  getGroupTitle($mappingGroup, $totalSources);
 
 
-                                $componentGroup = getCheckComponentGroup($groupName, $checkComponentsGroups);
+                                $componentGroup = getCheckComponentGroup($groupName);
                                 $componentGroup->AddCheckComponent($noMatchComponent);
                             }
                         }
@@ -863,6 +876,7 @@ function checkDataSources()
             }
         }
     }
+
 
     if ($totalSources > 2) {
         // perform comparison in context of source c components
@@ -888,7 +902,7 @@ function checkDataSources()
                 // check if mainclass is mapped
                 // if not mapped, then component will go to 'Undefined' group
                 if (!$groupMapped) {
-                    addUndefinedComponent($sourceCComponent, 3, $checkComponentsGroups);
+                    addUndefinedComponent($sourceCComponent, 3);
                     continue;
                 }
 
@@ -911,7 +925,7 @@ function checkDataSources()
                     }
                 }
                 if (!$isClassMapped) {
-                    addUndefinedComponent($sourceCComponent, 3, $checkComponentsGroups);
+                    addUndefinedComponent($sourceCComponent, 3);
                     continue;
                 }
 
@@ -1046,7 +1060,7 @@ function checkDataSources()
                 }
 
                 if ($isUndefinedComponent) {
-                    addUndefinedComponent($sourceCComponent, 3, $checkComponentsGroups);
+                    addUndefinedComponent($sourceCComponent, 3);
                 } else {
                     $totalGroupWiseMatechedComponents = count($groupWiseMatechedComponents);
 
@@ -1118,8 +1132,7 @@ function checkDataSources()
                                     $SourceCProperties,
                                     $mappingGroup,
                                     $checkCaseComponentClass,
-                                    $dataSourceOrderInCheckCase, 
-                                    $checkComponentsGroups
+                                    $dataSourceOrderInCheckCase
                                 );
                             }
                             else if ($totalSources === 4)
@@ -1135,8 +1148,7 @@ function checkDataSources()
                                     $SourceDProperties,
                                     $mappingGroup,
                                     $checkCaseComponentClass,
-                                    $dataSourceOrderInCheckCase, 
-                                    $checkComponentsGroups
+                                    $dataSourceOrderInCheckCase
                                 );
                             }
 
@@ -1221,7 +1233,7 @@ function checkDataSources()
 
                                     $groupName =  getGroupTitle($mappingGroup, $totalSources);
 
-                                    $componentGroup = getCheckComponentGroup($groupName, $checkComponentsGroups);
+                                    $componentGroup = getCheckComponentGroup($groupName);
                                     $componentGroup->AddCheckComponent($noMatchComponent);
                                 }
                             }
@@ -1255,7 +1267,7 @@ function checkDataSources()
                 // check if mainclass is mapped
                 // if not mapped, then component will go to 'Undefined' group
                 if (!$groupMapped) {
-                    addUndefinedComponent($sourceDComponent, 4, $checkComponentsGroups);
+                    addUndefinedComponent($sourceDComponent, 4);
                     continue;
                 }
 
@@ -1278,7 +1290,7 @@ function checkDataSources()
                     }
                 }
                 if (!$isClassMapped) {
-                    addUndefinedComponent($sourceDComponent, 4, $checkComponentsGroups);
+                    addUndefinedComponent($sourceDComponent, 4);
                     continue;
                 }
 
@@ -1404,7 +1416,7 @@ function checkDataSources()
                 }
 
                 if ($isUndefinedComponent) {
-                    addUndefinedComponent($sourceDComponent, 4, $checkComponentsGroups);
+                    addUndefinedComponent($sourceDComponent, 4);
                 } else {
                     $totalGroupWiseMatechedComponents = count($groupWiseMatechedComponents);
 
@@ -1464,8 +1476,7 @@ function checkDataSources()
                                 $SourceDProperties,
                                 $mappingGroup,
                                 $checkCaseComponentClass,
-                                $dataSourceOrderInCheckCase, 
-                                $checkComponentsGroups
+                                $dataSourceOrderInCheckCase
                             );
 
                             $matched = true;
@@ -1553,7 +1564,7 @@ function checkDataSources()
                                     $groupName =  getGroupTitle($mappingGroup, $totalSources);
 
 
-                                    $componentGroup = getCheckComponentGroup($groupName, $checkComponentsGroups);
+                                    $componentGroup = getCheckComponentGroup($groupName);
                                     $componentGroup->AddCheckComponent($noMatchComponent);
                                 }
                             }
@@ -1563,15 +1574,13 @@ function checkDataSources()
             }
         }
     }
-
-    return $checkComponentsGroups;
 }
 
-function addUndefinedComponent($component, $sourceLoadOrder, &$checkComponentsGroups)
+function addUndefinedComponent($component, $sourceLoadOrder)
 {
     // undefined component
     $undefinedComponent = getUndefinedComponent($component, $sourceLoadOrder);
-    $undefinedCheckComponentGroup =  getCheckComponentGroup('Undefined', $checkComponentsGroups);
+    $undefinedCheckComponentGroup =  getCheckComponentGroup('Undefined');
     $undefinedCheckComponentGroup->AddCheckComponent($undefinedComponent);
 }
 
@@ -1636,8 +1645,7 @@ function compareComponentsFor2Sources(
     $sourceBProperties,
     $mappingGroup,
     $checkCaseComponentClass,
-    $dataSourceOrderInCheckCase, 
-    &$checkComponentsGroups
+    $dataSourceOrderInCheckCase
 ) {
     if (
         $srcAComponent !== NULL &&
@@ -1662,7 +1670,7 @@ function compareComponentsFor2Sources(
         );
 
         $groupName =  getGroupTitle($mappingGroup, 2);
-        $componentGroup =  getCheckComponentGroup($groupName, $checkComponentsGroups);
+        $componentGroup =  getCheckComponentGroup($groupName);
         $componentGroup->AddCheckComponent($checkComponent);
     }
 }
@@ -1678,12 +1686,11 @@ function compareComponentsFor4Sources(
     $sourceDProperties,
     $mappingGroup,
     $checkCaseComponentClass,
-    $dataSourceOrderInCheckCase, 
-    &$checkComponentsGroups
+    $dataSourceOrderInCheckCase
 ) {
 
     $groupName =  getGroupTitle($mappingGroup, 4);
-    $componentGroup =  getCheckComponentGroup($groupName, $checkComponentsGroups);
+    $componentGroup =  getCheckComponentGroup($groupName);
     if (
         $srcAComponent !== NULL &&
         $srcBComponent !== NULL &&
@@ -1955,18 +1962,13 @@ function compareComponentsFor3Sources(
     $sourceCProperties,
     $mappingGroup,
     $checkCaseComponentClass,
-    $dataSourceOrderInCheckCase, 
-    &$checkComponentsGroups
+    $dataSourceOrderInCheckCase
 ) {
-
-    $groupName =  getGroupTitle($mappingGroup, 3);
-    $componentGroup =  getCheckComponentGroup($groupName, $checkComponentsGroups);
     if (
         $srcAComponent !== NULL &&
         $srcBComponent !== NULL &&
         $srcCComponent !== NULL
-    )
-    {
+    ) {
         // a-b-c
         $checkComponent = compareComponents(
             $srcAComponent,
@@ -1984,7 +1986,9 @@ function compareComponentsFor3Sources(
             NULL,
             3
         );
-        
+
+        $groupName =  getGroupTitle($mappingGroup, 3);
+        $componentGroup =  getCheckComponentGroup($groupName);
         $componentGroup->AddCheckComponent($checkComponent);
     } else if (
         $srcAComponent !== NULL &&
@@ -2008,7 +2012,9 @@ function compareComponentsFor3Sources(
             3
         );
         $checkComponent->Status = 'Missing Item(s)';
-               
+
+        $groupName =  getGroupTitle($mappingGroup, 3);
+        $componentGroup =  getCheckComponentGroup($groupName);
         $componentGroup->AddCheckComponent($checkComponent);
     } else if (
         $srcAComponent !== NULL &&
@@ -2032,7 +2038,9 @@ function compareComponentsFor3Sources(
             3
         );
         $checkComponent->Status = 'Missing Item(s)';
-      
+
+        $groupName =  getGroupTitle($mappingGroup, 3);
+        $componentGroup =  getCheckComponentGroup($groupName);
         $componentGroup->AddCheckComponent($checkComponent);
     } else if (
         $srcBComponent !== NULL &&
@@ -2057,13 +2065,15 @@ function compareComponentsFor3Sources(
         );
         $checkComponent->Status = 'Missing Item(s)';
 
+        $groupName =  getGroupTitle($mappingGroup, 3);
+        $componentGroup =  getCheckComponentGroup($groupName);
         $componentGroup->AddCheckComponent($checkComponent);
     }
 }
 
 function getSourceClassNameProperty($srcId)
 {
-    $dataSourceOrderInCheckCase = getDataSourceOrderInCheckCase();
+    global $dataSourceOrderInCheckCase;
 
     $sourceClassNameAttribute ='';
     $sourceOrder = $dataSourceOrderInCheckCase[$srcId];
@@ -2082,7 +2092,7 @@ function getSourceClassNameProperty($srcId)
 
 function getSourceGroupNameProperty($srcId)
 {
-    $dataSourceOrderInCheckCase = getDataSourceOrderInCheckCase();
+    global $dataSourceOrderInCheckCase;
 
     $groupNameAttribute = NULL;
     $sourceOrder = $dataSourceOrderInCheckCase[$srcId];
@@ -2101,7 +2111,7 @@ function getSourceGroupNameProperty($srcId)
 
 function getSourcePropertyNameProperty($srcId)
 {
-    $dataSourceOrderInCheckCase = getDataSourceOrderInCheckCase();
+    global $dataSourceOrderInCheckCase;
     $sourceOrder = $dataSourceOrderInCheckCase[$srcId];
 
     $propertyAttributeName = NULL;
@@ -3006,18 +3016,20 @@ function areClassesMapped(
     return false;
 }
 
-function getCheckComponentGroup($groupName, &$checkComponentsGroups)
-{    
+function getCheckComponentGroup($groupName)
+{
+    global $CheckComponentsGroups;
     $checkComponentGroup = null;
+
     if (
-        $checkComponentsGroups  != NULL &&
-        array_key_exists($groupName, $checkComponentsGroups)
+        $CheckComponentsGroups  != NULL &&
+        array_key_exists($groupName, $CheckComponentsGroups)
     ) {
 
-        $checkComponentGroup = $checkComponentsGroups[$groupName];
+        $checkComponentGroup = $CheckComponentsGroups[$groupName];
     } else {
         $checkComponentGroup = new CheckComponentGroup($groupName);
-        $checkComponentsGroups[$groupName] = $checkComponentGroup;
+        $CheckComponentsGroups[$groupName] = $checkComponentGroup;
     }
 
     return $checkComponentGroup;
@@ -3060,9 +3072,8 @@ function getUndefinedComponent($sourceComponent, $dataSourceIndex)
             $aNodeId = $sourceComponent['nodeid'];
         }
 
-        // source properties
-        $SourceComponents = json_decode($_POST['SourceComponents'], true);           
-        $properties = $SourceComponents['a']['properties'];
+        global $SourceAProperties;
+        $properties = $SourceAProperties;
     } else if ($dataSourceIndex === 2) {
         $bId =  $sourceComponent['id'];
         $bName = $sourceComponent['name'];
@@ -3074,29 +3085,22 @@ function getUndefinedComponent($sourceComponent, $dataSourceIndex)
             $bNodeId = $sourceComponent['nodeid'];
         }
 
-        // source properties
-        $SourceComponents = json_decode($_POST['SourceComponents'], true);           
-        $properties = $SourceComponents['b']['properties'];
-        }
-        else if ($dataSourceIndex === 3)
-        {
-            $cId =  $sourceComponent['id'];
-            $cName = $sourceComponent['name'];
-            $cSubclass =  $sourceComponent['subclass'];
-            $cMainclass =  $sourceComponent['mainclass'];
+        global $SourceBProperties;
+        $properties = $SourceBProperties;
+    } else if ($dataSourceIndex === 3) {
+        $cId =  $sourceComponent['id'];
+        $cName = $sourceComponent['name'];
+        $cSubclass =  $sourceComponent['subclass'];
+        $cMainclass =  $sourceComponent['mainclass'];
 
-            $cNodeId = NUll;
-            if (isset($sourceComponent['nodeid']))
-            {
-                $cNodeId = $sourceComponent['nodeid'];
-            }
-
-            // source properties
-            $SourceComponents = json_decode($_POST['SourceComponents'], true);
-            $properties = $SourceComponents['c']['properties'];
+        $cNodeId = NUll;
+        if (isset($sourceComponent['nodeid'])) {
+            $cNodeId = $sourceComponent['nodeid'];
         }
-        else if ($dataSourceIndex === 4)
-        {
+
+        global $SourceCProperties;
+        $properties = $SourceCProperties;
+    } else if ($dataSourceIndex === 4) {
         $dId =  $sourceComponent['id'];
         $dName = $sourceComponent['name'];
         $dSubclass =  $sourceComponent['subclass'];
@@ -3107,9 +3111,8 @@ function getUndefinedComponent($sourceComponent, $dataSourceIndex)
             $dNodeId = $sourceComponent['nodeid'];
         }
 
-        // source properties
-        $SourceComponents = json_decode($_POST['SourceComponents'], true);
-        $properties = $SourceComponents['d']['properties'];
+        global $SourceDProperties;
+        $properties = $SourceDProperties;
     }
 
     $checkComponent = new CheckComponent(
@@ -3200,7 +3203,7 @@ function getAllGroupMapped($groupName, $sourceOrderInCheckCase)
         return false;
     }
 
-    $CheckCaseType = getCheckCaseType();
+    global $CheckCaseType;
     $checkcaseGroups = $CheckCaseType['ComponentGroups'];
 
     $mappedGroups = array();
@@ -3232,7 +3235,7 @@ function isGroupMapped($groupName, $sourceOrderInCheckCase)
         return false;
     }
 
-    $CheckCaseType = getCheckCaseType();
+    global $CheckCaseType;
     $checkcaseGroups = $CheckCaseType['ComponentGroups'];
     $totalCheckcaseGroups = count($checkcaseGroups);
     for ($index = 0; $index < $totalCheckcaseGroups; $index++) {
