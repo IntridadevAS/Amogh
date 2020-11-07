@@ -90,6 +90,7 @@
 	   </ComponentGroup>
 	   <ComponentGroup sourceAGroupName="IFCBUILDINGSTOREY" sourceBGroupName="IFCBUILDINGSTOREY">
 		  <ComponentClass sourceAComponentClass="IFCBUILDINGSTOREY"  sourceBComponentClass="IFCBUILDINGSTOREY">
+		      <Matchwith sourceAPropertyname="IFCBUILDINGSTOREY/Name"  sourceBPropertyname ="IFCBUILDINGSTOREY/Name"/>					
 		      <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
 			 <Property sourceAName="IFCBUILDINGSTOREY/CompositionType" sourceBName="IFCBUILDINGSTOREY/CompositionType" severity="Error" />
 			 <Property sourceAName="IFCBUILDINGSTOREY/Elevation" sourceBName="IFCBUILDINGSTOREY/Elevation" severity="Error" />
@@ -112,6 +113,7 @@
 	   </ComponentGroup>
 	   <ComponentGroup sourceAGroupName="IFCWALLSTANDARDCASE" sourceBGroupName="IFCWALLSTANDARDCASE">
 		  <ComponentClass sourceAComponentClass="IFCWALLSTANDARDCASE"  sourceBComponentClass="IFCWALLSTANDARDCASE">
+		   <Matchwith sourceAPropertyname="IFCWALLTYPE/Name"  sourceBPropertyname ="IFCWALLTYPE/Name"/>
 		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
 			 <Property sourceAName="IFCWALLSTANDARDCASE/GlobalId" sourceBName="IFCWALLSTANDARDCASE/GlobalId" severity="Error" />
 			 <Property sourceAName="IFCWALLSTANDARDCASE/Name" sourceBName="IFCWALLSTANDARDCASE/Name" severity="Error" />
@@ -155,6 +157,7 @@
 	   </ComponentGroup>
 	   <ComponentGroup sourceAGroupName="IFCSLAB" sourceBGroupName="IFCSLAB">
 		  <ComponentClass sourceAComponentClass="IFCSLAB"  sourceBComponentClass="IFCSLAB">
+		  <Matchwith sourceAPropertyname="IFCSLAB/Name"  sourceBPropertyname ="IFCSLAB/Name"/>
 		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
 			 <Property sourceAName="IFCSLAB/GlobalId" sourceBName="IFCSLAB/GlobalId" severity="Error" />
 			 <Property sourceAName="IFCSLAB/Name" sourceBName="IFCSLAB/Name" severity="Error" />
@@ -193,6 +196,7 @@
 	   </ComponentGroup>
 	   <ComponentGroup sourceAGroupName="IFCWINDOW" sourceBGroupName="IFCWINDOW">
 		  <ComponentClass sourceAComponentClass="IFCWINDOW"  sourceBComponentClass="IFCWINDOW">
+		  <Matchwith sourceAPropertyname="IFCWINDOW/Name"  sourceBPropertyname ="IFCWINDOW/Name"/>
 		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
 			 <Property sourceAName="IFCWINDOW/GlobalId" sourceBName="IFCWINDOW/GlobalId" severity="Error" />
 			 <Property sourceAName="IFCWINDOW/Name" sourceBName="IFCWINDOW/Name" severity="Error" />
@@ -223,6 +227,7 @@
 	   </ComponentGroup>
 	   <ComponentGroup sourceAGroupName="IFCDOOR" sourceBGroupName="IFCDOOR">
 		  <ComponentClass sourceAComponentClass="IFCDOOR"  sourceBComponentClass="IFCDOOR">
+		  <Matchwith sourceAPropertyname="IFCDOOR/Name"  sourceBPropertyname ="IFCDOOR/Name"/>
 		  <Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
 			 <Property sourceAName="IFCDOOR/GlobalId" sourceBName="IFCDOOR/GlobalId" severity="Error" />
 			 <Property sourceAName="IFCDOOR/Name" sourceBName="IFCDOOR/Name" severity="Error" />
@@ -253,6 +258,7 @@
 	   </ComponentGroup>
 	   <ComponentGroup sourceAGroupName="IFCROOF" sourceBGroupName="IFCROOF">	
 			<ComponentClass sourceAComponentClass="IFCROOF"  sourceBComponentClass="IFCROOF">
+			<Matchwith sourceAPropertyname="IFCROOF/Name"  sourceBPropertyname ="IFCROOF/Name"/>
 			<Matchwith sourceAPropertyname="Type"  sourceBPropertyname ="Type"/>					
 			 <Property sourceAName="COG" sourceBName="COG" severity="Error" />
 			 <Property sourceAName="IFCROOF/GlobalId" sourceBName="IFCROOF/GlobalId" severity="Error" />
