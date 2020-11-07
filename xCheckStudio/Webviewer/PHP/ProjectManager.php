@@ -201,55 +201,64 @@ function RemoveSource()
         $dbh->beginTransaction();
 
         // delete comparison results
-        DeleteComparisonResults();
-
-        $sourceComponentsTable = NULL;
-        $sourcePropertiesTable = NULL;
-        $refrenceTable = NULL;
+        DeleteComparisonResults();       
 
         // delete compliance results
+        $tablesToRemove = array();
         if (strtolower($sourceId) === "a") {
             DeleteSourceAComplianceResults();
 
-            $sourceComponentsTable = "SourceAComponents";
-            $sourcePropertiesTable = "SourceAProperties";
-            $refrenceTable = "a_References";
+            array_push($tablesToRemove, "SourceAComponents");
+            array_push($tablesToRemove, "SourceAProperties");
+            array_push($tablesToRemove, "a_References");
+            array_push($tablesToRemove, "SourceAViewerOptions");
+            array_push($tablesToRemove, "SourceASelectedComponents");
         } else if (strtolower($sourceId) === "b") {
             DeleteSourceBComplianceResults();
 
-            $sourceComponentsTable = "SourceBComponents";
-            $sourcePropertiesTable = "SourceBProperties";
-            $refrenceTable = "b_References";
+            array_push($tablesToRemove, "SourceBComponents");
+            array_push($tablesToRemove, "SourceBProperties");
+            array_push($tablesToRemove, "b_References");
+            array_push($tablesToRemove, "SourceBViewerOptions");
+            array_push($tablesToRemove, "SourceBSelectedComponents");
         } else if (strtolower($sourceId) === "c") {
             DeleteSourceCComplianceResults();
 
-            $sourceComponentsTable = "SourceCComponents";
-            $sourcePropertiesTable = "SourceCProperties";
-            $refrenceTable = "c_References";
+            array_push($tablesToRemove, "SourceCComponents");
+            array_push($tablesToRemove, "SourceCProperties");
+            array_push($tablesToRemove, "b_References");
+            array_push($tablesToRemove, "SourceCViewerOptions");
+            array_push($tablesToRemove, "SourceCSelectedComponents");
         } else if (strtolower($sourceId) === "d") {
             DeleteSourceDComplianceResults();
 
-            $sourceComponentsTable = "SourceDComponents";
-            $sourcePropertiesTable = "SourceDProperties";
-            $refrenceTable = "d_References";
+            array_push($tablesToRemove, "SourceDComponents");
+            array_push($tablesToRemove, "SourceDProperties");
+            array_push($tablesToRemove, "b_References");
+            array_push($tablesToRemove, "SourceDViewerOptions");
+            array_push($tablesToRemove, "SourceDSelectedComponents");
         }
 
+        for($i = 0; $i < count($tablesToRemove); $i++){
+            $table = $tablesToRemove[$i];
+            $command = 'DROP TABLE IF EXISTS ' . $table . ';';
+            $dbh->exec($command);
+        }
         // delete source component and properties tables
-        if ($sourceComponentsTable !== NULL) {
-            $command = 'DROP TABLE IF EXISTS ' . $sourceComponentsTable . ';';
-            $dbh->exec($command);
-        }
+        // if ($sourceComponentsTable !== NULL) {
+        //     $command = 'DROP TABLE IF EXISTS ' . $sourceComponentsTable . ';';
+        //     $dbh->exec($command);
+        // }
 
-        if ($sourcePropertiesTable !== NULL) {
-            $command = 'DROP TABLE IF EXISTS ' . $sourcePropertiesTable . ';';
-            $dbh->exec($command);
-        }
+        // if ($sourcePropertiesTable !== NULL) {
+        //     $command = 'DROP TABLE IF EXISTS ' . $sourcePropertiesTable . ';';
+        //     $dbh->exec($command);
+        // }
 
-        if ($refrenceTable !== NULL) {
-            $command = 'DROP TABLE IF EXISTS ' . $refrenceTable . ';';
-            $dbh->exec($command);
-        }
-
+        // if ($refrenceTable !== NULL) {
+        //     $command = 'DROP TABLE IF EXISTS ' . $refrenceTable . ';';
+        //     $dbh->exec($command);
+        // }
 
         // commit update
         $dbh->commit();
