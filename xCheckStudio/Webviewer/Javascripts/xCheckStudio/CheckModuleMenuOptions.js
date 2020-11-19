@@ -147,7 +147,7 @@ function clearAllData() {
         }
 
         // show all available checkcases
-        filterCheckCases(true);
+        CheckCaseOperations.filterCheckCases(true);
 
         hideClearAllDataForm();
     });

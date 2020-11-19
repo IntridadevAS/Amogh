@@ -272,12 +272,12 @@ function getSourceComponents() {
 }
 
 function validCheckcaseSelected() {
-    var checkCaseSelect = document.getElementById("checkCaseSelect");
-    if (checkCaseSelect.value.toLowerCase() === "autoselect" ||
+    var checkCaseSelectElement = CheckCaseOperations.getCheckCaseSelectElement();
+    if (checkCaseSelectElement.value.toLowerCase() === "autoselect" ||
         !checkCaseManager ||
         !checkCaseManager.CheckCase) {
 
-        if (checkCaseSelect.options.length === 1) {
+        if (checkCaseSelectElement.options.length === 1) {
             showNotValidCheckcasePrompt();
         }
         else {

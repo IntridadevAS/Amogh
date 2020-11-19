@@ -65,23 +65,23 @@ var CheckCaseFilesData = function () {
     }
 
     CheckCaseFilesData.prototype.populateCheckCases = function () {
-        var checkCaseSelect = document.getElementById("checkCaseSelect");
+        var checkCaseSelectElement = CheckCaseOperations.getCheckCaseSelectElement();
 
         // remove old checkcase entries, if there are any
-        for (var i = checkCaseSelect.length - 1; i >= 0; i--) {
-            checkCaseSelect.remove(i);
+        for (var i = checkCaseSelectElement.length - 1; i >= 0; i--) {
+            checkCaseSelectElement.remove(i);
         }
              
-        checkCaseSelect.options.add(new Option("AutoSelect", "AutoSelect"));
+        checkCaseSelectElement.options.add(new Option("AutoSelect", "AutoSelect"));
 
         for (var i = 0; i < this.CheckCaseFileDataList.length; i++) {
             var checkCaseData = this.CheckCaseFileDataList[i];
 
-            checkCaseSelect.options.add(new Option(checkCaseData.CheckCaseName, checkCaseData.CheckCaseName));
+            checkCaseSelectElement.options.add(new Option(checkCaseData.CheckCaseName, checkCaseData.CheckCaseName));
         }
 
-        for (var i = 0; i < checkCaseSelect.options.length; i++) {
-            var checkCaseOption = checkCaseSelect.options[i];
+        for (var i = 0; i < checkCaseSelectElement.options.length; i++) {
+            var checkCaseOption = checkCaseSelectElement.options[i];
             checkCaseOption.className = "casesppidvspdm";
         }
     }

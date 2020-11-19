@@ -277,7 +277,7 @@ let SQLLoadManager = {
             }   
 
             // filter check case
-            filterCheckCases(false);
+            CheckCaseOperations.filterCheckCases(false);
 
             //hide busy spinner
             hideBusyIndicator();

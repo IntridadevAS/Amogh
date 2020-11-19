@@ -126,22 +126,27 @@ function loadDataSets(data) {
 
         for (var srcId in viewerOptions) {
             var viewerOption = viewerOptions[srcId];
-            loadDataSource(viewerOption, data, checkCaseName, srcId);
+            loadDataSource(viewerOption, data, checkCaseName, srcId, checkCaseInfo);
         }
     }
     else {
-        checkCaseFilesData.populateCheckCases();
-        var checkCaseSelectElement = document.getElementById("checkCaseSelect");
-        if (checkCaseName) {
-            checkCaseSelectElement.value = checkCaseName;
-        }
-        else {
-            checkCaseSelectElement.value = "AutoSelect";
-        }
+      checkCaseFilesData.populateCheckCases();
+
+      // select checkcase
+      CheckCaseOperations.selectCheckCase(
+        checkCaseName ? checkCaseName : "AutoSelect",
+        true,
+        checkCaseInfo
+      );      
     }
 }
 
-function loadDataSource(viewerOption, data, checkCaseName, srcId) {
+function loadDataSource(
+    viewerOption, 
+    data, 
+    checkCaseName, 
+    srcId,
+    checkCaseInfo) {
 
     if (!viewerOption.source ||
         !viewerOption.sourceType) {
@@ -231,68 +236,88 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
                 sourceManager.HiddenNodeIds = hiddenItems;
 
                 sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"], visibleItems, true).then(function (result) {
-                    filterCheckCases(false);
+                    CheckCaseOperations.filterCheckCases(false);
 
-                    // restore views                    
-                    if (data.markupViews[sourceManager.Id]) {
-                        sourceManager.RestoreMarkupViews(data.markupViews[sourceManager.Id]);
-                    }
-                    if (data.bookmarkViews[sourceManager.Id]) {
-                        sourceManager.RestoreBookmarkViews(data.bookmarkViews[sourceManager.Id]);
-                    }
-                    if (data.annotations[sourceManager.Id]) {
-                        sourceManager.RestoreAnnotations(data.annotations[sourceManager.Id]);
-                    }
+                  // restore views
+                  if (data.markupViews[sourceManager.Id]) {
+                    sourceManager.RestoreMarkupViews(
+                      data.markupViews[sourceManager.Id]
+                    );
+                  }
+                  if (data.bookmarkViews[sourceManager.Id]) {
+                    sourceManager.RestoreBookmarkViews(
+                      data.bookmarkViews[sourceManager.Id]
+                    );
+                  }
+                  if (data.annotations[sourceManager.Id]) {
+                    sourceManager.RestoreAnnotations(
+                      data.annotations[sourceManager.Id]
+                    );
+                  }
 
-                    // restore allcomponents                    
-                    if (sourceManager.Id in data.allComponents) {
-                        sourceManager.RestoreAllComponents(data.allComponents[sourceManager.Id]);
-                    }
+                  // restore allcomponents
+                  if (sourceManager.Id in data.allComponents) {
+                    sourceManager.RestoreAllComponents(
+                      data.allComponents[sourceManager.Id]
+                    );
+                  }
 
-                    var checkCaseSelectElement = document.getElementById("checkCaseSelect");
-                    if (checkCaseName) {
-                        checkCaseSelectElement.value = checkCaseName;
-                    }
-                    else {
-                        checkCaseSelectElement.value = "AutoSelect";
-                    }
+                  // select checkcase
+                  CheckCaseOperations.selectCheckCase(
+                    checkCaseName ? checkCaseName : "AutoSelect",
+                    true,
+                    checkCaseInfo
+                  );                 
 
-                    // triggere onchange manually
-                    checkCaseSelectElement.dispatchEvent(new Event('change'));
+                  // triggere onchange manually
+                  var checkCaseSelectElement = CheckCaseOperations.getCheckCaseSelectElement();
+                  checkCaseSelectElement.dispatchEvent(new Event("change"));
                 });
 
             }
         });
     }
     else if (xCheckStudio.Util.isSource1D(fileExtension)) {
+      if (!("classWiseComponents" in data)) {
+        return;
+      }
 
-        if (!("classWiseComponents" in data)) {
-            return;
-        }
+      var classWiseComponents;
+      if (addedSource.id === GlobalConstants.SourceAId) {
+        classWiseComponents = data["classWiseComponents"].SourceA;
+      } else if (addedSource.id === GlobalConstants.SourceBId) {
+        classWiseComponents = data["classWiseComponents"].SourceB;
+      } else if (addedSource.id === GlobalConstants.SourceCId) {
+        classWiseComponents = data["classWiseComponents"].SourceC;
+      } else if (addedSource.id === GlobalConstants.SourceDId) {
+        classWiseComponents = data["classWiseComponents"].SourceD;
+      }
 
-        var classWiseComponents;      
-        if (addedSource.id === GlobalConstants.SourceAId) {            
-            classWiseComponents = data["classWiseComponents"].SourceA;
-        }
-        else if (addedSource.id === GlobalConstants.SourceBId) {            
-            classWiseComponents = data["classWiseComponents"].SourceB;
-        }
-        else if (addedSource.id === GlobalConstants.SourceCId) {
-            classWiseComponents = data["classWiseComponents"].SourceC;
-        }
-        else if (addedSource.id === GlobalConstants.SourceDId) {
-            classWiseComponents = data["classWiseComponents"].SourceD;
-        }      
+      var sourceManager = createSourceManager(
+        addedSource.id,
+        viewerOption.source,
+        fileExtension,
+        addedSource.visualizer.id,
+        addedSource.tableData.id
+      );
+      SourceManagers[addedSource.id] = sourceManager;
 
-        var sourceManager = createSourceManager(addedSource.id,
-            viewerOption.source,
-            fileExtension,
-            addedSource.visualizer.id,
-            addedSource.tableData.id);
-        SourceManagers[addedSource.id] = sourceManager;
+      sourceManager.RestoreData(
+        classWiseComponents,
+        selectedComponents["NodeIdwiseSelectedComps"]
+      );
+      CheckCaseOperations.filterCheckCases(false);
 
-        sourceManager.RestoreData(classWiseComponents, selectedComponents["NodeIdwiseSelectedComps"]);  
-        filterCheckCases(false);      
+      // select checkcase
+      CheckCaseOperations.selectCheckCase(
+        checkCaseName ? checkCaseName : "AutoSelect",
+        true,
+        checkCaseInfo
+      );      
+
+      // triggere onchange manually
+      var checkCaseSelectElement = CheckCaseOperations.getCheckCaseSelectElement();
+      checkCaseSelectElement.dispatchEvent(new Event("change"));
     } 
     else if (xCheckStudio.Util.isSourceVisio(fileExtension)) {
         
@@ -330,18 +355,19 @@ function loadDataSource(viewerOption, data, checkCaseName, srcId) {
             SourceManagers[addedSource.id] = sourceManager;
 
             sourceManager.LoadData(selectedComponents["NodeIdwiseSelectedComps"]).then(function (result) {
-                filterCheckCases(false);
+                CheckCaseOperations.filterCheckCases(false);
 
-                var checkCaseSelectElement = document.getElementById("checkCaseSelect");
-                if (checkCaseName) {
-                    checkCaseSelectElement.value = checkCaseName;
-                }
-                else {
-                    checkCaseSelectElement.value = "AutoSelect";
-                }
+                // select checkcase
+                CheckCaseOperations.selectCheckCase(
+                  checkCaseName ? checkCaseName : "AutoSelect",
+                  true,
+                  checkCaseInfo
+                );
+             
 
-                // triggere onchange manually
-                checkCaseSelectElement.dispatchEvent(new Event('change'));
+              // triggere onchange manually
+              var checkCaseSelectElement = CheckCaseOperations.getCheckCaseSelectElement();
+              checkCaseSelectElement.dispatchEvent(new Event("change"));
             });
         });
     }

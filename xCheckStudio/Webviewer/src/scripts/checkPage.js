@@ -598,7 +598,7 @@ function clearDataSource() {
 
         // filter checkcases again
         checkCaseFilesData.FilteredCheckCaseDataList = [];
-        filterCheckCases(false);
+        CheckCaseOperations.filterCheckCases(false);
 
         hideClearDataSourceForm();
 
