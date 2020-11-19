@@ -724,9 +724,11 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                 if (results === null) {
                     return;
                 }
+                let resultComponent = results[componentId];
+                let resultProperties = results[componentId]["properties"];
 
                 var checkResultComponent = _this.GetCheckComponent(groupId, componentId);
-                checkResultComponent.accepted = results[componentId].accepted;
+                checkResultComponent.accepted = resultComponent.accepted;
 
                 var properties = checkResultComponent["properties"];
                 // var isPropertyTransposed = false;
@@ -736,16 +738,17 @@ ComparisonReviewManager.prototype.UnAcceptProperty = function (selectedPropertie
                     var property = properties[i];
                    
                     if (property.accepted == "true" && 
+                        resultProperties[i].accepted == "false" &&
                         property.transpose == null) {
-                        property.accepted = results[componentId]["properties"][i].accepted;
+                        property.accepted = resultProperties[i].accepted;
 
-                        property["severity"] = results[componentId]["properties"][i].severity;
+                        property["severity"] = resultProperties[i].severity;
                         model.getCurrentDetailedInfoTable().UpdateGridData(i.toString(), property);
                     }
                 }
                 model.getCurrentDetailedInfoTable().Refresh();
 
-                checkResultComponent.status = results[componentId]["status"];
+                checkResultComponent.status = resultComponent["status"];
 
                 var tableContainer = model.getCurrentReviewTable().CheckTableIds[groupId];
                 model.checks[model.currentCheck]["reviewTable"].UpdateGridData(componentId,
