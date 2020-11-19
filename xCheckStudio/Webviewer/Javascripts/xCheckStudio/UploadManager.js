@@ -262,7 +262,7 @@ let UploadManager = {
                         addedSource.tableData.id,
                         UploadManager.formId).then(function () {
                             // filter check case
-                            filterCheckCases(false);
+                            CheckCaseOperations.filterCheckCases(false);
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -278,7 +278,7 @@ let UploadManager = {
                         addedSource.tableData.id,
                         UploadManager.formId).then(function () {
                             // filter check case
-                            filterCheckCases(false);
+                            CheckCaseOperations.filterCheckCases(false);
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -476,7 +476,7 @@ let UploadManager = {
                             if (success) {
                                 if (!isDataVault()) {
                                     // filter check case
-                                    filterCheckCases(false);
+                                    CheckCaseOperations.filterCheckCases(false);
                                 }
                             }
                             else {
@@ -495,7 +495,7 @@ let UploadManager = {
                         addedSource.visualizer.id,
                         addedSource.tableData.id).then(function () {
                             // filter check case
-                            filterCheckCases(false);
+                            CheckCaseOperations.filterCheckCases(false);
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -509,7 +509,7 @@ let UploadManager = {
                         addedSource.tableData.id,
                         UploadManager.formId).then(function () {
                             // filter check case
-                            filterCheckCases(false);
+                            CheckCaseOperations.filterCheckCases(false);
 
                             //hide busy spinner
                             hideBusyIndicator();
@@ -526,7 +526,7 @@ let UploadManager = {
                     addedSource.visualizer.id,
                     addedSource.tableData.id).then(function () {
                         // filter check case
-                        filterCheckCases(false);
+                        CheckCaseOperations.filterCheckCases(false);
 
                         //hide busy spinner
                         hideBusyIndicator();

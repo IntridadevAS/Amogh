@@ -38,9 +38,6 @@ function CheckCaseManager() {
     }   
 }
 
-
-
-
 function CheckCase(name/*, complianceCheck*/) {
     this.Name = name;
     //this.ComplianceCheck = complianceCheck;
