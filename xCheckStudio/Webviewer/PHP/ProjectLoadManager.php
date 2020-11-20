@@ -827,6 +827,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
                 $compliance = array();
                 $compliance["source"] = $datasourceInfo["sourceAFileName"];
                 $compliance["results"] = $sourceAComplianceResult;
+                $compliance["sourceId"] = "a";
 
                 // create component hierarchy
                 $sourceAComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
@@ -857,6 +858,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
                 $compliance = array();
                 $compliance["source"] = $datasourceInfo["sourceBFileName"];
                 $compliance["results"] = $sourceBComplianceResult;
+                $compliance["sourceId"] = "b";
 
                 // create component hierarchy
                 $sourceBComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
@@ -888,6 +890,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
                 $compliance = array();
                 $compliance["source"] = $datasourceInfo["sourceCFileName"];
                 $compliance["results"] = $sourceCComplianceResult;
+                $compliance["sourceId"] = "c";
 
                 // create component hierarchy
                 $sourceCComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
@@ -918,6 +921,7 @@ function ReadCheckSpaceData($dbh, $tempDbh, $context)
                 $compliance = array();
                 $compliance["source"] = $datasourceInfo["sourceDFileName"];
                 $compliance["results"] = $sourceDComplianceResult;
+                $compliance["sourceId"] = "d";
 
                 // create component hierarchy
                 $sourceDComplianceComponentsHierarchy = createComplianceComponentsHierarchy(
