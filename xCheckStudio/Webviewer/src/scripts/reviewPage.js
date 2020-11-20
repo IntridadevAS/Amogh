@@ -534,23 +534,40 @@ let viewTabs = {
     if (index === null) {
       return;
     }
-
-    // for (var i = 0; i < compliances.length; i++) {
-    var compliance = compliances[index];
-    if (compliance.source === model.selectedCompliance.fileName) {
-
-      // populate check results
-      populateCheckResults(undefined,
-        compliance,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        model.selectedCompliance.id);
-
-      // break;
+    
+    for(var i =0; i < compliances.length; i++)
+    {
+      var compliance = compliances[i];
+      if(compliance.source === model.selectedCompliance.fileName &&
+          compliance.sourceId === model.selectedCompliance.id)
+          {
+            // populate check results
+            populateCheckResults(undefined,
+              compliance,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              model.selectedCompliance.id);
+            break;
+          }
     }
+
+    // var compliance = compliances[index];
+    // if (compliance.source === model.selectedCompliance.fileName) {
+
+    //   // populate check results
+    //   populateCheckResults(undefined,
+    //     compliance,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     model.selectedCompliance.id);
+
+    //   // break;
     // }
+    
 
     // close select files UI
     viewTabs.closeSelectFiles();
