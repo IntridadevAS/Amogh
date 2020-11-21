@@ -202,8 +202,11 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                     });
                 }
                 else {
-                    // restore the node id vs component list when saved data is loaded.
-                    _this.RestoreNodeIdVsCompList();
+
+                    if (!isDataVault()) {
+                      // restore the node id vs component list when saved data is loaded.
+                      _this.RestoreNodeIdVsCompList();
+                    }
                 }
                 //activate context menu            
                 var ids = _this.GetControlIds();

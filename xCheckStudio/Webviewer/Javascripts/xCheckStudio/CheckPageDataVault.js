@@ -199,22 +199,30 @@ const DataVault = {
             // get current source id
             var srcId = controller.nextAvailableView();
 
+            var addedSource = controller.addNewFile(selectedItem.Name);
+            addedSource.type = selectedItem.Type.toLowerCase();
+
+            //Create tab header and Show panel for selected tab
+            viewTabs.createTab(addedSource);
+            viewPanels.showPanel(addedSource.viewPanel);
+            viewTabs.addTab.classList.remove("selectedTab");
+
             if (xCheckStudio.Util.isSource3D(selectedItem.Type)) {
-                DataVault.load3DDataSetInCheckSpace(selectedItem, srcId).then(function (status) {
+                DataVault.load3DDataSetInCheckSpace(selectedItem, srcId, addedSource).then(function (status) {
 
                 });
             }
         }
     },
 
-    load3DDataSetInCheckSpace: function (selectedItem, srcId) {
+    load3DDataSetInCheckSpace: function (selectedItem, srcId, addedSource) {
         return new Promise((resolve) => {
             DataVault.copyDataFromVaultToCheckspace(selectedItem.Name, selectedItem.Version, srcId).then(function (data) {
                 if (data === null) {
                     return resolve(false);
                 }
 
-                DataVault.load3DDataSet(data, selectedItem, true).then(function (status) {
+                DataVault.load3DDataSet(data, selectedItem, true, addedSource).then(function (status) {
                     return resolve(true);
                 });
             });
@@ -256,8 +264,16 @@ const DataVault = {
         for (var i = 0; i < selectedItems.length; i++) {
             var selectedItem = selectedItems[i];
 
+            var addedSource = controller.addNewFile(selectedItem.Name);
+            addedSource.type = selectedItem.Type.toLowerCase();
+
+            //Create tab header and Show panel for selected tab
+            viewTabs.createTab(addedSource);
+            viewPanels.showPanel(addedSource.viewPanel);
+            viewTabs.addTab.classList.remove("selectedTab");
+            
             if (xCheckStudio.Util.isSource3D(selectedItem.Type)) {
-                DataVault.load3DDataSetInVault(selectedItem).then(function (status) {
+                DataVault.load3DDataSetInVault(selectedItem, addedSource).then(function (status) {
                       
                 });                
             }
@@ -291,33 +307,33 @@ const DataVault = {
         });
     },
 
-    load3DDataSetInVault: function (selectedItem) {
+    load3DDataSetInVault: function (selectedItem, addedSource) {
         return new Promise((resolve) => {
             DataVault.getDataFromVault(selectedItem.Name, selectedItem.Version).then(function (data) {
                 if (data === null) {
                     return resolve(false);
                 }
 
-                DataVault.load3DDataSet(data, selectedItem, false).then(function (status) {
+                DataVault.load3DDataSet(data, selectedItem, false, addedSource).then(function (status) {
                     return resolve(true);
                 });
             });
         });
     },
 
-    load3DDataSet: function (data, selectedItem, addComponentsToDB = false) {
+    load3DDataSet: function (data, selectedItem, addComponentsToDB, addedSource) {
         return new Promise((resolve) => {
 
             var path = data.scsFile;
             var allComponents = data.allComponents;
 
-            var addedSource = controller.addNewFile(selectedItem.Name);
-            addedSource.type = selectedItem.Type.toLowerCase();
+            // var addedSource = controller.addNewFile(selectedItem.Name);
+            // addedSource.type = selectedItem.Type.toLowerCase();
 
-            //Create tab header and Show panel for selected tab
-            viewTabs.createTab(addedSource);
-            viewPanels.showPanel(addedSource.viewPanel);
-            viewTabs.addTab.classList.remove("selectedTab");
+            // //Create tab header and Show panel for selected tab
+            // viewTabs.createTab(addedSource);
+            // viewPanels.showPanel(addedSource.viewPanel);
+            // viewTabs.addTab.classList.remove("selectedTab");
 
             var sourceManager = createSourceManager(addedSource.id,
                 selectedItem.Name,
