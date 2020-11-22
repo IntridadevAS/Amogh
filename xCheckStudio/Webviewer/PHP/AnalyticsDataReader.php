@@ -411,7 +411,11 @@
                              }
                         }
 
-                        $subClassStatistics = getSubClassWiseComparisonData($checkComponentTable, $ownerGroupId, $mainDbh);
+                        $subClassStatistics = getSubClassWiseComparisonData(
+                            $checkComponentTable, 
+                            $ownerGroupId, 
+                            $mainDbh, 
+                            $comparisonDataSources);
                                                 
                         $okAT = $okAs + $okTs +$okATs;
                         $totalErrors = $errors + $errorACount + $errorTCount + $errorATCount;
@@ -679,18 +683,22 @@
         }
     }
 
-    function getSubClassWiseComparisonData($checkComponentTable, $ownerGroupId)
+    function getSubClassWiseComparisonData(
+        $checkComponentTable, 
+        $ownerGroupId,
+        $mainDbh,
+        $comparisonDataSources)
     {
         global $projectName;
         global $checkName;
         
         try {
 
-            // open database
-            $mainDbPath = getCheckDatabasePath($projectName, $checkName);
-            $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database"); 
-            // begin the transaction
-            $mainDbh->beginTransaction(); 
+            // // open database
+            // $mainDbPath = getCheckDatabasePath($projectName, $checkName);
+            // $mainDbh = new PDO("sqlite:$mainDbPath") or die("cannot open the database"); 
+            // // begin the transaction
+            // $mainDbh->beginTransaction(); 
 
             $components = $mainDbh->query("SELECT * FROM  $checkComponentTable where ownerGroup=$ownerGroupId;");
             $subClassStatistics = array();  
@@ -733,25 +741,25 @@
                     $okcount->execute(array($ownerGroupId, $class, 'OK'));
                     $okcomponents = $okcount->fetchColumn();
 
-                    $subClassStatistics[$class]['OK'] = $okcomponents;
+                    $subClassStatistics[$class]['OK'] = $okcomponents * $comparisonDataSources;
 
                     $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('OK(A)', 'OK(T)', 'OK(A)(T)');");
                     $okcount->execute(array($ownerGroupId, $class));
                     $okATcomponents = $okcount->fetchColumn();
 
-                    $subClassStatistics[$class]['OKAT'] = $okATcomponents;
+                    $subClassStatistics[$class]['OKAT'] = $okATcomponents * $comparisonDataSources;
 
                     $Errorcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND $subComponentClassColumn=? AND status=?;");
                     $Errorcount->execute(array($ownerGroupId, $class, 'Error'));
                     $Errorcomponents = $Errorcount->fetchColumn();
 
-                    $subClassStatistics[$class]['Error'] = $Errorcomponents;
+                    $subClassStatistics[$class]['Error'] = $Errorcomponents * $comparisonDataSources;
 
                     $Warningcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND $subComponentClassColumn=? AND status=?;");
                     $Warningcount->execute(array($ownerGroupId, $class, 'Warning'));
                     $Warningcomponents = $Warningcount->fetchColumn();
 
-                    $subClassStatistics[$class]['Warning'] = $Warningcomponents;
+                    $subClassStatistics[$class]['Warning'] = $Warningcomponents * $comparisonDataSources;
 
                     $noMatchcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND $subComponentClassColumn=? AND status=?;");
                     $noMatchcount->execute(array($ownerGroupId, $class, 'No Match'));
@@ -772,35 +780,34 @@
                         $subClassStatistics[$className] = array('OK'=>0, 'Error'=>0, 'Warning'=>0, 'No Match'=>0);
                     }
 
-                    $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('OK', 'OK(A)', 'OK(T)', 'OK(A)(T)');");
-                    $okcount->execute(array($ownerGroupId, $class));
+                    $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status=?;");
+                    $okcount->execute(array($ownerGroupId, $class, 'OK'));
                     $okcomponents = $okcount->fetchColumn();
-
-                    $subClassStatistics[$className]['OK'] = $okcomponents;
+                    $subClassStatistics[$className]['OK'] = $okcomponents * $comparisonDataSources;
 
                     $okcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('OK(A)', 'OK(T)', 'OK(A)(T)');");
                     $okcount->execute(array($ownerGroupId, $class));
                     $okATcomponents = $okcount->fetchColumn();
 
-                    $subClassStatistics[$className]['OKAT'] = $okATcomponents;
+                    $subClassStatistics[$className]['OKAT'] = $okATcomponents * $comparisonDataSources;
 
                     $Errorcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('Error', 'Error(A)', 'Error(T)', 'Error(A)(T)');");
                     $Errorcount->execute(array($ownerGroupId, $class));
                     $Errorcomponents = $Errorcount->fetchColumn();
 
-                    $subClassStatistics[$className]['Error'] = $Errorcomponents;
+                    $subClassStatistics[$className]['Error'] = $Errorcomponents * $comparisonDataSources;
 
                     $Warningcount = $mainDbh->prepare("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup=? AND classMappingInfo=? AND status IN ('Warning', 'Warning(A)', 'Warning(T)', 'Warning(A)(T)');");
                     $Warningcount->execute(array($ownerGroupId, $class));
                     $Warningcomponents = $Warningcount->fetchColumn();
 
-                    $subClassStatistics[$className]['Warning'] = $Warningcomponents;
+                    $subClassStatistics[$className]['Warning'] = $Warningcomponents * $comparisonDataSources;
                     $subClassStatistics[$className]['No Match'] = $noMatchcomponents;
                 }
             }
 
-            $mainDbh->commit();           
-            $mainDbh = null; //This is how you close a PDO connection    
+            // $mainDbh->commit();           
+            // $mainDbh = null; //This is how you close a PDO connection    
 
             return $subClassStatistics;
         }
@@ -967,31 +974,6 @@
             if ($results) {
                 $okACount = $results->fetchColumn();
             }
-
-            //   // OK(T) components
-            //   $okTCount = 0;
-            //   $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)';");       
-            //   if( $results)
-            //   {
-            //       $okTCount = $results->fetchColumn();
-            //   }
-
-            //   // OK(T)(A) components
-            //   $okTACount = 0;
-            //   $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(T)(A)';");       
-            //   if( $results)
-            //   {
-            //       $okTACount = $results->fetchColumn();
-            //   }
-
-            //   // OK(A)(T) components
-            //   // OK(T) components
-            //   $okATCount = 0;
-            //   $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='OK(A)(T)';");       
-            //   if( $results)
-            //   {
-            //       $okATCount = $results->fetchColumn();
-            //   }
               
             // get error components count
             $errorCount = 0;
@@ -1023,14 +1005,6 @@
             {             
                 $warningA = $results->fetchColumn();
             }
-           
-            // // get No Match components count
-            // $nomatchCount = 0;
-            // $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='No Match';");     
-            // if($results)
-            // {
-            //     $nomatchCount = $results->fetchColumn();
-            // }
 
             $undefinedCount = 0;
             $results = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where status='undefined';");     
@@ -1065,15 +1039,11 @@
             $checkGroups = array();
             $groupWiseSubClassInfo = array();
             $oks = 0;
-            $okAs = 0;
-            // $okTs = 0;
-            // $okTAs = 0;
-            // $okATs = 0;
+            $okAs = 0;           
             $errors = 0;
             $errorACount = 0;
             $warnings = 0;
-            $warningACount = 0;
-            // $noMatches = 0;
+            $warningACount = 0;            
             $undefinedItem = 0;
             $groups = $mainDbh->query("SELECT DISTINCT ownerGroup FROM $checkComponentTable;");                
             if($groups)
@@ -1102,29 +1072,6 @@
                         {
                             $okAs = $okAResults->fetchColumn();
                         }
-
-                        // // OK(T) components
-                        // $okTResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)';");       
-                        // if( $okTResults)
-                        // {
-                        //     $okTs = $okTResults->fetchColumn();
-                        // }
-
-                        // // OK(T)(A) components
-                        // $okTAResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(T)(A)';");       
-                        // if( $okTAResults)
-                        // {
-                        //     $okTAs = $okTAResults->fetchColumn();
-                        // }
-
-                        // // OK(A)(T) components
-                        // // OK(T) components
-                        // $okATResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='OK(A)(T)';");       
-                        // if( $okATResults)
-                        // {
-                        //     $okATs = $okATResults->fetchColumn();
-                        // }
-
  
                          // Error components
                          $errorResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='Error';");       
@@ -1152,15 +1099,7 @@
                         if( $warningResults)
                         {
                             $warningACount = $warningResults->fetchColumn();
-                        }
-
-                        //  // Warning components
-                        //  $nomatchResults = $mainDbh->query("SELECT COUNT(*) FROM $checkComponentTable where ownerGroup= $ownerGroupId AND status='No Match';");       
-                        //  if( $nomatchResults)
-                        //  {
-                        //      $noMatches = $nomatchResults->fetchColumn();
-                        //  }    
-                         
+                        }    
 
                         $undefinedItem = 0;
                         $undefinedComponents = $mainDbh->query("SELECT * FROM $checkComponentTable where status='undefined';");
@@ -1192,27 +1131,21 @@
                             $subClassOkCount = (int)$subClassStatistics[$sourceSubClass]['OK'];
                             $subClassOkATCount = (int)$subClassStatistics[$sourceSubClass]['OKA'];
                             $subClassErrorCount = (int)$subClassStatistics[$sourceSubClass]['Error'];
-                            $subClassWarningCount = (int)$subClassStatistics[$sourceSubClass]['Warning'];
-                            // $subClassNoMatchCount = (int)$subClassStatistics[$sourceSubClass]['No Match'];
+                            $subClassWarningCount = (int)$subClassStatistics[$sourceSubClass]['Warning'];                            
 
-                            if(strpos($status, 'ok') !== false) {
+                            if(strtolower($status) === 'ok') {
                                 $subClassOkCount++;
                                 $subClassStatistics[$sourceSubClass]['OK'] = $subClassOkCount;
                             }
-                            else if(strpos($status, 'error') !== false) {
+                            else if(strtolower($status) === 'error') {
                                 $subClassErrorCount++;
                                 $subClassStatistics[$sourceSubClass]['Error'] = $subClassErrorCount;
                             }
-                            else if(strpos($status, 'warning') !== false) {
+                            else if(strtolower($status) === 'warning') {
                                 $subClassWarningCount++;
                                 $subClassStatistics[$sourceSubClass]['Warning'] = $subClassWarningCount;
-                            }
-                            // else if(strpos($status, 'no match') !== false || strpos($status, 'missing item(s)') !== false) {
-                            //     $subClassNoMatchCount++;
-                            //     $subClassStatistics[$sourceSubClass]['No Match'] = $subClassNoMatchCount;
-                            // }
-
-                            if($status == 'OK(A)') {
+                            }                           
+                            else if(strtolower($status) === 'ok(a)') {
                                 $subClassOkATCount++;
                                 $subClassStatistics[$sourceSubClass]['OKA'] = $subClassOkATCount;
                             }
@@ -1257,11 +1190,8 @@
         
             return array("okCount" => (int)$okCount, 
                         "errorCount" =>$errorCount + $errorA,
-                        "warningCount" =>$warningCount + $warningA,
-                        // "nomatchCount" =>$nomatchCount,
-                        "okACount" => (int)$okACount,
-                        // "okTCount" =>$okTCount,
-                        // "okATCount" => $okTACount + $okATCount,
+                        "warningCount" =>$warningCount + $warningA,                       
+                        "okACount" => (int)$okACount,                      
                         "undefinedCount" => (int)$undefinedCount,
                         "sourceSelectedCount" => (int)$sourceSelectedComp,
                         "sourceTotalComponentsCount" => (int)$sourceTotalComponentsCount,
