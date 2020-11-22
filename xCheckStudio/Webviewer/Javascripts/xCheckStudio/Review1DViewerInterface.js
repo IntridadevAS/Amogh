@@ -12,7 +12,7 @@ function Review1DViewerInterface(id,
 
     this.IsComparison = model.getCurrentReviewType() === "comparison" ? true : false;
 
-    this.SelectedSheetRow;
+    this.SelectedSheetRow = null;
 
     this.Id = id;
     
@@ -217,7 +217,7 @@ Review1DViewerInterface.prototype.ShowSheetDataInViewer = function (viewerContai
         }
 
         this.CheckStatusArray = {};
-        this.SelectedSheetRow = undefined;
+        // this.SelectedSheetRow = null;
 
         this.LoadSheetTableData(
             columnHeaders, 
@@ -271,7 +271,7 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (
     paging: { enabled: false },
     deferRendering: true,
     onContentReady: function (e) {
-      this.SelectedSheetRow = undefined;
+      _this.SelectedSheetRow = null;
       _this.highlightSheetRowsFromCheckStatus(
         viewerContainer,
         CurrentReviewTableRowData,
@@ -286,6 +286,8 @@ Review1DViewerInterface.prototype.LoadSheetTableData = function (
       _this.NameIdentifierProperty = null;
       _this.GridInstance = null;
       _this.CheckStatusArray = {};
+
+      _this.SelectedSheetRow = null;
     }
   }).dxDataGrid("instance");  
 };;;
@@ -649,11 +651,18 @@ Review1DViewerInterface.prototype.HighlightRowInSheetData = function (currentRev
         
         if (selectedComponentId == rows[i].data["xcs_id_"]) {
             if(this.SelectedSheetRow) {
+                
+              if(this.ActiveSheetName in this.CheckStatusArray &&
+                this.SelectedSheetRow.rowIndex in this.CheckStatusArray[this.ActiveSheetName])
+               {
+                let status = this.CheckStatusArray[this.ActiveSheetName][this.SelectedSheetRow.rowIndex];
                 model.getCurrentSelectionManager().ChangeBackgroundColor(
                     this.SelectedSheetRow, 
-                    currentReviewTableRowData.Status);
+                    status);
+               } 
             }
             this.HighlightSheetDataRow(viewerContainer, row);
+
             // scroll to rowElement
             dataGrid.getScrollable().scrollTo({top : row.offsetTop - row.offsetHeight});
 
