@@ -171,7 +171,7 @@ function removeAllDataSourcesFromDB() {
         $.ajax({
             url: 'PHP/ProjectManager.php',
             type: "POST",
-            async: false,
+            async: true,
             data:
             {
                 'InvokeFunction': "RemoveAllSources",
