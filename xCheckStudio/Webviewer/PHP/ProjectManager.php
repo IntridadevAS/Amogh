@@ -34,19 +34,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ReadCheckModuleControlsState();
             break;
         case "DeleteComparisonResults":
-            DeleteComparisonResults();
+            DeleteComparisonResults(null,true);
             break;
         case "DeleteSourceAComplianceResults":
-            DeleteSourceAComplianceResults();
+            DeleteSourceAComplianceResults(null,true);
             break;
         case "DeleteSourceBComplianceResults":
-            DeleteSourceBComplianceResults();
+            DeleteSourceBComplianceResults(null,true);
             break;
         case "DeleteSourceCComplianceResults":
-            DeleteSourceCComplianceResults();
+            DeleteSourceCComplianceResults(null,true);
             break;
         case "DeleteSourceDComplianceResults":
-            DeleteSourceDComplianceResults();
+            DeleteSourceDComplianceResults(null,true);
             break;
         case "SaveCheckCaseData":
             SaveCheckCaseData();
@@ -108,10 +108,8 @@ function RemoveAllSources()
 
         $dbPath = getCheckDatabasePath($projectName, $checkName);
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
-
         // begin the transaction
         $dbh->beginTransaction();
-
         // delete component tables
         $command = 'DROP TABLE IF EXISTS SourceAComponents;';
         $dbh->exec($command);
@@ -143,14 +141,14 @@ function RemoveAllSources()
         $dbh->exec($command);
 
         // delete comparison results
-        DeleteComparisonResults();
+        DeleteComparisonResults($dbh);
 
         // delete compliance results
-        DeleteSourceAComplianceResults();
-        DeleteSourceBComplianceResults();
-        DeleteSourceCComplianceResults();
-        DeleteSourceDComplianceResults();
-
+        DeleteSourceAComplianceResults($dbh);
+        DeleteSourceBComplianceResults($dbh);
+        DeleteSourceCComplianceResults($dbh);
+        DeleteSourceDComplianceResults($dbh);
+                
         // commit update
         $dbh->commit();
         $dbh = null; //This is how you close a PDO connection                
@@ -192,7 +190,7 @@ function RemoveSource()
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
         $sourceId = $_POST['SourceId'];
-
+        
         $dbPath = getCheckDatabasePath($projectName, $checkName);
 
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
@@ -201,12 +199,12 @@ function RemoveSource()
         $dbh->beginTransaction();
 
         // delete comparison results
-        DeleteComparisonResults();       
+        DeleteComparisonResults($dbh);       
 
         // delete compliance results
         $tablesToRemove = array();
         if (strtolower($sourceId) === "a") {
-            DeleteSourceAComplianceResults();
+            DeleteSourceAComplianceResults($dbh);
 
             array_push($tablesToRemove, "SourceAComponents");
             array_push($tablesToRemove, "SourceAProperties");
@@ -214,7 +212,7 @@ function RemoveSource()
             array_push($tablesToRemove, "SourceAViewerOptions");
             array_push($tablesToRemove, "SourceASelectedComponents");
         } else if (strtolower($sourceId) === "b") {
-            DeleteSourceBComplianceResults();
+            DeleteSourceBComplianceResults($dbh);
 
             array_push($tablesToRemove, "SourceBComponents");
             array_push($tablesToRemove, "SourceBProperties");
@@ -222,7 +220,7 @@ function RemoveSource()
             array_push($tablesToRemove, "SourceBViewerOptions");
             array_push($tablesToRemove, "SourceBSelectedComponents");
         } else if (strtolower($sourceId) === "c") {
-            DeleteSourceCComplianceResults();
+            DeleteSourceCComplianceResults($dbh);
 
             array_push($tablesToRemove, "SourceCComponents");
             array_push($tablesToRemove, "SourceCProperties");
@@ -230,7 +228,7 @@ function RemoveSource()
             array_push($tablesToRemove, "SourceCViewerOptions");
             array_push($tablesToRemove, "SourceCSelectedComponents");
         } else if (strtolower($sourceId) === "d") {
-            DeleteSourceDComplianceResults();
+            DeleteSourceDComplianceResults($dbh);
 
             array_push($tablesToRemove, "SourceDComponents");
             array_push($tablesToRemove, "SourceDProperties");
@@ -262,6 +260,7 @@ function RemoveSource()
 
         // commit update
         $dbh->commit();
+        
         $dbh = null; //This is how you close a PDO connection                
 
         echo json_encode(array(
@@ -3827,20 +3826,24 @@ function SaveCheckCaseData()
 |   Deletes all tables which store comparison check results
 |
 */
-function DeleteComparisonResults()
+function DeleteComparisonResults($dbh, $UseNewDbConnection=false)
 {
-    // get project name
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
-    $dbh = null;
     try {
-        // open database
-        $dbPath = getCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-        // begin the transaction
-        $dbh->beginTransaction();
+        if($UseNewDbConnection)
+        {
+            // get project name
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+            
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
+            // begin the transaction
+            $dbh->beginTransaction();
+        }
+    
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS ComparisonCheckComponents;';
         $dbh->exec($command);
@@ -3861,9 +3864,13 @@ function DeleteComparisonResults()
         $command = 'DROP TABLE IF EXISTS SourceBNotSelectedComponents;';
         $dbh->exec($command);
 
-        // commit update
-        $dbh->commit();
-        $dbh = null; //This is how you close a PDO connection    
+        if($UseNewDbConnection)
+        {
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection    
+        }
+        
     } catch (Exception $e) {
         return "fail";
     }
@@ -3876,19 +3883,23 @@ function DeleteComparisonResults()
 |   Deletes all tables which store source A compliance check results
 |
 */
-function DeleteSourceAComplianceResults()
+function DeleteSourceAComplianceResults($dbh, $UseNewDbConnection=false)
 {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
-    $dbh = null;
     try {
-        // open database
-        $dbPath = getCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+        
+        if($UseNewDbConnection)
+        {
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+    
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-        // begin the transaction
-        $dbh->beginTransaction();
-
+            // begin the transaction
+            $dbh->beginTransaction();
+        }
+    
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceAComplianceCheckComponents;';
         $dbh->exec($command);
@@ -3905,9 +3916,13 @@ function DeleteSourceAComplianceResults()
         $command = 'DROP TABLE IF EXISTS SourceAComplianceNotCheckedComponents;';
         $dbh->exec($command);
 
-        // commit update
-        $dbh->commit();
-        $dbh = null; //This is how you close a PDO connection    
+        if($UseNewDbConnection)
+        {
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection    
+        }
+        
     } catch (Exception $e) {
         return "fail";
     }
@@ -3920,20 +3935,23 @@ function DeleteSourceAComplianceResults()
 |   Deletes all tables which store source B compliance check results
 |
 */
-function DeleteSourceBComplianceResults()
+function DeleteSourceBComplianceResults($dbh, $UseNewDbConnection=false)
 {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
-
-    $dbh = null;
     try {
-        // open database
-        $dbPath = getCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-        // begin the transaction
-        $dbh->beginTransaction();
+        if($UseNewDbConnection)
+        {
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+    
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
+            // begin the transaction
+            $dbh->beginTransaction();
+        }
+    
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceBComplianceCheckComponents;';
         $dbh->exec($command);
@@ -3950,9 +3968,13 @@ function DeleteSourceBComplianceResults()
         $command = 'DROP TABLE IF EXISTS SourceBComplianceNotCheckedComponents;';
         $dbh->exec($command);
 
-        // commit update
-        $dbh->commit();
-        $dbh = null; //This is how you close a PDO connection    
+        if($UseNewDbConnection)
+        {
+            // commit update
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection    
+        }
+        
     } catch (Exception $e) {
         return "fail";
     }
@@ -3965,20 +3987,21 @@ function DeleteSourceBComplianceResults()
 |   Deletes all tables which store source C compliance check results
 |
 */
-function DeleteSourceCComplianceResults()
+function DeleteSourceCComplianceResults($dbh, $UseNewDbConnection=false)
 {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
-
-    $dbh = null;
     try {
-        // open database
-        $dbPath = getCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+        
+        if($UseNewDbConnection)
+        {
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-        // begin the transaction
-        $dbh->beginTransaction();
-
+            // begin the transaction
+            $dbh->beginTransaction();
+        }
         // drop table if exists
         $command = 'DROP TABLE IF EXISTS SourceCComplianceCheckComponents;';
         $dbh->exec($command);
@@ -3996,8 +4019,11 @@ function DeleteSourceCComplianceResults()
         $dbh->exec($command);
 
         // commit update
-        $dbh->commit();
-        $dbh = null; //This is how you close a PDO connection    
+        if($UseNewDbConnection)
+        {
+            $dbh->commit();
+            $dbh = null; //This is how you close a PDO connection    
+        }
     } catch (Exception $e) {
         return "fail";
     }
@@ -4010,41 +4036,48 @@ function DeleteSourceCComplianceResults()
 |   Deletes all tables which store source D compliance check results
 |
 */
-function DeleteSourceDComplianceResults()
+function DeleteSourceDComplianceResults($dbh, $UseNewDbConnection=false)
 {
-    $projectName = $_POST['ProjectName'];
-    $checkName = $_POST['CheckName'];
-
-    $dbh = null;
     try {
-        // open database
-        $dbPath = getCheckDatabasePath($projectName, $checkName);
-        $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
+    
+        if($UseNewDbConnection)
+        {
+            $projectName = $_POST['ProjectName'];
+            $checkName = $_POST['CheckName'];
+            //$dbh = null;
+            // open database
+            $dbPath = getCheckDatabasePath($projectName, $checkName);
+            $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
 
-        // begin the transaction
-        $dbh->beginTransaction();
+            // begin the transaction
+            $dbh->beginTransaction();
+        }
+        
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
+            $dbh->exec($command);
 
-        // drop table if exists
-        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckComponents;';
-        $dbh->exec($command);
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
+            $dbh->exec($command);
 
-        // drop table if exists
-        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckGroups;';
-        $dbh->exec($command);
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
+            $dbh->exec($command);
 
-        // drop table if exists
-        $command = 'DROP TABLE IF EXISTS SourceDComplianceCheckProperties;';
-        $dbh->exec($command);
+            // drop table if exists
+            $command = 'DROP TABLE IF EXISTS SourceDComplianceNotCheckedComponents;';
+            $dbh->exec($command);
 
-        // drop table if exists
-        $command = 'DROP TABLE IF EXISTS SourceDComplianceNotCheckedComponents;';
-        $dbh->exec($command);
-
-        // commit update
-        $dbh->commit();
-        $dbh = null; //This is how you close a PDO connection    
-    } catch (Exception $e) {
-        return "fail";
+            // commit update
+            if($UseNewDbConnection)
+            {
+                $dbh->commit();
+                $dbh = null; //This is how you close a PDO connection    
+            }
+            
+        } catch (Exception $e) {
+            return "fail";
     }
 
     return "success";
