@@ -190,7 +190,7 @@ function RemoveSource()
         $projectName = $_POST['ProjectName'];
         $checkName = $_POST['CheckName'];
         $sourceId = $_POST['SourceId'];
-        echo "Db transaction started " . date("h:i:sa");
+        
         $dbPath = getCheckDatabasePath($projectName, $checkName);
 
         $dbh = new PDO("sqlite:$dbPath") or die("cannot open the database");
@@ -260,7 +260,7 @@ function RemoveSource()
 
         // commit update
         $dbh->commit();
-        echo "Db transaction ended " . date("h:i:sa");
+        
         $dbh = null; //This is how you close a PDO connection                
 
         echo json_encode(array(
