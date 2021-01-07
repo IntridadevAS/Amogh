@@ -139,19 +139,52 @@ function cancelClearAllData() {
 }
 
 function clearAllData() {
-    removeAllDataSourcesFromDB().then(function (result) {
+    
+    if (isDataVault()) {
+        removeTempAllDataFromVault().then(function(status){
+            while (model.activeTabs > 0) {
+                var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+                viewTabs.deleteTab(tabToDelete);
+            }
+            hideClearAllDataForm();
+        });
+      }
 
-        while (model.activeTabs > 0) {
-            var tabToDelete = document.getElementById("tab_" + model.currentTabId)
-            viewTabs.deleteTab(tabToDelete);
-        }
+      else{
+            removeAllDataSourcesFromDB().then(function (result) {
 
-        // show all available checkcases
-        CheckCaseOperations.filterCheckCases(true);
-
-        hideClearAllDataForm();
-    });
+                while (model.activeTabs > 0) {
+                    var tabToDelete = document.getElementById("tab_" + model.currentTabId)
+                    viewTabs.deleteTab(tabToDelete);
+                }
+        
+                // show all available checkcases
+                CheckCaseOperations.filterCheckCases(true);
+        
+                hideClearAllDataForm();
+            });
+      }  
 }
+
+function removeTempAllDataFromVault() {
+    return new Promise((resolve) => {
+      var projectinfo = JSON.parse(localStorage.getItem('projectinfo'));
+  
+      $.ajax({
+        url: 'PHP/DataVault.php',
+        type: "POST",
+        async: true,
+        data:
+        {
+          'InvokeFunction': "ClearTempVaultAllData",
+          'ProjectName': projectinfo.projectname
+        },
+        success: function (msg) {
+          return resolve(true);
+        }
+      });
+    });
+  }
 
 function hideClearAllDataForm() {
     var overlay = document.getElementById("uiBlockingOverlay");
