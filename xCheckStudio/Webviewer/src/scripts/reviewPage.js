@@ -315,11 +315,8 @@ let viewTabs = {
         viewTabs.closeSelectFiles();
       } else {
         event.target.classList.add("invert");
-        console.time("complianceArrow : populateCompliances");
         viewTabs.populateCompliances();
-        console.timeEnd("complianceArrow : populateCompliances");
       }
-      console.timeEnd("complianceArrow");
     });
 
   },
@@ -423,13 +420,10 @@ let viewTabs = {
   },
 
   enterComparison: function () {
-
-    console.time("enterComparison");
     showBusyIndicator();
     // clear earlier data
     setTimeout(function () {
     clearData();
-
 
     // TODO set enter functionality for comparison here
     var requiredComparison = viewTabs.getComparison();
@@ -449,11 +443,9 @@ let viewTabs = {
     viewTabs.closeSelectFiles();
     hideBusyIndicator();
   }, 1000);
-    console.timeEnd("enterComparison");
   },
 
   enterComparisonBrowser: function () {
-    
     // clear earlier data
     clearData();
 
@@ -465,11 +457,9 @@ let viewTabs = {
 
     // close select files UI
     viewTabs.closeSelectFiles();
-    
   },
 
   getComparison: function () {
-    console.time("getComparison");
     if (!comparisons) {
       return null;
     }
@@ -496,7 +486,7 @@ let viewTabs = {
         return comparison;
       }
     }
-    console.timeEnd("getComparison");
+
     return undefined;
   },
 
@@ -534,7 +524,6 @@ let viewTabs = {
   },
 
   enterCompliance: function () {
-    console.time("enterCompliance");
     if (!compliances ||
       !model.selectedCompliance) {
       return;
@@ -587,10 +576,8 @@ let viewTabs = {
 
     // close select files UI
     viewTabs.closeSelectFiles();
-  
     hideBusyIndicator();
   }, 1000);
-    console.timeEnd("enterCompliance");
   },
 
   enterComplianceBrowser: function () {
