@@ -252,7 +252,7 @@ let controller = {
     viewTabs.selectTab(selectedTab);
     if (tabID === 'comparison') {
       viewPanels.showComparison();
-    } else if (tabID === 'compliance') {
+    } else if (tabID === 'compliance') {   
       viewPanels.showCompliance();
     }
   }
@@ -285,7 +285,7 @@ let viewTabs = {
       } else { return };
     });
 
-    this.comparisonArrow.addEventListener("click", function (event) {      
+    this.comparisonArrow.addEventListener("click", function (event) {    
       if (viewTabs.complianceArrow.classList.contains("invert")) {
         viewTabs.complianceArrow.click();
       }
@@ -302,7 +302,7 @@ let viewTabs = {
       }
     });
 
-    this.complianceArrow.addEventListener("click", function (event) {     
+    this.complianceArrow.addEventListener("click", function (event) { 
       if (viewTabs.comparisonArrow.classList.contains("invert")) {
         viewTabs.comparisonArrow.click();
       }
@@ -420,7 +420,9 @@ let viewTabs = {
   },
 
   enterComparison: function () {
+    showBusyIndicator();
     // clear earlier data
+    setTimeout(function () {
     clearData();
 
     // TODO set enter functionality for comparison here
@@ -439,6 +441,8 @@ let viewTabs = {
 
     // close select files UI
     viewTabs.closeSelectFiles();
+    hideBusyIndicator();
+  }, 1000);
   },
 
   enterComparisonBrowser: function () {
@@ -524,7 +528,8 @@ let viewTabs = {
       !model.selectedCompliance) {
       return;
     }
-
+    showBusyIndicator();
+    setTimeout(function () {
     // clear earlier data
     clearData();
 
@@ -571,6 +576,8 @@ let viewTabs = {
 
     // close select files UI
     viewTabs.closeSelectFiles();
+    hideBusyIndicator();
+  }, 1000);
   },
 
   enterComplianceBrowser: function () {
