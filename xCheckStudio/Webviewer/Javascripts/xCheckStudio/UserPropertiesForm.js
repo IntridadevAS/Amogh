@@ -97,7 +97,7 @@ UserPropertiesForm.prototype.LoadData = function () {
         showRowLines: true,
         paging: { enabled: false },
         filterRow: {
-            visible: true
+            visible: false
         },
         selection: {
             mode: "multiple",
