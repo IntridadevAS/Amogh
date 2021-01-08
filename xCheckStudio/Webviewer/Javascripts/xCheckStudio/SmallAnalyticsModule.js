@@ -1,28 +1,24 @@
 function LoadAnalyticsContent(analyticsData, currentCheck) {
 
-    HighLightButtonsOnPieChartClick(); 
+    HighLightButtonsOnPieChartClick();
     InitAnalyticsContextMenu();
     analyticsManager = new SmallAnalyticsManager(analyticsData);
 
-    if(currentCheck['check'] == 'comparison') {
+    if (currentCheck['check'] == 'comparison') {
         openChartComparison();
     }
     else {
         var currentcompliance = currentCheck['selectedCheck'].id;
-        if(currentcompliance == 'a') 
-        {
+        if (currentcompliance == 'a') {
             activeResultType = 'complianceA';
         }
-        else if(currentcompliance == 'b') 
-        {
+        else if (currentcompliance == 'b') {
             activeResultType = 'complianceB';
         }
-        else if(currentcompliance == 'c') 
-        {
+        else if (currentcompliance == 'c') {
             activeResultType = 'complianceC';
         }
-        else if(currentcompliance == 'd') 
-        {
+        else if (currentcompliance == 'd') {
             activeResultType = 'complianceD';
         }
 
@@ -40,14 +36,14 @@ function InitAnalyticsContextMenu() {
                     ExecuteAnalyticsContextMenu(key);
                 },
                 items: {
-                    "totalCheck" : {
+                    "totalCheck": {
                         name: "Total Check",
                     },
                     "category":
                     {
                         name: "Category",
                     },
-                    "subClassCheck" : {
+                    "subClassCheck": {
                         name: "Class"
                     },
                     "property": {
@@ -60,35 +56,35 @@ function InitAnalyticsContextMenu() {
 }
 
 function ExecuteAnalyticsContextMenu(key) {
-    switch(key) {
-        case "category" :
+    switch (key) {
+        case "category":
             AnalyticsType = key;
             onCategoryAnalyticsClick();
             break;
-        case "totalCheck" : 
+        case "totalCheck":
             AnalyticsType = key;
             onTotalCheckAnalyticsClick();
             break;
-        case "subClassCheck" :
+        case "subClassCheck":
             AnalyticsType = key;
             onSubClassAnalyticsClick();
             break;
-        case "property" :
+        case "property":
             AnalyticsType = key;
             onPropertyAnalyticsClick();
             break;
-            
+
     }
 }
 
 function onCategoryAnalyticsClick() {
     ActiveCategory = window.parent.GetActiveCategory();
 
-    if(ActiveCategory == undefined) {
+    if (ActiveCategory == undefined) {
         return;
     }
-    
-    if(activeResultType == "comparison") {
+
+    if (activeResultType == "comparison") {
         analyticsManager.populateComparisonCategoryAnalytics();
     }
     else {
@@ -97,7 +93,7 @@ function onCategoryAnalyticsClick() {
 }
 
 function onTotalCheckAnalyticsClick() {
-    if(activeResultType == "comparison") {
+    if (activeResultType == "comparison") {
         openChartComparison();
     }
     else {
@@ -108,7 +104,7 @@ function onTotalCheckAnalyticsClick() {
 function onSubClassAnalyticsClick() {
     ActiveCategory = window.parent.GetActiveCategory();
     var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
-    if(activeResultType == "comparison") {
+    if (activeResultType == "comparison") {
         analyticsManager.populateComparisonClassAnalytics(classMappingInfo);
     }
     else {
@@ -118,13 +114,13 @@ function onSubClassAnalyticsClick() {
 
 function onPropertyAnalyticsClick() {
     var PropertyAnalyticsData = window.parent.GetComponentAnalyticsData();
-    if(activeResultType == "comparison") {
+    if (activeResultType == "comparison") {
         analyticsManager.populateCompariosonPropertyAnalytics(PropertyAnalyticsData);
     }
     else {
         analyticsManager.populateCompliancePropertyAnalytics(PropertyAnalyticsData);
     }
-    
+
 }
 
 function HideAnalyticsViewer() {
@@ -141,21 +137,21 @@ function ShowSeveritySummary() {
     var summary = document.getElementById("Summary");
     summary.style.display = "block";
     var summaryData;
-    switch(AnalyticsType) {
-        case 'category' : 
+    switch (AnalyticsType) {
+        case 'category':
             summaryData = analyticsManager.getSeveritySummaryForCategory();
             break;
 
-        case 'totalCheck' :
+        case 'totalCheck':
             summaryData = analyticsManager.getSeveritySummary();
             break;
 
-        case 'subClassCheck' : 
+        case 'subClassCheck':
             var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
             summaryData = analyticsManager.getSeveritySummaryForClass(classMappingInfo);
             break;
 
-        case "property" :
+        case "property":
             var PropertyAnalyticsData = window.parent.GetComponentAnalyticsData();
             summaryData = analyticsManager.getSeveritySummaryForProperties(PropertyAnalyticsData)
             break;
@@ -187,24 +183,26 @@ function ShowSeveritySummary() {
 }
 
 function ShowInfoSummary() {
+    debugger;
     var summary = document.getElementById("SummaryInfo");
     summary.style.display = "block";
     var infoSummary;
-    switch(AnalyticsType) {
-        case 'category' : 
+   
+    switch (AnalyticsType) {
+        case 'category':
             infoSummary = analyticsManager.getInfoSummaryForCategory();
             break;
 
-        case 'totalCheck' :
+        case 'totalCheck':
             infoSummary = analyticsManager.getInfoSummary();
             break;
 
-        case 'subClassCheck' : 
+        case 'subClassCheck':
             var classMappingInfo = window.parent.GetSubClassMappingForHighlightedRow();
             infoSummary = analyticsManager.getInfoSummaryForClass(classMappingInfo);
             break;
 
-        case "property" :
+        case "property":
             var PropertyAnalyticsData = window.parent.GetComponentAnalyticsData();
             infoSummary = analyticsManager.getInfoSummaryForProperties(PropertyAnalyticsData)
             break;
@@ -212,10 +210,14 @@ function ShowInfoSummary() {
 
     var Total_items_loaded_div = document.getElementById("checkedItemCount");
     Total_items_loaded_div.innerHTML = infoSummary.TotalItemsLoaded;
-
-    var Items_with_nomatch_div = document.getElementById("count_no_match");
-    Items_with_nomatch_div.innerHTML = infoSummary.noMatchCount;
-
+    if (activeResultType.toLowerCase() === "comparison") {
+        var Items_with_nomatch_div = document.getElementById("count_no_match");
+        Items_with_nomatch_div.innerHTML = infoSummary.noMatchCount;
+        document.getElementById("Group_2_1").style.display = "block";
+    }
+    else{
+        document.getElementById("Group_2_1").style.display = "none";
+    }
     var Items_with_undefined_div = document.getElementById("count_undefined");
     Items_with_undefined_div.innerHTML = infoSummary.undefinedCount;
 
@@ -249,14 +251,14 @@ function onBarChartsClick() {
     BarChartActive = true;
     PieChartActive = false;
     ExecuteAnalyticsContextMenu(AnalyticsType);
-    HighlightButtonsOnBarChartClick();  
+    HighlightButtonsOnBarChartClick();
 }
 
 function openComplianceOverlay() {
     document.getElementById("ID2_A1_Group_21").style.backgroundColor = "rgba(143, 144, 145, 1)";
     document.getElementById("ID1_A1_Group_22").style.backgroundColor = "rgba(33,37,63,0)";
     var overlay = document.getElementById("Compliance_DataSet_Selection");
-    overlay.style.display="block";
+    overlay.style.display = "block";
 }
 
 function HighLightButtonsOnPieChartClick() {
@@ -271,12 +273,12 @@ function onPieChartsClick() {
     BarChartActive = false;
 
     ExecuteAnalyticsContextMenu(AnalyticsType);
-    HighLightButtonsOnPieChartClick();    
+    HighLightButtonsOnPieChartClick();
 }
 
 function openChartComparison() {
     activeResultType = "comparison";
-    
+
     document.getElementById("ID2_A1_Group_21").style.backgroundColor = "rgba(33,37,63,0)";
     document.getElementById("ID1_A1_Group_22").style.backgroundColor = "rgba(143, 144, 145, 1)";
 
