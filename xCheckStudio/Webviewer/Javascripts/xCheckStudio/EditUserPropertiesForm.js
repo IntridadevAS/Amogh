@@ -395,8 +395,7 @@ EditUserPropertiesForm3D.prototype.OnApply = function () {
 
 EditUserPropertiesForm3D.prototype.EditPropertyForAll = function (columnIndex, oldPropertyName, newPropertyName) {
     var _this = this;
-    var items = _this.PropertiesGrid.getDataSource().items();
-
+    var items = _this.PropertiesGrid.getDataSource().store()["_array"];
     var sourceManager = SourceManagers[_this.Id];
 
     var identifierProperties = xCheckStudio.ComponentIdentificationManager.getComponentIdentificationProperties(sourceManager.SourceType);
