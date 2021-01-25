@@ -23,6 +23,7 @@ function ListView(
 
     this.AvoidTableEvents = false;
     this.AvoidViewerEvents = false;
+    this.CategoryClassHidden = false;
     this.ViewerCallbackMap = {
         selectionArray: function (selections) {
             if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List ||
@@ -38,9 +39,9 @@ function ListView(
 
     this.CurrentRowId = 0;
 
-    this.Flat = false;
+    this.Flat = true;
     this.ExcludeMembers = false;
-
+    this.UndefinedHidden = false;
     _this.ContextMenu = null;
 }
 // assign ModelBrowser's method to this class
@@ -61,92 +62,34 @@ ListView.prototype.UpdateComponents = function (componentsData) {
         classProperty = identifierProperties.subClass.replace("Intrida Data/", "");
     }
 
-    for (var nodeId in componentsData) {
-        var componentData = componentsData[nodeId];
+    for (var nodeId in this.Components) {
+        var component = this.Components[nodeId];
 
-        // Update all components from this class
-        if (nodeId in this.Components) {
-            var component = this.Components[nodeId];
+        var rowData = {};
+        rowData["componentName"] = component.Name;
+        rowData["NodeId"] = Number(component.NodeId);
+        for (var i = 0; i < component.properties.length; i++) {
+            var property = component.properties[i];
 
-            if (componentData.name &&
-                component.Name !== componentData.name) {
-                component.Name = componentData.name;
+            var columnDataField = property.Name.replace(/\s/g, '');
+            rowData[columnDataField] = property.Value;
 
-                needsUpdate = true;
-            }
-            if (componentData.category) {
-                component.MainComponentClass = componentData.category;
+            if (this.ExistingColumnNames.indexOf(property.Name) === -1) {
+                var column = {};
+                column["caption"] = property.Name;
+                column["dataField"] = columnDataField;
+                column["visible"] = false;
+                // if (("visibleColumns" in this.GroupTemplate) &&
+                //     this.GroupTemplate.visibleColumns.indexOf(columnDataField) !== -1) {
+                //     column["visible"] = true;
+                // }
 
-                needsUpdate = true;
-            }
-            if (componentData.componentClass) {
-                component.SubComponentClass = componentData.componentClass;
-
-                needsUpdate = true;
-            }
-
-            // if component is new component, then add properties from
-            // allcomponents to new component being added.
-            if (componentData["newComponent"] === true) {
-                for (let i = 0; i < component.properties.length; i++) {
-                    let prop = component.properties[i];
-                    componentData.properties.push({
-                        "property": prop.Name,
-                        "value": prop.Value,
-                        "action": "add",
-                        "userdefined": "false"
-                    });
-                }
-            }
-
-            // add properties to components
-            for (var i = 0; i < componentData.properties.length; i++) {
-                var prop = componentData.properties[i];
-
-                if (prop.action.toLowerCase() === "add" &&
-                    prop["userdefined"] !== "false") {
-                    var genericPropertyObject = new GenericProperty(prop.property, "String", prop.value, true);
-                    component.addProperty(genericPropertyObject);
-                }
-                else if (prop.action.toLowerCase() === "remove") {
-                    if (prop.property.toLowerCase() === categoryProperty.toLowerCase()) {
-                        component.MainComponentClass = null;
-                        needsUpdate = true;
-                    }
-                    if (prop.property.toLowerCase() === classProperty.toLowerCase()) {
-                        component.SubComponentClass = null;
-                        needsUpdate = true;
-                    }
-
-                    component.removeProperty(prop.property);
-                }
-                else if (prop.action.toLowerCase() === "update") {
-                    if (prop.oldProperty.toLowerCase() === categoryProperty.toLowerCase()) {
-                        if (prop.property.toLowerCase() !== categoryProperty.toLowerCase()) {
-                            component.MainComponentClass = null;
-                        }
-                        else {
-                            component.MainComponentClass = prop.value;
-                        }
-
-                        needsUpdate = true;
-                    }
-                    if (prop.oldProperty.toLowerCase() === classProperty.toLowerCase()) {
-                        if (prop.property.toLowerCase() !== classProperty.toLowerCase()) {
-                            component.SubComponentClass = null;
-                        }
-                        else {
-                            component.SubComponentClass = prop.value;
-                        }
-                        needsUpdate = true;
-                    }
-                    component.updateProperty(prop.oldProperty, prop.property, prop.value)
-                }
+                this.Headers.push(column);
+                this.ExistingColumnNames.push(property.Name)
             }
         }
 
-        // Update SourceProperty components from SCManager which are shown in modelbrowser        
-        sourceManager.SourceProperties[nodeId] = this.Components[nodeId];
+        this.TableData.push(rowData);
     }
 
     // Sourcemanagers all components as well
@@ -176,14 +119,13 @@ ListView.prototype.UpdateComponents = function (componentsData) {
 ListView.prototype.Show = function (selectedComps) {
     this.Headers = [];
     this.TableData = [];
-   
-
+    this.ExistingColumnNames = [];
     // Create Headers
     this.CreateHeaders();
 
     // Create Table data
     var rootNode = this.Webviewer.model.getAbsoluteRootNode();
-    
+
     this.CurrentRowId = 1;
     var tableData = this.CreateTableData(rootNode, -1, this.Flat);
     if (!this.Flat) {
@@ -228,7 +170,7 @@ ListView.prototype.CreateTableData = function (nodeId, parentNode, flat) {
         var childRowData = this.CreateTableData(children[i], nodeId, flat);
         if (!flat && childRowData) {
             rowData["items"].push(childRowData);
-        }        
+        }
     }
 
     return rowData;
@@ -243,17 +185,32 @@ ListView.prototype.GetRowData = function (nodeId, parentNode) {
     //add node properties to model browser table
     var nodeData = this.Components[nodeId];
 
-    tableRowContent = {};
+    var rowData = {};
+    rowData["Item"] = nodeData.Name;
+    rowData["Category"] = nodeData.MainComponentClass;
+    rowData["Class"] = nodeData.SubComponentClass;
+    rowData["NodeId"] = Number(nodeData.NodeId);
+    for (var i = 0; i < nodeData.properties.length; i++) {
+        var property = nodeData.properties[i];
 
-    tableRowContent[ListViewColumnNames3D.Component] = nodeData.Name;
-    tableRowContent[ListViewColumnNames3D.MainClass] = (nodeData.MainComponentClass != undefined ? nodeData.MainComponentClass : "");
-    tableRowContent[ListViewColumnNames3D.SubClass] = (nodeData.SubComponentClass != undefined ? nodeData.SubComponentClass : "");
-    tableRowContent[ListViewColumnNames3D.NodeId] = (nodeData.NodeId != undefined ? Number(nodeData.NodeId) : "");
-    // tableRowContent[ListViewColumnNames3D.Parent] = parentNode;
-    tableRowContent["rowId"] = this.CurrentRowId;
+        var columnDataField = property.Name.replace(/\s/g, '');
+        rowData[columnDataField] = property.Value;
+
+        if (this.ExistingColumnNames.indexOf(property.Name) === -1) {
+            var column = {};
+            column["caption"] = property.Name;
+            column["dataField"] = columnDataField;
+            column["visible"] = false;
+
+            this.Headers.push(column);
+            this.ExistingColumnNames.push(property.Name)
+        }
+    }
+    rowData["rowId"] = this.CurrentRowId;
+    //tableRowContent["rowId"] = this.CurrentRowId;
     this.CurrentRowId++;
-    
-    return tableRowContent;
+
+    return rowData;
 }
 
 ListView.prototype.CreateHeaders = function () {
@@ -291,6 +248,7 @@ ListView.prototype.CreateHeaders = function () {
         columnHeader["dataField"] = caption.replace(/\s/g, '');;
         columnHeader["width"] = width;
         columnHeader["visible"] = visible;
+        columnHeader["showInColumnChooser"] = false;
         this.Headers.push(columnHeader);
     }
 }
@@ -331,7 +289,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                         Object.assign(item, values);
                     }
                 }
-            },         
+            },
             dataStructure: "tree",
             keyExpr: "rowId",
             itemsExpr: "items",
@@ -355,12 +313,18 @@ ListView.prototype.LoadTable = function (selectedComps) {
             headerFilter: {
                 visible: true
             },
+            columnChooser: {
+                enabled: false,
+                allowSearch: true,
+                mode: "select",
+                title: "Property Columns",
+            },
             onContentReady: function (e) {
                 if (!loadingBrowser) {
                     return;
                 }
                 loadingBrowser = false;
-                
+
                 _this.AvoidViewerEvents = true;
                 _this.AvoidTableEvents = true;
 
@@ -369,11 +333,11 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 // initialize the context menu
                 _this.ContextMenu = new ModelBrowserContextMenu(true);
                 _this.ContextMenu.ModelBrowser = _this;
-                
+
                 _this.ShowItemCount(e.component.getDataSource().totalCount());
 
                 // restore selected components
-                if (selectedComps && selectedComps.length > 0) {                    
+                if (selectedComps && selectedComps.length > 0) {
                     var selectedNodes = [];
                     for (var i = 0; i < selectedComps.length; i++) {
                         selectedNodes.push(Number(selectedComps[i].NodeId));
@@ -392,16 +356,16 @@ ListView.prototype.LoadTable = function (selectedComps) {
 
                 // enable events
                 _this.InitEvents();
-            },           
+            },
             onSelectionChanged: function (e) {
                 if (_this.AvoidTableEvents) {
                     return;
                 }
-                
+
                 _this.AvoidViewerEvents = true;
 
                 var includeMember = SourceManagers[_this.Id].GetIncludeMember();
-               
+
                 var selected;
                 var rowKeys;
                 if (e.currentSelectedRowKeys.length > 0) {
@@ -414,7 +378,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 }
 
                 _this.OnSelectRecurcively(rowKeys, selected, includeMember);
-               
+
                 if (model.views[_this.Id].editUserPropertiesForm.Active) {
                     model.views[_this.Id].editUserPropertiesForm.LoadData();
                 }
@@ -424,17 +388,17 @@ ListView.prototype.LoadTable = function (selectedComps) {
             onRowClick: function (e) {
                 if (e.event.target.tagName.toLowerCase() === "span") {
                     return;
-                }  
+                }
 
                 _this.AvoidViewerEvents = true;
 
-                _this.UnHighlightRow();                
-               
+                _this.UnHighlightRow();
+
                 _this.HighlightRow(e.key, e.data.NodeId);
-                
+
                 _this.AvoidViewerEvents = false;
             },
-            onRowPrepared: function (e) {                
+            onRowPrepared: function (e) {
                 if (_this.AvoidTableEvents ||
                     e.rowType !== "data") {
                     return;
@@ -450,16 +414,16 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 if (e.key in _this.UpdateRequiredRows) {
                     var updateData = _this.UpdateRequiredRows[e.key];
                     var component = _this.Components[updateData.nodeId];
-                   
+
                     e.component.cellValue(e.rowIndex, 0, component.Name);
                     e.component.cellValue(e.rowIndex, 1, component.MainComponentClass);
                     e.component.cellValue(e.rowIndex, 2, component.SubComponentClass);
 
                     delete _this.UpdateRequiredRows[e.key];
                     e.component.saveEditData();
-                }              
-               
-                _this.AvoidTableEvents = false;                
+                }
+
+                _this.AvoidTableEvents = false;
             },
             onContextMenuPreparing: function (e) {
                 if (e.row.rowType === "header") {
@@ -483,10 +447,35 @@ ListView.prototype.LoadTable = function (selectedComps) {
                                 _this.Flat = !_this.Flat;
                                 _this.Show();
                             }
+                        },
+                        {
+                            text: "Edit Columns",
+                            onItemClick: function () {
+                                e.component.showColumnChooser();
+                            }
+                        },
+                        {
+                            text: _this.CategoryClassHidden ? "Show Category/Class" : "Hide Category/Class",
+                            onItemClick: function () {
+
+                                if (!_this.CategoryClassHidden) {
+                                    $(containerDiv).dxTreeList("columnOption", "Item", "width", "100%");
+                                    $(containerDiv).dxTreeList("columnOption", "Category", "visible", false);
+                                    $(containerDiv).dxTreeList("columnOption", "Class", "visible", false);
+                                }
+                                else {
+                                    $(containerDiv).dxTreeList("columnOption", "Category", "visible", true);
+                                    $(containerDiv).dxTreeList("columnOption", "Class", "visible", true);
+                                    $(containerDiv).dxTreeList("columnOption", "Item", "width", "40%");
+                                    $(containerDiv).dxTreeList("columnOption", "Category", "width", "30%");
+                                    $(containerDiv).dxTreeList("columnOption", "Class", "width", "30%");
+                                }
+                                _this.CategoryClassHidden = !_this.CategoryClassHidden;
+                            }
                         }
                     ];
                 }
-                else  if (e.row.rowType === "data") {
+                else if (e.row.rowType === "data") {
                     e.items = [
                         {
                             text: "Hide",
@@ -510,7 +499,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("show");
                             }
-                        },                      
+                        },
                         {
                             text: "Translucency",
                             icon: "public/symbols/Transparency.svg",
@@ -520,17 +509,17 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             }
                         },
                         {
-                            text: "Properties",                           
+                            text: "Properties",
                             onItemClick: function () {
                                 let rowsData = e.component.getSelectedRowsData();
                                 if (rowsData.length === 0) {
                                     return;
                                 }
-                                
+
                                 let compData = null;
                                 if (_this.Webviewer) {
                                     compData = {
-                                        "name" : rowsData[0].Item,
+                                        "name": rowsData[0].Item,
                                         "nodeId": rowsData[0].NodeId
                                     };
                                 }
@@ -541,7 +530,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                             }
                         },
                         {
-                            text: "Reference",                           
+                            text: "Reference",
                             onItemClick: function () {
                                 _this.ContextMenu.OnMenuItemClicked("reference");
                             }
@@ -550,7 +539,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 }
             },
             onDisposing: function (e) {
-                 // disable events
+                // disable events
                 _this.TerminateEvents();
 
                 model.views[_this.Id].tableViewInstance = null;
@@ -559,6 +548,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                 _this.Webviewer.selectionManager.clear();
 
                 _this.ListViewTableInstance = null;
+                _this.UndefinedHidden = false;
 
                 _this.SelectedRows = {};
                 _this.HighlightedRow = {};
@@ -572,8 +562,9 @@ ListView.prototype.LoadTable = function (selectedComps) {
                     model.views[_this.Id].activeSelection = "Single Select";
                 }
 
-                _this.ExcludeMembers = false;                
+                _this.ExcludeMembers = false;
                 _this.ContextMenu = null;
+                _this.ExistingColumnNames = [];
             }
         }).dxTreeList("instance");
     });
@@ -581,7 +572,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
 
 ListView.prototype.HighlightRow = function (rowKey, nodeId) {
     var _this = this;
-   
+
     _this.HighlightedRow[rowKey] = nodeId;
 
     var rowIndex = this.ListViewTableInstance.getRowIndexByKey(Number(rowKey));
@@ -606,9 +597,9 @@ ListView.prototype.HighlightRow = function (rowKey, nodeId) {
     // property callout                
     if (nodeId in _this.Components) {
         SourceManagers[_this.Id].OpenPropertyCallout({
-                "name": _this.Components[nodeId].Name, 
-                "nodeId": nodeId
-            });
+            "name": _this.Components[nodeId].Name,
+            "nodeId": nodeId
+        });
     }
 }
 
@@ -632,7 +623,7 @@ ListView.prototype.UnHighlightRow = function () {
 
 ListView.prototype.RestoreSelectionFromComponents = function (selectedNodes) {
     var rootNode = this.ListViewTableInstance.getRootNode();
-    
+
     this.Webviewer.selectionManager.clear();
 
     if (rootNode.hasChildren === true) {
@@ -664,9 +655,9 @@ ListView.prototype.RestoreSelectionRecurcively = function (selectedNodes, rowNod
 ListView.prototype.OnIncludeMembers = function (include) {
     var rowKeys = this.ListViewTableInstance.getSelectedRowKeys();
 
-    this.SelectedRows = {};    
-   
-    this.OnSelectRecurcively(rowKeys, true, include);     
+    this.SelectedRows = {};
+
+    this.OnSelectRecurcively(rowKeys, true, include);
 }
 
 ListView.prototype.OnSelectRecurcively = function (rowKeys,
@@ -675,13 +666,13 @@ ListView.prototype.OnSelectRecurcively = function (rowKeys,
     if (!this.ListViewTableInstance) {
         return;
     }
-    
+
     this.AvoidViewerEvents = true;
     this.AvoidTableEvents = true;
 
     for (var i = 0; i < rowKeys.length; i++) {
         var rowKey = Number(rowKeys[i]);
-        this.SelectRecurcively(rowKey, selected, recursive);       
+        this.SelectRecurcively(rowKey, selected, recursive);
     }
 
     // manage GA selection, if components are deselected from table
@@ -693,7 +684,7 @@ ListView.prototype.OnSelectRecurcively = function (rowKeys,
         }
     }
 
-    this.AvoidViewerEvents = false;  
+    this.AvoidViewerEvents = false;
     this.AvoidTableEvents = false;
 }
 
@@ -701,7 +692,7 @@ ListView.prototype.SelectRecurcively = function (rowKey, selected, recursive) {
     var node = this.ListViewTableInstance.getNodeByKey(rowKey);
     if (selected) {
         this.SelectedRows[rowKey] = node.data.NodeId;
-        
+
         this.Webviewer.selectionManager.selectNode(node.data.NodeId, Communicator.SelectionMode.Add);
     }
     else {
@@ -713,7 +704,7 @@ ListView.prototype.SelectRecurcively = function (rowKey, selected, recursive) {
     if (recursive === true && node.hasChildren === true) {
         for (var i = 0; i < node.children.length; i++) {
             // this.ListViewTableInstance.selectRows([node.children[i].key], true);
-            this.SelectRecurcively(node.children[i].key, selected, recursive);            
+            this.SelectRecurcively(node.children[i].key, selected, recursive);
         }
     }
 }
@@ -800,7 +791,7 @@ ListView.prototype.GoToRow = function (rowKey) {
     if (_this.Flat) {
         _this.UnHighlightRow();
         _this.HighlightRow(rowKey, _this.KeyVsTableItems[rowKey].nodeId);
-        
+
         _this.ListViewTableInstance.navigateToRow(rowKey);
     }
     else {
