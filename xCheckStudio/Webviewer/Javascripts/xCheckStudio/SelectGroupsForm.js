@@ -37,13 +37,7 @@ SelectGroupsForm.prototype.Close = function () {
 SelectGroupsForm.prototype.Init = function () {
     var _this = this;
 
-    //this.PopulateTemplateGrid();
-
     this.PopulateGroups();
-
-    // this.NameTextBox = $("#defineGroupsFormNameBox" + this.Id).dxTextBox({
-    //     placeholder: "Enter Name..."
-    // }).dxTextBox("instance");
 
     // Create btns    
     document.getElementById("selectGroupsFormApplyBtn" + this.Id).onclick = function () {
@@ -66,50 +60,20 @@ SelectGroupsForm.prototype.PopulateGroups = function () {
 
     this.GroupSelect = $("#selectGroupsFormTypeDL" + this.Id).dxSelectBox({
         items: groups,
-        // value: "New",
-        // onValueChanged: function (data) {
-        //     if (data.value.toLowerCase() !== "new") {
-        //         _this.NameTextBox.option("value", data.value);
-        //         _this.NameTextBox.option("disabled", true);
-        //     }
-        //     else {
-        //         _this.NameTextBox.option("value", "");
-        //         _this.NameTextBox.option("disabled", false);
-        //         // return;
-        //     }
-            
-        //     //_this.PopulateTemplateGrid();
-        // }
-
     }).dxSelectBox("instance");
 }
 
 
 SelectGroupsForm.prototype.OnApply = function () {
-    // var templateName = this.NameTextBox.option("value");
-    // if (!templateName ||
-    //     templateName === "") {
-    //     alert("Please enter name for template to save.");
-    //     return;
-    // }
 
     if (this.GroupSelect) {
         var selectedGroup = this.GroupSelect.option("value");
-    
-    // var rows = this.DefineGroupsGrid.getVisibleRows();
-    // if (rows.length === 0) {
-    //     alert("No data to save.");
-    //     return;
-    // }
+
     var propertyGroups = model.propertyGroups;
     if (selectedGroup in propertyGroups) {
         var groupingProperties = model.propertyGroups[selectedGroup].properties;
     }
-    // var groupingProperties = [];
-    // for (var i = 0; i < _this.GroupSelect.option("value")..length; i++) {
-    //     var row = rows[i];
-    //     groupingProperties.push(row.data.Name);
-    // }
+
     }
     // templateName = this.NameTextBox.option("value");
 
