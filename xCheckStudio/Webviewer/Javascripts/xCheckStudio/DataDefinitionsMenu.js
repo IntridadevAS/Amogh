@@ -218,6 +218,10 @@ DataDefinitionMenu.prototype.CloseOpenForm = function (currentForm) {
         model.views[this.Id].defineGroupsForm.Active) {
         model.views[this.Id].defineGroupsForm.Close();
     }
+    else if (currentForm !== model.views[this.Id].selectGroupsForm &&
+        model.views[this.Id].selectGroupsForm.Active) {
+        model.views[this.Id].selectGroupsForm.Close();
+    }
     else if (currentForm !== model.views[this.Id].definePropertyHighlightsForm &&
         model.views[this.Id].definePropertyHighlightsForm.Active) {
         model.views[this.Id].definePropertyHighlightsForm.Close();

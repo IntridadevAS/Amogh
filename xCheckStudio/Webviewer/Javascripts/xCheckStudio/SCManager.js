@@ -107,6 +107,7 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                 var currentView = model.views[_this.Id];
                 currentView.displayMenu = new DisplayMenu(_this.Id);
                 currentView.dataDefinitionMenu = new DataDefinitionMenu(_this.Id);
+                currentView.listViewActionMenu = new ListViewActionMenu(_this.Id);
                 currentView.annotationOperator = new Example.AnnotationOperator(
                     viewer);
                 currentView.annotationOperatorId = viewer.registerCustomOperator(currentView.annotationOperator);
@@ -307,6 +308,8 @@ SCManager.prototype.OpenTableViewsMenu = function () {
     var listViewSDA = document.getElementById("listviewAction" + _this.Id);
     listViewSDA.classList.add("showSDA");
     listViewSDA.onclick = function () {
+        closeAnyOpenMenu();
+        model.views[_this.Id].listViewActionMenu.Open();
         if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
             var selectedComps = _this.GetCurrentTable().GetSelectedComponents();
             if (selectedComps.constructor === Object) {
