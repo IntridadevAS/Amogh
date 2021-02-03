@@ -24,6 +24,7 @@ function ListView(
     this.AvoidTableEvents = false;
     this.AvoidViewerEvents = false;
     this.CategoryClassHidden = false;
+    this.ListViewTemplate = null;
     this.ViewerCallbackMap = {
         selectionArray: function (selections) {
             if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List ||
@@ -472,6 +473,34 @@ ListView.prototype.LoadTable = function (selectedComps) {
                                 }
                                 _this.CategoryClassHidden = !_this.CategoryClassHidden;
                             }
+                        },
+                        {
+                            text: "Save View",
+                            onItemClick: function () {
+                                var defineList = document.getElementById("defineListForma");
+                                if (defineList.style.display === "none") {
+                                    defineList.style.display = "block";
+                                    defineList.style.top = "calc( 50% - 141px)";    
+                                    defineList.style.left = "calc( 50% - 225px)";
+    
+                                } else {
+                                    defineList.style.display = "none";
+                                }
+                            }
+                        },
+                        {
+                            text: "Saved View",
+                            onItemClick: function () {
+                                var defineList = document.getElementById("displayListForma");
+                                if (defineList.style.display === "none") {
+                                    defineList.style.display = "block";
+                                    defineList.style.top = "calc( 50% - 141px)";    
+                                    defineList.style.left = "calc( 50% - 225px)";
+    
+                                } else {
+                                    defineList.style.display = "none";
+                                }
+                            }
                         }
                     ];
                 }
@@ -650,6 +679,132 @@ ListView.prototype.RestoreSelectionRecurcively = function (selectedNodes, rowNod
             this.RestoreSelectionRecurcively(selectedNodes, rowNode.children[i]);
         }
     }
+}
+
+
+ListView.prototype.OnListViewTemplateChanged = function (groupName) {
+    this.Clear();
+    if (!groupName ||
+        groupName.toLowerCase() === "clear") {
+        return;
+    }
+
+    if (!(groupName in model.propertyGroups)) {
+      return;
+     } 
+    
+     this.ListViewTemplate = model.propertyGroups[groupName];
+
+   
+    this.TableData = [];
+    this.ExistingColumnNames = [];
+    this.Headers = [];
+    var column = {};
+    column["caption"] = "Item";
+    column["dataField"] = "componentName";
+    column["visible"] = true;
+    column["showInColumnChooser"] = false;
+    this.Headers.push(column);
+
+    if (this.CategoryClassHidden) { 
+
+    column = {};
+    column["caption"] = "MainClass";
+    column["dataField"] = "Category";
+    column["visible"] = true;
+    column["showInColumnChooser"] = false;
+    this.Headers.push(column);
+
+    column = {};
+    column["caption"] = "SubClass";
+    column["dataField"] = "Class";
+    column["visible"] = true;
+    column["showInColumnChooser"] = false;
+    this.Headers.push(column);
+
+    }
+
+    column = {};
+    column["caption"] = "NodeId";
+    column["dataField"] = "NodeId";
+    column["visible"] = false;
+    column["showInColumnChooser"] = false;
+    this.Headers.push(column);
+
+    // get table data
+    this.TableData = [];
+    this.GenerateTableDataForGroupByProperty();
+    if (this.TableData === undefined ||
+        this.TableData.length === 0) {
+        return;
+    }
+
+    // Load table
+    this.LoadTable();
+}
+
+
+ListView.prototype.GenerateTableDataForGroupByProperty = function () {
+
+    var groupProperties = this.GetGroupTemplateProperties();
+                if (!groupProperties ||
+                    groupProperties.length === 0) {
+                    return;
+                }
+
+    for (var nodeId in this.Components) {
+        var component = this.Components[nodeId];
+
+        var rowData = {};
+        rowData["componentName"] = component.Name;
+        rowData["Category"] = component.MainComponentClass;
+        rowData["Class"] = component.SubComponentClass;
+        rowData["NodeId"] = Number(component.NodeId);
+      
+        for (var i = 0; i < groupProperties.length; i++) {
+            var groupProperty = groupProperties[i];
+
+            if (this.ExistingColumnNames.indexOf(groupProperty) === -1) {
+
+                column = {};
+                column["caption"] = groupProperty;
+
+                var dataField = groupProperty.replace(/\s/g, '');
+                column["dataField"] = dataField;
+
+                column["visible"] = true;
+                
+                this.Headers.push(column);
+
+                this.ExistingColumnNames.push(groupProperty);
+            }
+        }
+
+        this.TableData.push(rowData);
+    }
+}
+
+
+ListView.prototype.IsPropertyInGroupProperties = function (property) {
+    var groupProperties = this.GetGroupTemplateProperties();
+    if (groupProperties === null) {
+        return false;
+    }
+
+    if (groupProperties.indexOf(property) !== -1) {
+        return true;
+    }
+
+    return false;
+}
+
+ListView.prototype.GetGroupTemplateProperties = function () {
+    if (this.ListViewTemplate &&
+        ("properties" in this.ListViewTemplate)) {
+        return this.ListViewTemplate.properties;
+    }
+
+    return null;
 }
 
 ListView.prototype.OnIncludeMembers = function (include) {
@@ -909,6 +1064,25 @@ ListView.prototype.ShowAllHiddenRows = function () {
     sourceManager.HiddenNodeIds = [];
 }
 
+ListView.prototype.SaveTableView = function () {
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+    if (!treeList ||
+        !this.ListViewTemplate) {
+        return;
+    }
+    this.ListViewTemplate['visibleColumns'] = [];
+    var columns = treeList.getVisibleColumns();
+    for (var i = 0; i < columns.length; i++) {
+        var column = columns[i];
+        if (column.type === "selection" ||
+            column.type === "groupExpand" ||
+            (("dataField" in column) && column.dataField.toLowerCase() === "componentname")) {
+            continue;
+        }
+
+        this.ListViewTemplate['visibleColumns'].push(column.dataField);
+    }
+}
 // ListView.prototype.GetAllSelectedRowNodeIds = function () {
 //     var selectedNodeIds = [];
 //     if (this.ListViewTableInstance) {
@@ -963,4 +1137,13 @@ function findItem(items, key, withIndex) {
             return item;
         }
     }
+}
+
+ListView.prototype.GetListTemplateProperties = function () {
+    if (this.ListViewTemplate &&
+        ("properties" in this.ListViewTemplate)) {
+        return this.ListViewTemplate.properties;
+    }
+
+    return null;
 }
