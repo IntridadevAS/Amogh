@@ -182,16 +182,18 @@ function cancelResetData() {
 function resetData() {
     hideResetDataForm();
     showBusyIndicator();
-    initReviewModule().then(function() {
-        if(model.currentCheck == "comparison") {
-            viewTabs.enterComparison();
-        }
-        else {
-            viewTabs.enterCompliance();
-        }
-
-        hideBusyIndicator();
-    });
+    setTimeout(function () {
+        const newLocal = initReviewModule();
+        newLocal.then(function () {
+            if (model.currentCheck == "comparison") {
+                viewTabs.enterComparison();
+            }
+            else {
+                viewTabs.enterCompliance();
+            }
+            hideBusyIndicator();
+        });
+    }, 1000);
 }
 
 function hideResetDataForm() {
