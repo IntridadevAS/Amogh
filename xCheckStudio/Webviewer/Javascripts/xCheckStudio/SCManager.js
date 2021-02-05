@@ -422,11 +422,13 @@ SCManager.prototype.InitGroupViewControls = function(){
         model.views[_this.Id].groupView.ApplyPropertyHighlightColor();
     }
 
+    //GroupViewHeader name and value
+    this.TableGroupHeaderName = document.getElementById("tableGroupHeaderName" + this.Id);
     //Group Database View Btn
-    this.GroupDatabaseViewBtn = document.getElementById("databaseViewBtn" + this.Id);
-    this.GroupDatabaseViewBtn.onclick = function () {
-        model.views[_this.Id].groupView.OnGroupDatabaseViewClick();
-    }
+    // this.GroupDatabaseViewBtn = document.getElementById("databaseViewBtn" + this.Id);
+    // this.GroupDatabaseViewBtn.onclick = function () {
+    //     model.views[_this.Id].groupView.OnGroupDatabaseViewClick();
+    // }
 }
 
 // SCManager.prototype.ShowGroupViewControls = function (show) {

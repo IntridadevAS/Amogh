@@ -4,6 +4,7 @@ function ListViewActionMenu(id) {
 
     this.Active = false;
     model.views[this.Id].selectGroupsForm = new SelectGroupsForm(this.Id);
+    model.views[this.Id].selectPropertyHighlightsForm = new SelectPropertyHighlightsForm(this.Id);
 }
 
 ListViewActionMenu.prototype.GetHtmlElementId = function () {
@@ -96,6 +97,7 @@ ListViewActionMenu.prototype.GetControls = function () {
             Title: "Highlight by Property",
             ImageSrc: "public/symbols/Property Highlight.svg",
             click: function (e, menu) {
+                menu.OnSelectPropertyHighlight();
             }
         },
         {
@@ -142,9 +144,25 @@ ListViewActionMenu.prototype.OnSelectGroups= function () {
     }     
 }
 
+ListViewActionMenu.prototype.OnSelectPropertyHighlight= function () {
+    if (model.views[this.Id].selectPropertyHighlightsForm.Active) {
+        model.views[this.Id].selectPropertyHighlightsForm.Close();
+    }
+    else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].selectPropertyHighlightsForm);
+        
+        model.views[this.Id].selectPropertyHighlightsForm.Open();
+    }     
+}
+
 ListViewActionMenu.prototype.CloseOpenForm = function (currentForm) {
     if (currentForm !== model.views[this.Id].selectGroupsForm &&
         model.views[this.Id].selectGroupsForm.Active) {
         model.views[this.Id].selectGroupsForm.Close();
+    }
+    else if (currentForm !== model.views[this.Id].selectPropertyHighlightsForm &&
+        model.views[this.Id].selectPropertyHighlightsForm.Active) {
+        model.views[this.Id].selectPropertyHighlightsForm.Close();
     }
 }

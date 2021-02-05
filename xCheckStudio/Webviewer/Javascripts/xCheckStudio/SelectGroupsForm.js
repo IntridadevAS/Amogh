@@ -1,11 +1,7 @@
 function SelectGroupsForm(id) {
     this.Id = id;
-
     this.Active = false;
-
-    //this.DefineGroupsGrid;
     this.GroupSelect;
-    //this.NameTextBox;
 }
 
 SelectGroupsForm.prototype.GetHtmlElementId = function () {
@@ -65,21 +61,21 @@ SelectGroupsForm.prototype.PopulateGroups = function () {
 
 
 SelectGroupsForm.prototype.OnApply = function () {
-
+    _this = this;
     if (this.GroupSelect) {
         var selectedGroup = this.GroupSelect.option("value");
-
+    
     var propertyGroups = model.propertyGroups;
-    if (selectedGroup in propertyGroups) {
-        var groupingProperties = model.propertyGroups[selectedGroup].properties;
-    }
+        if (selectedGroup in propertyGroups) {
+            var groupingProperties = model.propertyGroups[selectedGroup].properties;
+        }
+        model.views[_this.Id].groupView.Show(GlobalConstants.GroupView.Group,selectedGroup);
+
+        model.views[_this.Id].activeTableView = GlobalConstants.TableView.Group;
+        var sourceManager = SourceManagers[_this.Id];
+        sourceManager.ShowGroupViewControls(true);
+        model.views[_this.Id].groupView.ActiveGroupViewType = GlobalConstants.GroupView.Group;
+        model.views[_this.Id].groupView.OnGroupTemplateChanged(selectedGroup);
 
     }
-    // templateName = this.NameTextBox.option("value");
-
-    // var group = {
-    //     "name": templateName,
-    //     "properties": groupingProperties
-    // };
-    //var groupsSDA = document.getElementById("groupsAction" + _this.Id);
 }

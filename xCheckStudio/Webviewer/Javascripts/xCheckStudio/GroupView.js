@@ -78,10 +78,11 @@ function GroupView(
 GroupView.prototype = Object.create(ModelBrowser.prototype);
 GroupView.prototype.constructor = GroupView;
 
-GroupView.prototype.Show = function () {
+GroupView.prototype.Show = function (group,groupHeaderName) {
     this.Clear();
 
-    document.getElementById("tableHeaderName" + this.Id).innerText = GlobalConstants.TableView.Group;
+    document.getElementById("tableHeaderName" + this.Id).innerText = GlobalConstants.TableView.List;
+    document.getElementById("tableGroupHeaderName" + this.Id).innerText = group + ": " + groupHeaderName;
 }
 
 GroupView.prototype.IsHighlightByPropertyView = function () {

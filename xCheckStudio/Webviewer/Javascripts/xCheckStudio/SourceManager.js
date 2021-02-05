@@ -13,6 +13,7 @@ function SourceManager(id, sourceName, sourceType) {
     this.GroupHighlightTypeSelect = null;
     this.HighlightSelectionBtn = null;
     this.GroupDatabaseViewBtn = null;
+    this.TableGroupHeaderName = null;
 
     // virtual function
     SourceManager.prototype.GetViewerContainerID = function () {
@@ -80,15 +81,17 @@ function SourceManager(id, sourceName, sourceType) {
     }
 
     SourceManager.prototype.ShowGroupViewControls = function (show) {
-        this.GroupTemplateSelect.option("visible", show);
-        this.GroupHighlightTypeSelect.option("visible", show);
+        //this.GroupTemplateSelect.option("visible", show);
+        //this.GroupHighlightTypeSelect.option("visible", show);
         if (show) {
-            this.HighlightSelectionBtn.style.display = "block";
-            this.GroupDatabaseViewBtn.style.display = "block";
+            //this.HighlightSelectionBtn.style.display = "block";
+            //this.GroupDatabaseViewBtn.style.display = "block";
+            this.TableGroupHeaderName.style.display = "block";
         }
         else {
-            this.HighlightSelectionBtn.style.display = "none";
-            this.GroupDatabaseViewBtn.style.display = "none";
+            //this.HighlightSelectionBtn.style.display = "none";
+            //this.GroupDatabaseViewBtn.style.display = "none";
+            this.TableGroupHeaderName.style.display = "none";
         }
 
         this.GroupTemplateSelect.option("value", null);

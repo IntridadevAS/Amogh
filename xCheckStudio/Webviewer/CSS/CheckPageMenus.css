@@ -110,7 +110,7 @@
   
   .markupViewsCaption, .userPropertiesCaption, 
   .editUserPropertiesCaption, .clearUserPropertiesCaption,
-  .defineGroupsFormCaption,.selectGroupsFormCaption, .definePropertyHighlightFormCaption,
+  .defineGroupsFormCaption,.selectGroupsFormCaption, .definePropertyHighlightFormCaption,.selectPropertyHighlightFormCaption,
   .dataChangeTemplateOptionsFormCaption, .selectRevisionCaption,
   .selectDisplayTablesCaption, .exportExcelCaption, 
   .exportDatasetsToExcelCaption,
@@ -313,6 +313,17 @@
   border: 1px solid black;
 }
 
+.selectPropertyHighlightForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 4;
+  width: 550px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
 .editUserPropertiesForm
 {
   position: absolute; 
@@ -337,6 +348,8 @@
 
 .userPropertiesFormCaptionBar, .editUserPropertiesFormCaptionBar,
 .clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar, .selectGroupsFormCaptionBar,
+.definePropertyHighlightFormCaptionBar,.selectPropertyHighlightFormCaptionBar, .dataChangeTemplateOptionsFormCaptionBar,
+.selectRevisionCaptionBar, .selectDisplayTablesCaptionBar
 .definePropertyHighlightFormCaptionBar, .dataChangeTemplateOptionsFormCaptionBar,
 .selectRevisionCaptionBar, .selectDisplayTablesCaptionBar,.defineListFormCaptionBar
 {
@@ -435,8 +448,8 @@
   padding: 2px;
 }
 
-
-.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar
+.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,.selectPropertyHighlightFormBottomBar,
+.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,
 .defineGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,
 .defineListFormBottomBar
 {
@@ -462,6 +475,8 @@
 
 .userPropertiesApplyBtn, .editUserPropertiesApplyBtn,
 .clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn,.selectGroupsFormApplyBtn,
+.definePropertyHighlightFormApplyBtn,.selectPropertyHighlightFormApplyBtn, .dataChangeOptionsApplyBtn,
+.selectRevisionApplyBtn, .selectDisplayTablesApplyBtn
 .definePropertyHighlightFormApplyBtn, .dataChangeOptionsApplyBtn,
 .selectRevisionApplyBtn, .selectDisplayTablesApplyBtn,
 .defineListFormApplyBtn
@@ -506,8 +521,8 @@
 .clearUserPropertiesCloseBtn:hover, .clearUserPropertiesApplyBtn:hover,
 .defineGroupsFormCloseBtn:hover, .selectGroupsFormCloseBtn:hover, .defineGroupsFormAdd:hover,
 .defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover, .selectGroupsFormApplyBtn:hover,
-.definePropertyHighlightFormCloseBtn:hover, .definePropertyHighlightFormAdd:hover,
-.definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover,
+.definePropertyHighlightFormCloseBtn:hover,.selectPropertyHighlightFormCloseBtn:hover, .definePropertyHighlightFormAdd:hover,
+.definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover,.selectPropertyHighlightFormApplyBtn:hover,
 .dataChangeTemplateFormReset:hover, .dataChangeTemplateFormRemove:hover,
 .dataChangeTemplateOptionsCloseBtn:hover, .selectRevisionCloseBtn:hover,
 .selectDisplayTablesCloseBtn:hover, .selectDisplayTablesApplyBtn:hover,
@@ -519,6 +534,8 @@
 
 .userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
 .clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn,.selectGroupsFormCloseBtn,
+.definePropertyHighlightFormCloseBtn,.selectPropertyHighlightFormCloseBtn, .dataChangeTemplateOptionsCloseBtn, 
+.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn,
 .definePropertyHighlightFormCloseBtn, .dataChangeTemplateOptionsCloseBtn, 
 .selectRevisionCloseBtn, .selectDisplayTablesCloseBtn,
 .defineListFormCloseBtn
@@ -560,9 +577,9 @@
   position: relative;
 }
 
-
+.defineGroupsFormTypeDL, .selectGroupsFormTypeDL, .definePropertyHighlightFormTypeDL,.selectPropertyHighlightFormTypeDL,
 .defineGroupsFormTypeDL, .selectGroupsFormTypeDL, .definePropertyHighlightFormTypeDL
-=======
+
 .defineListFormNameBox
 {
   height: 30px;
