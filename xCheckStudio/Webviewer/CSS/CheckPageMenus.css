@@ -113,7 +113,8 @@
   .defineGroupsFormCaption,.selectGroupsFormCaption, .definePropertyHighlightFormCaption,.selectPropertyHighlightFormCaption,
   .dataChangeTemplateOptionsFormCaption, .selectRevisionCaption,
   .selectDisplayTablesCaption, .exportExcelCaption, 
-  .exportDatasetsToExcelCaption
+  .exportDatasetsToExcelCaption,
+  .defineListFormCaption
   {
   color: black;
   top: 5px;
@@ -290,6 +291,17 @@
   border: 1px solid black;
 }
 
+.defineListForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 4;
+  width: 250px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
 .definePropertyHighlightForm
 {
   position: absolute; 
@@ -338,6 +350,8 @@
 .clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar, .selectGroupsFormCaptionBar,
 .definePropertyHighlightFormCaptionBar,.selectPropertyHighlightFormCaptionBar, .dataChangeTemplateOptionsFormCaptionBar,
 .selectRevisionCaptionBar, .selectDisplayTablesCaptionBar
+.definePropertyHighlightFormCaptionBar, .dataChangeTemplateOptionsFormCaptionBar,
+.selectRevisionCaptionBar, .selectDisplayTablesCaptionBar,.defineListFormCaptionBar
 {
   height: 30px;
   width: 100%;
@@ -434,7 +448,10 @@
   padding: 2px;
 }
 
-.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,.selectPropertyHighlightFormBottomBar
+.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,.selectPropertyHighlightFormBottomBar,
+.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,
+.defineGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,
+.defineListFormBottomBar
 {
   height: 70px;
   width: 100%;
@@ -460,6 +477,9 @@
 .clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn,.selectGroupsFormApplyBtn,
 .definePropertyHighlightFormApplyBtn,.selectPropertyHighlightFormApplyBtn, .dataChangeOptionsApplyBtn,
 .selectRevisionApplyBtn, .selectDisplayTablesApplyBtn
+.definePropertyHighlightFormApplyBtn, .dataChangeOptionsApplyBtn,
+.selectRevisionApplyBtn, .selectDisplayTablesApplyBtn,
+.defineListFormApplyBtn
 {  
   position: absolute;
   right: 2px;
@@ -505,7 +525,9 @@
 .definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover,.selectPropertyHighlightFormApplyBtn:hover,
 .dataChangeTemplateFormReset:hover, .dataChangeTemplateFormRemove:hover,
 .dataChangeTemplateOptionsCloseBtn:hover, .selectRevisionCloseBtn:hover,
-.selectDisplayTablesCloseBtn:hover, .selectDisplayTablesApplyBtn:hover
+.selectDisplayTablesCloseBtn:hover, .selectDisplayTablesApplyBtn:hover,
+.defineListFormCloseBtn:hover, .defineListFormAdd:hover,
+.defineListFormClear:hover, .defineListFormApplyBtn:hover
 {
   opacity: 1;
 }
@@ -513,7 +535,10 @@
 .userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
 .clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn,.selectGroupsFormCloseBtn,
 .definePropertyHighlightFormCloseBtn,.selectPropertyHighlightFormCloseBtn, .dataChangeTemplateOptionsCloseBtn, 
-.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn
+.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn,
+.definePropertyHighlightFormCloseBtn, .dataChangeTemplateOptionsCloseBtn, 
+.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn,
+.defineListFormCloseBtn
 { 
   font-size: 12px;
   position: absolute;
@@ -525,7 +550,8 @@
 }
 
 .userPropertiesFormAddText, .defineGroupsFormAddText,
-.definePropertyHighlightFormAddText
+.definePropertyHighlightFormAddText,
+.defineListFormAddText
 {
   color: black;
   position: absolute;
@@ -534,7 +560,8 @@
 }
 
 .userPropertiesFormClearText, .defineGroupsFormClearText,
-.definePropertyHighlightFormClearText
+.definePropertyHighlightFormClearText,
+.defineListFormClearTex
 {
   color: black;
   position: absolute;
@@ -550,14 +577,46 @@
   position: relative;
 }
 
-.defineGroupsFormTypeDL, .selectGroupsFormTypeDL, .definePropertyHighlightFormTypeDL,.selectPropertyHighlightFormTypeDL
+.defineGroupsFormTypeDL, .selectGroupsFormTypeDL, .definePropertyHighlightFormTypeDL,.selectPropertyHighlightFormTypeDL,
+.defineGroupsFormTypeDL, .selectGroupsFormTypeDL, .definePropertyHighlightFormTypeDL
+
+.defineListFormNameBox
+{
+  height: 30px;
+  width: 200px;
+  top: 10px;
+  left: 10px;
+  position: relative;
+}
+
+.defineListFormDescriptionBox
+{
+  height: 30px;
+  width: 200px;
+  top: 15px;
+  left: 10px;
+  position: relative;
+}
+
+.defineGroupsFormTypeDL, .definePropertyHighlightFormTypeDL
+
 {
   width: 200px;
   font-size: 10px;
   height: 30px;
 }
 
-.deleteGroupBtn, .deletePropertyHighlightBtn
+.defineListFormTypeDL
+{
+  width: 200px;
+  font-size: 10px;
+  height: 30px;
+  left: 10px;
+  top: 25px;
+  position: relative;
+}
+.deleteGroupBtn, .deletePropertyHighlightBtn,
+.deleteListBtn
 {
   top: 214px;
   position: absolute;

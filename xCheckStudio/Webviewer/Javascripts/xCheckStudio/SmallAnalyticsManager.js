@@ -1021,10 +1021,21 @@ SmallAnalyticsManager.prototype.getInfoSummary = function () {
     if(this.AnalyticsData[activeResultType]["undefinedCount"])
         undefinedCount = this.AnalyticsData[activeResultType]["undefinedCount"];
 
-    return {
-        "TotalItemsLoaded": TotalItemsLoaded, "TotalItemsNotChecked": TotalItemsNotChecked, "noMatchCount": noMatchCount,
-        "undefinedCount": undefinedCount
-    }
+     if (activeResultType.toLowerCase() === "comparison") {
+        return {
+            "TotalItemsLoaded": TotalItemsLoaded, "TotalItemsNotChecked": TotalItemsNotChecked, "noMatchCount": noMatchCount,
+            "undefinedCount": undefinedCount
+        }
+     }
+     else
+     {
+         
+        return {
+            "TotalItemsLoaded": TotalItemsLoaded, "TotalItemsNotChecked": TotalItemsNotChecked, 
+            "undefinedCount": undefinedCount
+        }
+     }
+    
 }
 
 SmallAnalyticsManager.prototype.getInfoSummaryForCategory = function () {
