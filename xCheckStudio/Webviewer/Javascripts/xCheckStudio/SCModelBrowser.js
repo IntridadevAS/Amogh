@@ -20,6 +20,9 @@ function SCModelBrowser(id,
     this.SelectionManager = new SCSelectionManager(nodeIdvsSelectedComponents);
 
     this.ContextMenu = null;
+    this.ExcludeMembers = false;
+    this.AvoidTableEvents = false;
+    this.AvoidViewerEvents = false;
 }
 
 // assign ModelBrowser's method to this class
@@ -71,10 +74,12 @@ SCModelBrowser.prototype.CreateHeaders = function () {
             case ModelBrowserColumns3D.MainClass:
                 width = "30%";
                 caption = ModelBrowserColumnNames3D.MainClass;
+                visible = false;
                 break;
             case ModelBrowserColumns3D.SubClass:
                 width = "30%";
                 caption = ModelBrowserColumnNames3D.SubClass;
+                visible = false;
                 break;
             case ModelBrowserColumns3D.NodeId:
                 visible = false;
@@ -173,6 +178,17 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
     var _this = this;
     var containerDiv = "#" + _this.ModelBrowserContainer;
     this.Clear();
+    // set selection mode
+    var selectionAttribute = {
+        mode: "multiple",
+        recursive: true,
+    };
+    if (_this.ExcludeMembers === true) {
+        selectionAttribute = {
+            mode: "multiple",
+            recursive: false,
+        };
+    }
     $(function () {
         $(containerDiv).dxTreeList({
             dataSource: _this.modelTreeRowData,
@@ -195,16 +211,14 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
             scrolling: {
                 mode: "standard"
             },           
-            selection: {
-                mode: "multiple",
-                recursive: true,
-            },
+            selection: selectionAttribute,
             onContentReady: function (e) {
                 if (loadingBrower === false) {
                     return;
                 }
                 loadingBrower = false;
-
+                _this.AvoidViewerEvents = true;
+                _this.AvoidTableEvents = true;
                 // Restore selections
 
                 // if from saved data
@@ -220,6 +234,8 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                     e.component.selectRows(selectedNodeIds);
                 }               
                 
+                _this.AvoidViewerEvents = false;
+                _this.AvoidTableEvents = false;
                 // show table view action button
                 document.getElementById("tableViewAction" + _this.Id).style.display = "block";
             },
@@ -340,6 +356,23 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                         }
                     ];
                 }
+                else if (e.row.rowType === "header") {
+                    e.items = [
+                        {
+                            text: _this.ExcludeMembers ? "Include Members" : "Exclude Members",
+                            disabled: _this.Flat,
+                            onItemClick: function () {
+                                _this.ExcludeMembers = !_this.ExcludeMembers;
+
+                                e.component.option("selection.recursive", !_this.ExcludeMembers);
+
+                                _this.SelectedRows = {};
+                                let rowKeys = e.component.getSelectedRowKeys();
+                                _this.OnSelectRecurcively(rowKeys, true, !_this.ExcludeMembers);
+                            }
+                        },
+                    ]
+                }
             },
             onDisposing: function (e) {
                 _this.SelectionManager.SelectedComponentIds = [];
@@ -351,6 +384,7 @@ SCModelBrowser.prototype.loadModelBrowserTable = function (columnHeaders, select
                 model.views[_this.Id].tableViewWidget = null;
 
                 _this.ContextMenu = null;
+                _this.ExcludeMembers = false;
             }
         });
     });
@@ -508,6 +542,57 @@ SCModelBrowser.prototype.OpenHighlightedRow = function (path, selectedNodeId) {
     }
 }
 
+SCModelBrowser.prototype.OnSelectRecurcively = function (rowKeys,
+    selected,
+    recursive) {
+        var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+    if (!treeList) {
+        return;
+    }
+    
+    this.AvoidViewerEvents = true;
+    this.AvoidTableEvents = true;
+
+    for (var i = 0; i < rowKeys.length; i++) {
+        var rowKey = Number(rowKeys[i]);
+        this.SelectRecurcively(rowKey, selected, recursive);       
+    }
+
+    // manage GA selection, if components are deselected from table
+    if (selected === false) {
+        this.Webviewer.selectionManager.clear();
+        for (var rowKey in this.SelectedRows) {
+            this.Webviewer.selectionManager.selectNode(this.SelectedRows[rowKey],
+                Communicator.SelectionMode.Add);
+        }
+    }
+
+    this.AvoidViewerEvents = false;  
+    this.AvoidTableEvents = false;
+}
+
+SCModelBrowser.prototype.SelectRecurcively = function (rowKey, selected, recursive) {
+    var treeList = $("#" + this.ModelBrowserContainer).dxTreeList("instance");
+    var node = treeList.getNodeByKey(rowKey);
+    if (selected) {
+        this.SelectedRows[rowKey] = node.data.NodeId;
+        
+        this.Webviewer.selectionManager.selectNode(node.data.NodeId, Communicator.SelectionMode.Add);
+    }
+    else {
+        if (rowKey in this.SelectedRows) {
+            delete this.SelectedRows[rowKey];
+        }
+    }
+
+    if (recursive === true && node.hasChildren === true) {
+        for (var i = 0; i < node.children.length; i++) {
+            // this.ListViewTableInstance.selectRows([node.children[i].key], true);
+            this.SelectRecurcively(node.children[i].key, selected, recursive);            
+        }
+    }
+}
+
 SCModelBrowser.prototype.GetTopMostParentNode = function (rowKey, path) {
 
     if (rowKey in this.NodeParentList) {
@@ -636,6 +721,20 @@ SCModelBrowser.prototype.AddModelBrowser = function () {
                     checkBoxStatus = "off";
                     clickedCheckBoxRowKeys = e.currentDeselectedRowKeys;
                 }
+                var includeMember = SourceManagers[_this.Id].GetIncludeMember();
+               
+                var selected;
+                var rowKeys;
+                if (e.currentSelectedRowKeys.length > 0) {
+                    selected = true;
+                    rowKeys = e.currentSelectedRowKeys;
+                }
+                else {
+                    selected = false;
+                    rowKeys = e.currentDeselectedRowKeys;
+                }
+
+                _this.OnSelectRecurcively(rowKeys, selected, includeMember);
                 _this.OnBrowserNodeSelected(clickedCheckBoxRowKeys,
                     checkBoxStatus,
                     e.component,

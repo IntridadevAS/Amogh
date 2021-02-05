@@ -17,14 +17,14 @@
   .shapesMenu:hover, .bookmarkMenu:hover,
   .tagsMenu:hover, .modelViewsMenu:hover,
   .displayStylesMenu:hover, .sectioningMenu:hover,
-  .measureMenu:hover, .dataDefinitionMenu:hover {
+  .measureMenu:hover, .dataDefinitionMenu,.listViewActionMenu:hover {
     opacity: 1;
   }
   
   .displayMenu .dx-list-item-content, .markupMenu .dx-list-item-content, .shapesMenu .dx-list-item-content,
   .bookmarkMenu .dx-list-item-content, .tagsMenu .dx-list-item-content, .modelViewsMenu .dx-list-item-content,
   .displayStylesMenu .dx-list-item-content, .sectioningMenu .dx-list-item-content, .measureMenu .dx-list-item-content,
-  .dataDefinitionMenu .dx-list-item-content
+  .dataDefinitionMenu .listViewActionMenu .dx-list-item-content
   {
     padding: 4px 4px !important;
   }
@@ -33,7 +33,7 @@
   .displayMenu .dx-list-item, .markupMenu .dx-list-item, .shapesMenu .dx-list-item,
   .bookmarkMenu .dx-list-item, .tagsMenu .dx-list-item, .modelViewsMenu .dx-list-item,
   .displayStylesMenu .dx-list-item, .sectioningMenu .dx-list-item, .measureMenu .dx-list-item,
-  .dataDefinitionMenu .dx-list-item
+  .dataDefinitionMenu .listViewActionMenu .dx-list-item
   {
     border-top: none !important;
   }
@@ -110,10 +110,11 @@
   
   .markupViewsCaption, .userPropertiesCaption, 
   .editUserPropertiesCaption, .clearUserPropertiesCaption,
-  .defineGroupsFormCaption, .definePropertyHighlightFormCaption,
+  .defineGroupsFormCaption,.selectGroupsFormCaption, .definePropertyHighlightFormCaption,
   .dataChangeTemplateOptionsFormCaption, .selectRevisionCaption,
   .selectDisplayTablesCaption, .exportExcelCaption, 
-  .exportDatasetsToExcelCaption
+  .exportDatasetsToExcelCaption,
+  .defineListFormCaption
   {
   color: black;
   top: 5px;
@@ -264,12 +265,38 @@
   display: none;
 }
 
-.userPropertiesForm, .defineGroupsForm
+
+.listViewActionMenu{
+  position: absolute;
+  z-index: 1;
+  width: 40px;
+  height: 228px;
+  left: 2px;
+  top: calc( 50% - 114px);
+  background: rgba(25.5, 25.5, 25.5) !important; 
+  overflow: hidden !important;
+  text-align: center;
+  opacity: 0.2;
+  display: none;
+}
+
+.userPropertiesForm, .defineGroupsForm, .selectGroupsForm
 {
   position: absolute; 
   display: none;
   z-index: 4;
   width: 450px;
+  background: white;
+  right: 0px;
+  border: 1px solid black;
+}
+
+.defineListForm
+{
+  position: absolute; 
+  display: none;
+  z-index: 4;
+  width: 250px;
   background: white;
   right: 0px;
   border: 1px solid black;
@@ -309,9 +336,9 @@
 }
 
 .userPropertiesFormCaptionBar, .editUserPropertiesFormCaptionBar,
-.clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar,
+.clearUserPropertiesFormCaptionBar, .defineGroupsFormCaptionBar, .selectGroupsFormCaptionBar,
 .definePropertyHighlightFormCaptionBar, .dataChangeTemplateOptionsFormCaptionBar,
-.selectRevisionCaptionBar, .selectDisplayTablesCaptionBar
+.selectRevisionCaptionBar, .selectDisplayTablesCaptionBar,.defineListFormCaptionBar
 {
   height: 30px;
   width: 100%;
@@ -408,7 +435,10 @@
   padding: 2px;
 }
 
-.defineGroupsFormBottomBar, .definePropertyHighlightFormBottomBar
+
+.defineGroupsFormBottomBar,.selectGroupsFormBottomBar, .definePropertyHighlightFormBottomBar
+.defineGroupsFormBottomBar, .definePropertyHighlightFormBottomBar,
+.defineListFormBottomBar
 {
   height: 70px;
   width: 100%;
@@ -431,9 +461,10 @@
 }
 
 .userPropertiesApplyBtn, .editUserPropertiesApplyBtn,
-.clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn,
+.clearUserPropertiesApplyBtn, .defineGroupsFormApplyBtn,.selectGroupsFormApplyBtn,
 .definePropertyHighlightFormApplyBtn, .dataChangeOptionsApplyBtn,
-.selectRevisionApplyBtn, .selectDisplayTablesApplyBtn
+.selectRevisionApplyBtn, .selectDisplayTablesApplyBtn,
+.defineListFormApplyBtn
 {  
   position: absolute;
   right: 2px;
@@ -473,21 +504,24 @@
 .userPropertiesCloseBtn:hover, .editUserPropertiesCloseBtn:hover,
 .editUserPropertiesClearBtn:hover, .editUserPropertiesApplyBtn:hover,
 .clearUserPropertiesCloseBtn:hover, .clearUserPropertiesApplyBtn:hover,
-.defineGroupsFormCloseBtn:hover, .defineGroupsFormAdd:hover,
-.defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover,
+.defineGroupsFormCloseBtn:hover, .selectGroupsFormCloseBtn:hover, .defineGroupsFormAdd:hover,
+.defineGroupsFormClear:hover, .defineGroupsFormApplyBtn:hover, .selectGroupsFormApplyBtn:hover,
 .definePropertyHighlightFormCloseBtn:hover, .definePropertyHighlightFormAdd:hover,
 .definePropertyHighlightFormClear:hover, .definePropertyHighlightFormApplyBtn:hover,
 .dataChangeTemplateFormReset:hover, .dataChangeTemplateFormRemove:hover,
 .dataChangeTemplateOptionsCloseBtn:hover, .selectRevisionCloseBtn:hover,
-.selectDisplayTablesCloseBtn:hover, .selectDisplayTablesApplyBtn:hover
+.selectDisplayTablesCloseBtn:hover, .selectDisplayTablesApplyBtn:hover,
+.defineListFormCloseBtn:hover, .defineListFormAdd:hover,
+.defineListFormClear:hover, .defineListFormApplyBtn:hover
 {
   opacity: 1;
 }
 
 .userPropertiesCloseBtn, .editUserPropertiesCloseBtn,
-.clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn,
+.clearUserPropertiesCloseBtn, .defineGroupsFormCloseBtn,.selectGroupsFormCloseBtn,
 .definePropertyHighlightFormCloseBtn, .dataChangeTemplateOptionsCloseBtn, 
-.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn
+.selectRevisionCloseBtn, .selectDisplayTablesCloseBtn,
+.defineListFormCloseBtn
 { 
   font-size: 12px;
   position: absolute;
@@ -499,7 +533,8 @@
 }
 
 .userPropertiesFormAddText, .defineGroupsFormAddText,
-.definePropertyHighlightFormAddText
+.definePropertyHighlightFormAddText,
+.defineListFormAddText
 {
   color: black;
   position: absolute;
@@ -508,7 +543,8 @@
 }
 
 .userPropertiesFormClearText, .defineGroupsFormClearText,
-.definePropertyHighlightFormClearText
+.definePropertyHighlightFormClearText,
+.defineListFormClearTex
 {
   color: black;
   position: absolute;
@@ -524,14 +560,46 @@
   position: relative;
 }
 
+
+.defineGroupsFormTypeDL, .selectGroupsFormTypeDL, .definePropertyHighlightFormTypeDL
+=======
+.defineListFormNameBox
+{
+  height: 30px;
+  width: 200px;
+  top: 10px;
+  left: 10px;
+  position: relative;
+}
+
+.defineListFormDescriptionBox
+{
+  height: 30px;
+  width: 200px;
+  top: 15px;
+  left: 10px;
+  position: relative;
+}
+
 .defineGroupsFormTypeDL, .definePropertyHighlightFormTypeDL
+
 {
   width: 200px;
   font-size: 10px;
   height: 30px;
 }
 
-.deleteGroupBtn, .deletePropertyHighlightBtn
+.defineListFormTypeDL
+{
+  width: 200px;
+  font-size: 10px;
+  height: 30px;
+  left: 10px;
+  top: 25px;
+  position: relative;
+}
+.deleteGroupBtn, .deletePropertyHighlightBtn,
+.deleteListBtn
 {
   top: 214px;
   position: absolute;

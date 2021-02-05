@@ -67,7 +67,7 @@ function loadCheckSpaceForCheck(data) {
     // restore property groups
     let propertyGroups = xCheckStudio.Util.tryJsonParse(data.propertyGroups);
     model.propertyGroups = propertyGroups;
-
+    model.propertyList = propertyGroups;
     // restore highlight property templates 
     let propertyHighlightTemplates = xCheckStudio.Util.tryJsonParse(data.highlightPropertyTemplates);
     model.propertyHighlightTemplates = propertyHighlightTemplates;

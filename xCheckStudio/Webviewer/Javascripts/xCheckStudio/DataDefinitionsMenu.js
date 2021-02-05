@@ -14,6 +14,7 @@ function DataDefinitionMenu(id) {
     }
     model.views[this.Id].defineGroupsForm = new DefineGroupsForm(this.Id);
     model.views[this.Id].definePropertyHighlightsForm = new DefinePropertyHighlightsForm(this.Id);
+    model.views[this.Id].defineListForm = new DefineListForm(this.Id);
 }
 
 DataDefinitionMenu.prototype.GetHtmlElementId = function () {
@@ -141,6 +142,14 @@ DataDefinitionMenu.prototype.GetControls = function () {
             click: function (e, menu) {
                 menu.Close();
             }
+        },
+        {
+            id:6,
+            Title: "Save View",
+            ImageSrc: "public/symbols/Property Groups.svg",
+            click: function (e, menu) {
+                menu.OnDefineList();
+            }
         }
     ];
 }
@@ -181,6 +190,18 @@ DataDefinitionMenu.prototype.OnDefineGroups= function () {
     }     
 }
 
+DataDefinitionMenu.prototype.OnDefineList= function () {
+    if (model.views[this.Id].defineListForm.Active) {
+        model.views[this.Id].defineListForm.Close();
+    }
+    else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].defineListForm);
+        
+        model.views[this.Id].defineListForm.Open();
+    }     
+}
+
 DataDefinitionMenu.prototype.OnDefinePropertyHighlights = function () {
     if (model.views[this.Id].definePropertyHighlightsForm.Active) {
         model.views[this.Id].definePropertyHighlightsForm.Close();
@@ -218,8 +239,16 @@ DataDefinitionMenu.prototype.CloseOpenForm = function (currentForm) {
         model.views[this.Id].defineGroupsForm.Active) {
         model.views[this.Id].defineGroupsForm.Close();
     }
+    else if (currentForm !== model.views[this.Id].selectGroupsForm &&
+        model.views[this.Id].selectGroupsForm.Active) {
+        model.views[this.Id].selectGroupsForm.Close();
+    }
     else if (currentForm !== model.views[this.Id].definePropertyHighlightsForm &&
         model.views[this.Id].definePropertyHighlightsForm.Active) {
         model.views[this.Id].definePropertyHighlightsForm.Close();
+    }
+    else if (currentForm !== model.views[this.Id].defineListForm &&
+        model.views[this.Id].defineListForm.Active) {
+        model.views[this.Id].defineListForm.Close();
     }
 }
