@@ -154,6 +154,12 @@ const GlobalConstants = {
         "Group" : "Groups View"
     },
 
+    GroupView : {
+        "Group" : "Group",
+        "Highlight" : "Highlight",
+        "DataChangeHighlight" : "Data Change Highlight"
+    },
+
     TableRowSelectedColor : "#e6e6e6",
     TableRowHighlightedColor : "darkgray",
     TableRowNormalColor : "#fff",

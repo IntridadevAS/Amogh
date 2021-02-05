@@ -47,6 +47,7 @@ let model = {
       selectGroupsForm: null,
       isolateManager: null,
       definePropertyHighlightsForm: null,
+      selectPropertyHighlightsForm: null,
       activeSelection: "Single Select",
       viewerContextMenu: null
     },
