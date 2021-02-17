@@ -533,7 +533,7 @@ GroupView3D.prototype.LoadDataChangeViewTable = function (headers, tableData, is
                 if (_this.HighlightActive) {
                     _this.ResetViewerColors();
                     // change icon of btn
-                    document.getElementById("highlightSelectionBtn" + _this.Id).src = "public/symbols/Highlight Selection-Off.svg";
+                    document.getElementById("highlightSelectionBtn" + _this.Id).style.backgroundImage = "url(../../public/symbols/Highlight%20Selection-Off.svg)";
                 }
                 _this.HighlightActive = false;
 
@@ -937,7 +937,7 @@ GroupView3D.prototype.LoadTable = function () {
             if (_this.HighlightActive) {
                 _this.ResetViewerColors();
                 // change icon of btn
-                document.getElementById("highlightSelectionBtn" + _this.Id).src = "public/symbols/Highlight Selection-Off.svg";
+                document.getElementById("highlightSelectionBtn" + _this.Id).style.backgroundImage = "url(../../public/symbols/Highlight%20Selection-Off.svg)";
             }
             _this.HighlightActive = false;
 
@@ -2224,7 +2224,7 @@ GroupView3D.prototype.ApplyPropertyHighlightColor = function () {
         }
 
         // change icon of btn
-        document.getElementById("highlightSelectionBtn" + this.Id).src = "public/symbols/Highlight Selection-Off.svg";
+        document.getElementById("highlightSelectionBtn" + this.Id).style.backgroundImage = "url(../../public/symbols/Highlight%20Selection-Off.svg)";
     }
     else {
         this.HighlightActive = true;
@@ -2243,7 +2243,7 @@ GroupView3D.prototype.ApplyPropertyHighlightColor = function () {
         }
 
         // change icon of btn
-        document.getElementById("highlightSelectionBtn" + this.Id).src = "public/symbols/Highlight Selection-On.svg";
+        document.getElementById("highlightSelectionBtn" + this.Id).style.backgroundImage = "url(../../public/symbols/Highlight%20Selection-On.svg)";
     }
 }
 

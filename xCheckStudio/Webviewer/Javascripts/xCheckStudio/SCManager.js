@@ -329,7 +329,7 @@ SCManager.prototype.OpenTableViewsMenu = function () {
 
     var groupsSDA = document.getElementById("groupsAction" + _this.Id);
     if (!isDataVault()) {
-        groupsSDA.classList.add("showSDA");
+        //groupsSDA.classList.add("showSDA");
         groupsSDA.onclick = function () {
             if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.Group) {             
                 model.views[_this.Id].groupView.Show();
@@ -358,8 +358,8 @@ SCManager.prototype.CloseTableViewsMenu = function () {
     var listViewSDA = document.getElementById("listviewAction" + _this.Id);
     listViewSDA.classList.remove("showSDA");
 
-    var groupsSDA = document.getElementById("groupsAction" + _this.Id);
-    groupsSDA.classList.remove("showSDA");
+    //var groupsSDA = document.getElementById("groupsAction" + _this.Id);
+    //groupsSDA.classList.remove("showSDA");
 }
 
 SCManager.prototype.InitViewActionMenu = function () {
@@ -425,10 +425,10 @@ SCManager.prototype.InitGroupViewControls = function(){
     //GroupViewHeader name and value
     this.TableGroupHeaderName = document.getElementById("tableGroupHeaderName" + this.Id);
     //Group Database View Btn
-    // this.GroupDatabaseViewBtn = document.getElementById("databaseViewBtn" + this.Id);
-    // this.GroupDatabaseViewBtn.onclick = function () {
-    //     model.views[_this.Id].groupView.OnGroupDatabaseViewClick();
-    // }
+    this.GroupDatabaseViewBtn = document.getElementById("databaseViewBtn" + this.Id);
+    this.GroupDatabaseViewBtn.onclick = function () {
+        model.views[_this.Id].groupView.OnGroupDatabaseViewClick();
+    }
 }
 
 // SCManager.prototype.ShowGroupViewControls = function (show) {
