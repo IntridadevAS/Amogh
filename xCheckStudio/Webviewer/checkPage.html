@@ -28,6 +28,20 @@
     <iframe id="DataChangeRevisioningIFrame" style="width: 100%; height:100%"></iframe>
   </div>
   
+  <!-- Select Data Change Highlight form for list view hover menu -->
+  <div id="selectDataChangeTemplateForm" class="selectDataChangeTemplateForm">
+    <div id="selectDataChangeTemplateFormCaptionBar" class="selectDataChangeTemplateFormCaptionBar">
+      <div class="selectPropertyHighlightFormCaption">Data Change Highlight</div>
+      <img id="selectDataChangeTemplateFormCloseBtn" class="selectDataChangeTemplateFormCloseBtn"
+        src="public\symbols\CloseBlack.svg" />
+    </div>
+              
+    <div class="selectDataChangeTemplateFormBottomBar">
+      <div id="selectDataChangeTemplatesDL" class="selectDataChangeTemplatesDL"></div>
+      <div id="selectDataChangeTemplateFormApplyBtn" class="selectDataChangeTemplateFormApplyBtn">Apply</div>      
+    </div>
+  </div>
+            
   <!-- Data change template form -->
   <div id="dataChangeTemplateForm" class="dataChangeTemplateForm">
     <div id="dataChangeTemplateFormCaptionBar" class="dataChangeTemplateFormCaptionBar">
@@ -1986,16 +2000,16 @@
             <!-- tableA           -->
             <div class="tableHeaderArea">
               <div class="tableHeaderNameRow">
-                <div id="tableHeaderNamea" width="80px"></div>
+                <div id="tableHeaderNamea"></div>
                 <div id="tableGroupHeaderNamea" class="tableGroupHeaderName"></div>
-                <img id="databaseViewBtna" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+                <!-- <img id="databaseViewBtna" class="databaseViewBtn" src="public\symbols\databaseView.svg" /> -->
               </div>
               <div id="tableHeaderControla" class="tableHeaderControlRow">
               
                 <div id="groupTemplateSelecta" class="groupTemplateSelect"> </div>                
                 <div id="groupHighlightTypeSelecta" class="groupHighlightTypeSelect"> </div>
-                <img id="highlightSelectionBtna" class="highlightSelectionBtn"
-                  src="public\symbols\Highlight Selection-Off.svg" />
+                <!-- <img id="highlightSelectionBtna" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection-Off.svg" /> -->
                
               </div>
             </div>
@@ -2028,7 +2042,8 @@
           <div class="visualizerContainer">
             <div id="maxMinBtna" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-
+              <div id="highlightSelectionBtna" class="highlightSelectionBtn"></div>
+              <div id="databaseViewBtna" class="databaseViewBtn"></div>
             <!-- Properties Callout Button -->
             <div id="propertyCallouta" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
               onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
@@ -2367,19 +2382,19 @@
               </div>
             </div>
 
-                        <!-- select property highlight Form -->
-                        <div id="selectPropertyHighlightForma" class="selectPropertyHighlightForm">
-                          <div id="selectPropertyHighlightFormCaptionBara" class="selectPropertyHighlightFormCaptionBar">
-                            <div class="selectPropertyHighlightFormCaption">Highlight by Property</div>
-                            <img id="selectPropertyHighlightFormCloseBtna" class="selectPropertyHighlightFormCloseBtn"
-                              src="public\symbols\CloseBlack.svg" />
-                          </div>
+              <!-- select property highlight Form -->
+              <div id="selectPropertyHighlightForma" class="selectPropertyHighlightForm">
+                  <div id="selectPropertyHighlightFormCaptionBara" class="selectPropertyHighlightFormCaptionBar">
+                    <div class="selectPropertyHighlightFormCaption">Highlight by Property</div>
+                    <img id="selectPropertyHighlightFormCloseBtna" class="selectPropertyHighlightFormCloseBtn"
+                      src="public\symbols\CloseBlack.svg" />
+                  </div>
                           
-                          <div class="selectPropertyHighlightFormBottomBar">
-                            <div id="selectPropertyHighlightFormTypeDLa" class="selectPropertyHighlightFormTypeDL"></div>
-                            <div id="selectPropertyHighlightFormApplyBtna" class="definePropertyHighlightFormApplyBtn">Apply</div>
-                          </div>
-                        </div>
+                  <div class="selectPropertyHighlightFormBottomBar">
+                    <div id="selectPropertyHighlightFormTypeDLa" class="selectPropertyHighlightFormTypeDL"></div>
+                    <div id="selectPropertyHighlightFormApplyBtna" class="definePropertyHighlightFormApplyBtn">Apply</div>
+                </div>
+              </div>
 
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightForma" class="definePropertyHighlightForm">
@@ -2460,14 +2475,15 @@
             <div class="tableHeaderArea">
               <div class="tableHeaderNameRow">
                 <div id="tableHeaderNameb"></div>
-                <img id="databaseViewBtnb" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+                <div id="tableGroupHeaderNameb" class="tableGroupHeaderName"></div>
+                <!-- <img id="databaseViewBtnb" class="databaseViewBtn" src="public\symbols\databaseView.svg" /> -->
               </div>
               <div id="tableHeaderControlb" class="tableHeaderControlRow">
                
                 <div id="groupTemplateSelectb" class="groupTemplateSelect"> </div>
                 <div id="groupHighlightTypeSelectb" class="groupHighlightTypeSelect"> </div>
-                <img id="highlightSelectionBtnb" class="highlightSelectionBtn"
-                  src="public\symbols\Highlight Selection-Off.svg" />
+                <!-- <img id="highlightSelectionBtnb" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection-Off.svg" /> -->
 
               </div>
             </div>
@@ -2499,7 +2515,10 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnb" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="propertyCalloutb" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              <div id="highlightSelectionBtnb" class="highlightSelectionBtn"></div>
+              <div id="databaseViewBtnb" class="databaseViewBtn"></div>
+
+              <div id="propertyCalloutb" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
               onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
 
             <!-- explode slider -->
@@ -2712,6 +2731,20 @@
               </div>
             </div>
             
+              <!-- select Data Groups Form -->
+              <div id="selectGroupsFormb" class="selectGroupsForm">
+                <div id="selectGroupsFormCaptionBarb" class="selectGroupsFormCaptionBar">
+                  <div class="selectGroupsFormCaption">Group by Property</div>
+                  <img id="selectGroupsFormCloseBtnb" class="selectGroupsFormCloseBtn"
+                    src="public\symbols\CloseBlack.svg" />
+                </div>
+                
+                <div id="selectGroupsFormBottomBarb" class="selectGroupsFormBottomBar">
+                  <div id="selectGroupsFormTypeDLb" class="selectGroupsFormTypeDL"></div>
+                  <div id="selectGroupsFormApplyBtnb" class="selectGroupsFormApplyBtn">Apply</div>
+                </div>
+              </div>
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsFormb" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBarb" class="defineGroupsFormCaptionBar">
@@ -2755,6 +2788,20 @@
                 <div id="defineGroupsFormApplyBtnb" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
+
+             <!-- select property highlight Form -->
+          <div id="selectPropertyHighlightFormb" class="selectPropertyHighlightForm">
+              <div id="selectPropertyHighlightFormCaptionBarb" class="selectPropertyHighlightFormCaptionBar">
+                <div class="selectPropertyHighlightFormCaption">Highlight by Property</div>
+                <img id="selectPropertyHighlightFormCloseBtnb" class="selectPropertyHighlightFormCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
+              </div>
+                      
+              <div class="selectPropertyHighlightFormBottomBar">
+                <div id="selectPropertyHighlightFormTypeDLb" class="selectPropertyHighlightFormTypeDL"></div>
+                <div id="selectPropertyHighlightFormApplyBtnb" class="definePropertyHighlightFormApplyBtn">Apply</div>
+            </div>
+          </div>
 
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightFormb" class="definePropertyHighlightForm">
@@ -2836,14 +2883,15 @@
             <div class="tableHeaderArea">
               <div class="tableHeaderNameRow">
                 <div id="tableHeaderNamec"></div>
-                <img id="databaseViewBtnc" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+                <div id="tableGroupHeaderNamec" class="tableGroupHeaderName"></div>
+                <!-- <img id="databaseViewBtnc" class="databaseViewBtn" src="public\symbols\databaseView.svg" /> -->
               </div>
               <div id="tableHeaderControlc" class="tableHeaderControlRow">
                 
                 <div id="groupTemplateSelectc" class="groupTemplateSelect"> </div>
                 <div id="groupHighlightTypeSelectc" class="groupHighlightTypeSelect"> </div>
-                <img id="highlightSelectionBtnc" class="highlightSelectionBtn"
-                  src="public\symbols\Highlight Selection-Off.svg" />
+                <!-- <img id="highlightSelectionBtnc" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection-Off.svg" /> -->
               </div>
             </div>
 
@@ -2874,7 +2922,10 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnc" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="propertyCalloutc" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              <div id="highlightSelectionBtnc" class="highlightSelectionBtn"></div>
+              <div id="databaseViewBtnc" class="databaseViewBtn"></div>
+
+              <div id="propertyCalloutc" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
               onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
             <!-- visualizerC -->
             <!-- explode slider -->
@@ -3090,6 +3141,20 @@
             </div>
           </div>
 
+            <!-- select Data Groups Form -->
+            <div id="selectGroupsFormc" class="selectGroupsForm">
+              <div id="selectGroupsFormCaptionBarc" class="selectGroupsFormCaptionBar">
+                <div class="selectGroupsFormCaption">Group by Property</div>
+                <img id="selectGroupsFormCloseBtnc" class="selectGroupsFormCloseBtn"
+                  src="public\symbols\CloseBlack.svg" />
+              </div>
+              
+              <div id="selectGroupsFormBottomBarc" class="selectGroupsFormBottomBar">
+                <div id="selectGroupsFormTypeDLc" class="selectGroupsFormTypeDL"></div>
+                <div id="selectGroupsFormApplyBtnc" class="selectGroupsFormApplyBtn">Apply</div>
+              </div>
+            </div>
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsFormc" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBarc" class="defineGroupsFormCaptionBar">
@@ -3136,6 +3201,20 @@
                 <div id="defineGroupsFormApplyBtnc" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
+
+                <!-- select property highlight Form -->
+        <div id="selectPropertyHighlightFormc" class="selectPropertyHighlightForm">
+            <div id="selectPropertyHighlightFormCaptionBarc" class="selectPropertyHighlightFormCaptionBar">
+              <div class="selectPropertyHighlightFormCaption">Highlight by Property</div>
+              <img id="selectPropertyHighlightFormCloseBtnc" class="selectPropertyHighlightFormCloseBtn"
+                src="public\symbols\CloseBlack.svg" />
+            </div>
+                    
+            <div class="selectPropertyHighlightFormBottomBar">
+              <div id="selectPropertyHighlightFormTypeDLc" class="selectPropertyHighlightFormTypeDL"></div>
+              <div id="selectPropertyHighlightFormApplyBtnc" class="definePropertyHighlightFormApplyBtn">Apply</div>
+          </div>
+        </div>
 
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightFormc" class="definePropertyHighlightForm">
@@ -3215,14 +3294,15 @@
             <div class="tableHeaderArea">
               <div class="tableHeaderNameRow">
                 <div id="tableHeaderNamed"></div>
-                <img id="databaseViewBtnd" class="databaseViewBtn" src="public\symbols\databaseView.svg" />
+                <div id="tableGroupHeaderNamed" class="tableGroupHeaderName"></div>
+                <!-- <img id="databaseViewBtnd" class="databaseViewBtn" src="public\symbols\databaseView.svg" /> -->
               </div>
               <div id="tableHeaderControld" class="tableHeaderControlRow">
                 
                 <div id="groupTemplateSelectd" class="groupTemplateSelect"> </div>
                 <div id="groupHighlightTypeSelectd" class="groupHighlightTypeSelect"> </div>
-                <img id="highlightSelectionBtnd" class="highlightSelectionBtn"
-                  src="public\symbols\Highlight Selection-Off.svg" />
+                <!-- <img id="highlightSelectionBtnd" class="highlightSelectionBtn"
+                  src="public\symbols\Highlight Selection-Off.svg" /> -->
               </div>
             </div>
 
@@ -3253,7 +3333,10 @@
           <div class="visualizerContainer">
             <div id="maxMinBtnd" class="maxMinBtn" onmouseover="viewPanels.onMouseOverMaxMin(this)"
               onmouseout="viewPanels.onMouseOutMaxMin(this)" onClick="viewPanels.maxMin(this)"></div>
-            <div id="propertyCalloutd" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
+              <div id="highlightSelectionBtnd" class="highlightSelectionBtn"></div>
+              <div id="databaseViewBtnd" class="databaseViewBtn"></div>
+
+              <div id="propertyCalloutd" class="propertyCalloutBtn" onmouseover="viewPanels.onMouseOverCalloutBtn(this)"
               onmouseout="viewPanels.onMouseOutCalloutBtn(this)"></div>
             <!-- visualizerD -->
             <!-- explode slider -->
@@ -3467,6 +3550,20 @@
               </div>
             </div>
 
+              <!-- select Data Groups Form -->
+              <div id="selectGroupsFormd" class="selectGroupsForm">
+                <div id="selectGroupsFormCaptionBard" class="selectGroupsFormCaptionBar">
+                  <div class="selectGroupsFormCaption">Group by Property</div>
+                  <img id="selectGroupsFormCloseBtnd" class="selectGroupsFormCloseBtn"
+                    src="public\symbols\CloseBlack.svg" />
+                </div>
+                
+                <div id="selectGroupsFormBottomBard" class="selectGroupsFormBottomBar">
+                  <div id="selectGroupsFormTypeDLd" class="selectGroupsFormTypeDL"></div>
+                  <div id="selectGroupsFormApplyBtnd" class="selectGroupsFormApplyBtn">Apply</div>
+                </div>
+              </div>
+
             <!-- Define Data Groups Form -->
             <div id="defineGroupsFormd" class="defineGroupsForm">
               <div id="defineGroupsFormCaptionBard" class="defineGroupsFormCaptionBar">
@@ -3513,6 +3610,20 @@
                 <div id="defineGroupsFormApplyBtnd" class="defineGroupsFormApplyBtn">Apply</div>
               </div>
             </div>
+
+                <!-- select property highlight Form -->
+        <div id="selectPropertyHighlightFormd" class="selectPropertyHighlightForm">
+            <div id="selectPropertyHighlightFormCaptionBard" class="selectPropertyHighlightFormCaptionBar">
+              <div class="selectPropertyHighlightFormCaption">Highlight by Property</div>
+              <img id="selectPropertyHighlightFormCloseBtnd" class="selectPropertyHighlightFormCloseBtn"
+                src="public\symbols\CloseBlack.svg" />
+            </div>
+                    
+            <div class="selectPropertyHighlightFormBottomBar">
+              <div id="selectPropertyHighlightFormTypeDLd" class="selectPropertyHighlightFormTypeDL"></div>
+              <div id="selectPropertyHighlightFormApplyBtnd" class="definePropertyHighlightFormApplyBtn">Apply</div>
+          </div>
+        </div>
 
             <!-- Define property highlight Form -->
             <div id="definePropertyHighlightFormd" class="definePropertyHighlightForm">
@@ -3808,6 +3919,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\CheckPageDataVault.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeRevisioning.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DataChangeTemplateForm.js"></script>
+  <script type="text/javascript" src="Javascripts\xCheckStudio\SelectDataChangeTemplateForm.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\CMExportExcel.js"></script>
 

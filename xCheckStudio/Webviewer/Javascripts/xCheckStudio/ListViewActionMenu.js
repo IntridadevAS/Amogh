@@ -105,6 +105,7 @@ ListViewActionMenu.prototype.GetControls = function () {
             Title: "Data Change Highlight",
             ImageSrc: "public/symbols/Data Change Highlight.svg",
             click: function (e, menu) {
+                menu.OnSelectDataChangeHighlight();
             }
         },
         {
@@ -119,6 +120,7 @@ ListViewActionMenu.prototype.GetControls = function () {
             Title: "Return to List",
             ImageSrc: "public/symbols/MenuReturn.svg",
             click: function (e, menu) {
+                menu.OnReturnToListView();
             }
         },
         {
@@ -130,6 +132,26 @@ ListViewActionMenu.prototype.GetControls = function () {
             }
         }
     ];
+}
+
+ListViewActionMenu.prototype.OnReturnToListView= function () {
+    _this = this;
+        // close other open forms
+        this.CloseOpenForm(null);
+        
+        if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
+            var sourceManager = SourceManagers[_this.Id];
+            var selectedComps = sourceManager.GetCurrentTable().GetSelectedComponents();
+            if (selectedComps.constructor === Object) {
+                selectedComps = Object.values(selectedComps);
+            }
+            
+            model.views[_this.Id].listView.Show(selectedComps);
+            model.views[_this.Id].activeTableView = GlobalConstants.TableView.List;
+
+                // hide group view controls
+                sourceManager.ShowGroupViewControls(false);
+        }
 }
 
 ListViewActionMenu.prototype.OnSelectGroups= function () {
@@ -154,6 +176,18 @@ ListViewActionMenu.prototype.OnSelectPropertyHighlight= function () {
         
         model.views[this.Id].selectPropertyHighlightsForm.Open();
     }     
+}
+
+ListViewActionMenu.prototype.OnSelectDataChangeHighlight = function () {
+    if (SelectDataChangeTemplateForm.active) {
+        SelectDataChangeTemplateForm.close();
+    }
+    else {
+        // close other open forms
+        this.CloseOpenForm(null);
+        
+        SelectDataChangeTemplateForm.open();
+    }
 }
 
 ListViewActionMenu.prototype.CloseOpenForm = function (currentForm) {
