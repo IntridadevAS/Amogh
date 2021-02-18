@@ -174,7 +174,7 @@ SCManager.prototype.LoadData = function (selectedComponents, visibleItems, loadF
                                 _this.ViewerOptions.modelTree,
                                 _this.AllComponents,
                                 viewer);
-
+                               
                             if (!isDataVault()) {
                                 // Init group view
                                 model.views[_this.Id].groupView = new GroupView3D(
@@ -1206,7 +1206,7 @@ SCManager.prototype.RestoreAllComponents = function (allComponentsStr) {
         _this.ViewerOptions.modelTree,
         _this.AllComponents,
         _this.Webviewer);
-
+      
     if (!isDataVault()) {
 
         // Init group view

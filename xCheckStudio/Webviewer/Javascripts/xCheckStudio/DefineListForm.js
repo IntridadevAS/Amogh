@@ -41,7 +41,7 @@ DefineListForm.prototype.Init = function () {
 
   //  this.PopulateTemplateGrid();
 
-    this.PopulateLists();
+   // this.PopulateLists();
 
     this.NameTextBox = $("#defineListFormNameBox" + this.Id).dxTextBox({
         placeholder: "Enter Name..."
@@ -135,8 +135,7 @@ DefineListForm.prototype.PopulateLists = function () {
 
 
 DefineListForm.prototype.OnApplyListView = function () {
-    var _this = this
-   
+    var _this = this;
     var templateName = this.NameTextBox.option("value");
     if (!templateName ||
         templateName === "") {
@@ -145,14 +144,16 @@ DefineListForm.prototype.OnApplyListView = function () {
     }
 
     var editUserPropertiesForm = model.views[_this.Id].listView;
-    var selectedRowsData = editUserPropertiesForm.ListViewTableInstance.getSelectedRowsData();
+    var selectedRowsData = editUserPropertiesForm.ListViewTableInstance.getVisibleRows();
     var properties = [];
 
     var visibleColumns = editUserPropertiesForm.ListViewTableInstance.getVisibleColumns();
-    for (var i = 0; i < selectedRowsData.length; i++) {
-        var rowData = selectedRowsData[i];
+   // for (var i = 0; i < selectedRowsData.length; i++) {
+   //     var rowData = selectedRowsData[i];
 
-        for (var prop in rowData) {
+     //   for (var prop in visibleColumns) {
+        for (var i = 0; i < visibleColumns.length; i++) {
+            var prop = visibleColumns[i].dataField;
             if (prop.toLowerCase() === "item" ||
                 prop.toLowerCase() === "nodeid") {
                 continue;
@@ -167,36 +168,19 @@ DefineListForm.prototype.OnApplyListView = function () {
                 properties.push(propName);
             }
         }
-    }
- 
+  //  }
     var group = {
         "name": templateName,
         "properties": properties
     };
+    model.propertyGroups[templateName] = group;
 
     var sourceManager = SourceManagers[this.Id];
-  
-      
-    var listViewSDA = document.getElementById("listviewAction" + _this.Id);
-    listViewSDA.classList.add("showSDA");
-    listViewSDA.onclick = function () {
-        if (model.views[_this.Id].activeTableView !== GlobalConstants.TableView.List) {
-            var selectedComps = _this.GetCurrentTable().GetSelectedComponents();
-            if (selectedComps.constructor === Object) {
-                selectedComps = Object.values(selectedComps);
-            }
+    SourceManagers[this.Id].GroupTemplateSelect.option("items", ["Clear"].concat(Object.keys(model.propertyGroups)));
+// Reset controls
+this.NameTextBox.option("value", "");     
 
-            model.views[_this.Id].listView.Show(selectedComps);
-
-            _this.CloseTableViewsMenu();
-            
-            if (!isDataVault()) {
-                // hide group view controls
-                _this.ShowGroupViewControls(false);
-            }
-        }
-    }
-
+DevExpress.ui.notify("View template '" + templateName + "' created successfully.");
     // Reset controls
     this.NameTextBox.option("value", "");   
 

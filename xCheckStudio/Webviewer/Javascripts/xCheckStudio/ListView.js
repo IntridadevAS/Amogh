@@ -44,6 +44,8 @@ function ListView(
     this.ExcludeMembers = false;
     this.UndefinedHidden = false;
     _this.ContextMenu = null;
+
+    model.views[this.Id].defineListForm = new DefineListForm(this.Id);
 }
 // assign ModelBrowser's method to this class
 ListView.prototype = Object.create(ModelBrowser.prototype);
@@ -477,29 +479,7 @@ ListView.prototype.LoadTable = function (selectedComps) {
                         {
                             text: "Save View",
                             onItemClick: function () {
-                                var defineList = document.getElementById("defineListForma");
-                                if (defineList.style.display === "none") {
-                                    defineList.style.display = "block";
-                                    defineList.style.top = "calc( 50% - 141px)";    
-                                    defineList.style.left = "calc( 50% - 225px)";
-    
-                                } else {
-                                    defineList.style.display = "none";
-                                }
-                            }
-                        },
-                        {
-                            text: "Saved View",
-                            onItemClick: function () {
-                                var defineList = document.getElementById("displayListForma");
-                                if (defineList.style.display === "none") {
-                                    defineList.style.display = "block";
-                                    defineList.style.top = "calc( 50% - 141px)";    
-                                    defineList.style.left = "calc( 50% - 225px)";
-    
-                                } else {
-                                    defineList.style.display = "none";
-                                }
+                                _this.OnDisplayList();
                             }
                         }
                     ];
@@ -597,6 +577,13 @@ ListView.prototype.LoadTable = function (selectedComps) {
             }
         }).dxTreeList("instance");
     });
+}
+
+ListView.prototype.CloseOpenForm = function (currentForm) {
+    if (currentForm !== model.views[this.Id].displayListForm &&
+        model.views[this.Id].displayListForm.Active) {
+        model.views[this.Id].displayListForm.Close();
+    }
 }
 
 ListView.prototype.HighlightRow = function (rowKey, nodeId) {
@@ -768,18 +755,13 @@ ListView.prototype.GenerateTableDataForGroupByProperty = function () {
 
                 column = {};
                 column["caption"] = groupProperty;
-
                 var dataField = groupProperty.replace(/\s/g, '');
                 column["dataField"] = dataField;
-
                 column["visible"] = true;
-                
                 this.Headers.push(column);
-
                 this.ExistingColumnNames.push(groupProperty);
             }
         }
-
         this.TableData.push(rowData);
     }
 }
@@ -1146,4 +1128,25 @@ ListView.prototype.GetListTemplateProperties = function () {
     }
 
     return null;
+}
+
+
+ListView.prototype.OnDisplayList= function () {
+    if (model.views[this.Id].defineListForm.Active) {
+        model.views[this.Id].defineListForm.Close();
+    }
+    else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].defineListForm);
+        
+        model.views[this.Id].defineListForm.Open();
+    }     
+}
+
+
+ListView.prototype.CloseOpenForm = function (currentForm) {
+   if (currentForm !== model.views[this.Id].defineListForm &&
+        model.views[this.Id].defineListForm.Active) {
+        model.views[this.Id].defineListForm.Close();
+    }
 }
