@@ -14,7 +14,7 @@ function DataDefinitionMenu(id) {
     }
     model.views[this.Id].defineGroupsForm = new DefineGroupsForm(this.Id);
     model.views[this.Id].definePropertyHighlightsForm = new DefinePropertyHighlightsForm(this.Id);
-    model.views[this.Id].defineListForm = new DefineListForm(this.Id);
+   // model.views[this.Id].defineListForm = new DefineListForm(this.Id);
 }
 
 DataDefinitionMenu.prototype.GetHtmlElementId = function () {
@@ -143,14 +143,14 @@ DataDefinitionMenu.prototype.GetControls = function () {
                 menu.Close();
             }
         },
-        {
-            id:6,
-            Title: "Save View",
-            ImageSrc: "public/symbols/Property Groups.svg",
-            click: function (e, menu) {
-                menu.OnDefineList();
-            }
-        }
+        // {
+        //     id:6,
+        //     Title: "Save View",
+        //     ImageSrc: "public/symbols/Property Groups.svg",
+        //     click: function (e, menu) {
+        //         menu.OnDefineList();
+        //     }
+        // }
     ];
 }
 
