@@ -5,6 +5,8 @@ function ListViewActionMenu(id) {
     this.Active = false;
     model.views[this.Id].selectGroupsForm = new SelectGroupsForm(this.Id);
     model.views[this.Id].selectPropertyHighlightsForm = new SelectPropertyHighlightsForm(this.Id);
+   // model.views[this.Id].defineListForm = new DefineListForm(this.Id);
+    model.views[this.Id].displayListForm = new DisplayListForm(this.Id);
 }
 
 ListViewActionMenu.prototype.GetHtmlElementId = function () {
@@ -113,6 +115,7 @@ ListViewActionMenu.prototype.GetControls = function () {
             Title: "Saved Tables",
             ImageSrc: "public/symbols/Saved Table Views.svg",
             click: function (e, menu) {
+                menu.OnSelectSavedListView();
             }
         },
         {
@@ -199,4 +202,16 @@ ListViewActionMenu.prototype.CloseOpenForm = function (currentForm) {
         model.views[this.Id].selectPropertyHighlightsForm.Active) {
         model.views[this.Id].selectPropertyHighlightsForm.Close();
     }
+}
+
+ListViewActionMenu.prototype.OnSelectSavedListView= function () {
+    if (model.views[this.Id].displayListForm.Active) {
+        model.views[this.Id].displayListForm.Close();
+    }
+    else {
+        // close other open forms
+        this.CloseOpenForm(model.views[this.Id].displayListForm);
+        
+        model.views[this.Id].displayListForm.Open();
+    }     
 }

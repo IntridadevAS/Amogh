@@ -2280,56 +2280,51 @@
             
 
                 <!-- Define Save View Table Form -->
-              <div id="defineListForma" class="defineListForm">  
-                <div id="defineListFormCaptionBara" class="defineListFormCaptionBar">  
-                  <div class="defineListFormCaption">Save Table View</div>  
-                  <img id="defineListFormCloseBtna" class="defineListFormCloseBtn"  
+              <div id="displayListForma" class="displayListForm">  
+                <div id="displayListFormCaptionBara" class="displayListFormCaptionBar">  
+                  <div class="displayListFormCaption">Saved View</div>  
+                  <img id="displayListFormCloseBtna" class="displayListFormCloseBtn"  
                     src="public\symbols\CloseBlack.svg" />  
                 </div>  
-                <div class="defineListFormGridArea">  
-                  <table style="width: 100%;">  
-                    <tr>  
-                      <div id="defineListFormNameBoxa" class="defineListFormNameBox"></div>
-                    </tr> 
-                    
+                <div class="displayListFormGridArea">  
+                  <table style="width: 100%;">                    
 				             <tr>  
-                      <div id="defineListFormDescriptionBoxa" class="defineListFormDescriptionBox"></div>
+                      <div id="displayListFormDescriptionBoxa" class="displayListFormDescriptionBox"></div>
                     </tr>
                     <tr>
-                      <div id="defineListFormTypeDLa" class="defineListFormTypeDL"></div>
+                      <div id="displayListFormTypeDLa" class="displayListFormTypeDL"></div>
                     </tr>
                   </table>  
                 </div>  
-                <div id="defineListFormBottomBara" class="defineListFormBottomBar">  
-                     <div id="defineListFormApplyBtna" class="defineListFormApplyBtn">Apply</div>  
+                <div id="displayListFormBottomBara" class="displayListFormBottomBar">  
+                  <div class="deleteListBtn tooltipHov">
+                    <span class="tooltip" data-tooltip="Delete View"></span>
+                    <img id="deleteListBtna" src="public\symbols\MarkupDeleteBlack.svg"
+                      style="width: 25px; height: 25px;" />
+                  </div>
+                     <div id="displayListFormApplyBtna" class="displayListFormApplyBtn">Apply</div>  
                 </div>  
               </div>  
 
-                 <!-- Fetch Saved Views -->
-
-                 <div id="displayListForma" class="defineListForm" style="display: none;">  
-                  <div id="displayistFormCaptionBara" class="defineListFormCaptionBar">  
+                 <!-- Display Save View Form-->
+                 <div id="defineListForma" class="defineListForm">  
+                  <div id="defineListFormCaptionBara" class="defineListFormCaptionBar">  
                     <div class="defineListFormCaption">Save Table View</div>  
-                    <img id="displayListFormCloseBtna" class="defineListFormCloseBtn"  
+                    <img id="defineListFormCloseBtna" class="defineListFormCloseBtn"  
                       src="public\symbols\CloseBlack.svg" />  
                   </div>  
                   <div class="defineListFormGridArea">  
-                    <table style="width: 100%; height: 180px;">  
+                    <table style="width: 100%;">  
                       <tr>  
-                        <div id="displayListFormTypeDL" class="defineListFormTypeDL"></div>
+                        <div id="defineListFormNameBoxa" class="defineListFormNameBox"></div>
                       </tr>  
                        <tr>  
-                        <input type="text" id="displayListFormDecription" placeholder="Enter Decription" name="defineListFormDecription" required>  
+                        <div id="defineListFormDescriptionBoxa" class="defineListFormDescriptionBox"></div>
                       </tr>  
                     </table>  
                   </div>  
-                  <div id="displayListFormBottomBara" class="defineListFormBottomBar">  
-                    <div class="deleteListBtn tooltipHov">
-                      <span class="tooltip" data-tooltip="Delete View"></span>
-                      <img id="displaydeleteListBtna" src="public\symbols\MarkupDeleteBlack.svg"
-                        style="width: 25px; height: 25px;" />
-                    </div>
-                       <div id="displayListFormApplyBtna" class="defineListFormApplyBtn">Apply</div>  
+                  <div id="defineListFormBottomBara" class="defineListFormBottomBar">  
+                       <div id="defineListFormApplyBtna" class="defineListFormApplyBtn">Apply</div>  
                   </div>  
                 </div> 
 
@@ -3907,7 +3902,7 @@
   <script type="text/javascript" src="Javascripts\xCheckStudio\SelectGroupsForm.js"></script>
 
   <script type="text/javascript" src="Javascripts\xCheckStudio\DefineListForm.js"></script>
-
+  <script type="text/javascript" src="Javascripts\xCheckStudio\DisplayListForm.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\DefinePropertyHighlightsForm.js"></script>
   <script type="text/javascript" src="Javascripts\xCheckStudio\SelectPropertyHighlightsForm.js"></script>
   <link rel="stylesheet" href="CSS/CheckPageMenus.css" type="text/css" />
