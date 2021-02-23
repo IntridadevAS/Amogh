@@ -34,8 +34,8 @@ let SelectDataChangeTemplateForm = {
 
         var form = SelectDataChangeTemplateForm.getFormElement();
         form.style.display = "block";
-        form.style.top = "calc( 50% - 141px)";    
-        form.style.left = "calc( 50% - 225px)"; 
+        form.style.top = "calc( 50% - 120px)";    
+        form.style.left = "calc( 50% - 50px)"; 
 
         // Make the DIV element draggable:
         xCheckStudio.Util.dragElement(form,

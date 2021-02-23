@@ -17,14 +17,14 @@
   .shapesMenu:hover, .bookmarkMenu:hover,
   .tagsMenu:hover, .modelViewsMenu:hover,
   .displayStylesMenu:hover, .sectioningMenu:hover,
-  .measureMenu:hover, .dataDefinitionMenu,.listViewActionMenu:hover {
+  .measureMenu:hover, .dataDefinitionMenu:hover,.listViewActionMenu:hover {
     opacity: 1;
   }
   
   .displayMenu .dx-list-item-content, .markupMenu .dx-list-item-content, .shapesMenu .dx-list-item-content,
   .bookmarkMenu .dx-list-item-content, .tagsMenu .dx-list-item-content, .modelViewsMenu .dx-list-item-content,
   .displayStylesMenu .dx-list-item-content, .sectioningMenu .dx-list-item-content, .measureMenu .dx-list-item-content,
-  .dataDefinitionMenu .listViewActionMenu .dx-list-item-content
+  .dataDefinitionMenu .dx-list-item-content, .listViewActionMenu .dx-list-item-content
   {
     padding: 4px 4px !important;
   }
@@ -33,7 +33,7 @@
   .displayMenu .dx-list-item, .markupMenu .dx-list-item, .shapesMenu .dx-list-item,
   .bookmarkMenu .dx-list-item, .tagsMenu .dx-list-item, .modelViewsMenu .dx-list-item,
   .displayStylesMenu .dx-list-item, .sectioningMenu .dx-list-item, .measureMenu .dx-list-item,
-  .dataDefinitionMenu .listViewActionMenu .dx-list-item
+  .dataDefinitionMenu .dx-list-item, .listViewActionMenu .dx-list-item
   {
     border-top: none !important;
   }
@@ -291,6 +291,12 @@
   border: 1px solid black;
 }
 
+#selectGroupsForma,#selectGroupsFormb,#selectGroupsFormc,#selectGroupsFormd,#selectPropertyHighlightForma,
+#selectPropertyHighlightFormb,#selectPropertyHighlightFormc,#selectPropertyHighlightFormd,#selectDataChangeTemplateForm
+{
+  width: 300px;
+}
+
 .defineListForm
 {
   position: absolute; 
@@ -469,6 +475,13 @@
   padding: 2px;
 }
 
+#selectGroupsFormBottomBara,#selectGroupsFormBottomBarb,#selectGroupsFormBottomBarc,#selectGroupsFormBottomBard,
+#selectPropertyHighlightFormBottomBara,#selectPropertyHighlightFormBottomBarb,#selectPropertyHighlightFormBottomBarc,
+#selectPropertyHighlightFormBottomBard,#selectDataChangeTemplateFormBottomBar
+{
+  height: 85px;
+}
+
 .userPropertiesPropogateBtn
 {
   position: absolute;
@@ -601,6 +614,14 @@
   position: relative;
 }
 
+
+#selectGroupsFormTypeDLa,#selectGroupsFormTypeDLb, #selectGroupsFormTypeDLc,#selectGroupsFormTypeDLd,
+#selectPropertyHighlightFormTypeDLa,#selectPropertyHighlightFormTypeDLb,#selectPropertyHighlightFormTypeDLc,
+#selectPropertyHighlightFormTypeDLd,#selectDataChangeTemplatesDL
+{
+  width: 100%;
+  left: 0px;
+}
 .displayListFormNameBox
 {
   height: 30px;
