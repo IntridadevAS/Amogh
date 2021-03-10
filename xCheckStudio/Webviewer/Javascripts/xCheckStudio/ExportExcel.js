@@ -1,3 +1,4 @@
+
 function ExportExcel() {
     this.reviewWorkbook = new ExcelJS.Workbook();
     this.modelBrowserWorkook;
@@ -9,8 +10,8 @@ ExportExcel.prototype.ExportReviewTablesData = async function (selectedTables) {
     var index = 0;
     var save = false;
 
-    // var textBoxInstance = $("#reportNameTextBox").dxTextBox("instance");
-    // var workbookName = textBoxInstance.option("value");
+    //var textBoxInstance = $("#reportNameTextBox").dxTextBox("instance");
+    //var workbookName = textBoxInstance.option("value");
     let workbookName = "Excel Report";
 
     this.currentExport = "Review";
@@ -109,7 +110,7 @@ ExportExcel.prototype.ExportComparisonGroups = async function (
                     worksheet.getRow(this.rowCount).getCell(1),
                     {
                         value: categoryGroupName,
-                        font: { bold: true, size: 18 },
+                        font: { bold: true, size: 11 },
                         alignment: { horizontal: 'left', vertical: 'top' },
                     });
                 this.rowCount += 1;
@@ -247,7 +248,7 @@ ExportExcel.prototype.ExportGroup = async function (
                 bottom: { style: 'thin', color: { argb: '000000' } },
                 right: { style: 'thin', color: { argb: '000000' } }
             };
-            excelCell.width = 30;
+            excelCell.width = 50;
 
             if (gridCell.rowType == "group") {
                 let excelRow = worksheet.getRow(excelCell.fullAddress.row);
@@ -272,7 +273,7 @@ ExportExcel.prototype.ExportGroup = async function (
                             excelCell.fill = {
                                 type: 'pattern',
                                 pattern: 'solid',
-                                fgColor: { argb: "dddbff" }
+                                fgColor: { argb: "C9E6C9" }
                             };
                         }
                         else if (value.toLowerCase().includes("warning")) {
@@ -324,7 +325,7 @@ ExportExcel.prototype.ExportGroup = async function (
                                     excelCell.fill = {
                                         type: 'pattern',
                                         pattern: 'solid',
-                                        fgColor: { argb: "D3D3D3" }
+                                        fgColor: { argb: "C9E6C9" }
                                     };
                                 }
                                 else {
@@ -377,7 +378,7 @@ ExportExcel.prototype.ExportGroup = async function (
 ExportExcel.prototype.setAlternateRowColor = function (gridCell, excelCell) {
     if (gridCell.rowType === "data") {
         if (excelCell.fullAddress.row % 2 === 0) {
-            excelCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "D3D3D3" }, bgColor: { argb: "D3D3D3" } };
+            excelCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "C9E6C9" }, bgColor: { argb: "C9E6C9" } };
         }
     }
 }
@@ -397,6 +398,7 @@ ExportExcel.prototype.CreateTemporaryComponentGrid = function (component, contai
                 showRowLines: true,
                 allowColumnResizing: true,
                 hoverStateEnabled: true,
+                autoFilterEnabled: true,
                 filterRow: {
                     visible: true
                 },
@@ -457,7 +459,54 @@ ExportExcel.prototype.CustomiseHeader = function (worksheet, worksheetName) {
 ExportExcel.prototype.SaveWorkBook = function (workbookName, workbook) {
 
     workbook.xlsx.writeBuffer().then(function (buffer) {
-        saveAs(new Blob([buffer], { type: "application/octet-stream" }), workbookName + ".xlsx");
+        // saveAs(new Blob([buffer], { type: "application/octet-stream" }), workbookName + ".xlsx" ,);
+        
+        const { remote } = require("electron");
+
+
+        const dialog = remote.dialog;
+        const WIN = remote.getCurrentWindow();
+
+
+        let options = {
+            title: "Excel Export",
+            
+            buttonLabel: "Export",
+            filters: [
+                { name: 'xls', extensions: ['xls'] },
+                { name: 'xlsx', extensions: ['xlsx'] }]
+               
+        }
+        
+        dialog.showSaveDialog(WIN, options,
+            (filename) => { 
+                
+                
+                const fs = require('fs');
+                fs.writeFile(filename, buffer, (err) => {
+                    if (err) return;
+                    showSelectValidCheckCasePrompt(); });
+            }
+        );
+        
+
+        // dialog.showSaveDialog(
+        //     {
+        //         filters: [
+        //             {
+        //                 name: 'xlsx',
+        //                 extensions: ['xlsx'],
+        //             },
+        //         ],
+        //     },
+        //     (workbookName) => {
+        //         if (workbookName === undefined) return;
+        //         fs.writeFile(workbookName, buffer, (err) => { });
+        //     },
+        // );
+    
+     
+
         hideBusyIndicator();
     });
 }
@@ -877,11 +926,11 @@ ComparisonData.prototype.GetTablesData = function (selectedTables, exportPropert
                     allHeaders[classGroup].push({
                         "caption": "Status",
                         "dataField": "ComponentStatus",
-                        // "groupIndex": 0
+                        //"groupIndex": 0
                     });
                     allHeaders[classGroup].push({
-                        "caption": "Class Mapping",
-                        "dataField": "ClassMapping",
+                        "caption": "Status",
+                        "dataField": "ComponentStatus",
                         "groupIndex": 0
                     });
                 }
@@ -1043,8 +1092,8 @@ ComparisonData.prototype.GetTablesData = function (selectedTables, exportPropert
                         // "groupIndex": 0
                     });
                     allHeaders[classGroup].push({
-                        "caption": "Class Mapping",
-                        "dataField": "ClassMapping",
+                        "caption": "Status",
+                        "dataField": "ComponentStatus",
                         "groupIndex": 0
                     });
                 }

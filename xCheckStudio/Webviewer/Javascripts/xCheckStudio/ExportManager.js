@@ -70,6 +70,7 @@ function exportReviewsToExcel() {
         hideBusyIndicator();
         return;
     }
+    
 }
 
 function exportDatasetsToExcel() {
@@ -89,6 +90,9 @@ function exportDatasetsToExcel() {
         return;
     }
 }
+
+
+
 
 // select type of data to export in excel
 let SelectExportDataTypeForm = {
@@ -136,6 +140,7 @@ let SelectExportDataTypeForm = {
     init: function () {
         this.registerOnclick(this.cancelBtnId, function () {
             SelectExportDataTypeForm.close();
+            
         });
 
         this.registerOnclick(this.outputReviewsBtnId, function () {
@@ -331,6 +336,8 @@ let SelectComparisonDataForm = {
 
         this.registerOnclick(this.cancelBtnId, function () {
             SelectComparisonDataForm.close(true);
+            SelectExportDataTypeForm.open();
+
         });
 
         this.registerOnclick(this.nextBtnId, function () {
@@ -586,6 +593,8 @@ let SelectComplianceDataForm = {
         SelectComparisonDataForm.close();
 
         exportReviewsToExcel();
+      //  showSelectValidCheckCasePrompt();
+
     },
 
     saveData: function () {
@@ -852,6 +861,8 @@ let SelectDatasetsDataForm = {
 
         this.registerOnclick(this.cancelBtnId, function () {
             SelectDatasetsDataForm.close(true);
+            SelectExportDataTypeForm.open();
+            
         });
 
         this.registerOnclick(this.exportBtnId, function () {
