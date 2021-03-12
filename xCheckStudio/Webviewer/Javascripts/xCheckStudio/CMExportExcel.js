@@ -652,6 +652,27 @@ function exportDatasetsToExcel() {
                             showSelectValidCheckCasePrompt(); });
                     }
                 );
+                
+        
+                // dialog.showSaveDialog(
+                //     {
+                //         filters: [
+                //             {
+                //                 name: 'xlsx',
+                //                 extensions: ['xlsx'],
+                //             },
+                //         ],
+                //     },
+                //     (workbookName) => {
+                //         if (workbookName === undefined) return;
+                //         fs.writeFile(workbookName, buffer, (err) => { });
+                //     },
+                // );
+            
+             
+        
+                hideBusyIndicator();
+            });
         });
     }   
 }
