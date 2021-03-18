@@ -140,6 +140,7 @@ let SelectDatasetsDataForm = {
 
         this.registerOnclick(this.cancelBtnId, function () {
             SelectDatasetsDataForm.close(true);
+            SelectExportDataTypeForm.open();
         });
 
         this.registerOnclick(this.exportBtnId, function () {
@@ -621,9 +622,56 @@ function exportDatasetsToExcel() {
         exportDatasetToExcel(allDatasets[i], workbook).then(function (result) {
 
             // save workbook
-            workbook.xlsx.writeBuffer().then(function (data) {
-                var blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveAs(blob, result.selectedDataset + ".xlsx");
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                // saveAs(new Blob([buffer], { type: "application/octet-stream" }), workbookName + ".xlsx" ,);
+                
+                const { remote } = require("electron");
+        
+        
+                const dialog = remote.dialog;
+                const WIN = remote.getCurrentWindow();
+        
+        
+                let options = {
+                    title: "Excel Export",
+                    
+                    buttonLabel: "Export",
+                    filters: [
+                        { name: 'xls', extensions: ['xls'] },
+                        { name: 'xlsx', extensions: ['xlsx'] }]
+                       
+                }
+                
+                dialog.showSaveDialog(WIN, options,
+                    (filename) => { 
+                        
+                        
+                        const fs = require('fs');
+                        fs.writeFile(filename, buffer, (err) => {
+                            if (err) return;
+                            showSelectValidCheckCasePrompt(); });
+                    }
+                );
+                
+        
+                // dialog.showSaveDialog(
+                //     {
+                //         filters: [
+                //             {
+                //                 name: 'xlsx',
+                //                 extensions: ['xlsx'],
+                //             },
+                //         ],
+                //     },
+                //     (workbookName) => {
+                //         if (workbookName === undefined) return;
+                //         fs.writeFile(workbookName, buffer, (err) => { });
+                //     },
+                // );
+            
+             
+        
+                hideBusyIndicator();
             });
         });
     }   
