@@ -4,19 +4,11 @@
 	"version": "1.0.0",
 	"main": "main.js",
 	"devDependencies": {
-		"@types/mocha": "^8.2.1",
-		"@wdio/selenium-standalone-service": "^6.11.0",
-		"chai": "^4.3.3",
-		"chai-as-promised": "^7.1.1",
-		"electron": "^12.0.0",
-		"electron-builder": "^20.40.2",
-		"electron-chromedriver": "^11.0.0",
-		"mocha": "^8.3.0",
-		"spectron": "^13.0.0"
+		"electron": "^3.0.6",
+		"electron-builder": "^20.40.2"
 	},
 	"scripts": {
 		"start": "electron .",
-		"test": "mocha",
 		"dist": "build"
 	},
 	"dependencies": {
